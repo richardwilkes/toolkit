@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project name="com.trollworks.toolkit" default="build">
+	<property name="src" value="src"/>
+	<property name="build" value="ant_build"/>
+	<property name="package" value="com.trollworks.toolkit"/>
+	<property name="package_build" value="${build}/${package}"/>
+	<property name="annotations" value="../com.trollworks.annotation/com.trollworks.annotation.jar"/>
+	<property name="annotations_src" value="${build}/com.trollworks.annotation"/>
+
+	<target name="clean" description="Clean up after a build">
+		<delete dir="${build}"/>
+		<delete file="${package}.jar"/>
+	</target>
+
+	<target name="build" description="Build the toolkit" depends="clean">
+		<mkdir dir="${package_build}"/>
+		<mkdir dir="${annotations_src}"/>
+
+		<!-- Compile the code. -->
+		<javac srcdir="${src}" destdir="${package_build}" classpath="${annotations}" debug="no" optimize="yes" target="1.8" source="1.8" deprecation="true" includeantruntime="no">
+			<compilerarg value="-Xlint:all"/>
+			<compilerarg value="-processorpath"/>
+			<compilerarg value="${annotations}"/>
+			<compilerarg value="-s"/>
+			<compilerarg value="${annotations_src}"/>
+			<compilerarg value="-implicit:class"/>
+		</javac>
+
+		<!-- Create the jar file. -->
+		<tstamp>
+			<format property="version" pattern="yyyyMMdd-HHmmss"/>
+		</tstamp>
+		<tstamp>
+			<format property="year" pattern="yyyy"/>
+		</tstamp>
+		<jar destfile="${package}.jar" basedir="${package_build}" duplicate="fail">
+			<manifest>
+				<attribute name="bundle-name" value="${package}"/>
+				<attribute name="bundle-version" value="${version}"/>
+				<attribute name="bundle-license" value="MPL 1.1"/>
+				<attribute name="bundle-creator" value="Richard A. Wilkes"/>
+				<attribute name="bundle-copyright" value="© 1998-${year}"/>
+			</manifest>
+		</jar>
+	</target>
+</project>
