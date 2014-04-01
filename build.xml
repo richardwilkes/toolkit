@@ -4,8 +4,8 @@
 	<property name="build" value="ant_build"/>
 	<property name="package" value="com.trollworks.toolkit"/>
 	<property name="package_build" value="${build}/${package}"/>
-	<property name="annotations" value="../com.trollworks.annotation/com.trollworks.annotation.jar"/>
-	<property name="annotations_src" value="${build}/com.trollworks.annotation"/>
+	<property name="localization" value="../com.trollworks.localization/com.trollworks.localization.jar"/>
+	<property name="annotation_src" value="${build}/com.trollworks.localization"/>
 
 	<target name="clean" description="Clean up after a build">
 		<delete dir="${build}"/>
@@ -14,15 +14,15 @@
 
 	<target name="build" description="Build the toolkit" depends="clean">
 		<mkdir dir="${package_build}"/>
-		<mkdir dir="${annotations_src}"/>
+		<mkdir dir="${annotation_src}"/>
 
 		<!-- Compile the code. -->
-		<javac srcdir="${src}" destdir="${package_build}" classpath="${annotations}" debug="no" optimize="yes" target="1.8" source="1.8" deprecation="true" includeantruntime="no">
+		<javac srcdir="${src}" destdir="${package_build}" classpath="${localization}" debug="no" optimize="yes" target="1.8" source="1.8" deprecation="true" includeantruntime="no">
 			<compilerarg value="-Xlint:all"/>
 			<compilerarg value="-processorpath"/>
-			<compilerarg value="${annotations}"/>
+			<compilerarg value="${localization}"/>
 			<compilerarg value="-s"/>
-			<compilerarg value="${annotations_src}"/>
+			<compilerarg value="${annotation_src}"/>
 			<compilerarg value="-implicit:class"/>
 		</javac>
 

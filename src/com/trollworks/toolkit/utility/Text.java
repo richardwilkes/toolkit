@@ -23,20 +23,24 @@
 
 package com.trollworks.toolkit.utility;
 
-import static com.trollworks.toolkit.utility.Text_LS.*;
+import com.trollworks.localization.Localization;
+import com.trollworks.localization.Localize;
 
-import com.trollworks.annotation.LS;
-import com.trollworks.annotation.Localized;
-
-@Localized({
-	@LS(key = "A", msg = "a"),
-	@LS(key = "AN", msg = "an"),
-	@LS(key = "WAS", msg = "was"),
-	@LS(key = "WERE", msg = "were"),
-})
 /** Provides text manipulation. */
 public class Text {
 	public static final String	UTF8_ENCODING	= "UTF-8";	//$NON-NLS-1$
+	@Localize("a")
+	private static String		A;
+	@Localize("an")
+	private static String		AN;
+	@Localize("was")
+	private static String		WAS;
+	@Localize("were")
+	private static String		WERE;
+
+	static {
+		Localization.initialize();
+	}
 
 	/**
 	 * @param text The text to check.

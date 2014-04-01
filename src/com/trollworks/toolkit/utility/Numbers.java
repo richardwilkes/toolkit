@@ -23,25 +23,11 @@
 
 package com.trollworks.toolkit.utility;
 
-import static com.trollworks.toolkit.utility.Numbers_LS.*;
-
-import com.trollworks.annotation.LS;
-import com.trollworks.annotation.Localized;
+import com.trollworks.localization.Localization;
+import com.trollworks.localization.Localize;
 
 import java.text.DecimalFormatSymbols;
 
-@Localized({
-				@LS(key = "FIRST", msg = "first"),
-				@LS(key = "SECOND", msg = "second"),
-				@LS(key = "THIRD", msg = "third"),
-				@LS(key = "FOURTH", msg = "fourth"),
-				@LS(key = "FIFTH", msg = "fifth"),
-				@LS(key = "SIXTH", msg = "sixth"),
-				@LS(key = "SEVENTH", msg = "seventh"),
-				@LS(key = "EIGHTH", msg = "eighth"),
-				@LS(key = "NINTH", msg = "ninth"),
-				@LS(key = "TENTH", msg = "tenth"),
-})
 /** Various number utilities. */
 public class Numbers {
 	private static final String		LOCALIZED_DECIMAL_SEPARATOR		= Character.toString(DecimalFormatSymbols.getInstance().getDecimalSeparator());
@@ -49,6 +35,30 @@ public class Numbers {
 	private static final int[]		ROMAN_VALUES					= { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
 	@SuppressWarnings("nls")
 	private static final String[]	ROMAN_TEXT						= { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+	@Localize("First")
+	private static String			FIRST;
+	@Localize("Second")
+	private static String			SECOND;
+	@Localize("Third")
+	private static String			THIRD;
+	@Localize("Fourth")
+	private static String			FOURTH;
+	@Localize("Fifth")
+	private static String			FIFTH;
+	@Localize("Sixth")
+	private static String			SIXTH;
+	@Localize("Seventh")
+	private static String			SEVENTH;
+	@Localize("Eighth")
+	private static String			EIGHTH;
+	@Localize("Ninth")
+	private static String			NINTH;
+	@Localize("Tenth")
+	private static String			TENTH;
+
+	static {
+		Localization.initialize();
+	}
 
 	/**
 	 * @param buffer The text to process.

@@ -23,26 +23,28 @@
 
 package com.trollworks.toolkit.utility;
 
-import static com.trollworks.toolkit.utility.BundleInfo_LS.*;
-
-import com.trollworks.annotation.LS;
-import com.trollworks.annotation.Localized;
+import com.trollworks.localization.Localization;
+import com.trollworks.localization.Localize;
 import com.trollworks.toolkit.io.UrlUtils;
 
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 /** Provides information for a bundle of code. */
-@Localized({
-				@LS(key = "DEVELOPMENT", msg = "Development"),
-				@LS(key = "UNSPECIFIED", msg = "Unspecified"),
-})
 public class BundleInfo {
-	private String	mName;
-	private String	mVersion;
-	private String	mLicense;
-	private String	mCreator;
-	private String	mCopyright;
+	@Localize("Development")
+	private static String	DEVELOPMENT;
+	@Localize("Unspecified")
+	private static String	UNSPECIFIED;
+	private String			mName;
+	private String			mVersion;
+	private String			mLicense;
+	private String			mCreator;
+	private String			mCopyright;
+
+	static {
+		Localization.initialize();
+	}
 
 	/**
 	 * Loads the bundle information out of the manifest, if it is available. If not, the some
