@@ -23,8 +23,8 @@
 
 package com.trollworks.toolkit.utility;
 
-import com.trollworks.localization.Localization;
-import com.trollworks.localization.Localize;
+import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.io.Localization;
 
 /** Provides text manipulation. */
 public class Text {

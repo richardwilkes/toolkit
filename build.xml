@@ -1,28 +1,43 @@
 <?xml version="1.0"?>
-<project name="com.trollworks.toolkit" default="build">
+<project name="com.trollworks.toolkit" default="all">
 	<property name="src" value="src"/>
-	<property name="build" value="ant_build"/>
+	<property name="build_root" value="ant_build"/>
 	<property name="package" value="com.trollworks.toolkit"/>
-	<property name="package_build" value="${build}/${package}"/>
-	<property name="localization" value="../com.trollworks.localization/com.trollworks.localization.jar"/>
-	<property name="annotation_src" value="${build}/com.trollworks.localization"/>
+	<property name="package_dir" value="com/trollworks/toolkit"/>
+	<property name="toolkit_build" value="${build_root}/toolkit"/>
+	<property name="annotations_src" value="${build_root}/annotations"/>
+	<property name="ap_package" value="${package}.annotation"/>
+	<property name="ap_build" value="${build_root}/annotation_processors"/>
+	<tstamp>
+		<format property="version" pattern="yyyyMMdd-HHmmss"/>
+	</tstamp>
+	<tstamp>
+		<format property="year" pattern="yyyy"/>
+	</tstamp>
 
-	<target name="clean" description="Clean up after a build">
-		<delete dir="${build}"/>
-		<delete file="${package}.jar"/>
+	<target name="all" description="Builds the annotation processors and the toolkit" depends="annotations,toolkit"/>
+
+	<target name="clean" description="Clean up after a build" depends="clean_toolkit,clean_annotations">
+		<delete dir="${build_root}"/>
 	</target>
 
-	<target name="build" description="Build the toolkit" depends="clean">
-		<mkdir dir="${package_build}"/>
-		<mkdir dir="${annotation_src}"/>
+	<target name="clean_toolkit" description="Clean up after a toolkit build">
+		<delete dir="${toolkit_build}"/>
+		<delete dir="${annotations_src}"/>
+		<delete file="${package}.jar"/>
+	</target>
+	
+	<target name="toolkit" description="Build the toolkit" depends="clean_toolkit">
+		<mkdir dir="${toolkit_build}"/>
+		<mkdir dir="${annotations_src}"/>
 
 		<!-- Compile the code. -->
-		<javac srcdir="${src}" destdir="${package_build}" classpath="${localization}" debug="no" optimize="yes" target="1.8" source="1.8" deprecation="true" includeantruntime="no">
+		<javac srcdir="${src}" destdir="${toolkit_build}" includes="${package_dir}/**" excludes="${package_dir}/annotation/processor/**" debug="no" optimize="yes" target="1.8" source="1.8" deprecation="true" includeantruntime="no">
 			<compilerarg value="-Xlint:all"/>
 			<compilerarg value="-processorpath"/>
-			<compilerarg value="${localization}"/>
+			<compilerarg value="${ap_package}.jar"/>
 			<compilerarg value="-s"/>
-			<compilerarg value="${annotation_src}"/>
+			<compilerarg value="${annotations_src}"/>
 			<compilerarg value="-implicit:class"/>
 		</javac>
 
@@ -33,7 +48,7 @@
 		<tstamp>
 			<format property="year" pattern="yyyy"/>
 		</tstamp>
-		<jar destfile="${package}.jar" basedir="${package_build}" duplicate="fail">
+		<jar destfile="${package}.jar" basedir="${toolkit_build}" duplicate="fail">
 			<manifest>
 				<attribute name="bundle-name" value="${package}"/>
 				<attribute name="bundle-version" value="${version}"/>
@@ -41,6 +56,34 @@
 				<attribute name="bundle-creator" value="Richard A. Wilkes"/>
 				<attribute name="bundle-copyright" value="© 1998-${year}"/>
 			</manifest>
+		</jar>
+	</target>
+
+	<target name="clean_annotations" description="Clean up after an annotation processor build">
+		<delete dir="${ap_build}"/>
+		<delete file="${ap_package}.jar"/>
+	</target>
+
+	<target name="annotations" description="Build the annotation processors" depends="clean_annotations">
+		<mkdir dir="${ap_build}"/>
+
+		<!-- Compile the code. -->
+		<javac srcdir="${src}" destdir="${ap_build}" includes="${package_dir}/annotation/**" debug="no" optimize="yes" target="1.8" source="1.8" deprecation="true" includeantruntime="no">
+			<compilerarg value="-Xlint:all"/>
+		</javac>
+
+		<!-- Create the jar file. -->
+		<jar destfile="${ap_package}.jar" basedir="${ap_build}" duplicate="fail">
+			<manifest>
+				<attribute name="bundle-name" value="${ap_package}"/>
+				<attribute name="bundle-version" value="${version}"/>
+				<attribute name="bundle-license" value="MPL 1.1"/>
+				<attribute name="bundle-creator" value="Richard A. Wilkes"/>
+				<attribute name="bundle-copyright" value="© ${year}"/>
+			</manifest>
+			<service type="javax.annotation.processing.Processor">
+				<provider classname="${ap_package}.processor.localization.Processor"/>
+			</service>
 		</jar>
 	</target>
 </project>
