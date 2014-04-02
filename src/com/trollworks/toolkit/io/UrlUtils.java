@@ -85,6 +85,10 @@ public class UrlUtils {
 		return buffer.toString();
 	}
 
+	/**
+	 * @param theClass A {@link Class} in the bundle you wish to load the manifest from.
+	 * @return The loaded {@link Manifest}.
+	 */
 	public static final Manifest loadManifest(Class<?> theClass) throws IOException, URISyntaxException {
 		URI uri = theClass.getProtectionDomain().getCodeSource().getLocation().toURI();
 		File file = new File(uri.getPath());
