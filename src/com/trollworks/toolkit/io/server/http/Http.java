@@ -13,7 +13,6 @@ import com.trollworks.toolkit.io.server.Personality;
 import com.trollworks.toolkit.io.server.Session;
 import com.trollworks.toolkit.io.server.websocket.WebSocket;
 import com.trollworks.toolkit.io.server.websocket.WebSocketFactory;
-import com.trollworks.toolkit.utility.Base64;
 import com.trollworks.toolkit.utility.Text;
 
 import java.io.BufferedReader;
@@ -32,6 +31,7 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -204,7 +204,7 @@ public class Http extends Personality {
 		response.addHeader("Connection", "Upgrade");
 		MessageDigest md = MessageDigest.getInstance("SHA1");
 		md.update((key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").getBytes(Text.UTF8_ENCODING));
-		response.addHeader("Sec-WebSocket-Accept", new String(Base64.encode(md.digest())));
+		response.addHeader("Sec-WebSocket-Accept", Base64.getEncoder().encodeToString(md.digest()));
 		response.send(this);
 		ws.startConnection();
 	}

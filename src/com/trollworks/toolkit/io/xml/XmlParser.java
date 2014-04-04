@@ -37,9 +37,8 @@ public class XmlParser implements AutoCloseable {
 	}
 
 	/** @return The current line:column position. */
-	public String getLocation() {
-		Location location = mReader.getLocation();
-		return location.getLineNumber() + ":" + location.getColumnNumber(); //$NON-NLS-1$
+	public Location getLocation() {
+		return mReader.getLocation();
 	}
 
 	/** @return A marker for determining if you've come to the end of a specific tag. */

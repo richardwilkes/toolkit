@@ -8,10 +8,14 @@
 
 package com.trollworks.toolkit.utility;
 
+import com.trollworks.toolkit.io.Log;
+
 /** Provides various debugging utilities. */
 public final class Debug {
 	/** Controls whether we are in 'development mode' or not. */
-	public static final boolean	DEV_MODE	= false;
+	public static final boolean	DEV_MODE			= false;
+	/** Standard debug key for enabling diagnosis for load/save failures. */
+	public static final String	DIAGNOSE_LOAD_SAVE	= "com.trollworks.toolkit.utility.Debug.DiagnoseLoadSave";	//$NON-NLS-1$
 
 	/**
 	 * Determines whether the specified key is set, looking first in the system properties and
@@ -26,6 +30,18 @@ public final class Debug {
 			value = System.getenv(key);
 		}
 		return Numbers.extractBoolean(value);
+	}
+
+	/**
+	 * If load/save operation diagnosis has been asked for, dump the {@link Exception}'s stack trace
+	 * to the log.
+	 *
+	 * @param exception The {@link Exception}.
+	 */
+	public static void diagnoseLoadAndSave(Exception exception) {
+		if (isKeySet(DIAGNOSE_LOAD_SAVE)) {
+			Log.error(exception);
+		}
 	}
 
 	/**
