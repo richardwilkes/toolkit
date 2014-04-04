@@ -9,10 +9,9 @@
 package com.trollworks.toolkit.utility;
 
 /** Provides various debugging utilities. */
-public class Debug {
+public final class Debug {
 	/** Controls whether we are in 'development mode' or not. */
 	public static final boolean	DEV_MODE	= false;
-	private long				mStartTime;
 
 	/**
 	 * Determines whether the specified key is set, looking first in the system properties and
@@ -81,27 +80,5 @@ public class Debug {
 			buffer.append(')');
 		}
 		return buffer;
-	}
-
-	public Debug() {
-		mStartTime = System.nanoTime();
-	}
-
-	/**
-	 * @return The elapsed time in seconds since this object was created or reset. Calling this
-	 *         method resets the timer.
-	 */
-	public final double elapsed() {
-		long start = mStartTime;
-		mStartTime = System.nanoTime();
-		return (mStartTime - start) / 1000000.0;
-	}
-
-	/**
-	 * @return The elapsed time, formatted as seconds. Calling this method resets the timer.
-	 */
-	@Override
-	public final String toString() {
-		return String.format("%,.6f", Double.valueOf(elapsed())); //$NON-NLS-1$
 	}
 }
