@@ -12,13 +12,56 @@ package com.trollworks.toolkit.utility;
 @SuppressWarnings("nls")
 public enum Platform {
 	/** The constant used for the Linux platform. */
-	LINUX,
+	LINUX("linux", "", "lib", ".so", ".sh"),
 	/** The constant used for the Macintosh platform. */
-	MAC,
+	MAC("mac", "", "lib", ".jnilib", ".sh"),
 	/** The constant used for the Windows platform. */
-	WINDOWS,
+	WINDOWS("windows", ".exe", "", ".dll", ".bat"),
 	/** The constant used for unknown platforms. */
-	UNKNOWN;
+	UNKNOWN("unknown", "", "", "", "");
+
+	private String	mDirName;
+	private String	mExtension;
+	private String	mDynamicLibraryPrefix;
+	private String	mDynamicLibraryExtension;
+	private String	mScriptExtension;
+
+	private Platform(String dirName, String extension, String dynamicLibraryPrefix, String dynamicLibraryExtension, String scriptExtension) {
+		mDirName = dirName;
+		mExtension = extension;
+		mDynamicLibraryPrefix = dynamicLibraryPrefix;
+		mDynamicLibraryExtension = dynamicLibraryExtension;
+		mScriptExtension = scriptExtension;
+	}
+
+	public final String getDynamicLibraryPath(String libName) {
+		return mDirName + "/" + System.getProperty("os.arch") + "/" + mDynamicLibraryPrefix + libName + mDynamicLibraryExtension;
+	}
+
+	/** @return The directory name to use for the platform. */
+	public final String getDirName() {
+		return mDirName;
+	}
+
+	/** @return The extension for executables on the platform. */
+	public final String getExecutableExtension() {
+		return mExtension;
+	}
+
+	/** @return The prefix for dynamic libraries on the platform. */
+	public final String getDynamicLibraryPrefix() {
+		return mDynamicLibraryPrefix;
+	}
+
+	/** @return The extension for dynamic libraries on the platform. */
+	public final String getDynamicLibraryExtension() {
+		return mDynamicLibraryExtension;
+	}
+
+	/** @return The extension for scripts on the platform. */
+	public final String getScriptExtension() {
+		return mScriptExtension;
+	}
 
 	private static final Platform	CURRENT;
 
@@ -33,6 +76,11 @@ public enum Platform {
 		} else {
 			CURRENT = UNKNOWN;
 		}
+	}
+
+	/** @return The platform being run on. */
+	public static final Platform getPlatform() {
+		return CURRENT;
 	}
 
 	/** @return <code>true</code> if Macintosh is the platform being run on. */
