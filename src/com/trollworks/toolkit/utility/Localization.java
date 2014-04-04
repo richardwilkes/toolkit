@@ -6,7 +6,7 @@
  * can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package com.trollworks.toolkit.io;
+package com.trollworks.toolkit.utility;
 
 import com.trollworks.toolkit.annotation.Localize;
 

@@ -9,7 +9,6 @@
 package com.trollworks.toolkit.utility;
 
 import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.io.Localization;
 import com.trollworks.toolkit.io.UrlUtils;
 
 import java.util.jar.Attributes;

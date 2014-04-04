@@ -95,24 +95,24 @@ public class Base64 {
 	 */
 	public static byte[] decode(String encoded) {
 		byte nibbles[] = new byte[4];
-		int s = 0;
+		int state = 0;
 		int length = encoded.length();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(4 * length / 3);
 		int index = 0;
 		while (index < length) {
-			char c = encoded.charAt(index++);
-			if (c == PAD) {
+			char ch = encoded.charAt(index++);
+			if (ch == PAD) {
 				break;
 			}
-			if (Character.isWhitespace(c)) {
+			if (Character.isWhitespace(ch)) {
 				continue;
 			}
-			byte nibble = NIBBLES[c];
+			byte nibble = NIBBLES[ch];
 			if (nibble < 0) {
-				throw new IllegalArgumentException("Not B64 encoded"); //$NON-NLS-1$
+				throw new IllegalArgumentException("Not encoded as Base64"); //$NON-NLS-1$
 			}
-			nibbles[s++] = NIBBLES[c];
-			switch (s) {
+			nibbles[state++] = NIBBLES[ch];
+			switch (state) {
 				case 1:
 				default:
 					break;
@@ -124,7 +124,7 @@ public class Base64 {
 					break;
 				case 4:
 					baos.write(nibbles[2] << 6 | nibbles[3]);
-					s = 0;
+					state = 0;
 					break;
 			}
 		}
