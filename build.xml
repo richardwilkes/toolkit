@@ -52,7 +52,7 @@
 			<manifest>
 				<attribute name="bundle-name" value="${package}"/>
 				<attribute name="bundle-version" value="${version}"/>
-				<attribute name="bundle-license" value="MPL 1.1"/>
+				<attribute name="bundle-license" value="Mozilla Public License 2.0"/>
 				<attribute name="bundle-creator" value="Richard A. Wilkes"/>
 				<attribute name="bundle-copyright" value="© 1998-${year}"/>
 			</manifest>
@@ -77,9 +77,9 @@
 			<manifest>
 				<attribute name="bundle-name" value="${ap_package}"/>
 				<attribute name="bundle-version" value="${version}"/>
-				<attribute name="bundle-license" value="MPL 1.1"/>
+				<attribute name="bundle-license" value="Mozilla Public License 2.0"/>
 				<attribute name="bundle-creator" value="Richard A. Wilkes"/>
-				<attribute name="bundle-copyright" value="© ${year}"/>
+				<attribute name="bundle-copyright" value="© 1998-${year}"/>
 			</manifest>
 			<service type="javax.annotation.processing.Processor">
 				<provider classname="${ap_package}.processor.localization.Processor"/>
