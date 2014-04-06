@@ -16,6 +16,7 @@ import com.trollworks.toolkit.ui.preferences.Preferences;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.Version;
 
 import java.awt.Desktop;
 import java.awt.EventQueue;
@@ -25,7 +26,6 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URI;
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
@@ -36,7 +36,7 @@ public class UpdateChecker implements Runnable {
 	private static String		CHECKING;
 	@Localize("There are no updates available")
 	private static String		UP_TO_DATE;
-	@Localize("Version {0} is available")
+	@Localize("Version %s is available")
 	private static String		OUT_OF_DATE;
 	@Localize("Update")
 	private static String		UPDATE_TITLE;
@@ -100,7 +100,7 @@ public class UpdateChecker implements Runnable {
 	@Override
 	public void run() {
 		if (mMode == 0) {
-			long currentVersion = BundleInfo.getDefault().getVersionAsNumber();
+			long currentVersion = BundleInfo.getDefault().getVersion();
 			if (currentVersion == 0) {
 				// Development version. Bail.
 				mMode = 2;
@@ -137,7 +137,7 @@ public class UpdateChecker implements Runnable {
 						try {
 							if (tokenizer.nextToken().equalsIgnoreCase(mProductKey)) {
 								String token = tokenizer.nextToken();
-								long version = BundleInfo.getVersionAsNumber(token);
+								long version = Version.extract(token, 0);
 								if (version > versionAvailable) {
 									versionAvailable = version;
 								}
@@ -153,11 +153,10 @@ public class UpdateChecker implements Runnable {
 			}
 			if (versionAvailable > currentVersion) {
 				Preferences prefs = Preferences.getInstance();
-				String humanReadableVersion = BundleInfo.getNumberAsVersion(versionAvailable);
 				NEW_VERSION_AVAILABLE = true;
-				RESULT = MessageFormat.format(OUT_OF_DATE, humanReadableVersion);
-				if (versionAvailable > BundleInfo.getVersionAsNumber(prefs.getStringValue(MODULE, LAST_VERSION_KEY, BundleInfo.getDefault().getVersion()))) {
-					prefs.setValue(MODULE, LAST_VERSION_KEY, humanReadableVersion);
+				RESULT = String.format(OUT_OF_DATE, Version.toString(versionAvailable, false));
+				if (versionAvailable > prefs.getLongValue(MODULE, LAST_VERSION_KEY, BundleInfo.getDefault().getVersion())) {
+					prefs.setValue(MODULE, LAST_VERSION_KEY, versionAvailable);
 					prefs.save();
 					mMode = 1;
 					EventQueue.invokeLater(this);

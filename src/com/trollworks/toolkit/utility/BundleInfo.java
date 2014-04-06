@@ -23,7 +23,7 @@ public class BundleInfo {
 	private static String		DEVELOPMENT;
 	@Localize("Unspecified")
 	private static String		UNSPECIFIED;
-	@Localize("%s %s\n%s")
+	@Localize("%s %s\n%s\n%s")
 	private static String		APP_BANNER_FORMAT;
 	@Localize("Copyright \u00A9 %s by %s")
 	private static String		COPYRIGHT_FORMAT;
@@ -38,7 +38,7 @@ public class BundleInfo {
 
 	private static BundleInfo	DEFAULT;
 	private String				mName;
-	private String				mVersion;
+	private long				mVersion;
 	private String				mCopyrightOwner;
 	private String				mCopyrightYears;
 	private String				mLicense;
@@ -74,7 +74,7 @@ public class BundleInfo {
 	 * </tr>
 	 * <tr>
 	 * <td>bundle-version</td>
-	 * <td>The version of the code bundle, specified as <b>YYYYMMDD-HHMMSS</b>.</td>
+	 * <td>The version of the code bundle. May be any format compliant with {@link Version}.</td>
 	 * </tr>
 	 * <tr>
 	 * <td>bundle-copyright-owner</td>
@@ -97,7 +97,7 @@ public class BundleInfo {
 			Manifest manifest = UrlUtils.loadManifest(theClass);
 			Attributes attributes = manifest.getMainAttributes();
 			mName = attributes.getValue("bundle-name"); //$NON-NLS-1$
-			mVersion = attributes.getValue("bundle-version"); //$NON-NLS-1$
+			mVersion = Version.extract(attributes.getValue("bundle-version"), 0); //$NON-NLS-1$
 			mCopyrightOwner = attributes.getValue("bundle-copyright-owner"); //$NON-NLS-1$
 			mCopyrightYears = attributes.getValue("bundle-copyright-years"); //$NON-NLS-1$
 			mLicense = attributes.getValue("bundle-license"); //$NON-NLS-1$
@@ -107,9 +107,6 @@ public class BundleInfo {
 		if (mName == null || mName.trim().isEmpty()) {
 			Package pkg = theClass.getPackage();
 			mName = pkg != null ? pkg.getName() : theClass.getName();
-		}
-		if (mVersion == null || mVersion.trim().isEmpty()) {
-			mVersion = DEVELOPMENT;
 		}
 		if (mCopyrightOwner == null || mCopyrightOwner.trim().isEmpty()) {
 			mCopyrightOwner = UNSPECIFIED;
@@ -122,46 +119,32 @@ public class BundleInfo {
 		}
 	}
 
+	/**
+	 * Create a {@link BundleInfo} with explicitly set values.
+	 *
+	 * @param name The name of the code bundle.
+	 * @param version The version of the code bundle. May be any format compliant with
+	 *            {@link Version}.
+	 * @param copyrightOwner The copyright owner of the code bundle.
+	 * @param copyrightYears The copyright years of the code bundle.
+	 * @param license The license the code bundle uses.
+	 */
+	public BundleInfo(String name, String version, String copyrightOwner, String copyrightYears, String license) {
+		mName = name;
+		mVersion = Version.extract(version, 0);
+		mCopyrightOwner = copyrightOwner;
+		mCopyrightYears = copyrightYears;
+		mLicense = license;
+	}
+
 	/** @return The name of the code bundle. */
 	public String getName() {
 		return mName;
 	}
 
-	/** @return The version of the code bundle, specified as <b>YYYYMMDD-HHMMSS</b>. */
-	public String getVersion() {
+	/** @return The version of the code bundle. */
+	public long getVersion() {
 		return mVersion;
-	}
-
-	/** @return The version of the code bundle. */
-	public long getVersionAsNumber() {
-		return getVersionAsNumber(mVersion);
-	}
-
-	/** @return The version of the code bundle. */
-	public static long getVersionAsNumber(String version) {
-		String[] parts = version.split("[-\\.]"); //$NON-NLS-1$
-		if (parts.length == 2) {
-			try {
-				int date = Integer.parseInt(parts[0]);
-				if (date > -1 && date < 100000000L) {
-					int time = Integer.parseInt(parts[1]);
-					if (time > -1 && time < 1000000L) {
-						return date * 1000000L + time;
-					}
-				}
-			} catch (NumberFormatException nfe) {
-				// Ignore
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * @param version The version.
-	 * @return The human-readable version.
-	 */
-	public static String getNumberAsVersion(long version) {
-		return String.format("%08d-%06d", Long.valueOf(version / 1000000L), Long.valueOf(version % 1000000L)); //$NON-NLS-1$
 	}
 
 	/** @return The copyright owner of the code bundle. */
@@ -197,6 +180,6 @@ public class BundleInfo {
 
 	/** @return A full application banner for this code bundle. */
 	public String getAppBanner() {
-		return String.format(APP_BANNER_FORMAT, getName(), getVersion(), getCopyrightBanner());
+		return String.format(APP_BANNER_FORMAT, getName(), Version.toString(mVersion, false), Version.toBuildTimestamp(mVersion), getCopyrightBanner());
 	}
 }
