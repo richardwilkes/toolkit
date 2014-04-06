@@ -1,0 +1,128 @@
+/*
+ * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * version 2.0. If a copy of the MPL was not distributed with this file, You
+ * can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+package com.trollworks.toolkit.ui.layout;
+
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.Rectangle;
+
+/** The basic unit within a {@link FlexLayout}. */
+public abstract class FlexCell {
+	private Alignment	mHorizontalAlignment	= Alignment.LEFT_TOP;
+	private Alignment	mVerticalAlignment		= Alignment.CENTER;
+	private Insets		mInsets					= new Insets(0, 0, 0, 0);
+	private int			mX;
+	private int			mY;
+	private int			mWidth;
+	private int			mHeight;
+
+	/**
+	 * Creates a new {@link FlexLayout} with this cell as its root cell and applies it to the
+	 * specified component.
+	 *
+	 * @param container The container to apply the {@link FlexLayout} to.
+	 */
+	public void apply(Container container) {
+		container.setLayout(new FlexLayout(this));
+	}
+
+	/**
+	 * Draws the borders of this cell. Useful for debugging.
+	 *
+	 * @param gc The {@link Graphics} context to use.
+	 * @param color The {@link Color} to use.
+	 */
+	public void draw(Graphics gc, Color color) {
+		gc.setColor(color);
+		gc.drawRect(mX, mY, mWidth, mHeight);
+	}
+
+	/**
+	 * Layout the cell and its children.
+	 *
+	 * @param bounds The bounds to use for the cell.
+	 */
+	public final void layout(Rectangle bounds) {
+		bounds.x += mInsets.left;
+		bounds.y += mInsets.top;
+		bounds.width -= mInsets.left + mInsets.right;
+		bounds.height -= mInsets.top + mInsets.bottom;
+		mX = bounds.x;
+		mY = bounds.y;
+		mWidth = bounds.width;
+		mHeight = bounds.height;
+		layoutSelf(bounds);
+	}
+
+	/**
+	 * Called to layout the cell and its children.
+	 *
+	 * @param bounds The bounds to use for the cell. Insets have already been applied.
+	 */
+	protected abstract void layoutSelf(Rectangle bounds);
+
+	/**
+	 * @param type The type of size to determine.
+	 * @return The size for this cell.
+	 */
+	public final Dimension getSize(LayoutSize type) {
+		Dimension size = getSizeSelf(type);
+		size.width += mInsets.left + mInsets.right;
+		size.height += mInsets.top + mInsets.bottom;
+		return LayoutSize.sanitizeSize(size);
+	}
+
+	/**
+	 * @param type The type of size to determine.
+	 * @return The size for this cell. Do not include the insets from the cell.
+	 */
+	protected abstract Dimension getSizeSelf(LayoutSize type);
+
+	/** @return The horizontal alignment. */
+	public Alignment getHorizontalAlignment() {
+		return mHorizontalAlignment;
+	}
+
+	/** @param alignment The value to set for horizontal alignment. */
+	public void setHorizontalAlignment(Alignment alignment) {
+		mHorizontalAlignment = alignment;
+	}
+
+	/** @return The vertical alignment. */
+	public Alignment getVerticalAlignment() {
+		return mVerticalAlignment;
+	}
+
+	/** @param alignment The value to set for vertical alignment. */
+	public void setVerticalAlignment(Alignment alignment) {
+		mVerticalAlignment = alignment;
+	}
+
+	/** @return The insets. */
+	public Insets getInsets() {
+		return mInsets;
+	}
+
+	/** @param insets The value to set for insets. */
+	public void setInsets(Insets insets) {
+		if (insets != null) {
+			mInsets.set(insets.top, insets.left, insets.bottom, insets.right);
+		} else {
+			mInsets.set(0, 0, 0, 0);
+		}
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
+}

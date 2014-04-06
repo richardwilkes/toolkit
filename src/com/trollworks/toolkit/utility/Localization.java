@@ -28,13 +28,12 @@ import java.util.Properties;
  */
 @SuppressWarnings("nls")
 public class Localization extends Properties implements PrivilegedAction<Object> {
-	private static final long		serialVersionUID	= -1744934790648567577L;
-	private static final String		EXTENSION			= ".properties";
-	private static final int		MOD_EXPECTED		= Modifier.STATIC;
-	private static final int		MOD_MASK			= MOD_EXPECTED | Modifier.FINAL;
+	private static final String		EXTENSION		= ".properties";
+	private static final int		MOD_EXPECTED	= Modifier.STATIC;
+	private static final int		MOD_MASK		= MOD_EXPECTED | Modifier.FINAL;
 	private static final String[]	SUFFIXES;
 	private Class<?>				mClass;
-	private HashMap<String, Field>	mFields				= new HashMap<>();
+	private HashMap<String, Field>	mFields			= new HashMap<>();
 	private String					mBundleName;
 	private boolean					mIsAccessible;
 

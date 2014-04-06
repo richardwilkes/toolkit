@@ -14,11 +14,6 @@ import java.text.DecimalFormatSymbols;
 
 /** Various number utilities. */
 public class Numbers {
-	private static final String		LOCALIZED_DECIMAL_SEPARATOR		= Character.toString(DecimalFormatSymbols.getInstance().getDecimalSeparator());
-	private static final String		LOCALIZED_GROUPING_SEPARATOR	= Character.toString(DecimalFormatSymbols.getInstance().getGroupingSeparator());
-	private static final int[]		ROMAN_VALUES					= { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
-	@SuppressWarnings("nls")
-	private static final String[]	ROMAN_TEXT						= { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
 	@Localize("First")
 	private static String			FIRST;
 	@Localize("Second")
@@ -43,6 +38,12 @@ public class Numbers {
 	static {
 		Localization.initialize();
 	}
+
+	private static final String		LOCALIZED_DECIMAL_SEPARATOR		= Character.toString(DecimalFormatSymbols.getInstance().getDecimalSeparator());
+	private static final String		LOCALIZED_GROUPING_SEPARATOR	= Character.toString(DecimalFormatSymbols.getInstance().getGroupingSeparator());
+	private static final int[]		ROMAN_VALUES					= { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+	@SuppressWarnings("nls")
+	private static final String[]	ROMAN_TEXT						= { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
 
 	/**
 	 * @param buffer The text to process.

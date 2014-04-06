@@ -1,5 +1,5 @@
 /ant_build
-/com.trollworks.toolkit.jar
 /build
 /.apt_generated
-/com.trollworks.toolkit.annotation.jar
+/libraries/com.trollworks.toolkit.annotation.jar
+/libraries/com.trollworks.toolkit.jar

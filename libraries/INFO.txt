@@ -1,0 +1,16 @@
+This directory contains additional third-party libraries that the toolkit makes use of:
+
+Apple Java Extension Stubs
+  Description: Stubs for the Apple Java extensions, necessary for compiling on non-Apple platforms
+  Files: AppleJavaExtensions.jar
+  Version: Java 6
+  License Used: Unknown
+  Obtained from: /usr/share/java/Stubs on a Mac OS X installation
+
+GNU Trove
+  Description: High speed regular and primitive collections for Java.
+  Files: trove.jar
+         trove-src.jar
+  Version: 2.1
+  License Used: LGPL 2.1
+  Obtained from: http://trove4j.sourceforge.net

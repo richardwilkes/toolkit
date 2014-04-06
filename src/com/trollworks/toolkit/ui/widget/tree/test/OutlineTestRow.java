@@ -1,0 +1,61 @@
+/*
+ * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * version 2.0. If a copy of the MPL was not distributed with this file, You
+ * can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+package com.trollworks.toolkit.ui.widget.tree.test;
+
+import com.trollworks.toolkit.ui.image.ToolkitImage;
+import com.trollworks.toolkit.ui.widget.outline.Column;
+import com.trollworks.toolkit.ui.widget.outline.Row;
+
+import java.awt.image.BufferedImage;
+
+public class OutlineTestRow extends Row {
+	private String	mName;
+
+	public OutlineTestRow(String name) {
+		mName = name;
+	}
+
+	public String getName() {
+		return mName;
+	}
+
+	public String getSecond() {
+		return Integer.toString(mName.length());
+	}
+
+	@SuppressWarnings("static-method")
+	public BufferedImage getIcon() {
+		return ToolkitImage.getMiniWarningIcon();
+	}
+
+	@Override
+	public Object getData(Column column) {
+		switch (column.getID()) {
+			case 0:
+				return getName();
+			default:
+				return Integer.valueOf(mName.length());
+		}
+	}
+
+	@Override
+	public String getDataAsText(Column column) {
+		switch (column.getID()) {
+			case 0:
+				return getName();
+			default:
+				return getSecond();
+		}
+	}
+
+	@Override
+	public void setData(Column column, Object data) {
+		// Unused
+	}
+}

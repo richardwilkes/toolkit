@@ -12,7 +12,6 @@ import java.io.IOException;
 
 /** Provides an {@link IOException} that can be easily transformed into a {@link HttpResponse}. */
 public class HttpResponseException extends IOException {
-	private static final long		serialVersionUID	= -199288266940154619L;
 	private final HttpStatusCode	mStatus;
 
 	/**

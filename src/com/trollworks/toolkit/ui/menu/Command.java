@@ -1,0 +1,280 @@
+/*
+ * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * version 2.0. If a copy of the MPL was not distributed with this file, You
+ * can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+package com.trollworks.toolkit.ui.menu;
+
+import java.awt.Component;
+import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
+
+/** Represents a command in the user interface. */
+public abstract class Command extends AbstractAction implements Comparable<Command> {
+	/** The standard command modifier for this platform. */
+	public static final int	COMMAND_MODIFIER			= Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+	/** The standard command modifier for this platform, plus the shift key. */
+	public static final int	SHIFTED_COMMAND_MODIFIER	= COMMAND_MODIFIER | InputEvent.SHIFT_DOWN_MASK;
+	private boolean			mMarked;
+	private KeyStroke		mOriginalAccelerator;
+
+	/**
+	 * Creates a new {@link Command}.
+	 *
+	 * @param title The title to use.
+	 * @param command The command to use.
+	 */
+	public Command(String title, String command) {
+		super(title);
+		setCommand(command);
+	}
+
+	/**
+	 * Creates a new {@link Command}.
+	 *
+	 * @param title The title to use.
+	 * @param command The command to use.
+	 * @param icon The icon to use.
+	 */
+	public Command(String title, String command, Icon icon) {
+		super(title, icon);
+		setCommand(command);
+	}
+
+	/**
+	 * Creates a new {@link Command}.
+	 *
+	 * @param title The title to use.
+	 * @param command The command to use.
+	 * @param keyCode The key code to use. The platform's standard menu shortcut key will be
+	 *            specified as a modifier.
+	 */
+	public Command(String title, String command, int keyCode) {
+		super(title);
+		setAccelerator(keyCode);
+		mOriginalAccelerator = getAccelerator();
+		setCommand(command);
+	}
+
+	/**
+	 * Creates a new {@link Command}.
+	 *
+	 * @param title The title to use.
+	 * @param command The command to use.
+	 * @param keyCode The key code to use.
+	 * @param modifiers The modifiers to use.
+	 */
+	public Command(String title, String command, int keyCode, int modifiers) {
+		super(title);
+		setAccelerator(keyCode, modifiers);
+		mOriginalAccelerator = getAccelerator();
+		setCommand(command);
+	}
+
+	/**
+	 * Creates a new {@link Command}.
+	 *
+	 * @param title The title to use.
+	 * @param command The command to use.
+	 * @param icon The icon to use.
+	 * @param keyCode The key code to use. The platform's standard menu shortcut key will be
+	 *            specified as a modifier.
+	 */
+	public Command(String title, String command, Icon icon, int keyCode) {
+		super(title, icon);
+		setAccelerator(keyCode);
+		mOriginalAccelerator = getAccelerator();
+		setCommand(command);
+	}
+
+	/**
+	 * Creates a new {@link Command}.
+	 *
+	 * @param title The title to use.
+	 * @param command The command to use.
+	 * @param icon The icon to use.
+	 * @param keyCode The key code to use.
+	 * @param modifiers The modifiers to use.
+	 */
+	public Command(String title, String command, Icon icon, int keyCode, int modifiers) {
+		super(title, icon);
+		setAccelerator(keyCode, modifiers);
+		mOriginalAccelerator = getAccelerator();
+		setCommand(command);
+	}
+
+	/**
+	 * Creates a new {@link Command}.
+	 *
+	 * @param title The title to use.
+	 * @param command The command to use.
+	 * @param keystroke The {@link KeyStroke} to use.
+	 */
+	public Command(String title, String command, KeyStroke keystroke) {
+		super(title);
+		setAccelerator(keystroke);
+		mOriginalAccelerator = getAccelerator();
+		setCommand(command);
+	}
+
+	/**
+	 * Creates a new {@link Command}.
+	 *
+	 * @param title The title to use.
+	 * @param command The command to use.
+	 * @param icon The icon to use.
+	 * @param keystroke The {@link KeyStroke} to use.
+	 */
+	public Command(String title, String command, Icon icon, KeyStroke keystroke) {
+		super(title, icon);
+		setAccelerator(keystroke);
+		mOriginalAccelerator = getAccelerator();
+		setCommand(command);
+	}
+
+	/**
+	 * Called to adjust the action prior to a menu being displayed.
+	 *
+	 * @param item The {@link JMenuItem} that is using the {@link Command}. May be <code>null</code>
+	 *            .
+	 */
+	public abstract void adjustForMenu(JMenuItem item);
+
+	@Override
+	public abstract void actionPerformed(ActionEvent event);
+
+	/** @return The {@link Command}'s title. */
+	public final String getTitle() {
+		Object value = getValue(NAME);
+		return value != null ? value.toString() : null;
+	}
+
+	/** @param title The {@link Command}'s title. */
+	public final void setTitle(String title) {
+		putValue(NAME, title);
+	}
+
+	/** @return The {@link Command}'s command string. */
+	public final String getCommand() {
+		Object value = getValue(ACTION_COMMAND_KEY);
+		return value != null ? value.toString() : null;
+	}
+
+	/** @param cmd The {@link Command}'s command string. */
+	public final void setCommand(String cmd) {
+		putValue(ACTION_COMMAND_KEY, cmd);
+	}
+
+	/** @return The current keyboard accelerator for this {@link Command}, or <code>null</code>. */
+	public final KeyStroke getAccelerator() {
+		Object value = getValue(ACCELERATOR_KEY);
+		return value instanceof KeyStroke ? (KeyStroke) value : null;
+	}
+
+	/** @return The original keyboard accelerator for this {@link Command}, or <code>null</code>. */
+	public final KeyStroke getOriginalAccelerator() {
+		return mOriginalAccelerator;
+	}
+
+	/** @return Whether the original accelerator is still set. */
+	public final boolean hasOriginalAccelerator() {
+		KeyStroke ks = getAccelerator();
+		return ks == null ? mOriginalAccelerator == null : ks.equals(mOriginalAccelerator);
+	}
+
+	/**
+	 * Sets the keyboard accelerator for this {@link Command}. The platform's standard menu shortcut
+	 * key will be specified as a modifier.
+	 *
+	 * @param keyCode The key code to use.
+	 */
+	public final void setAccelerator(int keyCode) {
+		setAccelerator(keyCode, COMMAND_MODIFIER);
+	}
+
+	/**
+	 * Sets the keyboard accelerator for this {@link Command}.
+	 *
+	 * @param keyCode The key code to use.
+	 * @param modifiers The modifiers to use.
+	 */
+	public final void setAccelerator(int keyCode, int modifiers) {
+		setAccelerator(KeyStroke.getKeyStroke(keyCode, modifiers));
+	}
+
+	/**
+	 * Sets the keyboard accelerator for this {@link Command}.
+	 *
+	 * @param keystroke The {@link KeyStroke} to use.
+	 */
+	public final void setAccelerator(KeyStroke keystroke) {
+		DynamicMenuEnabler.remove(this);
+		putValue(ACCELERATOR_KEY, keystroke);
+		DynamicMenuEnabler.add(this);
+	}
+
+	/** Removes any previously set keyboard accelerator. */
+	public final void removeAccelerator() {
+		DynamicMenuEnabler.remove(this);
+		putValue(ACCELERATOR_KEY, null);
+	}
+
+	/** @return Whether any associated menu item should be marked. */
+	public final boolean isMarked() {
+		return mMarked;
+	}
+
+	/** @param marked Whether any associated menu item should be marked. */
+	public final void setMarked(boolean marked) {
+		mMarked = marked;
+	}
+
+	/**
+	 * @param item The {@link JMenuItem} to update to match the current marked state. May be
+	 *            <code>null</code>.
+	 */
+	public final void updateMark(JMenuItem item) {
+		if (item instanceof JCheckBoxMenuItem || item instanceof JRadioButtonMenuItem) {
+			item.setSelected(mMarked);
+		}
+	}
+
+	@Override
+	public int compareTo(Command other) {
+		int result = getTitle().compareTo(other.getTitle());
+		if (result == 0) {
+			int hc = hashCode();
+			int ohc = other.hashCode();
+			if (hc > ohc) {
+				return 1;
+			}
+			if (hc < ohc) {
+				return -1;
+			}
+		}
+		return result;
+	}
+
+	/** @return The current permanent focus owner. */
+	public static final Component getFocusOwner() {
+		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner();
+	}
+
+	/** @return The current active window. */
+	public static final Window getActiveWindow() {
+		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+	}
+}

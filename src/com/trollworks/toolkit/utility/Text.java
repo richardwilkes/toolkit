@@ -12,7 +12,6 @@ import com.trollworks.toolkit.annotation.Localize;
 
 /** Provides text manipulation. */
 public class Text {
-	public static final String	UTF8_ENCODING	= "UTF-8";	//$NON-NLS-1$
 	@Localize("a")
 	private static String		A;
 	@Localize("an")
@@ -25,6 +24,8 @@ public class Text {
 	static {
 		Localization.initialize();
 	}
+
+	public static final String	UTF8_ENCODING	= "UTF-8";	//$NON-NLS-1$
 
 	/**
 	 * @param text The text to check.

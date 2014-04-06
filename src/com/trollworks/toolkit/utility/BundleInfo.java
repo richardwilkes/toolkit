@@ -17,17 +17,43 @@ import java.util.jar.Manifest;
 /** Provides information for a bundle of code. */
 public class BundleInfo {
 	@Localize("Development")
-	private static String	DEVELOPMENT;
+	private static String		DEVELOPMENT;
 	@Localize("Unspecified")
-	private static String	UNSPECIFIED;
-	private String			mName;
-	private String			mVersion;
-	private String			mLicense;
-	private String			mCreator;
-	private String			mCopyright;
+	private static String		UNSPECIFIED;
+	@Localize("%s %s\n%s")
+	private static String		APP_BANNER_FORMAT;
+	@Localize("Copyright \u00A9 %s by %s")
+	private static String		COPYRIGHT_FORMAT;
+	@Localize("All rights reserved")
+	private static String		ALL_RIGHTS_RESERVED;
+	@Localize("%s. %s.")
+	private static String		COPYRIGHT_BANNER_FORMAT;
 
 	static {
 		Localization.initialize();
+	}
+
+	private static BundleInfo	DEFAULT;
+	private String				mName;
+	private String				mVersion;
+	private String				mCopyrightOwner;
+	private String				mCopyrightYears;
+	private String				mLicense;
+
+	/** @param bundleInfo The {@link BundleInfo} to use for the application. */
+	public static final synchronized void setDefault(BundleInfo bundleInfo) {
+		DEFAULT = bundleInfo;
+	}
+
+	/**
+	 * @return The application's {@link BundleInfo}. If one has not been explicitly set, then the
+	 *         {@link BundleInfo} for the {@link BundleInfo} class will be returned.
+	 */
+	public static final synchronized BundleInfo getDefault() {
+		if (DEFAULT == null) {
+			DEFAULT = new BundleInfo(BundleInfo.class);
+		}
+		return DEFAULT;
 	}
 
 	/**
@@ -48,16 +74,16 @@ public class BundleInfo {
 	 * <td>The version of the code bundle, specified as <b>YYYYMMDD-HHMMSS</b>.</td>
 	 * </tr>
 	 * <tr>
+	 * <td>bundle-copyright-owner</td>
+	 * <td>The copyright owner of the code bundle.</td>
+	 * </tr>
+	 * <tr>
+	 * <td>bundle-copyright-years</td>
+	 * <td>The copyright years of the code bundle.</td>
+	 * </tr>
+	 * <tr>
 	 * <td>bundle-license</td>
 	 * <td>The license the code bundle uses.</td>
-	 * </tr>
-	 * <tr>
-	 * <td>bundle-creator</td>
-	 * <td>The creator of the code bundle.</td>
-	 * </tr>
-	 * <tr>
-	 * <td>bundle-copyright</td>
-	 * <td>The copyright of the code bundle.</td>
 	 * </tr>
 	 * </table>
 	 *
@@ -69,9 +95,9 @@ public class BundleInfo {
 			Attributes attributes = manifest.getMainAttributes();
 			mName = attributes.getValue("bundle-name"); //$NON-NLS-1$
 			mVersion = attributes.getValue("bundle-version"); //$NON-NLS-1$
+			mCopyrightOwner = attributes.getValue("bundle-copyright-owner"); //$NON-NLS-1$
+			mCopyrightYears = attributes.getValue("bundle-copyright-years"); //$NON-NLS-1$
 			mLicense = attributes.getValue("bundle-license"); //$NON-NLS-1$
-			mCreator = attributes.getValue("bundle-creator"); //$NON-NLS-1$
-			mCopyright = attributes.getValue("bundle-copyright"); //$NON-NLS-1$
 		} catch (Exception exception) {
 			// Ignore... we'll fill in default values below
 		}
@@ -82,14 +108,14 @@ public class BundleInfo {
 		if (mVersion == null || mVersion.trim().isEmpty()) {
 			mVersion = DEVELOPMENT;
 		}
+		if (mCopyrightOwner == null || mCopyrightOwner.trim().isEmpty()) {
+			mCopyrightOwner = UNSPECIFIED;
+		}
+		if (mCopyrightYears == null || mCopyrightYears.trim().isEmpty()) {
+			mCopyrightYears = UNSPECIFIED;
+		}
 		if (mLicense == null || mLicense.trim().isEmpty()) {
 			mLicense = UNSPECIFIED;
-		}
-		if (mCreator == null || mCreator.trim().isEmpty()) {
-			mCreator = UNSPECIFIED;
-		}
-		if (mCopyright == null || mCopyright.trim().isEmpty()) {
-			mCopyright = UNSPECIFIED;
 		}
 	}
 
@@ -105,7 +131,12 @@ public class BundleInfo {
 
 	/** @return The version of the code bundle. */
 	public long getVersionAsNumber() {
-		String[] parts = mVersion.split("-"); //$NON-NLS-1$
+		return getVersionAsNumber(mVersion);
+	}
+
+	/** @return The version of the code bundle. */
+	public static long getVersionAsNumber(String version) {
+		String[] parts = version.split("[-\\.]"); //$NON-NLS-1$
 		if (parts.length == 2) {
 			try {
 				int date = Integer.parseInt(parts[0]);
@@ -122,18 +153,47 @@ public class BundleInfo {
 		return 0;
 	}
 
+	/**
+	 * @param version The version.
+	 * @return The human-readable version.
+	 */
+	public static String getNumberAsVersion(long version) {
+		return String.format("%08d-%06d", Long.valueOf(version / 1000000L), Long.valueOf(version % 1000000L)); //$NON-NLS-1$
+	}
+
+	/** @return The copyright owner of the code bundle. */
+	public String getCopyrightOwner() {
+		return mCopyrightOwner;
+	}
+
+	/** @return The copyright years of the code bundle. */
+	public String getCopyrightYears() {
+		return mCopyrightYears;
+	}
+
+	/** @return The formatted copyright notice for the code bundle. */
+	public String getCopyright() {
+		return String.format(COPYRIGHT_FORMAT, mCopyrightYears, mCopyrightOwner);
+	}
+
+	/** @return The rights declaration for the code bundle, usually "All rights reserved". */
+	@SuppressWarnings("static-method")
+	public String getReservedRights() {
+		return ALL_RIGHTS_RESERVED;
+	}
+
+	/** @return A full copyright banner for this code bundle. */
+	public String getCopyrightBanner() {
+		return String.format(COPYRIGHT_BANNER_FORMAT, getCopyright(), getReservedRights());
+	}
+
 	/** @return The license the code bundle uses. */
 	public String getLicense() {
 		return mLicense;
 	}
 
-	/** @return The creator of the code bundle. */
-	public String getCreator() {
-		return mCreator;
-	}
-
-	/** @return The copyright of the code bundle. */
-	public String getCopyright() {
-		return mCopyright;
+	/** @return A full application banner for this code bundle. */
+	public String getAppBanner() {
+		return String.format(APP_BANNER_FORMAT, getName(), getVersion(), getCopyrightBanner());
 	}
 }
