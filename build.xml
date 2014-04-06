@@ -10,7 +10,7 @@
 	<property name="ap_build" value="${build_root}/annotation_processors"/>
 	<property name="min_jdk" value="1.8"/>
 	<tstamp>
-		<format property="version" pattern="yyyyMMdd-HHmmss"/>
+		<format property="version" pattern="4.0.0.yyyyMMddHHmmss"/>
 	</tstamp>
 	<tstamp>
 		<format property="year" pattern="yyyy"/>
