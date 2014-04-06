@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.utility.cmdline;
 
+import com.trollworks.toolkit.utility.Platform;
+
 /** Describes a command-line option. */
 public class CmdLineOption {
 	private String[]	mNames;
@@ -52,5 +54,10 @@ public class CmdLineOption {
 	/** @return The argument label, if any. */
 	public String getArgumentLabel() {
 		return mArgumentLabel;
+	}
+
+	@Override
+	public String toString() {
+		return (Platform.isWindows() ? '/' : '-') + mNames[0];
 	}
 }
