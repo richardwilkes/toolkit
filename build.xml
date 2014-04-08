@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
-<project name="com.trollworks.toolkit" default="all">
+<project name="toolkit" default="all">
 	<property name="src" value="src"/>
+	<property name="lib" value="libraries"/>
 	<property name="build_root" value="ant_build"/>
-	<property name="package" value="com.trollworks.toolkit"/>
+	<property name="toolkit_jar" value="${lib}/toolkit.jar"/>
 	<property name="package_dir" value="com/trollworks/toolkit"/>
 	<property name="toolkit_build" value="${build_root}/toolkit"/>
-	<property name="annotations_src" value="${build_root}/annotations"/>
-	<property name="ap_package" value="${package}.annotation"/>
+	<property name="annotation_src" value="com/trollworks/toolkit/annotation"/>
+	<property name="generated_src" value="${build_root}/annotations"/>
+	<property name="ap_jar" value="${lib}/toolkit_annotation_processors.jar"/>
 	<property name="ap_build" value="${build_root}/annotation_processors"/>
 	<property name="min_jdk" value="1.8"/>
 	<tstamp>
@@ -25,28 +27,28 @@
 
 	<target name="clean_toolkit" description="Clean up after a toolkit build">
 		<delete dir="${toolkit_build}"/>
-		<delete dir="${annotations_src}"/>
-		<delete file="libraries/${package}.jar"/>
+		<delete dir="${generated_src}"/>
+		<delete file="${toolkit_jar}"/>
 	</target>
 	
 	<target name="toolkit" description="Build the toolkit" depends="clean_toolkit">
 		<mkdir dir="${toolkit_build}"/>
-		<mkdir dir="${annotations_src}"/>
+		<mkdir dir="${generated_src}"/>
 
 		<!-- Compile the code. -->
-		<javac srcdir="${src}" destdir="${toolkit_build}" includes="${package_dir}/**"
-			excludes="${package_dir}/annotation/processor/**" debug="no" optimize="yes"
+		<javac srcdir="${src}" destdir="${toolkit_build}"
+			excludes="${annotation_src}/processor/**" debug="no" optimize="yes"
 			target="${min_jdk}" source="${min_jdk}" deprecation="true" includeantruntime="no">
 			<classpath>
-				<pathelement location="libraries/trove.jar"/>
+				<pathelement location="${lib}/trove.jar"/>
 				<pathelement location="../apple_stubs/apple_stubs.jar"/>
 			</classpath>
 			<compilerarg value="-Xlint:all"/>
 			<compilerarg value="-Xlint:-serial"/>
 			<compilerarg value="-processorpath"/>
-			<compilerarg value="libraries/${ap_package}.jar"/>
+			<compilerarg value="${ap_jar}"/>
 			<compilerarg value="-s"/>
-			<compilerarg value="${annotations_src}"/>
+			<compilerarg value="${generated_src}"/>
 			<compilerarg value="-implicit:class"/>
 		</javac>
 		
@@ -56,9 +58,9 @@
 		</copy>
 
 		<!-- Create the jar file. -->
-		<jar destfile="libraries/${package}.jar" basedir="${toolkit_build}" duplicate="fail">
+		<jar destfile="${toolkit_jar}" basedir="${toolkit_build}" duplicate="fail">
 			<manifest>
-				<attribute name="bundle-name" value="${package}"/>
+				<attribute name="bundle-name" value="Trollworks Toolkit"/>
 				<attribute name="bundle-version" value="${version}"/>
 				<attribute name="bundle-license" value="Mozilla Public License 2.0"/>
 				<attribute name="bundle-copyright-owner" value="Richard A. Wilkes"/>
@@ -69,14 +71,14 @@
 
 	<target name="clean_annotations" description="Clean up after an annotation processor build">
 		<delete dir="${ap_build}"/>
-		<delete file="libraries/${ap_package}.jar"/>
+		<delete file="${ap_jar}"/>
 	</target>
 
 	<target name="annotations" description="Build the annotation processors" depends="clean_annotations">
 		<mkdir dir="${ap_build}"/>
 
 		<!-- Compile the code. -->
-		<javac srcdir="${src}" destdir="${ap_build}" includes="${package_dir}/annotation/**"
+		<javac srcdir="${src}" destdir="${ap_build}" includes="${annotation_src}/**"
 			debug="no" optimize="yes" target="${min_jdk}" source="${min_jdk}" deprecation="true"
 			includeantruntime="no">
 			<compilerarg value="-Xlint:all"/>
@@ -84,16 +86,16 @@
 		</javac>
 
 		<!-- Create the jar file. -->
-		<jar destfile="libraries/${ap_package}.jar" basedir="${ap_build}" duplicate="fail">
+		<jar destfile="${ap_jar}" basedir="${ap_build}" duplicate="fail">
 			<manifest>
-				<attribute name="bundle-name" value="${ap_package}"/>
+				<attribute name="bundle-name" value="Trollworks Toolkit Annotation Processors"/>
 				<attribute name="bundle-version" value="${version}"/>
 				<attribute name="bundle-license" value="Mozilla Public License 2.0"/>
 				<attribute name="bundle-creator" value="Richard A. Wilkes"/>
 				<attribute name="bundle-copyright" value="© 1998-${year}"/>
 			</manifest>
 			<service type="javax.annotation.processing.Processor">
-				<provider classname="${ap_package}.processor.localization.Processor"/>
+				<provider classname="com.trollworks.toolkit.annotation.processor.localization.Processor"/>
 			</service>
 		</jar>
 	</target>
