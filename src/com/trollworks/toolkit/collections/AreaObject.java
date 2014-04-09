@@ -13,7 +13,7 @@ package com.trollworks.toolkit.collections;
 
 import java.awt.Rectangle;
 
-/** All objects which want to be stored in a {@link AreaTree} must implement this interface. */
+/** Objects which can supply a bounding {@link Rectangle} should implement this interface. */
 public interface AreaObject {
 	/** @return The {@link Rectangle} which defines this object's bounds. */
 	Rectangle getBounds();
