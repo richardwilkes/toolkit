@@ -86,6 +86,10 @@ public interface Bounds {
 		return containedBy(other.x, other.y, other.width, other.height);
 	}
 
+	default boolean containedBy(Bounds other) {
+		return containedBy(other.getX(), other.getY(), other.getWidth(), other.getHeight());
+	}
+
 	default boolean containedBy(int otherX, int otherY, int otherWidth, int otherHeight) {
 		if (otherWidth > 0 && otherHeight > 0) {
 			int x = getX();
