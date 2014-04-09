@@ -38,7 +38,7 @@ class MessageBundle {
 		mPackageName = env.getElementUtils().getPackageOf(mClassElement).getQualifiedName().toString();
 		mClassName = mClassElement.getSimpleName().toString();
 		Element parent = mClassElement.getEnclosingElement();
-		if (parent != null) {
+		if (parent != null && parent.getKind().isClass()) {
 			mClassName = parent.getSimpleName().toString() + "$" + mClassName; //$NON-NLS-1$
 		}
 	}
