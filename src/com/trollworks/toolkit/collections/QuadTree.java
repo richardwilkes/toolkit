@@ -11,6 +11,9 @@
 
 package com.trollworks.toolkit.collections;
 
+import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.utility.Localization;
+
 import java.awt.Rectangle;
 import java.util.HashSet;
 import java.util.Set;
@@ -155,11 +158,32 @@ public class QuadTree<T extends Bounds> {
 	 *         with the specified bounds.
 	 */
 	public final boolean intersects(Rectangle bounds) {
-		if (mRoot.intersects(bounds)) {
+		return intersects(bounds.x, bounds.y, bounds.width, bounds.height);
+	}
+
+	/**
+	 * @param bounds The bounds to check.
+	 * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
+	 *         with the specified bounds.
+	 */
+	public final boolean intersects(Bounds bounds) {
+		return intersects(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+	}
+
+	/**
+	 * @param x The horizontal coordinate to check.
+	 * @param y The vertical coordinate to check.
+	 * @param width The width of the space to check.
+	 * @param height The height of the space to check.
+	 * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
+	 *         with the specified bounds.
+	 */
+	public final boolean intersects(int x, int y, int width, int height) {
+		if (mRoot.intersects(x, y, width, height)) {
 			return true;
 		}
 		for (T one : mOutside) {
-			if (one.intersectsBounds(bounds)) {
+			if (one.intersectsBounds(x, y, width, height)) {
 				return true;
 			}
 		}
@@ -173,11 +197,34 @@ public class QuadTree<T extends Bounds> {
 	 *         with the specified bounds and passes the {@link Matcher}'s test.
 	 */
 	public final boolean intersects(Rectangle bounds, Matcher<T> matcher) {
-		if (mRoot.intersects(bounds, matcher)) {
+		return intersects(bounds.x, bounds.y, bounds.width, bounds.height, matcher);
+	}
+
+	/**
+	 * @param bounds The bounds to check.
+	 * @param matcher A {@link Matcher} to use to verify any potential matches.
+	 * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
+	 *         with the specified bounds and passes the {@link Matcher}'s test.
+	 */
+	public final boolean intersects(Bounds bounds, Matcher<T> matcher) {
+		return intersects(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), matcher);
+	}
+
+	/**
+	 * @param x The horizontal coordinate to check.
+	 * @param y The vertical coordinate to check.
+	 * @param width The width of the space to check.
+	 * @param height The height of the space to check.
+	 * @param matcher A {@link Matcher} to use to verify any potential matches.
+	 * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
+	 *         with the specified bounds and passes the {@link Matcher}'s test.
+	 */
+	public final boolean intersects(int x, int y, int width, int height, Matcher<T> matcher) {
+		if (mRoot.intersects(x, y, width, height, matcher)) {
 			return true;
 		}
 		for (T one : mOutside) {
-			if (one.intersectsBounds(bounds) && matcher.matches(one)) {
+			if (one.intersectsBounds(x, y, width, height) && matcher.matches(one)) {
 				return true;
 			}
 		}
@@ -190,11 +237,32 @@ public class QuadTree<T extends Bounds> {
 	 *         contained by the specified bounds.
 	 */
 	public final boolean containedBy(Rectangle bounds) {
-		if (mRoot.inside(bounds)) {
+		return containedBy(bounds.x, bounds.y, bounds.width, bounds.height);
+	}
+
+	/**
+	 * @param bounds The bounds to check.
+	 * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
+	 *         contained by the specified bounds.
+	 */
+	public final boolean containedBy(Bounds bounds) {
+		return containedBy(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+	}
+
+	/**
+	 * @param x The horizontal coordinate to check.
+	 * @param y The vertical coordinate to check.
+	 * @param width The width of the space to check.
+	 * @param height The height of the space to check.
+	 * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
+	 *         contained by the specified bounds.
+	 */
+	public final boolean containedBy(int x, int y, int width, int height) {
+		if (mRoot.inside(x, y, width, height)) {
 			return true;
 		}
 		for (T one : mOutside) {
-			if (one.containedBy(bounds)) {
+			if (one.containedBy(x, y, width, height)) {
 				return true;
 			}
 		}
@@ -208,11 +276,34 @@ public class QuadTree<T extends Bounds> {
 	 *         contained by the specified bounds and passes the {@link Matcher}'s test.
 	 */
 	public final boolean containedBy(Rectangle bounds, Matcher<T> matcher) {
-		if (mRoot.inside(bounds, matcher)) {
+		return containedBy(bounds.x, bounds.y, bounds.width, bounds.height, matcher);
+	}
+
+	/**
+	 * @param bounds The bounds to check.
+	 * @param matcher A {@link Matcher} to use to verify any potential matches.
+	 * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
+	 *         contained by the specified bounds and passes the {@link Matcher}'s test.
+	 */
+	public final boolean containedBy(Bounds bounds, Matcher<T> matcher) {
+		return containedBy(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), matcher);
+	}
+
+	/**
+	 * @param x The horizontal coordinate to check.
+	 * @param y The vertical coordinate to check.
+	 * @param width The width of the space to check.
+	 * @param height The height of the space to check.
+	 * @param matcher A {@link Matcher} to use to verify any potential matches.
+	 * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
+	 *         contained by the specified bounds and passes the {@link Matcher}'s test.
+	 */
+	public final boolean containedBy(int x, int y, int width, int height, Matcher<T> matcher) {
+		if (mRoot.inside(x, y, width, height, matcher)) {
 			return true;
 		}
 		for (T one : mOutside) {
-			if (one.containedBy(bounds) && matcher.matches(one)) {
+			if (one.containedBy(x, y, width, height) && matcher.matches(one)) {
 				return true;
 			}
 		}
@@ -282,10 +373,29 @@ public class QuadTree<T extends Bounds> {
 	 * @return All objects in this {@link QuadTree} that intersect with the specified bounds.
 	 */
 	public final Set<T> findIntersects(Rectangle bounds) {
+		return findIntersects(bounds.x, bounds.y, bounds.width, bounds.height);
+	}
+
+	/**
+	 * @param bounds The bounds to check.
+	 * @return All objects in this {@link QuadTree} that intersect with the specified bounds.
+	 */
+	public final Set<T> findIntersects(Bounds bounds) {
+		return findIntersects(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+	}
+
+	/**
+	 * @param x The horizontal coordinate to check.
+	 * @param y The vertical coordinate to check.
+	 * @param width The width of the space to check.
+	 * @param height The height of the space to check.
+	 * @return All objects in this {@link QuadTree} that intersect with the specified bounds.
+	 */
+	public final Set<T> findIntersects(int x, int y, int width, int height) {
 		Set<T> result = new HashSet<>();
-		mRoot.findIntersects(bounds, result);
+		mRoot.findIntersects(x, y, width, height, result);
 		for (T one : mOutside) {
-			if (one.intersectsBounds(bounds)) {
+			if (one.intersectsBounds(x, y, width, height)) {
 				result.add(one);
 			}
 		}
@@ -299,10 +409,33 @@ public class QuadTree<T extends Bounds> {
 	 *         pass the {@link Matcher}'s test.
 	 */
 	public final Set<T> findIntersects(Rectangle bounds, Matcher<T> matcher) {
+		return findIntersects(bounds.x, bounds.y, bounds.width, bounds.height, matcher);
+	}
+
+	/**
+	 * @param bounds The bounds to check.
+	 * @param matcher A {@link Matcher} to use to verify any potential matches.
+	 * @return All objects in this {@link QuadTree} that intersect with the specified bounds and
+	 *         pass the {@link Matcher}'s test.
+	 */
+	public final Set<T> findIntersects(Bounds bounds, Matcher<T> matcher) {
+		return findIntersects(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), matcher);
+	}
+
+	/**
+	 * @param x The horizontal coordinate to check.
+	 * @param y The vertical coordinate to check.
+	 * @param width The width of the space to check.
+	 * @param height The height of the space to check.
+	 * @param matcher A {@link Matcher} to use to verify any potential matches.
+	 * @return All objects in this {@link QuadTree} that intersect with the specified bounds and
+	 *         pass the {@link Matcher}'s test.
+	 */
+	public final Set<T> findIntersects(int x, int y, int width, int height, Matcher<T> matcher) {
 		Set<T> result = new HashSet<>();
-		mRoot.findIntersects(bounds, result, matcher);
+		mRoot.findIntersects(x, y, width, height, result, matcher);
 		for (T one : mOutside) {
-			if (one.intersectsBounds(bounds) && matcher.matches(one)) {
+			if (one.intersectsBounds(x, y, width, height) && matcher.matches(one)) {
 				result.add(one);
 			}
 		}
@@ -314,10 +447,29 @@ public class QuadTree<T extends Bounds> {
 	 * @return All objects in this {@link QuadTree} that would be contained by the specified bounds.
 	 */
 	public final Set<T> findContainedBy(Rectangle bounds) {
+		return findContainedBy(bounds.x, bounds.y, bounds.width, bounds.height);
+	}
+
+	/**
+	 * @param bounds The bounds to check.
+	 * @return All objects in this {@link QuadTree} that would be contained by the specified bounds.
+	 */
+	public final Set<T> findContainedBy(Bounds bounds) {
+		return findContainedBy(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+	}
+
+	/**
+	 * @param x The horizontal coordinate to check.
+	 * @param y The vertical coordinate to check.
+	 * @param width The width of the space to check.
+	 * @param height The height of the space to check.
+	 * @return All objects in this {@link QuadTree} that would be contained by the specified bounds.
+	 */
+	public final Set<T> findContainedBy(int x, int y, int width, int height) {
 		Set<T> result = new HashSet<>();
-		mRoot.findContainedBy(bounds, result);
+		mRoot.findContainedBy(x, y, width, height, result);
 		for (T one : mOutside) {
-			if (one.containedBy(bounds)) {
+			if (one.containedBy(x, y, width, height)) {
 				result.add(one);
 			}
 		}
@@ -331,10 +483,33 @@ public class QuadTree<T extends Bounds> {
 	 *         and pass the {@link Matcher}'s test.
 	 */
 	public final Set<T> findContainedBy(Rectangle bounds, Matcher<T> matcher) {
+		return findContainedBy(bounds.x, bounds.y, bounds.width, bounds.height, matcher);
+	}
+
+	/**
+	 * @param bounds The bounds to check.
+	 * @param matcher A {@link Matcher} to use to verify any potential matches.
+	 * @return All objects in this {@link QuadTree} that would be contained by the specified bounds
+	 *         and pass the {@link Matcher}'s test.
+	 */
+	public final Set<T> findContainedBy(Bounds bounds, Matcher<T> matcher) {
+		return findContainedBy(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), matcher);
+	}
+
+	/**
+	 * @param x The horizontal coordinate to check.
+	 * @param y The vertical coordinate to check.
+	 * @param width The width of the space to check.
+	 * @param height The height of the space to check.
+	 * @param matcher A {@link Matcher} to use to verify any potential matches.
+	 * @return All objects in this {@link QuadTree} that would be contained by the specified bounds
+	 *         and pass the {@link Matcher}'s test.
+	 */
+	public final Set<T> findContainedBy(int x, int y, int width, int height, Matcher<T> matcher) {
 		Set<T> result = new HashSet<>();
-		mRoot.findContainedBy(bounds, result, matcher);
+		mRoot.findContainedBy(x, y, width, height, result, matcher);
 		for (T one : mOutside) {
-			if (one.containedBy(bounds) && matcher.matches(one)) {
+			if (one.containedBy(x, y, width, height) && matcher.matches(one)) {
 				result.add(one);
 			}
 		}
@@ -342,16 +517,22 @@ public class QuadTree<T extends Bounds> {
 	}
 
 	static class Node<T extends Bounds> implements Bounds {
-		private int			mX;
-		private int			mY;
-		private int			mWidth;
-		private int			mHeight;
-		protected Set<T>	mContents;
-		private int			mMaxCapacity;
-		private Node<T>		mNorthEast;
-		private Node<T>		mNorthWest;
-		private Node<T>		mSouthEast;
-		private Node<T>		mSouthWest;
+		@Localize("Objects must have a width and height greater than zero.")
+		private static String	MUST_HAVE_SIZE_GREATER_THAN_ZERO;
+		private int				mX;
+		private int				mY;
+		private int				mWidth;
+		private int				mHeight;
+		protected Set<T>		mContents;
+		private int				mMaxCapacity;
+		private Node<T>			mNorthEast;
+		private Node<T>			mNorthWest;
+		private Node<T>			mSouthEast;
+		private Node<T>			mSouthWest;
+
+		static {
+			Localization.initialize();
+		}
 
 		Node(int x, int y, int width, int height, int maxCapacity) {
 			mX = x;
@@ -403,6 +584,9 @@ public class QuadTree<T extends Bounds> {
 		}
 
 		final void add(T obj) {
+			if (obj.getWidth() < 1 || obj.getHeight() < 1) {
+				throw new IllegalArgumentException(MUST_HAVE_SIZE_GREATER_THAN_ZERO);
+			}
 			// Do we have to split?
 			if (isLeaf() && mContents.size() >= mMaxCapacity && mWidth > 1 && mHeight > 1) {
 				split();
@@ -493,57 +677,57 @@ public class QuadTree<T extends Bounds> {
 			return false;
 		}
 
-		final boolean intersects(Rectangle bounds) {
-			if (intersectsBounds(bounds)) {
+		final boolean intersects(int x, int y, int width, int height) {
+			if (intersectsBounds(x, y, width, height)) {
 				for (T one : mContents) {
-					if (one.intersectsBounds(bounds)) {
+					if (one.intersectsBounds(x, y, width, height)) {
 						return true;
 					}
 				}
 				if (!isLeaf()) {
-					return mNorthWest.intersects(bounds) || mNorthEast.intersects(bounds) || mSouthWest.intersects(bounds) || mSouthEast.intersects(bounds);
+					return mNorthWest.intersects(x, y, width, height) || mNorthEast.intersects(x, y, width, height) || mSouthWest.intersects(x, y, width, height) || mSouthEast.intersects(x, y, width, height);
 				}
 			}
 			return false;
 		}
 
-		final boolean intersects(Rectangle bounds, Matcher<T> matcher) {
-			if (intersectsBounds(bounds)) {
+		final boolean intersects(int x, int y, int width, int height, Matcher<T> matcher) {
+			if (intersectsBounds(x, y, width, height)) {
 				for (T one : mContents) {
-					if (one.intersectsBounds(bounds) && matcher.matches(one)) {
+					if (one.intersectsBounds(x, y, width, height) && matcher.matches(one)) {
 						return true;
 					}
 				}
 				if (!isLeaf()) {
-					return mNorthWest.intersects(bounds, matcher) || mNorthEast.intersects(bounds, matcher) || mSouthWest.intersects(bounds, matcher) || mSouthEast.intersects(bounds, matcher);
+					return mNorthWest.intersects(x, y, width, height, matcher) || mNorthEast.intersects(x, y, width, height, matcher) || mSouthWest.intersects(x, y, width, height, matcher) || mSouthEast.intersects(x, y, width, height, matcher);
 				}
 			}
 			return false;
 		}
 
-		final boolean inside(Rectangle bounds) {
-			if (intersectsBounds(bounds)) {
+		final boolean inside(int x, int y, int width, int height) {
+			if (intersectsBounds(x, y, width, height)) {
 				for (T one : mContents) {
-					if (one.containedBy(bounds)) {
+					if (one.containedBy(x, y, width, height)) {
 						return true;
 					}
 				}
 				if (!isLeaf()) {
-					return mNorthWest.inside(bounds) || mNorthEast.inside(bounds) || mSouthWest.inside(bounds) || mSouthEast.inside(bounds);
+					return mNorthWest.inside(x, y, width, height) || mNorthEast.inside(x, y, width, height) || mSouthWest.inside(x, y, width, height) || mSouthEast.inside(x, y, width, height);
 				}
 			}
 			return false;
 		}
 
-		final boolean inside(Rectangle bounds, Matcher<T> matcher) {
-			if (intersectsBounds(bounds)) {
+		final boolean inside(int x, int y, int width, int height, Matcher<T> matcher) {
+			if (intersectsBounds(x, y, width, height)) {
 				for (T one : mContents) {
-					if (one.containedBy(bounds) && matcher.matches(one)) {
+					if (one.containedBy(x, y, width, height) && matcher.matches(one)) {
 						return true;
 					}
 				}
 				if (!isLeaf()) {
-					return mNorthWest.inside(bounds, matcher) || mNorthEast.inside(bounds, matcher) || mSouthWest.inside(bounds, matcher) || mSouthEast.inside(bounds, matcher);
+					return mNorthWest.inside(x, y, width, height, matcher) || mNorthEast.inside(x, y, width, height, matcher) || mSouthWest.inside(x, y, width, height, matcher) || mSouthEast.inside(x, y, width, height, matcher);
 				}
 			}
 			return false;
@@ -581,68 +765,74 @@ public class QuadTree<T extends Bounds> {
 			}
 		}
 
-		final void findIntersects(Rectangle bounds, Set<T> result) {
-			if (intersectsBounds(bounds)) {
+		final void findIntersects(int x, int y, int width, int height, Set<T> result) {
+			if (intersectsBounds(x, y, width, height)) {
 				for (T one : mContents) {
-					if (one.intersectsBounds(bounds)) {
+					if (one.intersectsBounds(x, y, width, height)) {
 						result.add(one);
 					}
 				}
 				if (!isLeaf()) {
-					mNorthWest.findIntersects(bounds, result);
-					mNorthEast.findIntersects(bounds, result);
-					mSouthWest.findIntersects(bounds, result);
-					mSouthEast.findIntersects(bounds, result);
+					mNorthWest.findIntersects(x, y, width, height, result);
+					mNorthEast.findIntersects(x, y, width, height, result);
+					mSouthWest.findIntersects(x, y, width, height, result);
+					mSouthEast.findIntersects(x, y, width, height, result);
 				}
 			}
 		}
 
-		final void findIntersects(Rectangle bounds, Set<T> result, Matcher<T> matcher) {
-			if (intersectsBounds(bounds)) {
+		final void findIntersects(int x, int y, int width, int height, Set<T> result, Matcher<T> matcher) {
+			if (intersectsBounds(x, y, width, height)) {
 				for (T one : mContents) {
-					if (one.intersectsBounds(bounds) && matcher.matches(one)) {
+					if (one.intersectsBounds(x, y, width, height) && matcher.matches(one)) {
 						result.add(one);
 					}
 				}
 				if (!isLeaf()) {
-					mNorthWest.findIntersects(bounds, result, matcher);
-					mNorthEast.findIntersects(bounds, result, matcher);
-					mSouthWest.findIntersects(bounds, result, matcher);
-					mSouthEast.findIntersects(bounds, result, matcher);
+					mNorthWest.findIntersects(x, y, width, height, result, matcher);
+					mNorthEast.findIntersects(x, y, width, height, result, matcher);
+					mSouthWest.findIntersects(x, y, width, height, result, matcher);
+					mSouthEast.findIntersects(x, y, width, height, result, matcher);
 				}
 			}
 		}
 
-		final void findContainedBy(Rectangle bounds, Set<T> result) {
-			if (intersectsBounds(bounds)) {
+		final void findContainedBy(int x, int y, int width, int height, Set<T> result) {
+			if (intersectsBounds(x, y, width, height)) {
 				for (T one : mContents) {
-					if (one.containedBy(bounds)) {
+					if (one.containedBy(x, y, width, height)) {
 						result.add(one);
 					}
 				}
 				if (!isLeaf()) {
-					mNorthWest.findContainedBy(bounds, result);
-					mNorthEast.findContainedBy(bounds, result);
-					mSouthWest.findContainedBy(bounds, result);
-					mSouthEast.findContainedBy(bounds, result);
+					mNorthWest.findContainedBy(x, y, width, height, result);
+					mNorthEast.findContainedBy(x, y, width, height, result);
+					mSouthWest.findContainedBy(x, y, width, height, result);
+					mSouthEast.findContainedBy(x, y, width, height, result);
 				}
 			}
 		}
 
-		final void findContainedBy(Rectangle bounds, Set<T> result, Matcher<T> matcher) {
-			if (intersectsBounds(bounds)) {
+		final void findContainedBy(int x, int y, int width, int height, Set<T> result, Matcher<T> matcher) {
+			if (intersectsBounds(x, y, width, height)) {
 				for (T one : mContents) {
-					if (one.containedBy(bounds) && matcher.matches(one)) {
+					if (one.containedBy(x, y, width, height) && matcher.matches(one)) {
 						result.add(one);
 					}
 				}
 				if (!isLeaf()) {
-					mNorthWest.findContainedBy(bounds, result, matcher);
-					mNorthEast.findContainedBy(bounds, result, matcher);
-					mSouthWest.findContainedBy(bounds, result, matcher);
-					mSouthEast.findContainedBy(bounds, result, matcher);
+					mNorthWest.findContainedBy(x, y, width, height, result, matcher);
+					mNorthEast.findContainedBy(x, y, width, height, result, matcher);
+					mSouthWest.findContainedBy(x, y, width, height, result, matcher);
+					mSouthEast.findContainedBy(x, y, width, height, result, matcher);
 				}
 			}
+		}
+
+		@SuppressWarnings("nls")
+		@Override
+		public String toString() {
+			return mX + "," + mY + "," + mWidth + "," + mHeight;
 		}
 	}
 }
