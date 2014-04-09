@@ -37,11 +37,10 @@ class MessageBundle {
 		mClassElement = fieldElement.getEnclosingElement();
 		mPackageName = env.getElementUtils().getPackageOf(mClassElement).getQualifiedName().toString();
 		mClassName = mClassElement.getSimpleName().toString();
-	}
-
-	MessageBundle(String packageName, String className) {
-		mPackageName = packageName;
-		mClassName = className;
+		Element parent = mClassElement.getEnclosingElement();
+		if (parent != null) {
+			mClassName = parent.getSimpleName().toString() + "$" + mClassName; //$NON-NLS-1$
+		}
 	}
 
 	String getFullName() {
