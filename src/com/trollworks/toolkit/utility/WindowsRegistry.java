@@ -9,9 +9,7 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui;
-
-import com.trollworks.toolkit.utility.Platform;
+package com.trollworks.toolkit.utility;
 
 import java.io.File;
 import java.io.IOException;

@@ -9,14 +9,11 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui.preferences;
+package com.trollworks.toolkit.utility;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.io.SafeFileUpdater;
 import com.trollworks.toolkit.ui.Fonts;
-import com.trollworks.toolkit.ui.SafeFileUpdater;
-import com.trollworks.toolkit.utility.BundleInfo;
-import com.trollworks.toolkit.utility.Localization;
-import com.trollworks.toolkit.utility.Platform;
 import com.trollworks.toolkit.utility.notification.Notifier;
 import com.trollworks.toolkit.utility.text.Conversion;
 

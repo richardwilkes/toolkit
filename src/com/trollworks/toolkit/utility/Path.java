@@ -9,7 +9,7 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui;
+package com.trollworks.toolkit.utility;
 
 import java.io.File;
 import java.util.StringTokenizer;

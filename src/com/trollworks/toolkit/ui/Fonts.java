@@ -11,7 +11,7 @@
 
 package com.trollworks.toolkit.ui;
 
-import com.trollworks.toolkit.ui.preferences.Preferences;
+import com.trollworks.toolkit.utility.Preferences;
 
 import java.awt.Font;
 import java.awt.FontMetrics;

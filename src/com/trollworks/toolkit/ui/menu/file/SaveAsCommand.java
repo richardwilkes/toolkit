@@ -12,10 +12,10 @@
 package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.ui.Path;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.StdFileDialog;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.Path;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;

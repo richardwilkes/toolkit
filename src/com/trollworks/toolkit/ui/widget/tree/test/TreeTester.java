@@ -13,9 +13,9 @@ package com.trollworks.toolkit.ui.widget.tree.test;
 
 import com.trollworks.toolkit.ui.App;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
-import com.trollworks.toolkit.ui.LaunchProxy;
 import com.trollworks.toolkit.ui.menu.StdMenuBar;
-import com.trollworks.toolkit.ui.preferences.Preferences;
+import com.trollworks.toolkit.utility.LaunchProxy;
+import com.trollworks.toolkit.utility.Preferences;
 import com.trollworks.toolkit.utility.Timing;
 import com.trollworks.toolkit.utility.cmdline.CmdLine;
 

@@ -17,10 +17,10 @@ import com.apple.eawt.QuitResponse;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Fonts;
 import com.trollworks.toolkit.ui.menu.Command;
-import com.trollworks.toolkit.ui.preferences.Preferences;
 import com.trollworks.toolkit.ui.widget.BaseWindow;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.Platform;
+import com.trollworks.toolkit.utility.Preferences;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;

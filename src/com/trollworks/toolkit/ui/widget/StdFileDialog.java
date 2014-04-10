@@ -12,10 +12,10 @@
 package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.ui.NewerDataFileVersionException;
-import com.trollworks.toolkit.ui.Path;
 import com.trollworks.toolkit.ui.menu.file.RecentFilesMenu;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.NewerDataFileVersionException;
+import com.trollworks.toolkit.utility.Path;
 import com.trollworks.toolkit.utility.Platform;
 
 import java.awt.Component;

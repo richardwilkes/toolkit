@@ -12,10 +12,10 @@
 package com.trollworks.toolkit.ui;
 
 import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.ui.preferences.Preferences;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.Preferences;
 import com.trollworks.toolkit.utility.Version;
 
 import java.awt.Desktop;

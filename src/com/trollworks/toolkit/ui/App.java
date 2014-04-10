@@ -21,6 +21,7 @@ import com.trollworks.toolkit.ui.menu.file.QuitCommand;
 import com.trollworks.toolkit.ui.menu.help.AboutCommand;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.BundleInfo;
+import com.trollworks.toolkit.utility.LaunchProxy;
 import com.trollworks.toolkit.utility.Platform;
 import com.trollworks.toolkit.utility.cmdline.CmdLine;
 

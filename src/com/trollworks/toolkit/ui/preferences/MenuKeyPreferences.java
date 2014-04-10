@@ -19,6 +19,7 @@ import com.trollworks.toolkit.ui.widget.BandedPanel;
 import com.trollworks.toolkit.ui.widget.KeyStrokeDisplay;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.Preferences;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

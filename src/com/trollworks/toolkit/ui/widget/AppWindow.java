@@ -12,7 +12,6 @@
 package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.collections.FilteredIterator;
-import com.trollworks.toolkit.ui.Path;
 import com.trollworks.toolkit.ui.layout.FlexRow;
 import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.menu.edit.Undoable;
@@ -22,6 +21,7 @@ import com.trollworks.toolkit.ui.preferences.MenuKeyPreferences;
 import com.trollworks.toolkit.ui.print.PageOrientation;
 import com.trollworks.toolkit.ui.print.PrintManager;
 import com.trollworks.toolkit.ui.undo.StdUndoManager;
+import com.trollworks.toolkit.utility.Path;
 import com.trollworks.toolkit.utility.units.LengthUnits;
 
 import java.awt.AWTEvent;

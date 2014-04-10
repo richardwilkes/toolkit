@@ -12,10 +12,10 @@
 package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.ui.Path;
-import com.trollworks.toolkit.ui.preferences.Preferences;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.Path;
 import com.trollworks.toolkit.utility.Platform;
+import com.trollworks.toolkit.utility.Preferences;
 
 import java.io.File;
 import java.util.ArrayList;

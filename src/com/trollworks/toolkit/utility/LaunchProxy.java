@@ -9,15 +9,14 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui;
+package com.trollworks.toolkit.utility;
 
 import com.trollworks.toolkit.io.conduit.Conduit;
 import com.trollworks.toolkit.io.conduit.ConduitMessage;
 import com.trollworks.toolkit.io.conduit.ConduitReceiver;
+import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.menu.file.OpenCommand;
 import com.trollworks.toolkit.ui.menu.file.OpenDataFileCommand;
-import com.trollworks.toolkit.utility.BundleInfo;
-import com.trollworks.toolkit.utility.Debug;
 
 import java.awt.EventQueue;
 import java.io.File;

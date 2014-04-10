@@ -14,7 +14,7 @@ package com.trollworks.toolkit.ui.widget;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.WindowSizeEnforcer;
 import com.trollworks.toolkit.ui.menu.file.CloseCommand;
-import com.trollworks.toolkit.ui.preferences.Preferences;
+import com.trollworks.toolkit.utility.Preferences;
 
 import java.awt.Component;
 import java.awt.Container;
