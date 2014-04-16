@@ -20,8 +20,8 @@ import com.trollworks.toolkit.ui.menu.window.WindowMenu;
 import com.trollworks.toolkit.ui.preferences.MenuKeyPreferences;
 import com.trollworks.toolkit.ui.print.PageOrientation;
 import com.trollworks.toolkit.ui.print.PrintManager;
-import com.trollworks.toolkit.ui.undo.StdUndoManager;
 import com.trollworks.toolkit.utility.Path;
+import com.trollworks.toolkit.utility.undo.StdUndoManager;
 import com.trollworks.toolkit.utility.units.LengthUnits;
 
 import java.awt.AWTEvent;

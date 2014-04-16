@@ -11,7 +11,7 @@
 
 package com.trollworks.toolkit.ui.menu.edit;
 
-import com.trollworks.toolkit.ui.undo.StdUndoManager;
+import com.trollworks.toolkit.utility.undo.StdUndoManager;
 
 /**
  * Windows that want to participate in the standard {@link UndoCommand} and {@link RedoCommand}

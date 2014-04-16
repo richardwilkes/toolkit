@@ -9,7 +9,7 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui.undo;
+package com.trollworks.toolkit.utility.undo;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;

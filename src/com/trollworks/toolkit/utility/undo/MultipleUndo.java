@@ -9,17 +9,25 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui.undo;
+package com.trollworks.toolkit.utility.undo;
 
-import javax.swing.UIManager;
+import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.utility.Localization;
+
 import javax.swing.undo.CompoundEdit;
 
 /** Provides a convenient way to collect multiple undos into a single undo. */
 public class MultipleUndo extends CompoundEdit {
-	private static final String	SPACE		= " ";															//$NON-NLS-1$
-	private static final String	REDO_PREFIX	= UIManager.getString("AbstractUndoableEdit.redoText") + SPACE; //$NON-NLS-1$
-	private static final String	UNDO_PREFIX	= UIManager.getString("AbstractUndoableEdit.undoText") + SPACE; //$NON-NLS-1$
-	private String				mName;
+	@Localize("Redo ")
+	private static String	REDO_PREFIX;
+	@Localize("Undo ")
+	private static String	UNDO_PREFIX;
+
+	static {
+		Localization.initialize();
+	}
+
+	private String			mName;
 
 	/**
 	 * Create a multiple undo edit.
