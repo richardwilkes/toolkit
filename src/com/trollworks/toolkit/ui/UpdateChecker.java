@@ -16,6 +16,7 @@ import com.trollworks.toolkit.ui.widget.WindowUtils;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.Preferences;
+import com.trollworks.toolkit.utility.Task;
 import com.trollworks.toolkit.utility.Version;
 
 import java.awt.Desktop;
@@ -27,6 +28,7 @@ import java.net.NetworkInterface;
 import java.net.URI;
 import java.net.URL;
 import java.util.StringTokenizer;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
@@ -173,7 +175,7 @@ public class UpdateChecker implements Runnable {
 					goToUpdate();
 				}
 			} else {
-				DelayedTask.schedule(this, 250);
+				Task.scheduleOnUIThread(this, 250, TimeUnit.MILLISECONDS, this);
 			}
 		}
 	}

@@ -12,7 +12,6 @@
 package com.trollworks.toolkit.ui.widget.tree;
 
 import com.trollworks.toolkit.ui.Colors;
-import com.trollworks.toolkit.ui.DelayedTask;
 import com.trollworks.toolkit.ui.Fonts;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.TextDrawing;
@@ -23,6 +22,7 @@ import com.trollworks.toolkit.ui.menu.edit.SelectAllCapable;
 import com.trollworks.toolkit.ui.widget.DirectScrollPanel;
 import com.trollworks.toolkit.ui.widget.DirectScrollPanelArea;
 import com.trollworks.toolkit.utility.Debug;
+import com.trollworks.toolkit.utility.Task;
 import com.trollworks.toolkit.utility.notification.NotifierTarget;
 
 import gnu.trove.TObjectIntHashMap;
@@ -67,6 +67,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.UIManager;
 
@@ -348,7 +349,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			if (isDynamicRowHeightEnabled()) {
 				if (!mResizePending) {
 					mResizePending = true;
-					DelayedTask.schedule(this, 150);
+					Task.scheduleOnUIThread(this, 150, TimeUnit.MILLISECONDS, this);
 				}
 			} else {
 				run();
@@ -1814,7 +1815,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			g2d.drawImage(off1, -(getColumnStart(column) + pt.x), 0, this);
 		} catch (Exception paintException) {
 			assert false : Debug.toString(paintException);
-			off2 = null;
+		off2 = null;
 		} finally {
 			if (g2d != null) {
 				g2d.dispose();

@@ -13,10 +13,10 @@ package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Colors;
-import com.trollworks.toolkit.ui.DelayedTask;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.TextDrawing;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.Task;
 import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.awt.Color;
@@ -32,6 +32,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.text.MessageFormat;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -93,7 +94,7 @@ public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, 
 	private synchronized void schedule() {
 		if (!mPending && isDisplayable()) {
 			mPending = true;
-			DelayedTask.schedule(this, 1000);
+			Task.scheduleOnUIThread(this, 1, TimeUnit.SECONDS, this);
 		}
 	}
 
