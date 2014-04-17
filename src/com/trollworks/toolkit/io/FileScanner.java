@@ -20,15 +20,32 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.EnumSet;
 
+/** Walks a file tree, calling your {@link Handler} for each file found. */
 public class FileScanner implements FileVisitor<Path> {
 	private Path	mPath;
 	private Handler	mHandler;
 	private boolean	mSkipHidden;
 
+	/**
+	 * Walks a file tree, calling the specified {@link Handler} for each file found. Hidden files
+	 * and directories (those whose names start with a period) are skipped.
+	 *
+	 * @param path The starting point.
+	 * @param handler The {@link Handler} to call for each file.
+	 */
 	public static final void walk(Path path, Handler handler) {
 		walk(path, handler, true);
 	}
 
+	/**
+	 * Walks a file tree, calling the specified {@link Handler} for each file found. Hidden files
+	 * and directories (those that start with a period) are skipped.
+	 *
+	 * @param path The starting point.
+	 * @param handler The {@link Handler} to call for each file.
+	 * @param skipHidden Pass in <code>true</code> if files and directories whose names start with a
+	 *            period should be skipped.
+	 */
 	public static final void walk(Path path, Handler handler, boolean skipHidden) {
 		try {
 			Files.walkFileTree(path, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE, new FileScanner(path, handler, skipHidden));
@@ -77,7 +94,9 @@ public class FileScanner implements FileVisitor<Path> {
 		return FileVisitResult.CONTINUE;
 	}
 
+	/** The callback used for {@link FileScanner}. */
 	public interface Handler {
+		/** @param path The {@link Path} to the file to be processed. */
 		void processFile(Path path) throws IOException;
 	}
 }

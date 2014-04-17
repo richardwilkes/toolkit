@@ -18,9 +18,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
+/** Provides a simple way to remove all files in a directory tree. */
 public class RecursiveDirectoryRemover implements FileVisitor<Path> {
 	private Path	mPath;
 
+	/**
+	 * @param path The starting point.
+	 * @param includeRootDir Pass in <code>true</code> to remove the specified path as well as its
+	 *            contents.
+	 */
 	public static final void remove(Path path, boolean includeRootDir) {
 		try {
 			Files.walkFileTree(path, new RecursiveDirectoryRemover(includeRootDir ? null : path));
