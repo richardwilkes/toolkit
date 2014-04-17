@@ -25,7 +25,7 @@ import com.trollworks.toolkit.utility.Debug;
 import com.trollworks.toolkit.utility.Task;
 import com.trollworks.toolkit.utility.notification.NotifierTarget;
 
-import gnu.trove.TObjectIntHashMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -1815,7 +1815,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			g2d.drawImage(off1, -(getColumnStart(column) + pt.x), 0, this);
 		} catch (Exception paintException) {
 			assert false : Debug.toString(paintException);
-		off2 = null;
+			off2 = null;
 		} finally {
 			if (g2d != null) {
 				g2d.dispose();

@@ -7,7 +7,7 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libraries/trove.jar" sourcepath="libraries/trove-src.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/apple_stubs"/>
+	<classpathentry kind="lib" path="libraries/trove-3.0.3.jar" sourcepath="libraries/trove-3.0.3-src.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

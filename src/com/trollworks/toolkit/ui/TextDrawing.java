@@ -11,8 +11,8 @@
 
 package com.trollworks.toolkit.ui;
 
-import gnu.trove.TIntIntHashMap;
-import gnu.trove.TObjectIntHashMap;
+import gnu.trove.map.hash.TIntIntHashMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.awt.Dimension;
 import java.awt.Font;

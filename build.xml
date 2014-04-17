@@ -40,7 +40,7 @@
 			excludes="${annotation_src}/processor/**" debug="no" optimize="yes"
 			target="${min_jdk}" source="${min_jdk}" deprecation="true" includeantruntime="no">
 			<classpath>
-				<pathelement location="${lib}/trove.jar"/>
+				<pathelement location="${lib}/trove-3.0.3.jar"/>
 				<pathelement location="../apple_stubs/apple_stubs.jar"/>
 			</classpath>
 			<compilerarg value="-Xlint:all"/>
