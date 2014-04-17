@@ -3,7 +3,6 @@
 	<property name="src" value="src"/>
 	<property name="lib" value="libraries"/>
 	<property name="build_root" value="ant_build"/>
-	<property name="toolkit_jar" value="${lib}/toolkit.jar"/>
 	<property name="package_dir" value="com/trollworks/toolkit"/>
 	<property name="toolkit_build" value="${build_root}/toolkit"/>
 	<property name="annotation_src" value="com/trollworks/toolkit/annotation"/>
@@ -11,8 +10,11 @@
 	<property name="ap_jar" value="${lib}/toolkit_annotation_processors.jar"/>
 	<property name="ap_build" value="${build_root}/annotation_processors"/>
 	<property name="min_jdk" value="1.8"/>
+	<property name="primary_version" value="4.0.0"/>
+	<property name="toolkit_jar" value="${lib}/toolkit-${primary_version}.jar"/>
+	<property name="toolkit_src_jar" value="${lib}/toolkit-${primary_version}-src.jar"/>
 	<tstamp>
-		<format property="version" pattern="4.0.0.yyyyMMddHHmmss"/>
+		<format property="version" pattern="${primary_version}.yyyyMMddHHmmss"/>
 	</tstamp>
 	<tstamp>
 		<format property="year" pattern="yyyy"/>
@@ -29,6 +31,7 @@
 		<delete dir="${toolkit_build}"/>
 		<delete dir="${generated_src}"/>
 		<delete file="${toolkit_jar}"/>
+		<delete file="${toolkit_src_jar}"/>
 	</target>
 	
 	<target name="toolkit" description="Build the toolkit" depends="clean_toolkit">
@@ -57,10 +60,21 @@
 			<fileset dir="${src}" includes="**/*.properties,**/*.png,**/*.gif"/>
 		</copy>
 
-		<!-- Create the jar file. -->
+		<!-- Create the library jar file. -->
 		<jar destfile="${toolkit_jar}" basedir="${toolkit_build}" duplicate="fail">
 			<manifest>
 				<attribute name="bundle-name" value="Trollworks Toolkit"/>
+				<attribute name="bundle-version" value="${version}"/>
+				<attribute name="bundle-license" value="Mozilla Public License 2.0"/>
+				<attribute name="bundle-copyright-owner" value="Richard A. Wilkes"/>
+				<attribute name="bundle-copyright-years" value="1998-${year}"/>
+			</manifest>
+		</jar>
+
+		<!-- Create the source jar file. -->
+		<jar destfile="${toolkit_src_jar}" basedir="${src}" duplicate="fail">
+			<manifest>
+				<attribute name="bundle-name" value="Trollworks Toolkit Source"/>
 				<attribute name="bundle-version" value="${version}"/>
 				<attribute name="bundle-license" value="Mozilla Public License 2.0"/>
 				<attribute name="bundle-copyright-owner" value="Richard A. Wilkes"/>
