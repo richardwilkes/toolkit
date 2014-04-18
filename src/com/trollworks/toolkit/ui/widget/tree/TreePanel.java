@@ -22,8 +22,8 @@ import com.trollworks.toolkit.ui.menu.edit.SelectAllCapable;
 import com.trollworks.toolkit.ui.widget.DirectScrollPanel;
 import com.trollworks.toolkit.ui.widget.DirectScrollPanelArea;
 import com.trollworks.toolkit.utility.Debug;
-import com.trollworks.toolkit.utility.Task;
 import com.trollworks.toolkit.utility.notification.NotifierTarget;
+import com.trollworks.toolkit.utility.task.Tasks;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
 
@@ -349,7 +349,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			if (isDynamicRowHeightEnabled()) {
 				if (!mResizePending) {
 					mResizePending = true;
-					Task.scheduleOnUIThread(this, 150, TimeUnit.MILLISECONDS, this);
+					Tasks.scheduleOnUIThread(this, 150, TimeUnit.MILLISECONDS, this);
 				}
 			} else {
 				run();
