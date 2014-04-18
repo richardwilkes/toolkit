@@ -13,8 +13,6 @@ package com.trollworks.toolkit.io;
 
 import com.trollworks.toolkit.utility.Debug;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,22 +33,20 @@ public class Log {
 	}
 
 	/**
-	 * @param file The file to write the log data to. Pass in <code>null</code> to reset it to
-	 *            {@link System#out}. Note that when {@link Debug#DEV_MODE} is <code>true</code>,
+	 * @param stream The {@link PrintStream} to write the log data to. By default, logging is sent
+	 *            to {@link System#out}. Note that when {@link Debug#DEV_MODE} is <code>true</code>,
 	 *            calling this method has no effect and logging is always performed to
 	 *            {@link System#out}.
 	 */
-	public static final void setLogFile(File file) {
+	public static final void setPrintStream(PrintStream stream) {
 		if (!Debug.DEV_MODE) {
-			if (file == null) {
-				OUT = System.out;
-			} else {
-				try {
-					OUT = new PrintStream(file);
-				} catch (IOException exception) {
-					error(exception);
-				}
+			if (stream == null) {
+				stream = System.out;
 			}
+			if (OUT != stream && OUT != System.out) {
+				OUT.close();
+			}
+			OUT = stream;
 		}
 	}
 
