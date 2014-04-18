@@ -13,7 +13,7 @@ package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.utility.Localization;
-import com.trollworks.toolkit.utility.Path;
+import com.trollworks.toolkit.utility.PathUtils;
 import com.trollworks.toolkit.utility.Platform;
 import com.trollworks.toolkit.utility.Preferences;
 
@@ -60,14 +60,14 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
 
 	/** @param file The {@link File} to add to the recents list. */
 	public static void addRecent(File file) {
-		String extension = Path.getExtension(file.getName());
+		String extension = PathUtils.getExtension(file.getName());
 		if (Platform.isMacintosh() || Platform.isWindows()) {
 			extension = extension.toLowerCase();
 		}
 		for (String allowed : FileType.getOpenableExtensions()) {
 			if (allowed.equals(extension)) {
 				if (file.canRead()) {
-					file = Path.getFile(Path.getFullPath(file));
+					file = PathUtils.getFile(PathUtils.getFullPath(file));
 					RECENTS.remove(file);
 					RECENTS.add(0, file);
 					if (RECENTS.size() > MAX_RECENTS) {
@@ -89,7 +89,7 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
 			if (path == null) {
 				break;
 			}
-			addRecent(Path.getFile(Path.normalizeFullPath(path)));
+			addRecent(PathUtils.getFile(PathUtils.normalizeFullPath(path)));
 		}
 	}
 
@@ -128,7 +128,7 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
 		for (File file : RECENTS) {
 			if (file.canRead()) {
 				list.add(file);
-				add(new JMenuItem(new OpenDataFileCommand(Path.getLeafName(file.getName(), false), file)));
+				add(new JMenuItem(new OpenDataFileCommand(PathUtils.getLeafName(file.getName(), false), file)));
 				if (list.size() == MAX_RECENTS) {
 					break;
 				}

@@ -15,7 +15,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.StdFileDialog;
 import com.trollworks.toolkit.utility.Localization;
-import com.trollworks.toolkit.utility.Path;
+import com.trollworks.toolkit.utility.PathUtils;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -61,7 +61,7 @@ public class SaveAsCommand extends Command {
 	 */
 	public static File[] saveAs(Saveable saveable) {
 		String path = saveable.getPreferredSavePath();
-		File result = StdFileDialog.choose(saveable instanceof Component ? (Component) saveable : null, false, SAVE_AS, Path.getParent(path), Path.getLeafName(path), saveable.getAllowedExtensions());
+		File result = StdFileDialog.choose(saveable instanceof Component ? (Component) saveable : null, false, SAVE_AS, PathUtils.getParent(path), PathUtils.getLeafName(path), saveable.getAllowedExtensions());
 		File[] files = result != null ? saveable.saveTo(result) : new File[0];
 		for (File file : files) {
 			RecentFilesMenu.addRecent(file);

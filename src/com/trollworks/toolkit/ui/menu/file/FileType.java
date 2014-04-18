@@ -13,7 +13,7 @@ package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.widget.AppWindow;
-import com.trollworks.toolkit.utility.Path;
+import com.trollworks.toolkit.utility.PathUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -85,7 +85,7 @@ public class FileType {
 	 * @return The icon for the specified file.
 	 */
 	public static BufferedImage getIconForFile(String path) {
-		return getIconForFileExtension(Path.getExtension(path));
+		return getIconForFileExtension(PathUtils.getExtension(path));
 	}
 
 	/**

@@ -15,7 +15,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.StdFileDialog;
 import com.trollworks.toolkit.utility.Localization;
-import com.trollworks.toolkit.utility.Path;
+import com.trollworks.toolkit.utility.PathUtils;
 
 import java.awt.Component;
 import java.awt.Window;
@@ -90,7 +90,7 @@ public class ExportToCommand extends Command {
 	 */
 	public File[] saveAs(Saveable saveable) {
 		String path = saveable.getPreferredSavePath();
-		File result = StdFileDialog.choose(saveable instanceof Component ? (Component) saveable : null, false, (String) getValue(NAME), Path.getParent(path), Path.getLeafName(path), mExtension);
+		File result = StdFileDialog.choose(saveable instanceof Component ? (Component) saveable : null, false, (String) getValue(NAME), PathUtils.getParent(path), PathUtils.getLeafName(path), mExtension);
 		return result != null ? saveable.saveTo(result) : new File[0];
 	}
 }
