@@ -13,6 +13,10 @@ package com.trollworks.toolkit.utility;
 
 import com.trollworks.toolkit.annotation.Localize;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.StringTokenizer;
+
 /** Provides text manipulation. */
 public class Text {
 	@Localize("a")
@@ -64,5 +68,80 @@ public class Text {
 			return isVowel(text.charAt(0));
 		}
 		return false;
+	}
+
+	/**
+	 * @param data The bytes to compute a hash for.
+	 * @return A SHA-1 hash for the input data.
+	 */
+	public final static byte[] computeSHA1Hash(byte[] data) throws NoSuchAlgorithmException {
+		return computeSHA1Hash(data, 0, data.length);
+	}
+
+	/**
+	 * @param data The bytes to compute a hash for.
+	 * @param offset The starting index.
+	 * @param length The number of bytes to use.
+	 * @return A SHA-1 hash for the input data.
+	 */
+	public final static byte[] computeSHA1Hash(byte[] data, int offset, int length) throws NoSuchAlgorithmException {
+		MessageDigest sha1 = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
+		sha1.update(data, offset, length);
+		return sha1.digest();
+	}
+
+	/**
+	 * @param data The data to create a hex string for.
+	 * @return A string of two character hexadecimal values for each byte.
+	 */
+	public final static String bytesToHex(byte[] data) {
+		return bytesToHex(data, 0, data.length);
+	}
+
+	/**
+	 * @param data The data to create a hex string for.
+	 * @param offset The starting index.
+	 * @param length The number of bytes to use.
+	 * @return A string of two character hexadecimal values for each byte.
+	 */
+	public final static String bytesToHex(byte[] data, int offset, int length) {
+		StringBuilder buffer = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			String hex = Integer.toHexString(data[i + offset] & 0xFF);
+			if (hex.length() < 2) {
+				buffer.append('0');
+			}
+			buffer.append(hex);
+		}
+		return buffer.toString();
+	}
+
+	/**
+	 * @param text The text to reflow.
+	 * @return The revised text.
+	 */
+	@SuppressWarnings("nls")
+	public static final String reflow(String text) {
+		if (text == null) {
+			return "";
+		}
+		int count = 0;
+		StringBuilder buffer = new StringBuilder();
+		StringTokenizer tokenizer = new StringTokenizer(text.replaceAll("[\\x00-\\x08]", "").replaceAll("[\\x0b\\x0c]", "").replaceAll("[\\x0e-\\x1f]", "").replaceAll("[\\x7f-\\x9f]", "").replaceAll("\r\n", "\n").replace('\r', '\n').replaceAll("[ \t\f]+", " ").trim(), "\n", true);
+		while (tokenizer.hasMoreTokens()) {
+			String token = tokenizer.nextToken();
+			if (token.equals("\n")) {
+				count++;
+			} else {
+				if (count == 1) {
+					buffer.append(" ");
+				} else if (count > 1) {
+					buffer.append("\n\n");
+				}
+				count = 0;
+				buffer.append(token);
+			}
+		}
+		return buffer.toString();
 	}
 }
