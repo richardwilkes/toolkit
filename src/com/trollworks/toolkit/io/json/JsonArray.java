@@ -18,10 +18,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /** Represents an array in JSON. */
 public class JsonArray extends JsonCollection {
-	private ArrayList<Object>	mList	= new ArrayList<>();
+	private List<Object>	mList	= new ArrayList<>();
 
 	/**
 	 * @param index The index to retrieve.
