@@ -20,7 +20,7 @@ import com.trollworks.toolkit.ui.menu.window.WindowMenu;
 import com.trollworks.toolkit.ui.preferences.MenuKeyPreferences;
 import com.trollworks.toolkit.ui.print.PageOrientation;
 import com.trollworks.toolkit.ui.print.PrintManager;
-import com.trollworks.toolkit.utility.Path;
+import com.trollworks.toolkit.utility.PathUtils;
 import com.trollworks.toolkit.utility.undo.StdUndoManager;
 import com.trollworks.toolkit.utility.units.LengthUnits;
 
@@ -287,12 +287,12 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 	 * @return The {@link AppWindow} associated with the specified backing file.
 	 */
 	public static AppWindow findWindow(File file) {
-		String fullPath = Path.getFullPath(file);
+		String fullPath = PathUtils.getFullPath(file);
 		for (AppWindow window : AppWindow.getAllWindows()) {
 			if (window instanceof FileProxy) {
 				File wFile = ((FileProxy) window).getBackingFile();
 				if (wFile != null) {
-					if (Path.getFullPath(wFile).equals(fullPath)) {
+					if (PathUtils.getFullPath(wFile).equals(fullPath)) {
 						return window;
 					}
 				}

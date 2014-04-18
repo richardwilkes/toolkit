@@ -15,7 +15,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.file.RecentFilesMenu;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.NewerDataFileVersionException;
-import com.trollworks.toolkit.utility.Path;
+import com.trollworks.toolkit.utility.PathUtils;
 import com.trollworks.toolkit.utility.Platform;
 
 import java.awt.Component;
@@ -76,7 +76,7 @@ public class StdFileDialog implements FilenameFilter {
 				RecentFilesMenu.addRecent(file);
 				return file;
 			} else if (!open) {
-				File file = new File(dialog.getDirectory(), Path.enforceExtension(result, extension[0]));
+				File file = new File(dialog.getDirectory(), PathUtils.enforceExtension(result, extension[0]));
 				RecentFilesMenu.addRecent(file);
 				return file;
 			}
