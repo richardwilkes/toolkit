@@ -12,10 +12,11 @@
 package com.trollworks.toolkit.utility;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.StringTokenizer;
 
 /** Provides standard file path manipulation facilities. */
-public class Path {
+public class PathUtils {
 	/**
 	 * Ensures that the passed in string has the specified extension on it.
 	 *
@@ -110,20 +111,23 @@ public class Path {
 	 * @param path The path to operate on.
 	 * @return The extension of the path name, including the initial ".".
 	 */
+	public static String getExtension(Path path) {
+		return getExtension(path != null ? path.toString() : null);
+	}
+
+	/**
+	 * @param path The path to operate on.
+	 * @return The extension of the path name, including the initial ".".
+	 */
 	public static final String getExtension(String path) {
-		int index;
-
-		if (path == null) {
-			return null;
+		path = getLeafName(path);
+		if (path != null) {
+			int dot = path.lastIndexOf('.');
+			if (dot != -1 && dot + 1 < path.length()) {
+				return path.substring(dot + 1);
+			}
 		}
-
-		path = path.replace('\\', '/');
-		index = path.lastIndexOf('.');
-		if (index == -1 || index == path.length() - 1 || index < path.lastIndexOf('/')) {
-			return ""; //$NON-NLS-1$
-		}
-
-		return path.substring(index);
+		return ""; //$NON-NLS-1$
 	}
 
 	/**
@@ -198,6 +202,17 @@ public class Path {
 	 */
 	public static final String getLeafName(String path) {
 		return getLeafName(path, true);
+	}
+
+	/**
+	 * @param path The path to process.
+	 * @param includeExtension Pass in <code>true</code> to leave the extension on the name or
+	 *            <code>false</code> to strip it off.
+	 * @return The leaf portion of the path name (everything to the right of the last path
+	 *         separator).
+	 */
+	public static final String getLeafName(Path path, boolean includeExtension) {
+		return getLeafName(path.toString(), includeExtension);
 	}
 
 	/**
