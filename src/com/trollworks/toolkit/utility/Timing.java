@@ -79,6 +79,6 @@ public final class Timing {
 
 	@Override
 	public final String toString() {
-		return toStringWithMicroResolutionThenReset();
+		return Numbers.trimTrailingZeroes(toStringWithMicroResolutionThenReset(), true);
 	}
 }
