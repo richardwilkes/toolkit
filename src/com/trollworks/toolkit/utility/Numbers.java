@@ -49,6 +49,36 @@ public class Numbers {
 	private static final String[]	ROMAN_TEXT						= { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
 
 	/**
+	 * @param a A value to compare.
+	 * @param b A value to compare.
+	 * @return -1 if a is less than b, 1 if a is greater than b, 0 if a is equal to b.
+	 */
+	public static int compare(int a, int b) {
+		if (a < b) {
+			return -1;
+		}
+		if (a > b) {
+			return 1;
+		}
+		return 0;
+	}
+
+	/**
+	 * @param a A value to compare.
+	 * @param b A value to compare.
+	 * @return -1 if a is less than b, 1 if a is greater than b, 0 if a is equal to b.
+	 */
+	public static int compare(long a, long b) {
+		if (a < b) {
+			return -1;
+		}
+		if (a > b) {
+			return 1;
+		}
+		return 0;
+	}
+
+	/**
 	 * @param buffer The text to process.
 	 * @return <code>true</code> if the buffer contains a 'true' value.
 	 */
