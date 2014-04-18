@@ -7,3 +7,10 @@ GNU Trove
   Version: 3.0.3
   License Used: LGPL 2.1
   Obtained from: https://bitbucket.org/robeden/trove.git
+
+AppBundler
+  Description: Java application packager for Mac OS X
+  Files: appbundler-1.0.jar
+  Version: 1.0
+  License Used: GPL 2.0
+  Obtained from: http://java.net/projects/appbundler
