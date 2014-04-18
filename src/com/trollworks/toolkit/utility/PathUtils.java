@@ -109,7 +109,7 @@ public class PathUtils {
 
 	/**
 	 * @param path The path to operate on.
-	 * @return The extension of the path name, including the initial ".".
+	 * @return The extension of the path name, excluding the initial ".".
 	 */
 	public static String getExtension(Path path) {
 		return getExtension(path != null ? path.toString() : null);
@@ -117,7 +117,7 @@ public class PathUtils {
 
 	/**
 	 * @param path The path to operate on.
-	 * @return The extension of the path name, including the initial ".".
+	 * @return The extension of the path name, excluding the initial ".".
 	 */
 	public static final String getExtension(String path) {
 		path = getLeafName(path);
