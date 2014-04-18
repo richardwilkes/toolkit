@@ -16,8 +16,8 @@ import com.trollworks.toolkit.ui.widget.WindowUtils;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.Preferences;
-import com.trollworks.toolkit.utility.Task;
 import com.trollworks.toolkit.utility.Version;
+import com.trollworks.toolkit.utility.task.Tasks;
 
 import java.awt.Desktop;
 import java.awt.EventQueue;
@@ -175,7 +175,7 @@ public class UpdateChecker implements Runnable {
 					goToUpdate();
 				}
 			} else {
-				Task.scheduleOnUIThread(this, 250, TimeUnit.MILLISECONDS, this);
+				Tasks.scheduleOnUIThread(this, 250, TimeUnit.MILLISECONDS, this);
 			}
 		}
 	}
