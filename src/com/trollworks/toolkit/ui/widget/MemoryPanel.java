@@ -16,7 +16,7 @@ import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.TextDrawing;
 import com.trollworks.toolkit.utility.Localization;
-import com.trollworks.toolkit.utility.Task;
+import com.trollworks.toolkit.utility.task.Tasks;
 import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.awt.Color;
@@ -94,7 +94,7 @@ public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, 
 	private synchronized void schedule() {
 		if (!mPending && isDisplayable()) {
 			mPending = true;
-			Task.scheduleOnUIThread(this, 1, TimeUnit.SECONDS, this);
+			Tasks.scheduleOnUIThread(this, 1, TimeUnit.SECONDS, this);
 		}
 	}
 
