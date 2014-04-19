@@ -10,7 +10,7 @@ GNU Trove
 
 AppBundler
   Description: Java application packager for Mac OS X
-  Files: appbundler-1.0.jar
+  Files: appbundler-1.0ea.jar
   Version: 1.0
-  License Used: GPL 2.0
-  Obtained from: http://java.net/projects/appbundler
+  License Used: GPL 2.0 with 'Classpath' exception
+  Obtained from: https://bitbucket.org/infinitekind/appbundler
