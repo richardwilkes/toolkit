@@ -151,7 +151,7 @@ public class CmdLine {
 		}
 
 		if (mUsedOptions.contains(HELP_OPTION)) {
-			showHelp();
+			showHelpAndExit();
 		}
 
 		if (mUsedOptions.contains(VERSION_OPTION)) {
@@ -174,7 +174,7 @@ public class CmdLine {
 	}
 
 	/** Shows the help, then calls {@link System#exit(int)}. */
-	public void showHelp() {
+	public void showHelpAndExit() {
 		List<String> names = new ArrayList<>(mOptions.keySet());
 		int cmdWidth = 0;
 
