@@ -65,7 +65,9 @@ public class AdjustFileNotice {
 
 	public static void main(String[] args) {
 		BundleInfo.setDefault(new BundleInfo(AdjustFileNotice.class.getSimpleName(), VERSION, COPYRIGHT_OWNER, COPYRIGHT_YEARS, LICENSE));
-		CmdLine cmdline = new CmdLine(args, PATH_OPTION, TEMPLATE_OPTION);
+		CmdLine cmdline = new CmdLine();
+		cmdline.addOptions(PATH_OPTION, TEMPLATE_OPTION);
+		cmdline.processArguments(args);
 		if (!cmdline.isOptionUsed(PATH_OPTION)) {
 			System.err.printf(PATH_MUST_BE_SPECIFIED, PATH_OPTION);
 			System.exit(1);

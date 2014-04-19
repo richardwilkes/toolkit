@@ -24,7 +24,8 @@ import java.io.File;
 
 public class TreeTester extends App {
 	public static final void main(String[] args) {
-		CmdLine cmdLine = new CmdLine(args);
+		CmdLine cmdLine = new CmdLine();
+		cmdLine.processArguments(args);
 		LaunchProxy.configure(cmdLine.getArgumentsAsFiles().toArray(new File[0]));
 		GraphicsUtilities.configureStandardUI();
 		Preferences.setPreferenceFile(new File("/tmp/treetester.prf")); //$NON-NLS-1$

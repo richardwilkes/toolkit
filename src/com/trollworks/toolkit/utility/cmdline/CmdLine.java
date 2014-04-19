@@ -20,11 +20,12 @@ import com.trollworks.toolkit.utility.text.TextUtility;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /** Provides standardized command-line argument parsing. */
 public class CmdLine {
@@ -49,63 +50,48 @@ public class CmdLine {
 
 	private static final CmdLineOption	HELP_OPTION		= new CmdLineOption(HELP_DESCRIPTION, null, "h", "?", "help");	//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	private static final CmdLineOption	VERSION_OPTION	= new CmdLineOption(VERSION_DESCRIPTION, null, "v", "version"); //$NON-NLS-1$ //$NON-NLS-2$
-	private ArrayList<CmdLineData>		mData;
-	private HashSet<CmdLineOption>		mUsedOptions;
+	private Map<String, CmdLineOption>	mOptions		= new HashMap<>();
+	private String						mHelpHeader;
+	private String						mHelpFooter;
+	private List<CmdLineData>			mData;
+	private Set<CmdLineOption>			mUsedOptions;
 
-	/**
-	 * Creates a new {@link CmdLine}. If the command line arguments are invalid, or the version
-	 * number or help is requested, then this constructor will cause the program to exit.
-	 *
-	 * @param args The arguments passed to <code>main</code>.
-	 */
-	public CmdLine(String[] args) {
-		this(args, null, new ArrayList<CmdLineOption>());
+	public CmdLine() {
+		addOptions(HELP_OPTION, VERSION_OPTION);
 	}
 
-	/**
-	 * Creates a new {@link CmdLine}. If the command line arguments are invalid, or the version
-	 * number or help is requested, then this constructor will cause the program to exit.
-	 *
-	 * @param args The arguments passed to <code>main</code>.
-	 * @param options Valid options.
-	 */
-	public CmdLine(String[] args, CmdLineOption... options) {
-		this(args, null, Arrays.asList(options));
-	}
-
-	/**
-	 * Creates a new {@link CmdLine}. If the command line arguments are invalid, or the version
-	 * number or help is requested, then this constructor will cause the program to exit.
-	 *
-	 * @param args The arguments passed to <code>main</code>.
-	 * @param options Valid options.
-	 */
-	public CmdLine(String[] args, Collection<CmdLineOption> options) {
-		this(args, null, options);
-	}
-
-	/**
-	 * Creates a new {@link CmdLine}. If the command line arguments are invalid, or the version
-	 * number or help is requested, then this constructor will cause the program to exit.
-	 *
-	 * @param args The arguments passed to <code>main</code>.
-	 * @param extraHelp Any text that you would like appended to the end of the help output.
-	 * @param options Valid options.
-	 */
-	public CmdLine(String[] args, String extraHelp, Collection<CmdLineOption> options) {
-		HashMap<String, CmdLineOption> map = new HashMap<>();
-		ArrayList<CmdLineOption> all = new ArrayList<>(options);
-		ArrayList<String> msgs = new ArrayList<>();
-
-		all.add(HELP_OPTION);
-		all.add(VERSION_OPTION);
-
-		for (CmdLineOption option : all) {
-			for (String name : option.getNames()) {
-				map.put(name, option);
-			}
+	/** @param option A {@link CmdLineOption} to add. */
+	public void addOption(CmdLineOption option) {
+		for (String name : option.getNames()) {
+			mOptions.put(name, option);
 		}
+	}
 
+	/** @param options One or more {@link CmdLineOption}s to add. */
+	public void addOptions(CmdLineOption... options) {
+		for (CmdLineOption option : options) {
+			addOption(option);
+		}
+	}
+
+	/** @param header Text to display before the options are displayed in help. */
+	public void setHelpHeader(String header) {
+		mHelpHeader = header;
+	}
+
+	/** @param footer Text to display after the options are displayed in help. */
+	public void setHelpFooter(String footer) {
+		mHelpFooter = footer;
+	}
+
+	/**
+	 * Processes the specified command line arguments. If the command line arguments are invalid, or
+	 * the version number or help is requested, then this method will cause the program to exit.
+	 *
+	 * @param args The arguments passed to <code>main</code>.
+	 */
+	public void processArguments(String[] args) {
+		List<String> msgs = new ArrayList<>();
 		mData = new ArrayList<>();
 		mUsedOptions = new HashSet<>();
 
@@ -130,7 +116,7 @@ public class CmdLine {
 					arg = null;
 				}
 
-				option = map.get(name);
+				option = mOptions.get(name);
 				if (option != null) {
 					if (option.takesArgument()) {
 						if (arg != null) {
@@ -165,7 +151,7 @@ public class CmdLine {
 		}
 
 		if (mUsedOptions.contains(HELP_OPTION)) {
-			showHelp(map, extraHelp);
+			showHelp();
 		}
 
 		if (mUsedOptions.contains(VERSION_OPTION)) {
@@ -187,8 +173,9 @@ public class CmdLine {
 		return arg.startsWith("-") || Platform.isWindows() && arg.startsWith("/"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	private static void showHelp(HashMap<String, CmdLineOption> options, String extraHelp) {
-		ArrayList<String> names = new ArrayList<>(options.keySet());
+	/** Shows the help, then calls {@link System#exit(int)}. */
+	public void showHelp() {
+		List<String> names = new ArrayList<>(mOptions.keySet());
 		int cmdWidth = 0;
 
 		Collections.sort(names);
@@ -196,11 +183,15 @@ public class CmdLine {
 		System.out.println();
 		System.out.println(BundleInfo.getDefault().getAppBanner());
 		System.out.println();
+		if (mHelpHeader != null) {
+			System.out.println(mHelpHeader);
+			System.out.println();
+		}
 		System.out.println(AVAILABLE_OPTIONS);
 		System.out.println();
 
 		for (String name : names) {
-			CmdLineOption option = options.get(name);
+			CmdLineOption option = mOptions.get(name);
 			int width = 5 + name.length();
 
 			if (option.takesArgument()) {
@@ -212,7 +203,7 @@ public class CmdLine {
 		}
 
 		for (String name : names) {
-			CmdLineOption option = options.get(name);
+			CmdLineOption option = mOptions.get(name);
 
 			StringBuilder builder = new StringBuilder();
 			String[] allNames = option.getNames();
@@ -235,9 +226,9 @@ public class CmdLine {
 			System.out.print(TextUtility.makeNote(builder.toString(), TextUtility.wrapToCharacterCount(description, 75 - cmdWidth)));
 		}
 
-		if (extraHelp != null) {
+		if (mHelpFooter != null) {
 			System.out.println();
-			System.out.println(extraHelp);
+			System.out.println(mHelpFooter);
 		}
 		System.out.println();
 		System.exit(0);
@@ -270,8 +261,8 @@ public class CmdLine {
 	 * @param option The option to return the arguments for.
 	 * @return The option's arguments.
 	 */
-	public ArrayList<String> getOptionArguments(CmdLineOption option) {
-		ArrayList<String> list = new ArrayList<>();
+	public List<String> getOptionArguments(CmdLineOption option) {
+		List<String> list = new ArrayList<>();
 
 		if (isOptionUsed(option)) {
 			for (CmdLineData one : mData) {
@@ -284,8 +275,8 @@ public class CmdLine {
 	}
 
 	/** @return The arguments that were not options. */
-	public ArrayList<String> getArguments() {
-		ArrayList<String> arguments = new ArrayList<>();
+	public List<String> getArguments() {
+		List<String> arguments = new ArrayList<>();
 
 		for (CmdLineData one : mData) {
 			if (!one.isOption()) {
@@ -296,8 +287,8 @@ public class CmdLine {
 	}
 
 	/** @return The arguments that were not options. */
-	public ArrayList<File> getArgumentsAsFiles() {
-		ArrayList<File> arguments = new ArrayList<>();
+	public List<File> getArgumentsAsFiles() {
+		List<File> arguments = new ArrayList<>();
 
 		for (CmdLineData one : mData) {
 			if (!one.isOption()) {
