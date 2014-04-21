@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project name="mac_launcher" default="build">
+	<fail unless="app.name" message="You must define 'app.name'"/>
+	<fail unless="app.exe" message="You must define 'app.exe'"/>
+	<fail unless="app.jar" message="You must define 'app.jar'"/>
+
+	<!-- Setup the bundle locations. -->
+	<property name="bundle" value="${app.name}.app"/>
+	<property name="bundle.exe" value="${bundle}/Contents/MacOS"/>
+	<property name="bundle.jre" value="${bundle.exe}/support/jre"/>
+
+	<target name="clean">
+		<delete dir="${bundle}"/>
+	</target>
+
+	<target name="build" depends="clean,launcher,jre"/>
+
+	<target name="launcher">
+		<mkdir dir="${bundle.exe}"/>
+		<exec executable="gcc" failonerror="yes">
+			<arg value="-O2"/>
+			<arg value="-Wall"/>
+			<arg value="-arch"/>
+			<arg value="x86_64"/>
+			<arg value="-arch"/>
+			<arg value="i386"/>
+			<arg value="-framework"/>
+			<arg value="Cocoa"/>
+			<arg value="-isysroot"/>
+			<arg value="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk"/>
+			<arg value="-mmacosx-version-min=10.7"/> 
+			<arg value="-o"/>
+			<arg value="${bundle.exe}/${app.exe}"/>
+			<arg value="-DAPP_NAME=${app.name}"/>
+			<arg value="-DJAR_NAME=${app.jar}"/>
+			<arg value="launcher.m"/>
+		</exec>
+	</target>
+
+	<target name="jre">
+		<mkdir dir="${bundle.jre}"/>
+		<copy todir="${bundle.jre}">
+			<fileset dir="${java.home}"/>
+		</copy>
+		<delete dir="${bundle.jre}/bin"/>
+		<chmod dir="${bundle.jre}" includes="**/*.dylib,**/jspawnhelper" perm="+x"/>
+	</target>
+</project>
