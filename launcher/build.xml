@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<project name="launcher" default="build" xmlns:if="ant:if" xmlns:unless="ant:unless">
+	<condition property="platform.mac">
+		<os family="mac"/>
+	</condition>
+	<condition property="platform.win">
+		<os family="windows"/>
+	</condition>
+	<condition property="platform.linux">
+		<and>
+			<os family="unix"/>
+			<not>
+				<os family="mac"/>
+			</not>
+		</and>
+	</condition>
+	
+	<property name="app.dir" value="."/>
+	<property name="app.name" value="GURPS Character Sheet"/>
+	<property name="app.exe" value="gcs"/>
+
+	<fail unless="app.dir" message="You must define 'app.dir'"/>
+	<fail unless="app.name" message="You must define 'app.name'"/>
+	<fail unless="app.exe" message="You must define 'app.exe'"/>
+	<fail if:set="platform.linux" unless="app.categories" message="You must define 'app.categories'"/>
+	<fail if:set="platform.linux" unless="app.keywords" message="You must define 'app.keywords'"/>
+
+	<property name="support" value="${app.dir}/support"/>
+	<property name="support.jre" value="${support}/jre"/>
+
+	<target name="clean">
+		<delete dir="${app.exe}"/>
+		<delete dir="${support}"/>
+	</target>
+
+	<target name="build" depends="clean,launcher"/>
+
+	<target name="launcher">
+		<exec executable="gcc" failonerror="yes">
+			<arg value="-O2"/>
+			<arg value="-Wall"/>
+			<arg if:set="platform.linux" value="-std=gnu99"/>
+			<arg if:set="platform.mac" value="-arch"/>
+			<arg if:set="platform.mac" value="x86_64"/>
+			<arg if:set="platform.mac" value="-arch"/>
+			<arg if:set="platform.mac" value="i386"/>
+			<arg value="-DAPP_NAME=${app.name}"/>
+			<arg if:set="platform.linux" value="-DCATEGORIES=${app.categories}"/>
+			<arg if:set="platform.linux" value="-DKEYWORDS=${app.keywords}"/>
+			<arg value="launcher.c"/>
+			<arg value="-o"/>
+			<arg value="${app.exe}"/>
+		</exec>
+	</target>
+
+	<target name="jre">
+		<mkdir dir="${support.jre}"/>
+		<copy todir="${support.jre}">
+			<fileset dir="${java.home}"/>
+		</copy>
+		<delete dir="${support.jre}/bin" excludes="java"/>
+		<chmod dir="${support.jre}" includes="**/java,**/*.so,**/*.dylib,**/jspawnhelper" perm="+x"/>
+	</target>
+</project>
