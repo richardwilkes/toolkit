@@ -21,7 +21,19 @@ import java.util.Date;
 public class Log {
 	private static final String				SEPARATOR	= " | ";															//$NON-NLS-1$
 	private static final SimpleDateFormat	FORMAT		= new SimpleDateFormat("yyyy.MM.dd" + SEPARATOR + "HH:mm:ss.SSS");	//$NON-NLS-1$ //$NON-NLS-2$
-	private static PrintStream				OUT			= System.out;
+	private static PrintStream				OUT;
+
+	static {
+		OUT = System.out;
+		String property = System.getProperty("com.trollworks.log"); //$NON-NLS-1$
+		if (property != null && !property.isEmpty()) {
+			try {
+				OUT = new PrintStream(property);
+			} catch (Throwable throwable) {
+				error(null, "Unable to redirect log to " + property, throwable); //$NON-NLS-1$
+			}
+		}
+	}
 
 	/**
 	 * Implementors of this interface can be passed to the various logging methods to provide
