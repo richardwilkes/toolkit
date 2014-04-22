@@ -15,10 +15,6 @@
 		</and>
 	</condition>
 	
-	<property name="app.dir" value="."/>
-	<property name="app.name" value="GURPS Character Sheet"/>
-	<property name="app.exe" value="gcs"/>
-
 	<fail unless="app.dir" message="You must define 'app.dir'"/>
 	<fail unless="app.name" message="You must define 'app.name'"/>
 	<fail unless="app.exe" message="You must define 'app.exe'"/>

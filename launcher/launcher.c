@@ -60,6 +60,9 @@
 #include <limits.h>
 #include <unistd.h>
 #include <dirent.h>
+#if TARGET_LINUX
+#include <sys/stat.h>
+#endif
 #if TARGET_MAC
 #include <mach-o/dyld.h>
 #endif
@@ -182,16 +185,13 @@ static char *getMainJar(char *jarDir, char *exeName) {
 	DIR *dp = opendir(jarDir);
 	if (dp) {
 		char *buffer = concat(2, exeName, "-");
-		int nameLen = strlen(exeName);
 		struct dirent *dir;
 		while ((dir = readdir(dp))) {
-			int len = strlen(dir->d_name);
-			if (len > nameLen + 4) {
-				if (startsWith(exeName, dir->d_name) && endsWith(".jar", dir->d_name)) {
-					closedir(dp);
-					free(buffer);
-					return concat(3, jarDir, "/", dir->d_name);
-				}
+			if (startsWith(buffer, dir->d_name) && endsWith(".jar", dir->d_name)) {
+				char *jar = concat(3, jarDir, "/", dir->d_name);
+				closedir(dp);
+				free(buffer);
+				return jar;
 			}
 		}
 		closedir(dp);
@@ -203,7 +203,7 @@ static char *getMainJar(char *jarDir, char *exeName) {
 
 #if TARGET_LINUX
 static void createDesktopFile(char *exePath, char *exeName, char *supportDir) {
-	char *desktop = concat(exePath, ".desktop");
+	char *desktop = concat(2, exePath, ".desktop");
 	FILE *fp = fopen(desktop, "w");
 	if (fp) {
 		fprintf(fp, "[Desktop Entry]\n");
@@ -218,7 +218,9 @@ static void createDesktopFile(char *exePath, char *exeName, char *supportDir) {
 		chmod(desktop, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IXOTH);
 		char *localDesktop = concat(4, getenv("HOME"), "/.local/share/applications/", exeName, ".desktop");
 		unlink(localDesktop);
-		symlink(desktop, localDesktop);
+		if (symlink(desktop, localDesktop) == -1) {
+			perror("Unable to create a symlink to the .desktop file");
+		}
 		free(localDesktop);
 	}
 	free(desktop);
