@@ -1,37 +1,25 @@
 <?xml version="1.0"?>
-<project name="launcher" default="build" xmlns:if="ant:if" xmlns:unless="ant:unless">
-	<condition property="platform.mac">
-		<os family="mac"/>
-	</condition>
-	<condition property="platform.win">
-		<os family="windows"/>
-	</condition>
-	<condition property="platform.linux">
-		<and>
-			<os family="unix"/>
-			<not>
-				<os family="mac"/>
-			</not>
-		</and>
-	</condition>
-	
-	<fail unless="app.dir" message="You must define 'app.dir'"/>
-	<fail unless="app.name" message="You must define 'app.name'"/>
-	<fail unless="app.exe" message="You must define 'app.exe'"/>
-	<fail if:set="platform.linux" unless="app.categories" message="You must define 'app.categories'"/>
-	<fail if:set="platform.linux" unless="app.keywords" message="You must define 'app.keywords'"/>
-
-	<property name="support" value="${app.dir}/support"/>
-	<property name="support.jre" value="${support}/jre"/>
-
-	<target name="clean">
-		<delete dir="${app.exe}"/>
-		<delete dir="${support}"/>
-	</target>
-
-	<target name="build" depends="clean,launcher"/>
-
+<project name="launcher" default="launcher" xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<target name="launcher">
+		<condition property="platform.mac">
+			<os family="mac"/>
+		</condition>
+		<condition property="platform.win">
+			<os family="windows"/>
+		</condition>
+		<condition property="platform.linux">
+			<and>
+				<os family="unix"/>
+				<not>
+					<os family="mac"/>
+				</not>
+			</and>
+		</condition>
+		<fail unless="app.dir" message="You must define 'app.dir'"/>
+		<fail unless="app.name" message="You must define 'app.name'"/>
+		<fail unless="app.exe" message="You must define 'app.exe'"/>
+		<fail if:set="platform.linux" unless="app.categories" message="You must define 'app.categories'"/>
+		<fail if:set="platform.linux" unless="app.keywords" message="You must define 'app.keywords'"/>
 		<exec executable="gcc" failonerror="yes">
 			<arg value="-O2"/>
 			<arg value="-Wall"/>
@@ -45,16 +33,18 @@
 			<arg if:set="platform.linux" value="-DKEYWORDS=${app.keywords}"/>
 			<arg value="launcher.c"/>
 			<arg value="-o"/>
-			<arg value="${app.exe}"/>
+			<arg value="${app.dir}/${app.exe}"/>
 		</exec>
 	</target>
 
 	<target name="jre">
-		<mkdir dir="${support.jre}"/>
-		<copy todir="${support.jre}">
-			<fileset dir="${java.home}"/>
+		<property name="jre.src.dir" value="${java.home}"/>
+		<fail unless="jre.dst.dir" message="You must define 'jre.dst.dir'"/>
+		<mkdir dir="${jre.dst.dir}"/>
+		<copy todir="${jre.dst.dir}">
+			<fileset dir="${jre.src.dir}"/>
 		</copy>
-		<delete dir="${support.jre}/bin" excludes="java"/>
-		<chmod dir="${support.jre}" includes="**/java,**/*.so,**/*.dylib,**/jspawnhelper" perm="+x"/>
+		<delete dir="${jre.dst.dir}/bin" excludes="java"/>
+		<chmod dir="${jre.dst.dir}" includes="**/java,**/*.so,**/*.dylib,**/jspawnhelper" perm="+x"/>
 	</target>
 </project>
