@@ -22,6 +22,7 @@ import com.trollworks.toolkit.ui.menu.help.AboutCommand;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.LaunchProxy;
+import com.trollworks.toolkit.utility.PathUtils;
 import com.trollworks.toolkit.utility.Platform;
 import com.trollworks.toolkit.utility.cmdline.CmdLine;
 
@@ -53,11 +54,14 @@ public class App implements KeyEventDispatcher, Runnable {
 		try {
 			URI uri = theClass.getProtectionDomain().getCodeSource().getLocation().toURI();
 			file = new File(uri.getPath()).getParentFile();
-			if (file.getName().equals("Java")) { //$NON-NLS-1$
-				file = file.getParentFile();
-				if (file.getName().equals("Contents")) { //$NON-NLS-1$
-					file = file.getParentFile().getParentFile();
-				}
+			String path = PathUtils.getFullPath(file);
+			if (path.toLowerCase().endsWith("/support/jars")) { //$NON-NLS-1$
+				file = file.getParentFile().getParentFile();
+				path = PathUtils.getFullPath(file);
+			}
+			if (path.toLowerCase().endsWith("/contents/macos")) { //$NON-NLS-1$
+				// Note: we go up 3 levels, not 2, to account for the .app dir
+				file = file.getParentFile().getParentFile().getParentFile();
 			}
 		} catch (Throwable throwable) {
 			file = new File("."); //$NON-NLS-1$
