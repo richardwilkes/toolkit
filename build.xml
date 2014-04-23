@@ -181,8 +181,12 @@
 
 	<target name="jre" description="Unpacks a JRE into the ${support} directory.">
 		<fail unless="support" message="You must define 'support'"/>
+		<property name="jre.archive.name" value="jre-${platform}.zip"/>
+		<property name="jre.archive" value="launcher/${jre.archive.name}"/>
+		<available file="${jre.archive}" property="jre.available"/>
+		<fail unless="jre.available" message="You must provide a zipped copy of the ${platform} JRE in the toolkit launcher directory named '${jre.archive.name}'."/>
 		<mkdir dir="${support}"/>
-		<unzip src="launcher/jre-${platform}.zip" dest="${support}"/>
+		<unzip src="${jre.archive}" dest="${support}"/>
 		<chmod dir="${support}/jre" includes="**/java,**/*.so,**/*.dylib,**/jspawnhelper" perm="+x"/>
 	</target>
 </project>
