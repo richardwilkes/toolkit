@@ -52,19 +52,40 @@
 	#error Not a valid target platform
 #endif
 
+#if TARGET_WINDOWS
+#define _CRT_SECURE_NO_WARNINGS
+#define PATH_SEP "\\"
+#define JAVA_EXE "javaw.exe"
+#else
+#define PATH_SEP "/"
+#define JAVA_EXE "java"
+#endif
+
+#if TARGET_WINDOWS
+#include <windows.h>
+#include <process.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
-#include <libgen.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <limits.h>
+#if TARGET_MAC || TARGET_LINUX
+#include <libgen.h>
 #include <unistd.h>
 #include <dirent.h>
+#endif
 #if TARGET_LINUX
 #include <sys/stat.h>
 #endif
 #if TARGET_MAC
 #include <mach-o/dyld.h>
+#endif
+
+#if TARGET_WINDOWS
+#define PATH_MAX MAX_PATH
+#define strdup _strdup
+#define execv _execv
 #endif
 
 #define TRUE 1
@@ -126,6 +147,10 @@ static char *concat(int count, ...) {
 
 static char *getExecutablePath() {
 	char buffer[PATH_MAX + 1];
+#if TARGET_WINDOWS
+	GetModuleFileName(NULL, buffer, PATH_MAX);
+	return strdup(buffer);
+#else
 #if TARGET_LINUX
 	ssize_t size = readlink("/proc/self/exe", buffer, PATH_MAX);
 	if (size == -1) {
@@ -143,7 +168,32 @@ static char *getExecutablePath() {
 		fail("Unable to resole the executable's path: realpath failed: %s", buffer);
 	}
 	return result;
+#endif // !TARGET_WINDOWS
 }
+
+#if TARGET_WINDOWS
+static char *dirname(char *path) {
+	int i = strlen(path) - 1;
+	while (i > 0 && path[i] != '\\' && path[i] != ':') {
+		i--;
+	}
+	if (path[i] == '\\' || path[i] == ':') {
+		path[i] = 0;
+	}
+	return path;
+}
+
+static char *basename(char *path) {
+	int i = strlen(path) - 1;
+	while (i > 0 && path[i] != '\\' && path[i] != ':') {
+		i--;
+	}
+	if (path[i] == '\\' || path[i] == ':') {
+		i++;
+	}
+	return &path[i];
+}
+#endif
 
 static char *getDir(char *path) {
 	char *buffer = strdup(path);
@@ -181,6 +231,34 @@ static int endsWith(char *suffix, char *buffer) {
 	return bufferLen >= suffixLen && equals(suffix, buffer + bufferLen - suffixLen);
 }
 
+#if TARGET_WINDOWS
+static char *getMainJar(char *jarDir, char *exeName) {
+	WIN32_FIND_DATA ffd;
+	char *path = concat(3, jarDir, PATH_SEP, "*.jar");
+	HANDLE dp = FindFirstFile(path, &ffd);
+	if (dp != INVALID_HANDLE_VALUE) {
+		if (endsWith(".exe", exeName)) {
+			exeName = strdup(exeName);
+			exeName[strlen(exeName) - 4] = 0;
+		}
+		char *buffer = concat(2, exeName, "-");
+		do {
+			if (startsWith(buffer, ffd.cFileName) && endsWith(".jar", ffd.cFileName)) {
+				char *jar = concat(3, jarDir, PATH_SEP, ffd.cFileName);
+				FindClose(dp);
+				free(buffer);
+				free(path);
+				return jar;
+			}
+		} while (FindNextFile(dp, &ffd) != 0);
+		FindClose(dp);
+		free(buffer);
+		free(path);
+	}
+	fail("Unable to locate main jar");
+	return NULL;
+}
+#else
 static char *getMainJar(char *jarDir, char *exeName) {
 	DIR *dp = opendir(jarDir);
 	if (dp) {
@@ -188,7 +266,7 @@ static char *getMainJar(char *jarDir, char *exeName) {
 		struct dirent *dir;
 		while ((dir = readdir(dp))) {
 			if (startsWith(buffer, dir->d_name) && endsWith(".jar", dir->d_name)) {
-				char *jar = concat(3, jarDir, "/", dir->d_name);
+				char *jar = concat(3, jarDir, PATH_SEP, dir->d_name);
 				closedir(dp);
 				free(buffer);
 				return jar;
@@ -200,6 +278,7 @@ static char *getMainJar(char *jarDir, char *exeName) {
 	fail("Unable to locate main jar");
 	return NULL;
 }
+#endif
 
 #if TARGET_LINUX
 static void createDesktopFile(char *exePath, char *exeName, char *supportDir) {
@@ -252,22 +331,51 @@ static int countLinks(LinkPtr head) {
 static int addToArgsArray(LinkPtr head, char **args, int startAt, int printArgs) {
 	while (head) {
 		if (head->arg) {
-			args[startAt++] = head->arg;
 			if (printArgs) {
-				printf("%d: %s\n", startAt, head->arg);
+				printf("%d: %s\n", startAt + 1, head->arg);
 			}
+#if TARGET_WINDOWS
+			// Windows seems to concatenate the command line args together with spaces
+			// and then re-parse it in the new process... which, of course, completely
+			// defeats the purpose of separating them into separate arguments in the
+			// first place. We'll attempt to escape them here.
+			char *arg = (char *)malloc(strlen(head->arg) * 2);
+			int i = 0;
+			int j = 0;
+			arg[j++] = '"';
+			while (head->arg[i]) {
+				char ch = head->arg[i++];
+				if (ch == '"') {
+					arg[j++] = '"';
+					arg[j++] = '"';
+				}
+				arg[j++] = ch;
+			}
+			arg[j++] = '"';
+			arg[j] = 0;
+			args[startAt] = arg;
+			startAt++;
+#else
+			args[startAt++] = head->arg;
+#endif
 		}
 		head = head->next;
 	}
 	return startAt;
 }
 
-int main(int argc, char **argv, char **envp) {
+#if TARGET_WINDOWS
+int WINAPI WinMain(HINSTANCE inst,HINSTANCE prevInst,LPSTR cmdLine,int cmdShow) {
+	int argc = __argc;
+	char **argv = __argv;
+#else
+int main(int argc, char **argv) {
+#endif
 	// Setup our paths
 	char *exePath = getExecutablePath();
 	char *exeDir = getDir(exePath);
 	char *exeName = getLeafName(exePath);
-	char *supportDir = concat(2, exeDir, "/support");
+	char *supportDir = concat(3, exeDir, PATH_SEP, "support");
 
 	// Prepare the VM arguments
 	int debugArgs = FALSE;
@@ -277,7 +385,9 @@ int main(int argc, char **argv, char **envp) {
 	LinkPtr currentAppArgs = appArgs;
 	LinkPtr maxRAMLink = NULL;
 	LinkPtr logLink = NULL;
+#if !TARGET_WINDOWS
 	currentJvmArgs = addLink(currentJvmArgs, exePath);
+#endif
 #if TARGET_MAC
 	currentJvmArgs = addLink(currentJvmArgs, strdup("-Xdock:name=" xstr(APP_NAME)));
 #endif
@@ -319,7 +429,7 @@ int main(int argc, char **argv, char **envp) {
 		currentJvmArgs = addLink(currentJvmArgs, strdup("-Xmx" xstr(MAX_RAM)));
 	}
 	currentJvmArgs = addLink(currentJvmArgs, strdup("-jar"));
-	currentJvmArgs = addLink(currentJvmArgs, getMainJar(concat(2, supportDir, "/jars"), exeName));
+	currentJvmArgs = addLink(currentJvmArgs, getMainJar(concat(3, supportDir, PATH_SEP, "jars"), exeName));
 
 	// Build the VM arguments array
 	char **args = (char **)calloc(countLinks(jvmArgs) + countLinks(appArgs) + 1, sizeof(char *));
@@ -329,7 +439,7 @@ int main(int argc, char **argv, char **envp) {
 	createDesktopFile(exePath, exeName, supportDir);
 #endif
 
-	if (execv(concat(2, supportDir, "/jre/bin/java"), args) == -1) {
+	if (execv(concat(7, supportDir, PATH_SEP, "jre", PATH_SEP, "bin", PATH_SEP, JAVA_EXE), args) == -1) {
 		perror("Unable to exec the Java VM");
 		return 1;
 	}
