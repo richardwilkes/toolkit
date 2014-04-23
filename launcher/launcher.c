@@ -33,6 +33,13 @@
  *         PkgInfo
  *         Resources/
  *             <necessary resources>
+ *
+ * Note that two different approaches are being taken here, depending on platform.
+ * The approach taken for Linux and Windows is to just exec() the JRE's java/javaw
+ * executable with the appropriate command line. Unfortunately, this approach breaks
+ * the Mac's ability to respond to double-clicking on our documents, so on the Mac
+ * I use JLI. I don't use JLI on the other platforms since it has problems finding
+ * its dependent shared libraries on those platforms. (sigh)
  */
 
 // Setup the target macros
@@ -60,6 +67,23 @@
 #define PATH_SEP "/"
 #define JAVA_EXE "java"
 #endif
+
+#if TARGET_MAC
+#import <dlfcn.h>
+#import <pthread.h>
+
+// JLI signature
+typedef int (*JLI)(int argc, char **argv, int jargc, const char **jargv, int appclassc,
+				   const char **appclassv, const char *fullversion, const char *dotversion,
+				   const char *pname, const char *lname, unsigned char javaargs,
+				   unsigned char cpwildcard, unsigned char javaw,
+#if defined(__LP64__) && __LP64__
+				   int
+#else
+				   long
+#endif
+				   ergo);
+#endif // TARGET_MAC
 
 #if TARGET_WINDOWS
 #include <windows.h>
@@ -195,7 +219,7 @@ static char *basename(char *path) {
 }
 #endif
 
-static char *getDir(char *path) {
+static char *getParentDir(char *path) {
 	char *buffer = strdup(path);
 	char *result = dirname(buffer);
 	if (!result) {
@@ -364,6 +388,24 @@ static int addToArgsArray(LinkPtr head, char **args, int startAt, int printArgs)
 	return startAt;
 }
 
+#if TARGET_MAC
+static int launchViaJLI(char *jreDir, int argc, char **argv) {
+	// Load the jli library
+	char *jliDir = concat(2, jreDir, "/lib/jli/libjli.dylib");
+	void *jliLib = dlopen(jliDir, RTLD_LAZY);
+	if (!jliLib) {
+		fail("Unable to open %s", jliDir);
+	}
+	JLI jli = dlsym(jliLib, "JLI_Launch");
+	if (!jli) {
+		fail("Unable to locate JLI_Launch");
+	}
+
+	// Launch
+	return jli(argc, argv, 0, NULL, 0, NULL, "", "", "java", "java", FALSE, FALSE, FALSE, 0);
+}
+#endif
+
 #if TARGET_WINDOWS
 int WINAPI WinMain(HINSTANCE inst,HINSTANCE prevInst,LPSTR cmdLine,int cmdShow) {
 	int argc = __argc;
@@ -373,9 +415,20 @@ int main(int argc, char **argv) {
 #endif
 	// Setup our paths
 	char *exePath = getExecutablePath();
-	char *exeDir = getDir(exePath);
+	char *exeDir = getParentDir(exePath);
 	char *exeName = getLeafName(exePath);
 	char *supportDir = concat(3, exeDir, PATH_SEP, "support");
+	char *jreDir = concat(3, supportDir, PATH_SEP, "jre");
+
+#if TARGET_MAC
+	// Determine if this is the main thread. On the Mac, JLI will create a secondary thread
+	// and call our main method again, so we don't manipulate the arguments until we aren't
+	// on the main thread.
+	if (pthread_main_np() != 1) {
+		// Not on main thread, just pass the args through again.
+		return launchViaJLI(jreDir, argc, argv);
+	}
+#endif
 
 	// Prepare the VM arguments
 	int debugArgs = FALSE;
@@ -390,6 +443,7 @@ int main(int argc, char **argv) {
 #endif
 #if TARGET_MAC
 	currentJvmArgs = addLink(currentJvmArgs, strdup("-Xdock:name=" xstr(APP_NAME)));
+	currentJvmArgs = addLink(currentJvmArgs, concat(3, "-Xdock:icon=", getParentDir(exeDir), "/Resources/app.icns"));
 #endif
 	for (int i = 1; i < argc; i++) {
 		if (startsWith("-J-Xmx", argv[i])) {
@@ -403,6 +457,8 @@ int main(int argc, char **argv) {
 			}
 #if TARGET_MAC
 		} else if (startsWith("-J-Xdock:name=", argv[i])) {
+			// Ignore... we've already set it and we don't want it overridden
+		} else if (startsWith("-J-Xdock:icon=", argv[i])) {
 			// Ignore... we've already set it and we don't want it overridden
 		} else if (startsWith("-psn_", argv[i])) {
 			// Ignore... this used to be emitted when a bundle was launched, although it
@@ -432,16 +488,21 @@ int main(int argc, char **argv) {
 	currentJvmArgs = addLink(currentJvmArgs, getMainJar(concat(3, supportDir, PATH_SEP, "jars"), exeName));
 
 	// Build the VM arguments array
-	char **args = (char **)calloc(countLinks(jvmArgs) + countLinks(appArgs) + 1, sizeof(char *));
-	addToArgsArray(appArgs, args, addToArgsArray(jvmArgs, args, 0, debugArgs), debugArgs); 
+	argc = countLinks(jvmArgs) + countLinks(appArgs);
+	argv = (char **)calloc(argc + 1, sizeof(char *));
+	addToArgsArray(appArgs, argv, addToArgsArray(jvmArgs, argv, 0, debugArgs), debugArgs); 
 
 #if TARGET_LINUX
 	createDesktopFile(exePath, exeName, supportDir);
 #endif
 
-	if (execv(concat(7, supportDir, PATH_SEP, "jre", PATH_SEP, "bin", PATH_SEP, JAVA_EXE), args) == -1) {
+#if TARGET_MAC
+	return launchViaJLI(jreDir, argc, argv);
+#else
+	if (execv(concat(5, jreDir, PATH_SEP, "bin", PATH_SEP, JAVA_EXE), argv) == -1) {
 		perror("Unable to exec the Java VM");
 		return 1;
 	}
+#endif
 	return 0;
 }
