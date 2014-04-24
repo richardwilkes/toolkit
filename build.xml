@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <project name="toolkit" default="toolkit" xmlns:if="ant:if" xmlns:unless="ant:unless">
-	<condition property="platform.mac">
+	<condition property="platform.mac" else="false">
 		<os family="mac"/>
 	</condition>
-	<condition property="platform.windows">
+	<condition property="platform.windows" else="false">
 		<os family="windows"/>
 	</condition>
-	<condition property="platform.linux">
+	<condition property="platform.linux" else="false">
 		<and>
 			<os family="unix"/>
 			<not>
@@ -14,9 +14,9 @@
 			</not>
 		</and>
 	</condition>
-	<property if:set="platform.mac" name="platform" value="mac"/>
-	<property if:set="platform.windows" name="platform" value="windows"/>
-	<property if:set="platform.linux" name="platform" value="linux"/>
+	<property if:true="${platform.mac}" name="platform" value="mac"/>
+	<property if:true="${platform.windows}" name="platform" value="windows"/>
+	<property if:true="${platform.linux}" name="platform" value="linux"/>
 
 	<property name="src" value="src"/>
 	<property name="lib" value="libraries"/>
@@ -143,24 +143,24 @@
 		<fail unless="app.dir" message="You must define 'app.dir'"/>
 		<fail unless="app.name" message="You must define 'app.name'"/>
 		<fail unless="app.exe" message="You must define 'app.exe'"/>
-		<fail if:set="platform.linux" unless="app.categories" message="You must define 'app.categories'"/>
-		<fail if:set="platform.linux" unless="app.keywords" message="You must define 'app.keywords'"/>
-		<exec unless:set="platform.windows" executable="gcc" dir="launcher" failonerror="yes">
+		<fail if:true="${platform.linux}" unless="app.categories" message="You must define 'app.categories'"/>
+		<fail if:true="${platform.linux}" unless="app.keywords" message="You must define 'app.keywords'"/>
+		<exec unless:true="${platform.windows}" executable="gcc" dir="launcher" failonerror="yes">
 			<arg value="-O2"/>
 			<arg value="-Wall"/>
-			<arg if:set="platform.linux" value="-std=gnu99"/>
-			<arg if:set="platform.mac" value="-arch"/>
-			<arg if:set="platform.mac" value="x86_64"/>
-			<arg if:set="platform.mac" value="-arch"/>
-			<arg if:set="platform.mac" value="i386"/>
+			<arg if:true="${platform.linux}" value="-std=gnu99"/>
+			<arg if:true="${platform.mac}" value="-arch"/>
+			<arg if:true="${platform.mac}" value="x86_64"/>
+			<arg if:true="${platform.mac}" value="-arch"/>
+			<arg if:true="${platform.mac}" value="i386"/>
 			<arg value="-DAPP_NAME=${app.name}"/>
-			<arg if:set="platform.linux" value="-DCATEGORIES=${app.categories}"/>
-			<arg if:set="platform.linux" value="-DKEYWORDS=${app.keywords}"/>
+			<arg if:true="${platform.linux}" value="-DCATEGORIES=${app.categories}"/>
+			<arg if:true="${platform.linux}" value="-DKEYWORDS=${app.keywords}"/>
 			<arg value="launcher.c"/>
 			<arg value="-o"/>
 			<arg value="${app.dir}/${app.exe}"/>
 		</exec>
-		<exec if:set="platform.windows" executable="cl.exe" dir="launcher" failonerror="yes">
+		<exec if:true="${platform.windows}" executable="cl.exe" dir="launcher" failonerror="yes">
 			<arg value="/GA"/>
 			<arg value="/O1"/>
 			<arg value="/W3"/>
