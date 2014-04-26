@@ -143,6 +143,7 @@
 		<fail unless="app.dir" message="You must define 'app.dir'"/>
 		<fail unless="app.name" message="You must define 'app.name'"/>
 		<fail unless="app.exe" message="You must define 'app.exe'"/>
+		<fail if:true="${platform.windows}" unless="app.ico" message="You must define 'app.ico'"/>
 		<fail if:true="${platform.linux}" unless="app.categories" message="You must define 'app.categories'"/>
 		<fail if:true="${platform.linux}" unless="app.keywords" message="You must define 'app.keywords'"/>
 		<exec unless:true="${platform.windows}" executable="gcc" dir="launcher" failonerror="yes">
@@ -160,6 +161,12 @@
 			<arg value="-o"/>
 			<arg value="${app.dir}/${app.exe}"/>
 		</exec>
+		<echo if:true="${platform.windows}" message="1\tICON\t&quot;${app.ico}&quot;" file="${app.dir}/app.rc"/>
+		<exec if:true="${platform.windows}" executable="rc.exe" failonerror="yes">
+			<arg value="/nologo"/>
+			<arg value="/Fo${app.dir}/app.res"/>
+			<arg value="${app.dir}/app.rc"/>
+		</exec>
 		<exec if:true="${platform.windows}" executable="cl.exe" dir="launcher" failonerror="yes">
 			<arg value="/GA"/>
 			<arg value="/O1"/>
@@ -174,9 +181,11 @@
 			<arg value="User32.lib"/>
 			<arg value="Advapi32.lib"/>
 			<arg value="/SUBSYSTEM:WINDOWS"/>
-		<!--	<arg value="install/windows/assault.res"/> -->
+			<arg value="${app.dir}/app.res"/>
 			<arg value="/MACHINE:X86"/>
 		</exec>
+		<delete if:true="${platform.windows}" file="${app.dir}/app.rc"/>
+		<delete if:true="${platform.windows}" file="${app.dir}/app.res"/>
 	</target>
 
 	<target name="jre" description="Unpacks a JRE into the ${support} directory.">
