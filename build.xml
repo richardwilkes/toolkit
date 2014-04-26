@@ -143,7 +143,7 @@
 		<fail unless="app.dir" message="You must define 'app.dir'"/>
 		<fail unless="app.name" message="You must define 'app.name'"/>
 		<fail unless="app.exe" message="You must define 'app.exe'"/>
-		<fail if:true="${platform.windows}" unless="app.ico" message="You must define 'app.ico'"/>
+		<fail if:true="${platform.windows}" unless="app.icon.dir" message="You must define 'app.icon.dir'"/>
 		<fail if:true="${platform.linux}" unless="app.categories" message="You must define 'app.categories'"/>
 		<fail if:true="${platform.linux}" unless="app.keywords" message="You must define 'app.keywords'"/>
 		<exec unless:true="${platform.windows}" executable="gcc" dir="launcher" failonerror="yes">
@@ -161,7 +161,7 @@
 			<arg value="-o"/>
 			<arg value="${app.dir}/${app.exe}"/>
 		</exec>
-		<echo if:true="${platform.windows}" message="1\tICON\t&quot;${app.ico}&quot;" file="${app.dir}/app.rc"/>
+		<echo if:true="${platform.windows}" message="1	ICON	&quot;${app.icon.dir}\\app.ico&quot;" file="${app.dir}/app.rc"/>
 		<exec if:true="${platform.windows}" executable="rc.exe" failonerror="yes">
 			<arg value="/nologo"/>
 			<arg value="/Fo${app.dir}/app.res"/>
