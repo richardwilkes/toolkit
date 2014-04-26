@@ -11,9 +11,9 @@
 
 package com.trollworks.toolkit.utility;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 
 /**
@@ -27,8 +27,8 @@ public class WindowsRegistry implements Runnable {
 	private static final String		END_BRACKET		= "]";	//$NON-NLS-1$
 	private String					mPrefix;
 	private HashMap<String, String>	mMap;
-	private File					mAppFile;
-	private File					mIconDir;
+	private Path					mAppFile;
+	private Path					mIconDir;
 
 	/**
 	 * @param prefix The registry prefix to use.
@@ -38,17 +38,16 @@ public class WindowsRegistry implements Runnable {
 	 *            in the form 'extension.ico'. For example, the extension 'xyz' would need an icon
 	 *            file named 'xyz.ico' in this directory.
 	 */
-	public static final void register(String prefix, HashMap<String, String> map, File appFile, File iconDir) {
+	public static final void register(String prefix, HashMap<String, String> map, Path appFile, Path iconDir) {
 		if (Platform.isWindows()) {
 			Thread thread = new Thread(new WindowsRegistry(prefix, map, appFile, iconDir), WindowsRegistry.class.getSimpleName());
-
 			thread.setPriority(Thread.NORM_PRIORITY);
 			thread.setDaemon(true);
 			thread.start();
 		}
 	}
 
-	private WindowsRegistry(String prefix, HashMap<String, String> map, File appFile, File iconDir) {
+	private WindowsRegistry(String prefix, HashMap<String, String> map, Path appFile, Path iconDir) {
 		mPrefix = prefix;
 		mMap = map;
 		mAppFile = appFile;
@@ -58,23 +57,23 @@ public class WindowsRegistry implements Runnable {
 	@Override
 	public void run() {
 		try {
-			String appPath = mAppFile.getCanonicalPath().replaceAll("\\\\", "\\\\\\\\"); //$NON-NLS-1$ //$NON-NLS-2$
-			File regFile = File.createTempFile("reg", ".reg"); //$NON-NLS-1$ //$NON-NLS-2$
-			try (PrintWriter writer = new PrintWriter(regFile);) {
+			String appPath = mAppFile.normalize().toAbsolutePath().toString().replaceAll("\\\\", "\\\\\\\\"); //$NON-NLS-1$ //$NON-NLS-2$
+			Path path = Files.createTempFile("reg", ".reg"); //$NON-NLS-1$ //$NON-NLS-2$
+			try (PrintWriter writer = new PrintWriter(path.toFile())) {
 				writer.println("REGEDIT4"); //$NON-NLS-1$
 				writer.println();
 				for (String key : mMap.keySet()) {
 					writeRegistryEntry(writer, appPath, key);
 				}
 			}
-			new ProcessBuilder("regedit", "/S", regFile.getCanonicalPath()).start().waitFor(); //$NON-NLS-1$ //$NON-NLS-2$
-			regFile.delete();
+			new ProcessBuilder("regedit", "/S", path.toAbsolutePath().toString()).start().waitFor(); //$NON-NLS-1$ //$NON-NLS-2$
+			Files.delete(path);
 		} catch (Exception exception) {
 			// Ignore
 		}
 	}
 
-	private void writeRegistryEntry(PrintWriter writer, String appPath, String extension) throws IOException {
+	private void writeRegistryEntry(PrintWriter writer, String appPath, String extension) {
 		String upper = extension.toUpperCase();
 		StringBuilder builder = new StringBuilder("HKEY_CLASSES_ROOT\\"); //$NON-NLS-1$
 
@@ -94,7 +93,7 @@ public class WindowsRegistry implements Runnable {
 		writer.println();
 
 		writer.println(START_BRACKET + builder.toString() + "\\DefaultIcon]"); //$NON-NLS-1$
-		writer.println("@=\"\\\"" + new File(mIconDir, extension + ".ico").getCanonicalPath().replaceAll("\\\\", "\\\\\\\\") + "\\\"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		writer.println("@=\"\\\"" + mIconDir.resolve(extension + "ico").normalize().toAbsolutePath().toString().replaceAll("\\\\", "\\\\\\\\") + "\\\"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		writer.println();
 
 		builder.append("\\shell"); //$NON-NLS-1$
