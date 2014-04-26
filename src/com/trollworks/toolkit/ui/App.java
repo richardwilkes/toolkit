@@ -22,7 +22,6 @@ import com.trollworks.toolkit.ui.menu.help.AboutCommand;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.LaunchProxy;
-import com.trollworks.toolkit.utility.PathUtils;
 import com.trollworks.toolkit.utility.Platform;
 import com.trollworks.toolkit.utility.cmdline.CmdLine;
 
@@ -32,6 +31,8 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.BitSet;
 
 import javax.swing.JMenuBar;
@@ -42,7 +43,7 @@ import javax.swing.JPanel;
  * this information should be filled out as early as possible.
  */
 public class App implements KeyEventDispatcher, Runnable {
-	public static File						APP_HOME_DIR;
+	private static Path						APP_HOME_PATH;
 	private static boolean					NOTIFICATION_ALLOWED	= false;
 	private static Class<? extends JPanel>	ABOUT_PANEL_CLASS		= null;
 	private static BitSet					KEY_STATE				= new BitSet();
@@ -50,28 +51,26 @@ public class App implements KeyEventDispatcher, Runnable {
 
 	public static final void setup(Class<?> theClass) {
 		BundleInfo.setDefault(new BundleInfo(theClass));
-		File file;
+		Path path;
 		try {
 			URI uri = theClass.getProtectionDomain().getCodeSource().getLocation().toURI();
-			file = new File(uri.getPath()).getParentFile();
-			String path = PathUtils.getFullPath(file);
-			if (path.toLowerCase().endsWith("/support/jars")) { //$NON-NLS-1$
-				file = file.getParentFile().getParentFile();
-				path = PathUtils.getFullPath(file);
+			path = Paths.get(uri).normalize().getParent().toAbsolutePath();
+			if (path.endsWith("support/jars")) { //$NON-NLS-1$
+				path = path.getParent().getParent();
 			}
-			if (path.toLowerCase().endsWith("/contents/macos")) { //$NON-NLS-1$
+			if (path.endsWith("contents/macos")) { //$NON-NLS-1$
 				// Note: we go up 3 levels, not 2, to account for the .app dir
-				file = file.getParentFile().getParentFile().getParentFile();
+				path.getParent().getParent().getParent();
 			}
 		} catch (Throwable throwable) {
-			file = new File("."); //$NON-NLS-1$
+			path = Paths.get("."); //$NON-NLS-1$
 		}
-		APP_HOME_DIR = file.getAbsoluteFile();
+		APP_HOME_PATH = path.normalize().toAbsolutePath();
 	}
 
 	/** @return The application's 'home' directory. */
-	public static final File getHome() {
-		return APP_HOME_DIR;
+	public static final Path getHomePath() {
+		return APP_HOME_PATH;
 	}
 
 	/** Creates a new {@link App}. */
