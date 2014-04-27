@@ -199,7 +199,8 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 
 	@Override
 	public void windowOpened(WindowEvent event) {
-		// Nothing to do...
+		// On windows, this is necessary to prevent the window from opening in the background.
+		toFront();
 	}
 
 	@Override
