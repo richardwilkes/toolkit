@@ -25,16 +25,11 @@ public class Colors {
 
 	/**
 	 * @param color The color being tested.
-	 * @param threshold The percent of threshold (0 to 100).
-	 * @return <code>true</code> if the specified color is above the threshold. For example, if you
-	 *         pass in a dark color with a threshold of 50, it will return <code>false</code>
-	 *         because black is 0.
+	 * @param threshold The threshold to check for, in the range 0 to 1.
+	 * @return <code>true</code> if the specified color's brightness is above the threshold.
 	 */
-	public static boolean threshold(Color color, int threshold) {
-		if (threshold < 0 || threshold > 100) {
-			return false;
-		}
-		return (int) ((color.getRed() + color.getGreen() + color.getBlue()) / 7.65) > threshold;
+	public static boolean aboveBrightnessThreshold(Color color, float threshold) {
+		return Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null)[2] > threshold;
 	}
 
 	/**
@@ -45,36 +40,36 @@ public class Colors {
 	 */
 	public static final Color blend(Color color1, Color color2, int percentage) {
 		int remaining = 100 - percentage;
-
 		return new Color((color1.getRed() * remaining + color2.getRed() * percentage) / 100, (color1.getGreen() * remaining + color2.getGreen() * percentage) / 100, (color1.getBlue() * remaining + color2.getBlue() * percentage) / 100);
 	}
 
 	/**
-	 * @param color Return an intensified version of this color.
-	 * @return A color that is brighter than the color passed in.
+	 * @param color The color to base the new color on.
+	 * @param percentage The amount to adjust the saturation by, in the range -1 to 1.
+	 * @return The adjusted color.
 	 */
-	public static final Color brighten(Color color) {
-		if (threshold(color, 50)) {
-			return darker(color, 65).brighter();
-		}
-		return color;
+	public static final Color adjustSaturation(Color color, float percentage) {
+		float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+		return new Color(Color.HSBtoRGB(hsb[0], Math.max(Math.min(hsb[1] + percentage, 1f), 0f), hsb[2]));
 	}
 
 	/**
-	 * @param color Return a darker version of this color.
-	 * @param percentage How much darker.
-	 * @return A color that is darker than the color passed in by the given percentage.
+	 * @param color The color to base the new color on.
+	 * @param percentage The amount to adjust the brightness by, in the range -1 to 1.
+	 * @return The adjusted color.
 	 */
-	public static final Color darker(Color color, int percentage) {
-		return blend(color, Color.black, percentage);
+	public static final Color adjustBrightness(Color color, float percentage) {
+		float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+		return new Color(Color.HSBtoRGB(hsb[0], hsb[1], Math.max(Math.min(hsb[2] + percentage, 1f), 0f)));
 	}
 
 	/**
-	 * @param color Return a lighter version of this color.
-	 * @param percentage How much lighter.
-	 * @return A color that is lighter than the color passed in by the given percentage.
+	 * @param color The color to base the new color on.
+	 * @param percentage The amount to adjust the hue by, in the range -1 to 1.
+	 * @return The adjusted color.
 	 */
-	public static final Color lighter(Color color, int percentage) {
-		return blend(color, Color.white, percentage);
+	public static final Color adjustHue(Color color, float percentage) {
+		float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+		return new Color(Color.HSBtoRGB(Math.max(Math.min(hsb[0] + percentage, 1f), 0f), hsb[1], hsb[2]));
 	}
 }

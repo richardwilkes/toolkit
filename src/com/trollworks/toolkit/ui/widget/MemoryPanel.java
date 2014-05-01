@@ -109,10 +109,10 @@ public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, 
 	protected void paintComponent(Graphics gc) {
 		super.paintComponent(gc);
 		Rectangle bounds = GraphicsUtilities.getLocalInsetBounds(this);
-		gc.setColor(Colors.lighter(Color.YELLOW, 90));
+		gc.setColor(Colors.adjustSaturation(Color.YELLOW, -0.75f));
 		int width = (int) (bounds.width * mUsed / mMax);
 		gc.fillRect(bounds.x, bounds.y, width, bounds.height);
-		gc.setColor(Colors.darker(Color.YELLOW, 20));
+		gc.setColor(Colors.adjustBrightness(Color.YELLOW, -0.1f));
 		gc.drawLine(bounds.x + width - 1, bounds.y, bounds.x + width - 1, bounds.y + bounds.height - 1);
 		gc.setColor(Color.BLACK);
 		TextDrawing.draw(gc, bounds, getText(), SwingConstants.CENTER, SwingConstants.CENTER);

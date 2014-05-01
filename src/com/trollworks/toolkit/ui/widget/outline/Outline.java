@@ -1617,8 +1617,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 			g2d.drawImage(off1, 0, 0, this);
 		} catch (Exception paintException) {
 			assert false : Debug.toString(paintException);
-			off2 = null;
-			mDragClip = new Rectangle(x, y, 1, 1);
+		off2 = null;
+		mDragClip = new Rectangle(x, y, 1, 1);
 		} finally {
 			if (g2d != null) {
 				g2d.dispose();
@@ -2803,8 +2803,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 			Color color = UIManager.getColor("List.selectionForeground"); //$NON-NLS-1$
 			if (!active) {
 				Color background = getListBackground(selected, active);
-				boolean threshold = Colors.threshold(color, 50);
-				if (threshold == Colors.threshold(background, 50)) {
+				boolean threshold = Colors.aboveBrightnessThreshold(color, 0.5f);
+				if (threshold == Colors.aboveBrightnessThreshold(background, 0.5f)) {
 					return threshold ? Color.BLACK : Color.WHITE;
 				}
 			}
@@ -2822,7 +2822,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		if (selected) {
 			Color color = UIManager.getColor("List.selectionBackground"); //$NON-NLS-1$
 			if (!active) {
-				color = Colors.lighter(color, 50);
+				color = Colors.adjustSaturation(color, -0.5f);
 			}
 			return color;
 		}
