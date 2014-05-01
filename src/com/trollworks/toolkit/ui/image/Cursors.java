@@ -22,9 +22,9 @@ public class Cursors {
 		Images.addLocation(ToolkitImage.class.getResource("images/"));
 	}
 
-	public static final Cursor	COLUMN_RESIZE	= create("ColumnResizeCursor");
-	public static final Cursor	MOVE			= create("MoveCursor");
-	public static final Cursor	ROW_RESIZE		= create("RowResizeCursor");
+	public static final Cursor	HORIZONTAL_RESIZE	= create("HorizontalResizeCursor");
+	public static final Cursor	MOVE				= create("MoveCursor");
+	public static final Cursor	VERTICAL_RESIZE		= create("VerticalResizeCursor");
 
 	private static Cursor create(String name) {
 		BufferedImage img = Images.get(name);
