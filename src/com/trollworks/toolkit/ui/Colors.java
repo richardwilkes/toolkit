@@ -24,12 +24,43 @@ public class Colors {
 	}
 
 	/**
-	 * @param color The color being tested.
-	 * @param threshold The threshold to check for, in the range 0 to 1.
-	 * @return <code>true</code> if the specified color's brightness is above the threshold.
+	 * @param color The color to check.
+	 * @return <code>true</code> if each color channel is the same.
 	 */
-	public static boolean aboveBrightnessThreshold(Color color, float threshold) {
-		return Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null)[2] > threshold;
+	public static boolean isMonochrome(Color color) {
+		int green = color.getGreen();
+		return color.getRed() == green && green == color.getBlue();
+	}
+
+	/**
+	 * @param color The color to check.
+	 * @return <code>true</code> if the color's perceived brightness is less than 50%.
+	 */
+	public static boolean isDim(Color color) {
+		return perceivedBrightness(color) < 0.5;
+	}
+
+	/**
+	 * @param color The color to check.
+	 * @return <code>true</code> if the color's perceived brightness is greater than or equal to
+	 *         50%.
+	 */
+	public static boolean isBright(Color color) {
+		return perceivedBrightness(color) >= 0.5;
+	}
+
+	/**
+	 * @param color The color to check.
+	 * @return The perceived brightness. Less than 0.5 is a dark color.
+	 */
+	public static double perceivedBrightness(Color color) {
+		double red = color.getRed() / 255.0;
+		if (!isMonochrome(color)) {
+			double green = color.getGreen() / 255.0;
+			double blue = color.getBlue() / 255.0;
+			return Math.sqrt(red * red * 0.241 + green * green * 0.691 + blue * blue * 0.068);
+		}
+		return red;
 	}
 
 	/**

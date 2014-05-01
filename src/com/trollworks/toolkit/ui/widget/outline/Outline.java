@@ -2803,9 +2803,9 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 			Color color = UIManager.getColor("List.selectionForeground"); //$NON-NLS-1$
 			if (!active) {
 				Color background = getListBackground(selected, active);
-				boolean threshold = Colors.aboveBrightnessThreshold(color, 0.5f);
-				if (threshold == Colors.aboveBrightnessThreshold(background, 0.5f)) {
-					return threshold ? Color.BLACK : Color.WHITE;
+				boolean isBright = Colors.isBright(color);
+				if (isBright == Colors.isBright(background)) {
+					return isBright ? Color.BLACK : Color.WHITE;
 				}
 			}
 			return color;

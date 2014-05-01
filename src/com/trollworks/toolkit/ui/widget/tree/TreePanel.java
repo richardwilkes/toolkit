@@ -1138,9 +1138,9 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			Color color = UIManager.getColor("List.selectionForeground"); //$NON-NLS-1$
 			if (!active) {
 				Color background = getDefaultRowBackground(position, selected, active);
-				boolean threshold = Colors.aboveBrightnessThreshold(color, 0.5f);
-				if (threshold == Colors.aboveBrightnessThreshold(background, 0.5f)) {
-					return threshold ? Color.BLACK : Color.WHITE;
+				boolean isBright = Colors.isBright(color);
+				if (isBright == Colors.isBright(background)) {
+					return isBright ? Color.BLACK : Color.WHITE;
 				}
 			}
 			return color;
@@ -1815,7 +1815,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			g2d.drawImage(off1, -(getColumnStart(column) + pt.x), 0, this);
 		} catch (Exception paintException) {
 			assert false : Debug.toString(paintException);
-		off2 = null;
+			off2 = null;
 		} finally {
 			if (g2d != null) {
 				g2d.dispose();
