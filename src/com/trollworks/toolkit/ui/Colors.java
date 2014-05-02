@@ -103,4 +103,8 @@ public class Colors {
 		float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
 		return new Color(Color.HSBtoRGB(Math.max(Math.min(hsb[0] + percentage, 1f), 0f), hsb[1], hsb[2]));
 	}
+
+	public static final Color getWithAlpha(Color color, int alpha) {
+		return new Color(color.getRGB() & 0x00FFFFFF | alpha << 24, true);
+	}
 }
