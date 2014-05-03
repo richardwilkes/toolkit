@@ -1,0 +1,107 @@
+/*
+ * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * version 2.0. If a copy of the MPL was not distributed with this file, You
+ * can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This Source Code Form is "Incompatible With Secondary Licenses", as defined
+ * by the Mozilla Public License, version 2.0.
+ */
+
+package com.trollworks.toolkit.ui.widget.dock;
+
+import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.io.Log;
+import com.trollworks.toolkit.ui.UIUtilities;
+import com.trollworks.toolkit.ui.image.ToolkitImage;
+import com.trollworks.toolkit.ui.layout.PrecisionLayout;
+import com.trollworks.toolkit.utility.Localization;
+
+import java.awt.Color;
+import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+/** Provides a tab that contains the {@link Dockable}'s icon, title, and close button, if any. */
+public class DockTab extends JPanel implements ContainerListener, ActionListener {
+	@Localize("Close")
+	private static String		CLOSE_TOOLTIP;
+	@Localize("Ignored unknown command: ")
+	private static String		IGNORED_COMMAND;
+
+	static {
+		Localization.initialize();
+	}
+
+	private static final String	CLOSE_COMMAND	= "close_dockable"; //$NON-NLS-1$
+
+	/**
+	 * Creates a new {@link DockTab} for the specified {@link Dockable}.
+	 *
+	 * @param dockable The {@link Dockable} to work with.
+	 */
+	public DockTab(Dockable dockable) {
+		super(new PrecisionLayout("margins:0 vAlign:middle")); //$NON-NLS-1$
+		setOpaque(true);
+		addContainerListener(this);
+		add(new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT), "hGrab:yes"); //$NON-NLS-1$
+		if (dockable instanceof DockCloseable) {
+			JButton closeButton = DockHeader.createButton(ToolkitImage.getDockClose(), Color.RED, CLOSE_TOOLTIP);
+			closeButton.setActionCommand(CLOSE_COMMAND);
+			closeButton.addActionListener(this);
+			add(closeButton, "hAlign:end minWidth:16"); //$NON-NLS-1$
+		}
+	}
+
+	@Override
+	public PrecisionLayout getLayout() {
+		return (PrecisionLayout) super.getLayout();
+	}
+
+	@Override
+	public void setLayout(LayoutManager mgr) {
+		if (mgr instanceof PrecisionLayout) {
+			super.setLayout(mgr);
+		} else {
+			throw new IllegalArgumentException("Must use a PrecisionLayout."); //$NON-NLS-1$
+		}
+	}
+
+	@Override
+	public void componentAdded(ContainerEvent event) {
+		getLayout().mColumns = getComponentCount();
+	}
+
+	@Override
+	public void componentRemoved(ContainerEvent event) {
+		getLayout().mColumns = getComponentCount();
+	}
+
+	private DockContainer getDockContainer() {
+		return (DockContainer) UIUtilities.getAncestorOfType(this, DockContainer.class);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		String cmd = event.getActionCommand();
+		switch (cmd) {
+			case CLOSE_COMMAND:
+				DockContainer dc = getDockContainer();
+				if (dc != null) {
+					dc.attemptClose();
+				}
+				break;
+			default:
+				Log.warn(IGNORED_COMMAND + cmd);
+				break;
+		}
+	}
+}

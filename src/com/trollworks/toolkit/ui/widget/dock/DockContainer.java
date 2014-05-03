@@ -1,5 +1,7 @@
 package com.trollworks.toolkit.ui.widget.dock;
 
+import com.trollworks.toolkit.ui.UIUtilities;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -27,6 +29,11 @@ public class DockContainer extends JPanel implements DockLayoutNode {
 		setMinimumSize(new Dimension(0, 0));
 	}
 
+	/** @return The {@link Dock} this {@link DockContainer} resides in. */
+	public Dock getDock() {
+		return (Dock) UIUtilities.getAncestorOfType(this, Dock.class);
+	}
+
 	@Override
 	public Dockable getDockable() {
 		return mDockable;
@@ -40,5 +47,26 @@ public class DockContainer extends JPanel implements DockLayoutNode {
 	@Override
 	public String toString() {
 		return mDockable.getTitle();
+	}
+
+	/**
+	 * Attempt to close this {@link DockContainer}. This only has an affect if the contained
+	 * {@link Dockable} implements the {@link DockCloseable} interface.
+	 */
+	public void attemptClose() {
+		if (mDockable instanceof DockCloseable) {
+			if (((DockCloseable) mDockable).attemptClose()) {
+				close();
+			}
+		}
+	}
+
+	/** Closes this {@link DockContainer} and removes it from the {@link Dock}. */
+	public void close() {
+		Dock dock = getDock();
+		if (dock != null) {
+			dock.remove(this);
+			dock.revalidate();
+		}
 	}
 }
