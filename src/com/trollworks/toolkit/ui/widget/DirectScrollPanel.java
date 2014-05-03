@@ -768,9 +768,9 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
 			Point pt = toContentView(new Point(mHeaderBounds.x, mHeaderBounds.y));
 			g2d.drawImage(off1, -(mDragClip.x - pt.x), -(mDragClip.y - pt.y), this);
 		} catch (Exception paintException) {
+			off2 = null;
+			mDragClip = new Rectangle(dragOrigin.x, dragOrigin.y, 1, 1);
 			assert false : Debug.toString(paintException);
-		off2 = null;
-		mDragClip = new Rectangle(dragOrigin.x, dragOrigin.y, 1, 1);
 		} finally {
 			if (g2d != null) {
 				g2d.dispose();

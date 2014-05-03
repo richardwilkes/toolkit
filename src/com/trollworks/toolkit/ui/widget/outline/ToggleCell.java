@@ -35,12 +35,12 @@ public class ToggleCell extends ImageCell {
 		checkBox.putClientProperty("JComponent.sizeVariant", "mini"); //$NON-NLS-1$ //$NON-NLS-2$
 		Dimension prefSize = checkBox.getPreferredSize();
 		checkBox.setSize(prefSize);
-		mOff = Images.create(prefSize.width, prefSize.height);
+		mOff = Images.createTransparent(prefSize.width, prefSize.height);
 		Graphics gc = mOff.getGraphics();
 		checkBox.paint(gc);
 		gc.dispose();
 		checkBox.setSelected(true);
-		mOn = Images.create(prefSize.width, prefSize.height);
+		mOn = Images.createTransparent(prefSize.width, prefSize.height);
 		gc = mOn.getGraphics();
 		checkBox.paint(gc);
 		gc.dispose();

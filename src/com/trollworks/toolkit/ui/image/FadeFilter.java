@@ -11,8 +11,8 @@
 
 package com.trollworks.toolkit.ui.image;
 
+import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageProducer;
 import java.awt.image.RGBImageFilter;
@@ -44,11 +44,10 @@ public class FadeFilter extends RGBImageFilter {
 	 * @param useWhite Whether to use white or black.
 	 * @return The faded image.
 	 */
-	public static BufferedImage createFadedImage(BufferedImage image, int percentage, boolean useWhite) {
+	public static ToolkitIcon createFadedImage(Image image, int percentage, boolean useWhite) {
 		FadeFilter filter = new FadeFilter(percentage, useWhite);
 		ImageProducer producer = new FilteredImageSource(image.getSource(), filter);
-
-		return Images.getBufferedImage(Toolkit.getDefaultToolkit().createImage(producer));
+		return Images.getToolkitIcon(Toolkit.getDefaultToolkit().createImage(producer));
 	}
 
 	@Override

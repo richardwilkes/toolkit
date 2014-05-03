@@ -12,8 +12,8 @@
 package com.trollworks.toolkit.ui.image;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageProducer;
 import java.awt.image.RGBImageFilter;
@@ -59,7 +59,7 @@ public class ColorFilter extends RGBImageFilter {
 	 * @param color The color to apply.
 	 * @return The colorized image.
 	 */
-	public static BufferedImage createColorizedImage(BufferedImage image, Color color) {
+	public static ToolkitIcon createColorizedImage(Image image, Color color) {
 		return createColorizedImage(image, color, false);
 	}
 
@@ -72,10 +72,10 @@ public class ColorFilter extends RGBImageFilter {
 	 *            colorization.
 	 * @return The colorized image.
 	 */
-	public static BufferedImage createColorizedImage(BufferedImage image, Color color, boolean includeAlpha) {
+	public static ToolkitIcon createColorizedImage(Image image, Color color, boolean includeAlpha) {
 		ColorFilter filter = new ColorFilter(color, includeAlpha);
 		ImageProducer producer = new FilteredImageSource(image.getSource(), filter);
-		return Images.getBufferedImage(Toolkit.getDefaultToolkit().createImage(producer));
+		return Images.getToolkitIcon(Toolkit.getDefaultToolkit().createImage(producer));
 	}
 
 	/** We leave pixels with an alpha channel alone. */

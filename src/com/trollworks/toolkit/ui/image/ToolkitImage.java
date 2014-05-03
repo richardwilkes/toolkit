@@ -11,8 +11,6 @@
 
 package com.trollworks.toolkit.ui.image;
 
-import java.awt.image.BufferedImage;
-
 /** Convenience class to hold toolkit images. */
 @SuppressWarnings("nls")
 public class ToolkitImage {
@@ -21,97 +19,112 @@ public class ToolkitImage {
 	}
 
 	/** @return The collapse icon. */
-	public static final BufferedImage getCollapseIcon() {
+	public static final ToolkitIcon getCollapseIcon() {
 		return Images.get("Collapse");
 	}
 
 	/** @return The expand icon. */
-	public static final BufferedImage getExpandIcon() {
+	public static final ToolkitIcon getExpandIcon() {
 		return Images.get("Expand");
 	}
 
 	/** @return The add icon. */
-	public static final BufferedImage getAddIcon() {
+	public static final ToolkitIcon getAddIcon() {
 		return Images.get("Add");
 	}
 
 	/** @return The down triangle icon. */
-	public static final BufferedImage getDownTriangleIcon() {
+	public static final ToolkitIcon getDownTriangleIcon() {
 		return Images.get("DownTriangle");
 	}
 
 	/** @return The down triangle roll icon. */
-	public static final BufferedImage getDownTriangleRollIcon() {
+	public static final ToolkitIcon getDownTriangleRollIcon() {
 		return Images.get("DownTriangleRoll");
 	}
 
 	/** @return The file icon. */
-	public static final BufferedImage getFileIcon() {
+	public static final ToolkitIcon getFileIcon() {
 		return Images.get("File");
 	}
 
 	/** @return The folder icon. */
-	public static final BufferedImage getFolderIcon() {
+	public static final ToolkitIcon getFolderIcon() {
 		return Images.get("Folder");
 	}
 
 	/** @return The locked icon. */
-	public static final BufferedImage getLockedIcon() {
+	public static final ToolkitIcon getLockedIcon() {
 		return Images.get("Locked");
 	}
 
 	/** @return The mini warning dialog icon. */
-	public static final BufferedImage getMiniWarningIcon() {
+	public static final ToolkitIcon getMiniWarningIcon() {
 		return Images.get("MiniWarning");
 	}
 
 	/** @return The modified marker. */
-	public static final BufferedImage getModifiedMarker() {
+	public static final ToolkitIcon getModifiedMarker() {
 		return Images.get("ModifiedMarker");
 	}
 
 	/** @return The more icon. */
-	public static final BufferedImage getMoreIcon() {
+	public static final ToolkitIcon getMoreIcon() {
 		return Images.get("More");
 	}
 
 	/** @return The not modified marker. */
-	public static final BufferedImage getNotModifiedMarker() {
+	public static final ToolkitIcon getNotModifiedMarker() {
 		return Images.get("NotModifiedMarker");
 	}
 
 	/** @return The preferences icon. */
-	public static final BufferedImage getPreferencesIcon() {
+	public static final ToolkitIcon getPreferencesIcon() {
 		return Images.get("Preferences");
 	}
 
 	/** @return The remove icon. */
-	public static final BufferedImage getRemoveIcon() {
+	public static final ToolkitIcon getRemoveIcon() {
 		return Images.get("Remove");
 	}
 
 	/** @return The right triangle icon. */
-	public static final BufferedImage getRightTriangleIcon() {
+	public static final ToolkitIcon getRightTriangleIcon() {
 		return Images.get("RightTriangle");
 	}
 
 	/** @return The right triangle roll icon. */
-	public static final BufferedImage getRightTriangleRollIcon() {
+	public static final ToolkitIcon getRightTriangleRollIcon() {
 		return Images.get("RightTriangleRoll");
 	}
 
 	/** @return The size-to-fit icon. */
-	public static final BufferedImage getSizeToFitIcon() {
+	public static final ToolkitIcon getSizeToFitIcon() {
 		return Images.get("SizeToFit");
 	}
 
 	/** @return The toggle open icon. */
-	public static final BufferedImage getToggleOpenIcon() {
+	public static final ToolkitIcon getToggleOpenIcon() {
 		return Images.get("ToggleOpen");
 	}
 
 	/** @return The unlocked icon. */
-	public static final BufferedImage getUnlockedIcon() {
+	public static final ToolkitIcon getUnlockedIcon() {
 		return Images.get("Unlocked");
+	}
+
+	/** @return The dock close image. */
+	public static final ToolkitIcon getDockClose() {
+		return Images.get("dock_close");
+	}
+
+	/** @return The dock maximize image. */
+	public static final ToolkitIcon getDockMaximize() {
+		return Images.get("dock_maximize");
+	}
+
+	/** @return The dock restore image. */
+	public static final ToolkitIcon getDockRestore() {
+		return Images.get("dock_restore");
 	}
 }
