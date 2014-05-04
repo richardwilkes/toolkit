@@ -6,21 +6,25 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.IllegalComponentStateException;
+import java.awt.KeyboardFocusManager;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 
 /** Provides an area where {@link Dockable} components can be displayed and rearranged. */
-public class Dock extends JPanel implements MouseListener, MouseMotionListener {
-	private static final int	GRIP_GAP		= 1;
-	private static final int	GRIP_WIDTH		= 4;
-	private static final int	GRIP_HEIGHT		= 2;
-	private static final int	GRIP_LENGTH		= GRIP_HEIGHT * 5 + GRIP_GAP * 4;
-	public static final int		DIVIDER_SIZE	= GRIP_WIDTH + 4;
+public class Dock extends JPanel implements MouseListener, MouseMotionListener, PropertyChangeListener {
+	private static final String	PERMANENT_FOCUS_OWNER_KEY	= "permanentFocusOwner";			//$NON-NLS-1$
+	private static final int	GRIP_GAP					= 1;
+	private static final int	GRIP_WIDTH					= 4;
+	private static final int	GRIP_HEIGHT					= 2;
+	private static final int	GRIP_LENGTH					= GRIP_HEIGHT * 5 + GRIP_GAP * 4;
+	public static final int		DIVIDER_SIZE				= GRIP_WIDTH + 4;
 	private DockDragHandler		mDragHandler;
 	private DockLayoutNode		mDragOverNode;
 	private DockLocation		mDragOverLocation;
@@ -422,5 +426,22 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener {
 
 	private static final IllegalComponentStateException createIllegalComponentStateException() {
 		return new IllegalComponentStateException("Use one of the dock() methods instead"); //$NON-NLS-1$
+	}
+
+	@Override
+	public void addNotify() {
+		super.addNotify();
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(PERMANENT_FOCUS_OWNER_KEY, this);
+	}
+
+	@Override
+	public void removeNotify() {
+		super.removeNotify();
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().removePropertyChangeListener(PERMANENT_FOCUS_OWNER_KEY, this);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		getLayout().forEachDockContainer((dc) -> dc.updateActiveHighlight());
 	}
 }

@@ -39,6 +39,7 @@ public class DockHeader extends JPanel implements ContainerListener {
 	public DockHeader(Dockable dockable) {
 		super(new PrecisionLayout("margins:0 vAlign:middle")); //$NON-NLS-1$
 		setOpaque(true);
+		setBackground(DockColors.BACKGROUND);
 		setBorder(new CompoundBorder(new SelectiveLineBorder(DockColors.SHADOW, 0, 0, 1, 0), new EmptyBorder(2, 4, 2, 4)));
 		addContainerListener(this);
 		add(new DockTab(dockable), "hGrab:yes"); //$NON-NLS-1$
@@ -89,5 +90,9 @@ public class DockHeader extends JPanel implements ContainerListener {
 	@Override
 	public void componentRemoved(ContainerEvent event) {
 		getLayout().mColumns = getComponentCount();
+	}
+
+	void setActive(boolean active) {
+		setBackground(active ? DockColors.ACTIVE_HEADER_BACKGROUND : DockColors.BACKGROUND);
 	}
 }

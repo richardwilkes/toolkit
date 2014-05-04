@@ -4,7 +4,9 @@ import com.trollworks.toolkit.ui.UIUtilities;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
 
 import javax.swing.JPanel;
 
@@ -67,6 +69,16 @@ public class DockContainer extends JPanel implements DockLayoutNode {
 		if (dock != null) {
 			dock.remove(this);
 			dock.revalidate();
+			dock.repaint();
 		}
+	}
+
+	void updateActiveHighlight() {
+		Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner();
+		boolean hasFocus = focusOwner == this;
+		if (!hasFocus && focusOwner != null) {
+			hasFocus = UIUtilities.getAncestorOfType(focusOwner, DockContainer.class) == this;
+		}
+		mHeader.setActive(hasFocus);
 	}
 }

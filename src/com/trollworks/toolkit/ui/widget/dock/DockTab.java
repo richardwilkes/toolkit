@@ -50,7 +50,7 @@ public class DockTab extends JPanel implements ContainerListener, ActionListener
 	 */
 	public DockTab(Dockable dockable) {
 		super(new PrecisionLayout("margins:0 vAlign:middle")); //$NON-NLS-1$
-		setOpaque(true);
+		setOpaque(false);
 		addContainerListener(this);
 		add(new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT), "hGrab:yes"); //$NON-NLS-1$
 		if (dockable instanceof DockCloseable) {

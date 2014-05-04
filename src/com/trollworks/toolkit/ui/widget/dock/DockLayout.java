@@ -21,6 +21,17 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 		return null;
 	}
 
+	/** @param processor A processor to execute for each {@link DockContainer}. */
+	public void forEachDockContainer(DockContainerProcessor processor) {
+		for (DockLayoutNode child : mChildren) {
+			if (child instanceof DockContainer) {
+				processor.processDockContainer((DockContainer) child);
+			} else if (child instanceof DockLayout) {
+				((DockLayout) child).forEachDockContainer(processor);
+			}
+		}
+	}
+
 	/** @return The root {@link DockLayout}, which may be this object. */
 	public DockLayout getRootLayout() {
 		DockLayout root = this;
