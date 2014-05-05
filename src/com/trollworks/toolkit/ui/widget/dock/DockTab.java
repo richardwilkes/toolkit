@@ -15,6 +15,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
+import com.trollworks.toolkit.ui.layout.PrecisionLayoutData;
 import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
 
@@ -44,10 +45,10 @@ public class DockTab extends JPanel implements ContainerListener {
 		super(new PrecisionLayout().setMargins(0).setMiddleVerticalAlignment());
 		setOpaque(false);
 		addContainerListener(this);
-		add(new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT), "hGrab:yes"); //$NON-NLS-1$
+		add(new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT), new PrecisionLayoutData().setGrabHorizontalSpace(true));
 		if (dockable instanceof DockCloseable) {
 			IconButton closeButton = new IconButton(ToolkitImage.getDockClose(), CLOSE_TOOLTIP, () -> attemptClose());
-			add(closeButton, "hAlign:end minWidth:16"); //$NON-NLS-1$
+			add(closeButton, new PrecisionLayoutData().setEndHorizontalAlignment());
 		}
 	}
 

@@ -4,6 +4,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.border.SelectiveLineBorder;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
+import com.trollworks.toolkit.ui.layout.PrecisionLayoutData;
 import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
 
@@ -31,19 +32,18 @@ public class DockHeader extends JPanel implements ContainerListener {
 	 *
 	 * @param dockable The {@link Dockable} to work with.
 	 */
-	@SuppressWarnings("nls")
 	public DockHeader(Dockable dockable) {
 		super(new PrecisionLayout().setMargins(0).setMiddleVerticalAlignment());
 		setOpaque(true);
 		setBackground(DockColors.BACKGROUND);
 		setBorder(new CompoundBorder(new SelectiveLineBorder(DockColors.SHADOW, 0, 0, 1, 0), new EmptyBorder(2, 4, 2, 4)));
 		addContainerListener(this);
-		add(new DockTab(dockable), "hGrab:yes");
+		add(new DockTab(dockable), new PrecisionLayoutData().setGrabHorizontalSpace(true));
 		if (dockable instanceof DockMaximizable) {
 			add(new IconButton(ToolkitImage.getDockMaximize(), MAXIMIZE_TOOLTIP, () -> {
 				DockContainer dc = (DockContainer) getParent();
 				dc.getDock().maximize(dc.getDockable());
-			}), "hAlign:end");
+			}), new PrecisionLayoutData().setEndHorizontalAlignment());
 		}
 	}
 
