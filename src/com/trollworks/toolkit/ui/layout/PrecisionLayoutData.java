@@ -13,7 +13,6 @@ package com.trollworks.toolkit.ui.layout;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.util.StringTokenizer;
 
 /**
  * Data for components within a {@link PrecisionLayout}. Do not re-use {@link PrecisionLayoutData}
@@ -45,273 +44,502 @@ public final class PrecisionLayoutData {
 	public static final int		MIDDLE			= 1;
 	public static final int		END				= 2;
 	public static final int		FILL			= 3;
-	/**
-	 * Specifies how components will be positioned vertically within a cell. The default value is
-	 * {@link #MIDDLE}. Possible values are:
-	 * <ul>
-	 * <li>{@link #BEGINNING}: Position the component at the top of the cell</li>
-	 * <li>{@link #MIDDLE}: Position the component in the vertical center of the cell</li>
-	 * <li>{@link #END}: Position the component at the bottom of the cell</li>
-	 * <li>{@link #FILL}: Resize the component to fill the cell vertically</li>
-	 * </ul>
-	 */
-	public int					mVAlign			= MIDDLE;
-	/**
-	 * Specifies how components will be positioned horizontally within a cell. The default value is
-	 * {@link #BEGINNING}. Possible values are:
-	 * <ul>
-	 * <li>{@link #BEGINNING}: Position the component at the left of the cell</li>
-	 * <li>{@link #MIDDLE}: Position the component in the horizontal center of the cell</li>
-	 * <li>{@link #END}: Position the component at the right of the cell</li>
-	 * <li>{@link #FILL}: Resize the component to fill the cell horizontally</li>
-	 * </ul>
-	 */
-	public int					mHAlign			= BEGINNING;
-	/**
-	 * Specifies the preferred width in pixels. A value of {@link #DEFAULT} indicates the component
-	 * should be asked for its preferred size. The default value is {@link #DEFAULT}.
-	 */
-	public int					mWidthHint		= DEFAULT;
-	/**
-	 * Specifies the preferred height in pixels. A value of {@link #DEFAULT} indicates the component
-	 * should be asked for its preferred size. The default value is {@link #DEFAULT}.
-	 */
-	public int					mHeightHint		= DEFAULT;
-	/**
-	 * Specifies the number of pixels of indentation that will be placed along the top side of the
-	 * cell. The default value is 0.
-	 */
-	public int					mMarginTop		= 0;
-	/**
-	 * Specifies the number of pixels of indentation that will be placed along the left side of the
-	 * cell. The default value is 0.
-	 */
-	public int					mMarginLeft		= 0;
-	/**
-	 * Specifies the number of pixels of indentation that will be placed along the bottom side of
-	 * the cell. The default value is 0.
-	 */
-	public int					mMarginBottom	= 0;
-	/**
-	 * Specifies the number of pixels of indentation that will be placed along the right side of the
-	 * cell. The default value is 0.
-	 */
-	public int					mMarginRight	= 0;
-	/**
-	 * Specifies the number of column cells that the component will take up. The default value is 1.
-	 */
-	public int					mHSpan			= 1;
-	/**
-	 * Specifies the number of row cells that the component will take up. The default value is 1.
-	 */
-	public int					mVSpan			= 1;
-	/**
-	 * Specifies whether the width of the cell changes depending on the size of the parent
-	 * container. If <code>true</code>, the following rules apply to the width of the cell:
-	 * <ul>
-	 * <li>If extra horizontal space is available in the parent, the cell will grow to be wider than
-	 * its preferred width. The new width will be "preferred width + delta" where delta is the extra
-	 * horizontal space divided by the number of grabbing columns.</li>
-	 * <li>If there is not enough horizontal space available in the parent, the cell will shrink
-	 * until it reaches its minimum width as specified by {@link #mMinWidth}. The new width will be
-	 * the maximum of "{@link #mMinWidth}" and "preferred width - delta", where delta is the amount
-	 * of space missing divided by the number of grabbing columns.</li>
-	 * </ul>
-	 * The default value is <code>false</code>.
-	 */
-	public boolean				mHGrab			= false;
-	/**
-	 * Specifies whether the height of the cell changes depending on the size of the parent
-	 * container. If <code>true</code>, the following rules apply to the height of the cell:
-	 * <ul>
-	 * <li>If extra vertical space is available in the parent, the cell will grow to be taller than
-	 * its preferred height. The new height will be "preferred height + delta" where delta is the
-	 * extra vertical space divided by the number of grabbing rows.</li>
-	 * <li>If there is not enough vertical space available in the parent, the cell will shrink until
-	 * it reaches its minimum height as specified by {@link #mMinHeight}. The new height will be the
-	 * maximum of "{@link #mMinHeight}" and "preferred height - delta", where delta is the amount of
-	 * space missing divided by the number of grabbing rows.</li>
-	 * </ul>
-	 * The default value is <code>false</code>.
-	 */
-	public boolean				mVGrab			= false;
-	/**
-	 * Specifies the minimum width in pixels. This value applies only if {@link #mHGrab} is
-	 * <code>true</code>. A value of {@link #DEFAULT} means that the minimum width will be
-	 * determined by calling {@link Component#getMinimumSize()}. The default value is
-	 * {@link #DEFAULT}.
-	 */
-	public int					mMinWidth		= DEFAULT;
-	/**
-	 * Specifies the minimum height in pixels. This value applies only if {@link #mVGrab} is true. A
-	 * value of {@link #DEFAULT} means that the minimum height will be determined by calling
-	 * {@link Component#getMinimumSize()}. The default value is {@link #DEFAULT}.
-	 */
-	public int					mMinHeight		= DEFAULT;
-	/**
-	 * Informs the layout to ignore this component when sizing and positioning components. If this
-	 * value is <code>true</code>, the size and position of the component will not be managed by the
-	 * layout. If this value is <code>false</code>, the size and position of the component will be
-	 * computed and assigned. The default value is <code>false</code>.
-	 */
-	public boolean				mExclude		= false;
-	int							mCacheMinWidth;
-	int							mCacheWidth;
-	int							mCacheHeight;
-
-	public PrecisionLayoutData() {
-		super();
-	}
+	private int					mCacheMinWidth;
+	private int					mCacheWidth;
+	private int					mCacheHeight;
+	private int					mVAlign			= MIDDLE;
+	private int					mHAlign			= BEGINNING;
+	private int					mMarginTop		= 0;
+	private int					mMarginLeft		= 0;
+	private int					mMarginBottom	= 0;
+	private int					mMarginRight	= 0;
+	private int					mWidthHint		= DEFAULT;
+	private int					mHeightHint		= DEFAULT;
+	private int					mHSpan			= 1;
+	private int					mVSpan			= 1;
+	private int					mMinWidth		= DEFAULT;
+	private int					mMinHeight		= DEFAULT;
+	private boolean				mHGrab			= false;
+	private boolean				mVGrab			= false;
+	private boolean				mExclude		= false;
 
 	/**
-	 * Creates a new {@link PrecisionLayoutData} from a text description. Valid keywords are:
-	 * <ul>
-	 * <li>hAlign - sets {@link #mHAlign}</li>
-	 * <li>vAlign - sets {@link #mVAlign}</li>
-	 * <li>width - sets {@link #mWidthHint}</li>
-	 * <li>height - sets {@link #mHeightHint}</li>
-	 * <li>minWidth - sets {@link #mMinWidth}</li>
-	 * <li>minHeight - sets {@link #mMinHeight}</li>
-	 * <li>hSpan - sets {@link #mHSpan}</li>
-	 * <li>vSpan - sets {@link #mVSpan}</li>
-	 * <li>hGrab - sets {@link #mHGrab}</li>
-	 * <li>vGrab - sets {@link #mVGrab}</li>
-	 * <li>margins - sets {@link #mMarginTop}, {@link #mMarginLeft}, {@link #mMarginBottom} and
-	 * {@link #mMarginRight} to the same value</li>
-	 * <li>top - sets {@link #mMarginTop}</li>
-	 * <li>left - sets {@link #mMarginLeft}</li>
-	 * <li>bottom - sets {@link #mMarginBottom}</li>
-	 * <li>right - sets {@link #mMarginRight}</li>
-	 * <li>exclude - sets {@link #mExclude}</li>
-	 * </ul>
+	 * Position the components at the left of the container. This is the default.
 	 *
-	 * @param settings The settings string to parse.
+	 * @return This layout data.
 	 */
-	public PrecisionLayoutData(String settings) {
-		StringTokenizer tokenizer = new StringTokenizer(settings);
-		while (tokenizer.hasMoreTokens()) {
-			String token = tokenizer.nextToken();
-			int sep = token.indexOf(':');
-			String key = token.substring(0, sep);
-			String value = token.substring(sep + 1);
-			if (KEY_HALIGN.equalsIgnoreCase(key)) {
-				mHAlign = decodeAlignment(value, true);
-			} else if (KEY_VALIGN.equalsIgnoreCase(key)) {
-				mVAlign = decodeAlignment(value, true);
-			} else if (KEY_WIDTH.equalsIgnoreCase(key)) {
-				mWidthHint = Integer.parseInt(value);
-			} else if (KEY_HEIGHT.equalsIgnoreCase(key)) {
-				mHeightHint = Integer.parseInt(value);
-			} else if (KEY_MIN_WIDTH.equalsIgnoreCase(key)) {
-				mMinWidth = Integer.parseInt(value);
-			} else if (KEY_MIN_HEIGHT.equalsIgnoreCase(key)) {
-				mMinHeight = Integer.parseInt(value);
-			} else if (KEY_HSPAN.equalsIgnoreCase(key)) {
-				mHSpan = Integer.parseInt(value);
-			} else if (KEY_VSPAN.equalsIgnoreCase(key)) {
-				mVSpan = Integer.parseInt(value);
-			} else if (KEY_HGRAB.equalsIgnoreCase(key)) {
-				mHGrab = decodeBoolean(value);
-			} else if (KEY_VGRAB.equalsIgnoreCase(key)) {
-				mVGrab = decodeBoolean(value);
-			} else if (KEY_EXCLUDE.equalsIgnoreCase(key)) {
-				mExclude = decodeBoolean(value);
-			} else if (KEY_MARGINS.equalsIgnoreCase(key)) {
-				mMarginTop = Integer.parseInt(value);
-				mMarginLeft = mMarginTop;
-				mMarginBottom = mMarginTop;
-				mMarginRight = mMarginTop;
-			} else if (KEY_TOP.equalsIgnoreCase(key)) {
-				mMarginTop = Integer.parseInt(value);
-			} else if (KEY_LEFT.equalsIgnoreCase(key)) {
-				mMarginLeft = Integer.parseInt(value);
-			} else if (KEY_BOTTOM.equalsIgnoreCase(key)) {
-				mMarginBottom = Integer.parseInt(value);
-			} else if (KEY_RIGHT.equalsIgnoreCase(key)) {
-				mMarginRight = Integer.parseInt(value);
-			} else {
-				throw new IllegalArgumentException(token);
-			}
-		}
+	public PrecisionLayoutData setBeginningHorizontalAlign() {
+		mHAlign = BEGINNING;
+		return this;
 	}
 
-	static boolean decodeBoolean(String bool) {
-		return "true".equalsIgnoreCase(bool) || "yes".equalsIgnoreCase(bool) || "y".equalsIgnoreCase(bool) || "1".equalsIgnoreCase(bool); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	/**
+	 * Position the components in the horizontal center of the container.
+	 *
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setMiddleHorizontalAlignment() {
+		mHAlign = MIDDLE;
+		return this;
 	}
 
-	static int decodeAlignment(String alignment, boolean permitFill) {
-		if (VALUE_BEGINNING.equalsIgnoreCase(alignment)) {
-			return BEGINNING;
-		} else if (VALUE_MIDDLE.equalsIgnoreCase(alignment)) {
-			return MIDDLE;
-		} else if (VALUE_END.equalsIgnoreCase(alignment)) {
-			return END;
-		} else if (permitFill && VALUE_FILL.equalsIgnoreCase(alignment)) {
-			return FILL;
-		}
-		throw new IllegalArgumentException(alignment);
+	/**
+	 * Position the components at the right of the container.
+	 *
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setEndHorizontalAlignment() {
+		mHAlign = END;
+		return this;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder buffer = new StringBuilder();
-		emitAlign(KEY_HALIGN, mHAlign, buffer);
-		emitAlign(KEY_VALIGN, mVAlign, buffer);
-		emit(KEY_WIDTH, mWidthHint, buffer);
-		emit(KEY_HEIGHT, mHeightHint, buffer);
-		emit(KEY_MIN_WIDTH, mMinWidth, buffer);
-		emit(KEY_MIN_HEIGHT, mMinHeight, buffer);
-		emit(KEY_HSPAN, mHSpan, buffer);
-		emit(KEY_VSPAN, mVSpan, buffer);
-		emit(KEY_HGRAB, mHGrab, buffer);
-		emit(KEY_VGRAB, mVGrab, buffer);
-		if (mMarginTop == mMarginLeft && mMarginTop == mMarginBottom && mMarginTop == mMarginRight) {
-			emit(KEY_MARGINS, mMarginTop, buffer);
-		} else {
-			emit(KEY_TOP, mMarginTop, buffer);
-			emit(KEY_LEFT, mMarginLeft, buffer);
-			emit(KEY_BOTTOM, mMarginBottom, buffer);
-			emit(KEY_RIGHT, mMarginBottom, buffer);
-		}
-		emit(KEY_EXCLUDE, mExclude, buffer);
-		return buffer.toString();
+	/** @return The horizontal positioning of components within the container. */
+	public int getHorizontalAlignment() {
+		return mHAlign;
 	}
 
-	static void emit(String key, boolean value, StringBuilder buffer) {
-		if (buffer.length() > 0) {
-			buffer.append(' ');
-		}
-		buffer.append(key);
-		buffer.append(':');
-		buffer.append(value);
+	/**
+	 * @param align Specifies how components will be positioned horizontally within a cell. The
+	 *            default value is {@link #BEGINNING}.<br>
+	 *            Possible values are:
+	 *            <ul>
+	 *            <li>{@link #BEGINNING}: Position the component at the left of the cell</li>
+	 *            <li>{@link #MIDDLE}: Position the component in the horizontal center of the cell</li>
+	 *            <li>{@link #END}: Position the component at the right of the cell</li>
+	 *            <li>{@link #FILL}: Resize the component to fill the cell horizontally</li>
+	 *            </ul>
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setHorizontalAlignment(int align) {
+		mHAlign = align;
+		return this;
 	}
 
-	static void emit(String key, int value, StringBuilder buffer) {
-		if (buffer.length() > 0) {
-			buffer.append(' ');
-		}
-		buffer.append(key);
-		buffer.append(':');
-		buffer.append(value);
+	/**
+	 * Position the components at the top of the container. This is the default.
+	 *
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setBeginningVerticalAlignment() {
+		mVAlign = BEGINNING;
+		return this;
 	}
 
-	static void emitAlign(String key, int value, StringBuilder buffer) {
-		if (buffer.length() > 0) {
-			buffer.append(' ');
-		}
-		buffer.append(key);
-		buffer.append(':');
-		if (value == BEGINNING) {
-			buffer.append(VALUE_BEGINNING);
-		} else if (value == MIDDLE) {
-			buffer.append(VALUE_MIDDLE);
-		} else if (value == END) {
-			buffer.append(VALUE_END);
-		} else if (value == FILL) {
-			buffer.append(VALUE_FILL);
-		} else {
-			buffer.append(value);
-		}
+	/**
+	 * Position the components in the vertical center of the container.
+	 *
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setMiddleVerticalAlignment() {
+		mVAlign = MIDDLE;
+		return this;
+	}
+
+	/**
+	 * Position the components at the bottom of the container.
+	 *
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setEndVerticalAlignment() {
+		mVAlign = END;
+		return this;
+	}
+
+	/** @return The vertical positioning of components within the container. */
+	public int getVerticalAlignment() {
+		return mVAlign;
+	}
+
+	/**
+	 * @param align Specifies how components will be positioned vertically within a cell. The
+	 *            default value is {@link #MIDDLE}.<br>
+	 *            Possible values are:
+	 *            <ul>
+	 *            <li>{@link #BEGINNING}: Position the component at the top of the cell</li>
+	 *            <li>{@link #MIDDLE}: Position the component in the vertical center of the cell</li>
+	 *            <li>{@link #END}: Position the component at the bottom of the cell</li>
+	 *            <li>{@link #FILL}: Resize the component to fill the cell vertically</li>
+	 *            </ul>
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setVerticalAlignment(int align) {
+		mVAlign = align;
+		return this;
+	}
+
+	/**
+	 * @param horizontal Specifies how components will be positioned horizontally within a cell. The
+	 *            default value is {@link #BEGINNING}.<br>
+	 *            Possible values are:
+	 *            <ul>
+	 *            <li>{@link #BEGINNING}: Position the component at the left of the cell</li>
+	 *            <li>{@link #MIDDLE}: Position the component in the horizontal center of the cell</li>
+	 *            <li>{@link #END}: Position the component at the right of the cell</li>
+	 *            <li>{@link #FILL}: Resize the component to fill the cell horizontally</li>
+	 *            </ul>
+	 * @param vertical Specifies how components will be positioned vertically within a cell. The
+	 *            default value is {@link #MIDDLE}.<br>
+	 *            Possible values are:
+	 *            <ul>
+	 *            <li>{@link #BEGINNING}: Position the component at the top of the cell</li>
+	 *            <li>{@link #MIDDLE}: Position the component in the vertical center of the cell</li>
+	 *            <li>{@link #END}: Position the component at the bottom of the cell</li>
+	 *            <li>{@link #FILL}: Resize the component to fill the cell vertically</li>
+	 *            </ul>
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setAlignment(int horizontal, int vertical) {
+		mHAlign = horizontal;
+		mVAlign = vertical;
+		return this;
+	}
+
+	/**
+	 * @return The number of pixels of indentation that will be placed along the top side of the
+	 *         cell.
+	 */
+	public int getTopMargin() {
+		return mMarginTop;
+	}
+
+	/**
+	 * @param top The number of pixels of indentation that will be placed along the top side of the
+	 *            cell. The default value is 0.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setTopMargin(int top) {
+		mMarginTop = top;
+		return this;
+	}
+
+	/**
+	 * @return The number of pixels of indentation that will be placed along the left side of the
+	 *         cell.
+	 */
+	public int getLeftMargin() {
+		return mMarginLeft;
+	}
+
+	/**
+	 * @param left The number of pixels of indentation that will be placed along the left side of
+	 *            the cell. The default value is 0.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setLeftMargin(int left) {
+		mMarginLeft = left;
+		return this;
+	}
+
+	/**
+	 * @return The number of pixels of indentation that will be placed along the bottom side of the
+	 *         cell.
+	 */
+	public int getBottomMargin() {
+		return mMarginBottom;
+	}
+
+	/**
+	 * @param bottom The number of pixels of indentation that will be placed along the bottom side
+	 *            of the cell. The default value is 0.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setBottomMargin(int bottom) {
+		mMarginBottom = bottom;
+		return this;
+	}
+
+	/**
+	 * @return The number of pixels of indentation that will be placed along the right side of the
+	 *         cell.
+	 */
+	public int getRightMargin() {
+		return mMarginRight;
+	}
+
+	/**
+	 * @param right The number of pixels of indentation that will be placed along the right side of
+	 *            the cell. The default value is 0.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setRightMargin(int right) {
+		mMarginRight = right;
+		return this;
+	}
+
+	/**
+	 * @param margins The number of pixels of margin that will be placed along each edge of the
+	 *            layout. The default value is 4.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setMargins(int margins) {
+		mMarginTop = margins;
+		mMarginLeft = margins;
+		mMarginBottom = margins;
+		mMarginRight = margins;
+		return this;
+	}
+
+	/**
+	 * @param top The number of pixels of indentation that will be placed along the top side of the
+	 *            cell. The default value is 0.
+	 * @param left The number of pixels of indentation that will be placed along the left side of
+	 *            the cell. The default value is 0.
+	 * @param bottom The number of pixels of indentation that will be placed along the bottom side
+	 *            of the cell. The default value is 0.
+	 * @param right The number of pixels of indentation that will be placed along the right side of
+	 *            the cell. The default value is 0.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setMargins(int top, int left, int bottom, int right) {
+		mMarginTop = top;
+		mMarginLeft = left;
+		mMarginBottom = bottom;
+		mMarginRight = right;
+		return this;
+	}
+
+	/**
+	 * @return The preferred width in pixels. A value of {@link #DEFAULT} indicates the component
+	 *         should be asked for its preferred size.
+	 */
+	public int getWidthHint() {
+		return mWidthHint;
+	}
+
+	/**
+	 * @param width The preferred width in pixels. A value of {@link #DEFAULT} indicates the
+	 *            component should be asked for its preferred size. The default value is
+	 *            {@link #DEFAULT}.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setWidthHint(int width) {
+		mWidthHint = width;
+		return this;
+	}
+
+	/**
+	 * @return The minimum width in pixels. This value applies only if
+	 *         {@link #shouldGrabHorizontalSpace()} is <code>true</code>. A value of
+	 *         {@link #DEFAULT} means that the minimum width will be determined by calling
+	 *         {@link Component#getMinimumSize()}.
+	 */
+	public int getMinimumWidth() {
+		return mMinWidth;
+	}
+
+	/**
+	 * @param width The minimum width in pixels. This value applies only if
+	 *            {@link #shouldGrabHorizontalSpace()} is <code>true</code>. A value of
+	 *            {@link #DEFAULT} means that the minimum width will be determined by calling
+	 *            {@link Component#getMinimumSize()}. The default value is {@link #DEFAULT}.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setMinimumWidth(int width) {
+		mMinWidth = width;
+		return this;
+	}
+
+	/**
+	 * @return The preferred height in pixels. A value of {@link #DEFAULT} indicates the component
+	 *         should be asked for its preferred size.
+	 */
+	public int getHeightHint() {
+		return mHeightHint;
+	}
+
+	/**
+	 * @param height The preferred height in pixels. A value of {@link #DEFAULT} indicates the
+	 *            component should be asked for its preferred size. The default value is
+	 *            {@link #DEFAULT}.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setHeightHint(int height) {
+		mHeightHint = height;
+		return this;
+	}
+
+	/**
+	 * @return The minimum height in pixels. This value applies only if
+	 *         {@link #shouldGrabVerticalSpace()} is true. A value of {@link #DEFAULT} means that
+	 *         the minimum height will be determined by calling {@link Component#getMinimumSize()}.
+	 */
+	public int getMinimumHeight() {
+		return mMinHeight;
+	}
+
+	/**
+	 * @param height The minimum height in pixels. This value applies only if
+	 *            {@link #shouldGrabVerticalSpace()} is true. A value of {@link #DEFAULT} means that
+	 *            the minimum height will be determined by calling
+	 *            {@link Component#getMinimumSize()}. The default value is {@link #DEFAULT}.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setMinimumHeight(int height) {
+		mMinHeight = height;
+		return this;
+	}
+
+	/**
+	 * @return The number of column cells that the component will take up.
+	 */
+	public int getHorizontalSpan() {
+		return mHSpan;
+	}
+
+	/**
+	 * @param span The number of column cells that the component will take up. The default value is
+	 *            1.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setHorizontalSpan(int span) {
+		mHSpan = span;
+		return this;
+	}
+
+	/**
+	 * @return The number of row cells that the component will take up.
+	 */
+	public int getVerticalSpan() {
+		return mVSpan;
+	}
+
+	/**
+	 * @param span The number of row cells that the component will take up. The default value is 1.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setVerticalSpan(int span) {
+		mVSpan = span;
+		return this;
+	}
+
+	/**
+	 * @return Whether the width of the cell changes depending on the size of the parent container.
+	 *         If <code>true</code>, the following rules apply to the width of the cell:
+	 *         <ul>
+	 *         <li>If extra horizontal space is available in the parent, the cell will grow to be
+	 *         wider than its preferred width. The new width will be "preferred width + delta" where
+	 *         delta is the extra horizontal space divided by the number of grabbing columns.</li>
+	 *         <li>If there is not enough horizontal space available in the parent, the cell will
+	 *         shrink until it reaches its minimum width as specified by {@link #getMinimumWidth()}.
+	 *         The new width will be the maximum of "{@link #getMinimumWidth()}" and "preferred
+	 *         width - delta", where delta is the amount of space missing divided by the number of
+	 *         grabbing columns.</li>
+	 *         </ul>
+	 */
+	public boolean shouldGrabHorizontalSpace() {
+		return mHGrab;
+	}
+
+	/**
+	 * @param grab Whether the width of the cell changes depending on the size of the parent
+	 *            container. If <code>true</code>, the following rules apply to the width of the
+	 *            cell:
+	 *            <ul>
+	 *            <li>If extra horizontal space is available in the parent, the cell will grow to be
+	 *            wider than its preferred width. The new width will be "preferred width + delta"
+	 *            where delta is the extra horizontal space divided by the number of grabbing
+	 *            columns.</li>
+	 *            <li>If there is not enough horizontal space available in the parent, the cell will
+	 *            shrink until it reaches its minimum width as specified by
+	 *            {@link #getMinimumWidth()}. The new width will be the maximum of "
+	 *            {@link #getMinimumWidth()}" and "preferred width - delta", where delta is the
+	 *            amount of space missing divided by the number of grabbing columns.</li>
+	 *            </ul>
+	 *            The default value is <code>false</code>.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setGrabHorizontalSpace(boolean grab) {
+		mHGrab = grab;
+		return this;
+	}
+
+	/**
+	 * @return Whether the height of the cell changes depending on the size of the parent container.
+	 *         If <code>true</code>, the following rules apply to the height of the cell:
+	 *         <ul>
+	 *         <li>If extra vertical space is available in the parent, the cell will grow to be
+	 *         taller than its preferred height. The new height will be "preferred height + delta"
+	 *         where delta is the extra vertical space divided by the number of grabbing rows.</li>
+	 *         <li>If there is not enough vertical space available in the parent, the cell will
+	 *         shrink until it reaches its minimum height as specified by
+	 *         {@link #getMinimumHeight()}. The new height will be the maximum of "
+	 *         {@link #getMinimumHeight()}" and "preferred height - delta", where delta is the
+	 *         amount of space missing divided by the number of grabbing rows.</li>
+	 *         </ul>
+	 */
+	public boolean shouldGrabVerticalSpace() {
+		return mVGrab;
+	}
+
+	/**
+	 * @param grab Whether the height of the cell changes depending on the size of the parent
+	 *            container. If <code>true</code>, the following rules apply to the height of the
+	 *            cell:
+	 *            <ul>
+	 *            <li>If extra vertical space is available in the parent, the cell will grow to be
+	 *            taller than its preferred height. The new height will be
+	 *            "preferred height + delta" where delta is the extra vertical space divided by the
+	 *            number of grabbing rows.</li>
+	 *            <li>If there is not enough vertical space available in the parent, the cell will
+	 *            shrink until it reaches its minimum height as specified by
+	 *            {@link #getMinimumHeight()}. The new height will be the maximum of "
+	 *            {@link #getMinimumHeight()}" and "preferred height - delta", where delta is the
+	 *            amount of space missing divided by the number of grabbing rows.</li>
+	 *            </ul>
+	 *            The default value is <code>false</code>.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setGrabVerticalSpace(boolean grab) {
+		mVGrab = grab;
+		return this;
+	}
+
+	/**
+	 * @return <code>true</code> if the size and position of the component will not be managed by
+	 *         the layout. <code>false</code> ifthe size and position of the component will be
+	 *         computed and assigned.
+	 */
+	public boolean shouldExclude() {
+		return mExclude;
+	}
+
+	/**
+	 * Informs the layout to ignore this component when sizing and positioning components.
+	 *
+	 * @param exclude <code>true</code> if the size and position of the component will not be
+	 *            managed by the layout. <code>false</code> if the size and position of the
+	 *            component will be computed and assigned. The default value is <code>false</code>.
+	 */
+	public PrecisionLayoutData setExclude(boolean exclude) {
+		mExclude = exclude;
+		return this;
+	}
+
+	/** Clear the height and width caches. */
+	void clearCache() {
+		mCacheMinWidth = 0;
+		mCacheWidth = 0;
+		mCacheHeight = 0;
+	}
+
+	/** @return The cached width. */
+	int getCachedWidth() {
+		return mCacheWidth;
+	}
+
+	/** @return The cached minimum width. */
+	int getCachedMinimumWidth() {
+		return mCacheMinWidth;
+	}
+
+	/** @return The cached height. */
+	int getCachedHeight() {
+		return mCacheHeight;
+	}
+
+	/** @param height The height to set into the cache. */
+	void setCachedHeight(int height) {
+		mCacheHeight = height;
 	}
 
 	void computeSize(Component component, int wHint, int hHint, boolean useMinimumSize) {
