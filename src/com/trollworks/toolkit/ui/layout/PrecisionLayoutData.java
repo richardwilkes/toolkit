@@ -19,52 +19,32 @@ import java.awt.Dimension;
  * objects. Each component should have its own.
  */
 public final class PrecisionLayoutData {
-	public static final String	KEY_HALIGN		= "hAlign";	//$NON-NLS-1$
-	public static final String	KEY_VALIGN		= "vAlign";	//$NON-NLS-1$
-	public static final String	KEY_WIDTH		= "width";		//$NON-NLS-1$
-	public static final String	KEY_HEIGHT		= "height";	//$NON-NLS-1$
-	public static final String	KEY_MIN_WIDTH	= "minWidth";	//$NON-NLS-1$
-	public static final String	KEY_MIN_HEIGHT	= "minHeight";	//$NON-NLS-1$
-	public static final String	KEY_HSPAN		= "hSpan";		//$NON-NLS-1$
-	public static final String	KEY_VSPAN		= "vSpan";		//$NON-NLS-1$
-	public static final String	KEY_HGRAB		= "hGrab";		//$NON-NLS-1$
-	public static final String	KEY_VGRAB		= "vGrab";		//$NON-NLS-1$
-	public static final String	KEY_EXCLUDE		= "exclude";	//$NON-NLS-1$
-	public static final String	KEY_MARGINS		= "margins";	//$NON-NLS-1$
-	public static final String	KEY_TOP			= "top";		//$NON-NLS-1$
-	public static final String	KEY_LEFT		= "left";		//$NON-NLS-1$
-	public static final String	KEY_BOTTOM		= "bottom";	//$NON-NLS-1$
-	public static final String	KEY_RIGHT		= "right";		//$NON-NLS-1$
-	public static final String	VALUE_BEGINNING	= "beginning";	//$NON-NLS-1$
-	public static final String	VALUE_MIDDLE	= "middle";	//$NON-NLS-1$
-	public static final String	VALUE_END		= "end";		//$NON-NLS-1$
-	public static final String	VALUE_FILL		= "fill";		//$NON-NLS-1$
-	public static final int		DEFAULT			= -1;
-	public static final int		BEGINNING		= 0;
-	public static final int		MIDDLE			= 1;
-	public static final int		END				= 2;
-	public static final int		FILL			= 3;
-	private int					mCacheMinWidth;
-	private int					mCacheWidth;
-	private int					mCacheHeight;
-	private int					mVAlign			= MIDDLE;
-	private int					mHAlign			= BEGINNING;
-	private int					mMarginTop		= 0;
-	private int					mMarginLeft		= 0;
-	private int					mMarginBottom	= 0;
-	private int					mMarginRight	= 0;
-	private int					mWidthHint		= DEFAULT;
-	private int					mHeightHint		= DEFAULT;
-	private int					mHSpan			= 1;
-	private int					mVSpan			= 1;
-	private int					mMinWidth		= DEFAULT;
-	private int					mMinHeight		= DEFAULT;
-	private boolean				mHGrab			= false;
-	private boolean				mVGrab			= false;
-	private boolean				mExclude		= false;
+	public static final int	DEFAULT			= -1;
+	public static final int	BEGINNING		= 0;
+	public static final int	MIDDLE			= 1;
+	public static final int	END				= 2;
+	public static final int	FILL			= 3;
+	private int				mCacheMinWidth;
+	private int				mCacheWidth;
+	private int				mCacheHeight;
+	private int				mVAlign			= MIDDLE;
+	private int				mHAlign			= BEGINNING;
+	private int				mMarginTop		= 0;
+	private int				mMarginLeft		= 0;
+	private int				mMarginBottom	= 0;
+	private int				mMarginRight	= 0;
+	private int				mWidthHint		= DEFAULT;
+	private int				mHeightHint		= DEFAULT;
+	private int				mHSpan			= 1;
+	private int				mVSpan			= 1;
+	private int				mMinWidth		= DEFAULT;
+	private int				mMinHeight		= DEFAULT;
+	private boolean			mHGrab			= false;
+	private boolean			mVGrab			= false;
+	private boolean			mExclude		= false;
 
 	/**
-	 * Position the components at the left of the container. This is the default.
+	 * Position the component at the left of the cell. This is the default.
 	 *
 	 * @return This layout data.
 	 */
@@ -74,7 +54,7 @@ public final class PrecisionLayoutData {
 	}
 
 	/**
-	 * Position the components in the horizontal center of the container.
+	 * Position the component in the horizontal center of the cell.
 	 *
 	 * @return This layout data.
 	 */
@@ -84,12 +64,22 @@ public final class PrecisionLayoutData {
 	}
 
 	/**
-	 * Position the components at the right of the container.
+	 * Position the component at the right of the cell.
 	 *
 	 * @return This layout data.
 	 */
 	public PrecisionLayoutData setEndHorizontalAlignment() {
 		mHAlign = END;
+		return this;
+	}
+
+	/**
+	 * Resize the component to fill the cell horizontally.
+	 *
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setFillHorizontalAlignment() {
+		mHAlign = FILL;
 		return this;
 	}
 
@@ -116,7 +106,7 @@ public final class PrecisionLayoutData {
 	}
 
 	/**
-	 * Position the components at the top of the container. This is the default.
+	 * Position the component at the top of the cell.
 	 *
 	 * @return This layout data.
 	 */
@@ -126,7 +116,7 @@ public final class PrecisionLayoutData {
 	}
 
 	/**
-	 * Position the components in the vertical center of the container.
+	 * Position the component in the vertical center of the cell. This is the default.
 	 *
 	 * @return This layout data.
 	 */
@@ -136,12 +126,22 @@ public final class PrecisionLayoutData {
 	}
 
 	/**
-	 * Position the components at the bottom of the container.
+	 * Position the component at the bottom of the cell.
 	 *
 	 * @return This layout data.
 	 */
 	public PrecisionLayoutData setEndVerticalAlignment() {
 		mVAlign = END;
+		return this;
+	}
+
+	/**
+	 * Resize the component to fill the cell vertically.
+	 *
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setFillVerticalAlignment() {
+		mVAlign = FILL;
 		return this;
 	}
 
@@ -164,6 +164,50 @@ public final class PrecisionLayoutData {
 	 */
 	public PrecisionLayoutData setVerticalAlignment(int align) {
 		mVAlign = align;
+		return this;
+	}
+
+	/**
+	 * Position the component at the top left of the cell.
+	 *
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setBeginningAlignment() {
+		mHAlign = BEGINNING;
+		mVAlign = BEGINNING;
+		return this;
+	}
+
+	/**
+	 * Position the component in the center of the cell.
+	 *
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setMiddleAlignment() {
+		mHAlign = MIDDLE;
+		mVAlign = MIDDLE;
+		return this;
+	}
+
+	/**
+	 * Position the component at the bottom right of the cell.
+	 *
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setEndAlignment() {
+		mHAlign = END;
+		mVAlign = END;
+		return this;
+	}
+
+	/**
+	 * Resize the component to fill the cell horizontally and vertically.
+	 *
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setFillAlignment() {
+		mHAlign = FILL;
+		mVAlign = FILL;
 		return this;
 	}
 
@@ -490,6 +534,17 @@ public final class PrecisionLayoutData {
 	 * @return This layout data.
 	 */
 	public PrecisionLayoutData setGrabVerticalSpace(boolean grab) {
+		mVGrab = grab;
+		return this;
+	}
+
+	/**
+	 * @param grab Whether the size of the cell changes depending on the size of the parent
+	 *            container.
+	 * @return This layout data.
+	 */
+	public PrecisionLayoutData setGrabSpace(boolean grab) {
+		mHGrab = grab;
 		mVGrab = grab;
 		return this;
 	}
