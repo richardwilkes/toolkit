@@ -12,36 +12,28 @@
 package com.trollworks.toolkit.ui.widget.dock;
 
 import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
+import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
 
-import java.awt.Color;
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 /** Provides a tab that contains the {@link Dockable}'s icon, title, and close button, if any. */
-public class DockTab extends JPanel implements ContainerListener, ActionListener {
+public class DockTab extends JPanel implements ContainerListener {
 	@Localize("Close")
-	private static String		CLOSE_TOOLTIP;
-	@Localize("Ignored unknown command: ")
-	private static String		IGNORED_COMMAND;
+	private static String	CLOSE_TOOLTIP;
 
 	static {
 		Localization.initialize();
 	}
-
-	private static final String	CLOSE_COMMAND	= "close_dockable"; //$NON-NLS-1$
 
 	/**
 	 * Creates a new {@link DockTab} for the specified {@link Dockable}.
@@ -54,9 +46,7 @@ public class DockTab extends JPanel implements ContainerListener, ActionListener
 		addContainerListener(this);
 		add(new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT), "hGrab:yes"); //$NON-NLS-1$
 		if (dockable instanceof DockCloseable) {
-			JButton closeButton = DockHeader.createButton(ToolkitImage.getDockClose(), Color.RED, CLOSE_TOOLTIP);
-			closeButton.setActionCommand(CLOSE_COMMAND);
-			closeButton.addActionListener(this);
+			IconButton closeButton = new IconButton(ToolkitImage.getDockClose(), CLOSE_TOOLTIP, () -> attemptClose());
 			add(closeButton, "hAlign:end minWidth:16"); //$NON-NLS-1$
 		}
 	}
@@ -89,19 +79,10 @@ public class DockTab extends JPanel implements ContainerListener, ActionListener
 		return (DockContainer) UIUtilities.getAncestorOfType(this, DockContainer.class);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		String cmd = event.getActionCommand();
-		switch (cmd) {
-			case CLOSE_COMMAND:
-				DockContainer dc = getDockContainer();
-				if (dc != null) {
-					dc.attemptClose();
-				}
-				break;
-			default:
-				Log.warn(IGNORED_COMMAND + cmd);
-				break;
+	public void attemptClose() {
+		DockContainer dc = getDockContainer();
+		if (dc != null) {
+			dc.attemptClose();
 		}
 	}
 }

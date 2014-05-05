@@ -7,6 +7,7 @@ import com.trollworks.toolkit.ui.image.Images;
 import com.trollworks.toolkit.ui.image.ToolkitIcon;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
+import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.Color;
@@ -36,16 +37,17 @@ public class DockHeader extends JPanel implements ContainerListener {
 	 *
 	 * @param dockable The {@link Dockable} to work with.
 	 */
+	@SuppressWarnings("nls")
 	public DockHeader(Dockable dockable) {
-		super(new PrecisionLayout("margins:0 vAlign:middle")); //$NON-NLS-1$
+		super(new PrecisionLayout("margins:0 vAlign:middle"));
 		setOpaque(true);
 		setBackground(DockColors.BACKGROUND);
 		setBorder(new CompoundBorder(new SelectiveLineBorder(DockColors.SHADOW, 0, 0, 1, 0), new EmptyBorder(2, 4, 2, 4)));
 		addContainerListener(this);
-		add(new DockTab(dockable), "hGrab:yes"); //$NON-NLS-1$
+		add(new DockTab(dockable), "hGrab:yes");
 		if (dockable instanceof DockMaximizable) {
-			JButton maximizeButton = createButton(ToolkitImage.getDockMaximize(), Color.CYAN, MAXIMIZE_TOOLTIP);
-			add(maximizeButton, "hAlign:end"); //$NON-NLS-1$
+			// RAW: Implement 'maximize'
+			add(new IconButton(ToolkitImage.getDockMaximize(), MAXIMIZE_TOOLTIP, () -> System.out.println("maximize")), "hAlign:end");
 		}
 	}
 
@@ -93,6 +95,6 @@ public class DockHeader extends JPanel implements ContainerListener {
 	}
 
 	void setActive(boolean active) {
-		setBackground(active ? DockColors.ACTIVE_HEADER_BACKGROUND : DockColors.BACKGROUND);
+		setBackground(active ? DockColors.ACTIVE_DOCK_HEADER_BACKGROUND : DockColors.BACKGROUND);
 	}
 }

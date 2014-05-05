@@ -1,5 +1,6 @@
 package com.trollworks.toolkit.ui.widget.dock;
 
+import com.trollworks.toolkit.ui.MouseCapture;
 import com.trollworks.toolkit.ui.image.Cursors;
 
 import java.awt.Component;
@@ -98,11 +99,11 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		super.paintChildren(gc);
 		if (mDragOverNode != null) {
 			Rectangle bounds = getDragOverBounds();
-			gc.setColor(DockColors.DROP_AREA);
+			gc.setColor(DockColors.DOCK_DROP_AREA);
 			gc.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-			gc.setColor(DockColors.DROP_AREA_INNER_BORDER);
+			gc.setColor(DockColors.DOCK_DROP_AREA_INNER_BORDER);
 			gc.drawRect(bounds.x + 1, bounds.y + 1, bounds.width - 3, bounds.height - 3);
-			gc.setColor(DockColors.DROP_AREA_OUTER_BORDER);
+			gc.setColor(DockColors.DOCK_DROP_AREA_OUTER_BORDER);
 			gc.drawRect(bounds.x, bounds.y, bounds.width - 1, bounds.height - 1);
 		}
 	}
@@ -169,8 +170,8 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent event) {
-		// Unused
+	public void mouseMoved(MouseEvent event) {
+		updateCursor(event);
 	}
 
 	@Override
@@ -183,6 +184,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		}
 		if (mDragHandler != null) {
 			mDragHandler.start(event);
+			MouseCapture.start(this);
 		}
 	}
 
@@ -198,12 +200,18 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		if (mDragHandler != null) {
 			mDragHandler.finish(event);
 			mDragHandler = null;
+			MouseCapture.stop(this);
 		}
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent event) {
-		updateCursor(event);
+	public void mouseClicked(MouseEvent event) {
+		// Unused
+	}
+
+	@Override
+	public void mouseExited(MouseEvent event) {
+		setCursor(null);
 	}
 
 	private void updateCursor(MouseEvent event) {
@@ -217,11 +225,6 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			cursor = null;
 		}
 		setCursor(cursor);
-	}
-
-	@Override
-	public void mouseExited(MouseEvent event) {
-		setCursor(null);
 	}
 
 	private static boolean containedBy(DockLayoutNode node, int x, int y) {
