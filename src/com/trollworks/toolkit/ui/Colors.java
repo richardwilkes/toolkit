@@ -76,34 +76,39 @@ public class Colors {
 
 	/**
 	 * @param color The color to base the new color on.
-	 * @param percentage The amount to adjust the saturation by, in the range -1 to 1.
+	 * @param amount The amount to adjust the saturation by, in the range -1 to 1.
 	 * @return The adjusted color.
 	 */
-	public static final Color adjustSaturation(Color color, float percentage) {
+	public static final Color adjustSaturation(Color color, float amount) {
 		float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-		return new Color(Color.HSBtoRGB(hsb[0], Math.max(Math.min(hsb[1] + percentage, 1f), 0f), hsb[2]));
+		return new Color(Color.HSBtoRGB(hsb[0], Math.max(Math.min(hsb[1] + amount, 1f), 0f), hsb[2]));
 	}
 
 	/**
 	 * @param color The color to base the new color on.
-	 * @param percentage The amount to adjust the brightness by, in the range -1 to 1.
+	 * @param amount The amount to adjust the brightness by, in the range -1 to 1.
 	 * @return The adjusted color.
 	 */
-	public static final Color adjustBrightness(Color color, float percentage) {
+	public static final Color adjustBrightness(Color color, float amount) {
 		float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-		return new Color(Color.HSBtoRGB(hsb[0], hsb[1], Math.max(Math.min(hsb[2] + percentage, 1f), 0f)));
+		return new Color(Color.HSBtoRGB(hsb[0], hsb[1], Math.max(Math.min(hsb[2] + amount, 1f), 0f)));
 	}
 
 	/**
 	 * @param color The color to base the new color on.
-	 * @param percentage The amount to adjust the hue by, in the range -1 to 1.
+	 * @param amount The amount to adjust the hue by, in the range -1 to 1.
 	 * @return The adjusted color.
 	 */
-	public static final Color adjustHue(Color color, float percentage) {
+	public static final Color adjustHue(Color color, float amount) {
 		float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-		return new Color(Color.HSBtoRGB(Math.max(Math.min(hsb[0] + percentage, 1f), 0f), hsb[1], hsb[2]));
+		return new Color(Color.HSBtoRGB(Math.max(Math.min(hsb[0] + amount, 1f), 0f), hsb[1], hsb[2]));
 	}
 
+	/**
+	 * @param color The color to work with.
+	 * @param alpha The alpha to use.
+	 * @return A new {@link Color} with the specified alpha.
+	 */
 	public static final Color getWithAlpha(Color color, int alpha) {
 		return new Color(color.getRGB() & 0x00FFFFFF | alpha << 24, true);
 	}
