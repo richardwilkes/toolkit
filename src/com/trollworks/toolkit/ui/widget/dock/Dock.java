@@ -447,4 +447,19 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	public void propertyChange(PropertyChangeEvent event) {
 		getLayout().forEachDockContainer((dc) -> dc.updateActiveHighlight());
 	}
+
+	/**
+	 * Causes the {@link DockContainer} that contains the specified {@link Dockable} to fill the
+	 * entire {@link Dock} area.
+	 *
+	 * @param dockable The {@link Dockable} to maximize.
+	 */
+	public void maximize(Dockable dockable) {
+		// RAW: Implement 'maximize'
+	}
+
+	/** Restores the current maximized {@link DockContainer} to its normal state. */
+	public void restore() {
+		// RAW: Implement 'restore'
+	}
 }

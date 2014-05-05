@@ -41,7 +41,7 @@ public class DockTab extends JPanel implements ContainerListener {
 	 * @param dockable The {@link Dockable} to work with.
 	 */
 	public DockTab(Dockable dockable) {
-		super(new PrecisionLayout("margins:0 vAlign:middle")); //$NON-NLS-1$
+		super(new PrecisionLayout().setMargins(0).setMiddleVerticalAlignment());
 		setOpaque(false);
 		addContainerListener(this);
 		add(new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT), "hGrab:yes"); //$NON-NLS-1$
@@ -67,12 +67,12 @@ public class DockTab extends JPanel implements ContainerListener {
 
 	@Override
 	public void componentAdded(ContainerEvent event) {
-		getLayout().mColumns = getComponentCount();
+		getLayout().setColumns(getComponentCount());
 	}
 
 	@Override
 	public void componentRemoved(ContainerEvent event) {
-		getLayout().mColumns = getComponentCount();
+		getLayout().setColumns(getComponentCount());
 	}
 
 	private DockContainer getDockContainer() {
