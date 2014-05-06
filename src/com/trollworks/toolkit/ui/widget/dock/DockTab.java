@@ -47,7 +47,7 @@ public class DockTab extends JPanel implements ContainerListener {
 		addContainerListener(this);
 		add(new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT), new PrecisionLayoutData().setGrabHorizontalSpace(true));
 		if (dockable instanceof DockCloseable) {
-			IconButton closeButton = new IconButton(ToolkitImage.getDockClose(), CLOSE_TOOLTIP, () -> attemptClose());
+			IconButton closeButton = new IconButton(ToolkitImage.getDockClose(), CLOSE_TOOLTIP, this::attemptClose);
 			add(closeButton, new PrecisionLayoutData().setEndHorizontalAlignment());
 		}
 	}
