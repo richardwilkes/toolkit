@@ -191,7 +191,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	public void mousePressed(MouseEvent event) {
 		DockLayoutNode over = over(event.getX(), event.getY(), true);
 		if (over instanceof DockLayout) {
-			mDragHandler = new DividerDragHandler((DockLayout) over);
+			mDragHandler = new DockDividerDragHandler((DockLayout) over);
 		} else if (over instanceof DockContainer) {
 			mDragHandler = new DockContainerDragHandler((DockContainer) over);
 		}

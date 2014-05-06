@@ -14,13 +14,13 @@ package com.trollworks.toolkit.ui.widget.dock;
 import java.awt.event.MouseEvent;
 
 /** Handles dragging the divider of a {@link DockLayout} around. */
-class DividerDragHandler extends DockDragHandler {
+class DockDividerDragHandler extends DockDragHandler {
 	private DockLayout	mLayout;
 	private int			mInitialEventPosition;
 	private int			mInitialDividerPosition;
 
 	/** @param layout The {@link DockLayout} to be changed. */
-	DividerDragHandler(DockLayout layout) {
+	DockDividerDragHandler(DockLayout layout) {
 		mLayout = layout;
 	}
 
