@@ -24,7 +24,7 @@ import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 
 @SuppressWarnings("nls")
-public class DockTest implements Dockable, DockCloseable, DockMaximizable {
+public class DockTest implements Dockable, DockCloseable {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Dock Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

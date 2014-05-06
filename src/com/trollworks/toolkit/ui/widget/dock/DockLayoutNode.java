@@ -15,12 +15,6 @@ import java.awt.Dimension;
 
 /** A node within a {@link DockLayout}. */
 public interface DockLayoutNode {
-	/**
-	 * @return The {@link Dockable} this node represents. May be <code>null</code> if this node
-	 *         isn't a leaf node.
-	 */
-	Dockable getDockable();
-
 	/** @return The preferred size of this node. */
 	Dimension getPreferredSize();
 

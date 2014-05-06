@@ -18,13 +18,16 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
 /** All {@link Dockable}s are wrapped in a {@link DockContainer} when placed within a {@link Dock}. */
 public class DockContainer extends JPanel implements DockLayoutNode {
-	private DockHeader	mHeader;
-	private Dockable	mDockable;
+	private DockHeader		mHeader;
+	private List<Dockable>	mDockables	= new ArrayList<>();
+	private int				mCurrent;
 
 	/**
 	 * Creates a new {@link DockContainer} for the specified {@link Dockable}.
@@ -35,10 +38,10 @@ public class DockContainer extends JPanel implements DockLayoutNode {
 		super(new BorderLayout());
 		setOpaque(true);
 		setBackground(Color.WHITE);
-		mDockable = dockable;
-		mHeader = new DockHeader(mDockable);
+		mDockables.add(dockable);
+		mHeader = new DockHeader(this);
 		add(mHeader, BorderLayout.NORTH);
-		add(mDockable.getContent(), BorderLayout.CENTER);
+		add(dockable.getContent(), BorderLayout.CENTER);
 		setMinimumSize(new Dimension(0, 0));
 	}
 
@@ -47,9 +50,8 @@ public class DockContainer extends JPanel implements DockLayoutNode {
 		return (Dock) UIUtilities.getAncestorOfType(this, Dock.class);
 	}
 
-	@Override
-	public Dockable getDockable() {
-		return mDockable;
+	public List<Dockable> getDockables() {
+		return mDockables;
 	}
 
 	/** @return The {@link DockHeader} for this {@link DockContainer}. */
@@ -57,30 +59,73 @@ public class DockContainer extends JPanel implements DockLayoutNode {
 		return mHeader;
 	}
 
+	/**
+	 * Calls the owning {@link Dock}'s {@link Dock#maximize(DockContainer)} method with this
+	 * {@link DockContainer} as the argument.
+	 */
+	public void maximize() {
+		getDock().maximize(this);
+	}
+
+	/** Calls the owning {@link Dock}'s {@link Dock#restore()} method. */
+	public void restore() {
+		getDock().restore();
+	}
+
+	/** @return The current tab index. */
+	public int getCurrent() {
+		return mCurrent;
+	}
+
+	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
-		return mDockable.getTitle();
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("Dock Container [c:");
+		buffer.append(mCurrent);
+		buffer.append(" x:");
+		buffer.append(getX());
+		buffer.append(" y:");
+		buffer.append(getY());
+		buffer.append(" w:");
+		buffer.append(getWidth());
+		buffer.append(" h:");
+		buffer.append(getHeight());
+		buffer.append("]");
+		return buffer.toString();
 	}
 
 	/**
-	 * Attempt to close this {@link DockContainer}. This only has an affect if the contained
-	 * {@link Dockable} implements the {@link DockCloseable} interface.
+	 * Attempt to close a {@link Dockable} within this {@link DockContainer}. This only has an
+	 * affect if the {@link Dockable} is contained by this {@link DockContainer} and implements the
+	 * {@link DockCloseable} interface. If the last {@link Dockable} within this
+	 * {@link DockContainer} is closed, then the {@link DockContainer} is also closed.
 	 */
-	public void attemptClose() {
-		if (mDockable instanceof DockCloseable) {
-			if (((DockCloseable) mDockable).attemptClose()) {
-				close();
+	public void attemptClose(Dockable dockable) {
+		if (dockable instanceof DockCloseable) {
+			if (mDockables.contains(dockable)) {
+				if (((DockCloseable) dockable).attemptClose()) {
+					close(dockable);
+				}
 			}
 		}
 	}
 
-	/** Closes this {@link DockContainer} and removes it from the {@link Dock}. */
-	public void close() {
-		Dock dock = getDock();
-		if (dock != null) {
-			dock.remove(this);
-			dock.revalidate();
-			dock.repaint();
+	/**
+	 * Closes the specified {@link Dockable}. If the last {@link Dockable} within this
+	 * {@link DockContainer} is closed, then this {@link DockContainer} is also removed from the
+	 * {@link Dock}.
+	 */
+	public void close(Dockable dockable) {
+		remove(dockable.getContent());
+		mDockables.remove(dockable);
+		if (mDockables.isEmpty()) {
+			Dock dock = getDock();
+			if (dock != null) {
+				dock.remove(this);
+				dock.revalidate();
+				dock.repaint();
+			}
 		}
 	}
 

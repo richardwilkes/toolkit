@@ -36,6 +36,8 @@ public class DockTab extends JPanel implements ContainerListener {
 		Localization.initialize();
 	}
 
+	private Dockable		mDockable;
+
 	/**
 	 * Creates a new {@link DockTab} for the specified {@link Dockable}.
 	 *
@@ -43,6 +45,7 @@ public class DockTab extends JPanel implements ContainerListener {
 	 */
 	public DockTab(Dockable dockable) {
 		super(new PrecisionLayout().setMargins(0).setMiddleVerticalAlignment());
+		mDockable = dockable;
 		setOpaque(false);
 		addContainerListener(this);
 		add(new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT), new PrecisionLayoutData().setGrabHorizontalSpace(true));
@@ -83,7 +86,7 @@ public class DockTab extends JPanel implements ContainerListener {
 	public void attemptClose() {
 		DockContainer dc = getDockContainer();
 		if (dc != null) {
-			dc.attemptClose();
+			dc.attemptClose(mDockable);
 		}
 	}
 }

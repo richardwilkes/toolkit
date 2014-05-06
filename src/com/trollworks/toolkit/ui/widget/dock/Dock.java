@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget.dock;
 
 import com.trollworks.toolkit.ui.MouseCapture;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.Cursors;
 
 import java.awt.Component;
@@ -26,6 +27,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -86,7 +88,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	 */
 	public void dock(Dockable dockable, DockLayoutNode target, DockLocation locationRelativeToTarget) {
 		DockLayout layout = getLayout();
-		DockContainer dc = layout.findDockContainer(dockable);
+		DockContainer dc = getDockContainer(dockable);
 		if (dc == null) {
 			dc = new DockContainer(dockable);
 			layout.dock(dc, target, locationRelativeToTarget);
@@ -373,17 +375,18 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			}
 		} else if (node instanceof DockContainer) {
 			pad(buffer, depth);
-			buffer.append(((DockContainer) node).getDockable().getTitle());
-			buffer.append(" [x:");
-			buffer.append(node.getX());
-			buffer.append(" y:");
-			buffer.append(node.getY());
-			buffer.append(" w:");
-			buffer.append(node.getWidth());
-			buffer.append(" h:");
-			buffer.append(node.getHeight());
-			buffer.append("]");
+			buffer.append(node);
 			buffer.append('\n');
+			List<Dockable> dockables = ((DockContainer) node).getDockables();
+			int size = dockables.size();
+			for (int i = 0; i < size; i++) {
+				pad(buffer, depth);
+				buffer.append(".[");
+				buffer.append(i);
+				buffer.append("] ");
+				buffer.append(dockables.get(i).getTitle());
+				buffer.append('\n');
+			}
 		}
 	}
 
@@ -471,25 +474,20 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	}
 
 	/**
-	 * Causes the {@link DockContainer} that contains the specified {@link Dockable} to fill the
-	 * entire {@link Dock} area.
+	 * Causes the {@link DockContainer} to fill the entire {@link Dock} area.
 	 *
-	 * @param dockable The {@link Dockable} to maximize.
+	 * @param dc The {@link DockContainer} to maximize.
 	 */
-	public void maximize(Dockable dockable) {
-		DockLayout layout = getLayout();
-		DockContainer target = layout.findDockContainer(dockable);
-		if (target != null) {
-			if (mMaximizedContainer != null) {
-				mMaximizedContainer.getHeader().adjustToRestoredState();
-			}
-			mMaximizedContainer = target;
-			mMaximizedContainer.getHeader().adjustToMaximizedState();
-			layout.forEachDockContainer((dc) -> dc.setVisible(dc == mMaximizedContainer));
-			revalidate();
-			mMaximizedContainer.transferFocus();
-			repaint();
+	public void maximize(DockContainer dc) {
+		if (mMaximizedContainer != null) {
+			mMaximizedContainer.getHeader().adjustToRestoredState();
 		}
+		mMaximizedContainer = dc;
+		mMaximizedContainer.getHeader().adjustToMaximizedState();
+		getLayout().forEachDockContainer((target) -> target.setVisible(target == mMaximizedContainer));
+		revalidate();
+		mMaximizedContainer.transferFocus();
+		repaint();
 	}
 
 	/** Restores the current maximized {@link DockContainer} to its normal state. */
@@ -501,5 +499,20 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			revalidate();
 			repaint();
 		}
+	}
+
+	/**
+	 * @param dockable The {@link Dockable} to determine the {@link DockContainer} for.
+	 * @return The {@link DockContainer} that contains the {@link Dockable}, or <code>null</code> if
+	 *         it is not present or the {@link DockContainer} is not a child of this {@link Dock}.
+	 */
+	public DockContainer getDockContainer(Dockable dockable) {
+		DockContainer dc = (DockContainer) UIUtilities.getAncestorOfType(dockable.getContent(), DockContainer.class);
+		if (dc != null) {
+			if (dc.getDock() != this) {
+				dc = null;
+			}
+		}
+		return dc;
 	}
 }

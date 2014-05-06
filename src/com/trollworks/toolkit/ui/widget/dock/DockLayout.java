@@ -27,11 +27,6 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 	private int					mDividerPosition	= -1;
 	private boolean				mHorizontal;
 
-	@Override
-	public Dockable getDockable() {
-		return null;
-	}
-
 	/** @param processor A processor to execute for each {@link DockContainer}. */
 	public void forEachDockContainer(DockContainerProcessor processor) {
 		for (DockLayoutNode child : mChildren) {
@@ -72,51 +67,25 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 	}
 
 	/**
-	 * @param dockable The {@link Dockable} to search for.
-	 * @return The {@link DockLayout} that contains the {@link Dockable}, or <code>null</code> if it
-	 *         is not present. Note that this method will always start at the root and work its way
-	 *         down, even if called on a sub-node.
+	 * @param dc The {@link DockContainer} to search for.
+	 * @return The {@link DockLayout} that contains the {@link DockContainer}, or <code>null</code>
+	 *         if it is not present. Note that this method will always start at the root and work
+	 *         its way down, even if called on a sub-node.
 	 */
-	public DockLayout findLayout(Dockable dockable) {
-		return getRootLayout().findLayoutInternal(dockable);
+	public DockLayout findLayout(DockContainer dc) {
+		return getRootLayout().findLayoutInternal(dc);
 	}
 
-	private DockLayout findLayoutInternal(Dockable dockable) {
+	private DockLayout findLayoutInternal(DockContainer dc) {
 		for (DockLayoutNode child : mChildren) {
 			if (child instanceof DockContainer) {
-				if (child.getDockable() == dockable) {
+				if (child == dc) {
 					return this;
 				}
 			} else if (child instanceof DockLayout) {
-				DockLayout layout = ((DockLayout) child).findLayoutInternal(dockable);
+				DockLayout layout = ((DockLayout) child).findLayoutInternal(dc);
 				if (layout != null) {
 					return layout;
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * @param dockable The {@link Dockable} to search for.
-	 * @return The {@link DockContainer} that contains the {@link Dockable}, or <code>null</code> if
-	 *         it is not present. Note that this method will always start at the root and work its
-	 *         way down, even if called on a sub-node.
-	 */
-	public DockContainer findDockContainer(Dockable dockable) {
-		return getRootLayout().findDockContainerInternal(dockable);
-	}
-
-	private DockContainer findDockContainerInternal(Dockable dockable) {
-		for (DockLayoutNode child : mChildren) {
-			if (child instanceof DockContainer) {
-				if (child.getDockable() == dockable) {
-					return (DockContainer) child;
-				}
-			} else if (child instanceof DockLayout) {
-				DockContainer dc = ((DockLayout) child).findDockContainerInternal(dockable);
-				if (dc != null) {
-					return dc;
 				}
 			}
 		}
@@ -134,14 +103,14 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 	 */
 	public void dock(DockContainer dc, DockLayoutNode target, DockLocation locationRelativeToTarget) {
 		// Does the container already exist in our hierarchy?
-		DockLayout existingLayout = findLayout(dc.getDockable());
+		DockLayout existingLayout = findLayout(dc);
 		if (existingLayout != null) {
 			// Yes. Is it the same layout?
 			DockLayout targetLayout;
 			if (target instanceof DockLayout) {
 				targetLayout = (DockLayout) target;
 			} else if (target instanceof DockContainer) {
-				targetLayout = findLayout(((DockContainer) target).getDockable());
+				targetLayout = findLayout((DockContainer) target);
 			} else {
 				targetLayout = null;
 			}
@@ -163,7 +132,7 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 			((DockLayout) target).dock(dc, locationRelativeToTarget);
 		} else if (target instanceof DockContainer) {
 			DockContainer tdc = (DockContainer) target;
-			DockLayout layout = findLayout(tdc.getDockable());
+			DockLayout layout = findLayout(tdc);
 			layout.dockWithContainer(dc, tdc, locationRelativeToTarget);
 		}
 	}
@@ -402,7 +371,8 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 		mY = y;
 		mWidth = width;
 		mHeight = height;
-		DockContainer maximizedContainer = getDock().getMaximizedContainer();
+		Dock dock = getDock();
+		DockContainer maximizedContainer = dock != null ? dock.getMaximizedContainer() : null;
 		if (maximizedContainer != null) {
 			forEachDockContainer((dc) -> {
 				for (DockLayoutNode child : mChildren) {
@@ -467,11 +437,9 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 	@Override
 	public String toString() {
 		StringBuilder buffer = new StringBuilder();
-		buffer.append('[');
+		buffer.append(mHorizontal ? "Horizontal" : "Vertical");
+		buffer.append(" Dock Layout [id:");
 		buffer.append(Integer.toHexString(hashCode()));
-		buffer.append(' ');
-		buffer.append(mHorizontal ? 'H' : 'V');
-		buffer.append(" -");
 		if (mDividerPosition != -1) {
 			buffer.append(" d:");
 			buffer.append(mDividerPosition);

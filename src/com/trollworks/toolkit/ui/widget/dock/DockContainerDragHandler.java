@@ -33,7 +33,7 @@ class DockContainerDragHandler extends DockDragHandler {
 		int ey = event.getY();
 		DockLayoutNode over = dock.over(ex, ey, false);
 		if (over == mContainer) {
-			over = dock.getLayout().findLayout(mContainer.getDockable());
+			over = dock.getLayout().findLayout(mContainer);
 		}
 		if (over != null) {
 			mOver = over;

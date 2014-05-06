@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget.dock;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.border.SelectiveLineBorder;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
@@ -40,30 +41,33 @@ public class DockHeader extends JPanel implements ContainerListener {
 	}
 
 	/**
-	 * Creates a new {@link DockHeader} for the specified {@link Dockable}.
+	 * Creates a new {@link DockHeader} for the specified {@link DockContainer}.
 	 *
-	 * @param dockable The {@link Dockable} to work with.
+	 * @param dc The {@link DockContainer} to work with.
 	 */
-	public DockHeader(Dockable dockable) {
+	public DockHeader(DockContainer dc) {
 		super(new PrecisionLayout().setMargins(0).setMiddleVerticalAlignment());
 		setOpaque(true);
 		setBackground(DockColors.BACKGROUND);
 		setBorder(new CompoundBorder(new SelectiveLineBorder(DockColors.SHADOW, 0, 0, 1, 0), new EmptyBorder(2, 4, 2, 4)));
 		addContainerListener(this);
-		add(new DockTab(dockable), new PrecisionLayoutData().setGrabHorizontalSpace(true));
-		if (dockable instanceof DockMaximizable) {
-			mMaximizeRestoreButton = new IconButton(ToolkitImage.getDockMaximize(), MAXIMIZE_TOOLTIP, this::maximize);
-			add(mMaximizeRestoreButton, new PrecisionLayoutData().setEndHorizontalAlignment());
+		for (Dockable dockable : dc.getDockables()) {
+			add(new DockTab(dockable), new PrecisionLayoutData().setGrabHorizontalSpace(true));
 		}
+		mMaximizeRestoreButton = new IconButton(ToolkitImage.getDockMaximize(), MAXIMIZE_TOOLTIP, this::maximize);
+		add(mMaximizeRestoreButton, new PrecisionLayoutData().setEndHorizontalAlignment());
+	}
+
+	private DockContainer getDockContainer() {
+		return (DockContainer) UIUtilities.getAncestorOfType(this, DockContainer.class);
 	}
 
 	private void maximize() {
-		DockContainer dc = (DockContainer) getParent();
-		dc.getDock().maximize(dc.getDockable());
+		getDockContainer().maximize();
 	}
 
 	private void restore() {
-		((DockContainer) getParent()).getDock().restore();
+		getDockContainer().restore();
 	}
 
 	/** Called when the owning {@link DockContainer} is set to the maximized state. */
