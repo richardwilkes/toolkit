@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.layout;
 
+import static com.trollworks.toolkit.ui.layout.PrecisionLayoutAlignment.*;
+
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -19,29 +21,25 @@ import java.awt.Dimension;
  * objects. Each component should have its own.
  */
 public final class PrecisionLayoutData {
-	public static final int	DEFAULT			= -1;
-	public static final int	BEGINNING		= 0;
-	public static final int	MIDDLE			= 1;
-	public static final int	END				= 2;
-	public static final int	FILL			= 3;
-	private int				mCacheMinWidth;
-	private int				mCacheWidth;
-	private int				mCacheHeight;
-	private int				mVAlign			= MIDDLE;
-	private int				mHAlign			= BEGINNING;
-	private int				mMarginTop		= 0;
-	private int				mMarginLeft		= 0;
-	private int				mMarginBottom	= 0;
-	private int				mMarginRight	= 0;
-	private int				mWidthHint		= DEFAULT;
-	private int				mHeightHint		= DEFAULT;
-	private int				mHSpan			= 1;
-	private int				mVSpan			= 1;
-	private int				mMinWidth		= DEFAULT;
-	private int				mMinHeight		= DEFAULT;
-	private boolean			mHGrab			= false;
-	private boolean			mVGrab			= false;
-	private boolean			mExclude		= false;
+	public static final int				DEFAULT			= -1;
+	private int							mCacheMinWidth;
+	private int							mCacheWidth;
+	private int							mCacheHeight;
+	private PrecisionLayoutAlignment	mVAlign			= MIDDLE;
+	private PrecisionLayoutAlignment	mHAlign			= BEGINNING;
+	private int							mMarginTop		= 0;
+	private int							mMarginLeft		= 0;
+	private int							mMarginBottom	= 0;
+	private int							mMarginRight	= 0;
+	private int							mWidthHint		= DEFAULT;
+	private int							mHeightHint		= DEFAULT;
+	private int							mHSpan			= 1;
+	private int							mVSpan			= 1;
+	private int							mMinWidth		= DEFAULT;
+	private int							mMinHeight		= DEFAULT;
+	private boolean						mHGrab			= false;
+	private boolean						mVGrab			= false;
+	private boolean						mExclude		= false;
 
 	/**
 	 * Position the component at the left of the cell. This is the default.
@@ -84,24 +82,17 @@ public final class PrecisionLayoutData {
 	}
 
 	/** @return The horizontal positioning of components within the container. */
-	public int getHorizontalAlignment() {
+	public PrecisionLayoutAlignment getHorizontalAlignment() {
 		return mHAlign;
 	}
 
 	/**
-	 * @param align Specifies how components will be positioned horizontally within a cell. The
-	 *            default value is {@link #BEGINNING}.<br>
-	 *            Possible values are:
-	 *            <ul>
-	 *            <li>{@link #BEGINNING}: Position the component at the left of the cell</li>
-	 *            <li>{@link #MIDDLE}: Position the component in the horizontal center of the cell</li>
-	 *            <li>{@link #END}: Position the component at the right of the cell</li>
-	 *            <li>{@link #FILL}: Resize the component to fill the cell horizontally</li>
-	 *            </ul>
+	 * @param alignment Specifies how components will be positioned horizontally within a cell. The
+	 *            default value is {@link #BEGINNING}.
 	 * @return This layout data.
 	 */
-	public PrecisionLayoutData setHorizontalAlignment(int align) {
-		mHAlign = align;
+	public PrecisionLayoutData setHorizontalAlignment(PrecisionLayoutAlignment alignment) {
+		mHAlign = alignment;
 		return this;
 	}
 
@@ -146,24 +137,17 @@ public final class PrecisionLayoutData {
 	}
 
 	/** @return The vertical positioning of components within the container. */
-	public int getVerticalAlignment() {
+	public PrecisionLayoutAlignment getVerticalAlignment() {
 		return mVAlign;
 	}
 
 	/**
-	 * @param align Specifies how components will be positioned vertically within a cell. The
-	 *            default value is {@link #MIDDLE}.<br>
-	 *            Possible values are:
-	 *            <ul>
-	 *            <li>{@link #BEGINNING}: Position the component at the top of the cell</li>
-	 *            <li>{@link #MIDDLE}: Position the component in the vertical center of the cell</li>
-	 *            <li>{@link #END}: Position the component at the bottom of the cell</li>
-	 *            <li>{@link #FILL}: Resize the component to fill the cell vertically</li>
-	 *            </ul>
+	 * @param alignment Specifies how components will be positioned vertically within a cell. The
+	 *            default value is {@link #MIDDLE}.
 	 * @return This layout data.
 	 */
-	public PrecisionLayoutData setVerticalAlignment(int align) {
-		mVAlign = align;
+	public PrecisionLayoutData setVerticalAlignment(PrecisionLayoutAlignment alignment) {
+		mVAlign = alignment;
 		return this;
 	}
 
@@ -213,26 +197,12 @@ public final class PrecisionLayoutData {
 
 	/**
 	 * @param horizontal Specifies how components will be positioned horizontally within a cell. The
-	 *            default value is {@link #BEGINNING}.<br>
-	 *            Possible values are:
-	 *            <ul>
-	 *            <li>{@link #BEGINNING}: Position the component at the left of the cell</li>
-	 *            <li>{@link #MIDDLE}: Position the component in the horizontal center of the cell</li>
-	 *            <li>{@link #END}: Position the component at the right of the cell</li>
-	 *            <li>{@link #FILL}: Resize the component to fill the cell horizontally</li>
-	 *            </ul>
+	 *            default value is {@link #BEGINNING}.
 	 * @param vertical Specifies how components will be positioned vertically within a cell. The
-	 *            default value is {@link #MIDDLE}.<br>
-	 *            Possible values are:
-	 *            <ul>
-	 *            <li>{@link #BEGINNING}: Position the component at the top of the cell</li>
-	 *            <li>{@link #MIDDLE}: Position the component in the vertical center of the cell</li>
-	 *            <li>{@link #END}: Position the component at the bottom of the cell</li>
-	 *            <li>{@link #FILL}: Resize the component to fill the cell vertically</li>
-	 *            </ul>
+	 *            default value is {@link #MIDDLE}.
 	 * @return This layout data.
 	 */
-	public PrecisionLayoutData setAlignment(int horizontal, int vertical) {
+	public PrecisionLayoutData setAlignment(PrecisionLayoutAlignment horizontal, PrecisionLayoutAlignment vertical) {
 		mHAlign = horizontal;
 		mVAlign = vertical;
 		return this;

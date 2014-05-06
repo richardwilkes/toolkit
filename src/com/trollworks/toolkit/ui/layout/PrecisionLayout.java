@@ -11,6 +11,7 @@
 
 package com.trollworks.toolkit.ui.layout;
 
+import static com.trollworks.toolkit.ui.layout.PrecisionLayoutAlignment.*;
 import static com.trollworks.toolkit.ui.layout.PrecisionLayoutData.*;
 
 import com.trollworks.toolkit.io.Log;
@@ -23,6 +24,7 @@ import java.awt.LayoutManager2;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/** A layout manager that can handle complex layouts with precision. */
 public final class PrecisionLayout implements LayoutManager2 {
 	private HashMap<Component, PrecisionLayoutData>	mConstraints	= new HashMap<>();
 	private int										mRowCount;
@@ -33,8 +35,8 @@ public final class PrecisionLayout implements LayoutManager2 {
 	private int										mMarginRight	= 4;
 	private int										mHSpacing		= 4;
 	private int										mVSpacing		= 2;
-	private int										mHAlign			= BEGINNING;
-	private int										mVAlign			= BEGINNING;
+	private PrecisionLayoutAlignment				mHAlign			= BEGINNING;
+	private PrecisionLayoutAlignment				mVAlign			= BEGINNING;
 	private boolean									mEqualColumns	= false;
 
 	/** @return The number of cell columns in the layout. */
@@ -251,24 +253,17 @@ public final class PrecisionLayout implements LayoutManager2 {
 	}
 
 	/** @return The horizontal positioning of components within the container. */
-	public int getHorizontalAlignment() {
+	public PrecisionLayoutAlignment getHorizontalAlignment() {
 		return mHAlign;
 	}
 
 	/**
-	 * @param align Specifies how components will be positioned horizontally within the container.
-	 *            The default value is {@link #BEGINNING}.<br>
-	 *            Possible values are:
-	 *            <ul>
-	 *            <li>{@link #BEGINNING}: Position the components at the left of the container</li>
-	 *            <li>{@link #MIDDLE}: Position the components in the horizontal center of the
-	 *            container</li>
-	 *            <li>{@link #END}: Position the components at the right of the container</li>
-	 *            </ul>
+	 * @param alignment Specifies how components will be positioned horizontally within the
+	 *            container. The default value is {@link #BEGINNING}.
 	 * @return This layout.
 	 */
-	public PrecisionLayout setHorizontalAlignment(int align) {
-		mHAlign = align;
+	public PrecisionLayout setHorizontalAlignment(PrecisionLayoutAlignment alignment) {
+		mHAlign = alignment;
 		return this;
 	}
 
@@ -303,49 +298,28 @@ public final class PrecisionLayout implements LayoutManager2 {
 	}
 
 	/** @return The vertical positioning of components within the container. */
-	public int getVerticalAlignment() {
+	public PrecisionLayoutAlignment getVerticalAlignment() {
 		return mVAlign;
 	}
 
 	/**
-	 * @param align Specifies how components will be positioned vertically within the container. The
-	 *            default value is {@link #BEGINNING}.<br>
-	 *            Possible values are:
-	 *            <ul>
-	 *            <li>{@link #BEGINNING}: Position the components at the top of the container</li>
-	 *            <li>{@link #MIDDLE}: Position the components in the vertical center of the
-	 *            container</li>
-	 *            <li>{@link #END}: Position the components at the bottom of the container</li>
-	 *            </ul>
+	 * @param alignment Specifies how components will be positioned vertically within the container.
+	 *            The default value is {@link #BEGINNING}.
 	 * @return This layout.
 	 */
-	public PrecisionLayout setVerticalAlignment(int align) {
-		mVAlign = align;
+	public PrecisionLayout setVerticalAlignment(PrecisionLayoutAlignment alignment) {
+		mVAlign = alignment;
 		return this;
 	}
 
 	/**
 	 * @param horizontal Specifies how components will be positioned horizontally within the
-	 *            container. The default value is {@link #BEGINNING}.<br>
-	 *            Possible values are:
-	 *            <ul>
-	 *            <li>{@link #BEGINNING}: Position the components at the left of the container</li>
-	 *            <li>{@link #MIDDLE}: Position the components in the horizontal center of the
-	 *            container</li>
-	 *            <li>{@link #END}: Position the components at the right of the container</li>
-	 *            </ul>
+	 *            container. The default value is {@link #BEGINNING}.
 	 * @param vertical Specifies how components will be positioned vertically within the container.
-	 *            The default value is {@link #BEGINNING}.<br>
-	 *            Possible values are:
-	 *            <ul>
-	 *            <li>{@link #BEGINNING}: Position the components at the top of the container</li>
-	 *            <li>{@link #MIDDLE}: Position the components in the vertical center of the
-	 *            container</li>
-	 *            <li>{@link #END}: Position the components at the bottom of the container</li>
-	 *            </ul>
+	 *            The default value is {@link #BEGINNING}.
 	 * @return This layout.
 	 */
-	public PrecisionLayout setAlignment(int horizontal, int vertical) {
+	public PrecisionLayout setAlignment(PrecisionLayoutAlignment horizontal, PrecisionLayoutAlignment vertical) {
 		mHAlign = horizontal;
 		mVAlign = vertical;
 		return this;
