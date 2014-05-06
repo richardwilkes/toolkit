@@ -485,7 +485,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			}
 			mMaximizedContainer = target;
 			mMaximizedContainer.getHeader().adjustToMaximizedState();
-			layout.forEachDockContainer((dc) -> dc.setFocusCycleRoot(dc == mMaximizedContainer));
+			layout.forEachDockContainer((dc) -> dc.setVisible(dc == mMaximizedContainer));
 			revalidate();
 			mMaximizedContainer.transferFocus();
 			repaint();
@@ -497,7 +497,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		if (mMaximizedContainer != null) {
 			mMaximizedContainer.getHeader().adjustToRestoredState();
 			mMaximizedContainer = null;
-			getLayout().forEachDockContainer((dc) -> dc.setFocusCycleRoot(false));
+			getLayout().forEachDockContainer((dc) -> dc.setVisible(true));
 			revalidate();
 			repaint();
 		}
