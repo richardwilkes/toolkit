@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
@@ -35,12 +36,14 @@ public class DockTest implements Dockable, DockCloseable {
 		DockTest third = new DockTest("Third", UIManager.getColor("List.selectionBackground"));
 		DockTest fourth = new DockTest("Fourth", Colors.adjustSaturation(UIManager.getColor("List.selectionBackground"), -0.5f));
 		DockTest fifth = new DockTest("Fifth", Color.BLUE);
+		DockTest sixth = new DockTest();
 
 		dock.dock(first, DockLocation.WEST);
 		dock.dock(second, DockLocation.EAST);
 		dock.dock(third, second, DockLocation.SOUTH);
 		dock.dock(fourth, second, DockLocation.WEST);
 		dock.dock(fifth, first, DockLocation.EAST);
+		dock.dock(sixth, first, DockLocation.EAST);
 
 		JToolBar toolbar = new JToolBar();
 		toolbar.setRollover(true);
@@ -61,20 +64,29 @@ public class DockTest implements Dockable, DockCloseable {
 		first.getContent().transferFocus();
 	}
 
-	private String	mTitle;
-	private JPanel	mContent;
+	private String		mTitle;
+	private Component	mContent;
 
 	DockTest(String title, Color color) {
 		mTitle = title;
-		mContent = new JPanel(new PrecisionLayout());
+		JPanel panel = new JPanel(new PrecisionLayout());
 		JLabel label = new JLabel(title + " Content", SwingConstants.CENTER);
 		label.setForeground(Colors.isBright(color) ? Color.BLACK : Color.WHITE);
-		mContent.add(label);
+		panel.add(label);
 		JTextField field = new JTextField("Some text");
 		field.setName(title);
-		mContent.add(field);
-		mContent.setBackground(color);
-		mContent.setOpaque(true);
+		panel.add(field);
+		panel.setBackground(color);
+		panel.setOpaque(true);
+		mContent = panel;
+	}
+
+	DockTest() {
+		mTitle = "Editors";
+		JTabbedPane tabs = new JTabbedPane();
+		tabs.add("Editor #1", new DockTest("Editor #1", Color.WHITE).getContent());
+		tabs.add("Editor #2", new DockTest("Editor #2", Color.WHITE).getContent());
+		mContent = tabs;
 	}
 
 	@Override
