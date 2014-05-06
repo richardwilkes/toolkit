@@ -391,7 +391,15 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 		mY = y;
 		mWidth = width;
 		mHeight = height;
-		if (isFull()) {
+		DockContainer maximizedContainer = getDock().getMaximizedContainer();
+		if (maximizedContainer != null) {
+			forEachDockContainer((dc) -> {
+				for (DockLayoutNode child : mChildren) {
+					child.setBounds(-32000, -32000, child.getWidth(), child.getHeight());
+				}
+			});
+			maximizedContainer.setBounds(mX, mY, mWidth, mHeight);
+		} else if (isFull()) {
 			int available = Math.max((mHorizontal ? width : height) - Dock.DIVIDER_SIZE, 0);
 			int primary;
 			if (mDividerPosition == -1) {

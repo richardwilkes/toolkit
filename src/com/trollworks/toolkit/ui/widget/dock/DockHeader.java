@@ -22,6 +22,7 @@ public class DockHeader extends JPanel implements ContainerListener {
 	private static String	MAXIMIZE_TOOLTIP;
 	@Localize("Restore")
 	private static String	RESTORE_TOOLTIP;
+	private IconButton		mMaximizeRestoreButton;
 
 	static {
 		Localization.initialize();
@@ -40,11 +41,32 @@ public class DockHeader extends JPanel implements ContainerListener {
 		addContainerListener(this);
 		add(new DockTab(dockable), new PrecisionLayoutData().setGrabHorizontalSpace(true));
 		if (dockable instanceof DockMaximizable) {
-			add(new IconButton(ToolkitImage.getDockMaximize(), MAXIMIZE_TOOLTIP, () -> {
-				DockContainer dc = (DockContainer) getParent();
-				dc.getDock().maximize(dc.getDockable());
-			}), new PrecisionLayoutData().setEndHorizontalAlignment());
+			mMaximizeRestoreButton = new IconButton(ToolkitImage.getDockMaximize(), MAXIMIZE_TOOLTIP, this::maximize);
+			add(mMaximizeRestoreButton, new PrecisionLayoutData().setEndHorizontalAlignment());
 		}
+	}
+
+	private void maximize() {
+		DockContainer dc = (DockContainer) getParent();
+		dc.getDock().maximize(dc.getDockable());
+	}
+
+	private void restore() {
+		((DockContainer) getParent()).getDock().restore();
+	}
+
+	/** Called when the owning {@link DockContainer} is set to the maximized state. */
+	void adjustToMaximizedState() {
+		mMaximizeRestoreButton.setClickFunction(this::restore);
+		mMaximizeRestoreButton.setIcon(ToolkitImage.getDockRestore());
+		mMaximizeRestoreButton.setToolTipText(RESTORE_TOOLTIP);
+	}
+
+	/** Called when the owning {@link DockContainer} is restored from the maximized state. */
+	void adjustToRestoredState() {
+		mMaximizeRestoreButton.setClickFunction(this::maximize);
+		mMaximizeRestoreButton.setIcon(ToolkitImage.getDockMaximize());
+		mMaximizeRestoreButton.setToolTipText(MAXIMIZE_TOOLTIP);
 	}
 
 	@Override
@@ -71,6 +93,11 @@ public class DockHeader extends JPanel implements ContainerListener {
 		getLayout().setColumns(getComponentCount());
 	}
 
+	/**
+	 * Called when the 'active' state changes.
+	 *
+	 * @param active Whether the header should be drawn in its active state or not.
+	 */
 	void setActive(boolean active) {
 		setBackground(active ? DockColors.ACTIVE_DOCK_HEADER_BACKGROUND : DockColors.BACKGROUND);
 	}

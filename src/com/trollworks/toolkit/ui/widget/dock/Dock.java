@@ -29,6 +29,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	private DockDragHandler		mDragHandler;
 	private DockLayoutNode		mDragOverNode;
 	private DockLocation		mDragOverLocation;
+	private DockContainer		mMaximizedContainer;
 
 	/** Creates a new, empty {@link Dock}. */
 	public Dock() {
@@ -36,6 +37,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		setBorder(null);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		setFocusCycleRoot(true);
 	}
 
 	/**
@@ -361,7 +363,11 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		} else if (node instanceof DockContainer) {
 			pad(buffer, depth);
 			buffer.append(((DockContainer) node).getDockable().getTitle());
-			buffer.append(" [w:");
+			buffer.append(" [x:");
+			buffer.append(node.getX());
+			buffer.append(" y:");
+			buffer.append(node.getY());
+			buffer.append(" w:");
 			buffer.append(node.getWidth());
 			buffer.append(" h:");
 			buffer.append(node.getHeight());
@@ -448,6 +454,11 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		getLayout().forEachDockContainer((dc) -> dc.updateActiveHighlight());
 	}
 
+	/** @return The current maximized {@link DockContainer}, or <code>null</code>. */
+	public DockContainer getMaximizedContainer() {
+		return mMaximizedContainer;
+	}
+
 	/**
 	 * Causes the {@link DockContainer} that contains the specified {@link Dockable} to fill the
 	 * entire {@link Dock} area.
@@ -455,11 +466,29 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	 * @param dockable The {@link Dockable} to maximize.
 	 */
 	public void maximize(Dockable dockable) {
-		// RAW: Implement 'maximize'
+		DockLayout layout = getLayout();
+		DockContainer target = layout.findDockContainer(dockable);
+		if (target != null) {
+			if (mMaximizedContainer != null) {
+				mMaximizedContainer.getHeader().adjustToRestoredState();
+			}
+			mMaximizedContainer = target;
+			mMaximizedContainer.getHeader().adjustToMaximizedState();
+			layout.forEachDockContainer((dc) -> dc.setFocusCycleRoot(dc == mMaximizedContainer));
+			revalidate();
+			mMaximizedContainer.transferFocus();
+			repaint();
+		}
 	}
 
 	/** Restores the current maximized {@link DockContainer} to its normal state. */
 	public void restore() {
-		// RAW: Implement 'restore'
+		if (mMaximizedContainer != null) {
+			mMaximizedContainer.getHeader().adjustToRestoredState();
+			mMaximizedContainer = null;
+			getLayout().forEachDockContainer((dc) -> dc.setFocusCycleRoot(false));
+			revalidate();
+			repaint();
+		}
 	}
 }

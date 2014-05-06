@@ -70,7 +70,9 @@ public class DockTest implements Dockable, DockCloseable, DockMaximizable {
 		JLabel label = new JLabel(title + " Content", SwingConstants.CENTER);
 		label.setForeground(Colors.isBright(color) ? Color.BLACK : Color.WHITE);
 		mContent.add(label);
-		mContent.add(new JTextField("Some text"));
+		JTextField field = new JTextField("Some text");
+		field.setName(title);
+		mContent.add(field);
 		mContent.setBackground(color);
 		mContent.setOpaque(true);
 	}
