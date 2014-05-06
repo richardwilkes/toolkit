@@ -18,6 +18,10 @@ import com.trollworks.toolkit.ui.UIUtilities;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -25,7 +29,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-public class IconButton extends JComponent implements MouseListener, MouseMotionListener {
+public class IconButton extends JComponent implements MouseListener, MouseMotionListener, ComponentListener {
 	private static final int	MARGIN	= 4;
 	private Icon				mIcon;
 	private Runnable			mClickFunction;
@@ -41,6 +45,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 		setClickFunction(clickFunction);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		addComponentListener(this);
 	}
 
 	public void setIcon(Icon icon) {
@@ -112,13 +117,13 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 	@Override
 	public void mouseReleased(MouseEvent event) {
 		mouseDragged(event);
+		mShowBorder = mPressed;
+		mInMouseDown = false;
 		MouseCapture.stop(this);
 		if (mPressed) {
 			mPressed = false;
 			click();
 		}
-		mInMouseDown = false;
-		mShowBorder = isOver(event.getX(), event.getY());
 		repaint();
 	}
 
@@ -131,5 +136,35 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 	public void mouseExited(MouseEvent event) {
 		mShowBorder = false;
 		repaint();
+	}
+
+	private void updateRollOver() {
+		boolean wasBorderShown = mShowBorder;
+		Point location = MouseInfo.getPointerInfo().getLocation();
+		UIUtilities.convertPointFromScreen(location, this);
+		mShowBorder = isOver(location.x, location.y);
+		if (wasBorderShown != mShowBorder) {
+			repaint();
+		}
+	}
+
+	@Override
+	public void componentResized(ComponentEvent event) {
+		updateRollOver();
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent event) {
+		updateRollOver();
+	}
+
+	@Override
+	public void componentShown(ComponentEvent event) {
+		updateRollOver();
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent event) {
+		updateRollOver();
 	}
 }
