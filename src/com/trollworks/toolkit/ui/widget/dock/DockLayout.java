@@ -93,6 +93,27 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 	}
 
 	/**
+	 * @param node The {@link DockLayoutNode} to look for.
+	 * @return <code>true</code> if the node is this {@link DockLayout} or one of its descendants.
+	 */
+	public boolean contains(DockLayoutNode node) {
+		if (node == this) {
+			return true;
+		}
+		for (DockLayoutNode child : mChildren) {
+			if (child == node) {
+				return true;
+			}
+			if (child instanceof DockLayout) {
+				if (((DockLayout) child).contains(node)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Docks a {@link DockContainer} within this {@link DockLayout}. If the {@link DockContainer}
 	 * already exists in this {@link DockLayout}, it will be moved to the new location.
 	 *

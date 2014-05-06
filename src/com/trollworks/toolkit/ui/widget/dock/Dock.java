@@ -74,7 +74,10 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	 *            {@link Dockable}.
 	 */
 	public void dock(Dockable dockable, Dockable target, DockLocation locationRelativeToTarget) {
-		dock(dockable, (DockContainer) target.getContent().getParent(), locationRelativeToTarget);
+		DockContainer dc = getDockContainer(target);
+		if (dc != null) {
+			dock(dockable, dc, locationRelativeToTarget);
+		}
 	}
 
 	/**
@@ -88,13 +91,15 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	 */
 	public void dock(Dockable dockable, DockLayoutNode target, DockLocation locationRelativeToTarget) {
 		DockLayout layout = getLayout();
-		DockContainer dc = getDockContainer(dockable);
-		if (dc == null) {
-			dc = new DockContainer(dockable);
-			layout.dock(dc, target, locationRelativeToTarget);
-			addImpl(dc, null, -1);
-		} else {
-			layout.dock(dc, target, locationRelativeToTarget);
+		if (layout.contains(target)) {
+			DockContainer dc = getDockContainer(dockable);
+			if (dc == null) {
+				dc = new DockContainer(dockable);
+				layout.dock(dc, target, locationRelativeToTarget);
+				addImpl(dc, null, -1);
+			} else {
+				layout.dock(dc, target, locationRelativeToTarget);
+			}
 		}
 	}
 
@@ -195,7 +200,9 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		if (over instanceof DockLayout) {
 			mDragHandler = new DockDividerDragHandler((DockLayout) over);
 		} else if (over instanceof DockContainer) {
-			mDragHandler = new DockContainerDragHandler((DockContainer) over);
+			DockContainer dc = (DockContainer) over;
+			dc.transferFocus();
+			mDragHandler = new DockContainerDragHandler(dc);
 		}
 		if (mDragHandler != null) {
 			mDragHandler.start(event);
