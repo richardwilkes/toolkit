@@ -28,24 +28,33 @@ import javax.swing.JComponent;
 public class IconButton extends JComponent implements MouseListener, MouseMotionListener {
 	private static final int	MARGIN	= 4;
 	private Icon				mIcon;
-	private Runnable			mPerformClick;
+	private Runnable			mClickFunction;
 	private boolean				mInMouseDown;
 	private boolean				mPressed;
 	private boolean				mShowBorder;
 
-	public IconButton(Icon icon, String tooltip, Runnable performClick) {
-		mIcon = icon;
-		mPerformClick = performClick;
+	public IconButton(Icon icon, String tooltip, Runnable clickFunction) {
 		setOpaque(false);
 		setBackground(null);
 		setToolTipText(tooltip);
-		UIUtilities.setOnlySize(this, new Dimension(icon.getIconWidth() + MARGIN * 2, icon.getIconHeight() + MARGIN * 2));
+		setIcon(icon);
+		setClickFunction(clickFunction);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
 
+	public void setIcon(Icon icon) {
+		mIcon = icon;
+		UIUtilities.setOnlySize(this, new Dimension(icon.getIconWidth() + MARGIN * 2, icon.getIconHeight() + MARGIN * 2));
+		repaint();
+	}
+
+	public void setClickFunction(Runnable clickFunction) {
+		mClickFunction = clickFunction;
+	}
+
 	public void click() {
-		mPerformClick.run();
+		mClickFunction.run();
 	}
 
 	@Override
