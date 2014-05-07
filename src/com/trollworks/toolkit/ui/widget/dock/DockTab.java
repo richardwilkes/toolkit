@@ -13,6 +13,7 @@ package com.trollworks.toolkit.ui.widget.dock;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Colors;
+import com.trollworks.toolkit.ui.MouseCapture;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.border.SelectiveLineBorder;
 import com.trollworks.toolkit.ui.image.Cursors;
@@ -51,6 +52,7 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 	}
 
 	private Dockable		mDockable;
+	private DockDragHandler	mDragHandler;
 
 	/**
 	 * Creates a new {@link DockTab} for the specified {@link Dockable}.
@@ -131,18 +133,14 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		}
 	}
 
-	private void redispatch(MouseEvent event) {
-		UIUtilities.forwardMouseEvent(event, this, UIUtilities.getAncestorOfType(this, Dock.class));
-	}
-
 	@Override
 	public void mouseEntered(MouseEvent event) {
-		redispatch(event);
+		// Unused
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent event) {
-		redispatch(event);
+		// Unused
 	}
 
 	@Override
@@ -154,26 +152,29 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		} else if (!dc.isActive()) {
 			dc.transferFocus();
 		}
-		redispatch(event);
+		mDragHandler = new DockContainerDragHandler(dc, dc.getCurrentTabIndex());
+		MouseCapture.start(this);
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent event) {
-		redispatch(event);
+		mDragHandler.drag(event);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent event) {
-		redispatch(event);
+		mDragHandler.finish(event);
+		mDragHandler = null;
+		MouseCapture.stop(this);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
-		redispatch(event);
+		// Unused
 	}
 
 	@Override
 	public void mouseExited(MouseEvent event) {
-		redispatch(event);
+		// Unused
 	}
 }
