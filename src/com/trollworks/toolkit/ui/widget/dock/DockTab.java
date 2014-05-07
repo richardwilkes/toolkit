@@ -13,7 +13,6 @@ package com.trollworks.toolkit.ui.widget.dock;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Colors;
-import com.trollworks.toolkit.ui.MouseCapture;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.border.SelectiveLineBorder;
 import com.trollworks.toolkit.ui.image.Cursors;
@@ -30,11 +29,14 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Point;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -43,7 +45,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 /** Provides a tab that contains the {@link Dockable}'s icon, title, and close button, if any. */
-public class DockTab extends JPanel implements ContainerListener, MouseListener, MouseMotionListener {
+public class DockTab extends JPanel implements ContainerListener, MouseListener, DragGestureListener {
 	@Localize("Close")
 	private static String	CLOSE_TOOLTIP;
 
@@ -52,7 +54,6 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 	}
 
 	private Dockable		mDockable;
-	private DockDragHandler	mDragHandler;
 
 	/**
 	 * Creates a new {@link DockTab} for the specified {@link Dockable}.
@@ -70,8 +71,8 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 			add(new IconButton(ToolkitImage.getDockClose(), CLOSE_TOOLTIP, this::attemptClose), new PrecisionLayoutData().setEndHorizontalAlignment());
 		}
 		addMouseListener(this);
-		addMouseMotionListener(this);
 		setCursor(Cursors.MOVE);
+		DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, this);
 	}
 
 	/**
@@ -134,12 +135,17 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent event) {
-		// Unused
+	public void dragGestureRecognized(DragGestureEvent dge) {
+		if (DragSource.isDragImageSupported()) {
+			Point offset = new Point(dge.getDragOrigin());
+			offset.x = -offset.x;
+			offset.y = -offset.y;
+			dge.startDrag(Cursors.MOVE, UIUtilities.getImage(this), offset, new DockableTransferable(mDockable), null);
+		}
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent event) {
+	public void mouseEntered(MouseEvent event) {
 		// Unused
 	}
 
@@ -152,20 +158,11 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		} else if (!dc.isActive()) {
 			dc.transferFocus();
 		}
-		mDragHandler = new DockContainerDragHandler(dc, dc.getCurrentTabIndex());
-		MouseCapture.start(this);
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent event) {
-		mDragHandler.drag(event);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent event) {
-		mDragHandler.finish(event);
-		mDragHandler = null;
-		MouseCapture.stop(this);
+		// Unused
 	}
 
 	@Override

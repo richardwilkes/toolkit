@@ -11,17 +11,24 @@
 
 package com.trollworks.toolkit.ui.widget.dock;
 
+import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.MouseCapture;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.Cursors;
 
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.IllegalComponentStateException;
 import java.awt.KeyboardFocusManager;
 import java.awt.LayoutManager;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -32,14 +39,23 @@ import java.util.List;
 import javax.swing.JPanel;
 
 /** Provides an area where {@link Dockable} components can be displayed and rearranged. */
-public class Dock extends JPanel implements MouseListener, MouseMotionListener, PropertyChangeListener {
+public class Dock extends JPanel implements MouseListener, MouseMotionListener, PropertyChangeListener, DropTargetListener {
 	private static final String	PERMANENT_FOCUS_OWNER_KEY	= "permanentFocusOwner";			//$NON-NLS-1$
 	private static final int	GRIP_GAP					= 1;
 	private static final int	GRIP_WIDTH					= 4;
 	private static final int	GRIP_HEIGHT					= 2;
 	private static final int	GRIP_LENGTH					= GRIP_HEIGHT * 5 + GRIP_GAP * 4;
 	public static final int		DIVIDER_SIZE				= GRIP_WIDTH + 4;
-	private DockDragHandler		mDragHandler;
+	private static final int	DRAG_THRESHOLD				= 5;
+	private static final long	DRAG_DELAY					= 250;
+	private long				mDividerDragStartedAt;
+	private int					mDividerDragStartX;
+	private int					mDividerDragStartY;
+	private DockLayout			mDividerDragLayout;
+	private int					mDividerDragInitialEventPosition;
+	private int					mDividerDragInitialDividerPosition;
+	private boolean				mDividerDragIsValid;
+	private Dockable			mDragDockable;
 	private DockLayoutNode		mDragOverNode;
 	private DockLocation		mDragOverLocation;
 	private DockContainer		mMaximizedContainer;
@@ -51,6 +67,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setFocusCycleRoot(true);
+		setDropTarget(new DropTarget(this, DnDConstants.ACTION_MOVE, this));
 	}
 
 	/**
@@ -214,26 +231,41 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	public void mousePressed(MouseEvent event) {
 		DockLayoutNode over = over(event.getX(), event.getY(), true);
 		if (over instanceof DockLayout) {
-			mDragHandler = new DockDividerDragHandler((DockLayout) over);
-		}
-		if (mDragHandler != null) {
-			mDragHandler.start(event);
+			mDividerDragLayout = (DockLayout) over;
+			mDividerDragStartedAt = event.getWhen();
+			mDividerDragStartX = event.getX();
+			mDividerDragStartY = event.getY();
+			mDividerDragInitialEventPosition = mDividerDragLayout.isHorizontal() ? event.getX() : event.getY();
+			mDividerDragInitialDividerPosition = mDividerDragLayout.getDividerPosition();
+			mDividerDragIsValid = false;
 			MouseCapture.start(this);
 		}
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent event) {
-		if (mDragHandler != null) {
-			mDragHandler.drag(event);
+		dragDivider(event);
+	}
+
+	private void dragDivider(MouseEvent event) {
+		if (mDividerDragLayout != null) {
+			if (!mDividerDragIsValid) {
+				mDividerDragIsValid = Math.abs(mDividerDragStartX - event.getX()) > DRAG_THRESHOLD || Math.abs(mDividerDragStartY - event.getY()) > DRAG_THRESHOLD || event.getWhen() - mDividerDragStartedAt > DRAG_DELAY;
+			}
+			if (mDividerDragIsValid) {
+				int pos = mDividerDragInitialDividerPosition - (mDividerDragInitialEventPosition - (mDividerDragLayout.isHorizontal() ? event.getX() : event.getY()));
+				mDividerDragLayout.setDividerPosition(pos < 0 ? 0 : pos);
+			}
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent event) {
-		if (mDragHandler != null) {
-			mDragHandler.finish(event);
-			mDragHandler = null;
+		if (mDividerDragLayout != null) {
+			if (mDividerDragIsValid) {
+				dragDivider(event);
+			}
+			mDividerDragLayout = null;
 			MouseCapture.stop(this);
 		}
 	}
@@ -250,13 +282,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 
 	private void updateCursor(MouseEvent event) {
 		DockLayoutNode over = over(event.getX(), event.getY(), true);
-		Cursor cursor;
-		if (over instanceof DockLayout) {
-			cursor = ((DockLayout) over).isHorizontal() ? Cursors.HORIZONTAL_RESIZE : Cursors.VERTICAL_RESIZE;
-		} else {
-			cursor = null;
-		}
-		setCursor(cursor);
+		setCursor(over instanceof DockLayout ? ((DockLayout) over).isHorizontal() ? Cursors.HORIZONTAL_RESIZE : Cursors.VERTICAL_RESIZE : null);
 	}
 
 	private static boolean containedBy(DockLayoutNode node, int x, int y) {
@@ -311,48 +337,6 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Causes the drop area to be displayed or cleared.
-	 *
-	 * @param node The {@link DockLayoutNode} the drag is currently over. Pass in <code>null</code>
-	 *            to clear the drop area display.
-	 * @param location The location for the drop, should it occur.
-	 */
-	void setDragOver(DockLayoutNode node, DockLocation location) {
-		if (mDragOverNode != null) {
-			repaint(getDragOverBounds());
-		}
-		mDragOverNode = node;
-		mDragOverLocation = location;
-		if (mDragOverNode != null) {
-			repaint(getDragOverBounds());
-		}
-	}
-
-	private Rectangle getDragOverBounds() {
-		Rectangle bounds = new Rectangle(mDragOverNode.getX(), mDragOverNode.getY(), mDragOverNode.getWidth(), mDragOverNode.getHeight());
-		switch (mDragOverLocation) {
-			case NORTH:
-				bounds.height = Math.max(bounds.height / 2, 1);
-				break;
-			case SOUTH:
-				int halfHeight = Math.max(bounds.height / 2, 1);
-				bounds.y += bounds.height - halfHeight;
-				bounds.height = halfHeight;
-				break;
-			case EAST:
-				int halfWidth = Math.max(bounds.width / 2, 1);
-				bounds.x += bounds.width - halfWidth;
-				bounds.width = halfWidth;
-				break;
-			case WEST:
-			default:
-				bounds.width = Math.max(bounds.width / 2, 1);
-				break;
-		}
-		return bounds;
 	}
 
 	@Override
@@ -531,5 +515,153 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			}
 		}
 		return dc;
+	}
+
+	private Dockable getDockableInDrag(DropTargetDragEvent dtde) {
+		if (dtde.getDropAction() == DnDConstants.ACTION_MOVE) {
+			try {
+				if (dtde.isDataFlavorSupported(DockableTransferable.DATA_FLAVOR)) {
+					Dockable dockable = (Dockable) dtde.getTransferable().getTransferData(DockableTransferable.DATA_FLAVOR);
+					if (getDockContainer(dockable) != null) {
+						return dockable;
+					}
+				}
+			} catch (Exception exception) {
+				Log.error(exception);
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void dragEnter(DropTargetDragEvent dtde) {
+		mDragDockable = getDockableInDrag(dtde);
+		if (mDragDockable != null) {
+			mDragOverNode = null;
+			mDragOverLocation = null;
+			updateForDragOver(dtde.getLocation());
+			dtde.acceptDrag(DnDConstants.ACTION_MOVE);
+		} else {
+			dtde.rejectDrag();
+		}
+	}
+
+	@Override
+	public void dragOver(DropTargetDragEvent dtde) {
+		if (mDragDockable != null) {
+			updateForDragOver(dtde.getLocation());
+			dtde.acceptDrag(DnDConstants.ACTION_MOVE);
+		} else {
+			dtde.rejectDrag();
+		}
+	}
+
+	@Override
+	public void dragExit(DropTargetEvent dte) {
+		if (mDragDockable != null) {
+			clearDragState();
+		}
+	}
+
+	@Override
+	public void dropActionChanged(DropTargetDragEvent dtde) {
+		mDragDockable = getDockableInDrag(dtde);
+		if (mDragDockable != null) {
+			updateForDragOver(dtde.getLocation());
+			dtde.acceptDrag(DnDConstants.ACTION_MOVE);
+		} else {
+			clearDragState();
+			dtde.rejectDrag();
+		}
+	}
+
+	@Override
+	public void drop(DropTargetDropEvent dtde) {
+		if (mDragDockable != null) {
+			if (mDragOverNode != null) {
+				getLayout().dock(getDockContainer(mDragDockable), mDragOverNode, mDragOverLocation);
+				revalidate();
+			}
+			dtde.acceptDrop(DnDConstants.ACTION_MOVE);
+			dtde.dropComplete(true);
+		} else {
+			dtde.dropComplete(false);
+		}
+		clearDragState();
+	}
+
+	private void clearDragState() {
+		if (mDragOverNode != null) {
+			repaint(getDragOverBounds());
+		}
+		mDragDockable = null;
+		mDragOverNode = null;
+		mDragOverLocation = null;
+	}
+
+	private void updateForDragOver(Point where) {
+		int ex = where.x;
+		int ey = where.y;
+		DockLocation location = null;
+		DockLayoutNode over = over(ex, ey, false);
+		DockContainer container = getDockContainer(mDragDockable);
+		if (over == container) {
+			over = getLayout().findLayout(container);
+		}
+		if (over != null) {
+			int x = over.getX();
+			int y = over.getY();
+			int width = over.getWidth();
+			int height = over.getHeight();
+			ex -= x;
+			ey -= y;
+			if (ex < width / 2) {
+				location = DockLocation.WEST;
+			} else {
+				location = DockLocation.EAST;
+				ex = width - ex;
+			}
+			if (ey < height / 2) {
+				if (ex > ey) {
+					location = DockLocation.NORTH;
+				}
+			} else if (ex > height - ey) {
+				location = DockLocation.SOUTH;
+			}
+		}
+		if (over != mDragOverNode || location != mDragOverLocation) {
+			if (mDragOverNode != null) {
+				repaint(getDragOverBounds());
+			}
+			mDragOverNode = over;
+			mDragOverLocation = location;
+			if (mDragOverNode != null) {
+				repaint(getDragOverBounds());
+			}
+		}
+	}
+
+	private Rectangle getDragOverBounds() {
+		Rectangle bounds = new Rectangle(mDragOverNode.getX(), mDragOverNode.getY(), mDragOverNode.getWidth(), mDragOverNode.getHeight());
+		switch (mDragOverLocation) {
+			case NORTH:
+				bounds.height = Math.max(bounds.height / 2, 1);
+				break;
+			case SOUTH:
+				int halfHeight = Math.max(bounds.height / 2, 1);
+				bounds.y += bounds.height - halfHeight;
+				bounds.height = halfHeight;
+				break;
+			case EAST:
+				int halfWidth = Math.max(bounds.width / 2, 1);
+				bounds.x += bounds.width - halfWidth;
+				bounds.width = halfWidth;
+				break;
+			case WEST:
+			default:
+				bounds.width = Math.max(bounds.width / 2, 1);
+				break;
+		}
+		return bounds;
 	}
 }
