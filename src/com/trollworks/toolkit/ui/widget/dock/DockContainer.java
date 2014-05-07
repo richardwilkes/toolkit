@@ -16,18 +16,22 @@ import com.trollworks.toolkit.ui.UIUtilities;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
+import java.awt.LayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
 /** All {@link Dockable}s are wrapped in a {@link DockContainer} when placed within a {@link Dock}. */
-public class DockContainer extends JPanel implements DockLayoutNode {
+public class DockContainer extends JPanel implements DockLayoutNode, LayoutManager {
 	private DockHeader		mHeader;
 	private List<Dockable>	mDockables	= new ArrayList<>();
 	private int				mCurrent;
+	private boolean			mActive;
 
 	/**
 	 * Creates a new {@link DockContainer} for the specified {@link Dockable}.
@@ -35,7 +39,7 @@ public class DockContainer extends JPanel implements DockLayoutNode {
 	 * @param dockable The {@link Dockable} to wrap.
 	 */
 	public DockContainer(Dockable dockable) {
-		super(new BorderLayout());
+		setLayout(this);
 		setOpaque(true);
 		setBackground(Color.WHITE);
 		mDockables.add(dockable);
@@ -50,8 +54,19 @@ public class DockContainer extends JPanel implements DockLayoutNode {
 		return (Dock) UIUtilities.getAncestorOfType(this, Dock.class);
 	}
 
+	/** @return The current list of {@link Dockable}s in this {@link DockContainer}. */
 	public List<Dockable> getDockables() {
 		return mDockables;
+	}
+
+	/** @param dockable The {@link Dockable} to stack into this {@link DockContainer}. */
+	public void stack(Dockable dockable) {
+		mDockables.add(dockable);
+		add(dockable.getContent(), BorderLayout.CENTER);
+		mCurrent = mDockables.size() - 1;
+		mHeader.addTab(dockable);
+		revalidate();
+		repaint();
 	}
 
 	/** @return The {@link DockHeader} for this {@link DockContainer}. */
@@ -73,8 +88,26 @@ public class DockContainer extends JPanel implements DockLayoutNode {
 	}
 
 	/** @return The current tab index. */
-	public int getCurrent() {
+	public int getCurrentTabIndex() {
 		return mCurrent;
+	}
+
+	/** @return The current {@link Dockable}. */
+	public Dockable getCurrentDockable() {
+		return mCurrent >= 0 && mCurrent < mDockables.size() ? mDockables.get(mCurrent) : null;
+	}
+
+	/** @param dockable The {@link Dockable} to make current. */
+	public void setCurrentDockable(Dockable dockable) {
+		int index = mDockables.indexOf(dockable);
+		if (index != -1) {
+			mCurrent = index;
+			for (Dockable one : mDockables) {
+				one.getContent().setVisible(dockable == one);
+			}
+			mHeader.revalidate();
+			repaint();
+		}
 	}
 
 	@SuppressWarnings("nls")
@@ -129,13 +162,83 @@ public class DockContainer extends JPanel implements DockLayoutNode {
 		}
 	}
 
+	/**
+	 * @return <code>true</code> if this {@link DockContainer} or one of its children has the
+	 *         keyboard focus.
+	 */
+	public boolean isActive() {
+		return mActive;
+	}
+
 	/** Called by the {@link Dock} to update the active highlight. */
 	void updateActiveHighlight() {
+		boolean wasActive = mActive;
 		Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner();
-		boolean hasFocus = focusOwner == this;
-		if (!hasFocus && focusOwner != null) {
-			hasFocus = UIUtilities.getAncestorOfType(focusOwner, DockContainer.class) == this;
+		mActive = focusOwner == this;
+		if (!mActive && focusOwner != null) {
+			mActive = UIUtilities.getAncestorOfType(focusOwner, DockContainer.class) == this;
 		}
-		mHeader.setActive(hasFocus);
+		if (mActive != wasActive) {
+			mHeader.repaint();
+		}
+	}
+
+	@Override
+	public void addLayoutComponent(String name, Component comp) {
+		// Unused
+	}
+
+	@Override
+	public void removeLayoutComponent(Component comp) {
+		// Unused
+	}
+
+	@Override
+	public Dimension preferredLayoutSize(Container parent) {
+		Dimension size = mHeader.getPreferredSize();
+		int width = size.width;
+		int height = size.height;
+		if (!mDockables.isEmpty()) {
+			size = getCurrentDockable().getContent().getPreferredSize();
+			if (width < size.width) {
+				width = size.width;
+			}
+			height += size.height;
+		}
+		Insets insets = parent.getInsets();
+		return new Dimension(insets.left + width + insets.right, insets.top + height + insets.bottom);
+	}
+
+	@Override
+	public Dimension minimumLayoutSize(Container parent) {
+		Dimension size = mHeader.getMinimumSize();
+		int width = size.width;
+		int height = size.height;
+		Dockable current = getCurrentDockable();
+		if (current != null) {
+			size = current.getContent().getMinimumSize();
+			if (width < size.width) {
+				width = size.width;
+			}
+			height += size.height;
+		}
+		Insets insets = parent.getInsets();
+		return new Dimension(insets.left + width + insets.right, insets.top + height + insets.bottom);
+	}
+
+	@Override
+	public void layoutContainer(Container parent) {
+		Insets insets = parent.getInsets();
+		int height = mHeader.getPreferredSize().height;
+		int width = parent.getWidth() - (insets.left + insets.right);
+		mHeader.setBounds(insets.left, insets.top, width, height);
+		Dockable current = getCurrentDockable();
+		if (current != null) {
+			int remaining = getHeight() - (insets.top + height);
+			if (remaining < 0) {
+				remaining = 0;
+			}
+			current.getContent().setBounds(insets.left, insets.top + height, width, remaining);
+		}
 	}
 }

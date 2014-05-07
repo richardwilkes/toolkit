@@ -71,7 +71,8 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	 * @param dockable The {@link Dockable} to install into this {@link Dock}.
 	 * @param target The target {@link Dockable}.
 	 * @param locationRelativeToTarget The location relative to the target to install the
-	 *            {@link Dockable}.
+	 *            {@link Dockable}. You may pass in <code>null</code> to have it stack with the
+	 *            target.
 	 */
 	public void dock(Dockable dockable, Dockable target, DockLocation locationRelativeToTarget) {
 		DockContainer dc = getDockContainer(target);
@@ -87,10 +88,25 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	 * @param dockable The {@link Dockable} to install into this {@link Dock}.
 	 * @param target The target {@link DockLayoutNode}.
 	 * @param locationRelativeToTarget The location relative to the target to install the
-	 *            {@link Dockable}.
+	 *            {@link Dockable}. If the target is a {@link DockContainer}, you may pass in
+	 *            <code>null</code> to have it stack with the target.
 	 */
 	public void dock(Dockable dockable, DockLayoutNode target, DockLocation locationRelativeToTarget) {
 		DockLayout layout = getLayout();
+		if (locationRelativeToTarget == null) {
+			if (target instanceof DockContainer) {
+				DockContainer dc = getDockContainer(dockable);
+				if (dc != target) {
+					if (dc != null) {
+						dc.close(dockable);
+					}
+					((DockContainer) target).stack(dockable);
+				}
+				return;
+			}
+			// Arbitrary choice...
+			locationRelativeToTarget = DockLocation.EAST;
+		}
 		if (layout.contains(target)) {
 			DockContainer dc = getDockContainer(dockable);
 			if (dc == null) {
@@ -119,11 +135,11 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		super.paintChildren(gc);
 		if (mDragOverNode != null) {
 			Rectangle bounds = getDragOverBounds();
-			gc.setColor(DockColors.DOCK_DROP_AREA);
+			gc.setColor(DockColors.DROP_AREA);
 			gc.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-			gc.setColor(DockColors.DOCK_DROP_AREA_INNER_BORDER);
+			gc.setColor(DockColors.DROP_AREA_INNER_BORDER);
 			gc.drawRect(bounds.x + 1, bounds.y + 1, bounds.width - 3, bounds.height - 3);
-			gc.setColor(DockColors.DOCK_DROP_AREA_OUTER_BORDER);
+			gc.setColor(DockColors.DROP_AREA_OUTER_BORDER);
 			gc.drawRect(bounds.x, bounds.y, bounds.width - 1, bounds.height - 1);
 		}
 	}

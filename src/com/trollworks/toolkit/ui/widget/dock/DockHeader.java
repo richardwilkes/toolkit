@@ -15,30 +15,33 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.border.SelectiveLineBorder;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
-import com.trollworks.toolkit.ui.layout.PrecisionLayout;
-import com.trollworks.toolkit.ui.layout.PrecisionLayoutData;
 import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.LayoutManager;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
 
 import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 /** The header for a {@link DockContainer}. */
-public class DockHeader extends JPanel implements ContainerListener {
+public class DockHeader extends JPanel implements LayoutManager {
 	@Localize("Maximize")
-	private static String	MAXIMIZE_TOOLTIP;
+	private static String		MAXIMIZE_TOOLTIP;
 	@Localize("Restore")
-	private static String	RESTORE_TOOLTIP;
-	private IconButton		mMaximizeRestoreButton;
+	private static String		RESTORE_TOOLTIP;
 
 	static {
 		Localization.initialize();
 	}
+
+	private static final int	MINIMUM_TAB_WIDTH	= 28;
+	private static final int	GAP					= 4;
+	private IconButton			mMaximizeRestoreButton;
 
 	/**
 	 * Creates a new {@link DockHeader} for the specified {@link DockContainer}.
@@ -46,16 +49,28 @@ public class DockHeader extends JPanel implements ContainerListener {
 	 * @param dc The {@link DockContainer} to work with.
 	 */
 	public DockHeader(DockContainer dc) {
-		super(new PrecisionLayout().setMargins(0).setMiddleVerticalAlignment());
+		super.setLayout(this);
 		setOpaque(true);
 		setBackground(DockColors.BACKGROUND);
-		setBorder(new CompoundBorder(new SelectiveLineBorder(DockColors.SHADOW, 0, 0, 1, 0), new EmptyBorder(2, 4, 2, 4)));
-		addContainerListener(this);
+		setBorder(new CompoundBorder(new SelectiveLineBorder(DockColors.SHADOW, 0, 0, 1, 0), new EmptyBorder(0, 4, 0, 4)));
 		for (Dockable dockable : dc.getDockables()) {
-			add(new DockTab(dockable), new PrecisionLayoutData().setGrabHorizontalSpace(true));
+			add(new DockTab(dockable));
 		}
 		mMaximizeRestoreButton = new IconButton(ToolkitImage.getDockMaximize(), MAXIMIZE_TOOLTIP, this::maximize);
-		add(mMaximizeRestoreButton, new PrecisionLayoutData().setEndHorizontalAlignment());
+		add(mMaximizeRestoreButton);
+	}
+
+	void addTab(Dockable dockable) {
+		int count = getComponentCount();
+		int i;
+		for (i = 0; i < count; i++) {
+			if (!(getComponent(i) instanceof DockTab)) {
+				break;
+			}
+		}
+		add(new DockTab(dockable), i);
+		revalidate();
+		repaint();
 	}
 
 	private DockContainer getDockContainer() {
@@ -85,35 +100,113 @@ public class DockHeader extends JPanel implements ContainerListener {
 	}
 
 	@Override
-	public PrecisionLayout getLayout() {
-		return (PrecisionLayout) super.getLayout();
-	}
-
-	@Override
 	public void setLayout(LayoutManager mgr) {
-		if (mgr instanceof PrecisionLayout) {
-			super.setLayout(mgr);
-		} else {
-			throw new IllegalArgumentException("Must use a PrecisionLayout."); //$NON-NLS-1$
+		// Don't allow overrides
+	}
+
+	@Override
+	public void addLayoutComponent(String name, Component comp) {
+		// Unused
+	}
+
+	@Override
+	public void removeLayoutComponent(Component comp) {
+		// Unused
+	}
+
+	@Override
+	public Dimension preferredLayoutSize(Container parent) {
+		Insets insets = getInsets();
+		int count = getComponentCount();
+		int width = count > 0 ? (count - 1) * GAP : 0;
+		int height = 0;
+		for (int i = 0; i < count; i++) {
+			Dimension size = getComponent(i).getPreferredSize();
+			width += size.width;
+			if (height < size.height) {
+				height = size.height;
+			}
 		}
+		return new Dimension(insets.left + width + insets.right, insets.top + height + insets.bottom);
 	}
 
 	@Override
-	public void componentAdded(ContainerEvent event) {
-		getLayout().setColumns(getComponentCount());
+	public Dimension minimumLayoutSize(Container parent) {
+		Insets insets = getInsets();
+		int count = getComponentCount();
+		int width = count > 0 ? (count - 1) * GAP : 0;
+		int height = 0;
+		for (int i = 0; i < count; i++) {
+			Component component = getComponent(i);
+			Dimension size = component.getPreferredSize();
+			width += component instanceof DockTab ? MINIMUM_TAB_WIDTH : size.width;
+			if (height < size.height) {
+				height = size.height;
+			}
+		}
+		return new Dimension(insets.left + width + insets.right, insets.top + height + insets.bottom);
 	}
 
 	@Override
-	public void componentRemoved(ContainerEvent event) {
-		getLayout().setColumns(getComponentCount());
-	}
-
-	/**
-	 * Called when the 'active' state changes.
-	 *
-	 * @param active Whether the header should be drawn in its active state or not.
-	 */
-	void setActive(boolean active) {
-		setBackground(active ? DockColors.ACTIVE_DOCK_HEADER_BACKGROUND : DockColors.BACKGROUND);
+	public void layoutContainer(Container parent) {
+		int extra = getWidth() - preferredLayoutSize(parent).width;
+		Insets insets = getInsets();
+		int count = getComponentCount();
+		Component[] comps = getComponents();
+		int[] widths = new int[count];
+		int[] heights = new int[count];
+		for (int i = 0; i < count; i++) {
+			Dimension size = comps[i].getPreferredSize();
+			widths[i] = size.width;
+			heights[i] = size.height;
+		}
+		if (extra < 0) {
+			int current = getDockContainer().getCurrentTabIndex();
+			int remaining = -extra;
+			boolean found = true;
+			// Shrink the non-current tabs down
+			while (found && remaining > 0) {
+				int tabs = 0;
+				found = false;
+				for (int i = 0; i < count; i++) {
+					if (i != current && comps[i] instanceof DockTab && widths[i] > MINIMUM_TAB_WIDTH) {
+						tabs++;
+					}
+				}
+				if (tabs > 0) {
+					int perTab = Math.max(remaining / tabs, 1);
+					for (int i = 0; i < count && remaining > 0; i++) {
+						if (i != current && comps[i] instanceof DockTab && widths[i] > MINIMUM_TAB_WIDTH) {
+							found = true;
+							remaining -= perTab;
+							widths[i] -= perTab;
+							if (widths[i] <= MINIMUM_TAB_WIDTH) {
+								remaining += MINIMUM_TAB_WIDTH - widths[i];
+								widths[i] = MINIMUM_TAB_WIDTH;
+							}
+						}
+					}
+				}
+			}
+			if (remaining > 0) {
+				// Still not small enough... shrink the current tab down, too
+				widths[current] -= remaining;
+				if (widths[current] < MINIMUM_TAB_WIDTH) {
+					widths[current] = MINIMUM_TAB_WIDTH;
+				}
+			}
+			extra = 0;
+		}
+		int x = insets.left;
+		int height = getHeight();
+		boolean insertExtra = true;
+		for (int i = 0; i < count; i++) {
+			if (insertExtra && !(comps[i] instanceof DockTab)) {
+				insertExtra = false;
+				x += extra;
+			}
+			comps[i].setBounds(x, height - (insets.top + heights[i] + insets.bottom), widths[i], heights[i]);
+			x += widths[i] + GAP;
+		}
 	}
 }

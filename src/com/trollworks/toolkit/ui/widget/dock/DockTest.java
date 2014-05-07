@@ -42,8 +42,8 @@ public class DockTest implements Dockable, DockCloseable {
 		dock.dock(second, DockLocation.EAST);
 		dock.dock(third, second, DockLocation.SOUTH);
 		dock.dock(fourth, second, DockLocation.WEST);
-		dock.dock(fifth, first, DockLocation.EAST);
-		dock.dock(sixth, first, DockLocation.EAST);
+		dock.dock(fifth, fourth, null);
+		dock.dock(sixth, fourth, null);
 
 		JToolBar toolbar = new JToolBar();
 		toolbar.setRollover(true);
