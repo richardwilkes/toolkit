@@ -215,10 +215,6 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		DockLayoutNode over = over(event.getX(), event.getY(), true);
 		if (over instanceof DockLayout) {
 			mDragHandler = new DockDividerDragHandler((DockLayout) over);
-		} else if (over instanceof DockContainer) {
-			DockContainer dc = (DockContainer) over;
-			dc.transferFocus();
-			mDragHandler = new DockContainerDragHandler(dc);
 		}
 		if (mDragHandler != null) {
 			mDragHandler.start(event);
@@ -257,8 +253,6 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		Cursor cursor;
 		if (over instanceof DockLayout) {
 			cursor = ((DockLayout) over).isHorizontal() ? Cursors.HORIZONTAL_RESIZE : Cursors.VERTICAL_RESIZE;
-		} else if (over instanceof DockContainer) {
-			cursor = Cursors.MOVE;
 		} else {
 			cursor = null;
 		}
