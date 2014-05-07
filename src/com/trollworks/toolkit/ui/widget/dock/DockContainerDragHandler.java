@@ -11,17 +11,25 @@
 
 package com.trollworks.toolkit.ui.widget.dock;
 
+import com.trollworks.toolkit.ui.UIUtilities;
+
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 /** Handles dragging a {@link DockContainer} around. */
 class DockContainerDragHandler extends DockDragHandler {
 	private DockContainer	mContainer;
+	private int				mTabIndex;
 	private DockLayoutNode	mOver;
 	private DockLocation	mLocation;
 
-	/** @param container The {@link DockContainer} to be moved. */
-	DockContainerDragHandler(DockContainer container) {
+	/**
+	 * @param container The {@link DockContainer} to be moved.
+	 * @param tabIndex The index of the tab to move.
+	 */
+	DockContainerDragHandler(DockContainer container, int tabIndex) {
 		mContainer = container;
+		mTabIndex = tabIndex;
 	}
 
 	@Override
@@ -29,8 +37,10 @@ class DockContainerDragHandler extends DockDragHandler {
 		Dock dock = (Dock) mContainer.getParent();
 		DockLayoutNode oldOver = mOver;
 		DockLocation oldLocation = mLocation;
-		int ex = event.getX();
-		int ey = event.getY();
+		Point where = event.getPoint();
+		UIUtilities.convertPoint(where, event.getComponent(), dock);
+		int ex = where.x;
+		int ey = where.y;
 		DockLayoutNode over = dock.over(ex, ey, false);
 		if (over == mContainer) {
 			over = dock.getLayout().findLayout(mContainer);
