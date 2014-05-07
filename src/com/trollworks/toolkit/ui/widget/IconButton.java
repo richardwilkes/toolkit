@@ -15,6 +15,7 @@ import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.MouseCapture;
 import com.trollworks.toolkit.ui.UIUtilities;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
@@ -42,6 +43,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 		setBackground(null);
 		setToolTipText(tooltip);
 		setIcon(icon);
+		setCursor(Cursor.getDefaultCursor());
 		setClickFunction(clickFunction);
 		addMouseListener(this);
 		addMouseMotionListener(this);
