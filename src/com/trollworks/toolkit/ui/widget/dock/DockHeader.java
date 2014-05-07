@@ -205,7 +205,7 @@ public class DockHeader extends JPanel implements LayoutManager {
 				insertExtra = false;
 				x += extra;
 			}
-			comps[i].setBounds(x, height - (insets.top + heights[i] + insets.bottom), widths[i], heights[i]);
+			comps[i].setBounds(x, insets.top + (height - (insets.top + heights[i] + insets.bottom)) / 2, widths[i], heights[i]);
 			x += widths[i] + GAP;
 		}
 	}
