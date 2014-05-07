@@ -11,9 +11,14 @@
 
 package com.trollworks.toolkit.ui;
 
+import com.trollworks.toolkit.io.Log;
+import com.trollworks.toolkit.ui.image.Images;
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -22,6 +27,7 @@ import java.awt.event.MouseWheelEvent;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
@@ -334,5 +340,31 @@ public class UIUtilities {
 	public static <E> E getTypedSelectedItemFromCombo(JComboBox<E> combo) {
 		int index = combo.getSelectedIndex();
 		return index != -1 ? combo.getItemAt(index) : null;
+	}
+
+	/**
+	 * @param component The component to generate an image of.
+	 * @return The newly created image.
+	 */
+	public static ToolkitIcon getImage(JComponent component) {
+		ToolkitIcon offscreen = null;
+		synchronized (component.getTreeLock()) {
+			Graphics2D gc = null;
+			try {
+				Rectangle bounds = component.getVisibleRect();
+				offscreen = Images.createTransparent(component.getGraphicsConfiguration(), bounds.width, bounds.height);
+				gc = offscreen.getGraphics();
+				gc.setClip(0, 0, bounds.width, bounds.height);
+				gc.translate(-bounds.x, -bounds.y);
+				component.paint(gc);
+			} catch (Exception exception) {
+				Log.error(exception);
+			} finally {
+				if (gc != null) {
+					gc.dispose();
+				}
+			}
+		}
+		return offscreen;
 	}
 }
