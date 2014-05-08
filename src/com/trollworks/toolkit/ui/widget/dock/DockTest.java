@@ -105,6 +105,11 @@ public class DockTest implements Dockable, DockCloseable {
 	}
 
 	@Override
+	public String getTitleTooltip() {
+		return mTitle;
+	}
+
+	@Override
 	public Component getContent() {
 		return mContent;
 	}
