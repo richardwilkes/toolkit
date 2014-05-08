@@ -113,12 +113,10 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		if (locationRelativeToTarget == null) {
 			if (target instanceof DockContainer) {
 				DockContainer dc = getDockContainer(dockable);
-				if (dc != target) {
-					if (dc != null) {
-						dc.close(dockable);
-					}
-					((DockContainer) target).stack(dockable);
+				if (dc != null) {
+					dc.close(dockable);
 				}
+				((DockContainer) target).stack(dockable);
 				return;
 			}
 			// Arbitrary choice...

@@ -13,7 +13,6 @@ package com.trollworks.toolkit.ui.widget.dock;
 
 import com.trollworks.toolkit.ui.UIUtilities;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -44,8 +43,8 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 		setBackground(Color.WHITE);
 		mDockables.add(dockable);
 		mHeader = new DockHeader(this);
-		add(mHeader, BorderLayout.NORTH);
-		add(dockable.getContent(), BorderLayout.CENTER);
+		add(mHeader);
+		add(dockable.getContent());
 		setMinimumSize(new Dimension(0, 0));
 	}
 
@@ -61,12 +60,23 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 
 	/** @param dockable The {@link Dockable} to stack into this {@link DockContainer}. */
 	public void stack(Dockable dockable) {
-		mDockables.add(dockable);
-		add(dockable.getContent(), BorderLayout.CENTER);
-		mCurrent = mDockables.size() - 1;
-		mHeader.addTab(dockable);
-		revalidate();
-		repaint();
+		stack(dockable, -1);
+	}
+
+	/**
+	 * @param dockable The {@link Dockable} to stack into this {@link DockContainer}.
+	 * @param index The position within this container to place it. Values out of range will result
+	 *            in the {@link Dockable} being placed at the end.
+	 */
+	public void stack(Dockable dockable, int index) {
+		if (index < 0 || index >= mDockables.size()) {
+			mDockables.add(dockable);
+		} else {
+			mDockables.add(index, dockable);
+		}
+		add(dockable.getContent());
+		mHeader.addTab(dockable, mDockables.indexOf(dockable));
+		setCurrentDockable(dockable);
 	}
 
 	/** @return The {@link DockHeader} for this {@link DockContainer}. */
@@ -152,6 +162,7 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 	public void close(Dockable dockable) {
 		remove(dockable.getContent());
 		mDockables.remove(dockable);
+		mHeader.close(dockable);
 		if (mDockables.isEmpty()) {
 			Dock dock = getDock();
 			if (dock != null) {
