@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.widget.dock;
 
+import com.trollworks.toolkit.ui.UIUtilities;
+
 import java.awt.Component;
 
 import javax.swing.Icon;
@@ -37,4 +39,8 @@ public interface Dockable {
 	 *         once and the same object returned for all subsequent calls to this method.
 	 */
 	Component getContent();
+
+	default DockContainer getDockContainer() {
+		return (DockContainer) UIUtilities.getAncestorOfType(getContent(), DockContainer.class);
+	}
 }

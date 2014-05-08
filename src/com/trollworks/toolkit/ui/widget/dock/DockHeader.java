@@ -268,7 +268,8 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 			try {
 				if (dtde.isDataFlavorSupported(DockableTransferable.DATA_FLAVOR)) {
 					Dockable dockable = (Dockable) dtde.getTransferable().getTransferData(DockableTransferable.DATA_FLAVOR);
-					if (getDockContainer().getDock().getDockContainer(dockable) != null) {
+					DockContainer dc = dockable.getDockContainer();
+					if (dc != null && dc.getDock() == getDockContainer().getDock()) {
 						return dockable;
 					}
 				}
@@ -322,18 +323,12 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
-		if (mDragDockable != null) {
-			if (mDragInsertIndex != -1) {
-				DockContainer dc = getDockContainer();
-				DockContainer fromDC = dc.getDock().getDockContainer(mDragDockable);
-				if (fromDC != null) {
-					fromDC.close(mDragDockable);
-				}
-				dc.stack(mDragDockable, mDragInsertIndex);
-			}
+		if (mDragDockable != null && mDragInsertIndex != -1) {
+			getDockContainer().stack(mDragDockable, mDragInsertIndex);
 			dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 			dtde.dropComplete(true);
 		} else {
+			dtde.rejectDrop();
 			dtde.dropComplete(false);
 		}
 		clearDragState();
@@ -346,7 +341,6 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 	}
 
 	private void updateForDragOver(Point where) {
-		System.out.println(where.x);
 		int count = getComponentCount();
 		int insertAt = count;
 		for (int i = 0; i < count; i++) {

@@ -17,6 +17,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.LayoutManager;
@@ -69,6 +70,10 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 	 *            in the {@link Dockable} being placed at the end.
 	 */
 	public void stack(Dockable dockable, int index) {
+		DockContainer dc = dockable.getDockContainer();
+		if (dc != null) {
+			dc.close(dockable);
+		}
 		if (index < 0 || index >= mDockables.size()) {
 			mDockables.add(dockable);
 		} else {
@@ -77,6 +82,19 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 		add(dockable.getContent());
 		mHeader.addTab(dockable, mDockables.indexOf(dockable));
 		setCurrentDockable(dockable);
+		acquireFocus();
+	}
+
+	/** Transfers focus to this container if it doesn't already have the focus. */
+	public void acquireFocus() {
+		Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner();
+		Component content = getCurrentDockable().getContent();
+		while (focusOwner != null && focusOwner != content) {
+			focusOwner = focusOwner.getParent();
+		}
+		if (focusOwner == null) {
+			EventQueue.invokeLater(() -> transferFocus());
+		}
 	}
 
 	/** @return The {@link DockHeader} for this {@link DockContainer}. */
@@ -117,6 +135,7 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 			}
 			mHeader.revalidate();
 			repaint();
+			acquireFocus();
 		}
 	}
 
@@ -124,9 +143,10 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 	@Override
 	public String toString() {
 		StringBuilder buffer = new StringBuilder();
-		buffer.append("Dock Container [c:");
-		buffer.append(mCurrent);
-		buffer.append(" x:");
+		if (getParent() == null) {
+			buffer.append("FLOATING ");
+		}
+		buffer.append("Dock Container [x:");
 		buffer.append(getX());
 		buffer.append(" y:");
 		buffer.append(getY());
@@ -134,6 +154,17 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 		buffer.append(getWidth());
 		buffer.append(" h:");
 		buffer.append(getHeight());
+		int count = mDockables.size();
+		for (int i = 0; i < count; i++) {
+			buffer.append(' ');
+			if (i == mCurrent) {
+				buffer.append('*');
+			}
+			buffer.append('d');
+			buffer.append(i);
+			buffer.append(':');
+			buffer.append(mDockables.get(i).getTitle());
+		}
 		buffer.append("]");
 		return buffer.toString();
 	}
@@ -160,15 +191,23 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 	 * {@link Dock}.
 	 */
 	public void close(Dockable dockable) {
-		remove(dockable.getContent());
-		mDockables.remove(dockable);
-		mHeader.close(dockable);
-		if (mDockables.isEmpty()) {
-			Dock dock = getDock();
-			if (dock != null) {
-				dock.remove(this);
-				dock.revalidate();
-				dock.repaint();
+		int index = mDockables.indexOf(dockable);
+		if (index != -1) {
+			remove(dockable.getContent());
+			mDockables.remove(dockable);
+			mHeader.close(dockable);
+			if (mDockables.isEmpty()) {
+				Dock dock = getDock();
+				if (dock != null) {
+					dock.remove(this);
+					dock.revalidate();
+					dock.repaint();
+				}
+			} else {
+				if (index > 0) {
+					index--;
+				}
+				setCurrentDockable(mDockables.get(index));
 			}
 		}
 	}

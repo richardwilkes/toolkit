@@ -34,7 +34,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -92,8 +92,8 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	 *            target.
 	 */
 	public void dock(Dockable dockable, Dockable target, DockLocation locationRelativeToTarget) {
-		DockContainer dc = getDockContainer(target);
-		if (dc != null) {
+		DockContainer dc = target.getDockContainer();
+		if (dc != null && dc.getDock() == this) {
 			dock(dockable, dc, locationRelativeToTarget);
 		}
 	}
@@ -110,27 +110,46 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	 */
 	public void dock(Dockable dockable, DockLayoutNode target, DockLocation locationRelativeToTarget) {
 		DockLayout layout = getLayout();
-		if (locationRelativeToTarget == null) {
-			if (target instanceof DockContainer) {
-				DockContainer dc = getDockContainer(dockable);
-				if (dc != null) {
-					dc.close(dockable);
-				}
-				((DockContainer) target).stack(dockable);
-				return;
-			}
-			// Arbitrary choice...
-			locationRelativeToTarget = DockLocation.EAST;
-		}
 		if (layout.contains(target)) {
-			DockContainer dc = getDockContainer(dockable);
-			if (dc == null) {
-				dc = new DockContainer(dockable);
-				layout.dock(dc, target, locationRelativeToTarget);
-				addImpl(dc, null, -1);
-			} else {
-				layout.dock(dc, target, locationRelativeToTarget);
+			DockContainer dc = dockable.getDockContainer();
+			if (dc == target) {
+				if (dc.getDockables().size() == 1) {
+					// It's already where it needs to be
+					return;
+				}
 			}
+			if (dc != null) {
+				// Remove it from it's old position
+				ArrayList<DockLayoutNode> layouts = new ArrayList<>();
+				if (target instanceof DockLayout) {
+					while (target != null) {
+						layouts.add(target);
+						target = ((DockLayout) target).getParent();
+					}
+					target = layouts.get(0);
+					for (DockLayoutNode child : ((DockLayout) target).getChildren()) {
+						if (child != dc) {
+							layouts.add(1, child);
+						}
+					}
+				}
+				dc.close(dockable);
+				if (target instanceof DockLayout) {
+					int i = 1;
+					int count = layouts.size();
+					while (!layout.contains(target)) {
+						if (i >= count) {
+							target = layout;
+							break;
+						}
+						target = layouts.get(i++);
+					}
+				}
+			}
+			dc = new DockContainer(dockable);
+			layout.dock(dc, target, locationRelativeToTarget);
+			addImpl(dc, null, -1);
+			dc.acquireFocus();
 		}
 	}
 
@@ -227,7 +246,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 
 	@Override
 	public void mousePressed(MouseEvent event) {
-		DockLayoutNode over = over(event.getX(), event.getY(), true);
+		DockLayoutNode over = over(event.getX(), event.getY());
 		if (over instanceof DockLayout) {
 			mDividerDragLayout = (DockLayout) over;
 			mDividerDragStartedAt = event.getWhen();
@@ -279,7 +298,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	}
 
 	private void updateCursor(MouseEvent event) {
-		DockLayoutNode over = over(event.getX(), event.getY(), true);
+		DockLayoutNode over = over(event.getX(), event.getY());
 		setCursor(over instanceof DockLayout ? ((DockLayout) over).isHorizontal() ? Cursors.HORIZONTAL_RESIZE : Cursors.VERTICAL_RESIZE : null);
 	}
 
@@ -294,44 +313,24 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		return false;
 	}
 
-	/**
-	 * @param x The horizontal coordinate to check.
-	 * @param y The vertical coordinate to check.
-	 * @param headerOnly Pass in <code>true</code> if only the header of a {@link DockContainer}
-	 *            counts for purposes of hit detection, or <code>false</code> if the whole thing
-	 *            counts.
-	 * @return A {@link DockLayout} if we're over the divider, a {@link DockContainer} if we're over
-	 *         the dock header or component (depending on the value of <code>headerOnly</code>), or
-	 *         <code>null</code> if we're not over anything we care about.
-	 */
-	DockLayoutNode over(int x, int y, boolean headerOnly) {
-		return over(getLayout(), x, y, headerOnly);
+	private DockLayoutNode over(int x, int y) {
+		return over(getLayout(), x, y);
 	}
 
-	private DockLayoutNode over(DockLayoutNode node, int x, int y, boolean headerOnly) {
+	private DockLayoutNode over(DockLayoutNode node, int x, int y) {
 		if (containedBy(node, x, y)) {
 			if (node instanceof DockLayout) {
 				DockLayout layout = (DockLayout) node;
 				for (DockLayoutNode child : layout.getChildren()) {
 					if (containedBy(child, x, y)) {
-						return over(child, x, y, headerOnly);
+						return over(child, x, y);
 					}
 				}
 				if (layout.isFull()) {
 					return node;
 				}
 			} else if (node instanceof DockContainer) {
-				DockContainer dc = (DockContainer) node;
-				if (headerOnly) {
-					Rectangle bounds = dc.getHeader().getBounds();
-					bounds.x += dc.getX();
-					bounds.y += dc.getY();
-					if (bounds.contains(x, y)) {
-						return dc;
-					}
-				} else {
-					return dc;
-				}
+				return node;
 			}
 		}
 		return null;
@@ -359,7 +358,6 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		return buffer.toString();
 	}
 
-	@SuppressWarnings("nls")
 	private static void dump(StringBuilder buffer, int depth, DockLayoutNode node) {
 		if (node instanceof DockLayout) {
 			DockLayout layout = (DockLayout) node;
@@ -376,16 +374,6 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			pad(buffer, depth);
 			buffer.append(node);
 			buffer.append('\n');
-			List<Dockable> dockables = ((DockContainer) node).getDockables();
-			int size = dockables.size();
-			for (int i = 0; i < size; i++) {
-				pad(buffer, depth);
-				buffer.append(".[");
-				buffer.append(i);
-				buffer.append("] ");
-				buffer.append(dockables.get(i).getTitle());
-				buffer.append('\n');
-			}
 		}
 	}
 
@@ -485,7 +473,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		mMaximizedContainer.getHeader().adjustToMaximizedState();
 		getLayout().forEachDockContainer((target) -> target.setVisible(target == mMaximizedContainer));
 		revalidate();
-		mMaximizedContainer.transferFocus();
+		mMaximizedContainer.acquireFocus();
 		repaint();
 	}
 
@@ -520,7 +508,8 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			try {
 				if (dtde.isDataFlavorSupported(DockableTransferable.DATA_FLAVOR)) {
 					Dockable dockable = (Dockable) dtde.getTransferable().getTransferData(DockableTransferable.DATA_FLAVOR);
-					if (getDockContainer(dockable) != null) {
+					DockContainer dc = dockable.getDockContainer();
+					if (dc != null && dc.getDock() == this) {
 						return dockable;
 					}
 				}
@@ -577,7 +566,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	public void drop(DropTargetDropEvent dtde) {
 		if (mDragDockable != null) {
 			if (mDragOverNode != null) {
-				getLayout().dock(getDockContainer(mDragDockable), mDragOverNode, mDragOverLocation);
+				dock(mDragDockable, mDragOverNode, mDragOverLocation);
 				revalidate();
 			}
 			dtde.acceptDrop(DnDConstants.ACTION_MOVE);
@@ -601,11 +590,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		int ex = where.x;
 		int ey = where.y;
 		DockLocation location = null;
-		DockLayoutNode over = over(ex, ey, false);
-		DockContainer container = getDockContainer(mDragDockable);
-		if (over == container) {
-			over = getLayout().findLayout(container);
-		}
+		DockLayoutNode over = over(ex, ey);
 		if (over != null) {
 			int x = over.getX();
 			int y = over.getY();

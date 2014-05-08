@@ -160,9 +160,9 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		DockContainer dc = getDockContainer();
 		if (dc.getCurrentDockable() != mDockable) {
 			dc.setCurrentDockable(mDockable);
-			dc.transferFocus();
+			dc.acquireFocus();
 		} else if (!dc.isActive()) {
-			dc.transferFocus();
+			dc.acquireFocus();
 		}
 	}
 

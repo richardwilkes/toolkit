@@ -122,7 +122,7 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 	 * @param locationRelativeToTarget The location relative to the target to install the
 	 *            {@link DockContainer}.
 	 */
-	public void dock(DockContainer dc, DockLayoutNode target, DockLocation locationRelativeToTarget) {
+	void dock(DockContainer dc, DockLayoutNode target, DockLocation locationRelativeToTarget) {
 		// Does the container already exist in our hierarchy?
 		DockLayout existingLayout = findLayout(dc);
 		if (existingLayout != null) {
