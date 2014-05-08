@@ -29,6 +29,9 @@ public interface Dockable {
 	/** @return The title of this {@link Dockable}. */
 	String getTitle();
 
+	/** @return The title tooltip of this {@link Dockable}. */
+	String getTitleTooltip();
+
 	/**
 	 * @return The content of this {@link Dockable}. Note that this content should only be created
 	 *         once and the same object returned for all subsequent calls to this method.
