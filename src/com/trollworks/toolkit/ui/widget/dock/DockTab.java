@@ -71,6 +71,7 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 			add(new IconButton(ToolkitImage.getDockClose(), CLOSE_TOOLTIP, this::attemptClose), new PrecisionLayoutData().setEndHorizontalAlignment());
 		}
 		addMouseListener(this);
+		setToolTipText(dockable.getTitleTooltip());
 		setCursor(Cursors.MOVE);
 		DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, this);
 	}
@@ -82,6 +83,11 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 	public boolean isCurrent() {
 		DockContainer dc = getDockContainer();
 		return dc != null && dc.getCurrentDockable() == mDockable;
+	}
+
+	/** @return The {@link Dockable} this tab represents. */
+	public Dockable getDockable() {
+		return mDockable;
 	}
 
 	@Override
