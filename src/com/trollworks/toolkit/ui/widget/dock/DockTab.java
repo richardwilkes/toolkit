@@ -15,7 +15,6 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.border.SelectiveLineBorder;
-import com.trollworks.toolkit.ui.image.Cursors;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
 import com.trollworks.toolkit.ui.layout.PrecisionLayoutData;
@@ -72,7 +71,6 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		}
 		addMouseListener(this);
 		setToolTipText(dockable.getTitleTooltip());
-		setCursor(Cursors.MOVE);
 		DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, this);
 	}
 
@@ -146,7 +144,7 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 			Point offset = new Point(dge.getDragOrigin());
 			offset.x = -offset.x;
 			offset.y = -offset.y;
-			dge.startDrag(Cursors.MOVE, UIUtilities.getImage(this), offset, new DockableTransferable(mDockable), null);
+			dge.startDrag(null, UIUtilities.getImage(this), offset, new DockableTransferable(mDockable), null);
 		}
 	}
 
