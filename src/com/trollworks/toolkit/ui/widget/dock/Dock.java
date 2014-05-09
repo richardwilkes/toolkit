@@ -255,7 +255,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			mDividerDragInitialEventPosition = mDividerDragLayout.isHorizontal() ? event.getX() : event.getY();
 			mDividerDragInitialDividerPosition = mDividerDragLayout.getDividerPosition();
 			mDividerDragIsValid = false;
-			MouseCapture.start(this);
+			MouseCapture.start(this, mDividerDragLayout.isHorizontal() ? Cursors.HORIZONTAL_RESIZE : Cursors.VERTICAL_RESIZE);
 		}
 	}
 
