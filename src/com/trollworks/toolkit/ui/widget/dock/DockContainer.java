@@ -72,6 +72,11 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 	public void stack(Dockable dockable, int index) {
 		DockContainer dc = dockable.getDockContainer();
 		if (dc != null) {
+			if (dc == this && mDockables.size() == 1) {
+				setCurrentDockable(dockable);
+				acquireFocus();
+				return;
+			}
 			dc.close(dockable);
 		}
 		if (index < 0 || index >= mDockables.size()) {
@@ -199,6 +204,7 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 			if (mDockables.isEmpty()) {
 				Dock dock = getDock();
 				if (dock != null) {
+					restore();
 					dock.remove(this);
 					dock.revalidate();
 					dock.repaint();
