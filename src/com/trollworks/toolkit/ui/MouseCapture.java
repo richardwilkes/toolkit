@@ -1,6 +1,7 @@
 package com.trollworks.toolkit.ui;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
@@ -26,8 +27,9 @@ public class MouseCapture implements MouseListener, MouseMotionListener, Hierarc
 	 * Starts redirecting all mouse events to the specified component or one of its children.
 	 *
 	 * @param component The target.
+	 * @param cursor The cursor to use while the mouse is captured.
 	 */
-	public static void start(Component component) {
+	public static void start(Component component, Cursor cursor) {
 		JRootPane rootPane = SwingUtilities.getRootPane(component);
 		if (rootPane != null) {
 			Component glassPane = rootPane.getGlassPane();
@@ -35,6 +37,9 @@ public class MouseCapture implements MouseListener, MouseMotionListener, Hierarc
 			glassPane.addMouseListener(capture);
 			glassPane.addMouseMotionListener(capture);
 			glassPane.addHierarchyListener(capture);
+			if (cursor != null) {
+				glassPane.setCursor(cursor);
+			}
 			MAP.put(component, capture);
 			glassPane.setVisible(true);
 		}
@@ -43,7 +48,7 @@ public class MouseCapture implements MouseListener, MouseMotionListener, Hierarc
 	/**
 	 * Stops redirecting mouse events.
 	 *
-	 * @param component The target that was passed to {@link #start(Component)}.
+	 * @param component The target that was passed to {@link #start(Component, Cursor)}.
 	 */
 	public static void stop(Component component) {
 		MouseCapture capture = MAP.remove(component);
@@ -51,6 +56,7 @@ public class MouseCapture implements MouseListener, MouseMotionListener, Hierarc
 			capture.mGlassPane.removeMouseListener(capture);
 			capture.mGlassPane.removeMouseMotionListener(capture);
 			capture.mGlassPane.removeHierarchyListener(capture);
+			capture.mGlassPane.setCursor(null);
 			capture.mGlassPane.setVisible(false);
 		}
 	}
