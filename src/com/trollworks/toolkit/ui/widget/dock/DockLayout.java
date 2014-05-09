@@ -397,7 +397,9 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 		if (maximizedContainer != null) {
 			forEachDockContainer((dc) -> {
 				for (DockLayoutNode child : mChildren) {
-					child.setBounds(-32000, -32000, child.getWidth(), child.getHeight());
+					if (child != null) {
+						child.setBounds(-32000, -32000, child.getWidth(), child.getHeight());
+					}
 				}
 			});
 			maximizedContainer.setBounds(mX, mY, mWidth, mHeight);
