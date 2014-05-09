@@ -103,7 +103,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 			mInMouseDown = true;
 			mPressed = true;
 			repaint();
-			MouseCapture.start(this);
+			MouseCapture.start(this, Cursor.getDefaultCursor());
 		}
 	}
 
