@@ -14,7 +14,6 @@ package com.trollworks.toolkit.ui.widget.dock;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.border.SelectiveLineBorder;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
 import com.trollworks.toolkit.ui.layout.PrecisionLayoutData;
@@ -36,11 +35,11 @@ import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Path2D;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 /** Provides a tab that contains the {@link Dockable}'s icon, title, and close button, if any. */
@@ -63,7 +62,7 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		super(new PrecisionLayout().setMargins(2, 4, 2, 4).setMiddleVerticalAlignment());
 		mDockable = dockable;
 		setOpaque(false);
-		setBorder(new CompoundBorder(new EmptyBorder(1, 0, 0, 0), new SelectiveLineBorder(DockColors.SHADOW, 1, 1, 0, 1)));
+		setBorder(new EmptyBorder(2, 1, 0, 1));
 		addContainerListener(this);
 		add(new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT), new PrecisionLayoutData().setGrabHorizontalSpace(true));
 		if (dockable instanceof DockCloseable) {
@@ -90,8 +89,16 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		Graphics2D gc = (Graphics2D) g;
 		Insets insets = getInsets();
+		Path2D.Double path = new Path2D.Double();
+		int bottom = getHeight();
+		path.moveTo(0, bottom);
+		path.lineTo(0, 6);
+		path.curveTo(0, 6, 0, 1, 6, 1);
+		int width = getWidth();
+		path.lineTo(width - 7, 1);
+		path.curveTo(width - 7, 1, width - 1, 1, width - 1, 7);
+		path.lineTo(width - 1, bottom);
 		DockContainer dc = getDockContainer();
 		Color base = DockColors.BACKGROUND;
 		if (dc != null) {
@@ -99,8 +106,11 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 				base = dc.isActive() ? DockColors.ACTIVE_TAB_BACKGROUND : DockColors.CURRENT_TAB_BACKGROUND;
 			}
 		}
+		Graphics2D gc = (Graphics2D) g;
 		gc.setPaint(new GradientPaint(new Point(insets.left, insets.top), base, new Point(insets.left, getHeight() - (insets.top + insets.bottom)), Colors.adjustBrightness(base, -0.1f)));
-		gc.fillRect(insets.left, insets.top, getWidth() - (insets.left + insets.right), getHeight() - (insets.top + insets.bottom));
+		gc.fill(path);
+		gc.setColor(DockColors.SHADOW);
+		gc.draw(path);
 	}
 
 	@Override
