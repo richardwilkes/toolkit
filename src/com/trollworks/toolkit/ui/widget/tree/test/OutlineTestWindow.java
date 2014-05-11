@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
 
 public class OutlineTestWindow extends AppWindow implements SignificantFrame {
 	public OutlineTestWindow(String name) {
-		super(name, null, null);
+		super(name);
 		getContentPane().add(new JScrollPane(createTestPanel(false)), BorderLayout.CENTER);
 	}
 

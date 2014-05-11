@@ -13,6 +13,7 @@ package com.trollworks.toolkit.ui;
 
 import com.apple.eawt.Application;
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.ui.image.IconSet;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.Geometry;
 import com.trollworks.toolkit.utility.Localization;
@@ -47,7 +48,7 @@ public class GraphicsUtilities {
 	}
 
 	private static Frame			HIDDEN_FRAME					= null;
-	private static BufferedImage	HIDDEN_FRAME_ICON				= null;
+	private static int				HIDDEN_FRAME_ICONSET_SEQUENCE	= -1;
 	private static boolean			HEADLESS_PRINT_MODE				= false;
 	private static int				HEADLESS_CHECK_RESULT			= 0;
 	private static boolean			OK_TO_USE_FULLSCREEN_TRICK		= true;
@@ -306,11 +307,9 @@ public class GraphicsUtilities {
 		} else if (OK_TO_USE_FULLSCREEN_TRICK) {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			GraphicsDevice gd = ge.getDefaultScreenDevice();
-			AppWindow window = new AppWindow(null, null, null);
-
+			AppWindow window = new AppWindow();
 			window.setUndecorated(true);
 			window.getContentPane().setBackground(new Color(0, 0, 0, 0));
-
 			gd.setFullScreenWindow(window);
 			gd.setFullScreenWindow(null);
 			window.dispose();
@@ -323,20 +322,18 @@ public class GraphicsUtilities {
 	 *         operations that require a window before you actually have one available.
 	 */
 	public static Frame getHiddenFrame(boolean create) {
-		BufferedImage titleIcon;
-
-		if (HIDDEN_FRAME == null) {
-			if (!create) {
-				return null;
-			}
+		if (HIDDEN_FRAME == null && create) {
 			HIDDEN_FRAME = new Frame();
 			HIDDEN_FRAME.setUndecorated(true);
 			HIDDEN_FRAME.setBounds(0, 0, 0, 0);
 		}
-		titleIcon = AppWindow.getDefaultWindowIcon();
-		if (HIDDEN_FRAME_ICON != titleIcon) {
-			HIDDEN_FRAME_ICON = titleIcon;
-			HIDDEN_FRAME.setIconImage(titleIcon);
+		IconSet icons = AppWindow.getDefaultWindowIcons();
+		int sequence = icons != null ? icons.getSequence() : -1;
+		if (HIDDEN_FRAME_ICONSET_SEQUENCE != sequence) {
+			HIDDEN_FRAME_ICONSET_SEQUENCE = sequence;
+			if (icons != null) {
+				HIDDEN_FRAME.setIconImages(icons.toList());
+			}
 		}
 		return HIDDEN_FRAME;
 	}

@@ -11,11 +11,12 @@
 
 package com.trollworks.toolkit.ui.widget;
 
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
+
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -33,7 +34,7 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
 	 *
 	 * @param icon The icon to be displayed.
 	 */
-	public LinkedLabel(ImageIcon icon) {
+	public LinkedLabel(ToolkitIcon icon) {
 		super(icon);
 		mColor = getForeground();
 	}
@@ -44,7 +45,7 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
 	 * @param icon The icon to be displayed.
 	 * @param link The {@link JComponent} to pair with.
 	 */
-	public LinkedLabel(ImageIcon icon, JComponent link) {
+	public LinkedLabel(ToolkitIcon icon, JComponent link) {
 		super(icon);
 		mColor = getForeground();
 		setLink(link);

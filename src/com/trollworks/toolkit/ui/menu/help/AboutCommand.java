@@ -75,7 +75,7 @@ public class AboutCommand extends Command implements AboutHandler {
 
 		JPanel aboutPanel = App.createAboutPanel();
 		if (aboutPanel != null) {
-			ABOUT_WINDOW = new AppWindow(getTitle(), null, null);
+			ABOUT_WINDOW = new AppWindow(getTitle());
 			ABOUT_WINDOW.add(aboutPanel);
 			ABOUT_WINDOW.setResizable(false);
 			ABOUT_WINDOW.pack();

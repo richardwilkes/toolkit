@@ -12,10 +12,10 @@
 package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.utility.Localization;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JRootPane;
 
@@ -30,8 +30,8 @@ public class ModifiedMarker extends JLabel implements DataModifiedListener {
 		Localization.initialize();
 	}
 
-	private static ImageIcon	ICON_NOT_MODIFIED	= new ImageIcon(ToolkitImage.getNotModifiedMarker());
-	private static ImageIcon	ICON_MODIFIED		= new ImageIcon(ToolkitImage.getModifiedMarker());
+	private static ToolkitIcon	ICON_NOT_MODIFIED	= ToolkitImage.getNotModifiedMarker();
+	private static ToolkitIcon	ICON_MODIFIED		= ToolkitImage.getModifiedMarker();
 
 	/** Creates a new {@link ModifiedMarker}. */
 	public ModifiedMarker() {

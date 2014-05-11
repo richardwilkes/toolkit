@@ -11,35 +11,35 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
+import com.trollworks.toolkit.ui.image.IconSet;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.PathUtils;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /** Describes a file. */
 public class FileType {
-	private static final String						DOT			= ".";					//$NON-NLS-1$
-	private static final ArrayList<FileType>		TYPES		= new ArrayList<>();
-	private static HashMap<String, BufferedImage>	ICON_MAP	= new HashMap<>();
-	private String									mExtension;
-	private BufferedImage							mIcon;
-	private Class<? extends AppWindow>				mWindowClass;
-	private boolean									mAllowOpen;
+	private static final String					DOT			= ".";					//$NON-NLS-1$
+	private static final ArrayList<FileType>	TYPES		= new ArrayList<>();
+	private static HashMap<String, IconSet>		ICONSET_MAP	= new HashMap<>();
+	private String								mExtension;
+	private IconSet								mIconSet;
+	private Class<? extends AppWindow>			mWindowClass;
+	private boolean								mAllowOpen;
 
 	/**
 	 * Registers a new {@link FileType}, replacing any existing entry for the specified extension.
 	 *
 	 * @param extension The extension of the file.
-	 * @param icon The icon to use for the file.
+	 * @param iconset The {@link IconSet} to use for the file.
 	 * @param windowClass The {@link Class} responsible for creating a window with this file's
 	 *            contents.
 	 * @param allowOpen Whether this {@link FileType} is allowed to be opened via the menu command.
 	 */
-	public static final void register(String extension, BufferedImage icon, Class<? extends AppWindow> windowClass, boolean allowOpen) {
+	public static final void register(String extension, IconSet iconset, Class<? extends AppWindow> windowClass, boolean allowOpen) {
 		if (!extension.startsWith(DOT)) {
 			extension = DOT + extension;
 		}
@@ -49,8 +49,8 @@ public class FileType {
 				break;
 			}
 		}
-		TYPES.add(new FileType(extension, icon, windowClass, allowOpen));
-		ICON_MAP.put(extension, icon);
+		TYPES.add(new FileType(extension, iconset, windowClass, allowOpen));
+		ICONSET_MAP.put(extension, iconset);
 	}
 
 	/** @return All of the registered {@link FileType}s. */
@@ -84,40 +84,39 @@ public class FileType {
 	 * @param path The path to return an icon for.
 	 * @return The icon for the specified file.
 	 */
-	public static BufferedImage getIconForFile(String path) {
-		return getIconForFileExtension(PathUtils.getExtension(path));
+	public static IconSet getIconsForFile(String path) {
+		return getIconsForFileExtension(PathUtils.getExtension(path));
 	}
 
 	/**
 	 * @param file The file to return an icon for.
 	 * @return The icon for the specified file.
 	 */
-	public static BufferedImage getIconForFile(File file) {
-		return getIconForFile(file != null && file.isFile() ? file.getName() : null);
+	public static IconSet getIconsForFile(File file) {
+		return getIconsForFile(file != null && file.isFile() ? file.getName() : null);
 	}
 
 	/**
 	 * @param extension The extension to return an icon for.
 	 * @return The icon for the specified file extension.
 	 */
-	public static BufferedImage getIconForFileExtension(String extension) {
+	public static IconSet getIconsForFileExtension(String extension) {
 		if (extension != null) {
-			BufferedImage icon;
 			if (!extension.startsWith(DOT)) {
 				extension = DOT + extension;
 			}
-			icon = ICON_MAP.get(extension);
-			if (icon != null) {
-				return icon;
+			IconSet icons = ICONSET_MAP.get(extension);
+			if (icons != null) {
+				return icons;
 			}
-			return ToolkitImage.getFileIcon();
+			return ToolkitImage.getFileIcons();
 		}
-		return ToolkitImage.getFolderIcon();
+		return ToolkitImage.getFolderIcons();
 	}
 
-	private FileType(String extension, BufferedImage icon, Class<? extends AppWindow> windowClass, boolean allowOpen) {
+	private FileType(String extension, IconSet iconset, Class<? extends AppWindow> windowClass, boolean allowOpen) {
 		mExtension = extension;
-		mIcon = icon;
+		mIconSet = iconset;
 		mWindowClass = windowClass;
 		mAllowOpen = allowOpen;
 	}
@@ -127,9 +126,9 @@ public class FileType {
 		return mExtension;
 	}
 
-	/** @return The icon of the file. */
-	public BufferedImage getIcon() {
-		return mIcon;
+	/** @return The {@link IconSet} representing the file. */
+	public IconSet getIcons() {
+		return mIconSet;
 	}
 
 	/** @return The {@link Class} responsible for creating a window with this file's contents. */

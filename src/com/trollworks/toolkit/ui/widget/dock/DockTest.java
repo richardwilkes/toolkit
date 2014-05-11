@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -97,7 +96,7 @@ public class DockTest implements Dockable, DockCloseable {
 
 	@Override
 	public Icon getTitleIcon() {
-		return new ImageIcon(ToolkitImage.getFileIcon());
+		return ToolkitImage.getFileIcons().getIcon(16);
 	}
 
 	@Override

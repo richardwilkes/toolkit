@@ -18,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
@@ -69,7 +68,7 @@ public class OpenDataFileCommand extends Command implements Runnable {
 	 * @param file The file to open.
 	 */
 	public OpenDataFileCommand(String title, File file) {
-		super(title, CMD_PREFIX + file.getName() + CMD_POSTFIX, new ImageIcon(FileType.getIconForFile(file)));
+		super(title, CMD_PREFIX + file.getName() + CMD_POSTFIX, FileType.getIconsForFile(file).getIcon(16));
 		mFile = file;
 	}
 

@@ -15,9 +15,7 @@ import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
 
-import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 
 /** A command that will switch to a specific window. */
@@ -30,13 +28,8 @@ public class SwitchToWindowCommand extends Command {
 	 * @param window The window to switch to.
 	 */
 	public SwitchToWindowCommand(AppWindow window) {
-		super(window.getTitle(), "SwitchToWindow[" + window.getTitle() + "]", getWindowIcon(window)); //$NON-NLS-1$ //$NON-NLS-2$
+		super(window.getTitle(), "SwitchToWindow[" + window.getTitle() + "]", window.getMenuIcon()); //$NON-NLS-1$ //$NON-NLS-2$
 		mWindow = window;
-	}
-
-	private static final ImageIcon getWindowIcon(AppWindow window) {
-		BufferedImage icon = window.getMenuIcon();
-		return icon != null ? new ImageIcon(icon) : null;
 	}
 
 	@Override

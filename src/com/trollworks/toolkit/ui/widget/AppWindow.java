@@ -12,6 +12,8 @@
 package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.collections.FilteredIterator;
+import com.trollworks.toolkit.ui.image.IconSet;
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
 import com.trollworks.toolkit.ui.layout.FlexRow;
 import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.menu.edit.Undoable;
@@ -31,7 +33,6 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -39,12 +40,11 @@ import javax.swing.JToolBar;
 
 /** Provides a base OS-level window. */
 public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undoable {
-	private static BufferedImage				DEFAULT_WINDOW_ICON	= null;
-	private static final ArrayList<AppWindow>	WINDOW_LIST			= new ArrayList<>();
-	private BufferedImage						mWindowIcon;
+	private static IconSet						DEFAULT_WINDOW_ICONSET	= null;
+	private static final ArrayList<AppWindow>	WINDOW_LIST				= new ArrayList<>();
+	private ToolkitIcon							mMenuIcon;
 	private PrintManager						mPrintManager;
 	private StdUndoManager						mUndoManager;
-	private BufferedImage						mTitleIcon;
 	private boolean								mIsPrinting;
 
 	/** @return The top-most window. */
@@ -55,27 +55,39 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 		return null;
 	}
 
+	/** Creates a new {@link AppWindow}. */
+	public AppWindow() {
+		this(null, null, null, false);
+	}
+
 	/**
 	 * Creates a new {@link AppWindow}.
 	 *
 	 * @param title The window title. May be <code>null</code>.
-	 * @param largeIcon The 32x32 window icon. OK to pass in a 16x16 icon here.
-	 * @param smallIcon The 16x16 window icon.
 	 */
-	public AppWindow(String title, BufferedImage largeIcon, BufferedImage smallIcon) {
-		this(title, largeIcon, smallIcon, null, false);
+	public AppWindow(String title) {
+		this(title, null, null, false);
+	}
+
+	/**
+	 * Creates a new {@link AppWindow}.
+	 *
+	 * @param title The window title. May be <code>null</code>.
+	 * @param iconset The window {@link IconSet}.
+	 */
+	public AppWindow(String title, IconSet iconset) {
+		this(title, iconset, null, false);
 	}
 
 	/**
 	 * Creates a new {@link AppWindow}.
 	 *
 	 * @param title The title of the window.
-	 * @param largeIcon The 32x32 window icon. OK to pass in a 16x16 icon here.
-	 * @param smallIcon The 16x16 window icon.
+	 * @param iconset The window {@link IconSet}.
 	 * @param gc The graphics configuration to use.
 	 * @param undecorated Whether to create an undecorated window, without menus.
 	 */
-	public AppWindow(String title, BufferedImage largeIcon, BufferedImage smallIcon, GraphicsConfiguration gc, boolean undecorated) {
+	public AppWindow(String title, IconSet iconset, GraphicsConfiguration gc, boolean undecorated) {
 		super(title, gc);
 		if (undecorated) {
 			setUndecorated(true);
@@ -84,18 +96,12 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 			MenuKeyPreferences.loadFromPreferences();
 			setJMenuBar(new StdMenuBar());
 		}
-		if (largeIcon == null) {
-			largeIcon = DEFAULT_WINDOW_ICON;
+		if (iconset == null) {
+			iconset = DEFAULT_WINDOW_ICONSET;
 		}
-		if (largeIcon != null) {
-			setTitleIcon(largeIcon);
-		}
-
-		if (smallIcon == null) {
-			smallIcon = largeIcon;
-		}
-		if (smallIcon != null) {
-			setMenuIcon(smallIcon);
+		if (iconset != null) {
+			setIconImages(iconset.toList());
+			setMenuIcon(iconset.getIcon(16));
 		}
 		mUndoManager = new StdUndoManager();
 		enableEvents(AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
@@ -123,37 +129,24 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 		// Does nothing by default.
 	}
 
-	/** @return The default window icon. */
-	public static BufferedImage getDefaultWindowIcon() {
-		return DEFAULT_WINDOW_ICON;
+	/** @return The default window icons. */
+	public static IconSet getDefaultWindowIcons() {
+		return DEFAULT_WINDOW_ICONSET;
 	}
 
-	/** @param image The new default window icon. */
-	public static void setDefaultWindowIcon(BufferedImage image) {
-		DEFAULT_WINDOW_ICON = image;
-	}
-
-	/** @param icon The icon representing this window. */
-	public void setTitleIcon(BufferedImage icon) {
-		if (icon != mTitleIcon) {
-			mTitleIcon = icon;
-			setIconImage(mTitleIcon);
-		}
-	}
-
-	/** @return The icon representing this window. */
-	public BufferedImage getTitleIcon() {
-		return mTitleIcon;
+	/** @param iconset The new default window {@link IconSet}. */
+	public static void setDefaultWindowIcons(IconSet iconset) {
+		DEFAULT_WINDOW_ICONSET = iconset;
 	}
 
 	/** @return The menu icon representing this window. */
-	public BufferedImage getMenuIcon() {
-		return mWindowIcon;
+	public ToolkitIcon getMenuIcon() {
+		return mMenuIcon;
 	}
 
 	/** @param icon The menu icon representing this window. */
-	public void setMenuIcon(BufferedImage icon) {
-		mWindowIcon = icon;
+	public void setMenuIcon(ToolkitIcon icon) {
+		mMenuIcon = icon;
 	}
 
 	@Override

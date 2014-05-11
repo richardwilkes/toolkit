@@ -43,16 +43,6 @@ public class ToolkitImage {
 		return Images.get("DownTriangleRoll");
 	}
 
-	/** @return The file icon. */
-	public static final ToolkitIcon getFileIcon() {
-		return Images.get("File");
-	}
-
-	/** @return The folder icon. */
-	public static final ToolkitIcon getFolderIcon() {
-		return Images.get("Folder");
-	}
-
 	/** @return The locked icon. */
 	public static final ToolkitIcon getLockedIcon() {
 		return Images.get("Locked");
@@ -78,9 +68,19 @@ public class ToolkitImage {
 		return Images.get("NotModifiedMarker");
 	}
 
-	/** @return The preferences icon. */
-	public static final ToolkitIcon getPreferencesIcon() {
-		return Images.get("Preferences");
+	/** @return The file icon set. */
+	public static final IconSet getFileIcons() {
+		return IconSet.get("File");
+	}
+
+	/** @return The folder icon set. */
+	public static final IconSet getFolderIcons() {
+		return IconSet.get("Folder");
+	}
+
+	/** @return The preferences icon set. */
+	public static final IconSet getPreferencesIcons() {
+		return IconSet.get("Preferences");
 	}
 
 	/** @return The remove icon. */

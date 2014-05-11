@@ -65,7 +65,7 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
 	}
 
 	private PreferencesWindow() {
-		super(PREFERENCES, ToolkitImage.getPreferencesIcon(), ToolkitImage.getPreferencesIcon());
+		super(PREFERENCES, ToolkitImage.getPreferencesIcons());
 		Container content = getContentPane();
 		mTabPanel = new JTabbedPane();
 		for (Class<? extends PreferencePanel> panelClass : CATEGORIES) {
