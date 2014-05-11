@@ -170,22 +170,22 @@ public class Images {
 		Image scaledImg = loadToolkitImage(image);
 		int width = scaledImg.getWidth(null);
 		int height = scaledImg.getHeight(null);
+		double mult = 1;
 		if (width != scaledWidth || height != scaledHeight) {
-			double wMult = width / (double) scaledWidth;
-			double hMult = height / (double) scaledHeight;
-			if (wMult > hMult) {
-				scaledImg = loadToolkitImage(scaledImg.getScaledInstance(scaledWidth, -1, Image.SCALE_SMOOTH));
-			} else {
-				scaledImg = loadToolkitImage(scaledImg.getScaledInstance(-1, scaledHeight, Image.SCALE_SMOOTH));
-			}
+			double wMult = scaledWidth / (double) width;
+			double hMult = scaledHeight / (double) height;
+			mult = Math.min(wMult, hMult);
 		}
 		ToolkitIcon buffer = createTransparent(scaledWidth, scaledHeight);
-		if (scaledImg != null) {
-			Graphics2D gc = buffer.getGraphics();
-			gc.setClip(0, 0, scaledWidth, scaledHeight);
-			gc.drawImage(scaledImg, (scaledWidth - scaledImg.getWidth(null)) / 2, (scaledHeight - scaledImg.getHeight(null)) / 2, null);
-			gc.dispose();
-		}
+		Graphics2D gc = buffer.getGraphics();
+		GraphicsUtilities.setMaximumQualityForGraphics(gc);
+		gc.setClip(0, 0, scaledWidth, scaledHeight);
+		int newWidth = (int) (width * mult);
+		int newHeight = (int) (height * mult);
+		int x = (scaledWidth - newWidth) / 2;
+		int y = (scaledHeight - newHeight) / 2;
+		gc.drawImage(scaledImg, x, y, x + newWidth, y + newHeight, 0, 0, width, height, null);
+		gc.dispose();
 		return buffer;
 	}
 

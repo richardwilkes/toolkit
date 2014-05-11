@@ -252,6 +252,20 @@ public class GraphicsUtilities {
 	}
 
 	/**
+	 * @param gc The {@link Graphics2D} to configure.
+	 * @return The {@link RenderingHints} as they were prior to this call.
+	 */
+	public static RenderingHints setMaximumQualityForGraphics(Graphics2D gc) {
+		RenderingHints saved = (RenderingHints) gc.getRenderingHints().clone();
+		gc.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+		gc.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		gc.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+		gc.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		gc.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		return saved;
+	}
+
+	/**
 	 * @return A graphics context obtained by looking for an existing window and asking it for a
 	 *         graphics context.
 	 */
