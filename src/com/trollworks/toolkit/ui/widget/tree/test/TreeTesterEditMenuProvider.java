@@ -11,8 +11,10 @@
 
 package com.trollworks.toolkit.ui.widget.tree.test;
 
+import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.menu.DynamicMenuEnabler;
 import com.trollworks.toolkit.ui.menu.DynamicMenuItem;
+import com.trollworks.toolkit.ui.menu.MenuProvider;
 import com.trollworks.toolkit.ui.menu.edit.CopyCommand;
 import com.trollworks.toolkit.ui.menu.edit.CutCommand;
 import com.trollworks.toolkit.ui.menu.edit.DeleteCommand;
@@ -24,26 +26,34 @@ import com.trollworks.toolkit.ui.menu.edit.SelectAllCommand;
 import com.trollworks.toolkit.ui.menu.edit.UndoCommand;
 import com.trollworks.toolkit.utility.Platform;
 
+import java.util.Collections;
+import java.util.Set;
+
 import javax.swing.JMenu;
 
-/** */
-public class TreeTesterEditMenu extends JMenu {
-	/** Creates a new {@link TreeTesterEditMenu}. */
-	public TreeTesterEditMenu() {
-		super("Edit"); //$NON-NLS-1$
-		add(new DynamicMenuItem(UndoCommand.INSTANCE));
-		add(new DynamicMenuItem(RedoCommand.INSTANCE));
-		addSeparator();
-		add(new DynamicMenuItem(CutCommand.INSTANCE));
-		add(new DynamicMenuItem(CopyCommand.INSTANCE));
-		add(new DynamicMenuItem(PasteCommand.INSTANCE));
-		add(new DynamicMenuItem(DuplicateCommand.INSTANCE));
-		add(new DynamicMenuItem(DeleteCommand.INSTANCE));
-		add(new DynamicMenuItem(SelectAllCommand.INSTANCE));
+public class TreeTesterEditMenuProvider implements MenuProvider {
+	@Override
+	public Set<Command> getModifiableCommands() {
+		return Collections.emptySet();
+	}
+
+	@Override
+	public JMenu createMenu() {
+		JMenu menu = new JMenu("Edit"); //$NON-NLS-1$
+		menu.add(new DynamicMenuItem(UndoCommand.INSTANCE));
+		menu.add(new DynamicMenuItem(RedoCommand.INSTANCE));
+		menu.addSeparator();
+		menu.add(new DynamicMenuItem(CutCommand.INSTANCE));
+		menu.add(new DynamicMenuItem(CopyCommand.INSTANCE));
+		menu.add(new DynamicMenuItem(PasteCommand.INSTANCE));
+		menu.add(new DynamicMenuItem(DuplicateCommand.INSTANCE));
+		menu.add(new DynamicMenuItem(DeleteCommand.INSTANCE));
+		menu.add(new DynamicMenuItem(SelectAllCommand.INSTANCE));
 		if (!Platform.isMacintosh()) {
-			addSeparator();
-			add(new DynamicMenuItem(PreferencesCommand.INSTANCE));
+			menu.addSeparator();
+			menu.add(new DynamicMenuItem(PreferencesCommand.INSTANCE));
 		}
-		DynamicMenuEnabler.add(this);
+		DynamicMenuEnabler.add(menu);
+		return menu;
 	}
 }

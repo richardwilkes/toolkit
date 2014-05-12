@@ -12,38 +12,37 @@
 package com.trollworks.toolkit.ui.menu.window;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.menu.DynamicMenuEnabler;
+import com.trollworks.toolkit.ui.menu.MenuProvider;
 import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 
-/** The standard "Window" menu. */
-public class WindowMenu extends JMenu {
+/** Provides the standard "Window" menu. */
+public class WindowMenuProvider implements MenuProvider {
 	@Localize("Window")
-	private static String	WINDOW;
+	private static String		WINDOW;
 
 	static {
 		Localization.initialize();
 	}
 
-	/** Creates a new {@link WindowMenu}. */
-	public WindowMenu() {
-		super(WINDOW);
-		DynamicMenuEnabler.add(this);
-	}
+	public static final String	NAME	= "Window"; //$NON-NLS-1$
 
 	/** Updates the available menu items. */
 	public static void update() {
 		ArrayList<AppWindow> windows = AppWindow.getAllWindows();
 		Collections.sort(windows);
 		for (AppWindow window : windows) {
-			WindowMenu windowMenu = (WindowMenu) StdMenuBar.findMenu(window.getJMenuBar(), WindowMenu.class);
+			JMenu windowMenu = StdMenuBar.findMenuByName(window.getJMenuBar(), NAME);
 			if (windowMenu != null) {
 				windowMenu.removeAll();
 				for (AppWindow one : windows) {
@@ -51,5 +50,18 @@ public class WindowMenu extends JMenu {
 				}
 			}
 		}
+	}
+
+	@Override
+	public Set<Command> getModifiableCommands() {
+		return Collections.emptySet();
+	}
+
+	@Override
+	public JMenu createMenu() {
+		JMenu menu = new JMenu(WINDOW);
+		menu.setName(NAME);
+		DynamicMenuEnabler.add(menu);
+		return menu;
 	}
 }

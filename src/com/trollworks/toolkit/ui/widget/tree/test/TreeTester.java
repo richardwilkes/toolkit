@@ -34,10 +34,9 @@ public class TreeTester extends App {
 		EventQueue.invokeLater(app);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void configureApplication(CmdLine cmdLine) {
-		StdMenuBar.configure(TreeTesterEditMenu.class);
+		StdMenuBar.configure(new TreeTesterEditMenuProvider());
 	}
 
 	@Override

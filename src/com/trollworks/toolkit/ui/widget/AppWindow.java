@@ -18,7 +18,7 @@ import com.trollworks.toolkit.ui.layout.FlexRow;
 import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.menu.edit.Undoable;
 import com.trollworks.toolkit.ui.menu.file.FileProxy;
-import com.trollworks.toolkit.ui.menu.window.WindowMenu;
+import com.trollworks.toolkit.ui.menu.window.WindowMenuProvider;
 import com.trollworks.toolkit.ui.preferences.MenuKeyPreferences;
 import com.trollworks.toolkit.ui.print.PageOrientation;
 import com.trollworks.toolkit.ui.print.PrintManager;
@@ -153,7 +153,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		if (visible) {
-			WindowMenu.update();
+			WindowMenuProvider.update();
 		}
 	}
 
@@ -161,7 +161,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 	public void setTitle(String title) {
 		super.setTitle(title);
 		if (isVisible()) {
-			WindowMenu.update();
+			WindowMenuProvider.update();
 		}
 	}
 
@@ -237,7 +237,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 			}
 		}
 		super.dispose();
-		WindowMenu.update();
+		WindowMenuProvider.update();
 	}
 
 	/**

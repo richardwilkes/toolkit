@@ -11,9 +11,6 @@
 
 package com.trollworks.toolkit.ui.menu;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.JMenu;
@@ -21,33 +18,21 @@ import javax.swing.JMenuBar;
 
 /** The standard menu bar. */
 public class StdMenuBar extends JMenuBar {
-	private static Class<?>[]	MENU_CLASSES;
-	private static Command[]	COMMANDS;
+	private static MenuProvider[]	MENU_PROVIDERS;
+	private static Command[]		COMMANDS;
 
 	/**
-	 * Call to configure the standard menu bar. Should be called prior to actual use of this class.
+	 * Call to configure the standard menu bar. Should be called once prior to actual use of this
+	 * class.
 	 *
-	 * @param menuClasses The {@link JMenu} classes that will contribute to this menu bar.
+	 * @param providers The {@link MenuProvider}s that will contribute to this menu bar.
 	 */
-	@SuppressWarnings("unchecked")
-	public static final void configure(Class<? extends JMenu>... menuClasses) {
-		MENU_CLASSES = new Class<?>[menuClasses.length];
-		System.arraycopy(menuClasses, 0, MENU_CLASSES, 0, menuClasses.length);
+	public static final void configure(MenuProvider... providers) {
+		MENU_PROVIDERS = new MenuProvider[providers.length];
+		System.arraycopy(providers, 0, MENU_PROVIDERS, 0, providers.length);
 		TreeSet<Command> set = new TreeSet<>();
-		for (Class<?> one : MENU_CLASSES) {
-			try {
-				Method method = one.getMethod("getCommands"); //$NON-NLS-1$
-				int modifiers = method.getModifiers();
-				if (Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers) && Set.class.isAssignableFrom(method.getReturnType())) {
-					for (Object cmd : (Set<Object>) method.invoke((Object) null, (Object[]) null)) {
-						if (cmd instanceof Command) {
-							set.add((Command) cmd);
-						}
-					}
-				}
-			} catch (Exception exception) {
-				// Ignore
-			}
+		for (MenuProvider provider : providers) {
+			set.addAll(provider.getModifiableCommands());
 		}
 		COMMANDS = set.toArray(new Command[set.size()]);
 	}
@@ -57,32 +42,29 @@ public class StdMenuBar extends JMenuBar {
 		return COMMANDS;
 	}
 
-	/** Creates a new {@link StdMenuBar}. */
-	public StdMenuBar() {
-		for (Class<?> menuClass : MENU_CLASSES) {
-			try {
-				add((JMenu) menuClass.newInstance());
-			} catch (Exception exception) {
-				exception.printStackTrace();
-			}
-		}
-	}
-
 	/**
 	 * @param bar The {@link JMenuBar} to search.
-	 * @param type The {@link Class} to look for as a top-level {@link JMenu}.
+	 * @param name The name (as returned by {@link JMenu#getName()} to look for as a top-level
+	 *            {@link JMenu}.
 	 * @return The found {@link JMenu}, or <code>null</code>.
 	 */
-	public static JMenu findMenu(JMenuBar bar, Class<? extends JMenu> type) {
+	public static JMenu findMenuByName(JMenuBar bar, String name) {
 		if (bar != null) {
 			int count = bar.getMenuCount();
 			for (int i = 0; i < count; i++) {
 				JMenu menu = bar.getMenu(i);
-				if (type.isInstance(menu)) {
+				if (name.equals(menu.getName())) {
 					return menu;
 				}
 			}
 		}
 		return null;
+	}
+
+	/** Creates a new {@link StdMenuBar}. */
+	public StdMenuBar() {
+		for (MenuProvider provider : MENU_PROVIDERS) {
+			add(provider.createMenu());
+		}
 	}
 }
