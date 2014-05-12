@@ -168,14 +168,12 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 	@Override
 	public void toFront() {
 		if (!isClosed()) {
-			Component focus;
-
 			if (getExtendedState() == ICONIFIED) {
 				setExtendedState(NORMAL);
 			}
 			super.toFront();
 			if (!isActive() || !isFocused()) {
-				focus = getMostRecentFocusOwner();
+				Component focus = getMostRecentFocusOwner();
 				if (focus != null) {
 					focus.requestFocus();
 				} else {

@@ -22,7 +22,6 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
@@ -119,7 +118,7 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocationByPlatform(true);
 		((JComponent) getContentPane()).setDoubleBuffered(true);
-		Toolkit.getDefaultToolkit().setDynamicLayout(true);
+		getToolkit().setDynamicLayout(true);
 		addWindowListener(this);
 		addWindowFocusListener(this);
 		WindowSizeEnforcer.monitor(this);
