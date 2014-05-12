@@ -15,7 +15,6 @@ import com.apple.eawt.AboutHandler;
 import com.apple.eawt.AppEvent.AboutEvent;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.App;
-import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.BundleInfo;
@@ -41,10 +40,10 @@ public class AboutCommand extends Command implements AboutHandler {
 	}
 
 	/** The action command this command will issue. */
-	public static final String			CMD_ABOUT		= "About";				//$NON-NLS-1$
+	public static final String			CMD_ABOUT	= "About";				//$NON-NLS-1$
 	/** The singleton {@link AboutCommand}. */
-	public static final AboutCommand	INSTANCE		= new AboutCommand();
-	static AppWindow					ABOUT_WINDOW	= null;
+	public static final AboutCommand	INSTANCE	= new AboutCommand();
+	AppWindow							mWindow		= null;
 
 	private AboutCommand() {
 		super(MessageFormat.format(ABOUT, BundleInfo.getDefault().getName()), CMD_ABOUT);
@@ -66,30 +65,28 @@ public class AboutCommand extends Command implements AboutHandler {
 	}
 
 	private void show() {
-		if (ABOUT_WINDOW != null) {
-			if (ABOUT_WINDOW.isDisplayable() && ABOUT_WINDOW.isVisible()) {
-				ABOUT_WINDOW.toFront();
+		if (mWindow != null) {
+			if (mWindow.isDisplayable() && mWindow.isVisible()) {
+				mWindow.toFront();
 				return;
 			}
 		}
-
 		JPanel aboutPanel = App.createAboutPanel();
 		if (aboutPanel != null) {
-			ABOUT_WINDOW = new AppWindow(getTitle());
-			ABOUT_WINDOW.add(aboutPanel);
-			ABOUT_WINDOW.setResizable(false);
-			ABOUT_WINDOW.pack();
-			Dimension size = ABOUT_WINDOW.getSize();
-			Rectangle bounds = ABOUT_WINDOW.getGraphicsConfiguration().getBounds();
-			ABOUT_WINDOW.setLocation((bounds.width - size.width) / 2, (bounds.height - size.height) / 3);
-			GraphicsUtilities.forceOnScreen(ABOUT_WINDOW);
-			ABOUT_WINDOW.setVisible(true);
-			ABOUT_WINDOW.addWindowListener(new WindowAdapter() {
+			mWindow = new AppWindow(getTitle());
+			mWindow.getContentPane().add(aboutPanel);
+			mWindow.pack();
+			mWindow.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent windowEvent) {
-					ABOUT_WINDOW = null;
+					mWindow = null;
 				}
 			});
+			Rectangle bounds = mWindow.getGraphicsConfiguration().getBounds();
+			Dimension size = mWindow.getSize();
+			mWindow.setLocation(bounds.x + (bounds.width - size.width) / 2, bounds.y + (bounds.height - size.height) / 3);
+			mWindow.setVisible(true);
+			mWindow.setResizable(false);
 		}
 	}
 }
