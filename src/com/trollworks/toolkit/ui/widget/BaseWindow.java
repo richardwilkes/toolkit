@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.ui.GraphicsUtilities;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.WindowSizeEnforcer;
 import com.trollworks.toolkit.ui.menu.file.CloseCommand;
 import com.trollworks.toolkit.utility.Preferences;
@@ -183,7 +184,7 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 
 	@Override
 	public void windowDeactivated(WindowEvent event) {
-		CommitEnforcer.forceFocusToAccept();
+		UIUtilities.forceFocusToAccept();
 	}
 
 	@Override
@@ -209,7 +210,7 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 
 	@Override
 	public void windowLostFocus(WindowEvent event) {
-		CommitEnforcer.forceFocusToAccept();
+		UIUtilities.forceFocusToAccept();
 	}
 
 	/**

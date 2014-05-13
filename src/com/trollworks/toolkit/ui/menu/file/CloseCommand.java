@@ -12,9 +12,9 @@
 package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.BaseWindow;
-import com.trollworks.toolkit.ui.widget.CommitEnforcer;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.Frame;
@@ -68,7 +68,7 @@ public class CloseCommand extends Command {
 	public static boolean close(Window window, boolean quitIfLast) {
 		if (window != null && !BaseWindow.hasOwnedWindowsShowing(window)) {
 			if (window instanceof Saveable) {
-				CommitEnforcer.forceFocusToAccept();
+				UIUtilities.forceFocusToAccept();
 				Saveable saveable = (Saveable) window;
 				if (saveable.isModified()) {
 					int answer = JOptionPane.showConfirmDialog(window, MessageFormat.format(SAVE_CHANGES, ((Frame) window).getTitle()), SAVE, JOptionPane.YES_NO_CANCEL_OPTION);
