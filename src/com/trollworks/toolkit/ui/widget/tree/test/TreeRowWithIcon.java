@@ -11,22 +11,8 @@
 
 package com.trollworks.toolkit.ui.widget.tree.test;
 
-import com.trollworks.toolkit.ui.widget.tree.TreeContainerRow;
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
 
-public class TreeTestContainerRow extends TreeContainerRow implements TreeRowWithName {
-	private String	mName;
-
-	public TreeTestContainerRow(String name) {
-		mName = name;
-	}
-
-	@Override
-	public String getName() {
-		return mName;
-	}
-
-	@Override
-	public String getSecond() {
-		return Integer.toString(mName.length());
-	}
+public interface TreeRowWithIcon {
+	ToolkitIcon getIcon();
 }

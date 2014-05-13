@@ -40,10 +40,10 @@ public class TreeTestWindow extends AppWindow implements SignificantFrame {
 		if (wrapped) {
 			panel.setRowHeight(0);
 		}
-		TextTreeColumn column = new TextTreeColumn("Testy goop", "name", "icon", SwingConstants.LEFT, wrapped ? TextTreeColumn.WrappingMode.WRAPPED : TextTreeColumn.WrappingMode.NORMAL); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		TextTreeColumn column = new TextTreeColumn("Testy goop", TreeTestRow::getName, TreeTestRow::getIcon, SwingConstants.LEFT, wrapped ? TextTreeColumn.WrappingMode.WRAPPED : TextTreeColumn.WrappingMode.NORMAL); //$NON-NLS-1$
 		panel.addColumn(column);
 		for (int i = 2; i < 10; i++) {
-			column = new TextTreeColumn(Integer.toString(i), "second", SwingConstants.RIGHT, TextTreeColumn.WrappingMode.SINGLE_LINE); //$NON-NLS-1$
+			column = new TextTreeColumn(Integer.toString(i), TreeTestRow::getSecond, SwingConstants.RIGHT, TextTreeColumn.WrappingMode.SINGLE_LINE);
 			panel.addColumn(column);
 		}
 		for (int i = 0; i < 10000; i++) {

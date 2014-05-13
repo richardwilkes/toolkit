@@ -11,28 +11,50 @@
 
 package com.trollworks.toolkit.ui.widget.tree.test;
 
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.widget.tree.TreeRow;
 
-import java.awt.image.BufferedImage;
-
-public class TreeTestRow extends TreeRow {
+public class TreeTestRow extends TreeRow implements TreeRowWithName, TreeRowWithIcon {
 	private String	mName;
 
 	public TreeTestRow(String name) {
 		mName = name;
 	}
 
+	@Override
 	public String getName() {
 		return mName;
 	}
 
+	@Override
 	public String getSecond() {
 		return Integer.toString(mName.length());
 	}
 
-	@SuppressWarnings("static-method")
-	public BufferedImage getIcon() {
+	@Override
+	public ToolkitIcon getIcon() {
 		return ToolkitImage.getMiniWarningIcon();
+	}
+
+	public static String getName(TreeRow row) {
+		if (row instanceof TreeRowWithName) {
+			return ((TreeRowWithName) row).getName();
+		}
+		return null;
+	}
+
+	public static String getSecond(TreeRow row) {
+		if (row instanceof TreeRowWithName) {
+			return ((TreeRowWithName) row).getSecond();
+		}
+		return null;
+	}
+
+	public static ToolkitIcon getIcon(TreeRow row) {
+		if (row instanceof TreeRowWithIcon) {
+			return ((TreeRowWithIcon) row).getIcon();
+		}
+		return null;
 	}
 }

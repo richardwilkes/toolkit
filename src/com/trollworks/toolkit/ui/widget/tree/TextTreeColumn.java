@@ -20,21 +20,18 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Method;
-import java.util.HashMap;
 
 import javax.swing.SwingConstants;
 
 /** Displays text in a {@link TreeColumn}. */
 public class TextTreeColumn extends TreeColumn {
-	private static final int														ICON_GAP			= 2;
-	private static final int														HMARGIN				= 2;
-	private static final HashMap<Class<? extends TreeRow>, HashMap<String, Method>>	FIELD_LOOKUP_CACHE	= new HashMap<>();
-	private String																	mField;
-	private String																	mIconField;
-	private int																		mAlignment;
-	private int																		mTruncationPolicy	= SwingConstants.CENTER;
-	private WrappingMode															mWrappingMode;
+	private static final int	ICON_GAP			= 2;
+	private static final int	HMARGIN				= 2;
+	private FieldAccessor		mFieldAccessor;
+	private IconAccessor		mIconAccessor;
+	private int					mAlignment;
+	private int					mTruncationPolicy	= SwingConstants.CENTER;
+	private WrappingMode		mWrappingMode;
 
 	public enum WrappingMode {
 		NORMAL,
@@ -46,95 +43,73 @@ public class TextTreeColumn extends TreeColumn {
 	 * Creates a new left-aligned {@link TextTreeColumn} with no wrapping.
 	 *
 	 * @param name The name of the {@link TreeColumn}.
-	 * @param field The name of the field to display. This name will be used to access the
-	 *            corresponding method on the {@link TreeRow}. For example, passing in "name", will
-	 *            cause the getName() method to be called to retrieve the data to display.
+	 * @param fieldAccessor The {@link FieldAccessor} to use.
 	 */
-	public TextTreeColumn(String name, String field) {
-		this(name, field, SwingConstants.LEFT);
+	public TextTreeColumn(String name, FieldAccessor fieldAccessor) {
+		this(name, fieldAccessor, SwingConstants.LEFT);
 	}
 
 	/**
 	 * Creates a new {@link TextTreeColumn} with no wrapping.
 	 *
 	 * @param name The name of the {@link TreeColumn}.
-	 * @param field The name of the field to display. This name will be used to access the
-	 *            corresponding method on the {@link TreeRow}. For example, passing in "name", will
-	 *            cause the getName() method to be called to retrieve the data to display.
+	 * @param fieldAccessor The {@link FieldAccessor} to use.
 	 * @param alignment The horizontal text alignment.
 	 */
-	public TextTreeColumn(String name, String field, int alignment) {
-		this(name, field, null, alignment, WrappingMode.NORMAL);
+	public TextTreeColumn(String name, FieldAccessor fieldAccessor, int alignment) {
+		this(name, fieldAccessor, null, alignment, WrappingMode.NORMAL);
 	}
 
 	/**
 	 * Creates a new {@link TextTreeColumn}.
 	 *
 	 * @param name The name of the {@link TreeColumn}.
-	 * @param field The name of the field to display. This name will be used to access the
-	 *            corresponding method on the {@link TreeRow}. For example, passing in "name", will
-	 *            cause the getName() method to be called to retrieve the data to display.
+	 * @param fieldAccessor The {@link FieldAccessor} to use.
 	 * @param alignment The horizontal text alignment.
 	 * @param wrappingMode The text wrapping mode.
 	 */
-	public TextTreeColumn(String name, String field, int alignment, WrappingMode wrappingMode) {
-		this(name, field, null, alignment, wrappingMode);
+	public TextTreeColumn(String name, FieldAccessor fieldAccessor, int alignment, WrappingMode wrappingMode) {
+		this(name, fieldAccessor, null, alignment, wrappingMode);
 	}
 
 	/**
 	 * Creates a new left-aligned {@link TextTreeColumn} with no wrapping.
 	 *
 	 * @param name The name of the {@link TreeColumn}.
-	 * @param field The name of the field to display. This name will be used to access the
-	 *            corresponding method on the {@link TreeRow}. For example, passing in "name", will
-	 *            cause the getName() method to be called to retrieve the data to display.
-	 * @param iconField The name of the icon field to display. Used in the same way as the "field"
-	 *            parameter.
+	 * @param fieldAccessor The {@link FieldAccessor} to use.
+	 * @param iconAccessor The {@link IconAccessor} to use.
 	 */
-	public TextTreeColumn(String name, String field, String iconField) {
-		this(name, field, iconField, SwingConstants.LEFT);
+	public TextTreeColumn(String name, FieldAccessor fieldAccessor, IconAccessor iconAccessor) {
+		this(name, fieldAccessor, iconAccessor, SwingConstants.LEFT);
 	}
 
 	/**
 	 * Creates a new {@link TextTreeColumn} with no wrapping.
 	 *
 	 * @param name The name of the {@link TreeColumn}.
-	 * @param field The name of the field to display. This name will be used to access the
-	 *            corresponding method on the {@link TreeRow}. For example, passing in "name", will
-	 *            cause the getName() method to be called to retrieve the data to display.
-	 * @param iconField The name of the icon field to display. Used in the same way as the "field"
-	 *            parameter.
+	 * @param fieldAccessor The {@link FieldAccessor} to use.
+	 * @param iconAccessor The {@link IconAccessor} to use.
 	 * @param alignment The horizontal text alignment.
 	 */
-	public TextTreeColumn(String name, String field, String iconField, int alignment) {
-		this(name, field, iconField, alignment, WrappingMode.NORMAL);
+	public TextTreeColumn(String name, FieldAccessor fieldAccessor, IconAccessor iconAccessor, int alignment) {
+		this(name, fieldAccessor, iconAccessor, alignment, WrappingMode.NORMAL);
 	}
 
 	/**
 	 * Creates a new {@link TextTreeColumn}.
 	 *
 	 * @param name The name of the {@link TreeColumn}.
-	 * @param field The name of the field to display. This name will be used to access the
-	 *            corresponding method on the {@link TreeRow}. For example, passing in "name", will
-	 *            cause the getName() method to be called to retrieve the data to display.
-	 * @param iconField The name of the icon field to display. Used in the same way as the "field"
-	 *            parameter.
+	 * @param fieldAccessor The {@link FieldAccessor} to use.
+	 * @param iconAccessor The {@link IconAccessor} to use.
 	 * @param alignment The horizontal text alignment.
 	 * @param wrappingMode The text wrapping mode.
 	 */
-	public TextTreeColumn(String name, String field, String iconField, int alignment, WrappingMode wrappingMode) {
+	public TextTreeColumn(String name, FieldAccessor fieldAccessor, IconAccessor iconAccessor, int alignment, WrappingMode wrappingMode) {
 		super(name);
-		mField = createMethodName(field);
-		mIconField = createMethodName(iconField);
+		mFieldAccessor = fieldAccessor;
+		mIconAccessor = iconAccessor;
 		mAlignment = alignment;
 		mWrappingMode = wrappingMode;
-	}
-
-	private static String createMethodName(String field) {
-		if (field != null) {
-			return "get" + Character.toUpperCase(field.charAt(0)) + field.substring(1); //$NON-NLS-1$
-		}
-		return null;
 	}
 
 	@Override
@@ -229,7 +204,8 @@ public class TextTreeColumn extends TreeColumn {
 	 * @return The text to display.
 	 */
 	protected String getText(TreeRow row) {
-		return getFieldContents(row, mField, ""); //$NON-NLS-1$
+		String result = mFieldAccessor.getField(row);
+		return result != null ? result : ""; //$NON-NLS-1$
 	}
 
 	/**
@@ -237,33 +213,7 @@ public class TextTreeColumn extends TreeColumn {
 	 * @return The text to display.
 	 */
 	protected BufferedImage getIcon(TreeRow row) {
-		return getFieldContents(row, mIconField, null);
-	}
-
-	private static <T> T getFieldContents(TreeRow row, String fieldName, T def) {
-		if (fieldName != null) {
-			try {
-				Class<? extends TreeRow> clazz = row.getClass();
-				HashMap<String, Method> map = FIELD_LOOKUP_CACHE.get(clazz);
-				if (map == null) {
-					map = new HashMap<>();
-					FIELD_LOOKUP_CACHE.put(clazz, map);
-				}
-				Method method = map.get(fieldName);
-				if (method == null) {
-					method = clazz.getMethod(fieldName, (Class[]) null);
-					map.put(fieldName, method);
-				}
-				@SuppressWarnings("unchecked")
-				T result = (T) method.invoke(row, (Object[]) null);
-				if (result != null) {
-					def = result;
-				}
-			} catch (Exception exception) {
-				// Don't care
-			}
-		}
-		return def;
+		return mIconAccessor != null ? mIconAccessor.getIcon(row) : null;
 	}
 
 	/**
