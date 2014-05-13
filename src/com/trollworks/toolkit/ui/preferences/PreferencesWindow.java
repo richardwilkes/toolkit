@@ -21,8 +21,8 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -33,26 +33,26 @@ import javax.swing.event.ChangeListener;
 /** A window for editing application preferences. */
 public class PreferencesWindow extends AppWindow implements ActionListener, ChangeListener {
 	@Localize("Preferences")
-	private static String												PREFERENCES;
+	private static String									PREFERENCES;
 	@Localize("Reset to Factory Defaults")
-	private static String												RESET;
+	private static String									RESET;
 
 	static {
 		Localization.initialize();
 	}
 
-	private static final String											PREFIX		= "PreferencesWindow."; //$NON-NLS-1$
-	private static PreferencesWindow									INSTANCE	= null;
-	private static final ArrayList<Class<? extends PreferencePanel>>	CATEGORIES	= new ArrayList<>();
-	private JTabbedPane													mTabPanel;
-	private JButton														mResetButton;
+	private static final String								PREFIX		= "PreferencesWindow."; //$NON-NLS-1$
+	private static PreferencesWindow						INSTANCE	= null;
+	private static final List<PreferenceCategoryProvider>	CATEGORIES	= new ArrayList<>();
+	private JTabbedPane										mTabPanel;
+	private JButton											mResetButton;
 
 	/**
 	 * Adds a category of preference items.
 	 *
-	 * @param category The class that creates the preference panel for the category.
+	 * @param category The {@link PreferenceCategoryProvider} for the category.
 	 */
-	public static void addCategory(Class<? extends PreferencePanel> category) {
+	public static void addCategory(PreferenceCategoryProvider category) {
 		CATEGORIES.add(category);
 	}
 
@@ -68,12 +68,11 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
 		super(PREFERENCES, ToolkitImage.getPreferencesIcons());
 		Container content = getContentPane();
 		mTabPanel = new JTabbedPane();
-		for (Class<? extends PreferencePanel> panelClass : CATEGORIES) {
+		for (PreferenceCategoryProvider category : CATEGORIES) {
 			try {
-				Constructor<? extends PreferencePanel> constructor = panelClass.getConstructor(PreferencesWindow.class);
-				addTab(constructor.newInstance(this));
+				addTab(category.create(this));
 			} catch (Exception exception) {
-				System.out.println("Exception trying to load " + panelClass); //$NON-NLS-1$
+				System.out.println("Exception trying to load " + category); //$NON-NLS-1$
 				exception.printStackTrace();
 			}
 		}

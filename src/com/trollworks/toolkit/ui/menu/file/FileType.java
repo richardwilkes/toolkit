@@ -13,7 +13,6 @@ package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.ui.image.IconSet;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
-import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.PathUtils;
 
 import java.io.File;
@@ -27,7 +26,7 @@ public class FileType {
 	private static HashMap<String, IconSet>		ICONSET_MAP	= new HashMap<>();
 	private String								mExtension;
 	private IconSet								mIconSet;
-	private Class<? extends AppWindow>			mWindowClass;
+	private WindowForFileProvider				mWindowProvider;
 	private boolean								mAllowOpen;
 
 	/**
@@ -35,11 +34,11 @@ public class FileType {
 	 *
 	 * @param extension The extension of the file.
 	 * @param iconset The {@link IconSet} to use for the file.
-	 * @param windowClass The {@link Class} responsible for creating a window with this file's
-	 *            contents.
+	 * @param windowProvider The {@link WindowForFileProvider} responsible for creating a window
+	 *            with this file's contents.
 	 * @param allowOpen Whether this {@link FileType} is allowed to be opened via the menu command.
 	 */
-	public static final void register(String extension, IconSet iconset, Class<? extends AppWindow> windowClass, boolean allowOpen) {
+	public static final void register(String extension, IconSet iconset, WindowForFileProvider windowProvider, boolean allowOpen) {
 		if (!extension.startsWith(DOT)) {
 			extension = DOT + extension;
 		}
@@ -49,7 +48,7 @@ public class FileType {
 				break;
 			}
 		}
-		TYPES.add(new FileType(extension, iconset, windowClass, allowOpen));
+		TYPES.add(new FileType(extension, iconset, windowProvider, allowOpen));
 		ICONSET_MAP.put(extension, iconset);
 	}
 
@@ -114,10 +113,10 @@ public class FileType {
 		return ToolkitImage.getFolderIcons();
 	}
 
-	private FileType(String extension, IconSet iconset, Class<? extends AppWindow> windowClass, boolean allowOpen) {
+	private FileType(String extension, IconSet iconset, WindowForFileProvider windowProvider, boolean allowOpen) {
 		mExtension = extension;
 		mIconSet = iconset;
-		mWindowClass = windowClass;
+		mWindowProvider = windowProvider;
 		mAllowOpen = allowOpen;
 	}
 
@@ -131,9 +130,12 @@ public class FileType {
 		return mIconSet;
 	}
 
-	/** @return The {@link Class} responsible for creating a window with this file's contents. */
-	public Class<? extends AppWindow> getWindowClass() {
-		return mWindowClass;
+	/**
+	 * @return The {@link WindowForFileProvider} responsible for creating a window with this file's
+	 *         contents.
+	 */
+	public WindowForFileProvider getWindowForFileProvider() {
+		return mWindowProvider;
 	}
 
 	/** @return Whether this {@link FileType} is allowed to be opened via the menu command. */

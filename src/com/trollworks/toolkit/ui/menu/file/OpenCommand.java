@@ -25,7 +25,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 
 import javax.swing.JMenuItem;
 
@@ -73,8 +72,7 @@ public class OpenCommand extends Command implements OpenFilesHandler {
 				if (window == null) {
 					for (FileType type : FileType.getOpenable()) {
 						if (name.matches(StdFileDialog.createExtensionMatcher(type.getExtension()))) {
-							Constructor<? extends AppWindow> constructor = type.getWindowClass().getConstructor(File.class);
-							window = constructor.newInstance(file);
+							window = type.getWindowForFileProvider().create(file);
 							window.setVisible(true);
 							break;
 						}
