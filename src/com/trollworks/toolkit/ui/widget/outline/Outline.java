@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget.outline;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.Selection;
@@ -21,6 +22,8 @@ import com.trollworks.toolkit.ui.menu.edit.Deletable;
 import com.trollworks.toolkit.ui.menu.edit.SelectAllCapable;
 import com.trollworks.toolkit.ui.widget.ActionPanel;
 import com.trollworks.toolkit.ui.widget.AppWindow;
+import com.trollworks.toolkit.ui.widget.dock.Dock;
+import com.trollworks.toolkit.ui.widget.dock.DockableTransferable;
 import com.trollworks.toolkit.utility.Debug;
 import com.trollworks.toolkit.utility.Geometry;
 import com.trollworks.toolkit.utility.Localization;
@@ -134,6 +137,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	private int						mSelectOnMouseUp;
 	private boolean					mUserSortable;
 	private Deletable				mDeletableProxy;
+	private Dock					mAlternateDragDestination;
 
 	/** Creates a new outline. */
 	public Outline() {
@@ -2007,6 +2011,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	 */
 	protected boolean isDragAcceptable(DropTargetDragEvent dtde) {
 		boolean result = false;
+		mAlternateDragDestination = null;
 		try {
 			if (dtde.isDataFlavorSupported(Column.DATA_FLAVOR)) {
 				Column column = (Column) dtde.getTransferable().getTransferData(Column.DATA_FLAVOR);
@@ -2014,16 +2019,17 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 				if (result) {
 					mModel.setDragColumn(column);
 				}
-			}
-			if (dtde.isDataFlavorSupported(RowSelection.DATA_FLAVOR)) {
+			} else if (dtde.isDataFlavorSupported(RowSelection.DATA_FLAVOR)) {
 				Row[] rows = (Row[]) dtde.getTransferable().getTransferData(RowSelection.DATA_FLAVOR);
 				result = isRowDragAcceptable(dtde, rows);
 				if (result) {
 					mModel.setDragRows(rows);
 				}
+			} else if (dtde.isDataFlavorSupported(DockableTransferable.DATA_FLAVOR)) {
+				mAlternateDragDestination = (Dock) UIUtilities.getAncestorOfType(this, Dock.class);
 			}
 		} catch (Exception exception) {
-			assert false : Debug.toString(exception);
+			Log.error(exception);
 		}
 		return result;
 	}
@@ -2060,16 +2066,19 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	public void dragEnter(DropTargetDragEvent dtde) {
 		mDragWasAcceptable = isDragAcceptable(dtde);
 		if (mDragWasAcceptable) {
-			Row[] rows;
 			if (mModel.getDragColumn() != null) {
 				dtde.acceptDrag(dragEnterColumn(dtde));
 				return;
 			}
-			rows = mModel.getDragRows();
+			Row[] rows = mModel.getDragRows();
 			if (rows != null && rows.length > 0) {
 				dtde.acceptDrag(dragEnterRow(dtde));
 				return;
 			}
+		} else if (mAlternateDragDestination != null) {
+			UIUtilities.convertPoint(dtde.getLocation(), this, mAlternateDragDestination);
+			mAlternateDragDestination.dragEnter(dtde);
+			return;
 		}
 		dtde.rejectDrag();
 	}
@@ -2119,6 +2128,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 				dtde.acceptDrag(dragOverRow(dtde));
 				return;
 			}
+		} else if (mAlternateDragDestination != null) {
+			UIUtilities.convertPoint(dtde.getLocation(), this, mAlternateDragDestination);
+			mAlternateDragDestination.dragOver(dtde);
+			return;
 		}
 		dtde.rejectDrag();
 	}
@@ -2284,6 +2297,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 				dtde.acceptDrag(dropActionChangedRow(dtde));
 				return;
 			}
+		} else if (mAlternateDragDestination != null) {
+			UIUtilities.convertPoint(dtde.getLocation(), this, mAlternateDragDestination);
+			mAlternateDragDestination.dropActionChanged(dtde);
+			return;
 		}
 		dtde.rejectDrag();
 	}
@@ -2322,6 +2339,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 					dragExitRow(dte);
 				}
 			}
+		} else if (mAlternateDragDestination != null) {
+			mAlternateDragDestination.dragExit(dte);
 		}
 	}
 
@@ -2373,17 +2392,22 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
-		dtde.acceptDrop(dtde.getDropAction());
-		if (mModel.getDragColumn() != null) {
-			dropColumn(dtde);
-		} else {
-			Row[] rows = mModel.getDragRows();
+		if (mDragWasAcceptable) {
+			dtde.acceptDrop(dtde.getDropAction());
+			if (mModel.getDragColumn() != null) {
+				dropColumn(dtde);
+			} else {
+				Row[] rows = mModel.getDragRows();
 
-			if (rows != null && rows.length > 0) {
-				dropRow(dtde);
+				if (rows != null && rows.length > 0) {
+					dropRow(dtde);
+				}
 			}
+			dtde.dropComplete(true);
+		} else if (mAlternateDragDestination != null) {
+			UIUtilities.convertPoint(dtde.getLocation(), this, mAlternateDragDestination);
+			mAlternateDragDestination.drop(dtde);
 		}
-		dtde.dropComplete(true);
 	}
 
 	/**
