@@ -13,7 +13,6 @@ package com.trollworks.toolkit.ui.widget.dock;
 
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.MouseCapture;
-import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.Cursors;
 
 import java.awt.Component;
@@ -176,6 +175,12 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			gc.setColor(DockColors.DROP_AREA_OUTER_BORDER);
 			gc.drawRect(bounds.x, bounds.y, bounds.width - 1, bounds.height - 1);
 		}
+	}
+
+	@Override
+	protected boolean isPaintingOrigin() {
+		// This is necessary to ensure we do the correct overdraw when dragging.
+		return true;
 	}
 
 	private void drawDividers(Graphics gc, DockLayout layout, Rectangle clip) {
@@ -486,21 +491,6 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			revalidate();
 			repaint();
 		}
-	}
-
-	/**
-	 * @param dockable The {@link Dockable} to determine the {@link DockContainer} for.
-	 * @return The {@link DockContainer} that contains the {@link Dockable}, or <code>null</code> if
-	 *         it is not present or the {@link DockContainer} is not a child of this {@link Dock}.
-	 */
-	public DockContainer getDockContainer(Dockable dockable) {
-		DockContainer dc = (DockContainer) UIUtilities.getAncestorOfType(dockable.getContent(), DockContainer.class);
-		if (dc != null) {
-			if (dc.getDock() != this) {
-				dc = null;
-			}
-		}
-		return dc;
 	}
 
 	private Dockable getDockableInDrag(DropTargetDragEvent dtde) {
