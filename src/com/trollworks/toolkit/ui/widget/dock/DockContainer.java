@@ -59,6 +59,14 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 		return mDockables;
 	}
 
+	/** @param dockable The {@link Dockable} whose title and icon should be updated. */
+	public void updateTitle(Dockable dockable) {
+		int index = mDockables.indexOf(dockable);
+		if (index != -1) {
+			mHeader.updateTitle(index);
+		}
+	}
+
 	/** @param dockable The {@link Dockable} to stack into this {@link DockContainer}. */
 	public void stack(Dockable dockable) {
 		stack(dockable, -1);

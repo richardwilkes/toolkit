@@ -52,6 +52,7 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 	}
 
 	private Dockable		mDockable;
+	private JLabel			mTitle;
 
 	/**
 	 * Creates a new {@link DockTab} for the specified {@link Dockable}.
@@ -64,7 +65,8 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		setOpaque(false);
 		setBorder(new EmptyBorder(2, 1, 0, 1));
 		addContainerListener(this);
-		add(new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT), new PrecisionLayoutData().setGrabHorizontalSpace(true));
+		mTitle = new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT);
+		add(mTitle, new PrecisionLayoutData().setGrabHorizontalSpace(true));
 		if (dockable instanceof DockCloseable) {
 			add(new IconButton(ToolkitImage.getDockClose(), CLOSE_TOOLTIP, this::attemptClose), new PrecisionLayoutData().setEndHorizontalAlignment());
 		}
@@ -85,6 +87,13 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 	/** @return The {@link Dockable} this tab represents. */
 	public Dockable getDockable() {
 		return mDockable;
+	}
+
+	/** Update the title and icon from the {@link Dockable}. */
+	public void updateTitle() {
+		mTitle.setText(mDockable.getTitle());
+		mTitle.setIcon(mDockable.getTitleIcon());
+		mTitle.revalidate();
 	}
 
 	@Override

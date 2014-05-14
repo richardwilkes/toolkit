@@ -96,6 +96,17 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 		return (DockContainer) UIUtilities.getAncestorOfType(this, DockContainer.class);
 	}
 
+	/** @param index The index of the tab whose title and icon should be updated. */
+	public void updateTitle(int index) {
+		int count = getComponentCount();
+		if (index >= 0 && index < count) {
+			Component child = getComponent(index);
+			if (child instanceof DockTab) {
+				((DockTab) child).updateTitle();
+			}
+		}
+	}
+
 	private void maximize() {
 		getDockContainer().maximize();
 	}
