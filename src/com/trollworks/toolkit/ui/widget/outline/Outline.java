@@ -548,7 +548,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 			}
 		}
 
-		if (!isPrinting && (active || mDragFocus)) {
+		if (!isPrinting && mDragFocus) {
 			gc.setColor(getListBackground(true, true));
 			bounds = getVisibleRect();
 			int x = bounds.x;
@@ -1621,8 +1621,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 			g2d.drawImage(off1, 0, 0, this);
 		} catch (Exception paintException) {
 			assert false : Debug.toString(paintException);
-		off2 = null;
-		mDragClip = new Rectangle(x, y, 1, 1);
+			off2 = null;
+			mDragClip = new Rectangle(x, y, 1, 1);
 		} finally {
 			if (g2d != null) {
 				g2d.dispose();
