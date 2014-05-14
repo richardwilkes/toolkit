@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
+import com.trollworks.toolkit.ui.widget.DataModifiedListener;
+
 import java.io.File;
 
 /**
@@ -20,6 +22,12 @@ import java.io.File;
 public interface Saveable extends FileProxy {
 	/** @return Whether the changes have been made that could be saved. */
 	boolean isModified();
+
+	/** @param listener The listener to add. */
+	void addDataModifiedListener(DataModifiedListener listener);
+
+	/** @param listener The listener to remove. */
+	void removeDataModifiedListener(DataModifiedListener listener);
 
 	/**
 	 * @return The file extensions allowed when saving. The first one should be used if the user

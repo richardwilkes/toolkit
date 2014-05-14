@@ -17,6 +17,8 @@ import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
 import com.trollworks.toolkit.ui.layout.PrecisionLayoutData;
+import com.trollworks.toolkit.ui.menu.file.Saveable;
+import com.trollworks.toolkit.ui.widget.DataModifiedListener;
 import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
 
@@ -43,7 +45,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 /** Provides a tab that contains the {@link Dockable}'s icon, title, and close button, if any. */
-public class DockTab extends JPanel implements ContainerListener, MouseListener, DragGestureListener {
+public class DockTab extends JPanel implements ContainerListener, MouseListener, DragGestureListener, DataModifiedListener {
 	@Localize("Close")
 	private static String	CLOSE_TOOLTIP;
 
@@ -65,10 +67,13 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		setOpaque(false);
 		setBorder(new EmptyBorder(2, 1, 0, 1));
 		addContainerListener(this);
-		mTitle = new JLabel(dockable.getTitle(), dockable.getTitleIcon(), SwingConstants.LEFT);
+		mTitle = new JLabel(getFullTitle(), dockable.getTitleIcon(), SwingConstants.LEFT);
 		add(mTitle, new PrecisionLayoutData().setGrabHorizontalSpace(true));
 		if (dockable instanceof DockCloseable) {
 			add(new IconButton(ToolkitImage.getDockClose(), CLOSE_TOOLTIP, this::attemptClose), new PrecisionLayoutData().setEndHorizontalAlignment());
+		}
+		if (dockable instanceof Saveable) {
+			((Saveable) dockable).addDataModifiedListener(this);
 		}
 		addMouseListener(this);
 		setToolTipText(dockable.getTitleTooltip());
@@ -89,9 +94,20 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		return mDockable;
 	}
 
+	private String getFullTitle() {
+		StringBuilder buffer = new StringBuilder();
+		if (mDockable instanceof Saveable) {
+			if (((Saveable) mDockable).isModified()) {
+				buffer.append('*');
+			}
+		}
+		buffer.append(mDockable.getTitle());
+		return buffer.toString();
+	}
+
 	/** Update the title and icon from the {@link Dockable}. */
 	public void updateTitle() {
-		mTitle.setText(mDockable.getTitle());
+		mTitle.setText(getFullTitle());
 		mTitle.setIcon(mDockable.getTitleIcon());
 		mTitle.revalidate();
 	}
@@ -196,5 +212,14 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 	@Override
 	public void mouseExited(MouseEvent event) {
 		// Unused
+	}
+
+	@Override
+	public void dataModificationStateChanged(Object obj, boolean modified) {
+		String title = getFullTitle();
+		if (!title.equals(mTitle.getText())) {
+			mTitle.setText(title);
+			mTitle.revalidate();
+		}
 	}
 }
