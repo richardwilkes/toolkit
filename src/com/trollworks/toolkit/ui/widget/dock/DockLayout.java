@@ -38,6 +38,28 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 		}
 	}
 
+	/** @return The {@link DockContainer} with the current keyboard focus, or <code>null</code>. */
+	public DockContainer getFocusedDockContainer() {
+		return getRootLayout().getFocusedDockContainerInternal();
+	}
+
+	private DockContainer getFocusedDockContainerInternal() {
+		for (DockLayoutNode child : mChildren) {
+			if (child instanceof DockContainer) {
+				DockContainer dc = (DockContainer) child;
+				if (dc.isActive()) {
+					return dc;
+				}
+			} else if (child instanceof DockLayout) {
+				DockContainer dc = ((DockLayout) child).getFocusedDockContainerInternal();
+				if (dc != null) {
+					return dc;
+				}
+			}
+		}
+		return null;
+	}
+
 	/** @return The root {@link DockLayout}, which may be this object. */
 	public DockLayout getRootLayout() {
 		DockLayout root = this;

@@ -460,6 +460,11 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		getLayout().forEachDockContainer((dc) -> dc.updateActiveHighlight());
 	}
 
+	/** @return The {@link DockContainer} with the current keyboard focus, or <code>null</code>. */
+	public DockContainer getFocusedDockContainer() {
+		return getLayout().getFocusedDockContainer();
+	}
+
 	/** @return The current maximized {@link DockContainer}, or <code>null</code>. */
 	public DockContainer getMaximizedContainer() {
 		return mMaximizedContainer;
