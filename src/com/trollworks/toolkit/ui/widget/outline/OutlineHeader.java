@@ -71,7 +71,6 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 			DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
 			setDropTarget(new DropTarget(this, this));
 		}
-		// TKOutlineHeaderCM.install();
 	}
 
 	/** @return The top divider color. */
@@ -106,7 +105,6 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 			if (column != null && mOwner.allowColumnContextMenu()) {
 				ArrayList<Column> selection = new ArrayList<>();
 				selection.add(column);
-				// TKContextMenuManager.showContextMenu(event, this, selection);
 			}
 		} else if (mOwner.overColumnDivider(event.getX()) == null) {
 			mSortColumn = mOwner.overColumn(event.getX());
