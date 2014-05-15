@@ -89,11 +89,11 @@ public class StdFileDialog implements FilenameFilter {
 	 * @param comp The {@link Component} to use for determining the parent {@link Frame} or
 	 *            {@link Dialog}.
 	 * @param name The name of the file that cannot be opened.
-	 * @param exception The {@link Exception}, if any, that caused the failure.
+	 * @param throwable The {@link Throwable}, if any, that caused the failure.
 	 */
-	public static void showCannotOpenMsg(Component comp, String name, Exception exception) {
-		if (exception instanceof NewerDataFileVersionException) {
-			WindowUtils.showError(comp, MessageFormat.format(UNABLE_TO_OPEN_WITH_EXCEPTION, name, exception.getMessage()));
+	public static void showCannotOpenMsg(Component comp, String name, Throwable throwable) {
+		if (throwable instanceof NewerDataFileVersionException) {
+			WindowUtils.showError(comp, MessageFormat.format(UNABLE_TO_OPEN_WITH_EXCEPTION, name, throwable.getMessage()));
 		} else {
 			WindowUtils.showError(comp, MessageFormat.format(UNABLE_TO_OPEN, name));
 		}
