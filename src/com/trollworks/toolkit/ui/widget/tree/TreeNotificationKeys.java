@@ -22,6 +22,11 @@ public class TreeNotificationKeys {
 	/** The prefix used on all notifications regarding {@link TreeColumn}s. */
 	public static final String	COLUMN_PREFIX	= PREFIX + "column" + Notifier.SEPARATOR;	//$NON-NLS-1$
 	/**
+	 * The notification emitted when the header visibility is changed. Producer: The owning
+	 * {@link TreePanel}. Data: A {@link Boolean} indicating whether or not the header is visible.
+	 */
+	public static final String	HEADER			= PREFIX + "header";						//$NON-NLS-1$
+	/**
 	 * The notification emitted when one or more child {@link TreeRow}s are added. Producer: The
 	 * {@link TreeContainerRow} that was modified. Data: The array of child {@link TreeRow}s that
 	 * were added.

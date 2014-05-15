@@ -28,7 +28,6 @@ import com.trollworks.toolkit.utility.task.Tasks;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Cursor;
@@ -37,7 +36,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.Transparency;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
@@ -79,7 +77,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	private static final int			DRAG_FOCUS_WIDTH			= 3;
 	private static final int			DRAG_INSERT_WIDTH			= 3;
 	/** The amount of indent per level of hierarchy. */
-	public static final int				INDENT						= 25;
+	public static final int				INDENT						= TextTreeColumn.HMARGIN + 16 + TextTreeColumn.ICON_GAP;
 	private TreeRoot					mRoot;
 	private ArrayList<TreeColumn>		mColumns					= new ArrayList<>();
 	private DirectScrollPanelArea		mViewArea;
@@ -87,11 +85,11 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	private Openable					mOpenableProxy;
 	private Point						mDragStart;
 	private Color						mDividerColor				= Color.GRAY;
-	private Color						mHierarchyLineColor			= new Color(120, 152, 181);
+	private Color						mHierarchyLineColor			= new Color(224, 224, 224);
 	private HashSet<TreeContainerRow>	mOpenRows					= new HashSet<>();
 	private HashSet<TreeRow>			mSelectedRows				= new HashSet<>();
 	private TObjectIntHashMap<TreeRow>	mRowHeightMap				= new TObjectIntHashMap<>();
-	private int							mRowHeight					= TextDrawing.getFontHeight(Fonts.getDefaultFont());
+	private int							mRowHeight					= TextTreeColumn.VMARGIN + TextDrawing.getFontHeight(Fonts.getDefaultFont()) + TextTreeColumn.VMARGIN;
 	private int							mMouseOverColumnDivider		= -1;
 	private int							mDragColumnDivider			= -1;
 	private int							mAllowedRowDragTypes		= DnDConstants.ACTION_COPY_OR_MOVE;
@@ -112,6 +110,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	private boolean						mUserSortable				= true;
 	private boolean						mShowColumnDivider			= true;
 	private boolean						mShowRowDivider				= true;
+	private boolean						mShowHeader					= true;
 	private boolean						mDropReceived;
 	private boolean						mResizePending;
 
@@ -189,6 +188,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
 	@Override
 	public void mousePressed(MouseEvent event) {
+		requestFocusInWindow();
 		Point where = event.getPoint();
 		mRowToSelectOnMouseUp = null;
 		mViewArea = checkAndConvertToArea(where);
@@ -304,13 +304,15 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
-		if (mAllowColumnResize && event.getClickCount() == 2) {
+		if (event.getClickCount() == 2) {
 			Point where = event.getPoint();
 			mViewArea = checkAndConvertToArea(where);
 			if (mViewArea != DirectScrollPanelArea.NONE) {
 				int which = overColumnDivider(where.x);
-				if (which != -1) {
+				if (mAllowColumnResize && which != -1) {
 					sizeColumnToFit(mColumns.get(which));
+				} else if (mViewArea == DirectScrollPanelArea.CONTENT && canOpenSelection()) {
+					openSelection();
 				}
 			}
 		}
@@ -487,12 +489,14 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	public void addColumn(TreeColumn column) {
 		mColumns.add(column);
 		notify(TreeNotificationKeys.COLUMN_ADDED, new TreeColumn[] { column });
+		sizeColumnToFit(column);
 	}
 
 	/** @param columns The {@link TreeColumn}s to add. */
 	public void addColumn(List<TreeColumn> columns) {
 		if (mColumns.addAll(columns)) {
 			notify(TreeNotificationKeys.COLUMN_ADDED, columns.toArray(new TreeColumn[columns.size()]));
+			sizeColumnsToFit(columns);
 		}
 	}
 
@@ -503,6 +507,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	public void addColumn(int index, TreeColumn column) {
 		mColumns.add(index, column);
 		notify(TreeNotificationKeys.COLUMN_ADDED, new TreeColumn[] { column });
+		sizeColumnToFit(column);
 	}
 
 	/**
@@ -512,6 +517,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	public void addColumn(int index, List<TreeColumn> columns) {
 		if (mColumns.addAll(index, columns)) {
 			notify(TreeNotificationKeys.COLUMN_ADDED, columns.toArray(new TreeColumn[columns.size()]));
+			sizeColumnsToFit(columns);
 		}
 	}
 
@@ -540,17 +546,19 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	public Dimension getPreferredHeaderSize() {
 		int width = 0;
 		int height = 0;
-		for (TreeColumn column : mColumns) {
-			Dimension headerSize = column.calculatePreferredHeaderSize(this);
-			width += headerSize.width;
-			height = Math.max(headerSize.height, height);
+		if (mShowHeader) {
+			for (TreeColumn column : mColumns) {
+				Dimension headerSize = column.calculatePreferredHeaderSize(this);
+				width += headerSize.width;
+				height = Math.max(headerSize.height, height);
+			}
+			int columnDividerWidth = getColumnDividerWidth();
+			int size = mColumns.size() - 1;
+			if (size > 0) {
+				width += size * columnDividerWidth;
+			}
+			height += columnDividerWidth;
 		}
-		int columnDividerWidth = getColumnDividerWidth();
-		int size = mColumns.size() - 1;
-		if (size > 0) {
-			width += size * columnDividerWidth;
-		}
-		height += columnDividerWidth;
 		return new Dimension(width, height);
 	}
 
@@ -876,8 +884,6 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 					if ((mShowDisclosureControls || depth > 0) && mHierarchyLineColor != null) {
 						TreeRow firstRow = mRoot.getChild(0);
 						if (row != firstRow || mRoot.getChildCount() > 1 || firstRow instanceof TreeContainerRow) {
-							Stroke savedStroke = gc.getStroke();
-							gc.setStroke(new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, new float[] { 1f, 1f }, 0f));
 							int xx = x + indent - INDENT / 2;
 							gc.setColor(mHierarchyLineColor);
 							gc.drawLine(xx, top + rowHeight / 2, x + indent, top + rowHeight / 2);
@@ -895,7 +901,6 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 								one = one.getParent();
 							}
 							gc.setColor(fg);
-							gc.setStroke(savedStroke);
 						}
 					}
 					if (mShowDisclosureControls && row instanceof TreeContainerRow) {
@@ -1070,6 +1075,17 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			}
 		}
 		return null;
+	}
+
+	public boolean showHeader() {
+		return mShowHeader;
+	}
+
+	public void setShowHeader(boolean visible) {
+		if (visible != mShowHeader) {
+			mShowHeader = visible;
+			notify(TreeNotificationKeys.HEADER, Boolean.valueOf(mShowHeader));
+		}
 	}
 
 	public boolean showColumnDivider() {
@@ -2147,10 +2163,10 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 		}
 	}
 
-	/** Sets the width of all {@link TreeColumn}s to their preferred width. */
-	public void sizeColumnsToFit() {
+	/** @param columns Sets the width of these {@link TreeColumn}s to their preferred width. */
+	public void sizeColumnsToFit(Collection<TreeColumn> columns) {
 		boolean revalidate = false;
-		for (TreeColumn column : mColumns) {
+		for (TreeColumn column : columns) {
 			int width = getPreferredColumnWidth(column);
 			if (width != column.getWidth()) {
 				column.setWidth(width);
@@ -2162,6 +2178,11 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			run();
 			repaint();
 		}
+	}
+
+	/** Sets the width of all {@link TreeColumn}s to their preferred width. */
+	public void sizeColumnsToFit() {
+		sizeColumnsToFit(mColumns);
 	}
 
 	@Override
