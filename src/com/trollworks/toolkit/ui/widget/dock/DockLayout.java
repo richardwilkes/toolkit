@@ -193,10 +193,15 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 				layout.mParent = this;
 				layout.mChildren[order[0]] = dc;
 				layout.mHorizontal = horizontal;
-				layout.mDividerPosition = mDividerPosition;
 				int which = target == mChildren[order[0]] ? 0 : 1;
 				layout.mChildren[order[1]] = mChildren[order[which]];
 				mChildren[order[which]] = layout;
+				if (order[which] == 0) {
+					layout.mDividerPosition = mDividerPosition;
+					mDividerPosition = -1;
+				} else {
+					layout.mDividerPosition = -1;
+				}
 			}
 		} else {
 			mChildren[order[0]] = dc;
@@ -374,7 +379,7 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 				}
 				return mChildren[0].getHeight();
 			}
-			return mDividerPosition;
+			return Math.min(mDividerPosition, getDividerMaximum());
 		}
 		return 0;
 	}
@@ -390,8 +395,7 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 	 */
 	public void setDividerPosition(int position) {
 		int old = mDividerPosition;
-		int max = getDividerMaximum();
-		mDividerPosition = position < 0 ? -1 : Math.min(position, max);
+		mDividerPosition = position < 0 ? -1 : position;
 		if (mDividerPosition != old && isFull()) {
 			setBounds(mX, mY, mWidth, mHeight);
 			revalidate();
