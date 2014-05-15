@@ -34,6 +34,7 @@ import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -148,6 +149,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			dc = new DockContainer(dockable);
 			layout.dock(dc, target, locationRelativeToTarget);
 			addImpl(dc, null, -1);
+			revalidate();
 			dc.acquireFocus();
 		}
 	}
@@ -496,6 +498,13 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			revalidate();
 			repaint();
 		}
+	}
+
+	/** @return All the {@link Dockable}s contained in this {@link Dock}. */
+	public List<Dockable> getDockables() {
+		List<Dockable> dockables = new ArrayList<>();
+		getLayout().forEachDockContainer((dc) -> dockables.addAll(dc.getDockables()));
+		return dockables;
 	}
 
 	private Dockable getDockableInDrag(DropTargetDragEvent dtde) {
