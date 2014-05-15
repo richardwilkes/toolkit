@@ -1186,6 +1186,17 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	}
 
 	/**
+	 * Sets all {@link TreeContainerRow}s contained by this {@link TreePanel} to the opposite open
+	 * state of the first one.
+	 */
+	public void toggleDisclosure() {
+		List<TreeContainerRow> rows = mRoot.getRecursiveChildContainers(null);
+		if (!rows.isEmpty()) {
+			setOpen(!isOpen(rows.get(0)), rows);
+		}
+	}
+
+	/**
 	 * @param row The {@link TreeContainerRow} to check.
 	 * @return Whether the specified {@link TreeContainerRow} is logically 'open', i.e. showing its
 	 *         children.
@@ -1302,6 +1313,23 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 		}
 		if (added) {
 			repaintContentView();
+			notify(TreeNotificationKeys.ROW_SELECTION, oldSelection);
+		}
+	}
+
+	/**
+	 * Selects the specified {@link TreeRow}s, deselecting any others. The anchor will be set to the
+	 * top row in the selection.
+	 *
+	 * @param rows The {@link TreeRow}s to select.
+	 */
+	public void select(Collection<TreeRow> rows) {
+		if (!mSelectedRows.equals(rows)) {
+			TreeRow[] oldSelection = mSelectedRows.toArray(new TreeRow[mSelectedRows.size()]);
+			mSelectedRows.clear();
+			mSelectedRows.addAll(rows);
+			mAnchorRow = getFirstSelectedRow();
+			repaintRows(mSelectedRows);
 			notify(TreeNotificationKeys.ROW_SELECTION, oldSelection);
 		}
 	}
@@ -1815,7 +1843,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			g2d.drawImage(off1, -(getColumnStart(column) + pt.x), 0, this);
 		} catch (Exception paintException) {
 			assert false : Debug.toString(paintException);
-			off2 = null;
+		off2 = null;
 		} finally {
 			if (g2d != null) {
 				g2d.dispose();
