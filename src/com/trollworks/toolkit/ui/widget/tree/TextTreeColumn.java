@@ -25,13 +25,14 @@ import javax.swing.SwingConstants;
 
 /** Displays text in a {@link TreeColumn}. */
 public class TextTreeColumn extends TreeColumn {
-	private static final int	ICON_GAP			= 2;
-	private static final int	HMARGIN				= 2;
-	private FieldAccessor		mFieldAccessor;
-	private IconAccessor		mIconAccessor;
-	private int					mAlignment;
-	private int					mTruncationPolicy	= SwingConstants.CENTER;
-	private WrappingMode		mWrappingMode;
+	public static final int	ICON_GAP			= 2;
+	public static final int	HMARGIN				= 2;
+	public static final int	VMARGIN				= 1;
+	private FieldAccessor	mFieldAccessor;
+	private IconAccessor	mIconAccessor;
+	private int				mAlignment;
+	private int				mTruncationPolicy	= SwingConstants.CENTER;
+	private WrappingMode	mWrappingMode;
 
 	public enum WrappingMode {
 		NORMAL,
@@ -116,22 +117,23 @@ public class TextTreeColumn extends TreeColumn {
 	public int calculatePreferredHeight(TreeRow row, int width) {
 		Font font = getFont(row);
 		BufferedImage icon = getIcon(row);
+		int height;
 		if (mWrappingMode == WrappingMode.SINGLE_LINE) {
-			int height = TextDrawing.getFontHeight(font);
+			height = TextDrawing.getFontHeight(font);
 			if (icon != null) {
 				int iconHeight = icon.getHeight();
 				if (iconHeight > height) {
 					height = iconHeight;
 				}
 			}
-			return height;
+		} else {
+			width -= HMARGIN + HMARGIN;
+			if (icon != null) {
+				width -= icon.getWidth() + ICON_GAP;
+			}
+			height = calculatePreferredHeight(font, getPresentationText(row, font, width, true), icon);
 		}
-		width -= HMARGIN + HMARGIN;
-		if (icon != null) {
-			width -= icon.getWidth() + ICON_GAP;
-		}
-		String text = getPresentationText(row, font, width, true);
-		return calculatePreferredHeight(font, text, icon);
+		return VMARGIN + height + VMARGIN;
 	}
 
 	private static int calculatePreferredHeight(Font font, String text, BufferedImage icon) {
@@ -164,7 +166,7 @@ public class TextTreeColumn extends TreeColumn {
 		width -= HMARGIN + HMARGIN;
 		BufferedImage icon = getIcon(row);
 		if (icon != null) {
-			gc.drawImage(icon, left, top, null);
+			gc.drawImage(icon, left, top + VMARGIN, null);
 			int iconSize = icon.getWidth() + ICON_GAP;
 			left += iconSize;
 			width -= iconSize;
@@ -174,7 +176,7 @@ public class TextTreeColumn extends TreeColumn {
 		String text = getPresentationText(row, font, width, false);
 		int totalHeight = calculatePreferredHeight(font, text, icon);
 		gc.setColor(getColor(panel, row, position, selected, active));
-		TextDrawing.draw(gc, new Rectangle(left, top, width, totalHeight), text, mAlignment, SwingConstants.TOP);
+		TextDrawing.draw(gc, new Rectangle(left, top + VMARGIN, width, totalHeight), text, mAlignment, SwingConstants.TOP);
 	}
 
 	/**
