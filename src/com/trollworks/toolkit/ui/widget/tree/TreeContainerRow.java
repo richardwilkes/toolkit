@@ -211,4 +211,23 @@ public class TreeContainerRow extends TreeRow {
 			renumber(0);
 		}
 	}
+
+	/**
+	 * @param list A {@link List} to add the child containers into. May be <code>null</code>.
+	 * @return The child containers. This list will be the one passed in, or a newly created one, if
+	 *         <code>null</code> was passed for the <code>list</code> parameter.
+	 */
+	public List<TreeContainerRow> getRecursiveChildContainers(List<TreeContainerRow> list) {
+		if (list == null) {
+			list = new ArrayList<>();
+		}
+		for (TreeRow child : mChildren) {
+			if (child instanceof TreeContainerRow) {
+				TreeContainerRow container = (TreeContainerRow) child;
+				list.add(container);
+				container.getRecursiveChildContainers(list);
+			}
+		}
+		return list;
+	}
 }
