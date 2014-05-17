@@ -23,8 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.print.Printable;
 
-import javax.swing.JMenuItem;
-
 /** Provides the "Page Setup..." command. */
 public class PageSetupCommand extends Command {
 	@Localize("Page Setup\u2026")
@@ -47,7 +45,7 @@ public class PageSetupCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		Window window = getActiveWindow();
 		setEnabled(window instanceof AppWindow && window instanceof Printable);
 	}

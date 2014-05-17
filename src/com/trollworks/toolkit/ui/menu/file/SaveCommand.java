@@ -12,20 +12,26 @@
 package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
+import com.trollworks.toolkit.ui.widget.dock.Dockable;
 import com.trollworks.toolkit.utility.Localization;
 
+import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.text.MessageFormat;
 
-import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 /** Provides the "Save" command. */
 public class SaveCommand extends Command {
 	@Localize("Save")
 	private static String			SAVE;
+	@Localize("Save changes to \"{0}\"?")
+	private static String			SAVE_CHANGES;
 
 	static {
 		Localization.initialize();
@@ -42,27 +48,88 @@ public class SaveCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
-		Window window = getActiveWindow();
-		if (window instanceof Saveable) {
-			setEnabled(((Saveable) window).isModified());
-		} else {
-			setEnabled(false);
-		}
+	public void adjust() {
+		Saveable saveable = getCurrentSaveable();
+		setEnabled(saveable != null ? saveable.isModified() : false);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		save((Saveable) getActiveWindow());
+		save(getCurrentSaveable());
+	}
+
+	/** @return The current {@link Saveable} for the active window, or <code>null</code>. */
+	public static Saveable getCurrentSaveable() {
+		Window window = getActiveWindow();
+		return getCurrentSaveable(window);
+	}
+
+	/**
+	 * @param window The {@link Window} to get a {@link Saveable} for.
+	 * @return The current {@link Saveable} for the specified window, or <code>null</code>.
+	 */
+	public static Saveable getCurrentSaveable(Window window) {
+		Saveable saveable = null;
+		if (window instanceof SaveableProvider) {
+			saveable = ((SaveableProvider) window).getCurrentSaveable();
+		}
+		if (saveable == null && window instanceof Saveable) {
+			saveable = (Saveable) window;
+		}
+		return saveable;
+	}
+
+	/**
+	 * @param obj The object to extract a {@link Component} for.
+	 * @return The {@link Component} to use for the dialog, or <code>null</code>.
+	 */
+	public static Component getComponentForDialog(Object obj) {
+		Component component;
+		if (obj instanceof Component) {
+			component = (Component) obj;
+		} else if (obj instanceof Dockable) {
+			component = ((Dockable) obj).getContent();
+		} else {
+			component = null;
+		}
+		return component;
+	}
+
+	/**
+	 * Makes an attempt to save the specified {@link Saveable} if it has been modified.
+	 *
+	 * @param saveable The {@link Saveable} to work on.
+	 * @return <code>false</code> if the save was cancelled or failed.
+	 */
+	public static boolean attemptSave(Saveable saveable) {
+		if (saveable != null) {
+			UIUtilities.forceFocusToAccept();
+			if (saveable.isModified()) {
+				int answer = JOptionPane.showConfirmDialog(getComponentForDialog(saveable), MessageFormat.format(SAVE_CHANGES, saveable.getSaveTitle()), SAVE, JOptionPane.YES_NO_CANCEL_OPTION);
+				if (answer == JOptionPane.CANCEL_OPTION || answer == JOptionPane.CLOSED_OPTION) {
+					return false;
+				}
+				if (answer == JOptionPane.YES_OPTION) {
+					SaveCommand.save(saveable);
+					if (saveable.isModified()) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
 	 * Allows the user to save the file.
 	 *
 	 * @param saveable The {@link Saveable} to work on.
-	 * @return The file(s) actually written to.
+	 * @return The file(s) actually written to. May be empty.
 	 */
 	public static File[] save(Saveable saveable) {
+		if (saveable == null) {
+			return new File[0];
+		}
 		File file = saveable.getBackingFile();
 		if (file != null) {
 			File[] files = saveable.saveTo(file);

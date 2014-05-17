@@ -22,8 +22,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
-import javax.swing.JMenuItem;
-
 /** Provides the "Save As..." command. */
 public class ExportToCommand extends Command {
 	@Localize("Export To HTML\u2026")
@@ -63,7 +61,7 @@ public class ExportToCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		Window activeWindow = getActiveWindow();
 		boolean enable = false;
 		if (activeWindow instanceof Saveable) {

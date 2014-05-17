@@ -17,8 +17,6 @@ import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.JMenuItem;
-
 /** Provides the "Clear" command in the {@link RecentFilesMenu}. */
 public class ClearRecentFilesMenuCommand extends Command {
 	@Localize("Clear")
@@ -39,7 +37,7 @@ public class ClearRecentFilesMenuCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		setEnabled(RecentFilesMenu.getRecentCount() > 0);
 	}
 

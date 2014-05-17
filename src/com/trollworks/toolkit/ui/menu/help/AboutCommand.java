@@ -27,7 +27,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 /** Provides the "About" command. */
@@ -50,7 +49,7 @@ public class AboutCommand extends Command implements AboutHandler {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		setEnabled(true);
 	}
 

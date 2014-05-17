@@ -28,8 +28,6 @@ import java.awt.print.Printable;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import javax.swing.JMenuItem;
-
 /** Provides the "Print..." command. */
 public class PrintCommand extends Command implements PrintFilesHandler {
 	@Localize("Print\u2026")
@@ -52,7 +50,7 @@ public class PrintCommand extends Command implements PrintFilesHandler {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		Window window = getActiveWindow();
 		setEnabled(window instanceof AppWindow && window instanceof Printable);
 	}

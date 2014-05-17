@@ -61,7 +61,7 @@ public class DynamicMenuEnabler implements KeyEventDispatcher, MenuListener {
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		Command action = MAP.get(KeyStroke.getKeyStrokeForEvent(event));
 		if (action != null) {
-			action.adjustForMenu(null);
+			action.adjust();
 		}
 		return false;
 	}
@@ -84,7 +84,7 @@ public class DynamicMenuEnabler implements KeyEventDispatcher, MenuListener {
 				JMenuItem item = (JMenuItem) component;
 				Action action = item.getAction();
 				if (action instanceof Command) {
-					((Command) action).adjustForMenu(item);
+					((Command) action).adjust();
 				}
 			}
 		}

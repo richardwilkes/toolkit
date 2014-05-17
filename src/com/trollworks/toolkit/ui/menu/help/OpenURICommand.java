@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.swing.JMenuItem;
-
 /** A command that will open a specific URI in the preferred browser. */
 public class OpenURICommand extends Command {
 	private URI	mURI;
@@ -53,8 +51,8 @@ public class OpenURICommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
-		item.setEnabled(mURI != null && Desktop.isDesktopSupported());
+	public void adjust() {
+		setEnabled(mURI != null && Desktop.isDesktopSupported());
 	}
 
 	@Override

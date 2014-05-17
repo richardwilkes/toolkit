@@ -18,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
 /** A command that will open a specific data file. */
@@ -85,7 +84,7 @@ public class OpenDataFileCommand extends Command implements Runnable {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		// Not used. Always enabled.
 	}
 
@@ -97,7 +96,7 @@ public class OpenDataFileCommand extends Command implements Runnable {
 	@Override
 	public void run() {
 		if (mVerify) {
-			OpenCommand.INSTANCE.adjustForMenu(null);
+			OpenCommand.INSTANCE.adjust();
 			if (!OpenCommand.INSTANCE.isEnabled()) {
 				return;
 			}

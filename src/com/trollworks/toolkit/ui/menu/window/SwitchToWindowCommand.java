@@ -16,8 +16,6 @@ import com.trollworks.toolkit.ui.widget.AppWindow;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.JMenuItem;
-
 /** A command that will switch to a specific window. */
 public class SwitchToWindowCommand extends Command {
 	private AppWindow	mWindow;
@@ -33,9 +31,8 @@ public class SwitchToWindowCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		setMarked(getActiveWindow() == mWindow);
-		updateMark(item);
 	}
 
 	@Override

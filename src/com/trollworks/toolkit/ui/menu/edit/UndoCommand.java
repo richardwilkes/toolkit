@@ -19,7 +19,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JMenuItem;
 import javax.swing.undo.UndoManager;
 
 /** Provides the "Undo" command. */
@@ -42,7 +41,7 @@ public class UndoCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		Window window = getActiveWindow();
 		if (window instanceof Undoable) {
 			UndoManager mgr = ((Undoable) window).getUndoManager();

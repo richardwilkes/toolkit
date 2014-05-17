@@ -17,12 +17,9 @@ import com.trollworks.toolkit.ui.widget.StdFileDialog;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.PathUtils;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
-
-import javax.swing.JMenuItem;
 
 /** Provides the "Save As..." command. */
 public class SaveAsCommand extends Command {
@@ -44,24 +41,27 @@ public class SaveAsCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
-		setEnabled(getActiveWindow() instanceof Saveable);
+	public void adjust() {
+		setEnabled(SaveCommand.getCurrentSaveable() != null);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		saveAs((Saveable) getActiveWindow());
+		saveAs(SaveCommand.getCurrentSaveable());
 	}
 
 	/**
 	 * Allows the user to save the file under another name.
 	 *
 	 * @param saveable The {@link Saveable} to work on.
-	 * @return The file(s) actually written to.
+	 * @return The file(s) actually written to. May be empty.
 	 */
 	public static File[] saveAs(Saveable saveable) {
+		if (saveable == null) {
+			return new File[0];
+		}
 		String path = saveable.getPreferredSavePath();
-		File result = StdFileDialog.choose(saveable instanceof Component ? (Component) saveable : null, false, SAVE_AS, PathUtils.getParent(path), PathUtils.getLeafName(path), saveable.getAllowedExtensions());
+		File result = StdFileDialog.choose(SaveCommand.getComponentForDialog(saveable), false, SAVE_AS, PathUtils.getParent(path), PathUtils.getLeafName(path), saveable.getAllowedExtensions());
 		File[] files = result != null ? saveable.saveTo(result) : new File[0];
 		for (File file : files) {
 			RecentFilesMenu.addRecent(file);

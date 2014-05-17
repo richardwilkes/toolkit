@@ -19,7 +19,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JMenuItem;
 import javax.swing.text.JTextComponent;
 
 /** Provides the "Copy" command. */
@@ -42,7 +41,7 @@ public class CopyCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		boolean isEnabled = false;
 		Component comp = getFocusOwner();
 		if (comp instanceof JTextComponent) {

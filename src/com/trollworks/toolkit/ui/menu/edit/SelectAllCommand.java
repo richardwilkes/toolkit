@@ -20,7 +20,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JMenuItem;
 import javax.swing.text.JTextComponent;
 
 /** Provides the "Select All" command. */
@@ -43,7 +42,7 @@ public class SelectAllCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		boolean isEnabled = false;
 		boolean checkWindow = false;
 		Component comp = getFocusOwner();

@@ -26,8 +26,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JMenuItem;
-
 /** Provides the "Open..." command. */
 public class OpenCommand extends Command implements OpenFilesHandler {
 	@Localize("Open\u2026")
@@ -48,7 +46,7 @@ public class OpenCommand extends Command implements OpenFilesHandler {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		// Do nothing. Always enabled.
 	}
 

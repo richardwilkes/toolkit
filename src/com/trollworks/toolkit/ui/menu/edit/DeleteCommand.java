@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.text.JTextComponent;
 
@@ -44,7 +43,7 @@ public class DeleteCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		boolean isEnabled = false;
 		boolean checkWindow = false;
 		Component comp = getFocusOwner();

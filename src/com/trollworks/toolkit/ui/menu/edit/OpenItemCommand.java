@@ -20,8 +20,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JMenuItem;
-
 /** Provides the "Open Item" command. */
 public class OpenItemCommand extends Command {
 	@Localize("Open Item")
@@ -42,7 +40,7 @@ public class OpenItemCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		boolean isEnabled = false;
 		boolean checkWindow = false;
 		Component comp = getFocusOwner();

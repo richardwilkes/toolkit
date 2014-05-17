@@ -35,6 +35,9 @@ public interface Saveable extends FileProxy {
 	 */
 	String[] getAllowedExtensions();
 
+	/** @return The name the user will recognize as the name of the object being saved. */
+	String getSaveTitle();
+
 	/** @return The preferred file path to use when saving. */
 	String getPreferredSavePath();
 

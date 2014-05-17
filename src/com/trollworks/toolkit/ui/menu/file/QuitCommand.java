@@ -26,8 +26,6 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JMenuItem;
-
 /** Provides the "Quit"/"Exit" command. */
 public class QuitCommand extends Command implements QuitHandler {
 	@Localize("Quit")
@@ -50,7 +48,7 @@ public class QuitCommand extends Command implements QuitHandler {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		for (Frame frame : Frame.getFrames()) {
 			if (frame.isVisible() && BaseWindow.hasOwnedWindowsShowing(frame)) {
 				setEnabled(false);

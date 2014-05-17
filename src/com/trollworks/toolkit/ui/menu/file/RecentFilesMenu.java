@@ -141,7 +141,7 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
 			addSeparator();
 		}
 		JMenuItem item = new JMenuItem(ClearRecentFilesMenuCommand.INSTANCE);
-		ClearRecentFilesMenuCommand.INSTANCE.adjustForMenu(item);
+		ClearRecentFilesMenuCommand.INSTANCE.adjust();
 		add(item);
 	}
 }

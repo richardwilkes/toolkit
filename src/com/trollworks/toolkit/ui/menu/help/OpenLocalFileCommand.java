@@ -19,8 +19,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JMenuItem;
-
 /** A command that will open a specific file in the preferred browser. */
 public class OpenLocalFileCommand extends Command {
 	private File	mFile;
@@ -37,7 +35,7 @@ public class OpenLocalFileCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		// Not used. Always enabled.
 	}
 

@@ -20,8 +20,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JMenuItem;
-
 /** Provides the "Duplicate" command. */
 public class DuplicateCommand extends Command {
 	@Localize("Duplicate")
@@ -41,7 +39,7 @@ public class DuplicateCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		Duplicatable focus = findFocus();
 		setEnabled(focus != null ? focus.canDuplicateSelection() : false);
 	}

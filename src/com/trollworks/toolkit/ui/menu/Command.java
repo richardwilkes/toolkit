@@ -19,10 +19,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Icon;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
 /** Represents a command in the user interface. */
@@ -31,7 +29,6 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
 	public static final int	COMMAND_MODIFIER			= Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	/** The standard command modifier for this platform, plus the shift key. */
 	public static final int	SHIFTED_COMMAND_MODIFIER	= COMMAND_MODIFIER | InputEvent.SHIFT_DOWN_MASK;
-	private boolean			mMarked;
 	private KeyStroke		mOriginalAccelerator;
 
 	/**
@@ -148,13 +145,8 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
 		setCommand(command);
 	}
 
-	/**
-	 * Called to adjust the action prior to a menu being displayed.
-	 *
-	 * @param item The {@link JMenuItem} that is using the {@link Command}. May be <code>null</code>
-	 *            .
-	 */
-	public abstract void adjustForMenu(JMenuItem item);
+	/** Called to adjust the action prior to a menu being displayed or an action being used. */
+	public abstract void adjust();
 
 	@Override
 	public abstract void actionPerformed(ActionEvent event);
@@ -237,22 +229,12 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
 
 	/** @return Whether any associated menu item should be marked. */
 	public final boolean isMarked() {
-		return mMarked;
+		return Boolean.TRUE.equals(getValue(Action.SELECTED_KEY));
 	}
 
 	/** @param marked Whether any associated menu item should be marked. */
 	public final void setMarked(boolean marked) {
-		mMarked = marked;
-	}
-
-	/**
-	 * @param item The {@link JMenuItem} to update to match the current marked state. May be
-	 *            <code>null</code>.
-	 */
-	public final void updateMark(JMenuItem item) {
-		if (item instanceof JCheckBoxMenuItem || item instanceof JRadioButtonMenuItem) {
-			item.setSelected(mMarked);
-		}
+		putValue(Action.SELECTED_KEY, Boolean.valueOf(marked));
 	}
 
 	@Override

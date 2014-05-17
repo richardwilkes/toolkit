@@ -16,8 +16,6 @@ import com.trollworks.toolkit.ui.menu.Command;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.JMenuItem;
-
 /** Provides the "Update" command. */
 public class UpdateCommand extends Command {
 	/** The action command this command will issue. */
@@ -30,7 +28,7 @@ public class UpdateCommand extends Command {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		setTitle(UpdateChecker.getResult());
 		setEnabled(UpdateChecker.isNewVersionAvailable());
 	}

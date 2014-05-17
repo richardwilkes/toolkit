@@ -21,8 +21,6 @@ import com.trollworks.toolkit.utility.Localization;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JMenuItem;
-
 /** Provides the "Preferences..." command. */
 public class PreferencesCommand extends Command implements PreferencesHandler {
 	@Localize("Preferences\u2026")
@@ -43,7 +41,7 @@ public class PreferencesCommand extends Command implements PreferencesHandler {
 	}
 
 	@Override
-	public void adjustForMenu(JMenuItem item) {
+	public void adjust() {
 		setEnabled(true);
 	}
 
