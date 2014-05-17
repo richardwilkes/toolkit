@@ -41,7 +41,7 @@ public class PrintUtilities {
 	 * @return If the {@link Component} or one of its ancestors is currently printing.
 	 */
 	public static boolean isPrinting(Component component) {
-		PrintProxy proxy = component instanceof PrintProxy ? (PrintProxy) component : UIUtilities.getAncestorOfType(component, PrintProxy.class);
+		PrintProxy proxy = UIUtilities.getSelfOrAncestorOfType(component, PrintProxy.class);
 		return proxy != null && proxy.isPrinting();
 	}
 

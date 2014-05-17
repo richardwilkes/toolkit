@@ -243,13 +243,9 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 
 	/** Called by the {@link Dock} to update the active highlight. */
 	void updateActiveHighlight() {
-		boolean wasActive = mActive;
-		Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner();
-		mActive = focusOwner == this;
-		if (!mActive && focusOwner != null) {
-			mActive = UIUtilities.getAncestorOfType(focusOwner, DockContainer.class) == this;
-		}
-		if (mActive != wasActive) {
+		boolean active = UIUtilities.getSelfOrAncestorOfType(KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner(), DockContainer.class) == this;
+		if (mActive != active) {
+			mActive = active;
 			mHeader.repaint();
 		}
 	}

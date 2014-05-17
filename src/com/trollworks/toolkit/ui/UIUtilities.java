@@ -324,12 +324,32 @@ public class UIUtilities {
 	}
 
 	/**
+	 * @param component The component to be looked at.
+	 * @param type The type of component being looked for.
+	 * @return The first object that matches, starting with the component itself and working up
+	 *         through its parents, or <code>null</code>.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getSelfOrAncestorOfType(Component component, Class<T> type) {
+		if (component != null) {
+			if (type.isAssignableFrom(component.getClass())) {
+				return (T) component;
+			}
+			return getAncestorOfType(component, type);
+		}
+		return null;
+	}
+
+	/**
 	 * @param component The component whose ancestor chain is to be looked at.
 	 * @param type The type of ancestor being looked for.
 	 * @return The ancestor, or <code>null</code>.
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getAncestorOfType(Component component, Class<? extends T> type) {
+		if (component == null) {
+			return null;
+		}
 		Container parent = component.getParent();
 		while (parent != null && !type.isAssignableFrom(parent.getClass())) {
 			parent = parent.getParent();

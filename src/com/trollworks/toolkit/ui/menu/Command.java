@@ -267,13 +267,7 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
 
 	/** @return The current target root. */
 	public static final Object getTargetRoot() {
-		CommandTargetProvider provider = null;
-		Component component = getFocusOwner();
-		if (component instanceof CommandTargetProvider) {
-			provider = (CommandTargetProvider) component;
-		} else if (component != null) {
-			provider = UIUtilities.getAncestorOfType(component, CommandTargetProvider.class);
-		}
+		CommandTargetProvider provider = UIUtilities.getSelfOrAncestorOfType(getFocusOwner(), CommandTargetProvider.class);
 		Object root = null;
 		if (provider != null) {
 			root = provider.getCommandTarget();
