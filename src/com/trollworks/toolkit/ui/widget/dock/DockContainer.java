@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget.dock;
 
 import com.trollworks.toolkit.ui.UIUtilities;
+import com.trollworks.toolkit.ui.menu.file.CloseableProxy;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -185,14 +186,15 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 	/**
 	 * Attempt to close a {@link Dockable} within this {@link DockContainer}. This only has an
 	 * affect if the {@link Dockable} is contained by this {@link DockContainer} and implements the
-	 * {@link DockCloseable} interface. If the last {@link Dockable} within this
-	 * {@link DockContainer} is closed, then the {@link DockContainer} is also closed.
+	 * {@link CloseableProxy} interface. Note that the {@link CloseableProxy} must call this
+	 * {@link DockContainer}'s {@link #close(Dockable)} method to actually close the tab.
 	 */
 	public void attemptClose(Dockable dockable) {
-		if (dockable instanceof DockCloseable) {
+		if (dockable instanceof CloseableProxy) {
 			if (mDockables.contains(dockable)) {
-				if (((DockCloseable) dockable).attemptClose()) {
-					close(dockable);
+				CloseableProxy closeable = (CloseableProxy) dockable;
+				if (closeable.mayAttemptClose()) {
+					closeable.attemptClose();
 				}
 			}
 		}
