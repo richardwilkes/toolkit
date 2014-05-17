@@ -41,6 +41,6 @@ public interface Dockable {
 	Component getContent();
 
 	default DockContainer getDockContainer() {
-		return (DockContainer) UIUtilities.getAncestorOfType(getContent(), DockContainer.class);
+		return UIUtilities.getAncestorOfType(getContent(), DockContainer.class);
 	}
 }

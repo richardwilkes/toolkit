@@ -11,7 +11,11 @@
 
 package com.trollworks.toolkit.ui.print;
 
+import com.trollworks.toolkit.ui.UIUtilities;
+import com.trollworks.toolkit.ui.menu.file.PrintProxy;
 import com.trollworks.toolkit.utility.units.LengthUnits;
+
+import java.awt.Component;
 
 import javax.print.PrintService;
 import javax.print.attribute.Attribute;
@@ -32,6 +36,15 @@ import javax.print.attribute.standard.Sides;
 
 /** Provides access to various print settings. */
 public class PrintUtilities {
+	/**
+	 * @param component The {@link Component} to check.
+	 * @return If the {@link Component} or one of its ancestors is currently printing.
+	 */
+	public static boolean isPrinting(Component component) {
+		PrintProxy proxy = component instanceof PrintProxy ? (PrintProxy) component : UIUtilities.getAncestorOfType(component, PrintProxy.class);
+		return proxy != null && proxy.isPrinting();
+	}
+
 	/**
 	 * Extracts a setting from the specified {@link PrintRequestAttributeSet} or looks up a default
 	 * value from the specified {@link PrintService} if the set doesn't contain it.

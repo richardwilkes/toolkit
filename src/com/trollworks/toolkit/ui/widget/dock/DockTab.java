@@ -164,7 +164,7 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 	}
 
 	private DockContainer getDockContainer() {
-		return (DockContainer) UIUtilities.getAncestorOfType(this, DockContainer.class);
+		return UIUtilities.getAncestorOfType(this, DockContainer.class);
 	}
 
 	public void attemptClose() {

@@ -52,7 +52,7 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 
 	/** @return The {@link Dock} this {@link DockContainer} resides in. */
 	public Dock getDock() {
-		return (Dock) UIUtilities.getAncestorOfType(this, Dock.class);
+		return UIUtilities.getAncestorOfType(this, Dock.class);
 	}
 
 	/** @return The current list of {@link Dockable}s in this {@link DockContainer}. */
@@ -107,6 +107,10 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 			focusOwner = focusOwner.getParent();
 		}
 		if (focusOwner == null) {
+			// Do it twice, once immediately and then again at the end of the current event queue.
+			// Sometimes one works, sometimes the other does. Haven't determined why, so both are
+			// necessary for now.
+			transferFocus();
 			EventQueue.invokeLater(() -> transferFocus());
 		}
 	}

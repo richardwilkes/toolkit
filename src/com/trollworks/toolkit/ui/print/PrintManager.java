@@ -16,7 +16,8 @@ import com.trollworks.toolkit.collections.Enums;
 import com.trollworks.toolkit.io.xml.XMLNodeType;
 import com.trollworks.toolkit.io.xml.XMLReader;
 import com.trollworks.toolkit.io.xml.XMLWriter;
-import com.trollworks.toolkit.ui.widget.AppWindow;
+import com.trollworks.toolkit.ui.UIUtilities;
+import com.trollworks.toolkit.ui.menu.file.PrintProxy;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.Preferences;
@@ -25,7 +26,6 @@ import com.trollworks.toolkit.utility.units.LengthUnits;
 
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
-import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.IOException;
@@ -217,29 +217,29 @@ public class PrintManager {
 	/**
 	 * Presents the page setup dialog and allows the user to change the settings.
 	 *
-	 * @param window The owning window.
+	 * @param proxy The {@link PrintProxy} representing the information that would be printed.
 	 * @return Whether the user canceled (or an error occurred).
 	 */
-	public boolean pageSetup(AppWindow window) {
+	public boolean pageSetup(PrintProxy proxy) {
 		if (useNativeDialogs()) {
 			PageFormat format = mJob.pageDialog(createPageFormat());
 			if (format != null) {
 				adjustSettingsToPageFormat(format);
-				window.adjustToPageSetupChanges();
+				proxy.adjustToPageSetupChanges();
 				return true;
 			}
 		} else {
 			PageSetupPanel panel = new PageSetupPanel(getPrintService(), mSet);
-			if (WindowUtils.showOptionDialog(window, panel, PAGE_SETUP_TITLE, false, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null) == JOptionPane.OK_OPTION) {
+			if (WindowUtils.showOptionDialog(UIUtilities.getComponentForDialog(proxy), panel, PAGE_SETUP_TITLE, false, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null) == JOptionPane.OK_OPTION) {
 				try {
 					PrintService service = panel.accept(mSet);
 					if (service != null) {
 						mJob.setPrintService(service);
 					}
-					window.adjustToPageSetupChanges();
+					proxy.adjustToPageSetupChanges();
 					return true;
 				} catch (PrinterException exception) {
-					WindowUtils.showError(window, UNABLE_TO_SWITCH_PRINTERS);
+					WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), UNABLE_TO_SWITCH_PRINTERS);
 				}
 			}
 		}
@@ -249,51 +249,50 @@ public class PrintManager {
 	/**
 	 * Presents the print dialog and allows the user to print.
 	 *
-	 * @param window The owning window.
-	 * @param jobTitle The title for this print job.
-	 * @param printable The printable component.
+	 * @param proxy The {@link PrintProxy} representing the information being printed.
 	 */
-	public void print(AppWindow window, String jobTitle, Printable printable) {
-		PrintService service = getPrintService();
-
-		if (service != null) {
-			if (useNativeDialogs()) {
-				mJob.setJobName(jobTitle);
-				if (mJob.printDialog()) {
-					try {
-						window.adjustToPageSetupChanges();
-						window.setPrinting(true);
-						mJob.setPrintable(printable, createPageFormat());
-						mJob.print();
-					} catch (PrinterException exception) {
-						WindowUtils.showError(window, PRINTING_FAILED);
-					} finally {
-						window.setPrinting(false);
+	public void print(PrintProxy proxy) {
+		if (proxy != null) {
+			PrintService service = getPrintService();
+			if (service != null) {
+				if (useNativeDialogs()) {
+					mJob.setJobName(proxy.getPrintJobTitle());
+					if (mJob.printDialog()) {
+						try {
+							proxy.adjustToPageSetupChanges();
+							proxy.setPrinting(true);
+							mJob.setPrintable(proxy, createPageFormat());
+							mJob.print();
+						} catch (PrinterException exception) {
+							WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), PRINTING_FAILED);
+						} finally {
+							proxy.setPrinting(false);
+						}
+					}
+				} else {
+					mSet.add(new JobName(proxy.getPrintJobTitle(), null));
+					PrintPanel panel = new PrintPanel(getPrintService(), mSet);
+					if (WindowUtils.showOptionDialog(UIUtilities.getComponentForDialog(proxy), panel, PRINT_TITLE, false, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null) == JOptionPane.OK_OPTION) {
+						try {
+							mJob.setPrintService(panel.accept(mSet));
+							try {
+								proxy.adjustToPageSetupChanges();
+								proxy.setPrinting(true);
+								mJob.setPrintable(proxy, createPageFormat());
+								mJob.print(mSet);
+							} catch (PrinterException exception) {
+								WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), PRINTING_FAILED);
+							} finally {
+								proxy.setPrinting(false);
+							}
+						} catch (PrinterException exception) {
+							WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), UNABLE_TO_SWITCH_PRINTERS);
+						}
 					}
 				}
 			} else {
-				mSet.add(new JobName(jobTitle, null));
-				PrintPanel panel = new PrintPanel(getPrintService(), mSet);
-				if (WindowUtils.showOptionDialog(window, panel, PRINT_TITLE, false, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null) == JOptionPane.OK_OPTION) {
-					try {
-						mJob.setPrintService(panel.accept(mSet));
-						try {
-							window.adjustToPageSetupChanges();
-							window.setPrinting(true);
-							mJob.setPrintable(printable, createPageFormat());
-							mJob.print(mSet);
-						} catch (PrinterException exception) {
-							WindowUtils.showError(window, PRINTING_FAILED);
-						} finally {
-							window.setPrinting(false);
-						}
-					} catch (PrinterException exception) {
-						WindowUtils.showError(window, UNABLE_TO_SWITCH_PRINTERS);
-					}
-				}
+				WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), NO_PRINTER_AVAILABLE);
 			}
-		} else {
-			WindowUtils.showError(window, NO_PRINTER_AVAILABLE);
 		}
 	}
 

@@ -18,13 +18,12 @@ import com.trollworks.toolkit.ui.layout.FlexRow;
 import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.menu.edit.Undoable;
 import com.trollworks.toolkit.ui.menu.file.FileProxy;
+import com.trollworks.toolkit.ui.menu.file.FileProxyProvider;
+import com.trollworks.toolkit.ui.menu.file.PrintProxy;
 import com.trollworks.toolkit.ui.menu.window.WindowMenuProvider;
 import com.trollworks.toolkit.ui.preferences.MenuKeyPreferences;
-import com.trollworks.toolkit.ui.print.PageOrientation;
-import com.trollworks.toolkit.ui.print.PrintManager;
 import com.trollworks.toolkit.utility.PathUtils;
 import com.trollworks.toolkit.utility.undo.StdUndoManager;
-import com.trollworks.toolkit.utility.units.LengthUnits;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
@@ -43,9 +42,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 	private static IconSet						DEFAULT_WINDOW_ICONSET	= null;
 	private static final ArrayList<AppWindow>	WINDOW_LIST				= new ArrayList<>();
 	private ToolkitIcon							mMenuIcon;
-	private PrintManager						mPrintManager;
 	private StdUndoManager						mUndoManager;
-	private boolean								mIsPrinting;
 
 	/** @return The top-most window. */
 	public static AppWindow getTopWindow() {
@@ -183,42 +180,10 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 		}
 	}
 
-	/** @return The {@link PrintManager} for this window. */
-	public final PrintManager getPrintManager() {
-		if (mPrintManager == null) {
-			mPrintManager = createPageSettings();
-		}
-		return mPrintManager;
-	}
-
-	/** @param printManager The {@link PrintManager} to use. */
-	public void setPrintManager(PrintManager printManager) {
-		mPrintManager = printManager;
-	}
-
-	/** @return The default page settings for this window. May return <code>null</code>. */
+	/** @return The {@link PrintProxy} for this window. */
 	@SuppressWarnings("static-method")
-	protected PrintManager createPageSettings() {
-		try {
-			return new PrintManager(PageOrientation.PORTRAIT, 0.5, LengthUnits.INCHES);
-		} catch (Exception exception) {
-			return null;
-		}
-	}
-
-	/** Called after the page setup has changed. */
-	public void adjustToPageSetupChanges() {
-		// Does nothing by default.
-	}
-
-	/** @return <code>true</code> if the window is currently printing. */
-	public boolean isPrinting() {
-		return mIsPrinting;
-	}
-
-	/** @param printing <code>true</code> if the window is currently printing. */
-	public void setPrinting(boolean printing) {
-		mIsPrinting = printing;
+	public PrintProxy getPrintProxy() {
+		return null;
 	}
 
 	/** @param event The {@link MouseWheelEvent}. */
@@ -275,17 +240,23 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 
 	/**
 	 * @param file The backing file to look for.
-	 * @return The {@link AppWindow} associated with the specified backing file.
+	 * @return The {@link FileProxy} associated with the specified backing file.
 	 */
-	public static AppWindow findWindow(File file) {
+	public static FileProxy findFileProxy(File file) {
 		String fullPath = PathUtils.getFullPath(file);
 		for (AppWindow window : AppWindow.getAllWindows()) {
 			if (window instanceof FileProxy) {
-				File wFile = ((FileProxy) window).getBackingFile();
+				FileProxy proxy = (FileProxy) window;
+				File wFile = proxy.getCurrentBackingFile();
 				if (wFile != null) {
 					if (PathUtils.getFullPath(wFile).equals(fullPath)) {
-						return window;
+						return proxy;
 					}
+				}
+			} else if (window instanceof FileProxyProvider) {
+				FileProxy proxy = ((FileProxyProvider) window).getFileProxy(file);
+				if (proxy != null) {
+					return proxy;
 				}
 			}
 		}

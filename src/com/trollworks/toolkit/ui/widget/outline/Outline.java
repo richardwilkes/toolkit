@@ -20,6 +20,7 @@ import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.menu.edit.Deletable;
 import com.trollworks.toolkit.ui.menu.edit.SelectAllCapable;
+import com.trollworks.toolkit.ui.print.PrintUtilities;
 import com.trollworks.toolkit.ui.widget.ActionPanel;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.ui.widget.dock.Dock;
@@ -417,8 +418,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		boolean active = isFocusOwner();
 		int first = getFirstRowToDisplay();
 		int last = getLastRowToDisplay();
-		Container top = getTopLevelAncestor();
-		boolean isPrinting = top instanceof AppWindow && ((AppWindow) top).isPrinting();
+		boolean isPrinting = PrintUtilities.isPrinting(this);
 		boolean showIndent = showIndent();
 
 		for (int rowIndex = first; rowIndex <= last; rowIndex++) {
@@ -510,8 +510,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		boolean active = isFocusOwner();
 		int first = getFirstRowToDisplay();
 		int last = getLastRowToDisplay();
-		Container topAncestor = getTopLevelAncestor();
-		boolean isPrinting = topAncestor instanceof AppWindow && ((AppWindow) topAncestor).isPrinting();
+		boolean isPrinting = PrintUtilities.isPrinting(this);
 
 		for (int rowIndex = first; rowIndex <= last; rowIndex++) {
 			Row row = mModel.getRowAtIndex(rowIndex);
@@ -1426,7 +1425,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 				mSelectOnMouseUp = -1;
 				if (mDividerDrag != null && allowColumnResize()) {
 					dragColumnDivider(x);
-					JScrollPane scrollPane = (JScrollPane) UIUtilities.getAncestorOfType(this, JScrollPane.class);
+					JScrollPane scrollPane = UIUtilities.getAncestorOfType(this, JScrollPane.class);
 					if (scrollPane != null) {
 						Point pt = event.getPoint();
 						if (!(event.getSource() instanceof Outline)) {
@@ -2026,7 +2025,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 					mModel.setDragRows(rows);
 				}
 			} else if (dtde.isDataFlavorSupported(DockableTransferable.DATA_FLAVOR)) {
-				mAlternateDragDestination = (Dock) UIUtilities.getAncestorOfType(this, Dock.class);
+				mAlternateDragDestination = UIUtilities.getAncestorOfType(this, Dock.class);
 			}
 		} catch (Exception exception) {
 			Log.error(exception);
@@ -2642,7 +2641,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
 	@Override
 	public Insets getAutoscrollInsets() {
-		JScrollPane scrollPane = (JScrollPane) UIUtilities.getAncestorOfType(this, JScrollPane.class);
+		JScrollPane scrollPane = UIUtilities.getAncestorOfType(this, JScrollPane.class);
 		if (scrollPane != null) {
 			Rectangle bounds = scrollPane.getViewport().getViewRect();
 			return new Insets(bounds.y + AUTO_SCROLL_MARGIN, bounds.x + AUTO_SCROLL_MARGIN, getHeight() - (bounds.y + bounds.height) + AUTO_SCROLL_MARGIN, getWidth() - (bounds.x + bounds.width) + AUTO_SCROLL_MARGIN);

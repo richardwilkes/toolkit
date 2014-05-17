@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.print.PrintManager;
 import com.trollworks.toolkit.ui.widget.AppWindow;
@@ -21,7 +22,6 @@ import com.trollworks.toolkit.utility.Localization;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.print.Printable;
 
 /** Provides the "Page Setup..." command. */
 public class PageSetupCommand extends Command {
@@ -47,17 +47,22 @@ public class PageSetupCommand extends Command {
 	@Override
 	public void adjust() {
 		Window window = getActiveWindow();
-		setEnabled(window instanceof AppWindow && window instanceof Printable);
+		setEnabled(window instanceof AppWindow && ((AppWindow) window).getPrintProxy() != null);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		AppWindow window = (AppWindow) getActiveWindow();
-		PrintManager mgr = window.getPrintManager();
-		if (mgr != null) {
-			mgr.pageSetup(window);
-		} else {
-			WindowUtils.showError(window, NO_PRINTER_SELECTED);
+		Window window = getActiveWindow();
+		if (window instanceof AppWindow) {
+			PrintProxy proxy = ((AppWindow) window).getPrintProxy();
+			if (proxy != null) {
+				PrintManager mgr = proxy.getPrintManager();
+				if (mgr != null) {
+					mgr.pageSetup(proxy);
+				} else {
+					WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), NO_PRINTER_SELECTED);
+				}
+			}
 		}
 	}
 }

@@ -14,10 +14,8 @@ package com.trollworks.toolkit.ui.menu.file;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
-import com.trollworks.toolkit.ui.widget.dock.Dockable;
 import com.trollworks.toolkit.utility.Localization;
 
-import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -80,22 +78,6 @@ public class SaveCommand extends Command {
 	}
 
 	/**
-	 * @param obj The object to extract a {@link Component} for.
-	 * @return The {@link Component} to use for the dialog, or <code>null</code>.
-	 */
-	public static Component getComponentForDialog(Object obj) {
-		Component component;
-		if (obj instanceof Component) {
-			component = (Component) obj;
-		} else if (obj instanceof Dockable) {
-			component = ((Dockable) obj).getContent();
-		} else {
-			component = null;
-		}
-		return component;
-	}
-
-	/**
 	 * Makes an attempt to save the specified {@link Saveable} if it has been modified.
 	 *
 	 * @param saveable The {@link Saveable} to work on.
@@ -105,7 +87,7 @@ public class SaveCommand extends Command {
 		if (saveable != null) {
 			UIUtilities.forceFocusToAccept();
 			if (saveable.isModified()) {
-				int answer = JOptionPane.showConfirmDialog(getComponentForDialog(saveable), MessageFormat.format(SAVE_CHANGES, saveable.getSaveTitle()), SAVE, JOptionPane.YES_NO_CANCEL_OPTION);
+				int answer = JOptionPane.showConfirmDialog(UIUtilities.getComponentForDialog(saveable), MessageFormat.format(SAVE_CHANGES, saveable.getSaveTitle()), SAVE, JOptionPane.YES_NO_CANCEL_OPTION);
 				if (answer == JOptionPane.CANCEL_OPTION || answer == JOptionPane.CLOSED_OPTION) {
 					return false;
 				}
@@ -130,7 +112,7 @@ public class SaveCommand extends Command {
 		if (saveable == null) {
 			return new File[0];
 		}
-		File file = saveable.getBackingFile();
+		File file = saveable.getCurrentBackingFile();
 		if (file != null) {
 			File[] files = saveable.saveTo(file);
 			for (File one : files) {

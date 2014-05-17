@@ -66,19 +66,18 @@ public class OpenCommand extends Command implements OpenFilesHandler {
 		if (file != null) {
 			try {
 				String name = file.getName();
-				AppWindow window = AppWindow.findWindow(file);
-				if (window == null) {
+				FileProxy proxy = AppWindow.findFileProxy(file);
+				if (proxy == null) {
 					for (FileType type : FileType.getOpenable()) {
 						if (name.matches(StdFileDialog.createExtensionMatcher(type.getExtension()))) {
-							window = type.getWindowForFileProvider().create(file);
-							window.setVisible(true);
+							proxy = type.getWindowForFileProvider().create(file);
 							break;
 						}
 					}
 				} else {
-					window.toFront();
+					proxy.toFrontAndFocus();
 				}
-				if (window != null) {
+				if (proxy != null) {
 					RecentFilesMenu.addRecent(file);
 				} else {
 					throw new IOException("Unknown file extension"); //$NON-NLS-1$

@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui.menu.file;
 import com.apple.eawt.AppEvent.PrintFilesEvent;
 import com.apple.eawt.PrintFilesHandler;
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.print.PrintManager;
 import com.trollworks.toolkit.ui.widget.AppWindow;
@@ -24,7 +25,6 @@ import java.awt.EventQueue;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.print.Printable;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -52,22 +52,25 @@ public class PrintCommand extends Command implements PrintFilesHandler {
 	@Override
 	public void adjust() {
 		Window window = getActiveWindow();
-		setEnabled(window instanceof AppWindow && window instanceof Printable);
+		setEnabled(window instanceof AppWindow && ((AppWindow) window).getPrintProxy() != null);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		print((AppWindow) getActiveWindow());
+		Window window = getActiveWindow();
+		if (window instanceof AppWindow) {
+			print(((AppWindow) window).getPrintProxy());
+		}
 	}
 
-	/** @param window The {@link AppWindow} to print. */
-	public static void print(AppWindow window) {
-		if (window instanceof Printable) {
-			PrintManager mgr = window.getPrintManager();
+	/** @param proxy The {@link PrintProxy} to print. */
+	public static void print(PrintProxy proxy) {
+		if (proxy != null) {
+			PrintManager mgr = proxy.getPrintManager();
 			if (mgr != null) {
-				mgr.print(window, window.getTitle(), (Printable) window);
+				mgr.print(proxy);
 			} else {
-				WindowUtils.showError(window, NO_PRINTER_SELECTED);
+				WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), NO_PRINTER_SELECTED);
 			}
 		}
 	}
@@ -91,9 +94,9 @@ public class PrintCommand extends Command implements PrintFilesHandler {
 
 		@Override
 		public void run() {
-			AppWindow window = AppWindow.findWindow(mFile);
-			if (window != null) {
-				PrintCommand.print(window);
+			FileProxy proxy = AppWindow.findFileProxy(mFile);
+			if (proxy != null) {
+				PrintCommand.print(proxy.getPrintProxy());
 			} else if (System.currentTimeMillis() - mStart < TimeUnit.MILLISECONDS.convert(2, TimeUnit.MINUTES)) {
 				EventQueue.invokeLater(this);
 			}

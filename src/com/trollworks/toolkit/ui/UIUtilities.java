@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.image.Images;
 import com.trollworks.toolkit.ui.image.ToolkitIcon;
+import com.trollworks.toolkit.ui.widget.dock.Dockable;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -327,12 +328,13 @@ public class UIUtilities {
 	 * @param type The type of ancestor being looked for.
 	 * @return The ancestor, or <code>null</code>.
 	 */
-	public static Container getAncestorOfType(Component component, Class<? extends Container> type) {
+	@SuppressWarnings("unchecked")
+	public static <T> T getAncestorOfType(Component component, Class<? extends T> type) {
 		Container parent = component.getParent();
 		while (parent != null && !type.isAssignableFrom(parent.getClass())) {
 			parent = parent.getParent();
 		}
-		return parent;
+		return (T) parent;
 	}
 
 	/**
@@ -384,5 +386,21 @@ public class UIUtilities {
 			focusManager.dispatchEvent(new FocusEvent(focus, FocusEvent.FOCUS_LOST, false, null));
 			focusManager.dispatchEvent(new FocusEvent(focus, FocusEvent.FOCUS_GAINED, false, null));
 		}
+	}
+
+	/**
+	 * @param obj The object to extract a {@link Component} for.
+	 * @return The {@link Component} to use for the dialog, or <code>null</code>.
+	 */
+	public static Component getComponentForDialog(Object obj) {
+		Component component;
+		if (obj instanceof Component) {
+			component = (Component) obj;
+		} else if (obj instanceof Dockable) {
+			component = ((Dockable) obj).getContent();
+		} else {
+			component = null;
+		}
+		return component;
 	}
 }

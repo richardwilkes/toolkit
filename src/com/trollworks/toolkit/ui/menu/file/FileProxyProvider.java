@@ -12,14 +12,13 @@
 package com.trollworks.toolkit.ui.menu.file;
 
 import java.io.File;
-import java.io.IOException;
 
-/** Creates a {@link FileProxy} for files of a specific {@link FileType}. */
-public interface WindowForFileProvider {
+/** Provides a way to find a {@link FileProxy} for a {@link File}. */
+public interface FileProxyProvider {
 	/**
-	 * @param file The {@link File} to load data from.
-	 * @return The resulting {@link FileProxy}, which should have been made visible in the UI and
-	 *         brought to the foreground.
+	 * @param file The {@link File} to locate a {@link FileProxy} for.
+	 * @return The {@link FileProxy}. May be <code>null</code> if this provider doesn't have one
+	 *         that represents the specified {@link File}.
 	 */
-	FileProxy create(File file) throws IOException;
+	FileProxy getFileProxy(File file);
 }
