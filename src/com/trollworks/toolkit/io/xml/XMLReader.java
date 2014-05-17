@@ -11,6 +11,7 @@
 
 package com.trollworks.toolkit.io.xml;
 
+import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.io.IOException;
@@ -179,9 +180,8 @@ public class XMLReader implements AutoCloseable {
 	 */
 	public void skipTag(String name) throws IOException {
 		String marker;
-
 		if (SHOW_SKIPPED_TAGS) {
-			System.out.println("Skipping tag: " + name); //$NON-NLS-1$
+			Log.warn("Skipping tag: " + name); //$NON-NLS-1$
 		}
 		require(XMLNodeType.START_TAG, name);
 		marker = getMarker();
