@@ -65,11 +65,11 @@ public class ExportToCommand extends Command {
 	}
 
 	private Saveable getTarget() {
-		Object target = getTargetRoot();
-		if (target instanceof Saveable) {
-			for (String extension : ((Saveable) target).getAllowedExtensions()) {
+		Saveable saveable = getTarget(Saveable.class);
+		if (saveable != null) {
+			for (String extension : saveable.getAllowedExtensions()) {
 				if (mExtension.equals(extension)) {
-					return (Saveable) target;
+					return saveable;
 				}
 			}
 		}

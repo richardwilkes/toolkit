@@ -43,12 +43,12 @@ public class SaveAsCommand extends Command {
 
 	@Override
 	public void adjust() {
-		setEnabled(SaveCommand.getCurrentSaveable() != null);
+		setEnabled(getTarget(Saveable.class) != null);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		saveAs(SaveCommand.getCurrentSaveable());
+		saveAs(getTarget(Saveable.class));
 	}
 
 	/**

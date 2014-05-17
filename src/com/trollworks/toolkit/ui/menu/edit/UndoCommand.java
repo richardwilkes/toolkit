@@ -15,7 +15,6 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.utility.Localization;
 
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -42,9 +41,9 @@ public class UndoCommand extends Command {
 
 	@Override
 	public void adjust() {
-		Window window = getActiveWindow();
-		if (window instanceof Undoable) {
-			UndoManager mgr = ((Undoable) window).getUndoManager();
+		Undoable undoable = getTarget(Undoable.class);
+		if (undoable != null) {
+			UndoManager mgr = undoable.getUndoManager();
 			setEnabled(mgr.canUndo());
 			setTitle(mgr.getUndoPresentationName());
 		} else {
@@ -55,6 +54,9 @@ public class UndoCommand extends Command {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		((Undoable) getActiveWindow()).getUndoManager().undo();
+		Undoable undoable = getTarget(Undoable.class);
+		if (undoable != null) {
+			undoable.getUndoManager().undo();
+		}
 	}
 }

@@ -16,7 +16,6 @@ import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.utility.Localization;
 
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -47,34 +46,13 @@ public class SaveCommand extends Command {
 
 	@Override
 	public void adjust() {
-		Saveable saveable = getCurrentSaveable();
+		Saveable saveable = getTarget(Saveable.class);
 		setEnabled(saveable != null ? saveable.isModified() : false);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		save(getCurrentSaveable());
-	}
-
-	/** @return The current {@link Saveable} for the active window, or <code>null</code>. */
-	public static Saveable getCurrentSaveable() {
-		Window window = getActiveWindow();
-		return getCurrentSaveable(window);
-	}
-
-	/**
-	 * @param window The {@link Window} to get a {@link Saveable} for.
-	 * @return The current {@link Saveable} for the specified window, or <code>null</code>.
-	 */
-	public static Saveable getCurrentSaveable(Window window) {
-		Saveable saveable = null;
-		if (window instanceof SaveableProvider) {
-			saveable = ((SaveableProvider) window).getCurrentSaveable();
-		}
-		if (saveable == null && window instanceof Saveable) {
-			saveable = (Saveable) window;
-		}
-		return saveable;
+		save(getTarget(Saveable.class));
 	}
 
 	/**

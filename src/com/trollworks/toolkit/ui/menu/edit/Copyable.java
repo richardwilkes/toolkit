@@ -9,9 +9,16 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui.menu;
+package com.trollworks.toolkit.ui.menu.edit;
 
-/** Provides the root target for commands. */
-public interface CommandTargetProvider {
-	Object getCommandTarget();
+/**
+ * Focusable controls and windows that want to participate in {@link CopyCommand} processing must
+ * implement this interface.
+ */
+public interface Copyable {
+	/** @return Whether the selection can be copied. */
+	boolean canCopySelection();
+
+	/** Called to copy the current selection. */
+	void copySelection();
 }

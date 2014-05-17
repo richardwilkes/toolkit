@@ -19,7 +19,6 @@ import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.menu.edit.Undoable;
 import com.trollworks.toolkit.ui.menu.file.FileProxy;
 import com.trollworks.toolkit.ui.menu.file.FileProxyProvider;
-import com.trollworks.toolkit.ui.menu.file.PrintProxy;
 import com.trollworks.toolkit.ui.menu.window.WindowMenuProvider;
 import com.trollworks.toolkit.ui.preferences.MenuKeyPreferences;
 import com.trollworks.toolkit.utility.PathUtils;
@@ -178,12 +177,6 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 				}
 			}
 		}
-	}
-
-	/** @return The {@link PrintProxy} for this window. */
-	@SuppressWarnings("static-method")
-	public PrintProxy getPrintProxy() {
-		return null;
 	}
 
 	/** @param event The {@link MouseWheelEvent}. */

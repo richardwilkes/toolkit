@@ -12,8 +12,7 @@
 package com.trollworks.toolkit.ui.widget.dock;
 
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.menu.CommandTargetProvider;
-import com.trollworks.toolkit.ui.menu.file.CloseableProxy;
+import com.trollworks.toolkit.ui.menu.file.CloseHandler;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -29,7 +28,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 /** All {@link Dockable}s are wrapped in a {@link DockContainer} when placed within a {@link Dock}. */
-public class DockContainer extends JPanel implements DockLayoutNode, LayoutManager, CommandTargetProvider {
+public class DockContainer extends JPanel implements DockLayoutNode, LayoutManager {
 	private DockHeader		mHeader;
 	private List<Dockable>	mDockables	= new ArrayList<>();
 	private int				mCurrent;
@@ -191,13 +190,13 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 	/**
 	 * Attempt to close a {@link Dockable} within this {@link DockContainer}. This only has an
 	 * affect if the {@link Dockable} is contained by this {@link DockContainer} and implements the
-	 * {@link CloseableProxy} interface. Note that the {@link CloseableProxy} must call this
+	 * {@link CloseHandler} interface. Note that the {@link CloseHandler} must call this
 	 * {@link DockContainer}'s {@link #close(Dockable)} method to actually close the tab.
 	 */
 	public void attemptClose(Dockable dockable) {
-		if (dockable instanceof CloseableProxy) {
+		if (dockable instanceof CloseHandler) {
 			if (mDockables.contains(dockable)) {
-				CloseableProxy closeable = (CloseableProxy) dockable;
+				CloseHandler closeable = (CloseHandler) dockable;
 				if (closeable.mayAttemptClose()) {
 					closeable.attemptClose();
 				}
@@ -307,10 +306,5 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 			}
 			current.setBounds(insets.left, insets.top + height, width, remaining);
 		}
-	}
-
-	@Override
-	public Object getCommandTarget() {
-		return getCurrentDockable();
 	}
 }

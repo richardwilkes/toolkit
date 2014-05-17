@@ -42,18 +42,30 @@ public class CopyCommand extends Command {
 
 	@Override
 	public void adjust() {
-		boolean isEnabled = false;
+		boolean enable = false;
 		Component comp = getFocusOwner();
 		if (comp instanceof JTextComponent) {
 			JTextComponent textComp = (JTextComponent) comp;
-			String text = textComp.getSelectedText();
-			isEnabled = text != null && text.length() > 0;
+			enable = textComp.getSelectionStart() != textComp.getSelectionEnd();
+		} else {
+			Copyable copyable = getTarget(Copyable.class);
+			if (copyable != null) {
+				enable = copyable.canCopySelection();
+			}
 		}
-		setEnabled(isEnabled);
+		setEnabled(enable);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		((JTextComponent) getFocusOwner()).copy();
+		Component comp = getFocusOwner();
+		if (comp instanceof JTextComponent) {
+			((JTextComponent) comp).copy();
+		} else {
+			Copyable copyable = getTarget(Copyable.class);
+			if (copyable != null && copyable.canCopySelection()) {
+				copyable.copySelection();
+			}
+		}
 	}
 }

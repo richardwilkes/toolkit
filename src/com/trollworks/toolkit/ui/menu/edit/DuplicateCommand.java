@@ -15,8 +15,6 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.utility.Localization;
 
-import java.awt.Component;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -40,30 +38,19 @@ public class DuplicateCommand extends Command {
 
 	@Override
 	public void adjust() {
-		Duplicatable focus = findFocus();
-		setEnabled(focus != null ? focus.canDuplicateSelection() : false);
-	}
-
-	private static Duplicatable findFocus() {
-		Component comp = getFocusOwner();
-		while (comp != null && comp.isEnabled()) {
-			if (comp instanceof Duplicatable) {
-				return (Duplicatable) comp;
-			}
-			comp = comp.getParent();
+		boolean enable = false;
+		Duplicatable duplicatable = getTarget(Duplicatable.class);
+		if (duplicatable != null) {
+			enable = duplicatable.canDuplicateSelection();
 		}
-		Window window = getActiveWindow();
-		if (window instanceof Duplicatable) {
-			return (Duplicatable) window;
-		}
-		return null;
+		setEnabled(enable);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		Duplicatable focus = findFocus();
-		if (focus != null) {
-			focus.duplicateSelection();
+		Duplicatable duplicatable = getTarget(Duplicatable.class);
+		if (duplicatable != null) {
+			duplicatable.duplicateSelection();
 		}
 	}
 }

@@ -16,7 +16,6 @@ import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.Component;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -43,51 +42,29 @@ public class SelectAllCommand extends Command {
 
 	@Override
 	public void adjust() {
-		boolean isEnabled = false;
-		boolean checkWindow = false;
+		boolean enable = false;
 		Component comp = getFocusOwner();
-		if (comp != null && comp.isEnabled()) {
-			if (comp instanceof JTextComponent) {
-				JTextComponent textComp = (JTextComponent) comp;
-				String text = textComp.getSelectedText();
-				int length = text != null ? text.length() : 0;
-				isEnabled = length != textComp.getDocument().getLength();
-			} else if (comp instanceof SelectAllCapable) {
-				isEnabled = ((SelectAllCapable) comp).canSelectAll();
-			} else {
-				checkWindow = true;
-			}
+		if (comp instanceof JTextComponent && comp.isEnabled()) {
+			JTextComponent textComp = (JTextComponent) comp;
+			enable = textComp.getSelectionEnd() - textComp.getSelectionStart() != textComp.getDocument().getLength();
 		} else {
-			checkWindow = true;
-		}
-		if (checkWindow) {
-			Window window = getActiveWindow();
-			if (window instanceof SelectAllCapable) {
-				isEnabled = ((SelectAllCapable) window).canSelectAll();
+			SelectAllCapable selectable = getTarget(SelectAllCapable.class);
+			if (selectable != null) {
+				enable = selectable.canSelectAll();
 			}
 		}
-		setEnabled(isEnabled);
+		setEnabled(enable);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		boolean checkWindow = false;
 		Component comp = getFocusOwner();
-		if (comp.isEnabled()) {
-			if (comp instanceof JTextComponent) {
-				((JTextComponent) comp).selectAll();
-			} else if (comp instanceof SelectAllCapable) {
-				((SelectAllCapable) comp).selectAll();
-			} else {
-				checkWindow = true;
-			}
+		if (comp instanceof JTextComponent) {
+			((JTextComponent) comp).selectAll();
 		} else {
-			checkWindow = true;
-		}
-		if (checkWindow) {
-			Window window = getActiveWindow();
-			if (window instanceof SelectAllCapable) {
-				((SelectAllCapable) window).selectAll();
+			SelectAllCapable selectable = getTarget(SelectAllCapable.class);
+			if (selectable != null && selectable.canSelectAll()) {
+				selectable.selectAll();
 			}
 		}
 	}

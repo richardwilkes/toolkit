@@ -22,7 +22,6 @@ import com.trollworks.toolkit.ui.widget.WindowUtils;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.EventQueue;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -51,15 +50,14 @@ public class PrintCommand extends Command implements PrintFilesHandler {
 
 	@Override
 	public void adjust() {
-		Window window = getActiveWindow();
-		setEnabled(window instanceof AppWindow && ((AppWindow) window).getPrintProxy() != null);
+		setEnabled(getTarget(PrintProxy.class) != null);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		Window window = getActiveWindow();
-		if (window instanceof AppWindow) {
-			print(((AppWindow) window).getPrintProxy());
+		PrintProxy proxy = getTarget(PrintProxy.class);
+		if (proxy != null) {
+			print(proxy);
 		}
 	}
 

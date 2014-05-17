@@ -16,7 +16,6 @@ import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.Component;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -44,55 +43,36 @@ public class DeleteCommand extends Command {
 
 	@Override
 	public void adjust() {
-		boolean isEnabled = false;
-		boolean checkWindow = false;
+		boolean enable = false;
 		Component comp = getFocusOwner();
-		if (comp != null && comp.isEnabled()) {
-			if (comp instanceof JTextComponent) {
-				JTextComponent textComp = (JTextComponent) comp;
-				if (textComp.isEditable()) {
-					isEnabled = textComp.getDocument().getLength() > 0;
-				}
-			} else if (comp instanceof Deletable) {
-				isEnabled = ((Deletable) comp).canDeleteSelection();
-			} else {
-				checkWindow = true;
+		if (comp instanceof JTextComponent && comp.isEnabled()) {
+			JTextComponent textComp = (JTextComponent) comp;
+			if (textComp.isEditable()) {
+				int selectionEnd = textComp.getSelectionEnd();
+				enable = textComp.getSelectionStart() != selectionEnd || selectionEnd < textComp.getDocument().getLength();
 			}
 		} else {
-			checkWindow = true;
-		}
-		if (checkWindow) {
-			Window window = getActiveWindow();
-			if (window instanceof Deletable) {
-				isEnabled = ((Deletable) window).canDeleteSelection();
+			Deletable deletable = getTarget(Deletable.class);
+			if (deletable != null) {
+				enable = deletable.canDeleteSelection();
 			}
 		}
-		setEnabled(isEnabled);
+		setEnabled(enable);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		boolean checkWindow = false;
 		Component comp = getFocusOwner();
-		if (comp.isEnabled()) {
-			if (comp instanceof JTextComponent) {
-				JTextComponent textComp = (JTextComponent) comp;
-				ActionListener listener = textComp.getActionForKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-				if (listener != null) {
-					listener.actionPerformed(event);
-				}
-			} else if (comp instanceof Deletable) {
-				((Deletable) comp).deleteSelection();
-			} else {
-				checkWindow = true;
+		if (comp instanceof JTextComponent && comp.isEnabled()) {
+			JTextComponent textComp = (JTextComponent) comp;
+			ActionListener listener = textComp.getActionForKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+			if (listener != null) {
+				listener.actionPerformed(event);
 			}
 		} else {
-			checkWindow = true;
-		}
-		if (checkWindow) {
-			Window window = getActiveWindow();
-			if (window instanceof Deletable) {
-				((Deletable) window).deleteSelection();
+			Deletable deletable = getTarget(Deletable.class);
+			if (deletable != null && deletable.canDeleteSelection()) {
+				deletable.deleteSelection();
 			}
 		}
 	}

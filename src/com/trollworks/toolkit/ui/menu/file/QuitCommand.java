@@ -15,6 +15,7 @@ import com.apple.eawt.AppEvent.QuitEvent;
 import com.apple.eawt.QuitHandler;
 import com.apple.eawt.QuitResponse;
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.Fonts;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.BaseWindow;
@@ -38,10 +39,12 @@ public class QuitCommand extends Command implements QuitHandler {
 	}
 
 	/** The action command this command will issue. */
-	public static final String		CMD_QUIT	= "Quit";				//$NON-NLS-1$
+	public static final String		CMD_QUIT								= "Quit";				//$NON-NLS-1$
 
 	/** The singleton {@link QuitCommand}. */
-	public static final QuitCommand	INSTANCE	= new QuitCommand();
+	public static final QuitCommand	INSTANCE								= new QuitCommand();
+
+	private boolean					mAllowQuitIfNoSignificantWindowsOpen	= true;
 
 	private QuitCommand() {
 		super(Platform.isMacintosh() ? QUIT : EXIT, CMD_QUIT, KeyEvent.VK_Q);
@@ -60,44 +63,55 @@ public class QuitCommand extends Command implements QuitHandler {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if (attemptQuit()) {
-			System.exit(0);
+		attemptQuit();
+	}
+
+	/** Attempts to quit. */
+	public void attemptQuit() {
+		if (isEnabled()) {
+			if (closeFrames(true)) {
+				quitIfNoSignificantWindowsOpen();
+			}
 		}
 	}
 
-	/**
-	 * Attempts to quit.
-	 *
-	 * @result <code>true</code> if the quit was successful and the caller should call
-	 *         {@link System#exit(int)}.
-	 */
-	public boolean attemptQuit() {
-		if (isEnabled()) {
-			if (closeFrames(true)) {
-				if (closeFrames(false)) {
-					try {
-						RecentFilesMenu.saveToPreferences();
-						Fonts.saveToPreferences();
-						Preferences.getInstance().save();
-					} catch (Exception exception) {
-						// Ignore, since preferences may not have been initialized...
+	public void quitIfNoSignificantWindowsOpen() {
+		if (mAllowQuitIfNoSignificantWindowsOpen) {
+			for (Frame frame : Frame.getFrames()) {
+				if (frame.isVisible()) {
+					if (frame instanceof SignificantFrame || BaseWindow.hasOwnedWindowsShowing(frame)) {
+						return;
 					}
-					return true;
 				}
 			}
+			mAllowQuitIfNoSignificantWindowsOpen = false;
+			if (closeFrames(false)) {
+				saveState();
+				System.exit(0);
+			}
+			mAllowQuitIfNoSignificantWindowsOpen = true;
 		}
-		return false;
+	}
+
+	private static void saveState() {
+		try {
+			RecentFilesMenu.saveToPreferences();
+			Fonts.saveToPreferences();
+			Preferences.getInstance().save();
+		} catch (Exception exception) {
+			// Ignore, since preferences may not have been initialized...
+		}
 	}
 
 	private static boolean closeFrames(boolean significant) {
 		for (Frame frame : Frame.getFrames()) {
 			if (frame instanceof SignificantFrame == significant && frame.isVisible()) {
 				try {
-					if (!CloseCommand.close(frame, false)) {
+					if (!CloseCommand.close(frame)) {
 						return false;
 					}
 				} catch (Exception exception) {
-					exception.printStackTrace(System.err);
+					Log.error(exception);
 				}
 			}
 		}
@@ -106,10 +120,17 @@ public class QuitCommand extends Command implements QuitHandler {
 
 	@Override
 	public void handleQuitRequestWith(QuitEvent event, QuitResponse response) {
-		if (attemptQuit()) {
-			response.performQuit();
-		} else {
-			response.cancelQuit();
+		if (isEnabled()) {
+			mAllowQuitIfNoSignificantWindowsOpen = false;
+			if (closeFrames(true)) {
+				if (closeFrames(false)) {
+					saveState();
+					response.performQuit();
+					return;
+				}
+			}
+			mAllowQuitIfNoSignificantWindowsOpen = true;
 		}
+		response.cancelQuit();
 	}
 }

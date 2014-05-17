@@ -26,7 +26,7 @@ public class FileType {
 	private static HashMap<String, IconSet>		ICONSET_MAP	= new HashMap<>();
 	private String								mExtension;
 	private IconSet								mIconSet;
-	private WindowForFileProvider				mWindowProvider;
+	private FileProxyCreator					mFileProxyCreator;
 	private boolean								mAllowOpen;
 
 	/**
@@ -34,11 +34,11 @@ public class FileType {
 	 *
 	 * @param extension The extension of the file.
 	 * @param iconset The {@link IconSet} to use for the file.
-	 * @param windowProvider The {@link WindowForFileProvider} responsible for creating a window
-	 *            with this file's contents.
+	 * @param fileProxyCreator The {@link FileProxyCreator} responsible for creating a
+	 *            {@link FileProxy} with this file's contents.
 	 * @param allowOpen Whether this {@link FileType} is allowed to be opened via the menu command.
 	 */
-	public static final void register(String extension, IconSet iconset, WindowForFileProvider windowProvider, boolean allowOpen) {
+	public static final void register(String extension, IconSet iconset, FileProxyCreator fileProxyCreator, boolean allowOpen) {
 		if (!extension.startsWith(DOT)) {
 			extension = DOT + extension;
 		}
@@ -48,7 +48,7 @@ public class FileType {
 				break;
 			}
 		}
-		TYPES.add(new FileType(extension, iconset, windowProvider, allowOpen));
+		TYPES.add(new FileType(extension, iconset, fileProxyCreator, allowOpen));
 		ICONSET_MAP.put(extension, iconset);
 	}
 
@@ -113,10 +113,10 @@ public class FileType {
 		return ToolkitImage.getFolderIcons();
 	}
 
-	private FileType(String extension, IconSet iconset, WindowForFileProvider windowProvider, boolean allowOpen) {
+	private FileType(String extension, IconSet iconset, FileProxyCreator fileProxyCreator, boolean allowOpen) {
 		mExtension = extension;
 		mIconSet = iconset;
-		mWindowProvider = windowProvider;
+		mFileProxyCreator = fileProxyCreator;
 		mAllowOpen = allowOpen;
 	}
 
@@ -131,11 +131,11 @@ public class FileType {
 	}
 
 	/**
-	 * @return The {@link WindowForFileProvider} responsible for creating a window with this file's
-	 *         contents.
+	 * @return The {@link FileProxyCreator} responsible for creating a {@link FileProxy} with this
+	 *         file's contents.
 	 */
-	public WindowForFileProvider getWindowForFileProvider() {
-		return mWindowProvider;
+	public FileProxyCreator getFileProxyCreator() {
+		return mFileProxyCreator;
 	}
 
 	/** @return Whether this {@link FileType} is allowed to be opened via the menu command. */

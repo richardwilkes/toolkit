@@ -42,20 +42,32 @@ public class CutCommand extends Command {
 
 	@Override
 	public void adjust() {
-		boolean isEnabled = false;
+		boolean enable = false;
 		Component comp = getFocusOwner();
 		if (comp instanceof JTextComponent && comp.isEnabled()) {
 			JTextComponent textComp = (JTextComponent) comp;
 			if (textComp.isEditable()) {
-				String text = textComp.getSelectedText();
-				isEnabled = text != null && text.length() > 0;
+				enable = textComp.getSelectionStart() != textComp.getSelectionEnd();
+			}
+		} else {
+			Cutable cutable = getTarget(Cutable.class);
+			if (cutable != null) {
+				enable = cutable.canCutSelection();
 			}
 		}
-		setEnabled(isEnabled);
+		setEnabled(enable);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		((JTextComponent) getFocusOwner()).cut();
+		Component comp = getFocusOwner();
+		if (comp instanceof JTextComponent) {
+			((JTextComponent) comp).cut();
+		} else {
+			Cutable cutable = getTarget(Cutable.class);
+			if (cutable != null && cutable.canCutSelection()) {
+				cutable.cutSelection();
+			}
+		}
 	}
 }

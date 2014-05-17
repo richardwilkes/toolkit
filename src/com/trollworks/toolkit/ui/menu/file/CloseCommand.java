@@ -16,10 +16,10 @@ import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.BaseWindow;
 import com.trollworks.toolkit.utility.Localization;
 
-import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 
 /** Provides the "Close" command. */
 public class CloseCommand extends Command {
@@ -43,51 +43,35 @@ public class CloseCommand extends Command {
 	@Override
 	public void adjust() {
 		Window window = getActiveWindow();
-		boolean enable = window != null && !BaseWindow.hasOwnedWindowsShowing(window);
-		if (enable && window instanceof CloseableProxy) {
-			enable = ((CloseableProxy) window).mayAttemptClose();
+		boolean enable = false;
+		if (window != null && !BaseWindow.hasOwnedWindowsShowing(window)) {
+			CloseHandler handler = getTarget(CloseHandler.class);
+			enable = handler != null ? handler.mayAttemptClose() : true;
 		}
 		setEnabled(enable);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		close(getActiveWindow(), true);
+		Window window = getActiveWindow();
+		if (window != null && !BaseWindow.hasOwnedWindowsShowing(window)) {
+			CloseHandler handler = getTarget(CloseHandler.class);
+			if (handler != null) {
+				if (handler.mayAttemptClose()) {
+					handler.attemptClose();
+				}
+			} else {
+				close(window);
+			}
+		}
 	}
 
 	/**
 	 * @param window The {@link Window} to close.
-	 * @param quitIfLast Call {@link QuitCommand#attemptQuit()} if no windows are open when this
-	 *            method completes.
-	 * @return <code>true</code> if the {@link Window} was closed.
+	 * @return Whether the window was closed or not.
 	 */
-	public static boolean close(Window window, boolean quitIfLast) {
-		if (window != null && !BaseWindow.hasOwnedWindowsShowing(window)) {
-			if (window instanceof CloseableProxy) {
-				CloseableProxy proxy = (CloseableProxy) window;
-				if (proxy.mayAttemptClose()) {
-					proxy.attemptClose();
-				}
-			} else {
-				if (!SaveCommand.attemptSave(SaveCommand.getCurrentSaveable(window))) {
-					return false;
-				}
-				window.dispose();
-			}
-		}
-		if (quitIfLast) {
-			for (Frame frame : Frame.getFrames()) {
-				if (frame instanceof SignificantFrame) {
-					if (frame.isVisible() || BaseWindow.hasOwnedWindowsShowing(frame)) {
-						return true;
-					}
-				}
-			}
-			QuitCommand.INSTANCE.adjust();
-			if (QuitCommand.INSTANCE.attemptQuit()) {
-				System.exit(0);
-			}
-		}
-		return true;
+	public static boolean close(Window window) {
+		window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+		return !window.isVisible();
 	}
 }

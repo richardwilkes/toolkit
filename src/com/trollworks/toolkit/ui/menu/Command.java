@@ -260,21 +260,13 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
 		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner();
 	}
 
+	/** @return The current target. */
+	public static final <T> T getTarget(Class<T> type) {
+		return UIUtilities.getSelfOrAncestorOfType(getFocusOwner(), type);
+	}
+
 	/** @return The current active window. */
 	public static final Window getActiveWindow() {
 		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
-	}
-
-	/** @return The current target root. */
-	public static final Object getTargetRoot() {
-		CommandTargetProvider provider = UIUtilities.getSelfOrAncestorOfType(getFocusOwner(), CommandTargetProvider.class);
-		Object root = null;
-		if (provider != null) {
-			root = provider.getCommandTarget();
-		}
-		if (root == null) {
-			root = getActiveWindow();
-		}
-		return root;
 	}
 }

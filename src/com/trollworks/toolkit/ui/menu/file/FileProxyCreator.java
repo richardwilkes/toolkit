@@ -11,14 +11,15 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
-import com.trollworks.toolkit.ui.widget.dock.Dock;
+import java.io.File;
+import java.io.IOException;
 
-/**
- * Windows that have multiple {@link Saveable}s within them (such as those that contain a
- * {@link Dock}) can implement this interface to allow them to provide the current {@link Saveable},
- * if any.
- */
-public interface SaveableProvider {
-	/** @return The current {@link Saveable}, or <code>null</code>. */
-	Saveable getCurrentSaveable();
+/** Creates a {@link FileProxy} for files of a specific {@link FileType}. */
+public interface FileProxyCreator {
+	/**
+	 * @param file The {@link File} to load data from.
+	 * @return The resulting {@link FileProxy}, which should have been made visible in the UI and
+	 *         brought to the foreground.
+	 */
+	FileProxy create(File file) throws IOException;
 }

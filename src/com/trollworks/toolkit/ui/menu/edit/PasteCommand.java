@@ -43,23 +43,36 @@ public class PasteCommand extends Command {
 
 	@Override
 	public void adjust() {
-		boolean isEnabled = false;
+		boolean enable = false;
 		Component comp = getFocusOwner();
 		if (comp instanceof JTextComponent && comp.isEnabled()) {
 			JTextComponent textComp = (JTextComponent) comp;
 			if (textComp.isEditable()) {
 				try {
-					isEnabled = comp.getToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor);
+					enable = comp.getToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor);
 				} catch (Exception exception) {
 					// Ignore.
 				}
 			}
+		} else {
+			Pastable pastable = getTarget(Pastable.class);
+			if (pastable != null) {
+				enable = pastable.canPasteSelection();
+			}
 		}
-		setEnabled(isEnabled);
+		setEnabled(enable);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		((JTextComponent) getFocusOwner()).paste();
+		Component comp = getFocusOwner();
+		if (comp instanceof JTextComponent) {
+			((JTextComponent) comp).paste();
+		} else {
+			Pastable pastable = getTarget(Pastable.class);
+			if (pastable != null && pastable.canPasteSelection()) {
+				pastable.pasteSelection();
+			}
+		}
 	}
 }

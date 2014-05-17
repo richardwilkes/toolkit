@@ -14,7 +14,8 @@ package com.trollworks.toolkit.ui.widget;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.WindowSizeEnforcer;
-import com.trollworks.toolkit.ui.menu.file.CloseCommand;
+import com.trollworks.toolkit.ui.menu.file.CloseHandler;
+import com.trollworks.toolkit.ui.menu.file.QuitCommand;
 import com.trollworks.toolkit.utility.Preferences;
 
 import java.awt.Component;
@@ -174,12 +175,34 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 
 	@Override
 	public void windowClosed(WindowEvent event) {
-		// Nothing to do...
+		QuitCommand.INSTANCE.quitIfNoSignificantWindowsOpen();
 	}
 
 	@Override
 	public void windowClosing(WindowEvent event) {
-		CloseCommand.close(this, true);
+		if (!hasOwnedWindowsShowing(this)) {
+			List<CloseHandler> handlers = new ArrayList<>();
+			collectCloseHandlers(this, handlers);
+			for (CloseHandler handler : handlers) {
+				if (!handler.mayAttemptClose() || !handler.attemptClose()) {
+					return;
+				}
+			}
+			dispose();
+		}
+	}
+
+	private void collectCloseHandlers(Component component, List<CloseHandler> handlers) {
+		if (component instanceof Container) {
+			Container container = (Container) component;
+			int count = container.getComponentCount();
+			for (int i = 0; i < count; i++) {
+				collectCloseHandlers(container.getComponent(i), handlers);
+			}
+		}
+		if (component instanceof CloseHandler) {
+			handlers.add((CloseHandler) component);
+		}
 	}
 
 	@Override

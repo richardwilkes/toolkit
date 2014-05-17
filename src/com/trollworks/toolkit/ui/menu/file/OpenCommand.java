@@ -70,7 +70,7 @@ public class OpenCommand extends Command implements OpenFilesHandler {
 				if (proxy == null) {
 					for (FileType type : FileType.getOpenable()) {
 						if (name.matches(StdFileDialog.createExtensionMatcher(type.getExtension()))) {
-							proxy = type.getWindowForFileProvider().create(file);
+							proxy = type.getFileProxyCreator().create(file);
 							break;
 						}
 					}

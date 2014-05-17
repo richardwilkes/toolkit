@@ -15,8 +15,6 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.utility.Localization;
 
-import java.awt.Component;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -41,45 +39,19 @@ public class OpenItemCommand extends Command {
 
 	@Override
 	public void adjust() {
-		boolean isEnabled = false;
-		boolean checkWindow = false;
-		Component comp = getFocusOwner();
-		if (comp != null && comp.isEnabled()) {
-			if (comp instanceof Openable) {
-				isEnabled = ((Openable) comp).canOpenSelection();
-			} else {
-				checkWindow = true;
-			}
-		} else {
-			checkWindow = true;
+		boolean enable = false;
+		Openable openable = getTarget(Openable.class);
+		if (openable != null) {
+			enable = openable.canOpenSelection();
 		}
-		if (checkWindow) {
-			Window window = getActiveWindow();
-			if (window instanceof Openable) {
-				isEnabled = ((Openable) window).canOpenSelection();
-			}
-		}
-		setEnabled(isEnabled);
+		setEnabled(enable);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		boolean checkWindow = false;
-		Component comp = getFocusOwner();
-		if (comp.isEnabled()) {
-			if (comp instanceof Openable) {
-				((Openable) comp).openSelection();
-			} else {
-				checkWindow = true;
-			}
-		} else {
-			checkWindow = true;
-		}
-		if (checkWindow) {
-			Window window = getActiveWindow();
-			if (window instanceof Openable) {
-				((Openable) window).openSelection();
-			}
+		Openable openable = getTarget(Openable.class);
+		if (openable != null) {
+			openable.openSelection();
 		}
 	}
 }
