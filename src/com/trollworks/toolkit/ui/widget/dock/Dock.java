@@ -146,7 +146,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 					}
 				}
 			}
-			dc = new DockContainer(dockable);
+			dc = new DockContainer(this, dockable);
 			layout.dock(dc, target, locationRelativeToTarget);
 			addImpl(dc, null, -1);
 			revalidate();
@@ -650,5 +650,33 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 				break;
 		}
 		return bounds;
+	}
+
+	/**
+	 * Creates a new, untitled window title.
+	 *
+	 * @param baseTitle The base untitled name.
+	 * @param exclude A {@link Dockable} to exclude from naming decisions. May be <code>null</code>.
+	 * @return The new {@link Dockable} title.
+	 */
+	public String getNextUntitledDockableName(String baseTitle, Dockable exclude) {
+		List<Dockable> dockables = getDockables();
+		int value = 0;
+		String title;
+		boolean again;
+		do {
+			again = false;
+			title = baseTitle;
+			if (++value > 1) {
+				title += " " + value; //$NON-NLS-1$
+			}
+			for (Dockable dockable : dockables) {
+				if (dockable != exclude && title.equals(dockable.getTitle())) {
+					again = true;
+					break;
+				}
+			}
+		} while (again);
+		return title;
 	}
 }

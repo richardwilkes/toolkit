@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 
 /** All {@link Dockable}s are wrapped in a {@link DockContainer} when placed within a {@link Dock}. */
 public class DockContainer extends JPanel implements DockLayoutNode, LayoutManager {
+	private Dock			mDock;
 	private DockHeader		mHeader;
 	private List<Dockable>	mDockables	= new ArrayList<>();
 	private int				mCurrent;
@@ -37,22 +38,25 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 	/**
 	 * Creates a new {@link DockContainer} for the specified {@link Dockable}.
 	 *
+	 * @param dock The {@link Dock} that owns this {@link DockContainer}.
 	 * @param dockable The {@link Dockable} to wrap.
 	 */
-	public DockContainer(Dockable dockable) {
+	public DockContainer(Dock dock, Dockable dockable) {
+		mDock = dock;
 		setLayout(this);
 		setOpaque(true);
 		setBackground(Color.WHITE);
-		mDockables.add(dockable);
 		mHeader = new DockHeader(this);
 		add(mHeader);
 		add(dockable);
+		mDockables.add(dockable);
+		mHeader.addTab(dockable, 0);
 		setMinimumSize(new Dimension(0, 0));
 	}
 
 	/** @return The {@link Dock} this {@link DockContainer} resides in. */
 	public Dock getDock() {
-		return UIUtilities.getAncestorOfType(this, Dock.class);
+		return mDock;
 	}
 
 	/** @return The current list of {@link Dockable}s in this {@link DockContainer}. */
@@ -125,12 +129,12 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 	 * {@link DockContainer} as the argument.
 	 */
 	public void maximize() {
-		getDock().maximize(this);
+		mDock.maximize(this);
 	}
 
 	/** Calls the owning {@link Dock}'s {@link Dock#restore()} method. */
 	public void restore() {
-		getDock().restore();
+		mDock.restore();
 	}
 
 	/** @return The current tab index. */
@@ -216,13 +220,11 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 			mDockables.remove(dockable);
 			mHeader.close(dockable);
 			if (mDockables.isEmpty()) {
-				Dock dock = getDock();
-				if (dock != null) {
-					restore();
-					dock.remove(this);
-					dock.revalidate();
-					dock.repaint();
-				}
+				restore();
+				mDock.remove(this);
+				mDock.revalidate();
+				mDock.repaint();
+				mDock = null;
 			} else {
 				if (index > 0) {
 					index--;
