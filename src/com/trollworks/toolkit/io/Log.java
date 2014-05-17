@@ -83,6 +83,16 @@ public class Log {
 	/**
 	 * Logs an error.
 	 *
+	 * @param msg The message to log.
+	 * @param throwable The {@link Throwable} to log.
+	 */
+	public static final void error(String msg, Throwable throwable) {
+		error(null, msg, throwable);
+	}
+
+	/**
+	 * Logs an error.
+	 *
 	 * @param context The {@link Context} this error occurred within.
 	 * @param msg The message to log.
 	 */
@@ -118,6 +128,16 @@ public class Log {
 	 */
 	public static final void warn(String msg) {
 		warn(null, msg, null);
+	}
+
+	/**
+	 * Logs a warning.
+	 *
+	 * @param msg The message to log.
+	 * @param throwable The {@link Throwable} to log.
+	 */
+	public static final void warn(String msg, Throwable throwable) {
+		warn(null, msg, throwable);
 	}
 
 	/**
@@ -167,6 +187,16 @@ public class Log {
 	 */
 	public static final void info(String msg) {
 		info(null, msg, null);
+	}
+
+	/**
+	 * Logs an informational message.
+	 *
+	 * @param msg The message to log.
+	 * @param throwable The {@link Throwable} to log.
+	 */
+	public static final void info(String msg, Throwable throwable) {
+		info(null, msg, throwable);
 	}
 
 	/**
