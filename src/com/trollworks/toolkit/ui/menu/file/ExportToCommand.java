@@ -18,7 +18,6 @@ import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.PathUtils;
 
 import java.awt.Component;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
@@ -42,11 +41,11 @@ public class ExportToCommand extends Command {
 	/** The action command the PNG form of this command will issue. */
 	public static final String			CMD_EXPORT_TO_PNG	= "ExportToPNG";													//$NON-NLS-1$
 	/** The PNG extension. */
-	public static final String			PNG_EXTENSION		= ".png";															//$NON-NLS-1$
+	public static final String			PNG_EXTENSION		= "png";															//$NON-NLS-1$
 	/** The PDF extension. */
-	public static final String			PDF_EXTENSION		= ".pdf";															//$NON-NLS-1$
+	public static final String			PDF_EXTENSION		= "pdf";															//$NON-NLS-1$
 	/** The HTML extension. */
-	public static final String			HTML_EXTENSION		= ".html";															//$NON-NLS-1$
+	public static final String			HTML_EXTENSION		= "html";															//$NON-NLS-1$
 	/** The "Export To HTML...". */
 	public static final ExportToCommand	EXPORT_TO_HTML		= new ExportToCommand(HTML, CMD_EXPORT_TO_HTML, HTML_EXTENSION);
 	/** The "Export To PDF...". */
@@ -62,22 +61,24 @@ public class ExportToCommand extends Command {
 
 	@Override
 	public void adjust() {
-		Window activeWindow = getActiveWindow();
-		boolean enable = false;
-		if (activeWindow instanceof Saveable) {
-			for (String extension : ((Saveable) activeWindow).getAllowedExtensions()) {
+		setEnabled(getTarget() != null);
+	}
+
+	private Saveable getTarget() {
+		Object target = getTargetRoot();
+		if (target instanceof Saveable) {
+			for (String extension : ((Saveable) target).getAllowedExtensions()) {
 				if (mExtension.equals(extension)) {
-					enable = true;
-					break;
+					return (Saveable) target;
 				}
 			}
 		}
-		setEnabled(enable);
+		return null;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		saveAs((Saveable) getActiveWindow());
+		saveAs(getTarget());
 	}
 
 	/**
@@ -87,6 +88,9 @@ public class ExportToCommand extends Command {
 	 * @return The file(s) actually written to.
 	 */
 	public File[] saveAs(Saveable saveable) {
+		if (saveable == null) {
+			return new File[0];
+		}
 		String path = saveable.getPreferredSavePath();
 		File result = StdFileDialog.choose(saveable instanceof Component ? (Component) saveable : null, false, (String) getValue(NAME), PathUtils.getParent(path), PathUtils.getLeafName(path), mExtension);
 		return result != null ? saveable.saveTo(result) : new File[0];

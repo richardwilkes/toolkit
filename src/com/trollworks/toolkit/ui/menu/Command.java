@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.menu;
 
+import com.trollworks.toolkit.ui.UIUtilities;
+
 import java.awt.Component;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
@@ -261,5 +263,24 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
 	/** @return The current active window. */
 	public static final Window getActiveWindow() {
 		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+	}
+
+	/** @return The current target root. */
+	public static final Object getTargetRoot() {
+		CommandTargetProvider provider = null;
+		Component component = getFocusOwner();
+		if (component instanceof CommandTargetProvider) {
+			provider = (CommandTargetProvider) component;
+		} else if (component != null) {
+			provider = UIUtilities.getAncestorOfType(component, CommandTargetProvider.class);
+		}
+		Object root = null;
+		if (provider != null) {
+			root = provider.getCommandTarget();
+		}
+		if (root == null) {
+			root = getActiveWindow();
+		}
+		return root;
 	}
 }
