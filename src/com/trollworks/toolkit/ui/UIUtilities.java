@@ -14,7 +14,6 @@ package com.trollworks.toolkit.ui;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.image.Images;
 import com.trollworks.toolkit.ui.image.ToolkitIcon;
-import com.trollworks.toolkit.ui.widget.dock.Dockable;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -413,14 +412,6 @@ public class UIUtilities {
 	 * @return The {@link Component} to use for the dialog, or <code>null</code>.
 	 */
 	public static Component getComponentForDialog(Object obj) {
-		Component component;
-		if (obj instanceof Component) {
-			component = (Component) obj;
-		} else if (obj instanceof Dockable) {
-			component = ((Dockable) obj).getContent();
-		} else {
-			component = null;
-		}
-		return component;
+		return obj instanceof Component ? (Component) obj : null;
 	}
 }

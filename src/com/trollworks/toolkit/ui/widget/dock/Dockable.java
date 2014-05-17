@@ -13,34 +13,41 @@ package com.trollworks.toolkit.ui.widget.dock;
 
 import com.trollworks.toolkit.ui.UIUtilities;
 
-import java.awt.Component;
+import java.awt.LayoutManager;
 
 import javax.swing.Icon;
+import javax.swing.JPanel;
 
 /** Represents dockable items. */
-public interface Dockable {
+public abstract class Dockable extends JPanel {
+	/**
+	 * Creates a new {@link Dockable}.
+	 */
+	protected Dockable() {
+		super(true);
+	}
+
+	/** @param layout The {@link LayoutManager} to use. */
+	protected Dockable(LayoutManager layout) {
+		super(layout, true);
+	}
+
 	/**
 	 * @return A unique descriptor that can be used by a {@link DockableFactory} to recreate the
 	 *         contents of the {@link Dockable}.
 	 */
-	String getDescriptor();
+	public abstract String getDescriptor();
 
 	/** @return An {@link Icon} to represent this {@link Dockable}. */
-	Icon getTitleIcon();
+	public abstract Icon getTitleIcon();
 
 	/** @return The title of this {@link Dockable}. */
-	String getTitle();
+	public abstract String getTitle();
 
 	/** @return The title tooltip of this {@link Dockable}. */
-	String getTitleTooltip();
+	public abstract String getTitleTooltip();
 
-	/**
-	 * @return The content of this {@link Dockable}. Note that this content should only be created
-	 *         once and the same object returned for all subsequent calls to this method.
-	 */
-	Component getContent();
-
-	default DockContainer getDockContainer() {
-		return UIUtilities.getAncestorOfType(getContent(), DockContainer.class);
+	public final DockContainer getDockContainer() {
+		return UIUtilities.getAncestorOfType(this, DockContainer.class);
 	}
 }

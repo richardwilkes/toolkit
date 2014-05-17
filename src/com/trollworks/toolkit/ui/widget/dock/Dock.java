@@ -16,7 +16,6 @@ import com.trollworks.toolkit.ui.MouseCapture;
 import com.trollworks.toolkit.ui.image.Cursors;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.IllegalComponentStateException;
 import java.awt.KeyboardFocusManager;
@@ -35,9 +34,7 @@ import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JPanel;
 
@@ -653,28 +650,5 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 				break;
 		}
 		return bounds;
-	}
-
-	/**
-	 * @param component The {@link Component} to check for.
-	 * @return The {@link Dockable} that the specified {@link Component} resides within.
-	 */
-	public static Dockable getParentDockable(Component component) {
-		Set<Component> set = new HashSet<>();
-		set.add(component);
-		Container parent = component.getParent();
-		while (parent != null) {
-			if (parent instanceof DockContainer) {
-				for (Dockable dockable : ((DockContainer) parent).getDockables()) {
-					if (set.contains(dockable.getContent())) {
-						return dockable;
-					}
-				}
-				return null;
-			}
-			set.add(parent);
-			parent = parent.getParent();
-		}
-		return null;
 	}
 }
