@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.preferences;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.Localization;
@@ -72,8 +73,7 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
 			try {
 				addTab(category.create(this));
 			} catch (Exception exception) {
-				System.out.println("Exception trying to load " + category); //$NON-NLS-1$
-				exception.printStackTrace();
+				Log.error("Trying to load " + category, exception); //$NON-NLS-1$
 			}
 		}
 		mTabPanel.addChangeListener(this);
