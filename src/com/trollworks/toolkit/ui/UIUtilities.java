@@ -346,7 +346,7 @@ public class UIUtilities {
 	 * @return The ancestor, or <code>null</code>.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T getAncestorOfType(Component component, Class<? extends T> type) {
+	public static <T> T getAncestorOfType(Component component, Class<T> type) {
 		if (component == null) {
 			return null;
 		}
