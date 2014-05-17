@@ -240,7 +240,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 		for (AppWindow window : AppWindow.getAllWindows()) {
 			if (window instanceof FileProxy) {
 				FileProxy proxy = (FileProxy) window;
-				File wFile = proxy.getCurrentBackingFile();
+				File wFile = proxy.getBackingFile();
 				if (wFile != null) {
 					if (PathUtils.getFullPath(wFile).equals(fullPath)) {
 						return proxy;

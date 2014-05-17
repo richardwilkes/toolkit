@@ -90,7 +90,7 @@ public class SaveCommand extends Command {
 		if (saveable == null) {
 			return new File[0];
 		}
-		File file = saveable.getCurrentBackingFile();
+		File file = saveable.getBackingFile();
 		if (file != null) {
 			File[] files = saveable.saveTo(file);
 			for (File one : files) {

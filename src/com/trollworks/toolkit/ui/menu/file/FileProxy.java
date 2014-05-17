@@ -15,8 +15,8 @@ import java.io.File;
 
 /** Objects that provide a backing {@link File} should implement this interface. */
 public interface FileProxy {
-	/** @return The current backing file object. May be <code>null</code>. */
-	File getCurrentBackingFile();
+	/** @return The backing file object. May be <code>null</code>. */
+	File getBackingFile();
 
 	/**
 	 * Called to request the UI that displays the {@link File} associated with this
