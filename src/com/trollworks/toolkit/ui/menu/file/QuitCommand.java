@@ -115,15 +115,18 @@ public class QuitCommand extends Command implements QuitHandler {
 
 	@Override
 	public void handleQuitRequestWith(QuitEvent event, QuitResponse response) {
-		mAllowQuitIfNoSignificantWindowsOpen = false;
-		if (closeFrames(true)) {
-			if (closeFrames(false)) {
-				saveState();
-				response.performQuit();
-				return;
+		if (!UIUtilities.inModalState()) {
+			mAllowQuitIfNoSignificantWindowsOpen = false;
+			if (closeFrames(true)) {
+				if (closeFrames(false)) {
+					saveState();
+					response.performQuit();
+					return;
+				}
 			}
+			mAllowQuitIfNoSignificantWindowsOpen = true;
 		}
-		mAllowQuitIfNoSignificantWindowsOpen = true;
 		response.cancelQuit();
+
 	}
 }
