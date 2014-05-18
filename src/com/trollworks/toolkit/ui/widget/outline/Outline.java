@@ -20,9 +20,9 @@ import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.menu.edit.Deletable;
 import com.trollworks.toolkit.ui.menu.edit.SelectAllCapable;
+import com.trollworks.toolkit.ui.menu.edit.Undoable;
 import com.trollworks.toolkit.ui.print.PrintUtilities;
 import com.trollworks.toolkit.ui.widget.ActionPanel;
-import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.ui.widget.dock.Dock;
 import com.trollworks.toolkit.ui.widget.dock.DockableTransferable;
 import com.trollworks.toolkit.utility.Debug;
@@ -33,7 +33,6 @@ import com.trollworks.toolkit.utility.text.Numbers;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
-import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -76,7 +75,6 @@ import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.undo.StateEdit;
-import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
 /** A panel that can show both hierarchical and tabular data. */
@@ -1620,8 +1618,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 			g2d.drawImage(off1, 0, 0, this);
 		} catch (Exception paintException) {
 			assert false : Debug.toString(paintException);
-			off2 = null;
-			mDragClip = new Rectangle(x, y, 1, 1);
+		off2 = null;
+		mDragClip = new Rectangle(x, y, 1, 1);
 		} finally {
 			if (g2d != null) {
 				g2d.dispose();
@@ -2792,12 +2790,9 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
 	/** @param undo The undo to post. */
 	public void postUndo(UndoableEdit undo) {
-		Container top = getTopLevelAncestor();
-		if (top instanceof AppWindow) {
-			UndoManager mgr = ((AppWindow) top).getUndoManager();
-			if (mgr != null) {
-				mgr.addEdit(undo);
-			}
+		Undoable undoable = UIUtilities.getSelfOrAncestorOfType(this, Undoable.class);
+		if (undoable != null) {
+			undoable.getUndoManager().addEdit(undo);
 		}
 	}
 
