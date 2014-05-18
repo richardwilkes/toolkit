@@ -13,6 +13,7 @@ package com.trollworks.toolkit.ui.preferences;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.Localization;
@@ -59,10 +60,12 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
 
 	/** Displays the preferences window. */
 	public static void display() {
-		if (INSTANCE == null) {
-			INSTANCE = new PreferencesWindow();
+		if (!UIUtilities.inModalState()) {
+			if (INSTANCE == null) {
+				INSTANCE = new PreferencesWindow();
+			}
+			INSTANCE.setVisible(true);
 		}
-		INSTANCE.setVisible(true);
 	}
 
 	private PreferencesWindow() {
