@@ -47,6 +47,14 @@ public abstract class Dockable extends JPanel {
 	/** @return The title tooltip of this {@link Dockable}. */
 	public abstract String getTitleTooltip();
 
+	/**
+	 * Called when this {@link Dockable} is made active within a {@link DockContainer}. This can be
+	 * called many times in a row without other {@link Dockable}s receiving a call in between.
+	 */
+	public void activated() {
+		// Does nothing by default
+	}
+
 	public final DockContainer getDockContainer() {
 		return UIUtilities.getAncestorOfType(this, DockContainer.class);
 	}

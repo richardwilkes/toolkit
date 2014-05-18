@@ -151,6 +151,7 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 	public void setCurrentDockable(Dockable dockable) {
 		int index = mDockables.indexOf(dockable);
 		if (index != -1) {
+			int wasCurrent = mCurrent;
 			mCurrent = index;
 			for (Dockable one : mDockables) {
 				one.setVisible(dockable == one);
@@ -158,6 +159,9 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 			mHeader.revalidate();
 			repaint();
 			acquireFocus();
+			if (mActive && wasCurrent != mCurrent) {
+				dockable.activated();
+			}
 		}
 	}
 
@@ -248,6 +252,12 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 		if (mActive != active) {
 			mActive = active;
 			mHeader.repaint();
+			if (mActive) {
+				Dockable dockable = getCurrentDockable();
+				if (dockable != null) {
+					dockable.activated();
+				}
+			}
 		}
 	}
 
