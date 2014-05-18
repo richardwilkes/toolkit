@@ -1640,6 +1640,19 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 		return null;
 	}
 
+	/** @return The currently selected {@link TreeRow}s. */
+	public ArrayList<TreeRow> getExplicitlySelectedRows() {
+		ArrayList<TreeRow> selection = new ArrayList<>();
+		if (!mSelectedRows.isEmpty()) {
+			for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
+				if (mSelectedRows.contains(row)) {
+					selection.add(row);
+				}
+			}
+		}
+		return selection;
+	}
+
 	/**
 	 * @return The currently selected {@link TreeRow}s. If any ancestor of a {@link TreeRow} is
 	 *         selected, then it will not appear in the result.
