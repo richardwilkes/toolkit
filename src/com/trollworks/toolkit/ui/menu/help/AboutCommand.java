@@ -15,6 +15,7 @@ import com.apple.eawt.AboutHandler;
 import com.apple.eawt.AppEvent.AboutEvent;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.App;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.BundleInfo;
@@ -50,7 +51,7 @@ public class AboutCommand extends Command implements AboutHandler {
 
 	@Override
 	public void adjust() {
-		setEnabled(true);
+		setEnabled(!UIUtilities.inModalState());
 	}
 
 	@Override
@@ -64,28 +65,30 @@ public class AboutCommand extends Command implements AboutHandler {
 	}
 
 	private void show() {
-		if (mWindow != null) {
-			if (mWindow.isDisplayable() && mWindow.isVisible()) {
-				mWindow.toFront();
-				return;
-			}
-		}
-		JPanel aboutPanel = App.createAboutPanel();
-		if (aboutPanel != null) {
-			mWindow = new AppWindow(getTitle());
-			mWindow.getContentPane().add(aboutPanel);
-			mWindow.pack();
-			mWindow.addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosed(WindowEvent windowEvent) {
-					mWindow = null;
+		if (!UIUtilities.inModalState()) {
+			if (mWindow != null) {
+				if (mWindow.isDisplayable() && mWindow.isVisible()) {
+					mWindow.toFront();
+					return;
 				}
-			});
-			Rectangle bounds = mWindow.getGraphicsConfiguration().getBounds();
-			Dimension size = mWindow.getSize();
-			mWindow.setLocation(bounds.x + (bounds.width - size.width) / 2, bounds.y + (bounds.height - size.height) / 3);
-			mWindow.setVisible(true);
-			mWindow.setResizable(false);
+			}
+			JPanel aboutPanel = App.createAboutPanel();
+			if (aboutPanel != null) {
+				mWindow = new AppWindow(getTitle());
+				mWindow.getContentPane().add(aboutPanel);
+				mWindow.pack();
+				mWindow.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosed(WindowEvent windowEvent) {
+						mWindow = null;
+					}
+				});
+				Rectangle bounds = mWindow.getGraphicsConfiguration().getBounds();
+				Dimension size = mWindow.getSize();
+				mWindow.setLocation(bounds.x + (bounds.width - size.width) / 2, bounds.y + (bounds.height - size.height) / 3);
+				mWindow.setVisible(true);
+				mWindow.setResizable(false);
+			}
 		}
 	}
 }
