@@ -14,10 +14,12 @@ package com.trollworks.toolkit.ui;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.image.Images;
 import com.trollworks.toolkit.ui.image.ToolkitIcon;
+import com.trollworks.toolkit.ui.widget.BaseWindow;
 
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
@@ -121,14 +123,14 @@ public class UIUtilities {
 	 * @param component The component the point should be translated to.
 	 */
 	public static void convertPointFromScreen(Point pt, Component component) {
-		do {
+		while (component != null) {
 			pt.x -= component.getX();
 			pt.y -= component.getY();
 			if (component instanceof Window) {
 				break;
 			}
 			component = component.getParent();
-		} while (component != null);
+		}
 	}
 
 	/**
@@ -138,14 +140,14 @@ public class UIUtilities {
 	 * @param component The component the point originated in.
 	 */
 	public static void convertPointToScreen(Point pt, Component component) {
-		do {
+		while (component != null) {
 			pt.x += component.getX();
 			pt.y += component.getY();
 			if (component instanceof Window) {
 				break;
 			}
 			component = component.getParent();
-		} while (component != null);
+		}
 	}
 
 	/**
@@ -167,14 +169,14 @@ public class UIUtilities {
 	 * @param component The component the rectangle should be translated to.
 	 */
 	public static void convertRectangleFromScreen(Rectangle bounds, Component component) {
-		do {
+		while (component != null) {
 			bounds.x -= component.getX();
 			bounds.y -= component.getY();
 			if (component instanceof Window) {
 				break;
 			}
 			component = component.getParent();
-		} while (component != null);
+		}
 	}
 
 	/**
@@ -184,14 +186,14 @@ public class UIUtilities {
 	 * @param component The component the rectangle originated in.
 	 */
 	public static void convertRectangleToScreen(Rectangle bounds, Component component) {
-		do {
+		while (component != null) {
 			bounds.x += component.getX();
 			bounds.y += component.getY();
 			if (component instanceof Window) {
 				break;
 			}
 			component = component.getParent();
-		} while (component != null);
+		}
 	}
 
 	/**
@@ -413,5 +415,15 @@ public class UIUtilities {
 	 */
 	public static Component getComponentForDialog(Object obj) {
 		return obj instanceof Component ? (Component) obj : null;
+	}
+
+	/** @return Whether or not the application is currently in a modal state. */
+	public static boolean inModalState() {
+		for (Frame frame : Frame.getFrames()) {
+			if (frame.isShowing() && BaseWindow.hasOwnedWindowsShowing(frame)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
