@@ -115,4 +115,23 @@ public class Geometry {
 		}
 		return new Rectangle(Integer.parseInt(parts[0].trim()), Integer.parseInt(parts[1].trim()), parts.length > 2 ? Integer.parseInt(parts[2].trim()) : 1, parts.length > 2 ? Integer.parseInt(parts[3].trim()) : 1);
 	}
+
+	/**
+	 * @param amount The number of pixels to inset the {@link Rectangle}.
+	 * @param bounds The {@link Rectangle} to inset.
+	 * @return The {@link Rectangle} that was passed in.
+	 */
+	public static final Rectangle inset(int amount, Rectangle bounds) {
+		bounds.x += amount;
+		bounds.y += amount;
+		bounds.width -= amount * 2;
+		bounds.height -= amount * 2;
+		if (bounds.width < 0) {
+			bounds.width = 0;
+		}
+		if (bounds.height < 0) {
+			bounds.height = 0;
+		}
+		return bounds;
+	}
 }
