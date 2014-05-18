@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui.menu.edit;
 import com.apple.eawt.AppEvent.PreferencesEvent;
 import com.apple.eawt.PreferencesHandler;
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.preferences.PreferencesWindow;
 import com.trollworks.toolkit.utility.Localization;
@@ -42,7 +43,7 @@ public class PreferencesCommand extends Command implements PreferencesHandler {
 
 	@Override
 	public void adjust() {
-		setEnabled(true);
+		setEnabled(!UIUtilities.inModalState());
 	}
 
 	@Override
