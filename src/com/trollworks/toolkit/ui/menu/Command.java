@@ -269,4 +269,9 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
 	public static final Window getActiveWindow() {
 		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
 	}
+
+	/** @return The current focused window. */
+	public static final Window getFocusedWindow() {
+		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
+	}
 }
