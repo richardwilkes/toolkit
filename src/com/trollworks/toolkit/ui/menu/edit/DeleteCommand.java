@@ -38,7 +38,7 @@ public class DeleteCommand extends Command {
 	public static final DeleteCommand	INSTANCE	= new DeleteCommand();
 
 	private DeleteCommand() {
-		super(DELETE, CMD_DELETE, KeyEvent.VK_DELETE);
+		super(DELETE, CMD_DELETE, KeyEvent.VK_DELETE, 0);
 	}
 
 	@Override
