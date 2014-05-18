@@ -14,8 +14,9 @@ package com.trollworks.toolkit.ui.widget;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.WindowSizeEnforcer;
-import com.trollworks.toolkit.ui.menu.file.CloseHandler;
 import com.trollworks.toolkit.ui.menu.file.QuitCommand;
+import com.trollworks.toolkit.ui.menu.file.SaveCommand;
+import com.trollworks.toolkit.ui.menu.file.Saveable;
 import com.trollworks.toolkit.utility.Preferences;
 
 import java.awt.Component;
@@ -51,9 +52,11 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 	 * @return <code>true</code> if an owned window is showing.
 	 */
 	public static boolean hasOwnedWindowsShowing(Window window) {
-		for (Window one : window.getOwnedWindows()) {
-			if (one.isShowing()) {
-				return true;
+		if (window != null) {
+			for (Window one : window.getOwnedWindows()) {
+				if (one.isShowing()) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -181,27 +184,24 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 	@Override
 	public void windowClosing(WindowEvent event) {
 		if (!hasOwnedWindowsShowing(this)) {
-			List<CloseHandler> handlers = new ArrayList<>();
-			collectCloseHandlers(this, handlers);
-			for (CloseHandler handler : handlers) {
-				if (!handler.mayAttemptClose() || !handler.attemptClose()) {
-					return;
-				}
+			List<Saveable> saveables = new ArrayList<>();
+			collectSaveables(this, saveables);
+			if (SaveCommand.attemptSave(saveables)) {
+				dispose();
 			}
-			dispose();
 		}
 	}
 
-	private void collectCloseHandlers(Component component, List<CloseHandler> handlers) {
+	private void collectSaveables(Component component, List<Saveable> saveables) {
 		if (component instanceof Container) {
 			Container container = (Container) component;
 			int count = container.getComponentCount();
 			for (int i = 0; i < count; i++) {
-				collectCloseHandlers(container.getComponent(i), handlers);
+				collectSaveables(container.getComponent(i), saveables);
 			}
 		}
-		if (component instanceof CloseHandler) {
-			handlers.add((CloseHandler) component);
+		if (component instanceof Saveable) {
+			saveables.add((Saveable) component);
 		}
 	}
 
