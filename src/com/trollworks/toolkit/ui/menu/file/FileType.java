@@ -21,11 +21,11 @@ import java.util.HashMap;
 
 /** Describes a file. */
 public class FileType {
-	private static final String					DOT			= ".";					//$NON-NLS-1$
 	private static final ArrayList<FileType>	TYPES		= new ArrayList<>();
 	private static HashMap<String, IconSet>		ICONSET_MAP	= new HashMap<>();
 	private String								mExtension;
 	private IconSet								mIconSet;
+	private String								mDescription;
 	private FileProxyCreator					mFileProxyCreator;
 	private boolean								mAllowOpen;
 
@@ -34,22 +34,35 @@ public class FileType {
 	 *
 	 * @param extension The extension of the file.
 	 * @param iconset The {@link IconSet} to use for the file.
+	 * @param description A short description of the file type.
 	 * @param fileProxyCreator The {@link FileProxyCreator} responsible for creating a
 	 *            {@link FileProxy} with this file's contents.
 	 * @param allowOpen Whether this {@link FileType} is allowed to be opened via the menu command.
 	 */
-	public static final void register(String extension, IconSet iconset, FileProxyCreator fileProxyCreator, boolean allowOpen) {
-		if (!extension.startsWith(DOT)) {
-			extension = DOT + extension;
-		}
+	public static final void register(String extension, IconSet iconset, String description, FileProxyCreator fileProxyCreator, boolean allowOpen) {
+		extension = normalizeExtension(extension);
 		for (FileType type : TYPES) {
 			if (type.mExtension.equals(extension)) {
 				TYPES.remove(type);
 				break;
 			}
 		}
-		TYPES.add(new FileType(extension, iconset, fileProxyCreator, allowOpen));
+		TYPES.add(new FileType(extension, iconset, description, fileProxyCreator, allowOpen));
 		ICONSET_MAP.put(extension, iconset);
+	}
+
+	/**
+	 * @param extension The file extension to normalize.
+	 * @return The extension, minus the leading '.', if it was present.
+	 */
+	public static String normalizeExtension(String extension) {
+		if (extension == null) {
+			return ""; //$NON-NLS-1$
+		}
+		if (extension.startsWith(".")) { //$NON-NLS-1$
+			extension = extension.substring(1);
+		}
+		return extension;
 	}
 
 	/** @return All of the registered {@link FileType}s. */
@@ -101,9 +114,7 @@ public class FileType {
 	 */
 	public static IconSet getIconsForFileExtension(String extension) {
 		if (extension != null) {
-			if (!extension.startsWith(DOT)) {
-				extension = DOT + extension;
-			}
+			extension = normalizeExtension(extension);
 			IconSet icons = ICONSET_MAP.get(extension);
 			if (icons != null) {
 				return icons;
@@ -113,9 +124,10 @@ public class FileType {
 		return ToolkitImage.getFolderIcons();
 	}
 
-	private FileType(String extension, IconSet iconset, FileProxyCreator fileProxyCreator, boolean allowOpen) {
+	private FileType(String extension, IconSet iconset, String description, FileProxyCreator fileProxyCreator, boolean allowOpen) {
 		mExtension = extension;
 		mIconSet = iconset;
+		mDescription = description;
 		mFileProxyCreator = fileProxyCreator;
 		mAllowOpen = allowOpen;
 	}
@@ -128,6 +140,11 @@ public class FileType {
 	/** @return The {@link IconSet} representing the file. */
 	public IconSet getIcons() {
 		return mIconSet;
+	}
+
+	/** @return A short description for the file type. */
+	public String getDescription() {
+		return mDescription;
 	}
 
 	/**
