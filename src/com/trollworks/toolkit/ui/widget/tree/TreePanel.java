@@ -65,6 +65,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.UIManager;
@@ -1274,6 +1275,32 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	}
 
 	/**
+	 * Ensures that each {@link TreeRow} specified will have all of its parents open such that it
+	 * can be viewed by the user.
+	 *
+	 * @param rows The rows whose parents must be open.
+	 */
+	public void setParentsOpen(Collection<TreeRow> rows) {
+		Set<TreeContainerRow> parents = new HashSet<>();
+		for (TreeRow row : rows) {
+			collectClosedParents(row, parents);
+		}
+		if (!parents.isEmpty()) {
+			setOpen(true, parents);
+		}
+	}
+
+	private void collectClosedParents(TreeRow row, Set<TreeContainerRow> parents) {
+		TreeContainerRow parent = row.getParent();
+		if (parent != null) {
+			if (!isOpen(parent)) {
+				parents.add(parent);
+			}
+			collectClosedParents(parent, parents);
+		}
+	}
+
+	/**
 	 * @param row The {@link TreeRow} to check.
 	 * @return Whether or not the specified {@link TreeRow} is selected.
 	 */
@@ -1859,7 +1886,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			g2d.drawImage(off1, -(getColumnStart(column) + pt.x), 0, this);
 		} catch (Exception paintException) {
 			assert false : Debug.toString(paintException);
-		off2 = null;
+			off2 = null;
 		} finally {
 			if (g2d != null) {
 				g2d.dispose();
