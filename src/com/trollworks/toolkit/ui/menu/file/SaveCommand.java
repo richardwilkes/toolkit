@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.MessageFormat;
+import java.util.Collection;
 
 import javax.swing.JOptionPane;
 
@@ -56,6 +57,22 @@ public class SaveCommand extends Command {
 	}
 
 	/**
+	 * Makes an attempt to save the specified {@link Saveable}s if any have been modified.
+	 *
+	 * @param saveables The {@link Saveable}s to work on.
+	 * @return <code>false</code> if a save was cancelled or failed.
+	 */
+	public static boolean attemptSave(Collection<Saveable> saveables) {
+		UIUtilities.forceFocusToAccept();
+		for (Saveable saveable : saveables) {
+			if (!attemptSaveInternal(saveable)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Makes an attempt to save the specified {@link Saveable} if it has been modified.
 	 *
 	 * @param saveable The {@link Saveable} to work on.
@@ -64,16 +81,22 @@ public class SaveCommand extends Command {
 	public static boolean attemptSave(Saveable saveable) {
 		if (saveable != null) {
 			UIUtilities.forceFocusToAccept();
-			if (saveable.isModified()) {
-				int answer = JOptionPane.showConfirmDialog(UIUtilities.getComponentForDialog(saveable), MessageFormat.format(SAVE_CHANGES, saveable.getSaveTitle()), SAVE, JOptionPane.YES_NO_CANCEL_OPTION);
-				if (answer == JOptionPane.CANCEL_OPTION || answer == JOptionPane.CLOSED_OPTION) {
+			return attemptSaveInternal(saveable);
+		}
+		return true;
+	}
+
+	private static boolean attemptSaveInternal(Saveable saveable) {
+		if (saveable.isModified()) {
+			saveable.toFrontAndFocus();
+			int answer = JOptionPane.showConfirmDialog(UIUtilities.getComponentForDialog(saveable), MessageFormat.format(SAVE_CHANGES, saveable.getSaveTitle()), SAVE, JOptionPane.YES_NO_CANCEL_OPTION);
+			if (answer == JOptionPane.CANCEL_OPTION || answer == JOptionPane.CLOSED_OPTION) {
+				return false;
+			}
+			if (answer == JOptionPane.YES_OPTION) {
+				SaveCommand.save(saveable);
+				if (saveable.isModified()) {
 					return false;
-				}
-				if (answer == JOptionPane.YES_OPTION) {
-					SaveCommand.save(saveable);
-					if (saveable.isModified()) {
-						return false;
-					}
 				}
 			}
 		}
