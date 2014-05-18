@@ -13,7 +13,6 @@ package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
-import com.trollworks.toolkit.ui.widget.BaseWindow;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.Window;
@@ -42,26 +41,16 @@ public class CloseCommand extends Command {
 
 	@Override
 	public void adjust() {
-		Window window = getActiveWindow();
-		boolean enable = false;
-		if (window != null && !BaseWindow.hasOwnedWindowsShowing(window)) {
-			CloseHandler handler = getTarget(CloseHandler.class);
-			enable = handler != null ? handler.mayAttemptClose() : true;
-		}
-		setEnabled(enable);
+		CloseHandler handler = getTarget(CloseHandler.class);
+		setEnabled(handler != null ? handler.mayAttemptClose() : false);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		Window window = getActiveWindow();
-		if (window != null && !BaseWindow.hasOwnedWindowsShowing(window)) {
-			CloseHandler handler = getTarget(CloseHandler.class);
-			if (handler != null) {
-				if (handler.mayAttemptClose()) {
-					handler.attemptClose();
-				}
-			} else {
-				close(window);
+		CloseHandler handler = getTarget(CloseHandler.class);
+		if (handler != null) {
+			if (handler.mayAttemptClose()) {
+				handler.attemptClose();
 			}
 		}
 	}
@@ -71,7 +60,10 @@ public class CloseCommand extends Command {
 	 * @return Whether the window was closed or not.
 	 */
 	public static boolean close(Window window) {
+		if (window == null) {
+			return true;
+		}
 		window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-		return !window.isVisible();
+		return !window.isShowing();
 	}
 }

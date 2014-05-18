@@ -17,6 +17,7 @@ import com.apple.eawt.QuitResponse;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.Fonts;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.BaseWindow;
 import com.trollworks.toolkit.utility.Localization;
@@ -52,12 +53,6 @@ public class QuitCommand extends Command implements QuitHandler {
 
 	@Override
 	public void adjust() {
-		for (Frame frame : Frame.getFrames()) {
-			if (frame.isVisible() && BaseWindow.hasOwnedWindowsShowing(frame)) {
-				setEnabled(false);
-				return;
-			}
-		}
 		setEnabled(true);
 	}
 
@@ -68,7 +63,7 @@ public class QuitCommand extends Command implements QuitHandler {
 
 	/** Attempts to quit. */
 	public void attemptQuit() {
-		if (isEnabled()) {
+		if (!UIUtilities.inModalState()) {
 			if (closeFrames(true)) {
 				quitIfNoSignificantWindowsOpen();
 			}
@@ -78,7 +73,7 @@ public class QuitCommand extends Command implements QuitHandler {
 	public void quitIfNoSignificantWindowsOpen() {
 		if (mAllowQuitIfNoSignificantWindowsOpen) {
 			for (Frame frame : Frame.getFrames()) {
-				if (frame.isVisible()) {
+				if (frame.isShowing()) {
 					if (frame instanceof SignificantFrame || BaseWindow.hasOwnedWindowsShowing(frame)) {
 						return;
 					}
@@ -105,7 +100,7 @@ public class QuitCommand extends Command implements QuitHandler {
 
 	private static boolean closeFrames(boolean significant) {
 		for (Frame frame : Frame.getFrames()) {
-			if (frame instanceof SignificantFrame == significant && frame.isVisible()) {
+			if (frame instanceof SignificantFrame == significant && frame.isShowing()) {
 				try {
 					if (!CloseCommand.close(frame)) {
 						return false;
@@ -120,17 +115,15 @@ public class QuitCommand extends Command implements QuitHandler {
 
 	@Override
 	public void handleQuitRequestWith(QuitEvent event, QuitResponse response) {
-		if (isEnabled()) {
-			mAllowQuitIfNoSignificantWindowsOpen = false;
-			if (closeFrames(true)) {
-				if (closeFrames(false)) {
-					saveState();
-					response.performQuit();
-					return;
-				}
+		mAllowQuitIfNoSignificantWindowsOpen = false;
+		if (closeFrames(true)) {
+			if (closeFrames(false)) {
+				saveState();
+				response.performQuit();
+				return;
 			}
-			mAllowQuitIfNoSignificantWindowsOpen = true;
 		}
+		mAllowQuitIfNoSignificantWindowsOpen = true;
 		response.cancelQuit();
 	}
 }
