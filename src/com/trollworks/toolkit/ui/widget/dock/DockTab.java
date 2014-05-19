@@ -22,6 +22,7 @@ import com.trollworks.toolkit.ui.menu.file.Saveable;
 import com.trollworks.toolkit.ui.widget.DataModifiedListener;
 import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.NumericComparator;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -40,13 +41,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Path2D;
 
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 /** Provides a tab that contains the {@link Dockable}'s icon, title, and close button, if any. */
-public class DockTab extends JPanel implements ContainerListener, MouseListener, DragGestureListener, DataModifiedListener {
+public class DockTab extends JPanel implements ContainerListener, MouseListener, DragGestureListener, DataModifiedListener, Comparable<DockTab> {
 	@Localize("Close")
 	private static String	CLOSE_TOOLTIP;
 
@@ -95,7 +97,13 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		return mDockable;
 	}
 
-	private String getFullTitle() {
+	/** @return The icon used by the tab. */
+	public Icon getIcon() {
+		return mDockable.getTitleIcon();
+	}
+
+	/** @return The full title used by the tab. */
+	public String getFullTitle() {
 		StringBuilder buffer = new StringBuilder();
 		if (mDockable instanceof Saveable) {
 			if (((Saveable) mDockable).isModified()) {
@@ -222,5 +230,20 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 			mTitle.setText(title);
 			mTitle.revalidate();
 		}
+	}
+
+	@Override
+	public int compareTo(DockTab other) {
+		int result = NumericComparator.caselessCompareStrings(mDockable.getTitle(), other.mDockable.getTitle());
+		if (result == 0) {
+			int h1 = hashCode();
+			int h2 = other.hashCode();
+			if (h1 < h2) {
+				result = -1;
+			} else if (h1 > h2) {
+				result = 1;
+			}
+		}
+		return result;
 	}
 }

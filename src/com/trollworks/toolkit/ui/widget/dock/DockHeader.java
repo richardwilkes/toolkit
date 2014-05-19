@@ -49,9 +49,10 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 		Localization.initialize();
 	}
 
-	private static final int	MINIMUM_TAB_WIDTH	= 28;
+	private static final int	MINIMUM_TAB_WIDTH	= 60;
 	private static final int	GAP					= 4;
 	private IconButton			mMaximizeRestoreButton;
+	private ShowTabsButton		mShowTabsButton;
 	private Dockable			mDragDockable;
 	private int					mDragInsertIndex;
 
@@ -68,6 +69,8 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 		for (Dockable dockable : dc.getDockables()) {
 			add(new DockTab(dockable));
 		}
+		mShowTabsButton = new ShowTabsButton();
+		add(mShowTabsButton);
 		mMaximizeRestoreButton = new IconButton(ToolkitImage.getDockMaximize(), MAXIMIZE_TOOLTIP, this::maximize);
 		add(mMaximizeRestoreButton);
 		setDropTarget(new DropTarget(this, DnDConstants.ACTION_MOVE, this));
@@ -148,14 +151,21 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 	public Dimension preferredLayoutSize(Container parent) {
 		Insets insets = getInsets();
 		int count = getComponentCount();
-		int width = count > 0 ? (count - 1) * GAP : 0;
+		int width = 0;
 		int height = 0;
 		for (int i = 0; i < count; i++) {
-			Dimension size = getComponent(i).getPreferredSize();
-			width += size.width;
-			if (height < size.height) {
-				height = size.height;
+			Component component = getComponent(i);
+			if (component != mShowTabsButton) {
+				Dimension size = component.getPreferredSize();
+				width += size.width + GAP;
+				if (height < size.height) {
+					height = size.height;
+				}
 			}
+		}
+		width -= GAP;
+		if (width < 0) {
+			width = 0;
 		}
 		return new Dimension(insets.left + width + insets.right, insets.top + height + insets.bottom);
 	}
@@ -164,15 +174,26 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 	public Dimension minimumLayoutSize(Container parent) {
 		Insets insets = getInsets();
 		int count = getComponentCount();
-		int width = count > 0 ? (count - 1) * GAP : 0;
+		int width = 0;
 		int height = 0;
+		boolean foundTab = false;
 		for (int i = 0; i < count; i++) {
 			Component component = getComponent(i);
+			if (component instanceof DockTab) {
+				if (foundTab) {
+					continue;
+				}
+				foundTab = true;
+			}
 			Dimension size = component.getPreferredSize();
-			width += component instanceof DockTab ? MINIMUM_TAB_WIDTH : size.width;
+			width += (component instanceof DockTab ? MINIMUM_TAB_WIDTH : size.width) + GAP;
 			if (height < size.height) {
 				height = size.height;
 			}
+		}
+		width -= GAP;
+		if (width < 0) {
+			width = 0;
 		}
 		return new Dimension(insets.left + width + insets.right, insets.top + height + insets.bottom);
 	}
@@ -185,10 +206,15 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 		Component[] comps = getComponents();
 		int[] widths = new int[count];
 		int[] heights = new int[count];
+		int showTabsIndex = -1;
+		mShowTabsButton.clearHidden();
 		for (int i = 0; i < count; i++) {
 			Dimension size = comps[i].getPreferredSize();
 			widths[i] = size.width;
 			heights[i] = size.height;
+			if (comps[i] == mShowTabsButton) {
+				showTabsIndex = i;
+			}
 		}
 		if (extra < 0) {
 			int current = getDockContainer().getCurrentTabIndex();
@@ -219,24 +245,45 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 				}
 			}
 			if (remaining > 0) {
-				// Still not small enough... shrink the current tab down, too
-				widths[current] -= remaining;
-				if (widths[current] < MINIMUM_TAB_WIDTH) {
-					widths[current] = MINIMUM_TAB_WIDTH;
+				// Still not small enough... start trimming out tabs
+				remaining += widths[showTabsIndex] + GAP;
+				for (int i = count - 1; i >= 0 && remaining > 0; i--) {
+					if (i != current && comps[i] instanceof DockTab) {
+						remaining -= widths[showTabsIndex];
+						mShowTabsButton.addHidden((DockTab) comps[i]);
+						widths[showTabsIndex] = mShowTabsButton.getPreferredWidth();
+						remaining += widths[showTabsIndex];
+						remaining -= widths[i] + GAP;
+					}
 				}
+				if (remaining > 0) {
+					// STILL not small enough... reduce the size of the current tab, too
+					widths[current] -= remaining;
+					if (widths[current] < MINIMUM_TAB_WIDTH) {
+						widths[current] = MINIMUM_TAB_WIDTH;
+					}
+					remaining = 0;
+				}
+				extra = -remaining;
+			} else {
+				extra = 0;
 			}
-			extra = 0;
 		}
 		int x = insets.left;
 		int height = getHeight();
 		boolean insertExtra = true;
 		for (int i = 0; i < count; i++) {
-			if (insertExtra && !(comps[i] instanceof DockTab)) {
-				insertExtra = false;
-				x += extra;
+			if (mShowTabsButton.isHidden(comps[i])) {
+				comps[i].setVisible(false);
+			} else {
+				comps[i].setVisible(true);
+				if (insertExtra && !(comps[i] instanceof DockTab)) {
+					insertExtra = false;
+					x += extra;
+				}
+				comps[i].setBounds(x, insets.top + (height - (insets.top + heights[i] + insets.bottom)) / 2, widths[i], heights[i]);
+				x += widths[i] + GAP;
 			}
-			comps[i].setBounds(x, insets.top + (height - (insets.top + heights[i] + insets.bottom)) / 2, widths[i], heights[i]);
-			x += widths[i] + GAP;
 		}
 	}
 
