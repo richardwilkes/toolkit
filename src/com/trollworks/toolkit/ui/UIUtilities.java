@@ -14,12 +14,12 @@ package com.trollworks.toolkit.ui;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.image.Images;
 import com.trollworks.toolkit.ui.image.ToolkitIcon;
-import com.trollworks.toolkit.ui.widget.BaseWindow;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dialog;
+import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
@@ -419,9 +419,15 @@ public class UIUtilities {
 
 	/** @return Whether or not the application is currently in a modal state. */
 	public static boolean inModalState() {
-		for (Frame frame : Frame.getFrames()) {
-			if (frame.isShowing() && BaseWindow.hasOwnedWindowsShowing(frame)) {
-				return true;
+		for (Window window : Window.getWindows()) {
+			if (window instanceof Dialog) {
+				Dialog dialog = (Dialog) window;
+				if (dialog.isShowing()) {
+					ModalityType type = dialog.getModalityType();
+					if (type == ModalityType.APPLICATION_MODAL || type == ModalityType.TOOLKIT_MODAL) {
+						return true;
+					}
+				}
 			}
 		}
 		return false;
