@@ -127,6 +127,5 @@ public class QuitCommand extends Command implements QuitHandler {
 			mAllowQuitIfNoSignificantWindowsOpen = true;
 		}
 		response.cancelQuit();
-
 	}
 }
