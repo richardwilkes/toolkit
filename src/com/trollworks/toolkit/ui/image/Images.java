@@ -167,24 +167,47 @@ public class Images {
 	 * @return The new image scaled to the given size.
 	 */
 	public static final ToolkitIcon scale(Image image, int scaledWidth, int scaledHeight) {
-		Image scaledImg = loadToolkitImage(image);
-		int width = scaledImg.getWidth(null);
-		int height = scaledImg.getHeight(null);
-		double mult = 1;
-		if (width != scaledWidth || height != scaledHeight) {
-			double wMult = scaledWidth / (double) width;
-			double hMult = scaledHeight / (double) height;
-			mult = Math.min(wMult, hMult);
+		ToolkitIcon img = getToolkitIcon(image);
+		int currentWidth = img.getWidth();
+		int currentHeight = img.getHeight();
+		if (currentWidth < scaledWidth || currentHeight < scaledHeight) {
+			return internalScale(img, scaledWidth, scaledHeight);
 		}
+		boolean needFlush = false;
+		do {
+			int prevCurrentWidth = currentWidth;
+			int prevCurrentHeight = currentHeight;
+			currentWidth = reduce(currentWidth, scaledWidth);
+			currentHeight = reduce(currentHeight, scaledHeight);
+			if (prevCurrentWidth == currentWidth && prevCurrentHeight == currentHeight) {
+				break;
+			}
+			ToolkitIcon intermediate = internalScale(img, currentWidth, currentHeight);
+			if (needFlush) {
+				img.flush();
+			}
+			img = intermediate;
+			needFlush = true;
+		} while (currentWidth != scaledWidth || currentHeight != scaledHeight);
+		return img;
+	}
+
+	private static final int reduce(int current, int desired) {
+		if (current > desired) {
+			current -= current / 7;
+			if (current < desired) {
+				current = desired;
+			}
+		}
+		return current;
+	}
+
+	private static final ToolkitIcon internalScale(ToolkitIcon image, int scaledWidth, int scaledHeight) {
 		ToolkitIcon buffer = createTransparent(scaledWidth, scaledHeight);
 		Graphics2D gc = buffer.getGraphics();
 		GraphicsUtilities.setMaximumQualityForGraphics(gc);
 		gc.setClip(0, 0, scaledWidth, scaledHeight);
-		int newWidth = (int) (width * mult);
-		int newHeight = (int) (height * mult);
-		int x = (scaledWidth - newWidth) / 2;
-		int y = (scaledHeight - newHeight) / 2;
-		gc.drawImage(scaledImg, x, y, x + newWidth, y + newHeight, 0, 0, width, height, null);
+		gc.drawImage(image, 0, 0, scaledWidth, scaledHeight, null);
 		gc.dispose();
 		return buffer;
 	}
