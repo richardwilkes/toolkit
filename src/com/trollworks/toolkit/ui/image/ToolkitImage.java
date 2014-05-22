@@ -70,17 +70,17 @@ public class ToolkitImage {
 
 	/** @return The file icon set. */
 	public static final IconSet getFileIcons() {
-		return IconSet.get("File");
+		return IconSet.getOrLoad("File");
 	}
 
 	/** @return The folder icon set. */
 	public static final IconSet getFolderIcons() {
-		return IconSet.get("Folder");
+		return IconSet.getOrLoad("Folder");
 	}
 
 	/** @return The preferences icon set. */
 	public static final IconSet getPreferencesIcons() {
-		return IconSet.get("Preferences");
+		return IconSet.getOrLoad("preferences");
 	}
 
 	/** @return The remove icon. */

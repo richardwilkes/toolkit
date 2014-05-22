@@ -69,6 +69,39 @@ public class IconSet implements Comparator<ToolkitIcon> {
 		return SETS.get(name);
 	}
 
+	/**
+	 * If the {@link IconSet} has not already been loaded, this method will attempt to load it from
+	 * individual icons matching the name.
+	 *
+	 * @param name The name of the {@link IconSet}.
+	 * @return The {@link IconSet}.
+	 */
+	public static final IconSet getOrLoad(String name) {
+		IconSet set = SETS.get(name);
+		if (set == null) {
+			List<ToolkitIcon> images = new ArrayList<>();
+			for (int size : new int[] { 1024, 512, 256, 128, 64, 48, 32, 16 }) {
+				ToolkitIcon img = Images.get(name + "_" + size); //$NON-NLS-1$
+				if (img != null) {
+					images.add(img);
+				}
+			}
+			if (!images.isEmpty()) {
+				set = new IconSet(name, images);
+			}
+		}
+		return set;
+	}
+
+	/**
+	 * Loads a Mac OS X icon set file (.icns). The format is described here: <a
+	 * href="http://en.wikipedia.org/wiki/Apple_Icon_Image"
+	 * >http://en.wikipedia.org/wiki/Apple_Icon_Image</a>.
+	 *
+	 * @param name The name to give this {@link IconSet}. Note that this should be unique, as it
+	 *            will replace any existing {@link IconSet} with the same name.
+	 * @param url The {@link URL} to load the icons from.
+	 */
 	public static final IconSet loadIcns(String name, URL url) throws IOException {
 		try (InputStream in = url.openStream()) {
 			return loadIcns(name, in);
@@ -129,6 +162,22 @@ public class IconSet implements Comparator<ToolkitIcon> {
 		if (img != null) {
 			trackIcon(name, img);
 			images.add(img);
+		}
+	}
+
+	/**
+	 * Loads a Windows OS icon set file (.ico). The format is described here: <a
+	 * href="http://en.wikipedia.org/wiki/ICO_(file_format)"
+	 * >http://en.wikipedia.org/wiki/ICO_(file_format)</a>. Note that only those ICO files that
+	 * embed PNG images can be loaded with this method.
+	 *
+	 * @param name The name to give this {@link IconSet}. Note that this should be unique, as it
+	 *            will replace any existing {@link IconSet} with the same name.
+	 * @param url The {@link URL} to load the icons from.
+	 */
+	public static final IconSet loadIco(String name, URL url) throws IOException {
+		try (InputStream in = url.openStream()) {
+			return loadIco(name, in);
 		}
 	}
 
