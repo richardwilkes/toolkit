@@ -43,6 +43,7 @@ public class IconSet implements Comparator<ToolkitIcon> {
 		Localization.initialize();
 	}
 
+	public static final int[]			STD_SIZES	= { 1024, 512, 256, 128, 64, 48, 32, 16 };
 	private static final int			TYPE_icns	= 0x69636e73;
 	private static final int			TYPE_icp4	= 0x69637034;
 	private static final int			TYPE_icp5	= 0x69637035;
@@ -58,6 +59,7 @@ public class IconSet implements Comparator<ToolkitIcon> {
 	private static Map<String, IconSet>	SETS		= new HashMap<>();
 	private static int					SEQUENCE	= 0;
 	private String						mName;
+	private IconSet[]					mLayers;
 	private List<ToolkitIcon>			mIcons;
 	private int							mSequence;
 
@@ -80,7 +82,7 @@ public class IconSet implements Comparator<ToolkitIcon> {
 		IconSet set = SETS.get(name);
 		if (set == null) {
 			List<ToolkitIcon> images = new ArrayList<>();
-			for (int size : new int[] { 1024, 512, 256, 128, 64, 48, 32, 16 }) {
+			for (int size : STD_SIZES) {
 				ToolkitIcon img = Images.get(name + "_" + size); //$NON-NLS-1$
 				if (img != null) {
 					images.add(img);
@@ -248,6 +250,27 @@ public class IconSet implements Comparator<ToolkitIcon> {
 		SETS.put(name, this);
 	}
 
+	/**
+	 * Creates a new {@link IconSet} that composites multiple icons together from other
+	 * {@link IconSet}s to form its icons.
+	 * 
+	 * @param name The name of this {@link IconSet}. This can be used to retrieve the
+	 *            {@link IconSet} later, via a call to {@link #get(String)}.
+	 * @param layers Two or more other {@link IconSet}s to use. Each one will be layered on top of
+	 *            the previous one, creating a single icon for a given size.
+	 */
+	public IconSet(String name, IconSet... layers) {
+		if (layers == null || layers.length < 2) {
+			throw new IllegalArgumentException();
+		}
+		mName = name;
+		updateSequence();
+		mLayers = new IconSet[layers.length];
+		System.arraycopy(layers, 0, mLayers, 0, layers.length);
+		mIcons = new ArrayList<>();
+		SETS.put(name, this);
+	}
+
 	@Override
 	public int compare(ToolkitIcon o1, ToolkitIcon o2) {
 		int result = Numbers.compare(o2.getWidth(), o1.getWidth());
@@ -327,27 +350,38 @@ public class IconSet implements Comparator<ToolkitIcon> {
 	public ToolkitIcon getIcon(int width, int height) {
 		ToolkitIcon match = getIconNoCreate(width, height);
 		if (match == null) {
-			ToolkitIcon inverseMatch = null;
-			int best = Integer.MAX_VALUE;
-			int inverseBest = Integer.MIN_VALUE;
-			for (ToolkitIcon icon : mIcons) {
-				int iconWidth = icon.getWidth();
-				int iconHeight = icon.getHeight();
-				int heuristic = (iconWidth - width) * (iconHeight - height);
-				if (heuristic > 0) {
-					if (heuristic < best) {
-						best = heuristic;
-						match = icon;
+			if (mLayers != null) {
+				match = mLayers[0].getIcon(width, height);
+				for (int i = 1; i < mLayers.length; i++) {
+					ToolkitIcon previous = match;
+					match = Images.superimpose(match, mLayers[i].getIcon(width, height));
+					if (i > 1) {
+						previous.flush();
 					}
-				} else if (match == null && heuristic > inverseBest) {
-					inverseBest = heuristic;
-					inverseMatch = icon;
 				}
+			} else {
+				ToolkitIcon inverseMatch = null;
+				int best = Integer.MAX_VALUE;
+				int inverseBest = Integer.MIN_VALUE;
+				for (ToolkitIcon icon : mIcons) {
+					int iconWidth = icon.getWidth();
+					int iconHeight = icon.getHeight();
+					int heuristic = (iconWidth - width) * (iconHeight - height);
+					if (iconWidth > width || iconHeight > height) {
+						if (heuristic < best) {
+							best = heuristic;
+							match = icon;
+						}
+					} else if (match == null && heuristic > inverseBest) {
+						inverseBest = heuristic;
+						inverseMatch = icon;
+					}
+				}
+				if (match == null) {
+					match = inverseMatch;
+				}
+				match = Images.scale(match, width, height);
 			}
-			if (match == null) {
-				match = inverseMatch;
-			}
-			match = Images.scale(match, width, height);
 			trackIcon(mName, match);
 			mIcons.add(match);
 			Collections.sort(mIcons, this);
@@ -373,7 +407,12 @@ public class IconSet implements Comparator<ToolkitIcon> {
 		mSequence = ++SEQUENCE;
 	}
 
-	/** @param out The stream to write an ICNS file with this {@link IconSet}s contents to. */
+	/**
+	 * @param out The stream to write an ICNS file with this {@link IconSet}s contents to. Only
+	 *            square icons which have been loaded and match the sizes appropriate for an ICNS
+	 *            file will be output. You may need to call {@link #getIcon(int)} on the appropriate
+	 *            sizes first.
+	 */
 	public void saveAsIcns(OutputStream out) throws IOException {
 		List<byte[]> imageData = new ArrayList<>();
 		List<Integer> imageType = new ArrayList<>();
@@ -433,6 +472,52 @@ public class IconSet implements Comparator<ToolkitIcon> {
 			EndianUtils.writeBEInt(buffer.length + data.length, buffer, 4);
 			out.write(buffer);
 			out.write(data);
+		}
+	}
+
+	/**
+	 * @param out The stream to write an ICO file with this {@link IconSet}s contents to. Only
+	 *            square icons which have been loaded and match the sizes appropriate for an ICO
+	 *            file will be output. You may need to call {@link #getIcon(int)} on the appropriate
+	 *            sizes first.
+	 */
+	public void saveAsIco(OutputStream out) throws IOException {
+		byte[] buffer = new byte[16];
+		int count = 0;
+		int[] sizes = new int[] { 256, 128, 64, 48, 32, 16 };
+		for (int size : sizes) {
+			if (hasIcon(size)) {
+				count++;
+			}
+		}
+		EndianUtils.writeLEShort(0, buffer, 0);
+		EndianUtils.writeLEShort(1, buffer, 2);
+		EndianUtils.writeLEShort(count, buffer, 4);
+		out.write(buffer, 0, 6);
+		int totalImageBytes = 0;
+		List<byte[]> images = new ArrayList<>();
+		for (int size : sizes) {
+			if (hasIcon(size)) {
+				buffer[0] = (byte) (size == 256 ? 0 : size);
+				buffer[1] = buffer[0];
+				buffer[2] = 0;
+				buffer[3] = 0;
+				EndianUtils.writeLEShort(1, buffer, 4);
+				EndianUtils.writeLEShort(32, buffer, 6);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				if (!Images.writePNG(baos, getIcon(size), 72)) {
+					throw new IOException(UNABLE_TO_CREATE_PNG);
+				}
+				byte[] bytes = baos.toByteArray();
+				images.add(bytes);
+				EndianUtils.writeLEInt(bytes.length, buffer, 8);
+				EndianUtils.writeLEInt(6 + buffer.length * count + totalImageBytes, buffer, 12);
+				out.write(buffer);
+				totalImageBytes = bytes.length;
+			}
+		}
+		for (byte[] bytes : images) {
+			out.write(bytes);
 		}
 	}
 }
