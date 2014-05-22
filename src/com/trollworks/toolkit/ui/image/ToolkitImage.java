@@ -20,62 +20,62 @@ public class ToolkitImage {
 
 	/** @return The collapse icon. */
 	public static final ToolkitIcon getCollapseIcon() {
-		return Images.get("Collapse");
+		return Images.get("collapse");
 	}
 
 	/** @return The expand icon. */
 	public static final ToolkitIcon getExpandIcon() {
-		return Images.get("Expand");
+		return Images.get("expand");
 	}
 
 	/** @return The add icon. */
 	public static final ToolkitIcon getAddIcon() {
-		return Images.get("Add");
+		return Images.get("add");
 	}
 
 	/** @return The down triangle icon. */
 	public static final ToolkitIcon getDownTriangleIcon() {
-		return Images.get("DownTriangle");
+		return Images.get("down_triangle");
 	}
 
 	/** @return The down triangle roll icon. */
 	public static final ToolkitIcon getDownTriangleRollIcon() {
-		return Images.get("DownTriangleRoll");
+		return Images.get("down_triangle_roll");
 	}
 
 	/** @return The locked icon. */
 	public static final ToolkitIcon getLockedIcon() {
-		return Images.get("Locked");
+		return Images.get("locked");
 	}
 
 	/** @return The mini warning dialog icon. */
 	public static final ToolkitIcon getMiniWarningIcon() {
-		return Images.get("MiniWarning");
+		return Images.get("mini_warning");
 	}
 
 	/** @return The modified marker. */
 	public static final ToolkitIcon getModifiedMarker() {
-		return Images.get("ModifiedMarker");
+		return Images.get("modified_marker");
 	}
 
 	/** @return The more icon. */
 	public static final ToolkitIcon getMoreIcon() {
-		return Images.get("More");
+		return Images.get("more");
 	}
 
 	/** @return The not modified marker. */
 	public static final ToolkitIcon getNotModifiedMarker() {
-		return Images.get("NotModifiedMarker");
+		return Images.get("not_modified_marker");
 	}
 
 	/** @return The file icon set. */
 	public static final IconSet getFileIcons() {
-		return IconSet.getOrLoad("File");
+		return IconSet.getOrLoad("file");
 	}
 
 	/** @return The folder icon set. */
 	public static final IconSet getFolderIcons() {
-		return IconSet.getOrLoad("Folder");
+		return IconSet.getOrLoad("folder");
 	}
 
 	/** @return The preferences icon set. */
@@ -85,32 +85,32 @@ public class ToolkitImage {
 
 	/** @return The remove icon. */
 	public static final ToolkitIcon getRemoveIcon() {
-		return Images.get("Remove");
+		return Images.get("remove");
 	}
 
 	/** @return The right triangle icon. */
 	public static final ToolkitIcon getRightTriangleIcon() {
-		return Images.get("RightTriangle");
+		return Images.get("right_triangle");
 	}
 
 	/** @return The right triangle roll icon. */
 	public static final ToolkitIcon getRightTriangleRollIcon() {
-		return Images.get("RightTriangleRoll");
+		return Images.get("right_triangle_roll");
 	}
 
 	/** @return The size-to-fit icon. */
 	public static final ToolkitIcon getSizeToFitIcon() {
-		return Images.get("SizeToFit");
+		return Images.get("size_to_fit");
 	}
 
 	/** @return The toggle open icon. */
 	public static final ToolkitIcon getToggleOpenIcon() {
-		return Images.get("ToggleOpen");
+		return Images.get("toggle_open");
 	}
 
 	/** @return The unlocked icon. */
 	public static final ToolkitIcon getUnlockedIcon() {
-		return Images.get("Unlocked");
+		return Images.get("unlocked");
 	}
 
 	/** @return The dock close image. */
