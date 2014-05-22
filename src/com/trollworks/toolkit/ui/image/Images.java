@@ -162,6 +162,15 @@ public class Images {
 
 	/**
 	 * @param image The image to scale.
+	 * @param scaledSize The height and width to scale the image to.
+	 * @return The new image scaled to the given size.
+	 */
+	public static final ToolkitIcon scale(Image image, int scaledSize) {
+		return scale(image, scaledSize, scaledSize);
+	}
+
+	/**
+	 * @param image The image to scale.
 	 * @param scaledWidth The width to scale the image to.
 	 * @param scaledHeight The height to scale the image to.
 	 * @return The new image scaled to the given size.
