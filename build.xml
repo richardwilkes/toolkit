@@ -79,9 +79,9 @@
 			<compilerarg value="-Xlint:-options"/>
 		</javac>
 
-		<!-- Copy the resources over. -->
+		<!-- Copy the images over. -->
 		<copy todir="${toolkit_build}">
-			<fileset dir="${src}" includes="**/*.properties,**/*.png,**/*.gif"/>
+			<fileset dir="${src}" includes="**/*.png"/>
 		</copy>
 
 		<!-- Create the library jar file. -->
