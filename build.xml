@@ -138,7 +138,7 @@
 		</jar>
 	</target>
 
-	<target name="launcher" description="Compiles a launcher tailored to your app.">
+	<target name="launcher" description="Compiles a launcher tailored to your app. Note that this must be done on the platform where the app is intended to execute, as platform-specific tasks are required.">
 		<delete file="${app.dir}/${app.exe}"/>
 		<fail unless="app.dir" message="You must define 'app.dir'"/>
 		<fail unless="app.name" message="You must define 'app.name'"/>
