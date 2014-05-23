@@ -78,7 +78,6 @@ public class ColorFilter extends RGBImageFilter {
 		return Images.getToolkitIcon(Toolkit.getDefaultToolkit().createImage(producer));
 	}
 
-	/** We leave pixels with an alpha channel alone. */
 	@Override
 	public int filterRGB(int x, int y, int argb) {
 		if (mIncludeAlpha || (argb & OPAQUE) == OPAQUE) {
