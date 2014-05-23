@@ -88,7 +88,7 @@ public class WindowUtils {
 	 */
 	public static int showOptionDialog(Component parentComponent, Object message, String title, boolean resizable, int optionType, int messageType, Icon icon, Object[] options, Object initialValue) {
 		JOptionPane pane = new JOptionPane(message, messageType, optionType, icon, options, initialValue);
-		pane.setUI(new MyBasicOptionPaneUI(pane.getUI()));
+		pane.setUI(new SizeAwareBasicOptionPaneUI(pane.getUI()));
 		pane.setInitialValue(initialValue);
 		pane.setComponentOrientation((parentComponent == null ? JOptionPane.getRootFrame() : parentComponent).getComponentOrientation());
 
