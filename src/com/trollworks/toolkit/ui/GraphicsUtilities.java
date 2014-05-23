@@ -13,7 +13,7 @@ package com.trollworks.toolkit.ui;
 
 import com.apple.eawt.Application;
 import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.ui.image.IconSet;
+import com.trollworks.toolkit.ui.image.StdImageSet;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.Geometry;
 import com.trollworks.toolkit.utility.Localization;
@@ -341,7 +341,7 @@ public class GraphicsUtilities {
 			HIDDEN_FRAME.setUndecorated(true);
 			HIDDEN_FRAME.setBounds(0, 0, 0, 0);
 		}
-		IconSet icons = AppWindow.getDefaultWindowIcons();
+		StdImageSet icons = AppWindow.getDefaultWindowIcons();
 		int sequence = icons != null ? icons.getSequence() : -1;
 		if (HIDDEN_FRAME_ICONSET_SEQUENCE != sequence) {
 			HIDDEN_FRAME_ICONSET_SEQUENCE = sequence;

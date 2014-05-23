@@ -17,9 +17,7 @@ import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.Selection;
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.image.Images;
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
-import com.trollworks.toolkit.ui.image.ToolkitImage;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.menu.edit.Deletable;
 import com.trollworks.toolkit.ui.menu.edit.SelectAllCapable;
 import com.trollworks.toolkit.ui.menu.edit.Undoable;
@@ -116,10 +114,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	private String					mDefaultConfig;
 	private boolean					mUseBanding;
 	private ArrayList<Column>		mSavedColumns;
-	private ToolkitIcon				mDownTriangle;
-	private ToolkitIcon				mDownTriangleRoll;
-	private ToolkitIcon				mRightTriangle;
-	private ToolkitIcon				mRightTriangleRoll;
+	private StdImage			mDownTriangle;
+	private StdImage			mDownTriangleRoll;
+	private StdImage			mRightTriangle;
+	private StdImage			mRightTriangleRoll;
 	private Row						mRollRow;
 	private Row						mDragParentRow;
 	private int						mDragChildInsertIndex;
@@ -183,10 +181,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		mDividerColor = Color.LIGHT_GRAY;
 		mSelectionChangedCommand = CMD_SELECTION_CHANGED;
 		mPotentialContentSizeChangeCommand = CMD_POTENTIAL_CONTENT_SIZE_CHANGE;
-		mDownTriangle = ToolkitImage.getDownTriangleIcon();
-		mDownTriangleRoll = ToolkitImage.getDownTriangleRollIcon();
-		mRightTriangle = ToolkitImage.getRightTriangleIcon();
-		mRightTriangleRoll = ToolkitImage.getRightTriangleRollIcon();
+		mDownTriangle = StdImage.DOWN_TRIANGLE;
+		mDownTriangleRoll = StdImage.DOWN_TRIANGLE_ROLL;
+		mRightTriangle = StdImage.RIGHT_TRIANGLE;
+		mRightTriangleRoll = StdImage.RIGHT_TRIANGLE_ROLL;
 		mDragChildInsertIndex = -1;
 		mLastRow = -1;
 		mModel.setShowIndent(showIndent);
@@ -449,7 +447,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 										colBounds.x += shift;
 										colBounds.width -= shift;
 										if (row.canHaveChildren()) {
-											ToolkitIcon image = getDisclosureControl(row);
+											StdImage image = getDisclosureControl(row);
 											gc.drawImage(image, colBounds.x - image.getWidth(), 1 + colBounds.y + (colBounds.height - image.getHeight()) / 2, null);
 										}
 									}
@@ -819,7 +817,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		return -1;
 	}
 
-	private ToolkitIcon getDisclosureControl(Row row) {
+	private StdImage getDisclosureControl(Row row) {
 		return row.isOpen() ? row == mRollRow ? mDownTriangleRoll : mDownTriangle : row == mRollRow ? mRightTriangleRoll : mRightTriangle;
 	}
 
@@ -832,7 +830,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	 */
 	public boolean overDisclosureControl(int x, int y, Column column, Row row) {
 		if (showIndent() && column != null && row != null && row.canHaveChildren() && mModel.isFirstColumn(column)) {
-			ToolkitIcon image = getDisclosureControl(row);
+			StdImage image = getDisclosureControl(row);
 			int right = getInsets().left + mModel.getIndentWidth(row, column);
 			return x <= right && x >= right - image.getWidth();
 		}
@@ -875,15 +873,15 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
 	/**
 	 * @param column The column.
-	 * @return An {@link ToolkitIcon} containing the drag image for the specified column.
+	 * @return An {@link StdImage} containing the drag image for the specified column.
 	 */
-	public ToolkitIcon getColumnDragImage(Column column) {
-		ToolkitIcon offscreen = null;
+	public StdImage getColumnDragImage(Column column) {
+		StdImage offscreen = null;
 		synchronized (getTreeLock()) {
 			Graphics2D gc = null;
 			try {
 				Rectangle bounds = new Rectangle(0, 0, column.getWidth() + (mDrawColumnDividers ? 2 : 0), getVisibleRect().height + (mHeaderPanel != null ? mHeaderPanel.getHeight() + 1 : 0));
-				offscreen = Images.createTransparent(getGraphicsConfiguration(), bounds.width, bounds.height);
+				offscreen = StdImage.createTransparent(getGraphicsConfiguration(), bounds.width, bounds.height);
 				gc = GraphicsUtilities.prepare(offscreen.getGraphics());
 				gc.setClip(bounds);
 				gc.setBackground(new Color(0, true));
@@ -1591,10 +1589,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	 * @param y The y-coordinate.
 	 * @return The drag image for this table when dragging rows.
 	 */
-	protected ToolkitIcon getDragImage(int x, int y) {
+	protected StdImage getDragImage(int x, int y) {
 		Graphics2D gc = null;
-		ToolkitIcon off1 = null;
-		ToolkitIcon off2 = null;
+		StdImage off1 = null;
+		StdImage off2 = null;
 
 		mDrawingDragImage = true;
 		mDragClip = null;
@@ -1606,7 +1604,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		}
 
 		try {
-			off2 = Images.createTransparent(getGraphicsConfiguration(), mDragClip.width, mDragClip.height);
+			off2 = StdImage.createTransparent(getGraphicsConfiguration(), mDragClip.width, mDragClip.height);
 			gc = off2.getGraphics();
 			gc.setClip(new Rectangle(0, 0, mDragClip.width, mDragClip.height));
 			gc.setBackground(new Color(0, true));
@@ -1629,16 +1627,16 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	}
 
 	/**
-	 * @return An {@link ToolkitIcon} containing the current contents of this component, minus the
+	 * @return An {@link StdImage} containing the current contents of this component, minus the
 	 *         specified component and its children.
 	 */
-	public ToolkitIcon getImage() {
-		ToolkitIcon offscreen = null;
+	public StdImage getImage() {
+		StdImage offscreen = null;
 		synchronized (getTreeLock()) {
 			Graphics2D gc = null;
 			try {
 				Rectangle bounds = getVisibleRect();
-				offscreen = Images.createTransparent(getGraphicsConfiguration(), bounds.width, bounds.height);
+				offscreen = StdImage.createTransparent(getGraphicsConfiguration(), bounds.width, bounds.height);
 				gc = offscreen.getGraphics();
 				Color saved = gc.getBackground();
 				gc.setBackground(new Color(0, true));
@@ -1990,7 +1988,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 			Point pt = dge.getDragOrigin();
 			RowSelection selection = new RowSelection(mModel, mModel.getSelectionAsList(true).toArray(new Row[0]));
 			if (DragSource.isDragImageSupported()) {
-				ToolkitIcon dragImage = getDragImage(pt.x, pt.y);
+				StdImage dragImage = getDragImage(pt.x, pt.y);
 				Point imageOffset = new Point(mDragClip.x - pt.x, mDragClip.y - pt.y);
 				dge.startDrag(null, dragImage, imageOffset, selection, null);
 			} else {

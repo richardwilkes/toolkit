@@ -18,13 +18,17 @@ import com.trollworks.toolkit.utility.Debug;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Transparency;
+import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.ImageObserver;
+import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +36,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -40,28 +45,56 @@ import javax.imageio.ImageWriter;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
+import javax.swing.Icon;
 
 import org.w3c.dom.Node;
 
-/** Provides standardized image access. To simplify things, only PNG images are supported now. */
-public class Images {
+/** Provides a {@link BufferedImage} that implements Swing's {@link Icon} interface for convenience. */
+public class StdImage extends BufferedImage implements Icon {
 	@Localize("Unable to load image")
-	private static String								UNABLE_TO_LOAD_IMAGE;
+	private static String							UNABLE_TO_LOAD_IMAGE;
 	@Localize("Invalid angle: %d")
-	private static String								INVALID_ANGLE;
+	private static String							INVALID_ANGLE;
 	@Localize("Invalid transparency")
-	private static String								INVALID_TRANSPARENCY;
+	private static String							INVALID_TRANSPARENCY;
 
 	static {
 		Localization.initialize();
 	}
 
-	private static final String							COLORIZED_POSTFIX	= new String(new char[] { ':', 'C', 22 });
-	private static final String							FADED_POSTFIX		= new String(new char[] { ':', 'F', 22 });
-	private static final HashSet<URL>					LOCATIONS			= new HashSet<>();
-	private static final HashMap<String, ToolkitIcon>	MAP					= new HashMap<>();
-	private static final HashMap<ToolkitIcon, String>	REVERSE_MAP			= new HashMap<>();
-	private static final HashSet<String>				FAILED_LOOKUPS		= new HashSet<>();
+	private static final String						COLORIZED_POSTFIX	= new String(new char[] { ':', 'C', 22 });
+	private static final String						FADED_POSTFIX		= new String(new char[] { ':', 'F', 22 });
+	private static final HashSet<URL>				LOCATIONS			= new HashSet<>();
+	private static final HashMap<String, StdImage>	MAP					= new HashMap<>();
+	private static final HashMap<StdImage, String>	REVERSE_MAP			= new HashMap<>();
+	private static final HashSet<String>			FAILED_LOOKUPS		= new HashSet<>();
+
+	static {
+		addLocation(StdImage.class.getResource("images/")); //$NON-NLS-1$
+	}
+
+	public static final StdImage					ADD					= get("add");								//$NON-NLS-1$
+	public static final StdImage					COLLAPSE			= get("collapse");							//$NON-NLS-1$
+	public static final StdImage					DOCK_CLOSE			= get("dock_close");						//$NON-NLS-1$
+	public static final StdImage					DOCK_MAXIMIZE		= get("dock_maximize");					//$NON-NLS-1$
+	public static final StdImage					DOCK_RESTORE		= get("dock_restore");						//$NON-NLS-1$
+	public static final StdImage					DOWN_TRIANGLE		= get("down_triangle");					//$NON-NLS-1$
+	public static final StdImage					DOWN_TRIANGLE_ROLL	= get("down_triangle_roll");				//$NON-NLS-1$
+	public static final StdImage					EXPAND				= get("expand");							//$NON-NLS-1$
+	public static final StdImageSet					FILE				= StdImageSet.getOrLoad("file");			//$NON-NLS-1$
+	public static final StdImageSet					FOLDER				= StdImageSet.getOrLoad("folder");			//$NON-NLS-1$
+	public static final StdImage					LOCKED				= get("locked");							//$NON-NLS-1$
+	public static final StdImage					MINI_WARNING		= get("mini_warning");						//$NON-NLS-1$
+	public static final StdImage					MODIFIED_MARKER		= get("modified_marker");					//$NON-NLS-1$
+	public static final StdImage					MORE				= get("more");								//$NON-NLS-1$
+	public static final StdImage					NOT_MODIFIED_MARKER	= get("not_modified_marker");				//$NON-NLS-1$
+	public static final StdImageSet					PREFERENCES			= StdImageSet.getOrLoad("preferences");	//$NON-NLS-1$
+	public static final StdImage					REMOVE				= get("remove");							//$NON-NLS-1$
+	public static final StdImage					RIGHT_TRIANGLE		= get("right_triangle");					//$NON-NLS-1$
+	public static final StdImage					RIGHT_TRIANGLE_ROLL	= get("right_triangle_roll");				//$NON-NLS-1$
+	public static final StdImage					SIZE_TO_FIT			= get("size_to_fit");						//$NON-NLS-1$
+	public static final StdImage					TOGGLE_OPEN			= get("toggle_open");						//$NON-NLS-1$
+	public static final StdImage					UNLOCKED			= get("unlocked");							//$NON-NLS-1$
 
 	/**
 	 * Adds a location to search for images.
@@ -94,7 +127,7 @@ public class Images {
 	 * @param name The name to search for.
 	 * @return The image for the specified name.
 	 */
-	public static final synchronized ToolkitIcon get(String name) {
+	public static final synchronized StdImage get(String name) {
 		return get(name, true);
 	}
 
@@ -105,8 +138,8 @@ public class Images {
 	 *            already.
 	 * @return The image for the specified name.
 	 */
-	public static final synchronized ToolkitIcon get(String name, boolean cache) {
-		ToolkitIcon img = cache ? MAP.get(name) : null;
+	public static final synchronized StdImage get(String name, boolean cache) {
+		StdImage img = cache ? MAP.get(name) : null;
 		if (img == null && !FAILED_LOOKUPS.contains(name)) {
 			for (URL url : LOCATIONS) {
 				String filename = name + ".png"; //$NON-NLS-1$
@@ -138,7 +171,7 @@ public class Images {
 	 * @param name The name to map the image to.
 	 * @param image The image itself.
 	 */
-	public static final synchronized void add(String name, ToolkitIcon image) {
+	public static final synchronized void add(String name, StdImage image) {
 		MAP.put(name, image);
 		REVERSE_MAP.put(image, name);
 		FAILED_LOOKUPS.remove(name);
@@ -161,7 +194,7 @@ public class Images {
 	 * @param scaledSize The height and width to scale the image to.
 	 * @return The new image scaled to the given size.
 	 */
-	public static final ToolkitIcon scale(Image image, int scaledSize) {
+	public static final StdImage scale(Image image, int scaledSize) {
 		return scale(image, scaledSize, scaledSize);
 	}
 
@@ -171,8 +204,8 @@ public class Images {
 	 * @param scaledHeight The height to scale the image to.
 	 * @return The new image scaled to the given size.
 	 */
-	public static final ToolkitIcon scale(Image image, int scaledWidth, int scaledHeight) {
-		ToolkitIcon img = getToolkitIcon(image);
+	public static final StdImage scale(Image image, int scaledWidth, int scaledHeight) {
+		StdImage img = getToolkitImage(image);
 		int currentWidth = img.getWidth();
 		int currentHeight = img.getHeight();
 		if (currentWidth < scaledWidth || currentHeight < scaledHeight) {
@@ -187,7 +220,7 @@ public class Images {
 			if (prevCurrentWidth == currentWidth && prevCurrentHeight == currentHeight) {
 				break;
 			}
-			ToolkitIcon intermediate = internalScale(img, currentWidth, currentHeight);
+			StdImage intermediate = internalScale(img, currentWidth, currentHeight);
 			if (needFlush) {
 				img.flush();
 			}
@@ -207,41 +240,57 @@ public class Images {
 		return current;
 	}
 
-	private static final ToolkitIcon internalScale(ToolkitIcon image, int scaledWidth, int scaledHeight) {
-		ToolkitIcon buffer = createTransparent(scaledWidth, scaledHeight);
+	private static final StdImage internalScale(StdImage image, int scaledWidth, int scaledHeight) {
+		StdImage buffer = createTransparent(scaledWidth, scaledHeight);
 		Graphics2D gc = buffer.getGraphics();
 		GraphicsUtilities.setMaximumQualityForGraphics(gc);
-		gc.setClip(0, 0, scaledWidth, scaledHeight);
 		gc.drawImage(image, 0, 0, scaledWidth, scaledHeight, null);
 		gc.dispose();
 		return buffer;
 	}
 
 	/**
-	 * If the image passed in is already a {@link ToolkitIcon}, it is returned. However, if it is
-	 * not, then a new {@link ToolkitIcon} is created with the contents of the image and returned.
+	 * If the image passed in is already a {@link StdImage}, it is returned. However, if it is not,
+	 * then a new {@link StdImage} is created with the contents of the image and returned.
 	 *
 	 * @param image The image to work on.
 	 * @return A buffered image.
 	 */
-	public static final ToolkitIcon getToolkitIcon(Image image) {
-		if (image instanceof ToolkitIcon) {
-			return (ToolkitIcon) image;
+	public static final StdImage getToolkitImage(Image image) {
+		if (image instanceof StdImage) {
+			return (StdImage) image;
 		}
 		return createOptimizedImage(image);
 	}
 
-	private static ToolkitIcon createOptimizedImage(Image image) {
-		image = loadToolkitImage(image);
+	private static StdImage createOptimizedImage(Image image) {
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		if (!tk.prepareImage(image, -1, -1, null)) {
+			while (true) {
+				int result = tk.checkImage(image, -1, -1, null);
+				if ((result & (ImageObserver.ERROR | ImageObserver.ABORT)) != 0) {
+					image = null;
+					break;
+				}
+				if ((result & (ImageObserver.ALLBITS | ImageObserver.SOMEBITS | ImageObserver.FRAMEBITS)) != 0) {
+					break;
+				}
+				// Try to allow the image loading thread a chance to run.
+				// At least on Windows, not sleeping seems to be a problem.
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException ie) {
+					image = null;
+					break;
+				}
+			}
+		}
 		if (image == null) {
 			Log.error(new Exception(UNABLE_TO_LOAD_IMAGE));
 			return create(1, 1);
 		}
-		int width = image.getWidth(null);
-		int height = image.getHeight(null);
-		ToolkitIcon buffer = createTransparent(width, height);
+		StdImage buffer = createTransparent(image.getWidth(null), image.getHeight(null));
 		Graphics2D gc = buffer.getGraphics();
-		gc.setClip(0, 0, width, height);
 		gc.drawImage(image, 0, 0, null);
 		gc.dispose();
 		return buffer;
@@ -251,7 +300,7 @@ public class Images {
 	 * @param image The image to work on.
 	 * @return A new image rotated 90 degrees.
 	 */
-	public static final ToolkitIcon rotate90(Image image) {
+	public static final StdImage rotate90(StdImage image) {
 		return rotate(image, 90);
 	}
 
@@ -259,7 +308,7 @@ public class Images {
 	 * @param image The image to work on.
 	 * @return A new image rotated 180 degrees.
 	 */
-	public static final ToolkitIcon rotate180(Image image) {
+	public static final StdImage rotate180(StdImage image) {
 		return rotate(image, 180);
 	}
 
@@ -267,17 +316,15 @@ public class Images {
 	 * @param image The image to work on.
 	 * @return A new image rotated 270 degrees.
 	 */
-	public static final ToolkitIcon rotate270(Image image) {
+	public static final StdImage rotate270(StdImage image) {
 		return rotate(image, 270);
 	}
 
-	private static final ToolkitIcon rotate(Image image, int angle) {
-		ToolkitIcon input = getToolkitIcon(image);
-		int width = input.getWidth();
-		int height = input.getHeight();
-		ToolkitIcon buffer = createTransparent(height, width);
+	private static final StdImage rotate(StdImage image, int angle) {
+		int width = image.getWidth();
+		int height = image.getHeight();
+		StdImage buffer = createTransparent(height, width);
 		Graphics2D gc = buffer.getGraphics();
-		gc.setClip(0, 0, height, width);
 		gc.rotate(Math.toRadians(angle));
 		int x;
 		int y;
@@ -307,10 +354,8 @@ public class Images {
 	 * @param image The image to superimpose.
 	 * @return The new image.
 	 */
-	public static final ToolkitIcon superimpose(Image baseImage, Image image) {
-		ToolkitIcon img1 = getToolkitIcon(baseImage);
-		ToolkitIcon img2 = getToolkitIcon(image);
-		return superimpose(img1, img2, (img1.getWidth() - img2.getWidth()) / 2, (img1.getHeight() - img2.getHeight()) / 2);
+	public static final StdImage superimpose(StdImage baseImage, StdImage image) {
+		return superimpose(baseImage, image, (baseImage.getWidth() - image.getWidth()) / 2, (baseImage.getHeight() - image.getHeight()) / 2);
 	}
 
 	/**
@@ -322,24 +367,21 @@ public class Images {
 	 * @param y The y-coordinate to draw the top image at.
 	 * @return The new image.
 	 */
-	public static final ToolkitIcon superimpose(Image baseImage, Image image, int x, int y) {
-		ToolkitIcon img1 = getToolkitIcon(baseImage);
-		ToolkitIcon img2 = getToolkitIcon(image);
-		int width = img1.getWidth();
-		int height = img1.getHeight();
-		int tWidth = img2.getWidth();
-		int tHeight = img2.getHeight();
+	public static final StdImage superimpose(StdImage baseImage, StdImage image, int x, int y) {
+		int width = baseImage.getWidth();
+		int height = baseImage.getHeight();
+		int tWidth = image.getWidth();
+		int tHeight = image.getHeight();
 		if (x + tWidth > width) {
 			width = x + tWidth;
 		}
 		if (y + tHeight > height) {
 			height = y + tHeight;
 		}
-		ToolkitIcon buffer = createTransparent(width, height);
+		StdImage buffer = createTransparent(width, height);
 		Graphics2D gc = buffer.getGraphics();
-		gc.setClip(0, 0, width, height);
-		gc.drawImage(img1, 0, 0, null);
-		gc.drawImage(img2, x, y, null);
+		gc.drawImage(baseImage, 0, 0, null);
+		gc.drawImage(image, x, y, null);
 		gc.dispose();
 		return buffer;
 	}
@@ -353,8 +395,8 @@ public class Images {
 	 * @param name The name to use.
 	 * @return The new image.
 	 */
-	public static final ToolkitIcon superimposeAndName(Image baseImage, Image image, String name) {
-		ToolkitIcon img = superimpose(baseImage, image);
+	public static final StdImage superimposeAndName(StdImage baseImage, StdImage image, String name) {
+		StdImage img = superimpose(baseImage, image);
 		add(name, img);
 		return img;
 	}
@@ -370,8 +412,8 @@ public class Images {
 	 * @param name The name to use.
 	 * @return The new image.
 	 */
-	public static final ToolkitIcon superimposeAndName(Image baseImage, Image image, int x, int y, String name) {
-		ToolkitIcon img = superimpose(baseImage, image, x, y);
+	public static final StdImage superimposeAndName(StdImage baseImage, StdImage image, int x, int y, String name) {
+		StdImage img = superimpose(baseImage, image, x, y);
 		add(name, img);
 		return img;
 	}
@@ -383,9 +425,9 @@ public class Images {
 	 * @param color The color to apply.
 	 * @return The colorized image.
 	 */
-	public static final synchronized ToolkitIcon createColorizedImage(ToolkitIcon image, Color color) {
+	public static final synchronized StdImage createColorizedImage(StdImage image, Color color) {
 		String name = REVERSE_MAP.get(image);
-		ToolkitIcon img = null;
+		StdImage img = null;
 		if (name != null) {
 			name = name + color + COLORIZED_POSTFIX;
 			img = get(name);
@@ -408,9 +450,9 @@ public class Images {
 	 * @param useWhite Whether to use black or white.
 	 * @return The faded image.
 	 */
-	public static final synchronized ToolkitIcon createFadedImage(ToolkitIcon image, int percentage, boolean useWhite) {
+	public static final synchronized StdImage createFadedImage(StdImage image, int percentage, boolean useWhite) {
 		String name = REVERSE_MAP.get(image);
-		ToolkitIcon img = null;
+		StdImage img = null;
 		if (name != null) {
 			name = name + percentage + useWhite + FADED_POSTFIX;
 			img = get(name);
@@ -431,37 +473,8 @@ public class Images {
 	 * @param image The image to work on.
 	 * @return The disabled image.
 	 */
-	public static final ToolkitIcon createDisabledImage(ToolkitIcon image) {
+	public static final StdImage createDisabledImage(StdImage image) {
 		return createFadedImage(createColorizedImage(image, Color.white), 50, true);
-	}
-
-	/**
-	 * Forces the image to be loaded.
-	 *
-	 * @param image The image to load.
-	 * @return The fully loaded image, or <code>null</code> if it can't be loaded.
-	 */
-	public static final Image loadToolkitImage(Image image) {
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		if (!tk.prepareImage(image, -1, -1, null)) {
-			while (true) {
-				int result = tk.checkImage(image, -1, -1, null);
-				if ((result & (ImageObserver.ERROR | ImageObserver.ABORT)) != 0) {
-					return null;
-				}
-				if ((result & (ImageObserver.ALLBITS | ImageObserver.SOMEBITS | ImageObserver.FRAMEBITS)) != 0) {
-					break;
-				}
-				// Try to allow the image loading thread a chance to run.
-				// At least on Windows, not sleeping seems to be a problem.
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException ie) {
-					return null;
-				}
-			}
-		}
-		return image;
 	}
 
 	/**
@@ -470,7 +483,7 @@ public class Images {
 	 * @param file The file to load from.
 	 * @return The image, or <code>null</code> if it cannot be loaded.
 	 */
-	public static final ToolkitIcon loadImage(File file) {
+	public static final StdImage loadImage(File file) {
 		try {
 			return loadImage(file.toURI().toURL());
 		} catch (Exception exception) {
@@ -484,7 +497,7 @@ public class Images {
 	 * @param url The URL to load from.
 	 * @return The image, or <code>null</code> if it cannot be loaded.
 	 */
-	public static final ToolkitIcon loadImage(URL url) {
+	public static final StdImage loadImage(URL url) {
 		try {
 			return createOptimizedImage(ImageIO.read(url));
 		} catch (Exception exception) {
@@ -498,7 +511,7 @@ public class Images {
 	 * @param data The byte array to load from.
 	 * @return The image, or <code>null</code> if it cannot be loaded.
 	 */
-	public static final ToolkitIcon loadImage(byte[] data) {
+	public static final StdImage loadImage(byte[] data) {
 		try {
 			return createOptimizedImage(ImageIO.read(new ByteArrayInputStream(data)));
 		} catch (Exception exception) {
@@ -535,7 +548,7 @@ public class Images {
 	public static final boolean writePNG(OutputStream os, Image image, int dpi) {
 		ImageWriter writer = null;
 		try (ImageOutputStream stream = ImageIO.createImageOutputStream(os)) {
-			ToolkitIcon img = getToolkitIcon(image);
+			StdImage img = getToolkitImage(image);
 			ImageTypeSpecifier type = ImageTypeSpecifier.createFromRenderedImage(img);
 			writer = ImageIO.getImageWriters(type, "png").next(); //$NON-NLS-1$
 			IIOMetadata metaData = writer.getDefaultImageMetadata(type, null);
@@ -567,12 +580,12 @@ public class Images {
 	/**
 	 * @param width The width to create.
 	 * @param height The height to create.
-	 * @return A new {@link ToolkitIcon} of the given size.
+	 * @return A new {@link StdImage} of the given size.
 	 */
-	public static ToolkitIcon create(int width, int height) {
+	public static StdImage create(int width, int height) {
 		Graphics2D g2d = GraphicsUtilities.getGraphics();
 		GraphicsConfiguration gc = g2d.getDeviceConfiguration();
-		ToolkitIcon img = create(gc, width, height);
+		StdImage img = create(gc, width, height);
 		g2d.dispose();
 		return img;
 	}
@@ -581,23 +594,23 @@ public class Images {
 	 * @param gc The {@link GraphicsConfiguration} to make the image compatible with.
 	 * @param width The width to create.
 	 * @param height The height to create.
-	 * @return A new {@link ToolkitIcon} of the given size.
+	 * @return A new {@link StdImage} of the given size.
 	 */
-	public static ToolkitIcon create(GraphicsConfiguration gc, int width, int height) {
+	public static StdImage create(GraphicsConfiguration gc, int width, int height) {
 		ColorModel model = gc.getColorModel();
-		return new ToolkitIcon(model, model.createCompatibleWritableRaster(width, height), model.isAlphaPremultiplied(), null);
+		return new StdImage(model, model.createCompatibleWritableRaster(width, height), model.isAlphaPremultiplied(), null);
 	}
 
 	/**
 	 * @param width The width to create.
 	 * @param height The height to create.
 	 * @param transparency A constant from {@link Transparency}.
-	 * @return A new {@link ToolkitIcon} of the given size.
+	 * @return A new {@link StdImage} of the given size.
 	 */
-	public static ToolkitIcon create(int width, int height, int transparency) {
+	public static StdImage create(int width, int height, int transparency) {
 		Graphics2D g2d = GraphicsUtilities.getGraphics();
 		GraphicsConfiguration gc = g2d.getDeviceConfiguration();
-		ToolkitIcon img = create(gc, width, height, transparency);
+		StdImage img = create(gc, width, height, transparency);
 		g2d.dispose();
 		return img;
 	}
@@ -607,9 +620,9 @@ public class Images {
 	 * @param width The width to create.
 	 * @param height The height to create.
 	 * @param transparency A constant from {@link Transparency}.
-	 * @return A new {@link ToolkitIcon} of the given size.
+	 * @return A new {@link StdImage} of the given size.
 	 */
-	public static ToolkitIcon create(GraphicsConfiguration gc, int width, int height, int transparency) {
+	public static StdImage create(GraphicsConfiguration gc, int width, int height, int transparency) {
 		if (gc.getColorModel().getTransparency() == transparency) {
 			return create(gc, width, height);
 		}
@@ -617,15 +630,15 @@ public class Images {
 		if (cm == null) {
 			throw new IllegalArgumentException(INVALID_TRANSPARENCY);
 		}
-		return new ToolkitIcon(cm, cm.createCompatibleWritableRaster(width, height), cm.isAlphaPremultiplied(), null);
+		return new StdImage(cm, cm.createCompatibleWritableRaster(width, height), cm.isAlphaPremultiplied(), null);
 	}
 
 	/**
 	 * @param width The width to create.
 	 * @param height The height to create.
-	 * @return A new {@link ToolkitIcon} of the given size.
+	 * @return A new {@link StdImage} of the given size.
 	 */
-	public static final ToolkitIcon createTransparent(int width, int height) {
+	public static final StdImage createTransparent(int width, int height) {
 		return create(width, height, Transparency.TRANSLUCENT);
 	}
 
@@ -633,9 +646,51 @@ public class Images {
 	 * @param gc The {@link GraphicsConfiguration} to make the image compatible with.
 	 * @param width The width to create.
 	 * @param height The height to create.
-	 * @return A new {@link ToolkitIcon} of the given size.
+	 * @return A new {@link StdImage} of the given size.
 	 */
-	public static final ToolkitIcon createTransparent(GraphicsConfiguration gc, int width, int height) {
+	public static final StdImage createTransparent(GraphicsConfiguration gc, int width, int height) {
 		return create(gc, width, height, Transparency.TRANSLUCENT);
+	}
+
+	private StdImage(ColorModel cm, WritableRaster raster, boolean isRasterPremultiplied, Hashtable<?, ?> properties) {
+		super(cm, raster, isRasterPremultiplied, properties);
+		clear();
+	}
+
+	@Override
+	public Graphics2D getGraphics() {
+		Graphics2D gc = (Graphics2D) super.getGraphics();
+		gc.setClip(0, 0, getWidth(), getHeight());
+		return gc;
+	}
+
+	/**
+	 * Clears the image, filling it with black or, if the image isn't opaque, complete transparency.
+	 */
+	public void clear() {
+		fill(new Color(0, getTransparency() != OPAQUE));
+	}
+
+	/** @param color The {@link Color} to fill the image with. */
+	public void fill(Color color) {
+		Graphics2D gc = getGraphics();
+		gc.setBackground(color);
+		gc.clearRect(0, 0, getWidth(), getHeight());
+		gc.dispose();
+	}
+
+	@Override
+	public void paintIcon(Component component, Graphics gc, int x, int y) {
+		gc.drawImage(this, x, y, component);
+	}
+
+	@Override
+	public int getIconWidth() {
+		return getWidth();
+	}
+
+	@Override
+	public int getIconHeight() {
+		return getHeight();
 	}
 }

@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget.tree.test;
 
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
-import com.trollworks.toolkit.ui.image.ToolkitImage;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.widget.tree.TreeRow;
 
 public class TreeTestRow extends TreeRow implements TreeRowWithName, TreeRowWithIcon {
@@ -33,8 +32,8 @@ public class TreeTestRow extends TreeRow implements TreeRowWithName, TreeRowWith
 	}
 
 	@Override
-	public ToolkitIcon getIcon() {
-		return ToolkitImage.getMiniWarningIcon();
+	public StdImage getIcon() {
+		return StdImage.MINI_WARNING;
 	}
 
 	public static String getName(TreeRow row) {
@@ -51,7 +50,7 @@ public class TreeTestRow extends TreeRow implements TreeRowWithName, TreeRowWith
 		return null;
 	}
 
-	public static ToolkitIcon getIcon(TreeRow row) {
+	public static StdImage getIcon(TreeRow row) {
 		if (row instanceof TreeRowWithIcon) {
 			return ((TreeRowWithIcon) row).getIcon();
 		}

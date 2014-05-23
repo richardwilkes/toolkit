@@ -44,10 +44,10 @@ public class FadeFilter extends RGBImageFilter {
 	 * @param useWhite Whether to use white or black.
 	 * @return The faded image.
 	 */
-	public static ToolkitIcon createFadedImage(Image image, int percentage, boolean useWhite) {
+	public static StdImage createFadedImage(Image image, int percentage, boolean useWhite) {
 		FadeFilter filter = new FadeFilter(percentage, useWhite);
 		ImageProducer producer = new FilteredImageSource(image.getSource(), filter);
-		return Images.getToolkitIcon(Toolkit.getDefaultToolkit().createImage(producer));
+		return StdImage.getToolkitImage(Toolkit.getDefaultToolkit().createImage(producer));
 	}
 
 	@Override

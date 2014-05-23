@@ -12,7 +12,7 @@
 package com.trollworks.toolkit.ui.preferences;
 
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.layout.Alignment;
 import com.trollworks.toolkit.ui.layout.FlexComponent;
 import com.trollworks.toolkit.ui.layout.FlexContainer;
@@ -98,10 +98,10 @@ public abstract class PreferencePanel extends JPanel {
 	 *
 	 * @param title The title to use.
 	 * @param tooltip The tooltip to use.
-	 * @param icon The {@link ToolkitIcon} to use.
+	 * @param icon The {@link StdImage} to use.
 	 * @return The newly created {@link JLabel}.
 	 */
-	protected JLabel createLabel(String title, String tooltip, ToolkitIcon icon) {
+	protected JLabel createLabel(String title, String tooltip, StdImage icon) {
 		return createLabel(title, tooltip, icon, SwingConstants.RIGHT);
 	}
 
@@ -110,11 +110,11 @@ public abstract class PreferencePanel extends JPanel {
 	 *
 	 * @param title The title to use.
 	 * @param tooltip The tooltip to use.
-	 * @param icon The {@link ToolkitIcon} to use.
+	 * @param icon The {@link StdImage} to use.
 	 * @param alignment The alignment to use.
 	 * @return The newly created {@link JLabel}.
 	 */
-	protected JLabel createLabel(String title, String tooltip, ToolkitIcon icon, int alignment) {
+	protected JLabel createLabel(String title, String tooltip, StdImage icon, int alignment) {
 		JLabel label = new JLabel(title, alignment);
 		label.setOpaque(false);
 		label.setToolTipText(tooltip);

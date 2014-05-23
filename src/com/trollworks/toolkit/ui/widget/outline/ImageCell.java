@@ -11,7 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget.outline;
 
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.utility.NumericComparator;
 
 import java.awt.Cursor;
@@ -58,15 +58,15 @@ public class ImageCell implements Cell {
 	 * @return The icon, if any.
 	 */
 	@SuppressWarnings("static-method")
-	protected ToolkitIcon getIcon(Row row, Column column, boolean selected, boolean active) {
+	protected StdImage getIcon(Row row, Column column, boolean selected, boolean active) {
 		Object data = row.getData(column);
-		return data instanceof ToolkitIcon ? (ToolkitIcon) data : null;
+		return data instanceof StdImage ? (StdImage) data : null;
 	}
 
 	@Override
 	public void drawCell(Outline outline, Graphics gc, Rectangle bounds, Row row, Column column, boolean selected, boolean active) {
 		if (row != null) {
-			ToolkitIcon image = getIcon(row, column, selected, active);
+			StdImage image = getIcon(row, column, selected, active);
 
 			if (image != null) {
 				int x = bounds.x;
@@ -99,14 +99,14 @@ public class ImageCell implements Cell {
 	public int getPreferredWidth(Row row, Column column) {
 		Object data = row != null ? row.getData(column) : null;
 
-		return data instanceof ToolkitIcon ? ((ToolkitIcon) data).getWidth() : 0;
+		return data instanceof StdImage ? ((StdImage) data).getWidth() : 0;
 	}
 
 	@Override
 	public int getPreferredHeight(Row row, Column column) {
 		Object data = row != null ? row.getData(column) : null;
 
-		return data instanceof ToolkitIcon ? ((ToolkitIcon) data).getHeight() : 0;
+		return data instanceof StdImage ? ((StdImage) data).getHeight() : 0;
 	}
 
 	@Override

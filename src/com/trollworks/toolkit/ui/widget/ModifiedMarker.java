@@ -12,8 +12,7 @@
 package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
-import com.trollworks.toolkit.ui.image.ToolkitImage;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.utility.Localization;
 
 import javax.swing.JLabel;
@@ -22,30 +21,27 @@ import javax.swing.JRootPane;
 /** A toolbar marker that tracks the modified state. */
 public class ModifiedMarker extends JLabel implements DataModifiedListener {
 	@Localize("Changes have been made")
-	private static String		MODIFIED;
+	private static String	MODIFIED;
 	@Localize("No changes have been made")
-	private static String		NOT_MODIFIED;
+	private static String	NOT_MODIFIED;
 
 	static {
 		Localization.initialize();
 	}
 
-	private static ToolkitIcon	ICON_NOT_MODIFIED	= ToolkitImage.getNotModifiedMarker();
-	private static ToolkitIcon	ICON_MODIFIED		= ToolkitImage.getModifiedMarker();
-
 	/** Creates a new {@link ModifiedMarker}. */
 	public ModifiedMarker() {
-		super(ICON_NOT_MODIFIED);
+		super(StdImage.NOT_MODIFIED_MARKER);
 		setToolTipText(NOT_MODIFIED);
 	}
 
 	@Override
 	public void dataModificationStateChanged(Object obj, boolean modified) {
 		if (modified) {
-			setIcon(ICON_MODIFIED);
+			setIcon(StdImage.MODIFIED_MARKER);
 			setToolTipText(MODIFIED);
 		} else {
-			setIcon(ICON_NOT_MODIFIED);
+			setIcon(StdImage.NOT_MODIFIED_MARKER);
 			setToolTipText(NOT_MODIFIED);
 		}
 		repaint();

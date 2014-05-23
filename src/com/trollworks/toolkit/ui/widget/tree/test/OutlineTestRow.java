@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget.tree.test;
 
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
-import com.trollworks.toolkit.ui.image.ToolkitImage;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.widget.outline.Column;
 import com.trollworks.toolkit.ui.widget.outline.Row;
 
@@ -32,8 +31,8 @@ public class OutlineTestRow extends Row {
 	}
 
 	@SuppressWarnings("static-method")
-	public ToolkitIcon getIcon() {
-		return ToolkitImage.getMiniWarningIcon();
+	public StdImage getIcon() {
+		return StdImage.MINI_WARNING;
 	}
 
 	@Override

@@ -30,66 +30,66 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Provides a set of icons at different resolutions. */
-public class IconSet implements Comparator<ToolkitIcon> {
+/** Provides a set of images at different resolutions. */
+public class StdImageSet implements Comparator<StdImage> {
 	@Localize("Invalid ICNS")
-	private static String				INVALID_ICNS;
+	private static String					INVALID_ICNS;
 	@Localize("Invalid ICO")
-	private static String				INVALID_ICO;
+	private static String					INVALID_ICO;
 	@Localize("Unable to create PNG")
-	private static String				UNABLE_TO_CREATE_PNG;
+	private static String					UNABLE_TO_CREATE_PNG;
 
 	static {
 		Localization.initialize();
 	}
 
-	public static final int[]			STD_SIZES	= { 1024, 512, 256, 128, 64, 48, 32, 16 };
-	private static final int			TYPE_icns	= 0x69636e73;
-	private static final int			TYPE_icp4	= 0x69637034;
-	private static final int			TYPE_icp5	= 0x69637035;
-	private static final int			TYPE_icp6	= 0x69637036;
-	private static final int			TYPE_ic07	= 0x69633037;
-	private static final int			TYPE_ic08	= 0x69633038;
-	private static final int			TYPE_ic09	= 0x69633039;
-	private static final int			TYPE_ic10	= 0x69633130;
-	private static final int			TYPE_ic11	= 0x69633131;
-	private static final int			TYPE_ic12	= 0x69633132;
-	private static final int			TYPE_ic13	= 0x69633133;
-	private static final int			TYPE_ic14	= 0x69633134;
-	private static Map<String, IconSet>	SETS		= new HashMap<>();
-	private static int					SEQUENCE	= 0;
-	private String						mName;
-	private IconSet[]					mLayers;
-	private List<ToolkitIcon>			mIcons;
-	private int							mSequence;
+	public static final int[]				STD_SIZES	= { 1024, 512, 256, 128, 64, 48, 32, 16 };
+	private static final int				TYPE_icns	= 0x69636e73;
+	private static final int				TYPE_icp4	= 0x69637034;
+	private static final int				TYPE_icp5	= 0x69637035;
+	private static final int				TYPE_icp6	= 0x69637036;
+	private static final int				TYPE_ic07	= 0x69633037;
+	private static final int				TYPE_ic08	= 0x69633038;
+	private static final int				TYPE_ic09	= 0x69633039;
+	private static final int				TYPE_ic10	= 0x69633130;
+	private static final int				TYPE_ic11	= 0x69633131;
+	private static final int				TYPE_ic12	= 0x69633132;
+	private static final int				TYPE_ic13	= 0x69633133;
+	private static final int				TYPE_ic14	= 0x69633134;
+	private static Map<String, StdImageSet>	SETS		= new HashMap<>();
+	private static int						SEQUENCE	= 0;
+	private String							mName;
+	private StdImageSet[]					mLayers;
+	private List<StdImage>					mImages;
+	private int								mSequence;
 
 	/**
-	 * @param name The name of the {@link IconSet}.
-	 * @return The {@link IconSet}.
+	 * @param name The name of the {@link StdImageSet}.
+	 * @return The {@link StdImageSet}.
 	 */
-	public static final IconSet get(String name) {
+	public static final StdImageSet get(String name) {
 		return SETS.get(name);
 	}
 
 	/**
-	 * If the {@link IconSet} has not already been loaded, this method will attempt to load it from
-	 * individual icons matching the name.
+	 * If the {@link StdImageSet} has not already been loaded, this method will attempt to load it
+	 * from individual images matching the name.
 	 *
-	 * @param name The name of the {@link IconSet}.
-	 * @return The {@link IconSet}.
+	 * @param name The name of the {@link StdImageSet}.
+	 * @return The {@link StdImageSet}.
 	 */
-	public static final IconSet getOrLoad(String name) {
-		IconSet set = SETS.get(name);
+	public static final StdImageSet getOrLoad(String name) {
+		StdImageSet set = SETS.get(name);
 		if (set == null) {
-			List<ToolkitIcon> images = new ArrayList<>();
+			List<StdImage> images = new ArrayList<>();
 			for (int size : STD_SIZES) {
-				ToolkitIcon img = Images.get(name + "_" + size); //$NON-NLS-1$
+				StdImage img = StdImage.get(name + "_" + size); //$NON-NLS-1$
 				if (img != null) {
 					images.add(img);
 				}
 			}
 			if (!images.isEmpty()) {
-				set = new IconSet(name, images);
+				set = new StdImageSet(name, images);
 			}
 		}
 		return set;
@@ -100,11 +100,11 @@ public class IconSet implements Comparator<ToolkitIcon> {
 	 * href="http://en.wikipedia.org/wiki/Apple_Icon_Image"
 	 * >http://en.wikipedia.org/wiki/Apple_Icon_Image</a>.
 	 *
-	 * @param name The name to give this {@link IconSet}. Note that this should be unique, as it
-	 *            will replace any existing {@link IconSet} with the same name.
-	 * @param url The {@link URL} to load the icons from.
+	 * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
+	 *            will replace any existing {@link StdImageSet} with the same name.
+	 * @param url The {@link URL} to load the images from.
 	 */
-	public static final IconSet loadIcns(String name, URL url) throws IOException {
+	public static final StdImageSet loadIcns(String name, URL url) throws IOException {
 		try (InputStream in = url.openStream()) {
 			return loadIcns(name, in);
 		}
@@ -115,12 +115,12 @@ public class IconSet implements Comparator<ToolkitIcon> {
 	 * href="http://en.wikipedia.org/wiki/Apple_Icon_Image"
 	 * >http://en.wikipedia.org/wiki/Apple_Icon_Image</a>.
 	 *
-	 * @param name The name to give this {@link IconSet}. Note that this should be unique, as it
-	 *            will replace any existing {@link IconSet} with the same name.
-	 * @param in The {@link InputStream} to load the icons from.
+	 * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
+	 *            will replace any existing {@link StdImageSet} with the same name.
+	 * @param in The {@link InputStream} to load the images from.
 	 */
-	public static final IconSet loadIcns(String name, InputStream in) throws IOException {
-		List<ToolkitIcon> images = new ArrayList<>();
+	public static final StdImageSet loadIcns(String name, InputStream in) throws IOException {
+		List<StdImage> images = new ArrayList<>();
 		byte[] header = new byte[8];
 		StreamUtils.readFully(in, header);
 		if (EndianUtils.readBEInt(header, 0) != TYPE_icns) {
@@ -154,15 +154,15 @@ public class IconSet implements Comparator<ToolkitIcon> {
 					break;
 			}
 		}
-		return images.isEmpty() ? null : new IconSet(name, images);
+		return images.isEmpty() ? null : new StdImageSet(name, images);
 	}
 
-	private static final void loadImage(InputStream in, int length, String name, List<ToolkitIcon> images) throws IOException {
+	private static final void loadImage(InputStream in, int length, String name, List<StdImage> images) throws IOException {
 		byte[] data = new byte[length];
 		StreamUtils.readFully(in, data);
-		ToolkitIcon img = Images.loadImage(data);
+		StdImage img = StdImage.loadImage(data);
 		if (img != null) {
-			trackIcon(name, img);
+			track(name, img);
 			images.add(img);
 		}
 	}
@@ -173,11 +173,11 @@ public class IconSet implements Comparator<ToolkitIcon> {
 	 * >http://en.wikipedia.org/wiki/ICO_(file_format)</a>. Note that only those ICO files that
 	 * embed PNG images can be loaded with this method.
 	 *
-	 * @param name The name to give this {@link IconSet}. Note that this should be unique, as it
-	 *            will replace any existing {@link IconSet} with the same name.
-	 * @param url The {@link URL} to load the icons from.
+	 * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
+	 *            will replace any existing {@link StdImageSet} with the same name.
+	 * @param url The {@link URL} to load the images from.
 	 */
-	public static final IconSet loadIco(String name, URL url) throws IOException {
+	public static final StdImageSet loadIco(String name, URL url) throws IOException {
 		try (InputStream in = url.openStream()) {
 			return loadIco(name, in);
 		}
@@ -189,12 +189,12 @@ public class IconSet implements Comparator<ToolkitIcon> {
 	 * >http://en.wikipedia.org/wiki/ICO_(file_format)</a>. Note that only those ICO files that
 	 * embed PNG images can be loaded with this method.
 	 *
-	 * @param name The name to give this {@link IconSet}. Note that this should be unique, as it
-	 *            will replace any existing {@link IconSet} with the same name.
-	 * @param in The {@link InputStream} to load the icons from.
+	 * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
+	 *            will replace any existing {@link StdImageSet} with the same name.
+	 * @param in The {@link InputStream} to load the images from.
 	 */
-	public static final IconSet loadIco(String name, InputStream in) throws IOException {
-		List<ToolkitIcon> images = new ArrayList<>();
+	public static final StdImageSet loadIco(String name, InputStream in) throws IOException {
+		List<StdImage> images = new ArrayList<>();
 		byte[] header = new byte[6];
 		StreamUtils.readFully(in, header);
 		if (EndianUtils.readLEUnsignedShort(header, 0) != 0 || EndianUtils.readLEUnsignedShort(header, 2) != 1) {
@@ -218,7 +218,7 @@ public class IconSet implements Comparator<ToolkitIcon> {
 			loadImage(in, toc[i].length, name, images);
 			pos += toc[i].length;
 		}
-		return images.isEmpty() ? null : new IconSet(name, images);
+		return images.isEmpty() ? null : new StdImageSet(name, images);
 	}
 
 	private static class ico implements Comparable<ico> {
@@ -231,48 +231,48 @@ public class IconSet implements Comparator<ToolkitIcon> {
 		}
 	}
 
-	private static final void trackIcon(String name, ToolkitIcon icon) {
-		Images.add("is:" + name + "_" + icon.getWidth() + "x" + icon.getHeight(), icon); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private static final void track(String name, StdImage image) {
+		StdImage.add("is:" + name + "_" + image.getWidth() + "x" + image.getHeight(), image); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**
-	 * Creates a new {@link IconSet}.
+	 * Creates a new {@link StdImageSet}.
 	 *
-	 * @param name The name of this {@link IconSet}. This can be used to retrieve the
-	 *            {@link IconSet} later, via a call to {@link #get(String)}.
-	 * @param images The images that belong in this {@link IconSet}.
+	 * @param name The name of this {@link StdImageSet}. This can be used to retrieve the
+	 *            {@link StdImageSet} later, via a call to {@link #get(String)}.
+	 * @param images The images that belong in this {@link StdImageSet}.
 	 */
-	public IconSet(String name, List<ToolkitIcon> images) {
+	public StdImageSet(String name, List<StdImage> images) {
 		mName = name;
 		updateSequence();
-		mIcons = new ArrayList<>(images);
-		Collections.sort(mIcons, this);
+		mImages = new ArrayList<>(images);
+		Collections.sort(mImages, this);
 		SETS.put(name, this);
 	}
 
 	/**
-	 * Creates a new {@link IconSet} that composites multiple icons together from other
-	 * {@link IconSet}s to form its icons.
-	 * 
-	 * @param name The name of this {@link IconSet}. This can be used to retrieve the
-	 *            {@link IconSet} later, via a call to {@link #get(String)}.
-	 * @param layers Two or more other {@link IconSet}s to use. Each one will be layered on top of
-	 *            the previous one, creating a single icon for a given size.
+	 * Creates a new {@link StdImageSet} that composites multiple images together from other
+	 * {@link StdImageSet}s to form its images.
+	 *
+	 * @param name The name of this {@link StdImageSet}. This can be used to retrieve the
+	 *            {@link StdImageSet} later, via a call to {@link #get(String)}.
+	 * @param layers Two or more other {@link StdImageSet}s to use. Each one will be layered on top
+	 *            of the previous one, creating a single image for a given size.
 	 */
-	public IconSet(String name, IconSet... layers) {
+	public StdImageSet(String name, StdImageSet... layers) {
 		if (layers == null || layers.length < 2) {
 			throw new IllegalArgumentException();
 		}
 		mName = name;
 		updateSequence();
-		mLayers = new IconSet[layers.length];
+		mLayers = new StdImageSet[layers.length];
 		System.arraycopy(layers, 0, mLayers, 0, layers.length);
-		mIcons = new ArrayList<>();
+		mImages = new ArrayList<>();
 		SETS.put(name, this);
 	}
 
 	@Override
-	public int compare(ToolkitIcon o1, ToolkitIcon o2) {
+	public int compare(StdImage o1, StdImage o2) {
 		int result = Numbers.compare(o2.getWidth(), o1.getWidth());
 		if (result == 0) {
 			result = Numbers.compare(o2.getHeight(), o1.getHeight());
@@ -283,27 +283,27 @@ public class IconSet implements Comparator<ToolkitIcon> {
 		return result;
 	}
 
-	/** @return The name of this {@link IconSet}. */
+	/** @return The name of this {@link StdImageSet}. */
 	public String getName() {
 		return mName;
 	}
 
 	/**
-	 * @param size The width and height of the icon.
-	 * @return <code>true</code> if the icon exists.
+	 * @param size The width and height of the image.
+	 * @return <code>true</code> if the image exists.
 	 */
-	public boolean hasIcon(int size) {
-		return hasIcon(size, size);
+	public boolean hasImage(int size) {
+		return hasImage(size, size);
 	}
 
 	/**
-	 * @param width The width of the icon.
-	 * @param height The height of the icon.
-	 * @return <code>true</code> if the icon exists.
+	 * @param width The width of the image.
+	 * @param height The height of the image.
+	 * @return <code>true</code> if the image exists.
 	 */
-	public boolean hasIcon(int width, int height) {
-		for (ToolkitIcon icon : mIcons) {
-			if (width == icon.getWidth() && height == icon.getHeight()) {
+	public boolean hasImage(int width, int height) {
+		for (StdImage image : mImages) {
+			if (width == image.getWidth() && height == image.getHeight()) {
 				return true;
 			}
 		}
@@ -311,93 +311,95 @@ public class IconSet implements Comparator<ToolkitIcon> {
 	}
 
 	/**
-	 * @param size The width and height of the icon.
-	 * @return An icon from the set, or <code>null</code> if the desired dimensions cannot be found.
+	 * @param size The width and height of the image.
+	 * @return An image from the set, or <code>null</code> if the desired dimensions cannot be
+	 *         found.
 	 */
-	public ToolkitIcon getIconNoCreate(int size) {
-		return getIconNoCreate(size, size);
+	public StdImage getImageNoCreate(int size) {
+		return getImageNoCreate(size, size);
 	}
 
 	/**
-	 * @param width The width of the icon.
-	 * @param height The height of the icon.
-	 * @return An icon from the set, or <code>null</code> if the desired dimensions cannot be found.
+	 * @param width The width of the image.
+	 * @param height The height of the image.
+	 * @return An image from the set, or <code>null</code> if the desired dimensions cannot be
+	 *         found.
 	 */
-	public ToolkitIcon getIconNoCreate(int width, int height) {
-		for (ToolkitIcon icon : mIcons) {
-			if (width == icon.getWidth() && height == icon.getHeight()) {
-				return icon;
+	public StdImage getImageNoCreate(int width, int height) {
+		for (StdImage image : mImages) {
+			if (width == image.getWidth() && height == image.getHeight()) {
+				return image;
 			}
 		}
 		return null;
 	}
 
 	/**
-	 * @param size The width and height of the icon.
-	 * @return An icon from the set. If an exact match cannot be found, one of the existing icons
+	 * @param size The width and height of the image.
+	 * @return An image from the set. If an exact match cannot be found, one of the existing images
 	 *         will be scaled to the desired size.
 	 */
-	public ToolkitIcon getIcon(int size) {
-		return getIcon(size, size);
+	public StdImage getImage(int size) {
+		return getImage(size, size);
 	}
 
 	/**
-	 * @param width The width of the icon.
-	 * @param height The height of the icon.
-	 * @return An icon from the set. If an exact match cannot be found, one of the existing icons
+	 * @param width The width of the image.
+	 * @param height The height of the image.
+	 * @return An image from the set. If an exact match cannot be found, one of the existing images
 	 *         will be scaled to the desired size.
 	 */
-	public ToolkitIcon getIcon(int width, int height) {
-		ToolkitIcon match = getIconNoCreate(width, height);
+	public StdImage getImage(int width, int height) {
+		StdImage match = getImageNoCreate(width, height);
 		if (match == null) {
 			if (mLayers != null) {
-				match = mLayers[0].getIcon(width, height);
+				match = mLayers[0].getImage(width, height);
 				for (int i = 1; i < mLayers.length; i++) {
-					ToolkitIcon previous = match;
-					match = Images.superimpose(match, mLayers[i].getIcon(width, height));
+					StdImage previous = match;
+					match = StdImage.superimpose(match, mLayers[i].getImage(width, height));
 					if (i > 1) {
 						previous.flush();
 					}
 				}
 			} else {
-				ToolkitIcon inverseMatch = null;
+				StdImage inverseMatch = null;
 				int best = Integer.MAX_VALUE;
 				int inverseBest = Integer.MIN_VALUE;
-				for (ToolkitIcon icon : mIcons) {
-					int iconWidth = icon.getWidth();
-					int iconHeight = icon.getHeight();
-					int heuristic = (iconWidth - width) * (iconHeight - height);
-					if (iconWidth > width || iconHeight > height) {
+				for (StdImage image : mImages) {
+					int imageWidth = image.getWidth();
+					int imageHeight = image.getHeight();
+					int heuristic = (imageWidth - width) * (imageHeight - height);
+					if (imageWidth > width || imageHeight > height) {
 						if (heuristic < best) {
 							best = heuristic;
-							match = icon;
+							match = image;
 						}
 					} else if (match == null && heuristic > inverseBest) {
 						inverseBest = heuristic;
-						inverseMatch = icon;
+						inverseMatch = image;
 					}
 				}
 				if (match == null) {
 					match = inverseMatch;
 				}
-				match = Images.scale(match, width, height);
+				match = StdImage.scale(match, width, height);
 			}
-			trackIcon(mName, match);
-			mIcons.add(match);
-			Collections.sort(mIcons, this);
+			track(mName, match);
+			mImages.add(match);
+			Collections.sort(mImages, this);
 		}
 		return match;
 	}
 
-	/** @return A list containing all of the icons within this {@link IconSet}. */
-	public List<ToolkitIcon> toList() {
-		return new ArrayList<>(mIcons);
+	/** @return A list containing all of the images within this {@link StdImageSet}. */
+	public List<StdImage> toList() {
+		return new ArrayList<>(mImages);
 	}
 
 	/**
-	 * @return The current sequence number of this {@link IconSet}. This can be used to determine if
-	 *         the {@link IconSet} is the same as the last time you used it. These are unique across
-	 *         all {@link IconSet}s.
+	 * @return The current sequence number of this {@link StdImageSet}. This can be used to
+	 *         determine if the {@link StdImageSet} is the same as the last time you used it. These
+	 *         are unique across all {@link StdImageSet}s.
 	 */
 	public synchronized int getSequence() {
 		return mSequence;
@@ -408,19 +410,19 @@ public class IconSet implements Comparator<ToolkitIcon> {
 	}
 
 	/**
-	 * @param out The stream to write an ICNS file with this {@link IconSet}s contents to. Only
-	 *            square icons which have been loaded and match the sizes appropriate for an ICNS
-	 *            file will be output. You may need to call {@link #getIcon(int)} on the appropriate
-	 *            sizes first.
+	 * @param out The stream to write an ICNS file with this {@link StdImageSet}s contents to. Only
+	 *            square images which have been loaded and match the sizes appropriate for an ICNS
+	 *            file will be output. You may need to call {@link #getImage(int)} on the
+	 *            appropriate sizes first.
 	 */
 	public void saveAsIcns(OutputStream out) throws IOException {
 		List<byte[]> imageData = new ArrayList<>();
 		List<Integer> imageType = new ArrayList<>();
 		int size = 8;
-		for (ToolkitIcon icon : mIcons) {
-			int width = icon.getWidth();
-			// We currently only write out square icons
-			if (width == icon.getHeight()) {
+		for (StdImage image : mImages) {
+			int width = image.getWidth();
+			// We currently only write out square images
+			if (width == image.getHeight()) {
 				int type;
 				// We currently only write out certain sizes
 				switch (width) {
@@ -451,7 +453,7 @@ public class IconSet implements Comparator<ToolkitIcon> {
 				}
 				if (type != 0) {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					if (!Images.writePNG(baos, icon, 72)) {
+					if (!StdImage.writePNG(baos, image, 72)) {
 						throw new IOException(UNABLE_TO_CREATE_PNG);
 					}
 					byte[] bytes = baos.toByteArray();
@@ -476,17 +478,17 @@ public class IconSet implements Comparator<ToolkitIcon> {
 	}
 
 	/**
-	 * @param out The stream to write an ICO file with this {@link IconSet}s contents to. Only
-	 *            square icons which have been loaded and match the sizes appropriate for an ICO
-	 *            file will be output. You may need to call {@link #getIcon(int)} on the appropriate
-	 *            sizes first.
+	 * @param out The stream to write an ICO file with this {@link StdImageSet}s contents to. Only
+	 *            square images which have been loaded and match the sizes appropriate for an ICO
+	 *            file will be output. You may need to call {@link #getImage(int)} on the
+	 *            appropriate sizes first.
 	 */
 	public void saveAsIco(OutputStream out) throws IOException {
 		byte[] buffer = new byte[16];
 		int count = 0;
 		int[] sizes = new int[] { 256, 128, 64, 48, 32, 16 };
 		for (int size : sizes) {
-			if (hasIcon(size)) {
+			if (hasImage(size)) {
 				count++;
 			}
 		}
@@ -497,7 +499,7 @@ public class IconSet implements Comparator<ToolkitIcon> {
 		int totalImageBytes = 0;
 		List<byte[]> images = new ArrayList<>();
 		for (int size : sizes) {
-			if (hasIcon(size)) {
+			if (hasImage(size)) {
 				buffer[0] = (byte) (size == 256 ? 0 : size);
 				buffer[1] = buffer[0];
 				buffer[2] = 0;
@@ -505,7 +507,7 @@ public class IconSet implements Comparator<ToolkitIcon> {
 				EndianUtils.writeLEShort(1, buffer, 4);
 				EndianUtils.writeLEShort(32, buffer, 6);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				if (!Images.writePNG(baos, getIcon(size), 72)) {
+				if (!StdImage.writePNG(baos, getImage(size), 72)) {
 					throw new IOException(UNABLE_TO_CREATE_PNG);
 				}
 				byte[] bytes = baos.toByteArray();

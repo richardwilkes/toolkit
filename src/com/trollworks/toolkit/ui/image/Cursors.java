@@ -18,7 +18,7 @@ import java.awt.Toolkit;
 @SuppressWarnings("nls")
 public class Cursors {
 	static {
-		Images.addLocation(ToolkitImage.class.getResource("cursors/"));
+		StdImage.addLocation(StdImage.class.getResource("cursors/"));
 	}
 
 	public static final Cursor	HORIZONTAL_RESIZE	= create("horizontal_resize_cursor");
@@ -33,7 +33,7 @@ public class Cursors {
 	 * @param name The name of the image to load.
 	 */
 	public static final Cursor create(String name) {
-		ToolkitIcon img = Images.get(name);
+		StdImage img = StdImage.get(name);
 		if (img == null) {
 			return Cursor.getDefaultCursor();
 		}
@@ -49,7 +49,7 @@ public class Cursors {
 	 * @param hotSpotY The vertical hot spot for the cursor.
 	 */
 	public static final Cursor create(String name, int hotSpotX, int hotSpotY) {
-		ToolkitIcon img = Images.get(name);
+		StdImage img = StdImage.get(name);
 		if (img == null) {
 			return Cursor.getDefaultCursor();
 		}

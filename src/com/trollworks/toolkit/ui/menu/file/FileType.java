@@ -11,8 +11,8 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
-import com.trollworks.toolkit.ui.image.IconSet;
-import com.trollworks.toolkit.ui.image.ToolkitImage;
+import com.trollworks.toolkit.ui.image.StdImageSet;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.utility.PathUtils;
 
 import java.io.File;
@@ -22,9 +22,9 @@ import java.util.HashMap;
 /** Describes a file. */
 public class FileType {
 	private static final ArrayList<FileType>	TYPES		= new ArrayList<>();
-	private static HashMap<String, IconSet>		ICONSET_MAP	= new HashMap<>();
+	private static HashMap<String, StdImageSet>		ICONSET_MAP	= new HashMap<>();
 	private String								mExtension;
-	private IconSet								mIconSet;
+	private StdImageSet								mIconSet;
 	private String								mDescription;
 	private FileProxyCreator					mFileProxyCreator;
 	private boolean								mAllowOpen;
@@ -33,13 +33,13 @@ public class FileType {
 	 * Registers a new {@link FileType}, replacing any existing entry for the specified extension.
 	 *
 	 * @param extension The extension of the file.
-	 * @param iconset The {@link IconSet} to use for the file.
+	 * @param iconset The {@link StdImageSet} to use for the file.
 	 * @param description A short description of the file type.
 	 * @param fileProxyCreator The {@link FileProxyCreator} responsible for creating a
 	 *            {@link FileProxy} with this file's contents.
 	 * @param allowOpen Whether this {@link FileType} is allowed to be opened via the menu command.
 	 */
-	public static final void register(String extension, IconSet iconset, String description, FileProxyCreator fileProxyCreator, boolean allowOpen) {
+	public static final void register(String extension, StdImageSet iconset, String description, FileProxyCreator fileProxyCreator, boolean allowOpen) {
 		extension = normalizeExtension(extension);
 		for (FileType type : TYPES) {
 			if (type.mExtension.equals(extension)) {
@@ -96,7 +96,7 @@ public class FileType {
 	 * @param path The path to return an icon for.
 	 * @return The icon for the specified file.
 	 */
-	public static IconSet getIconsForFile(String path) {
+	public static StdImageSet getIconsForFile(String path) {
 		return getIconsForFileExtension(PathUtils.getExtension(path));
 	}
 
@@ -104,7 +104,7 @@ public class FileType {
 	 * @param file The file to return an icon for.
 	 * @return The icon for the specified file.
 	 */
-	public static IconSet getIconsForFile(File file) {
+	public static StdImageSet getIconsForFile(File file) {
 		return getIconsForFile(file != null && file.isFile() ? file.getName() : null);
 	}
 
@@ -112,19 +112,19 @@ public class FileType {
 	 * @param extension The extension to return an icon for.
 	 * @return The icon for the specified file extension.
 	 */
-	public static IconSet getIconsForFileExtension(String extension) {
+	public static StdImageSet getIconsForFileExtension(String extension) {
 		if (extension != null) {
 			extension = normalizeExtension(extension);
-			IconSet icons = ICONSET_MAP.get(extension);
+			StdImageSet icons = ICONSET_MAP.get(extension);
 			if (icons != null) {
 				return icons;
 			}
-			return ToolkitImage.getFileIcons();
+			return StdImage.FILE;
 		}
-		return ToolkitImage.getFolderIcons();
+		return StdImage.FOLDER;
 	}
 
-	private FileType(String extension, IconSet iconset, String description, FileProxyCreator fileProxyCreator, boolean allowOpen) {
+	private FileType(String extension, StdImageSet iconset, String description, FileProxyCreator fileProxyCreator, boolean allowOpen) {
 		mExtension = extension;
 		mIconSet = iconset;
 		mDescription = description;
@@ -137,8 +137,8 @@ public class FileType {
 		return mExtension;
 	}
 
-	/** @return The {@link IconSet} representing the file. */
-	public IconSet getIcons() {
+	/** @return The {@link StdImageSet} representing the file. */
+	public StdImageSet getIcons() {
 		return mIconSet;
 	}
 

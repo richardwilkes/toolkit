@@ -59,7 +59,7 @@ public class ColorFilter extends RGBImageFilter {
 	 * @param color The color to apply.
 	 * @return The colorized image.
 	 */
-	public static ToolkitIcon createColorizedImage(Image image, Color color) {
+	public static StdImage createColorizedImage(Image image, Color color) {
 		return createColorizedImage(image, color, false);
 	}
 
@@ -72,10 +72,10 @@ public class ColorFilter extends RGBImageFilter {
 	 *            colorization.
 	 * @return The colorized image.
 	 */
-	public static ToolkitIcon createColorizedImage(Image image, Color color, boolean includeAlpha) {
+	public static StdImage createColorizedImage(Image image, Color color, boolean includeAlpha) {
 		ColorFilter filter = new ColorFilter(color, includeAlpha);
 		ImageProducer producer = new FilteredImageSource(image.getSource(), filter);
-		return Images.getToolkitIcon(Toolkit.getDefaultToolkit().createImage(producer));
+		return StdImage.getToolkitImage(Toolkit.getDefaultToolkit().createImage(producer));
 	}
 
 	@Override

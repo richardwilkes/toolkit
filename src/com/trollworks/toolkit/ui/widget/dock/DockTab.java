@@ -14,7 +14,7 @@ package com.trollworks.toolkit.ui.widget.dock;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.image.ToolkitImage;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
 import com.trollworks.toolkit.ui.layout.PrecisionLayoutData;
 import com.trollworks.toolkit.ui.menu.file.CloseHandler;
@@ -73,7 +73,7 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		mTitle = new JLabel(getFullTitle(), dockable.getTitleIcon(), SwingConstants.LEFT);
 		add(mTitle, new PrecisionLayoutData().setGrabHorizontalSpace(true));
 		if (dockable instanceof CloseHandler) {
-			add(new IconButton(ToolkitImage.getDockClose(), CLOSE_TOOLTIP, this::attemptClose), new PrecisionLayoutData().setEndHorizontalAlignment());
+			add(new IconButton(StdImage.DOCK_CLOSE, CLOSE_TOOLTIP, this::attemptClose), new PrecisionLayoutData().setEndHorizontalAlignment());
 		}
 		if (dockable instanceof Saveable) {
 			((Saveable) dockable).addDataModifiedListener(this);

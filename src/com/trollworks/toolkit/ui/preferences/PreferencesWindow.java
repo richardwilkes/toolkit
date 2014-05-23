@@ -14,7 +14,7 @@ package com.trollworks.toolkit.ui.preferences;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.image.ToolkitImage;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.Localization;
 
@@ -69,7 +69,7 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
 	}
 
 	private PreferencesWindow() {
-		super(PREFERENCES, ToolkitImage.getPreferencesIcons());
+		super(PREFERENCES, StdImage.PREFERENCES);
 		Container content = getContentPane();
 		mTabPanel = new JTabbedPane();
 		for (PreferenceCategoryProvider category : CATEGORIES) {

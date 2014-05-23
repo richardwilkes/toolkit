@@ -12,8 +12,8 @@
 package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.collections.FilteredIterator;
-import com.trollworks.toolkit.ui.image.IconSet;
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
+import com.trollworks.toolkit.ui.image.StdImageSet;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.layout.FlexRow;
 import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.menu.edit.Undoable;
@@ -38,9 +38,9 @@ import javax.swing.JToolBar;
 
 /** Provides a base OS-level window. */
 public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undoable {
-	private static IconSet						DEFAULT_WINDOW_ICONSET	= null;
+	private static StdImageSet						DEFAULT_WINDOW_ICONSET	= null;
 	private static final ArrayList<AppWindow>	WINDOW_LIST				= new ArrayList<>();
-	private ToolkitIcon							mMenuIcon;
+	private StdImage							mMenuIcon;
 	private StdUndoManager						mUndoManager;
 
 	/** @return The top-most window. */
@@ -69,9 +69,9 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 	 * Creates a new {@link AppWindow}.
 	 *
 	 * @param title The window title. May be <code>null</code>.
-	 * @param iconset The window {@link IconSet}.
+	 * @param iconset The window {@link StdImageSet}.
 	 */
-	public AppWindow(String title, IconSet iconset) {
+	public AppWindow(String title, StdImageSet iconset) {
 		this(title, iconset, null, false);
 	}
 
@@ -79,11 +79,11 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 	 * Creates a new {@link AppWindow}.
 	 *
 	 * @param title The title of the window.
-	 * @param iconset The window {@link IconSet}.
+	 * @param iconset The window {@link StdImageSet}.
 	 * @param gc The graphics configuration to use.
 	 * @param undecorated Whether to create an undecorated window, without menus.
 	 */
-	public AppWindow(String title, IconSet iconset, GraphicsConfiguration gc, boolean undecorated) {
+	public AppWindow(String title, StdImageSet iconset, GraphicsConfiguration gc, boolean undecorated) {
 		super(title, gc);
 		if (undecorated) {
 			setUndecorated(true);
@@ -97,7 +97,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 		}
 		if (iconset != null) {
 			setIconImages(iconset.toList());
-			setMenuIcon(iconset.getIcon(16));
+			setMenuIcon(iconset.getImage(16));
 		}
 		mUndoManager = new StdUndoManager();
 		enableEvents(AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
@@ -126,22 +126,22 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 	}
 
 	/** @return The default window icons. */
-	public static IconSet getDefaultWindowIcons() {
+	public static StdImageSet getDefaultWindowIcons() {
 		return DEFAULT_WINDOW_ICONSET;
 	}
 
-	/** @param iconset The new default window {@link IconSet}. */
-	public static void setDefaultWindowIcons(IconSet iconset) {
+	/** @param iconset The new default window {@link StdImageSet}. */
+	public static void setDefaultWindowIcons(StdImageSet iconset) {
 		DEFAULT_WINDOW_ICONSET = iconset;
 	}
 
 	/** @return The menu icon representing this window. */
-	public ToolkitIcon getMenuIcon() {
+	public StdImage getMenuIcon() {
 		return mMenuIcon;
 	}
 
 	/** @param icon The menu icon representing this window. */
-	public void setMenuIcon(ToolkitIcon icon) {
+	public void setMenuIcon(StdImage icon) {
 		mMenuIcon = icon;
 	}
 

@@ -13,7 +13,7 @@ package com.trollworks.toolkit.ui.widget.tree;
 
 import com.trollworks.toolkit.ui.Fonts;
 import com.trollworks.toolkit.ui.TextDrawing;
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.utility.NumericComparator;
 
 import java.awt.Color;
@@ -116,7 +116,7 @@ public class TextTreeColumn extends TreeColumn {
 	@Override
 	public int calculatePreferredHeight(TreeRow row, int width) {
 		Font font = getFont(row);
-		ToolkitIcon icon = getIcon(row);
+		StdImage icon = getIcon(row);
 		int height;
 		if (mWrappingMode == WrappingMode.SINGLE_LINE) {
 			height = TextDrawing.getFontHeight(font);
@@ -136,7 +136,7 @@ public class TextTreeColumn extends TreeColumn {
 		return VMARGIN + height + VMARGIN;
 	}
 
-	private static int calculatePreferredHeight(Font font, String text, ToolkitIcon icon) {
+	private static int calculatePreferredHeight(Font font, String text, StdImage icon) {
 		int height = TextDrawing.getPreferredHeight(font, text);
 		if (height == 0) {
 			height = TextDrawing.getFontHeight(font);
@@ -153,7 +153,7 @@ public class TextTreeColumn extends TreeColumn {
 	@Override
 	public int calculatePreferredWidth(TreeRow row) {
 		int width = TextDrawing.getPreferredSize(getFont(row), getText(row)).width;
-		ToolkitIcon icon = getIcon(row);
+		StdImage icon = getIcon(row);
 		if (icon != null) {
 			width += icon.getWidth() + ICON_GAP;
 		}
@@ -164,7 +164,7 @@ public class TextTreeColumn extends TreeColumn {
 	public void draw(Graphics2D gc, TreePanel panel, TreeRow row, int position, int top, int left, int width, boolean selected, boolean active) {
 		left += HMARGIN;
 		width -= HMARGIN + HMARGIN;
-		ToolkitIcon icon = getIcon(row);
+		StdImage icon = getIcon(row);
 		if (icon != null) {
 			gc.drawImage(icon, left, top + VMARGIN, null);
 			int iconSize = icon.getWidth() + ICON_GAP;
@@ -214,7 +214,7 @@ public class TextTreeColumn extends TreeColumn {
 	 * @param row The {@link TreeRow} to extract information from.
 	 * @return The text to display.
 	 */
-	protected ToolkitIcon getIcon(TreeRow row) {
+	protected StdImage getIcon(TreeRow row) {
 		return mIconAccessor != null ? mIconAccessor.getIcon(row) : null;
 	}
 

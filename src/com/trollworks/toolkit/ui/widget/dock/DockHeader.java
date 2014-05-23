@@ -15,7 +15,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.border.SelectiveLineBorder;
-import com.trollworks.toolkit.ui.image.ToolkitImage;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
 
@@ -71,7 +71,7 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 		}
 		mShowTabsButton = new ShowTabsButton();
 		add(mShowTabsButton);
-		mMaximizeRestoreButton = new IconButton(ToolkitImage.getDockMaximize(), MAXIMIZE_TOOLTIP, this::maximize);
+		mMaximizeRestoreButton = new IconButton(StdImage.DOCK_MAXIMIZE, MAXIMIZE_TOOLTIP, this::maximize);
 		add(mMaximizeRestoreButton);
 		setDropTarget(new DropTarget(this, DnDConstants.ACTION_MOVE, this));
 	}
@@ -121,14 +121,14 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 	/** Called when the owning {@link DockContainer} is set to the maximized state. */
 	void adjustToMaximizedState() {
 		mMaximizeRestoreButton.setClickFunction(this::restore);
-		mMaximizeRestoreButton.setIcon(ToolkitImage.getDockRestore());
+		mMaximizeRestoreButton.setIcon(StdImage.DOCK_RESTORE);
 		mMaximizeRestoreButton.setToolTipText(RESTORE_TOOLTIP);
 	}
 
 	/** Called when the owning {@link DockContainer} is restored from the maximized state. */
 	void adjustToRestoredState() {
 		mMaximizeRestoreButton.setClickFunction(this::maximize);
-		mMaximizeRestoreButton.setIcon(ToolkitImage.getDockMaximize());
+		mMaximizeRestoreButton.setIcon(StdImage.DOCK_MAXIMIZE);
 		mMaximizeRestoreButton.setToolTipText(MAXIMIZE_TOOLTIP);
 	}
 

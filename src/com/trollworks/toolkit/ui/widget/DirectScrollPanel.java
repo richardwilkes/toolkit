@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget;
 
-import com.trollworks.toolkit.ui.image.Images;
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
+import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.utility.Debug;
 import com.trollworks.toolkit.utility.Geometry;
 
@@ -690,18 +689,18 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
 	}
 
 	/**
-	 * @return A {@link ToolkitIcon} containing the currently visible header and contents (no scroll
-	 *         bars). If something goes wrong (unable to allocate an offscreen buffer, for
+	 * @return A {@link StdImage} containing the currently visible header and contents (no
+	 *         scroll bars). If something goes wrong (unable to allocate an offscreen buffer, for
 	 *         instance), then <code>null</code> may be returned.
 	 */
-	public ToolkitIcon createImage() {
-		ToolkitIcon offscreen = null;
+	public StdImage createImage() {
+		StdImage offscreen = null;
 		synchronized (getTreeLock()) {
 			Graphics2D g2d = null;
 			try {
 				int width = mHeaderBounds.width;
 				int height = mHeaderBounds.height + mContentBounds.height;
-				offscreen = Images.createTransparent(getGraphicsConfiguration(), width, height);
+				offscreen = StdImage.createTransparent(getGraphicsConfiguration(), width, height);
 				g2d = offscreen.getGraphics();
 				Color saved = g2d.getBackground();
 				g2d.setBackground(new Color(0, true));
@@ -748,18 +747,18 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
 	 *            {@link DragGestureEvent#getDragOrigin()}.
 	 * @return The drag image.
 	 */
-	public ToolkitIcon createDragImage(Point dragOrigin) {
+	public StdImage createDragImage(Point dragOrigin) {
 		Graphics2D gc = null;
-		ToolkitIcon off2 = null;
+		StdImage off2 = null;
 		mDrawingDragImage = true;
 		mDragClip = null;
-		ToolkitIcon off1 = createImage();
+		StdImage off1 = createImage();
 		mDrawingDragImage = false;
 		if (mDragClip == null) {
 			mDragClip = new Rectangle(dragOrigin.x, dragOrigin.y, 1, 1);
 		}
 		try {
-			off2 = Images.createTransparent(getGraphicsConfiguration(), mDragClip.width, mDragClip.height);
+			off2 = StdImage.createTransparent(getGraphicsConfiguration(), mDragClip.width, mDragClip.height);
 			gc = off2.getGraphics();
 			gc.setClip(new Rectangle(0, 0, mDragClip.width, mDragClip.height));
 			gc.setBackground(new Color(0, true));

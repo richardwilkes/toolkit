@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget.outline;
 
-import com.trollworks.toolkit.ui.image.Images;
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
+import com.trollworks.toolkit.ui.image.StdImage;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -26,8 +25,8 @@ import javax.swing.JCheckBox;
  * {@link Row#getData(Column)} method must return a {@link Boolean}.
  */
 public class ToggleCell extends ImageCell {
-	private ToolkitIcon	mOn;
-	private ToolkitIcon	mOff;
+	private StdImage	mOn;
+	private StdImage	mOff;
 
 	/** Creates a new {@link ToggleCell}. */
 	public ToggleCell() {
@@ -35,12 +34,12 @@ public class ToggleCell extends ImageCell {
 		checkBox.putClientProperty("JComponent.sizeVariant", "mini"); //$NON-NLS-1$ //$NON-NLS-2$
 		Dimension prefSize = checkBox.getPreferredSize();
 		checkBox.setSize(prefSize);
-		mOff = Images.createTransparent(prefSize.width, prefSize.height);
+		mOff = StdImage.createTransparent(prefSize.width, prefSize.height);
 		Graphics gc = mOff.getGraphics();
 		checkBox.paint(gc);
 		gc.dispose();
 		checkBox.setSelected(true);
-		mOn = Images.createTransparent(prefSize.width, prefSize.height);
+		mOn = StdImage.createTransparent(prefSize.width, prefSize.height);
 		gc = mOn.getGraphics();
 		checkBox.paint(gc);
 		gc.dispose();
@@ -49,16 +48,16 @@ public class ToggleCell extends ImageCell {
 	/**
 	 * Creates a new {@link ToggleCell}.
 	 *
-	 * @param on The {@link ToolkitIcon} to represent the 'on' state.
-	 * @param off The {@link ToolkitIcon} to represent the 'off' state.
+	 * @param on The {@link StdImage} to represent the 'on' state.
+	 * @param off The {@link StdImage} to represent the 'off' state.
 	 */
-	public ToggleCell(ToolkitIcon on, ToolkitIcon off) {
+	public ToggleCell(StdImage on, StdImage off) {
 		mOn = on;
 		mOff = off;
 	}
 
 	@Override
-	protected ToolkitIcon getIcon(Row row, Column column, boolean selected, boolean active) {
+	protected StdImage getIcon(Row row, Column column, boolean selected, boolean active) {
 		Object data = row.getData(column);
 		return ((Boolean) data).booleanValue() ? mOn : mOff;
 	}

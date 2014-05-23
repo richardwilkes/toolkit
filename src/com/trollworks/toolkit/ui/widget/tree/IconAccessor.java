@@ -11,13 +11,13 @@
 
 package com.trollworks.toolkit.ui.widget.tree;
 
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
+import com.trollworks.toolkit.ui.image.StdImage;
 
 @FunctionalInterface
 public interface IconAccessor {
 	/**
 	 * @param row The {@link TreeRow} to operate on.
-	 * @return The {@link ToolkitIcon} for the field, or <code>null</code>.
+	 * @return The {@link StdImage} for the field, or <code>null</code>.
 	 */
-	ToolkitIcon getIcon(TreeRow row);
+	StdImage getIcon(TreeRow row);
 }

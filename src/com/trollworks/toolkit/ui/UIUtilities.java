@@ -12,8 +12,7 @@
 package com.trollworks.toolkit.ui;
 
 import com.trollworks.toolkit.io.Log;
-import com.trollworks.toolkit.ui.image.Images;
-import com.trollworks.toolkit.ui.image.ToolkitIcon;
+import com.trollworks.toolkit.ui.image.StdImage;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -371,15 +370,14 @@ public class UIUtilities {
 	 * @param component The component to generate an image of.
 	 * @return The newly created image.
 	 */
-	public static ToolkitIcon getImage(JComponent component) {
-		ToolkitIcon offscreen = null;
+	public static StdImage getImage(JComponent component) {
+		StdImage offscreen = null;
 		synchronized (component.getTreeLock()) {
 			Graphics2D gc = null;
 			try {
 				Rectangle bounds = component.getVisibleRect();
-				offscreen = Images.createTransparent(component.getGraphicsConfiguration(), bounds.width, bounds.height);
+				offscreen = StdImage.createTransparent(component.getGraphicsConfiguration(), bounds.width, bounds.height);
 				gc = offscreen.getGraphics();
-				gc.setClip(0, 0, bounds.width, bounds.height);
 				gc.translate(-bounds.x, -bounds.y);
 				component.paint(gc);
 			} catch (Exception exception) {
