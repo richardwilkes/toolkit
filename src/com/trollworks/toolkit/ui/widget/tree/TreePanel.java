@@ -15,12 +15,15 @@ import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.Fonts;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.TextDrawing;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.menu.edit.Deletable;
 import com.trollworks.toolkit.ui.menu.edit.Openable;
 import com.trollworks.toolkit.ui.menu.edit.SelectAllCapable;
 import com.trollworks.toolkit.ui.widget.DirectScrollPanel;
 import com.trollworks.toolkit.ui.widget.DirectScrollPanelArea;
+import com.trollworks.toolkit.ui.widget.dock.Dock;
+import com.trollworks.toolkit.ui.widget.dock.DockableTransferable;
 import com.trollworks.toolkit.utility.Debug;
 import com.trollworks.toolkit.utility.notification.NotifierTarget;
 import com.trollworks.toolkit.utility.task.Tasks;
@@ -102,6 +105,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	private TreeRow						mAnchorRow;
 	private TreeRow						mRowToSelectOnMouseUp;
 	private TreeRow						mResizeRow;
+	private Dock						mAlternateDragDestination;
 	private boolean						mShowDisclosureControls		= true;
 	private boolean						mUseBanding					= true;
 	private boolean						mAllowColumnResize			= true;
@@ -1954,6 +1958,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	 *         acceptable.
 	 */
 	protected TreeDragState checkDragAcceptability(DropTargetDragEvent event) {
+		mAlternateDragDestination = null;
 		try {
 			if (event.isDataFlavorSupported(TreeColumn.DATA_FLAVOR)) {
 				TreeColumn column = (TreeColumn) event.getTransferable().getTransferData(TreeColumn.DATA_FLAVOR);
@@ -1969,6 +1974,9 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 						return new TreeRowDragState(this, rowSelection);
 					}
 				}
+			}
+			if (event.isDataFlavorSupported(DockableTransferable.DATA_FLAVOR)) {
+				mAlternateDragDestination = UIUtilities.getAncestorOfType(this, Dock.class);
 			}
 		} catch (Exception exception) {
 			assert false : Debug.toString(exception);
@@ -2001,6 +2009,10 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 		mDragState = checkDragAcceptability(event);
 		if (mDragState != null) {
 			redrawDragHighlight(mDragState.isHeaderFocus(), mDragState.isContentsFocus());
+			mDragState.dragEnter(event);
+		} else if (mAlternateDragDestination != null) {
+			UIUtilities.convertPoint(event.getLocation(), this, mAlternateDragDestination);
+			mAlternateDragDestination.dragEnter(event);
 		} else {
 			event.rejectDrag();
 		}
@@ -2010,6 +2022,9 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	public void dragOver(DropTargetDragEvent event) {
 		if (mDragState != null) {
 			mDragState.dragOver(event);
+		} else if (mAlternateDragDestination != null) {
+			UIUtilities.convertPoint(event.getLocation(), this, mAlternateDragDestination);
+			mAlternateDragDestination.dragOver(event);
 		} else {
 			event.rejectDrag();
 		}
@@ -2019,6 +2034,9 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	public void dropActionChanged(DropTargetDragEvent event) {
 		if (mDragState != null) {
 			mDragState.dropActionChanged(event);
+		} else if (mAlternateDragDestination != null) {
+			UIUtilities.convertPoint(event.getLocation(), this, mAlternateDragDestination);
+			mAlternateDragDestination.dropActionChanged(event);
 		} else {
 			event.rejectDrag();
 		}
@@ -2028,6 +2046,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	public void dragExit(DropTargetEvent event) {
 		if (mDragState != null) {
 			mDragState.dragExit(event);
+		} else if (mAlternateDragDestination != null) {
+			mAlternateDragDestination.dragExit(event);
 		}
 		clearDragState();
 	}
@@ -2038,6 +2058,9 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			event.acceptDrop(event.getDropAction());
 			mDropReceived = true;
 			event.dropComplete(mDragState.drop(event));
+		} else if (mAlternateDragDestination != null) {
+			UIUtilities.convertPoint(event.getLocation(), this, mAlternateDragDestination);
+			mAlternateDragDestination.drop(event);
 		} else {
 			mDropReceived = false;
 			event.rejectDrop();
@@ -2052,6 +2075,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			mDragState = null;
 			redrawDragHighlight(forHeader, forContents);
 		}
+		mAlternateDragDestination = null;
 	}
 
 	@Override
