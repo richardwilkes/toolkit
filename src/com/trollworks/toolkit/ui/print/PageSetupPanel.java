@@ -14,10 +14,8 @@ package com.trollworks.toolkit.ui.print;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.layout.Alignment;
-import com.trollworks.toolkit.ui.layout.FlexColumn;
-import com.trollworks.toolkit.ui.layout.FlexComponent;
-import com.trollworks.toolkit.ui.layout.FlexGrid;
+import com.trollworks.toolkit.ui.layout.PrecisionLayout;
+import com.trollworks.toolkit.ui.layout.PrecisionLayoutData;
 import com.trollworks.toolkit.ui.widget.EditorField;
 import com.trollworks.toolkit.ui.widget.LinkedLabel;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
@@ -50,7 +48,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.text.DefaultFormatterFactory;
 
 /** Provides the basic page setup panel. */
@@ -73,10 +70,8 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 	private static String						RESOLUTION;
 	@Localize(" dpi")
 	private static String						DPI;
-	@Localize("Margins")
+	@Localize("<html>Margins<br>(inches)")
 	private static String						MARGINS;
-	@Localize("(inches)")
-	private static String						INCHES;
 
 	static {
 		Localization.initialize();
@@ -103,8 +98,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 	 * @param set The {@link PrintRequestAttributeSet} to use.
 	 */
 	public PageSetupPanel(PrintService service, PrintRequestAttributeSet set) {
-		super();
-		setBorder(new EmptyBorder(5, 5, 5, 5));
+		super(new PrecisionLayout().setColumns(2));
 		rebuild(service, set);
 	}
 
@@ -116,10 +110,8 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 	private void rebuild(PrintService service, PrintRequestAttributeSet set) {
 		removeAll();
 		mService = service;
-		FlexGrid grid = new FlexGrid();
-		int row = createPrinterCombo(grid, 0);
-		rebuildSelf(set, grid, row);
-		grid.apply(this);
+		createPrinterCombo();
+		rebuildSelf(set);
 		revalidate();
 		Window window = WindowUtils.getWindowForComponent(this);
 		if (window != null) {
@@ -128,20 +120,16 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	/**
-	 * @param set The current {@link PrintRequestAttributeSet}.
-	 * @param grid The {@link FlexGrid} to place components within.
-	 * @param row The row to begin placement.
-	 */
-	protected void rebuildSelf(PrintRequestAttributeSet set, FlexGrid grid, int row) {
-		row = createPaperTypeCombo(set, grid, row);
-		row = createOrientationCombo(set, grid, row);
-		row = createSidesCombo(set, grid, row);
-		row = createNumberUpCombo(set, grid, row);
-		row = createChromaticityCombo(set, grid, row);
-		row = createPrintQualityCombo(set, grid, row);
-		row = createResolutionCombo(set, grid, row);
-		row = createMarginFields(set, grid, row);
+	/** @param set The current {@link PrintRequestAttributeSet}. */
+	protected void rebuildSelf(PrintRequestAttributeSet set) {
+		createPaperTypeCombo(set);
+		createOrientationCombo(set);
+		createSidesCombo(set);
+		createNumberUpCombo(set);
+		createChromaticityCombo(set);
+		createPrintQualityCombo(set);
+		createResolutionCombo(set);
+		createMarginFields(set);
 	}
 
 	// This is only here because the compiler wouldn't let me do this:
@@ -152,7 +140,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	private int createPrinterCombo(FlexGrid grid, int row) {
+	private void createPrinterCombo() {
 		PrintService[] services = PrinterJob.lookupPrintServices();
 		if (services.length == 0) {
 			services = new PrintService[] { new DummyPrintService() };
@@ -171,11 +159,8 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 		mServices.addActionListener(this);
 		mService = services[selection];
 		LinkedLabel label = new LinkedLabel(PRINTER, mServices);
-		add(label);
+		add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
 		add(mServices);
-		grid.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER), row, 0);
-		grid.add(mServices, row, 1);
-		return row + 1;
 	}
 
 	// This is only here because the compiler wouldn't let me do this:
@@ -186,7 +171,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	private int createPaperTypeCombo(PrintRequestAttributeSet set, FlexGrid grid, int row) {
+	private void createPaperTypeCombo(PrintRequestAttributeSet set) {
 		Media[] possible = (Media[]) mService.getSupportedAttributeValues(Media.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
 		if (possible != null && possible.length > 0) {
 			Media current = (Media) PrintUtilities.getSetting(mService, set, Media.class, true);
@@ -210,14 +195,11 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 			mPaperType.setSelectedIndex(selection);
 			UIUtilities.setOnlySize(mPaperType, mPaperType.getPreferredSize());
 			LinkedLabel label = new LinkedLabel(PAPER_TYPE, mPaperType);
-			add(label);
+			add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
 			add(mPaperType);
-			grid.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER), row, 0);
-			grid.add(mPaperType, row, 1);
-			return row + 1;
+		} else {
+			mPaperType = null;
 		}
-		mPaperType = null;
-		return row;
 	}
 
 	private static String cleanUpMediaSizeName(MediaSizeName msn) {
@@ -246,7 +228,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 		return builder.toString();
 	}
 
-	private int createOrientationCombo(PrintRequestAttributeSet set, FlexGrid grid, int row) {
+	private void createOrientationCombo(PrintRequestAttributeSet set) {
 		OrientationRequested[] orientations = (OrientationRequested[]) mService.getSupportedAttributeValues(OrientationRequested.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
 		if (orientations != null && orientations.length > 0) {
 			HashSet<OrientationRequested> possible = new HashSet<>();
@@ -263,17 +245,14 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 			mOrientation.setSelectedItem(PrintUtilities.getPageOrientation(mService, set));
 			UIUtilities.setOnlySize(mOrientation, mOrientation.getPreferredSize());
 			LinkedLabel label = new LinkedLabel(ORIENTATION, mOrientation);
-			add(label);
+			add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
 			add(mOrientation);
-			grid.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER), row, 0);
-			grid.add(mOrientation, row, 1);
-			return row + 1;
+		} else {
+			mOrientation = null;
 		}
-		mOrientation = null;
-		return row;
 	}
 
-	private int createSidesCombo(PrintRequestAttributeSet set, FlexGrid grid, int row) {
+	private void createSidesCombo(PrintRequestAttributeSet set) {
 		Sides[] sides = (Sides[]) mService.getSupportedAttributeValues(Sides.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
 		if (sides != null && sides.length > 0) {
 			HashSet<Sides> possible = new HashSet<>();
@@ -290,14 +269,11 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 			mSides.setSelectedItem(PrintUtilities.getSides(mService, set));
 			UIUtilities.setOnlySize(mSides, mSides.getPreferredSize());
 			LinkedLabel label = new LinkedLabel(SIDES, mSides);
-			add(label);
+			add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
 			add(mSides);
-			grid.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER), row, 0);
-			grid.add(mSides, row, 1);
-			return row + 1;
+		} else {
+			mSides = null;
 		}
-		mSides = null;
-		return row;
 	}
 
 	// This is only here because the compiler wouldn't let me do this:
@@ -308,7 +284,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	private int createNumberUpCombo(PrintRequestAttributeSet set, FlexGrid grid, int row) {
+	private void createNumberUpCombo(PrintRequestAttributeSet set) {
 		NumberUp[] numUp = (NumberUp[]) mService.getSupportedAttributeValues(NumberUp.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
 		if (numUp != null && numUp.length > 0) {
 			NumberUp current = PrintUtilities.getNumberUp(mService, set);
@@ -324,17 +300,14 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 			mNumberUp.setSelectedIndex(selection);
 			UIUtilities.setOnlySize(mNumberUp, mNumberUp.getPreferredSize());
 			LinkedLabel label = new LinkedLabel(NUMBER_UP, mNumberUp);
-			add(label);
+			add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
 			add(mNumberUp);
-			grid.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER), row, 0);
-			grid.add(mNumberUp, row, 1);
-			return row + 1;
+		} else {
+			mNumberUp = null;
 		}
-		mNumberUp = null;
-		return row;
 	}
 
-	private int createChromaticityCombo(PrintRequestAttributeSet set, FlexGrid grid, int row) {
+	private void createChromaticityCombo(PrintRequestAttributeSet set) {
 		Chromaticity[] chromacities = (Chromaticity[]) mService.getSupportedAttributeValues(Chromaticity.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
 		if (chromacities != null && chromacities.length > 0) {
 			HashSet<Chromaticity> possible = new HashSet<>();
@@ -351,17 +324,14 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 			mChromaticity.setSelectedItem(PrintUtilities.getChromaticity(mService, set, true));
 			UIUtilities.setOnlySize(mChromaticity, mChromaticity.getPreferredSize());
 			LinkedLabel label = new LinkedLabel(CHROMATICITY, mChromaticity);
-			add(label);
+			add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
 			add(mChromaticity);
-			grid.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER), row, 0);
-			grid.add(mChromaticity, row, 1);
-			return row + 1;
+		} else {
+			mChromaticity = null;
 		}
-		mChromaticity = null;
-		return row;
 	}
 
-	private int createPrintQualityCombo(PrintRequestAttributeSet set, FlexGrid grid, int row) {
+	private void createPrintQualityCombo(PrintRequestAttributeSet set) {
 		PrintQuality[] qualities = (PrintQuality[]) mService.getSupportedAttributeValues(PrintQuality.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
 		if (qualities != null && qualities.length > 0) {
 			HashSet<PrintQuality> possible = new HashSet<>();
@@ -378,14 +348,11 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 			mPrintQuality.setSelectedItem(PrintUtilities.getPrintQuality(mService, set, true));
 			UIUtilities.setOnlySize(mPrintQuality, mPrintQuality.getPreferredSize());
 			LinkedLabel label = new LinkedLabel(QUALITY, mPrintQuality);
-			add(label);
+			add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
 			add(mPrintQuality);
-			grid.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER), row, 0);
-			grid.add(mPrintQuality, row, 1);
-			return row + 1;
+		} else {
+			mPrintQuality = null;
 		}
-		mPrintQuality = null;
-		return row;
 	}
 
 	// This is only here because the compiler wouldn't let me do this:
@@ -396,7 +363,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	private int createResolutionCombo(PrintRequestAttributeSet set, FlexGrid grid, int row) {
+	private void createResolutionCombo(PrintRequestAttributeSet set) {
 		PrinterResolution[] resolutions = (PrinterResolution[]) mService.getSupportedAttributeValues(PrinterResolution.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
 		if (resolutions != null && resolutions.length > 0) {
 			PrinterResolution current = PrintUtilities.getResolution(mService, set, true);
@@ -412,14 +379,11 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 			mResolution.setSelectedIndex(selection);
 			UIUtilities.setOnlySize(mResolution, mResolution.getPreferredSize());
 			LinkedLabel label = new LinkedLabel(RESOLUTION, mResolution);
-			add(label);
+			add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
 			add(mResolution);
-			grid.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER), row, 0);
-			grid.add(mResolution, row, 1);
-			return row + 1;
+		} else {
+			mResolution = null;
 		}
-		mResolution = null;
-		return row;
 	}
 
 	private static String generateResolutionTitle(PrinterResolution res) {
@@ -436,35 +400,27 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 		return buffer.toString();
 	}
 
-	private int createMarginFields(PrintRequestAttributeSet set, FlexGrid grid, int row) {
-		FlexColumn column = new FlexColumn();
-		column.setFill(false);
-		column.setVerticalAlignment(Alignment.CENTER);
+	private void createMarginFields(PrintRequestAttributeSet set) {
 		JLabel label = new JLabel(MARGINS, SwingConstants.RIGHT);
-		add(label);
-		column.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER));
-		label = new JLabel(INCHES, SwingConstants.RIGHT);
-		add(label);
-		column.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER));
-		grid.add(column, row, 0);
-		FlexGrid innerGrid = new FlexGrid();
-		grid.add(innerGrid, row++, 1);
+		add(label, new PrecisionLayoutData().setEndHorizontalAlignment().setMiddleVerticalAlignment());
+		JPanel wrapper = new JPanel(new PrecisionLayout().setEqualColumns(true).setColumns(3));
 		double[] margins = PrintUtilities.getPageMargins(mService, set, LengthUnits.INCHES);
-		mTopMargin = createMarginField(margins[0]);
-		innerGrid.add(mTopMargin, 0, 1);
-		mLeftMargin = createMarginField(margins[1]);
-		innerGrid.add(mLeftMargin, 1, 0);
-		mRightMargin = createMarginField(margins[3]);
-		innerGrid.add(mRightMargin, 1, 2);
-		mBottomMargin = createMarginField(margins[2]);
-		innerGrid.add(mBottomMargin, 2, 1);
-		return row;
+		wrapper.add(new JPanel());
+		mTopMargin = createMarginField(margins[0], wrapper);
+		wrapper.add(new JPanel());
+		mLeftMargin = createMarginField(margins[1], wrapper);
+		wrapper.add(new JPanel());
+		mRightMargin = createMarginField(margins[3], wrapper);
+		wrapper.add(new JPanel());
+		mBottomMargin = createMarginField(margins[2], wrapper);
+		wrapper.add(new JPanel());
+		add(wrapper);
 	}
 
-	private EditorField createMarginField(double margin) {
+	private static EditorField createMarginField(double margin, JPanel wrapper) {
 		EditorField field = new EditorField(new DefaultFormatterFactory(new DoubleFormatter(0, 999.999, false)), null, SwingConstants.RIGHT, new Double(margin), new Double(999.999), null);
 		UIUtilities.setOnlySize(field, field.getPreferredSize());
-		add(field);
+		wrapper.add(field);
 		return field;
 	}
 

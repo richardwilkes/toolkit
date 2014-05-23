@@ -13,10 +13,8 @@ package com.trollworks.toolkit.ui.print;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.layout.Alignment;
-import com.trollworks.toolkit.ui.layout.FlexComponent;
-import com.trollworks.toolkit.ui.layout.FlexGrid;
-import com.trollworks.toolkit.ui.layout.FlexRow;
+import com.trollworks.toolkit.ui.layout.PrecisionLayout;
+import com.trollworks.toolkit.ui.layout.PrecisionLayoutData;
 import com.trollworks.toolkit.ui.widget.EditorField;
 import com.trollworks.toolkit.ui.widget.LinkedLabel;
 import com.trollworks.toolkit.utility.Localization;
@@ -30,6 +28,7 @@ import javax.print.attribute.standard.Copies;
 import javax.print.attribute.standard.PageRanges;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import javax.swing.text.DefaultFormatterFactory;
@@ -68,29 +67,26 @@ public class PrintPanel extends PageSetupPanel {
 	}
 
 	@Override
-	protected void rebuildSelf(PrintRequestAttributeSet set, FlexGrid grid, int row) {
-		row = createCopiesField(set, grid, row);
-		row = createPageRangeFields(set, grid, row);
-		super.rebuildSelf(set, grid, row);
+	protected void rebuildSelf(PrintRequestAttributeSet set) {
+		createCopiesField(set);
+		createPageRangeFields(set);
+		super.rebuildSelf(set);
 	}
 
-	private int createCopiesField(PrintRequestAttributeSet set, FlexGrid grid, int row) {
+	private void createCopiesField(PrintRequestAttributeSet set) {
 		PrintService service = getService();
 		if (service.isAttributeCategorySupported(Copies.class)) {
 			mCopies = new EditorField(new DefaultFormatterFactory(new IntegerFormatter(1, 999, false)), null, SwingConstants.RIGHT, new Integer(PrintUtilities.getCopies(service, set)), new Integer(999), null);
 			UIUtilities.setOnlySize(mCopies, mCopies.getPreferredSize());
-			add(mCopies);
 			LinkedLabel label = new LinkedLabel(COPIES, mCopies);
-			add(label);
-			grid.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER), row, 0);
-			grid.add(mCopies, row, 1);
-			return row + 1;
+			add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
+			add(mCopies);
+		} else {
+			mCopies = null;
 		}
-		mCopies = null;
-		return row;
 	}
 
-	private int createPageRangeFields(PrintRequestAttributeSet set, FlexGrid grid, int row) {
+	private void createPageRangeFields(PrintRequestAttributeSet set) {
 		PrintService service = getService();
 		if (service.isAttributeCategorySupported(PageRanges.class)) {
 			ButtonGroup group = new ButtonGroup();
@@ -107,41 +103,33 @@ public class PrintPanel extends PageSetupPanel {
 				}
 			}
 			JLabel label = new JLabel(PAGE_RANGE, SwingConstants.CENTER);
-			add(label);
-			grid.add(new FlexComponent(label, Alignment.RIGHT_BOTTOM, Alignment.CENTER), row, 0);
+			add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
+			JPanel wrapper = new JPanel(new PrecisionLayout().setMargins(0).setColumns(5));
 			mPageRangeAll = new JRadioButton(ALL, pageRanges == null);
-			add(mPageRangeAll);
+			wrapper.add(mPageRangeAll);
 			mPageRangeSome = new JRadioButton(PAGES, pageRanges != null);
-			add(mPageRangeSome);
-			mPageRangeStart = createPageRangeField(start);
-			mPageRangeEnd = createPageRangeField(end);
+			wrapper.add(mPageRangeSome);
+			mPageRangeStart = createPageRangeField(start, wrapper);
+			wrapper.add(new JLabel(TO, SwingConstants.CENTER));
+			mPageRangeEnd = createPageRangeField(end, wrapper);
+			add(wrapper);
 			group.add(mPageRangeAll);
 			group.add(mPageRangeSome);
 			adjustPageRanges();
 			mPageRangeAll.addActionListener(this);
 			mPageRangeSome.addActionListener(this);
-			label = new JLabel(TO, SwingConstants.CENTER);
-			add(label);
-			FlexRow fRow = new FlexRow();
-			fRow.add(mPageRangeAll);
-			fRow.add(mPageRangeSome);
-			fRow.add(mPageRangeStart);
-			fRow.add(label);
-			fRow.add(mPageRangeEnd);
-			grid.add(fRow, row, 1);
-			return row + 1;
+		} else {
+			mPageRangeAll = null;
+			mPageRangeSome = null;
+			mPageRangeStart = null;
+			mPageRangeEnd = null;
 		}
-		mPageRangeAll = null;
-		mPageRangeSome = null;
-		mPageRangeStart = null;
-		mPageRangeEnd = null;
-		return row;
 	}
 
-	private EditorField createPageRangeField(int value) {
+	private static EditorField createPageRangeField(int value, JPanel parent) {
 		EditorField field = new EditorField(new DefaultFormatterFactory(new IntegerFormatter(1, 9999, false)), null, SwingConstants.RIGHT, new Integer(value), new Integer(9999), null);
 		UIUtilities.setOnlySize(field, field.getPreferredSize());
-		add(field);
+		parent.add(field);
 		return field;
 	}
 
