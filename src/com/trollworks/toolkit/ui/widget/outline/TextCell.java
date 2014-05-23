@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget.outline;
 
 import com.trollworks.toolkit.ui.TextDrawing;
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
 import com.trollworks.toolkit.utility.NumericComparator;
 
 import java.awt.Color;
@@ -20,7 +21,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.util.StringTokenizer;
 
 import javax.swing.SwingConstants;
@@ -86,7 +86,7 @@ public class TextCell implements Cell {
 	@Override
 	public int getPreferredWidth(Row row, Column column) {
 		int width = TextDrawing.getPreferredSize(getFont(row, column), getPresentationText(row, column)).width;
-		BufferedImage icon = row == null ? column.getIcon() : row.getIcon(column);
+		ToolkitIcon icon = row == null ? column.getIcon() : row.getIcon(column);
 		if (icon != null) {
 			width += icon.getWidth() + H_MARGIN;
 		}
@@ -98,7 +98,7 @@ public class TextCell implements Cell {
 		Font font = getFont(row, column);
 		int minHeight = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
 		int height = TextDrawing.getPreferredSize(font, getPresentationText(row, column)).height;
-		BufferedImage icon = row == null ? column.getIcon() : row.getIcon(column);
+		ToolkitIcon icon = row == null ? column.getIcon() : row.getIcon(column);
 		if (icon != null) {
 			int iconHeight = icon.getHeight();
 			if (height < iconHeight) {
@@ -109,7 +109,7 @@ public class TextCell implements Cell {
 	}
 
 	@SuppressWarnings("static-method")
-	public BufferedImage getIcon(Row row, Column column) {
+	public ToolkitIcon getIcon(Row row, Column column) {
 		return row == null ? column.getIcon() : row.getIcon(column);
 	}
 
@@ -121,7 +121,7 @@ public class TextCell implements Cell {
 		int totalHeight = getPreferredHeight(row, column);
 		int lineHeight = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
 		int lineCount = 0;
-		BufferedImage icon = getIcon(row, column);
+		ToolkitIcon icon = getIcon(row, column);
 		int left = icon == null ? 0 : icon.getWidth() + H_MARGIN;
 		int cellWidth = bounds.width - (left + H_MARGIN_WIDTH);
 		int vAlignment = getVAlignment();

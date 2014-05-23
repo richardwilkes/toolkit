@@ -43,7 +43,7 @@ import javax.imageio.stream.ImageOutputStream;
 
 import org.w3c.dom.Node;
 
-/** Provides standardized image access. */
+/** Provides standardized image access. To simplify things, only PNG images are supported now. */
 public class Images {
 	@Localize("Unable to load image")
 	private static String								UNABLE_TO_LOAD_IMAGE;
@@ -56,8 +56,6 @@ public class Images {
 		Localization.initialize();
 	}
 
-	/** The extensions used for image files. */
-	public static final String[]						EXTENSIONS			= { ".png", ".gif", ".jpg" };				//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	private static final String							COLORIZED_POSTFIX	= new String(new char[] { ':', 'C', 22 });
 	private static final String							FADED_POSTFIX		= new String(new char[] { ':', 'F', 22 });
 	private static final HashSet<URL>					LOCATIONS			= new HashSet<>();
@@ -111,13 +109,11 @@ public class Images {
 		ToolkitIcon img = cache ? MAP.get(name) : null;
 		if (img == null && !FAILED_LOOKUPS.contains(name)) {
 			for (URL url : LOCATIONS) {
-				for (int i = 0; i < EXTENSIONS.length && img == null; i++) {
-					String filename = name + EXTENSIONS[i];
-					try {
-						img = loadImage(new URL(url, filename));
-					} catch (Exception exception) {
-						// Ignore...
-					}
+				String filename = name + ".png"; //$NON-NLS-1$
+				try {
+					img = loadImage(new URL(url, filename));
+				} catch (Exception exception) {
+					// Ignore...
 				}
 				if (img != null) {
 					break;

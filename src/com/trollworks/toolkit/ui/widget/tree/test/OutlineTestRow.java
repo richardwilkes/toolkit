@@ -11,11 +11,10 @@
 
 package com.trollworks.toolkit.ui.widget.tree.test;
 
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.widget.outline.Column;
 import com.trollworks.toolkit.ui.widget.outline.Row;
-
-import java.awt.image.BufferedImage;
 
 public class OutlineTestRow extends Row {
 	private String	mName;
@@ -33,7 +32,7 @@ public class OutlineTestRow extends Row {
 	}
 
 	@SuppressWarnings("static-method")
-	public BufferedImage getIcon() {
+	public ToolkitIcon getIcon() {
 		return ToolkitImage.getMiniWarningIcon();
 	}
 

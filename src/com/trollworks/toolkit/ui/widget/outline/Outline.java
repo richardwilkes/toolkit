@@ -17,6 +17,8 @@ import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.Selection;
 import com.trollworks.toolkit.ui.UIUtilities;
+import com.trollworks.toolkit.ui.image.Images;
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.menu.edit.Deletable;
 import com.trollworks.toolkit.ui.menu.edit.SelectAllCapable;
@@ -25,7 +27,6 @@ import com.trollworks.toolkit.ui.print.PrintUtilities;
 import com.trollworks.toolkit.ui.widget.ActionPanel;
 import com.trollworks.toolkit.ui.widget.dock.Dock;
 import com.trollworks.toolkit.ui.widget.dock.DockableTransferable;
-import com.trollworks.toolkit.utility.Debug;
 import com.trollworks.toolkit.utility.Geometry;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.text.Numbers;
@@ -41,7 +42,6 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.Transparency;
 import java.awt.dnd.Autoscroll;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
@@ -62,7 +62,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -117,10 +116,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	private String					mDefaultConfig;
 	private boolean					mUseBanding;
 	private ArrayList<Column>		mSavedColumns;
-	private BufferedImage			mDownTriangle;
-	private BufferedImage			mDownTriangleRoll;
-	private BufferedImage			mRightTriangle;
-	private BufferedImage			mRightTriangleRoll;
+	private ToolkitIcon				mDownTriangle;
+	private ToolkitIcon				mDownTriangleRoll;
+	private ToolkitIcon				mRightTriangle;
+	private ToolkitIcon				mRightTriangleRoll;
 	private Row						mRollRow;
 	private Row						mDragParentRow;
 	private int						mDragChildInsertIndex;
@@ -450,7 +449,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 										colBounds.x += shift;
 										colBounds.width -= shift;
 										if (row.canHaveChildren()) {
-											BufferedImage image = getDisclosureControl(row);
+											ToolkitIcon image = getDisclosureControl(row);
 											gc.drawImage(image, colBounds.x - image.getWidth(), 1 + colBounds.y + (colBounds.height - image.getHeight()) / 2, null);
 										}
 									}
@@ -820,7 +819,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		return -1;
 	}
 
-	private BufferedImage getDisclosureControl(Row row) {
+	private ToolkitIcon getDisclosureControl(Row row) {
 		return row.isOpen() ? row == mRollRow ? mDownTriangleRoll : mDownTriangle : row == mRollRow ? mRightTriangleRoll : mRightTriangle;
 	}
 
@@ -833,7 +832,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	 */
 	public boolean overDisclosureControl(int x, int y, Column column, Row row) {
 		if (showIndent() && column != null && row != null && row.canHaveChildren() && mModel.isFirstColumn(column)) {
-			BufferedImage image = getDisclosureControl(row);
+			ToolkitIcon image = getDisclosureControl(row);
 			int right = getInsets().left + mModel.getIndentWidth(row, column);
 			return x <= right && x >= right - image.getWidth();
 		}
@@ -876,41 +875,41 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
 	/**
 	 * @param column The column.
-	 * @return An {@link BufferedImage}containing the drag image for the specified column.
+	 * @return An {@link ToolkitIcon} containing the drag image for the specified column.
 	 */
-	public BufferedImage getColumnDragImage(Column column) {
-		BufferedImage offscreen = null;
+	public ToolkitIcon getColumnDragImage(Column column) {
+		ToolkitIcon offscreen = null;
 		synchronized (getTreeLock()) {
-			Graphics2D g2d = null;
+			Graphics2D gc = null;
 			try {
 				Rectangle bounds = new Rectangle(0, 0, column.getWidth() + (mDrawColumnDividers ? 2 : 0), getVisibleRect().height + (mHeaderPanel != null ? mHeaderPanel.getHeight() + 1 : 0));
-				offscreen = getGraphicsConfiguration().createCompatibleImage(bounds.width, bounds.height, Transparency.TRANSLUCENT);
-				g2d = GraphicsUtilities.prepare(offscreen.getGraphics());
-				g2d.setClip(bounds);
-				g2d.setBackground(new Color(0, true));
-				g2d.clearRect(0, 0, bounds.width, bounds.height);
-				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-				g2d.setColor(getBackground());
-				g2d.fill(bounds);
-				g2d.setColor(getDividerColor());
+				offscreen = Images.createTransparent(getGraphicsConfiguration(), bounds.width, bounds.height);
+				gc = GraphicsUtilities.prepare(offscreen.getGraphics());
+				gc.setClip(bounds);
+				gc.setBackground(new Color(0, true));
+				gc.clearRect(0, 0, bounds.width, bounds.height);
+				gc.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+				gc.setColor(getBackground());
+				gc.fill(bounds);
+				gc.setColor(getDividerColor());
 				if (mDrawRowDividers) {
-					g2d.drawLine(bounds.x, bounds.y, bounds.x + bounds.width, bounds.y);
-					g2d.drawLine(bounds.x, bounds.y + bounds.height - 1, bounds.x + bounds.width, bounds.y + bounds.height - 1);
+					gc.drawLine(bounds.x, bounds.y, bounds.x + bounds.width, bounds.y);
+					gc.drawLine(bounds.x, bounds.y + bounds.height - 1, bounds.x + bounds.width, bounds.y + bounds.height - 1);
 					bounds.y++;
 					bounds.height -= 2;
 				}
 				if (mDrawColumnDividers) {
-					g2d.drawLine(bounds.x, bounds.y, bounds.x, bounds.y + bounds.height);
-					g2d.drawLine(bounds.x + bounds.width - 1, bounds.y, bounds.x + bounds.width - 1, bounds.y + bounds.height);
+					gc.drawLine(bounds.x, bounds.y, bounds.x, bounds.y + bounds.height);
+					gc.drawLine(bounds.x + bounds.width - 1, bounds.y, bounds.x + bounds.width - 1, bounds.y + bounds.height);
 					bounds.x++;
 					bounds.width -= 2;
 				}
-				drawOneColumn(g2d, column, bounds);
+				drawOneColumn(gc, column, bounds);
 			} catch (Exception exception) {
-				assert false : Debug.toString(exception);
+				Log.error(exception);
 			} finally {
-				if (g2d != null) {
-					g2d.dispose();
+				if (gc != null) {
+					gc.dispose();
 				}
 			}
 		}
@@ -1592,10 +1591,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	 * @param y The y-coordinate.
 	 * @return The drag image for this table when dragging rows.
 	 */
-	protected BufferedImage getDragImage(int x, int y) {
-		Graphics2D g2d = null;
-		BufferedImage off1 = null;
-		BufferedImage off2 = null;
+	protected ToolkitIcon getDragImage(int x, int y) {
+		Graphics2D gc = null;
+		ToolkitIcon off1 = null;
+		ToolkitIcon off2 = null;
 
 		mDrawingDragImage = true;
 		mDragClip = null;
@@ -1607,22 +1606,22 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		}
 
 		try {
-			off2 = getGraphicsConfiguration().createCompatibleImage(mDragClip.width, mDragClip.height, Transparency.TRANSLUCENT);
-			g2d = (Graphics2D) off2.getGraphics();
-			g2d.setClip(new Rectangle(0, 0, mDragClip.width, mDragClip.height));
-			g2d.setBackground(new Color(0, true));
-			g2d.clearRect(0, 0, mDragClip.width, mDragClip.height);
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+			off2 = Images.createTransparent(getGraphicsConfiguration(), mDragClip.width, mDragClip.height);
+			gc = off2.getGraphics();
+			gc.setClip(new Rectangle(0, 0, mDragClip.width, mDragClip.height));
+			gc.setBackground(new Color(0, true));
+			gc.clearRect(0, 0, mDragClip.width, mDragClip.height);
+			gc.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 			Rectangle bounds = getVisibleRect();
-			g2d.translate(-(mDragClip.x - bounds.x), -(mDragClip.y - bounds.y));
-			g2d.drawImage(off1, 0, 0, this);
+			gc.translate(-(mDragClip.x - bounds.x), -(mDragClip.y - bounds.y));
+			gc.drawImage(off1, 0, 0, this);
 		} catch (Exception paintException) {
-			assert false : Debug.toString(paintException);
-		off2 = null;
-		mDragClip = new Rectangle(x, y, 1, 1);
+			Log.error(paintException);
+			off2 = null;
+			mDragClip = new Rectangle(x, y, 1, 1);
 		} finally {
-			if (g2d != null) {
-				g2d.dispose();
+			if (gc != null) {
+				gc.dispose();
 			}
 		}
 
@@ -1630,32 +1629,30 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	}
 
 	/**
-	 * @return An {@link BufferedImage} containing the current contents of this component, minus the
+	 * @return An {@link ToolkitIcon} containing the current contents of this component, minus the
 	 *         specified component and its children.
 	 */
-	public BufferedImage getImage() {
-		BufferedImage offscreen = null;
-
+	public ToolkitIcon getImage() {
+		ToolkitIcon offscreen = null;
 		synchronized (getTreeLock()) {
-			Graphics2D g2d = null;
-
+			Graphics2D gc = null;
 			try {
 				Rectangle bounds = getVisibleRect();
-				offscreen = getGraphicsConfiguration().createCompatibleImage(bounds.width, bounds.height, Transparency.TRANSLUCENT);
-				g2d = (Graphics2D) offscreen.getGraphics();
-				Color saved = g2d.getBackground();
-				g2d.setBackground(new Color(0, true));
-				g2d.clearRect(0, 0, bounds.width, bounds.height);
-				g2d.setBackground(saved);
+				offscreen = Images.createTransparent(getGraphicsConfiguration(), bounds.width, bounds.height);
+				gc = offscreen.getGraphics();
+				Color saved = gc.getBackground();
+				gc.setBackground(new Color(0, true));
+				gc.clearRect(0, 0, bounds.width, bounds.height);
+				gc.setBackground(saved);
 				Rectangle clip = new Rectangle(0, 0, bounds.width, bounds.height);
-				g2d.setClip(clip);
-				g2d.translate(-bounds.x, -bounds.y);
-				paint(g2d);
+				gc.setClip(clip);
+				gc.translate(-bounds.x, -bounds.y);
+				paint(gc);
 			} catch (Exception exception) {
-				assert false : Debug.toString(exception);
+				Log.error(exception);
 			} finally {
-				if (g2d != null) {
-					g2d.dispose();
+				if (gc != null) {
+					gc.dispose();
 				}
 			}
 		}
@@ -1993,7 +1990,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 			Point pt = dge.getDragOrigin();
 			RowSelection selection = new RowSelection(mModel, mModel.getSelectionAsList(true).toArray(new Row[0]));
 			if (DragSource.isDragImageSupported()) {
-				BufferedImage dragImage = getDragImage(pt.x, pt.y);
+				ToolkitIcon dragImage = getDragImage(pt.x, pt.y);
 				Point imageOffset = new Point(mDragClip.x - pt.x, mDragClip.y - pt.y);
 				dge.startDrag(null, dragImage, imageOffset, selection, null);
 			} else {

@@ -12,12 +12,12 @@
 package com.trollworks.toolkit.ui.widget.outline;
 
 import com.trollworks.toolkit.ui.image.Images;
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JCheckBox;
 
@@ -26,8 +26,8 @@ import javax.swing.JCheckBox;
  * {@link Row#getData(Column)} method must return a {@link Boolean}.
  */
 public class ToggleCell extends ImageCell {
-	private BufferedImage	mOn;
-	private BufferedImage	mOff;
+	private ToolkitIcon	mOn;
+	private ToolkitIcon	mOff;
 
 	/** Creates a new {@link ToggleCell}. */
 	public ToggleCell() {
@@ -49,16 +49,16 @@ public class ToggleCell extends ImageCell {
 	/**
 	 * Creates a new {@link ToggleCell}.
 	 *
-	 * @param on The {@link BufferedImage} to represent the 'on' state.
-	 * @param off The {@link BufferedImage} to represent the 'off' state.
+	 * @param on The {@link ToolkitIcon} to represent the 'on' state.
+	 * @param off The {@link ToolkitIcon} to represent the 'off' state.
 	 */
-	public ToggleCell(BufferedImage on, BufferedImage off) {
+	public ToggleCell(ToolkitIcon on, ToolkitIcon off) {
 		mOn = on;
 		mOff = off;
 	}
 
 	@Override
-	protected BufferedImage getIcon(Row row, Column column, boolean selected, boolean active) {
+	protected ToolkitIcon getIcon(Row row, Column column, boolean selected, boolean active) {
 		Object data = row.getData(column);
 		return ((Boolean) data).booleanValue() ? mOn : mOff;
 	}

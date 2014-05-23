@@ -16,6 +16,8 @@ import com.trollworks.toolkit.ui.Fonts;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.TextDrawing;
 import com.trollworks.toolkit.ui.UIUtilities;
+import com.trollworks.toolkit.ui.image.Images;
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
 import com.trollworks.toolkit.ui.image.ToolkitImage;
 import com.trollworks.toolkit.ui.menu.edit.Deletable;
 import com.trollworks.toolkit.ui.menu.edit.Openable;
@@ -39,7 +41,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.Transparency;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
@@ -61,7 +62,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -909,7 +909,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 						}
 					}
 					if (mShowDisclosureControls && row instanceof TreeContainerRow) {
-						BufferedImage img = isOpen((TreeContainerRow) row) ? ToolkitImage.getCollapseIcon() : ToolkitImage.getExpandIcon();
+						ToolkitIcon img = isOpen((TreeContainerRow) row) ? ToolkitImage.getCollapseIcon() : ToolkitImage.getExpandIcon();
 						int imgWidth = img.getWidth();
 						int yt = rowHeight - img.getHeight();
 						if ((yt & 1) == 1) {
@@ -1886,27 +1886,27 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 		repaint(bounds);
 	}
 
-	private BufferedImage createColumnDragImage(TreeColumn column) {
-		Graphics2D g2d = null;
-		BufferedImage off2 = null;
-		BufferedImage off1 = createImage();
+	private ToolkitIcon createColumnDragImage(TreeColumn column) {
+		Graphics2D gc = null;
+		ToolkitIcon off2 = null;
+		ToolkitIcon off1 = createImage();
 		try {
 			int width = column.getWidth();
 			int height = getHeight();
-			off2 = getGraphicsConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
-			g2d = (Graphics2D) off2.getGraphics();
-			g2d.setClip(new Rectangle(0, 0, width, height));
-			g2d.setBackground(new Color(0, true));
-			g2d.clearRect(0, 0, width, height);
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, DRAG_OPACITY));
+			off2 = Images.createTransparent(getGraphicsConfiguration(), width, height);
+			gc = off2.getGraphics();
+			gc.setClip(new Rectangle(0, 0, width, height));
+			gc.setBackground(new Color(0, true));
+			gc.clearRect(0, 0, width, height);
+			gc.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, DRAG_OPACITY));
 			Point pt = fromHeaderView(new Point());
-			g2d.drawImage(off1, -(getColumnStart(column) + pt.x), 0, this);
+			gc.drawImage(off1, -(getColumnStart(column) + pt.x), 0, this);
 		} catch (Exception paintException) {
 			assert false : Debug.toString(paintException);
-			off2 = null;
+		off2 = null;
 		} finally {
-			if (g2d != null) {
-				g2d.dispose();
+			if (gc != null) {
+				gc.dispose();
 			}
 		}
 		return off2 != null ? off2 : off1;
@@ -1922,7 +1922,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 				if (mDragColumnDivider == -1 && !mSelectedRows.isEmpty() && (dragAction & mAllowedRowDragTypes) != 0) {
 					TreeRowSelection selection = new TreeRowSelection(getSelectedRows(), mOpenRows);
 					if (DragSource.isDragImageSupported()) {
-						BufferedImage dragImage = createDragImage(where);
+						ToolkitIcon dragImage = createDragImage(where);
 						Point imageOffset;
 						Rectangle dragClip = getDragClip();
 						if (dragClip != null) {

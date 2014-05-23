@@ -11,7 +11,8 @@
 
 package com.trollworks.toolkit.ui.widget.outline;
 
-import java.awt.image.BufferedImage;
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -68,7 +69,7 @@ public abstract class Row {
 	 * @return The icon for the specified column, or <code>null</code>.
 	 */
 	@SuppressWarnings("static-method")
-	public BufferedImage getIcon(Column column) {
+	public ToolkitIcon getIcon(Column column) {
 		return null;
 	}
 

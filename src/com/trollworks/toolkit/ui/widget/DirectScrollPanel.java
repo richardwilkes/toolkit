@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.widget;
 
+import com.trollworks.toolkit.ui.image.Images;
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
 import com.trollworks.toolkit.utility.Debug;
 import com.trollworks.toolkit.utility.Geometry;
 
@@ -26,13 +28,11 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Transparency;
 import java.awt.dnd.Autoscroll;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -690,19 +690,19 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
 	}
 
 	/**
-	 * @return A {@link BufferedImage} containing the currently visible header and contents (no
-	 *         scroll bars). If something goes wrong (unable to allocate an offscreen buffer, for
+	 * @return A {@link ToolkitIcon} containing the currently visible header and contents (no scroll
+	 *         bars). If something goes wrong (unable to allocate an offscreen buffer, for
 	 *         instance), then <code>null</code> may be returned.
 	 */
-	public BufferedImage createImage() {
-		BufferedImage offscreen = null;
+	public ToolkitIcon createImage() {
+		ToolkitIcon offscreen = null;
 		synchronized (getTreeLock()) {
 			Graphics2D g2d = null;
 			try {
 				int width = mHeaderBounds.width;
 				int height = mHeaderBounds.height + mContentBounds.height;
-				offscreen = getGraphicsConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
-				g2d = (Graphics2D) offscreen.getGraphics();
+				offscreen = Images.createTransparent(getGraphicsConfiguration(), width, height);
+				g2d = offscreen.getGraphics();
 				Color saved = g2d.getBackground();
 				g2d.setBackground(new Color(0, true));
 				g2d.clearRect(0, 0, width, height);
@@ -748,32 +748,32 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
 	 *            {@link DragGestureEvent#getDragOrigin()}.
 	 * @return The drag image.
 	 */
-	public BufferedImage createDragImage(Point dragOrigin) {
-		Graphics2D g2d = null;
-		BufferedImage off2 = null;
+	public ToolkitIcon createDragImage(Point dragOrigin) {
+		Graphics2D gc = null;
+		ToolkitIcon off2 = null;
 		mDrawingDragImage = true;
 		mDragClip = null;
-		BufferedImage off1 = createImage();
+		ToolkitIcon off1 = createImage();
 		mDrawingDragImage = false;
 		if (mDragClip == null) {
 			mDragClip = new Rectangle(dragOrigin.x, dragOrigin.y, 1, 1);
 		}
 		try {
-			off2 = getGraphicsConfiguration().createCompatibleImage(mDragClip.width, mDragClip.height, Transparency.TRANSLUCENT);
-			g2d = (Graphics2D) off2.getGraphics();
-			g2d.setClip(new Rectangle(0, 0, mDragClip.width, mDragClip.height));
-			g2d.setBackground(new Color(0, true));
-			g2d.clearRect(0, 0, mDragClip.width, mDragClip.height);
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+			off2 = Images.createTransparent(getGraphicsConfiguration(), mDragClip.width, mDragClip.height);
+			gc = off2.getGraphics();
+			gc.setClip(new Rectangle(0, 0, mDragClip.width, mDragClip.height));
+			gc.setBackground(new Color(0, true));
+			gc.clearRect(0, 0, mDragClip.width, mDragClip.height);
+			gc.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 			Point pt = toContentView(new Point(mHeaderBounds.x, mHeaderBounds.y));
-			g2d.drawImage(off1, -(mDragClip.x - pt.x), -(mDragClip.y - pt.y), this);
+			gc.drawImage(off1, -(mDragClip.x - pt.x), -(mDragClip.y - pt.y), this);
 		} catch (Exception paintException) {
 			off2 = null;
 			mDragClip = new Rectangle(dragOrigin.x, dragOrigin.y, 1, 1);
 			assert false : Debug.toString(paintException);
 		} finally {
-			if (g2d != null) {
-				g2d.dispose();
+			if (gc != null) {
+				gc.dispose();
 			}
 		}
 		return off2 != null ? off2 : off1;

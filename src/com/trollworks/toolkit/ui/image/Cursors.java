@@ -14,7 +14,6 @@ package com.trollworks.toolkit.ui.image;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 
 @SuppressWarnings("nls")
 public class Cursors {
@@ -34,7 +33,7 @@ public class Cursors {
 	 * @param name The name of the image to load.
 	 */
 	public static final Cursor create(String name) {
-		BufferedImage img = Images.get(name);
+		ToolkitIcon img = Images.get(name);
 		if (img == null) {
 			return Cursor.getDefaultCursor();
 		}
@@ -50,7 +49,7 @@ public class Cursors {
 	 * @param hotSpotY The vertical hot spot for the cursor.
 	 */
 	public static final Cursor create(String name, int hotSpotX, int hotSpotY) {
-		BufferedImage img = Images.get(name);
+		ToolkitIcon img = Images.get(name);
 		if (img == null) {
 			return Cursor.getDefaultCursor();
 		}

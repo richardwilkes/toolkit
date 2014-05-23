@@ -11,13 +11,14 @@
 
 package com.trollworks.toolkit.ui.widget.outline;
 
+import com.trollworks.toolkit.ui.image.ToolkitIcon;
+
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
 /** Represents a single column within a {@link Outline} panel. */
 public class Column implements Transferable {
@@ -28,7 +29,7 @@ public class Column implements Transferable {
 	private boolean					mVisible;
 	private int						mWidth;
 	private String					mName;
-	private BufferedImage			mIcon;
+	private ToolkitIcon				mIcon;
 	private int						mID;
 	private String					mToolTipText;
 
@@ -39,7 +40,7 @@ public class Column implements Transferable {
 	 * @param name The name of the column.
 	 */
 	public Column(int id, String name) {
-		this(id, name, (BufferedImage) null);
+		this(id, name, (ToolkitIcon) null);
 	}
 
 	/**
@@ -60,7 +61,7 @@ public class Column implements Transferable {
 	 * @param name The name of the column.
 	 * @param icon The icon to use in the header of the column, if any.
 	 */
-	public Column(int id, String name, BufferedImage icon) {
+	public Column(int id, String name, ToolkitIcon icon) {
 		this(id, name, icon, name);
 	}
 
@@ -83,7 +84,7 @@ public class Column implements Transferable {
 	 * @param icon The icon to use in the header of the column, if any.
 	 * @param toolTipText The tooltip text to use for this column.
 	 */
-	public Column(int id, String name, BufferedImage icon, String toolTipText) {
+	public Column(int id, String name, ToolkitIcon icon, String toolTipText) {
 		this(id, name, icon, toolTipText, new TextCell());
 	}
 
@@ -108,7 +109,7 @@ public class Column implements Transferable {
 	 * @param toolTipText The tooltip text to use for this column.
 	 * @param rowCell The cell to use for rows.
 	 */
-	public Column(int id, String name, BufferedImage icon, String toolTipText, Cell rowCell) {
+	public Column(int id, String name, ToolkitIcon icon, String toolTipText, Cell rowCell) {
 		mName = name == null || name.length() == 0 ? " " : name; //$NON-NLS-1$
 		mIcon = icon;
 		mToolTipText = toolTipText;
@@ -269,12 +270,12 @@ public class Column implements Transferable {
 	}
 
 	/** @return The icon used in the header of this column, if any. */
-	public BufferedImage getIcon() {
+	public ToolkitIcon getIcon() {
 		return mIcon;
 	}
 
 	/** @param icon The icon used in the header of this column. */
-	public void setIcon(BufferedImage icon) {
+	public void setIcon(ToolkitIcon icon) {
 		mIcon = icon;
 	}
 
