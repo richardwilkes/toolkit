@@ -55,6 +55,7 @@ public abstract class Dockable extends JPanel {
 		// Does nothing by default
 	}
 
+	/** @return The containing {@link DockContainer}. */
 	public final DockContainer getDockContainer() {
 		return UIUtilities.getAncestorOfType(this, DockContainer.class);
 	}
