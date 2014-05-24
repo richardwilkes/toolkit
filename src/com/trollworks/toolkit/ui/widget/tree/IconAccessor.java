@@ -13,7 +13,6 @@ package com.trollworks.toolkit.ui.widget.tree;
 
 import com.trollworks.toolkit.ui.image.StdImage;
 
-@FunctionalInterface
 public interface IconAccessor {
 	/**
 	 * @param row The {@link TreeRow} to operate on.

@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.ui.widget.tree;
 
-@FunctionalInterface
 public interface FieldAccessor {
 	/**
 	 * @param row The {@link TreeRow} to operate on.
