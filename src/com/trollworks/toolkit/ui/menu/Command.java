@@ -262,7 +262,15 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
 
 	/** @return The current target. */
 	public static final <T> T getTarget(Class<T> type) {
-		return UIUtilities.getSelfOrAncestorOfType(getFocusOwner(), type);
+		Component focus = getFocusOwner();
+		T target = UIUtilities.getSelfOrAncestorOfType(focus, type);
+		if (target == null) {
+			RetargetableFocus retargeter = UIUtilities.getSelfOrAncestorOfType(focus, RetargetableFocus.class);
+			if (retargeter != null) {
+				target = UIUtilities.getSelfOrAncestorOfType(retargeter.getRetargetedFocus(), type);
+			}
+		}
+		return target;
 	}
 
 	/** @return The current active window. */
