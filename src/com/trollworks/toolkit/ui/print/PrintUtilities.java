@@ -12,7 +12,7 @@
 package com.trollworks.toolkit.ui.print;
 
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.menu.file.PrintProxy;
+import com.trollworks.toolkit.utility.PrintProxy;
 import com.trollworks.toolkit.utility.units.LengthUnits;
 
 import java.awt.Component;

@@ -17,6 +17,7 @@ import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.print.PrintManager;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.PrintProxy;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;

@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.ui.widget.DataModifiedListener;
+import com.trollworks.toolkit.utility.FileProxy;
 
 import java.io.File;
 

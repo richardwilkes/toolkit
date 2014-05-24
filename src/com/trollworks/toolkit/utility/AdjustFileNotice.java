@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Calendar;
+import java.util.jar.Attributes;
 
 public class AdjustFileNotice {
 	@Localize("1.0.0.20140406153944")
@@ -64,7 +65,14 @@ public class AdjustFileNotice {
 	private static final CmdLineOption	TEMPLATE_OPTION	= new CmdLineOption(TEMPLATE_DESCRIPTION, TEMPLATE, "template");	//$NON-NLS-1$
 
 	public static void main(String[] args) {
-		BundleInfo.setDefault(new BundleInfo(AdjustFileNotice.class.getSimpleName(), VERSION, COPYRIGHT_OWNER, COPYRIGHT_YEARS, LICENSE));
+		String name = AdjustFileNotice.class.getSimpleName();
+		Attributes attributes = new Attributes();
+		attributes.putValue(BundleInfo.BUNDLE_NAME, name);
+		attributes.putValue(BundleInfo.BUNDLE_VERSION, VERSION);
+		attributes.putValue(BundleInfo.BUNDLE_COPYRIGHT_OWNER, COPYRIGHT_OWNER);
+		attributes.putValue(BundleInfo.BUNDLE_COPYRIGHT_YEARS, COPYRIGHT_YEARS);
+		attributes.putValue(BundleInfo.BUNDLE_LICENSE, LICENSE);
+		BundleInfo.setDefault(new BundleInfo(attributes, name));
 		CmdLine cmdline = new CmdLine();
 		cmdline.addOptions(PATH_OPTION, TEMPLATE_OPTION);
 		cmdline.processArguments(args);

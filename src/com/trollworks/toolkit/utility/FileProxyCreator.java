@@ -9,16 +9,17 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui.menu.file;
+package com.trollworks.toolkit.utility;
 
 import java.io.File;
+import java.io.IOException;
 
-/** Provides a way to find a {@link FileProxy} for a {@link File}. */
-public interface FileProxyProvider {
+/** Creates a {@link FileProxy} for files of a specific {@link FileType}. */
+public interface FileProxyCreator {
 	/**
-	 * @param file The {@link File} to locate a {@link FileProxy} for.
-	 * @return The {@link FileProxy}. May be <code>null</code> if this provider doesn't have one
-	 *         that represents the specified {@link File}.
+	 * @param file The {@link File} to load data from.
+	 * @return The resulting {@link FileProxy}, which should have been made visible in the UI and
+	 *         brought to the foreground.
 	 */
-	FileProxy getFileProxy(File file);
+	FileProxy create(File file) throws IOException;
 }

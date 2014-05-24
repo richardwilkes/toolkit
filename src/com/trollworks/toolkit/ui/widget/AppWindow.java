@@ -17,10 +17,10 @@ import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.layout.FlexRow;
 import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.menu.edit.Undoable;
-import com.trollworks.toolkit.ui.menu.file.FileProxy;
-import com.trollworks.toolkit.ui.menu.file.FileProxyProvider;
 import com.trollworks.toolkit.ui.menu.window.WindowMenuProvider;
 import com.trollworks.toolkit.ui.preferences.MenuKeyPreferences;
+import com.trollworks.toolkit.utility.FileProxy;
+import com.trollworks.toolkit.utility.FileProxyProvider;
 import com.trollworks.toolkit.utility.PathUtils;
 import com.trollworks.toolkit.utility.undo.StdUndoManager;
 

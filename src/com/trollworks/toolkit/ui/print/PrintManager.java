@@ -17,10 +17,10 @@ import com.trollworks.toolkit.io.xml.XMLNodeType;
 import com.trollworks.toolkit.io.xml.XMLReader;
 import com.trollworks.toolkit.io.xml.XMLWriter;
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.menu.file.PrintProxy;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.Preferences;
+import com.trollworks.toolkit.utility.PrintProxy;
 import com.trollworks.toolkit.utility.text.Numbers;
 import com.trollworks.toolkit.utility.units.LengthUnits;
 

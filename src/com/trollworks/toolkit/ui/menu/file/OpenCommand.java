@@ -14,10 +14,12 @@ package com.trollworks.toolkit.ui.menu.file;
 import com.apple.eawt.AppEvent.OpenFilesEvent;
 import com.apple.eawt.OpenFilesHandler;
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.ui.widget.StdFileDialog;
-import com.trollworks.toolkit.utility.Debug;
+import com.trollworks.toolkit.utility.FileProxy;
+import com.trollworks.toolkit.utility.FileType;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.Component;
@@ -83,7 +85,7 @@ public class OpenCommand extends Command implements OpenFilesHandler {
 					throw new IOException("Unknown file extension"); //$NON-NLS-1$
 				}
 			} catch (Exception exception) {
-				Debug.diagnoseLoadAndSave(exception);
+				Log.error(exception);
 				StdFileDialog.showCannotOpenMsg(getFocusOwner(), file.getName(), exception);
 			}
 		}

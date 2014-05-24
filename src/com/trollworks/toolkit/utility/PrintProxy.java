@@ -9,7 +9,7 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui.menu.file;
+package com.trollworks.toolkit.utility;
 
 import com.trollworks.toolkit.ui.print.PrintManager;
 

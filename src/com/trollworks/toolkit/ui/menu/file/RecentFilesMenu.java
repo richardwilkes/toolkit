@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.utility.FileType;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.PathUtils;
 import com.trollworks.toolkit.utility.Platform;

@@ -19,7 +19,9 @@ import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.print.PrintManager;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
+import com.trollworks.toolkit.utility.FileProxy;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.PrintProxy;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;

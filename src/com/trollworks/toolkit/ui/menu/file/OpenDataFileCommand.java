@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.ui.menu.Command;
+import com.trollworks.toolkit.utility.FileType;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;

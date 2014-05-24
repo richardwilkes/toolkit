@@ -9,11 +9,10 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui.menu.file;
+package com.trollworks.toolkit.utility;
 
-import com.trollworks.toolkit.ui.image.StdImageSet;
 import com.trollworks.toolkit.ui.image.StdImage;
-import com.trollworks.toolkit.utility.PathUtils;
+import com.trollworks.toolkit.ui.image.StdImageSet;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,10 +21,11 @@ import java.util.HashMap;
 /** Describes a file. */
 public class FileType {
 	private static final ArrayList<FileType>	TYPES		= new ArrayList<>();
-	private static HashMap<String, StdImageSet>		ICONSET_MAP	= new HashMap<>();
+	private static HashMap<String, StdImageSet>	ICONSET_MAP	= new HashMap<>();
 	private String								mExtension;
-	private StdImageSet								mIconSet;
+	private StdImageSet							mIconSet;
 	private String								mDescription;
+	private String								mReferenceURL;
 	private FileProxyCreator					mFileProxyCreator;
 	private boolean								mAllowOpen;
 
@@ -35,11 +35,12 @@ public class FileType {
 	 * @param extension The extension of the file.
 	 * @param iconset The {@link StdImageSet} to use for the file.
 	 * @param description A short description of the file type.
+	 * @param referenceURL A URL that contains a description of this file type..
 	 * @param fileProxyCreator The {@link FileProxyCreator} responsible for creating a
 	 *            {@link FileProxy} with this file's contents.
 	 * @param allowOpen Whether this {@link FileType} is allowed to be opened via the menu command.
 	 */
-	public static final void register(String extension, StdImageSet iconset, String description, FileProxyCreator fileProxyCreator, boolean allowOpen) {
+	public static final void register(String extension, StdImageSet iconset, String description, String referenceURL, FileProxyCreator fileProxyCreator, boolean allowOpen) {
 		extension = normalizeExtension(extension);
 		for (FileType type : TYPES) {
 			if (type.mExtension.equals(extension)) {
@@ -47,7 +48,7 @@ public class FileType {
 				break;
 			}
 		}
-		TYPES.add(new FileType(extension, iconset, description, fileProxyCreator, allowOpen));
+		TYPES.add(new FileType(extension, iconset, description, referenceURL, fileProxyCreator, allowOpen));
 		ICONSET_MAP.put(extension, iconset);
 	}
 
@@ -124,10 +125,11 @@ public class FileType {
 		return StdImage.FOLDER;
 	}
 
-	private FileType(String extension, StdImageSet iconset, String description, FileProxyCreator fileProxyCreator, boolean allowOpen) {
+	private FileType(String extension, StdImageSet iconset, String description, String referenceURL, FileProxyCreator fileProxyCreator, boolean allowOpen) {
 		mExtension = extension;
 		mIconSet = iconset;
 		mDescription = description;
+		mReferenceURL = referenceURL;
 		mFileProxyCreator = fileProxyCreator;
 		mAllowOpen = allowOpen;
 	}
@@ -145,6 +147,11 @@ public class FileType {
 	/** @return A short description for the file type. */
 	public String getDescription() {
 		return mDescription;
+	}
+
+	/** @return A URL that contains a description of this file type. */
+	public String getReferenceURL() {
+		return mReferenceURL;
 	}
 
 	/**
