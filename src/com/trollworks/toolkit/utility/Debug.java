@@ -11,14 +11,25 @@
 
 package com.trollworks.toolkit.utility;
 
-import com.trollworks.toolkit.io.Log;
-
 /** Provides various debugging utilities. */
 public final class Debug {
 	/** Controls whether we are in 'development mode' or not. */
-	public static final boolean	DEV_MODE			= false;
-	/** Standard debug key for enabling diagnosis for load/save failures. */
-	public static final String	DIAGNOSE_LOAD_SAVE	= "com.trollworks.toolkit.utility.Debug.DiagnoseLoadSave";	//$NON-NLS-1$
+	public static final boolean	DEV_MODE	= false;
+
+	/**
+	 * Retrieves the specified key, looking first in the system properties and falling back to the
+	 * system environment if it is not set in the system properties.
+	 *
+	 * @param key The key to check.
+	 * @return The value of the specified key, or <code>null</code> if it has not been defined.
+	 */
+	public static final String getPropertyOrEnvironmentSetting(String key) {
+		String value = System.getProperty(key);
+		if (value == null) {
+			value = System.getenv(key);
+		}
+		return value;
+	}
 
 	/**
 	 * Determines whether the specified key is set, looking first in the system properties and
@@ -28,23 +39,7 @@ public final class Debug {
 	 * @return <code>true</code> if the key is enabled.
 	 */
 	public static final boolean isKeySet(String key) {
-		String value = System.getProperty(key);
-		if (value == null) {
-			value = System.getenv(key);
-		}
-		return Numbers.extractBoolean(value);
-	}
-
-	/**
-	 * If load/save operation diagnosis has been asked for, dump the {@link Exception}'s stack trace
-	 * to the log.
-	 *
-	 * @param exception The {@link Exception}.
-	 */
-	public static void diagnoseLoadAndSave(Exception exception) {
-		if (isKeySet(DIAGNOSE_LOAD_SAVE)) {
-			Log.error(exception);
-		}
+		return Numbers.extractBoolean(getPropertyOrEnvironmentSetting(key));
 	}
 
 	/**
