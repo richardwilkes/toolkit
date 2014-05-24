@@ -58,9 +58,9 @@ public class App implements KeyEventDispatcher, Runnable {
 			if (path.endsWith("support/jars")) { //$NON-NLS-1$
 				path = path.getParent().getParent();
 			}
-			if (path.endsWith("contents/macos")) { //$NON-NLS-1$
+			if (path.endsWith("Contents/MacOS")) { //$NON-NLS-1$
 				// Note: we go up 3 levels, not 2, to account for the .app dir
-				path.getParent().getParent().getParent();
+				path = path.getParent().getParent().getParent();
 			}
 		} catch (Throwable throwable) {
 			path = Paths.get("."); //$NON-NLS-1$
