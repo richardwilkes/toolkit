@@ -25,7 +25,7 @@ public class Log {
 
 	static {
 		OUT = System.out;
-		String property = System.getProperty("com.trollworks.log"); //$NON-NLS-1$
+		String property = Debug.getPropertyOrEnvironmentSetting("com.trollworks.log"); //$NON-NLS-1$
 		if (property != null && !property.isEmpty()) {
 			try {
 				OUT = new PrintStream(property);
