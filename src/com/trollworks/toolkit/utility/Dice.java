@@ -15,26 +15,42 @@ import java.util.Random;
 
 /** Simulates dice. */
 public class Dice implements Cloneable {
-	/**
-	 * If this system property does not exist, then the <code>toString()</code> method will assume
-	 * 6-sided dice are used and will omit the '6' from the die notation. For example, instead of
-	 * <code>2d6+2</code>, <code>toString()</code> will result in <code>2d+2</code>.
-	 */
-	public static final String	DISPLAY_D6					= "com.trollworks.toolkit.utility.Dice.DisplayD6";				//$NON-NLS-1$
-	/**
-	 * If this system property exists, then for every +7 in modifiers, two extra dice will be added
-	 * to the count and the modifier will be reduced by 7. For modifiers less than 7 but greater
-	 * than 3, one extra die will be added to the count and the modifier will be reduced by 4. For
-	 * example, <code>2d+12</code> will become <code>5d+1</code>.
-	 */
-	public static final String	EXTRA_DICE_FROM_MODIFIERS	= "com.trollworks.toolkit.utility.Dice.ExtraDiceFromModifiers";	//$NON-NLS-1$
 	private static final Random	RANDOM						= new Random();
+	private static int			ASSUMED_SIDE_COUNT			= 0;
+	private static boolean		EXTRA_DICE_FROM_MODIFIERS	= false;
 	private int					mCount;
 	private int					mSides;
 	private int					mModifier;
 	private int					mMultiplier;
 	private int					mAltCount;
 	private int					mAltModifier;
+
+	/**
+	 * Sets the assumed number of sides per die. When this is set to a positive value greater than
+	 * 0, the {@link #toString()} method will emit dice notations without the dice sides if it
+	 * matches this value. For example, if the assumed side count is 6, then rather than
+	 * <code>2d6+2</code>, {@link #toString()} would generate <code>2d+2</code>. Likewise, input
+	 * dice specifications for the {@link #Dice(String)} constructor will use this value if the
+	 * number of sides is omitted.<br>
+	 * <br>
+	 * By default, this is set to <code>0</code>.
+	 *
+	 * @param sides The number of sides to assume.
+	 */
+	public static final void setAssumedSideCount(int sides) {
+		ASSUMED_SIDE_COUNT = sides;
+	}
+
+	/**
+	 * By default, this is set to <code>false</code>.
+	 *
+	 * @param convert <code>true</code> if modifiers greater than or equal to the average result of
+	 *            the base die should be converted to extra dice. For example, <code>1d6+8</code>
+	 *            will become <code>3d6+1</code>.
+	 */
+	public static final void setConvertModifiersToExtraDice(boolean convert) {
+		EXTRA_DICE_FROM_MODIFIERS = convert;
+	}
 
 	/** Creates a new 1d6 dice object. */
 	public Dice() {
@@ -54,7 +70,7 @@ public class Dice implements Cloneable {
 			buffer.deleteCharAt(0);
 			mSides = extractValue(buffer);
 			if (mSides == 0) {
-				mSides = 6;
+				mSides = ASSUMED_SIDE_COUNT;
 			}
 			ch = nextChar(buffer);
 		}
@@ -213,8 +229,8 @@ public class Dice implements Cloneable {
 	 * @param multiplier A multiplier for the roll.
 	 */
 	public Dice(int count, int sides, int modifier, int multiplier) {
-		mCount = count;
-		mSides = sides;
+		mCount = Math.max(count, 0);
+		mSides = Math.max(sides, 0);
 		mModifier = modifier;
 		mMultiplier = multiplier;
 	}
@@ -267,8 +283,10 @@ public class Dice implements Cloneable {
 	public int roll(Random randomizer) {
 		int result = 0;
 		updateAlt();
-		for (int i = 0; i < mAltCount; i++) {
-			result += 1 + randomizer.nextInt(mSides);
+		if (mSides > 0) {
+			for (int i = 0; i < mAltCount; i++) {
+				result += 1 + randomizer.nextInt(mSides);
+			}
 		}
 		return (result + mAltModifier) * mMultiplier;
 	}
@@ -280,7 +298,7 @@ public class Dice implements Cloneable {
 		if (mAltCount > 0 && mSides > 0) {
 			buffer.append(mAltCount);
 			buffer.append('d');
-			if (mSides != 6 || System.getProperty(DISPLAY_D6) != null) {
+			if (mSides != ASSUMED_SIDE_COUNT) {
 				buffer.append(mSides);
 			}
 		}
@@ -303,14 +321,22 @@ public class Dice implements Cloneable {
 	private void updateAlt() {
 		mAltCount = mCount;
 		mAltModifier = mModifier;
-		if (System.getProperty(EXTRA_DICE_FROM_MODIFIERS) != null) {
-			while (mAltModifier > 3) {
-				if (mAltModifier > 6) {
-					mAltModifier -= 7;
-					mAltCount += 2;
-				} else {
-					mAltModifier -= 4;
-					mAltCount++;
+		if (EXTRA_DICE_FROM_MODIFIERS) {
+			int average = (mSides + 1) / 2;
+			if ((mSides & 1) == 1) {
+				// Odd number of sides, so average is a whole number
+				mAltCount += mAltModifier / average;
+				mAltModifier %= average;
+			} else {
+				// Even number of sides, so average has an extra half, which means we alternate
+				while (mAltModifier > average) {
+					if (mAltModifier > 2 * average) {
+						mAltModifier -= 2 * average + 1;
+						mAltCount += 2;
+					} else {
+						mAltModifier -= average + 1;
+						mAltCount++;
+					}
 				}
 			}
 		}
