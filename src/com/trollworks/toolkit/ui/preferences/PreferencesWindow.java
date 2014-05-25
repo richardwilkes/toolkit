@@ -15,6 +15,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.ui.menu.file.CloseHandler;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.Localization;
 
@@ -23,6 +24,7 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /** A window for editing application preferences. */
-public class PreferencesWindow extends AppWindow implements ActionListener, ChangeListener {
+public class PreferencesWindow extends AppWindow implements ActionListener, ChangeListener, CloseHandler {
 	@Localize("Preferences")
 	private static String									PREFERENCES;
 	@Localize("Reset to Factory Defaults")
@@ -123,5 +125,16 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
 	@Override
 	public void stateChanged(ChangeEvent event) {
 		adjustResetButton();
+	}
+
+	@Override
+	public boolean mayAttemptClose() {
+		return true;
+	}
+
+	@Override
+	public boolean attemptClose() {
+		windowClosing(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		return true;
 	}
 }
