@@ -71,9 +71,10 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 		setBorder(new EmptyBorder(2, 1, 0, 1));
 		addContainerListener(this);
 		mTitle = new JLabel(getFullTitle(), dockable.getTitleIcon(), SwingConstants.LEFT);
-		add(mTitle, new PrecisionLayoutData().setGrabHorizontalSpace(true));
+		IconButton closeButton = new IconButton(StdImage.DOCK_CLOSE, CLOSE_TOOLTIP, this::attemptClose);
+		add(mTitle, new PrecisionLayoutData().setGrabHorizontalSpace(true).setHeightHint(Math.max(mTitle.getPreferredSize().height, closeButton.getPreferredSize().height)));
 		if (dockable instanceof CloseHandler) {
-			add(new IconButton(StdImage.DOCK_CLOSE, CLOSE_TOOLTIP, this::attemptClose), new PrecisionLayoutData().setEndHorizontalAlignment());
+			add(closeButton, new PrecisionLayoutData().setEndHorizontalAlignment());
 		}
 		if (dockable instanceof Saveable) {
 			((Saveable) dockable).addDataModifiedListener(this);
