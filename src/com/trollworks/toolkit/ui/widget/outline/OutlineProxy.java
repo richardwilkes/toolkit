@@ -52,7 +52,7 @@ public class OutlineProxy extends Outline {
 
 	@Override
 	protected void addProxy(OutlineProxy proxy) {
-		assert false : "You cannot add a proxy to a proxy"; //$NON-NLS-1$
+		// You can't add a proxy to a proxy
 	}
 
 	@Override

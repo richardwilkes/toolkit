@@ -11,6 +11,7 @@
 
 package com.trollworks.toolkit.utility;
 
+import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.io.conduit.Conduit;
 import com.trollworks.toolkit.io.conduit.ConduitMessage;
 import com.trollworks.toolkit.io.conduit.ConduitReceiver;
@@ -44,7 +45,6 @@ public class LaunchProxy implements ConduitReceiver {
 
 	/** @return The single instance of the app launch proxy. */
 	public synchronized static LaunchProxy getInstance() {
-		assert INSTANCE != null;
 		return INSTANCE;
 	}
 
@@ -65,7 +65,7 @@ public class LaunchProxy implements ConduitReceiver {
 				// Ignore
 			}
 		} else {
-			assert false : "Can only call configure once."; //$NON-NLS-1$
+			Log.error("Can only call configure once."); //$NON-NLS-1$
 		}
 	}
 

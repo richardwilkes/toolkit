@@ -149,7 +149,6 @@ public class OutlineModel implements SelectionOwner, StateEditable {
 	 * @param column The column to add.
 	 */
 	public void addColumn(Column column) {
-		assert !mColumns.contains(column);
 		mColumns.add(column);
 	}
 
@@ -168,7 +167,6 @@ public class OutlineModel implements SelectionOwner, StateEditable {
 	 * @param column The column to remove.
 	 */
 	public void removeColumn(Column column) {
-		assert mColumns.contains(column);
 		mColumns.remove(column);
 	}
 
@@ -273,9 +271,6 @@ public class OutlineModel implements SelectionOwner, StateEditable {
 	 */
 	public void addRow(int index, Row row, boolean includeChildren) {
 		ArrayList<Row> list = new ArrayList<>();
-
-		assert !mRows.contains(row);
-
 		if (includeChildren) {
 			collectRowsAndSetOwner(list, row, false);
 		} else {
