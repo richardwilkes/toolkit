@@ -52,11 +52,11 @@
 	<target name="toolkit" description="Build the toolkit" depends="clean_toolkit">
 		<mkdir dir="${toolkit_build}"/>
 		<mkdir dir="${generated_src}"/>
-
+		
 		<!-- Compile the code. -->
 		<javac srcdir="${src}" destdir="${toolkit_build}" excludes="${annotation_src}/processor/**"
 			debug="no" optimize="yes" target="${min_jdk}" source="${min_jdk}" deprecation="true"
-			includeantruntime="no">
+			includeantruntime="no" fork="yes">
 			<classpath>
 				<pathelement location="${lib}/trove-3.0.3.jar"/>
 				<pathelement location="../apple_stubs/apple_stubs.jar"/>
@@ -109,7 +109,7 @@
 		<!-- Compile the code. -->
 		<javac srcdir="${src}" destdir="${ap_build}" includes="${annotation_src}/**"
 			debug="no" optimize="yes" target="${min_jdk}" source="${min_jdk}" deprecation="true"
-			includeantruntime="no">
+			includeantruntime="no" fork="yes">
 			<compilerarg value="-Xlint:all"/>
 			<compilerarg value="-Xlint:-serial"/>
 		</javac>
