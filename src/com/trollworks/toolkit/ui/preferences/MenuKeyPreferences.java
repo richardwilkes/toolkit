@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.preferences;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.layout.ColumnLayout;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.menu.StdMenuBar;
@@ -26,6 +27,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -67,12 +69,14 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
 		super(MENU_KEYS, owner);
 		setLayout(new BorderLayout());
 		mPanel = new BandedPanel(MENU_KEYS);
-		mPanel.setLayout(new ColumnLayout(2, 0, 0));
+		mPanel.setLayout(new ColumnLayout(2, 5, 0));
 		mPanel.setBorder(new EmptyBorder(2, 5, 2, 5));
 		mPanel.setOpaque(true);
 		mPanel.setBackground(Color.WHITE);
 		for (Command cmd : StdMenuBar.getCommands()) {
-			JButton button = new JButton(getAcceleratorText(cmd));
+			JButton button = new JButton(KeyStrokeDisplay.getKeyStrokeDisplay(KeyStroke.getKeyStroke('Z', InputEvent.META_MASK | InputEvent.ALT_MASK | InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)));
+			UIUtilities.setOnlySize(button, button.getPreferredSize());
+			button.setText(getAcceleratorText(cmd));
 			mMap.put(button, cmd);
 			button.addActionListener(this);
 			mPanel.add(button);
