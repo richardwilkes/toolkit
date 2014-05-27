@@ -12,7 +12,7 @@
 package com.trollworks.toolkit.ui.preferences;
 
 import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.ui.layout.FlexGrid;
+import com.trollworks.toolkit.ui.layout.ColumnLayout;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.widget.BandedPanel;
@@ -66,27 +66,20 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
 	public MenuKeyPreferences(PreferencesWindow owner) {
 		super(MENU_KEYS, owner);
 		setLayout(new BorderLayout());
-
 		mPanel = new BandedPanel(MENU_KEYS);
+		mPanel.setLayout(new ColumnLayout(2, 0, 0));
 		mPanel.setBorder(new EmptyBorder(2, 5, 2, 5));
 		mPanel.setOpaque(true);
 		mPanel.setBackground(Color.WHITE);
-		FlexGrid grid = new FlexGrid();
-		int row = 0;
 		for (Command cmd : StdMenuBar.getCommands()) {
 			JButton button = new JButton(getAcceleratorText(cmd));
 			mMap.put(button, cmd);
 			button.addActionListener(this);
 			mPanel.add(button);
-			grid.add(button, row, 0);
-
 			JLabel label = new JLabel(cmd.getTitle());
 			mPanel.add(label);
-			grid.add(label, row++, 1);
 		}
-		grid.apply(mPanel);
 		mPanel.setSize(mPanel.getPreferredSize());
-
 		JScrollPane scroller = new JScrollPane(mPanel);
 		Dimension preferredSize = scroller.getPreferredSize();
 		if (preferredSize.height > 200) {
