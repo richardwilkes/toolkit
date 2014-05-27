@@ -111,10 +111,6 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 			focusOwner = focusOwner.getParent();
 		}
 		if (focusOwner == null) {
-			// Do it twice, once immediately and then again at the end of the current event queue.
-			// Sometimes one works, sometimes the other does. Haven't determined why, so both are
-			// necessary for now.
-			transferFocus();
 			EventQueue.invokeLater(() -> transferFocus());
 		}
 	}
