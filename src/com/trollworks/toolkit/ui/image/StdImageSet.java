@@ -56,6 +56,11 @@ public class StdImageSet implements Comparator<StdImage> {
 	private static final int				TYPE_ic12	= 0x69633132;
 	private static final int				TYPE_ic13	= 0x69633133;
 	private static final int				TYPE_ic14	= 0x69633134;
+	private static final int				TYPE_il32	= 0x696c3332;
+	private static final int				TYPE_l8mk	= 0x6c386d6b;
+	private static final int				TYPE_is32	= 0x69733332;
+	private static final int				TYPE_s8mk	= 0x73386d6b;
+	private static final int				TYPE_TOC	= 0x544f4320;
 	private static Map<String, StdImageSet>	SETS		= new HashMap<>();
 	private static int						SEQUENCE	= 0;
 	private String							mName;
@@ -423,51 +428,78 @@ public class StdImageSet implements Comparator<StdImage> {
 			int width = image.getWidth();
 			// We currently only write out square images
 			if (width == image.getHeight()) {
-				int type;
+				int type = 0;
+				int hiResType = 0;
+				int oldStyleType = 0;
+				int oldStyleMaskType = 0;
 				// We currently only write out certain sizes
 				switch (width) {
 					case 1024:
-						type = TYPE_ic10;
+						hiResType = TYPE_ic10;
 						break;
 					case 512:
 						type = TYPE_ic09;
+						hiResType = TYPE_ic14;
 						break;
 					case 256:
 						type = TYPE_ic08;
+						hiResType = TYPE_ic13;
 						break;
 					case 128:
 						type = TYPE_ic07;
 						break;
 					case 64:
 						type = TYPE_icp6;
+						hiResType = TYPE_ic12;
 						break;
 					case 32:
-						type = TYPE_icp5;
+						// The next line is commented out because, at least in Mac OS X 10.9, the
+						// Finder is unable to load the type correctly
+
+						// type = TYPE_icp5;
+						hiResType = TYPE_ic11;
+						oldStyleType = TYPE_il32;
+						oldStyleMaskType = TYPE_l8mk;
 						break;
 					case 16:
-						type = TYPE_icp4;
+						// The next line is commented out because, at least in Mac OS X 10.9, the
+						// Finder is unable to load the type correctly
+
+						// type = TYPE_icp4;
+						oldStyleType = TYPE_is32;
+						oldStyleMaskType = TYPE_s8mk;
 						break;
 					default:
-						type = 0;
 						break;
 				}
+				if (hiResType != 0) {
+					size += createPNG(image, imageData, imageType, hiResType, 144);
+				}
 				if (type != 0) {
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					if (!StdImage.writePNG(baos, image, 72)) {
-						throw new IOException(UNABLE_TO_CREATE_PNG);
-					}
-					byte[] bytes = baos.toByteArray();
-					imageData.add(bytes);
-					imageType.add(Integer.valueOf(type));
-					size += 8 + bytes.length;
+					size += createPNG(image, imageData, imageType, type, 72);
+				}
+				if (oldStyleType != 0) {
+					size += createOldStyleIcon(image, imageData, imageType, oldStyleType);
+				}
+				if (oldStyleMaskType != 0) {
+					size += createOldStyleMask(image, imageData, imageType, oldStyleMaskType);
 				}
 			}
 		}
+		int count = imageData.size();
+		byte[] toc = new byte[(count + 1) * 8];
+		EndianUtils.writeBEInt(TYPE_TOC, toc, 0);
+		EndianUtils.writeBEInt(toc.length, toc, 4);
+		for (int i = 0; i < count; i++) {
+			EndianUtils.writeBEInt(imageType.get(i).intValue(), toc, (i + 1) * 8);
+			EndianUtils.writeBEInt(8 + imageData.get(i).length, toc, (i + 1) * 8 + 4);
+		}
+		size += toc.length;
 		byte[] buffer = new byte[8];
 		EndianUtils.writeBEInt(TYPE_icns, buffer, 0);
 		EndianUtils.writeBEInt(size, buffer, 4);
 		out.write(buffer);
-		int count = imageData.size();
+		out.write(toc);
 		for (int i = 0; i < count; i++) {
 			byte[] data = imageData.get(i);
 			EndianUtils.writeBEInt(imageType.get(i).intValue(), buffer, 0);
@@ -475,6 +507,45 @@ public class StdImageSet implements Comparator<StdImage> {
 			out.write(buffer);
 			out.write(data);
 		}
+	}
+
+	private static int createPNG(StdImage image, List<byte[]> imageData, List<Integer> imageType, int type, int dpi) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		if (!StdImage.writePNG(baos, image, dpi)) {
+			throw new IOException(UNABLE_TO_CREATE_PNG);
+		}
+		byte[] bytes = baos.toByteArray();
+		imageData.add(bytes);
+		imageType.add(Integer.valueOf(type));
+		return 8 + bytes.length;
+	}
+
+	private static int createOldStyleIcon(StdImage image, List<byte[]> imageData, List<Integer> imageType, int type) {
+		int size = image.getWidth();
+		byte[] bytes = new byte[size * size * 4];
+		int i = 0;
+		for (int y = 0; y < size; y++) {
+			for (int x = 0; x < size; x++) {
+				EndianUtils.writeBEInt(image.getRGB(x, y), bytes, 4 * i++);
+			}
+		}
+		imageData.add(bytes);
+		imageType.add(Integer.valueOf(type));
+		return 8 + bytes.length;
+	}
+
+	private static int createOldStyleMask(StdImage image, List<byte[]> imageData, List<Integer> imageType, int type) {
+		int size = image.getWidth();
+		byte[] bytes = new byte[size * size];
+		int i = 0;
+		for (int y = 0; y < size; y++) {
+			for (int x = 0; x < size; x++) {
+				bytes[i++] = (byte) (image.getRGB(x, y) >>> 24);
+			}
+		}
+		imageData.add(bytes);
+		imageType.add(Integer.valueOf(type));
+		return 8 + bytes.length;
 	}
 
 	/**
