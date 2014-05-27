@@ -11,7 +11,7 @@
 
 package com.trollworks.toolkit.io.conduit;
 
-import com.trollworks.toolkit.utility.Debug;
+import com.trollworks.toolkit.io.Log;
 
 import java.awt.EventQueue;
 import java.io.DataInputStream;
@@ -97,7 +97,7 @@ public class Conduit implements Runnable {
 			return InetAddress.getByName(null);
 		} catch (UnknownHostException uhe) {
 			// This can't occur, as the loopback address is always valid.
-			assert false : Debug.toString(uhe);
+			Log.error(uhe);
 			return null;
 		}
 	}

@@ -11,7 +11,7 @@
 
 package com.trollworks.toolkit.io.conduit;
 
-import com.trollworks.toolkit.utility.Debug;
+import com.trollworks.toolkit.io.Log;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -73,7 +73,7 @@ class Client extends Thread {
 		try {
 			mClientSocket.close();
 		} catch (Exception exception) {
-			assert false : Debug.toString(exception);
+			Log.error(exception);
 		}
 		mServer.remove(this);
 	}

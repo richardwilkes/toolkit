@@ -14,7 +14,6 @@ package com.trollworks.toolkit.ui.image;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
-import com.trollworks.toolkit.utility.Debug;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.Color;
@@ -107,7 +106,7 @@ public class StdImage extends BufferedImage implements Icon {
 				addLocation(file.toURI().toURL());
 			}
 		} catch (Exception exception) {
-			assert false : Debug.toString(exception);
+			Log.error(exception);
 		}
 	}
 
@@ -562,7 +561,7 @@ public class StdImage extends BufferedImage implements Icon {
 				root.appendChild(pHYs_node);
 				metaData.setFromTree("javax_imageio_png_1.0", root); //$NON-NLS-1$
 			} catch (Exception exception) {
-				assert false : Debug.toString(exception);
+				Log.error(exception);
 			}
 			writer.setOutput(stream);
 			writer.write(new IIOImage(img, null, metaData));

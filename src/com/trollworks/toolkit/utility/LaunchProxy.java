@@ -62,7 +62,7 @@ public class LaunchProxy implements ConduitReceiver {
 				// Give it a chance to terminate this run...
 				Thread.sleep(1500);
 			} catch (Exception exception) {
-				assert false : Debug.toString(exception);
+				// Ignore
 			}
 		} else {
 			assert false : "Can only call configure once."; //$NON-NLS-1$

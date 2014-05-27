@@ -11,6 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget.tree;
 
+import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.Fonts;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
@@ -24,7 +25,6 @@ import com.trollworks.toolkit.ui.widget.DirectScrollPanel;
 import com.trollworks.toolkit.ui.widget.DirectScrollPanelArea;
 import com.trollworks.toolkit.ui.widget.dock.Dock;
 import com.trollworks.toolkit.ui.widget.dock.DockableTransferable;
-import com.trollworks.toolkit.utility.Debug;
 import com.trollworks.toolkit.utility.notification.NotifierTarget;
 import com.trollworks.toolkit.utility.task.Tasks;
 
@@ -1900,7 +1900,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 			Point pt = fromHeaderView(new Point());
 			gc.drawImage(off1, -(getColumnStart(column) + pt.x), 0, this);
 		} catch (Exception paintException) {
-			assert false : Debug.toString(paintException);
+			Log.error(paintException);
 			off2 = null;
 		} finally {
 			if (gc != null) {
@@ -1977,7 +1977,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 				mAlternateDragDestination = UIUtilities.getAncestorOfType(this, Dock.class);
 			}
 		} catch (Exception exception) {
-			assert false : Debug.toString(exception);
+			Log.error(exception);
 		}
 		return null;
 	}

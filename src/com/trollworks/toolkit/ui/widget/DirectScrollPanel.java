@@ -11,8 +11,8 @@
 
 package com.trollworks.toolkit.ui.widget;
 
+import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.image.StdImage;
-import com.trollworks.toolkit.utility.Debug;
 import com.trollworks.toolkit.utility.Geometry;
 
 import java.awt.Adjustable;
@@ -689,8 +689,8 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
 	}
 
 	/**
-	 * @return A {@link StdImage} containing the currently visible header and contents (no
-	 *         scroll bars). If something goes wrong (unable to allocate an offscreen buffer, for
+	 * @return A {@link StdImage} containing the currently visible header and contents (no scroll
+	 *         bars). If something goes wrong (unable to allocate an offscreen buffer, for
 	 *         instance), then <code>null</code> may be returned.
 	 */
 	public StdImage createImage() {
@@ -712,7 +712,7 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
 				g2d.setClip(clip);
 				paint(g2d);
 			} catch (Exception exception) {
-				assert false : Debug.toString(exception);
+				Log.error(exception);
 			} finally {
 				if (g2d != null) {
 					g2d.dispose();
@@ -769,7 +769,7 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
 		} catch (Exception paintException) {
 			off2 = null;
 			mDragClip = new Rectangle(dragOrigin.x, dragOrigin.y, 1, 1);
-			assert false : Debug.toString(paintException);
+			Log.error(paintException);
 		} finally {
 			if (gc != null) {
 				gc.dispose();

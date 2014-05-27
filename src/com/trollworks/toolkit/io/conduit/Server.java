@@ -11,7 +11,7 @@
 
 package com.trollworks.toolkit.io.conduit;
 
-import com.trollworks.toolkit.utility.Debug;
+import com.trollworks.toolkit.io.Log;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -115,7 +115,7 @@ class Server extends Thread {
 		try {
 			mServerSocket.close();
 		} catch (Exception exception) {
-			assert false : Debug.toString(exception);
+			Log.error(exception);
 		}
 	}
 
