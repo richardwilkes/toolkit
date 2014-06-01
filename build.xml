@@ -17,7 +17,7 @@
 	<property if:true="${platform.mac}" name="platform" value="mac"/>
 	<property if:true="${platform.windows}" name="platform" value="windows"/>
 	<property if:true="${platform.linux}" name="platform" value="linux"/>
-	<condition property="platform32" else="false">
+	<condition property="platformWithBits" value="${platform}-32" else="${platform}">
 		<and>
 			<os family="unix"/>
 			<os name="i386"/>
@@ -187,8 +187,7 @@
 
 	<target name="jre" description="Unpacks a JRE into the ${support} directory.">
 		<fail unless="support" message="You must define 'support'"/>
-		<property if:false="${platform32}" name="jre.archive.name" value="jre-${platform}.zip"/>
-		<property if:true="${platform32}" name="jre.archive.name" value="jre-${platform}-32.zip"/>
+		<property name="jre.archive.name" value="jre-${platformWithBits}.zip"/>
 		<property name="jre.archive" value="launcher/${jre.archive.name}"/>
 		<available file="${jre.archive}" property="jre.available"/>
 		<fail unless="jre.available" message="You must provide a zipped copy of the ${platform} JRE in the toolkit launcher directory named '${jre.archive.name}'."/>
