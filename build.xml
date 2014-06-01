@@ -17,6 +17,12 @@
 	<property if:true="${platform.mac}" name="platform" value="mac"/>
 	<property if:true="${platform.windows}" name="platform" value="windows"/>
 	<property if:true="${platform.linux}" name="platform" value="linux"/>
+	<condition property="platform32" else="false">
+		<and>
+			<os family="unix"/>
+			<os name="i386"/>
+		</and>
+	</condition>
 
 	<property name="src" value="src"/>
 	<property name="lib" value="libraries"/>
@@ -130,10 +136,10 @@
 	</target>
 
 	<target name="launcher" description="Compiles a launcher tailored to your app. Note that this must be done on the platform where the app is intended to execute, as platform-specific tasks are required.">
-		<delete file="${app.dir}/${app.exe}"/>
 		<fail unless="app.dir" message="You must define 'app.dir'"/>
 		<fail unless="app.name" message="You must define 'app.name'"/>
 		<fail unless="app.exe" message="You must define 'app.exe'"/>
+		<delete file="${app.dir}/${app.exe}"/>
 		<fail if:true="${platform.windows}" unless="app.icon.dir" message="You must define 'app.icon.dir'"/>
 		<fail if:true="${platform.linux}" unless="app.categories" message="You must define 'app.categories'"/>
 		<fail if:true="${platform.linux}" unless="app.keywords" message="You must define 'app.keywords'"/>
@@ -181,7 +187,8 @@
 
 	<target name="jre" description="Unpacks a JRE into the ${support} directory.">
 		<fail unless="support" message="You must define 'support'"/>
-		<property name="jre.archive.name" value="jre-${platform}.zip"/>
+		<property if:false="${platform32}" name="jre.archive.name" value="jre-${platform}.zip"/>
+		<property if:true="${platform32}" name="jre.archive.name" value="jre-${platform}-32.zip"/>
 		<property name="jre.archive" value="launcher/${jre.archive.name}"/>
 		<available file="${jre.archive}" property="jre.available"/>
 		<fail unless="jre.available" message="You must provide a zipped copy of the ${platform} JRE in the toolkit launcher directory named '${jre.archive.name}'."/>
