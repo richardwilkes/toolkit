@@ -11,8 +11,13 @@
 
 package com.trollworks.toolkit.utility.text;
 
+
 /** A utility for consistent extraction of an {@link Enum} value from a text buffer. */
 public class Enums {
+	public static final String toId(Enum<?> value) {
+		return value.name().toLowerCase().replace('_', ' ');
+	}
+
 	/**
 	 * @param <T> The type of {@link Enum}.
 	 * @param buffer The buffer to load from.
@@ -34,32 +39,14 @@ public class Enums {
 	 */
 	public static final <T extends Enum<?>> T extract(String buffer, T[] values) {
 		if (buffer != null) {
+			// Check for the standard forms first
 			for (T type : values) {
-				if (type.name().equalsIgnoreCase(buffer)) {
-					return type;
-				}
-			}
-
-			// If that failed, replace any embedded underscores in the name with
-			// spaces and try again
-			for (T type : values) {
-				if (type.name().replaceAll("_", " ").equalsIgnoreCase(buffer)) { //$NON-NLS-1$ //$NON-NLS-2$
-					return type;
-				}
-			}
-
-			// If that failed, replace any embedded underscores in the name with
-			// commas and try again
-			for (T type : values) {
-				if (type.name().replaceAll("_", ",").equalsIgnoreCase(buffer)) { //$NON-NLS-1$ //$NON-NLS-2$
-					return type;
-				}
-			}
-
-			// If that failed, remove any embedded underscores in the name and try
-			// again
-			for (T type : values) {
-				if (type.name().replaceAll("_", "").equalsIgnoreCase(buffer)) { //$NON-NLS-1$ //$NON-NLS-2$
+				String name = type.name();
+				if (name.equalsIgnoreCase(buffer) ||
+								name.replace('_', ' ').equalsIgnoreCase(buffer) ||
+								name.replace('_', ',').equalsIgnoreCase(buffer) ||
+								name.replace('_', '-').equalsIgnoreCase(buffer) ||
+								name.replaceAll("_", "").equalsIgnoreCase(buffer)) { //$NON-NLS-1$ //$NON-NLS-2$
 					return type;
 				}
 			}

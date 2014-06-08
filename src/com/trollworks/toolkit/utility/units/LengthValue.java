@@ -11,6 +11,7 @@
 
 package com.trollworks.toolkit.utility.units;
 
+import com.trollworks.toolkit.utility.text.Enums;
 import com.trollworks.toolkit.utility.text.Numbers;
 
 /** Holds a value and {@link LengthUnits} pair. */
@@ -21,7 +22,7 @@ public class LengthValue extends UnitsValue<LengthUnits> {
 	 * @return The result.
 	 */
 	public static LengthValue extract(String buffer, boolean localized) {
-		LengthUnits units = LengthUnits.INCHES;
+		LengthUnits units = LengthUnits.IN;
 		if (buffer != null) {
 			buffer = buffer.trim();
 			// Check for the special case of FEET_AND_INCHES first
@@ -30,7 +31,7 @@ public class LengthValue extends UnitsValue<LengthUnits> {
 			if (feetMark != -1 || inchesMark != -1) {
 				if (feetMark == -1) {
 					String part = buffer.substring(0, inchesMark);
-					return new LengthValue(localized ? Numbers.getLocalizedDouble(part, 0) : Numbers.getDouble(part, 0), LengthUnits.FEET_AND_INCHES);
+					return new LengthValue(localized ? Numbers.getLocalizedDouble(part, 0) : Numbers.getDouble(part, 0), LengthUnits.FT_IN);
 				}
 				String part = buffer.substring(inchesMark != -1 && feetMark > inchesMark ? inchesMark + 1 : 0, feetMark);
 				double inches = (localized ? Numbers.getLocalizedDouble(part, 0) : Numbers.getDouble(part, 0)) * 12;
@@ -38,10 +39,10 @@ public class LengthValue extends UnitsValue<LengthUnits> {
 					part = buffer.substring(feetMark < inchesMark ? feetMark + 1 : 0, inchesMark);
 					inches += localized ? Numbers.getLocalizedDouble(part, 0) : Numbers.getDouble(part, 0);
 				}
-				return new LengthValue(inches, LengthUnits.FEET_AND_INCHES);
+				return new LengthValue(inches, LengthUnits.FT_IN);
 			}
 			for (LengthUnits lu : LengthUnits.values()) {
-				String text = lu.toString();
+				String text = Enums.toId(lu);
 				if (buffer.endsWith(text)) {
 					units = lu;
 					buffer = buffer.substring(0, buffer.length() - text.length());
@@ -73,7 +74,7 @@ public class LengthValue extends UnitsValue<LengthUnits> {
 
 	@Override
 	public LengthUnits getDefaultUnits() {
-		return LengthUnits.FEET_AND_INCHES;
+		return LengthUnits.FT_IN;
 	}
 
 	@Override

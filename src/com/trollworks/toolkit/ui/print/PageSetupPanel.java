@@ -404,7 +404,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 		JLabel label = new JLabel(MARGINS, SwingConstants.RIGHT);
 		add(label, new PrecisionLayoutData().setEndHorizontalAlignment().setMiddleVerticalAlignment());
 		JPanel wrapper = new JPanel(new PrecisionLayout().setEqualColumns(true).setColumns(3));
-		double[] margins = PrintUtilities.getPageMargins(mService, set, LengthUnits.INCHES);
+		double[] margins = PrintUtilities.getPageMargins(mService, set, LengthUnits.IN);
 		wrapper.add(new JPanel());
 		mTopMargin = createMarginField(margins[0], wrapper);
 		wrapper.add(new JPanel());
@@ -437,9 +437,9 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 			PrintUtilities.setPageOrientation(set, (PageOrientation) mOrientation.getSelectedItem());
 		}
 		if (mPaperType != null) {
-			PrintUtilities.setPaperSize(mService, set, PrintUtilities.getMediaDimensions(((WrappedMediaSizeName) mPaperType.getSelectedItem()).getObject(), LengthUnits.INCHES), LengthUnits.INCHES);
+			PrintUtilities.setPaperSize(mService, set, PrintUtilities.getMediaDimensions(((WrappedMediaSizeName) mPaperType.getSelectedItem()).getObject(), LengthUnits.IN), LengthUnits.IN);
 		}
-		PrintUtilities.setPageMargins(mService, set, new double[] { ((Double) mTopMargin.getValue()).doubleValue(), ((Double) mLeftMargin.getValue()).doubleValue(), ((Double) mBottomMargin.getValue()).doubleValue(), ((Double) mRightMargin.getValue()).doubleValue() }, LengthUnits.INCHES);
+		PrintUtilities.setPageMargins(mService, set, new double[] { ((Double) mTopMargin.getValue()).doubleValue(), ((Double) mLeftMargin.getValue()).doubleValue(), ((Double) mBottomMargin.getValue()).doubleValue(), ((Double) mRightMargin.getValue()).doubleValue() }, LengthUnits.IN);
 		if (mChromaticity != null) {
 			PrintUtilities.setChromaticity(set, (InkChromaticity) mChromaticity.getSelectedItem());
 		}

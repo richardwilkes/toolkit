@@ -12,7 +12,6 @@
 package com.trollworks.toolkit.ui.print;
 
 import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.collections.Enums;
 import com.trollworks.toolkit.io.xml.XMLNodeType;
 import com.trollworks.toolkit.io.xml.XMLReader;
 import com.trollworks.toolkit.io.xml.XMLWriter;
@@ -21,6 +20,7 @@ import com.trollworks.toolkit.ui.widget.WindowUtils;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.Preferences;
 import com.trollworks.toolkit.utility.PrintProxy;
+import com.trollworks.toolkit.utility.text.Enums;
 import com.trollworks.toolkit.utility.text.Numbers;
 import com.trollworks.toolkit.utility.units.LengthUnits;
 
@@ -151,7 +151,7 @@ public class PrintManager {
 	 */
 	public void load(XMLReader reader) throws IOException {
 		String marker = reader.getMarker();
-		LengthUnits units = Enums.extract(reader.getAttribute(ATTRIBUTE_UNITS), LengthUnits.values(), LengthUnits.INCHES);
+		LengthUnits units = Enums.extract(reader.getAttribute(ATTRIBUTE_UNITS), LengthUnits.values(), LengthUnits.IN);
 		String printer = reader.getAttribute(ATTRIBUTE_PRINTER);
 		double[] size = new double[] { 8.5, 11.0 };
 		double[] margins = new double[] { 0, 0, 0, 0 };
@@ -211,7 +211,7 @@ public class PrintManager {
 	}
 
 	private static double getNumber(XMLReader reader, LengthUnits units, double defInches) throws IOException {
-		return reader.readDouble(units.convert(LengthUnits.INCHES, defInches));
+		return reader.readDouble(units.convert(LengthUnits.IN, defInches));
 	}
 
 	/**
@@ -300,8 +300,8 @@ public class PrintManager {
 	public PageFormat createPageFormat() {
 		PageFormat format = new PageFormat();
 		PageOrientation orientation = getPageOrientation();
-		double[] size = getPaperSize(LengthUnits.POINTS);
-		double[] margins = getPaperMargins(LengthUnits.POINTS);
+		double[] size = getPaperSize(LengthUnits.PT);
+		double[] margins = getPaperMargins(LengthUnits.PT);
 		Paper paper = new Paper();
 
 		if (orientation == PageOrientation.PORTRAIT) {
@@ -324,8 +324,8 @@ public class PrintManager {
 	public void adjustSettingsToPageFormat(PageFormat format) {
 		Paper paper = format.getPaper();
 		setPageOrientation(PageOrientation.get(format));
-		setPaperSize(new double[] { paper.getWidth(), paper.getHeight() }, LengthUnits.POINTS);
-		setPaperMargins(new double[] { paper.getImageableY(), paper.getImageableX(), paper.getHeight() - (paper.getImageableY() + paper.getImageableHeight()), paper.getWidth() - (paper.getImageableX() + paper.getImageableWidth()) }, LengthUnits.POINTS);
+		setPaperSize(new double[] { paper.getWidth(), paper.getHeight() }, LengthUnits.PT);
+		setPaperMargins(new double[] { paper.getImageableY(), paper.getImageableX(), paper.getHeight() - (paper.getImageableY() + paper.getImageableHeight()), paper.getWidth() - (paper.getImageableX() + paper.getImageableWidth()) }, LengthUnits.PT);
 	}
 
 	/**
@@ -343,19 +343,19 @@ public class PrintManager {
 		if (service != null) {
 			out.writeAttribute(ATTRIBUTE_PRINTER, service.getName());
 		}
-		out.writeAttribute(ATTRIBUTE_UNITS, units.toString());
+		out.writeAttribute(ATTRIBUTE_UNITS, Enums.toId(units));
 		out.finishTagEOL();
-		out.simpleTag(TAG_ORIENTATION, getPageOrientation());
+		out.simpleTag(TAG_ORIENTATION, Enums.toId(getPageOrientation()));
 		out.simpleTag(TAG_WIDTH, size[0]);
 		out.simpleTag(TAG_HEIGHT, size[1]);
 		out.simpleTag(TAG_TOP_MARGIN, margins[0]);
 		out.simpleTag(TAG_LEFT_MARGIN, margins[1]);
 		out.simpleTag(TAG_BOTTOM_MARGIN, margins[2]);
 		out.simpleTag(TAG_RIGHT_MARGIN, margins[3]);
-		out.simpleTag(TAG_CHROMATICITY, getChromaticity(false));
-		out.simpleTag(TAG_SIDES, getSides());
+		out.simpleTag(TAG_CHROMATICITY, Enums.toId(getChromaticity(false)));
+		out.simpleTag(TAG_SIDES, Enums.toId(getSides()));
 		out.simpleTag(TAG_NUMBER_UP, getNumberUp());
-		out.simpleTag(TAG_QUALITY, getPrintQuality(false));
+		out.simpleTag(TAG_QUALITY, Enums.toId(getPrintQuality(false)));
 		out.simpleTagNotEmpty(TAG_RESOLUTION, createResolutionString(getResolution(false)));
 		out.endTagEOL(TAG_ROOT, true);
 	}

@@ -90,7 +90,7 @@ public class PrintUtilities {
 	 * @return The margins of the paper (top, left, bottom, right).
 	 */
 	public static double[] getPaperMargins(PrintService service, PrintRequestAttributeSet set, LengthUnits units) {
-		double[] size = getPaperSize(service, set, LengthUnits.INCHES);
+		double[] size = getPaperSize(service, set, LengthUnits.IN);
 		MediaPrintableArea current = (MediaPrintableArea) getSetting(service, set, MediaPrintableArea.class, true);
 		double x;
 		double y;
@@ -100,7 +100,7 @@ public class PrintUtilities {
 		}
 		x = current.getX(MediaPrintableArea.INCH);
 		y = current.getY(MediaPrintableArea.INCH);
-		return new double[] { units.convert(LengthUnits.INCHES, y), units.convert(LengthUnits.INCHES, x), units.convert(LengthUnits.INCHES, size[1] - (y + current.getHeight(MediaPrintableArea.INCH))), units.convert(LengthUnits.INCHES, size[0] - (x + current.getWidth(MediaPrintableArea.INCH))) };
+		return new double[] { units.convert(LengthUnits.IN, y), units.convert(LengthUnits.IN, x), units.convert(LengthUnits.IN, size[1] - (y + current.getHeight(MediaPrintableArea.INCH))), units.convert(LengthUnits.IN, size[0] - (x + current.getWidth(MediaPrintableArea.INCH))) };
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class PrintUtilities {
 	public static void setPaperMargins(PrintService service, PrintRequestAttributeSet set, double[] margins, LengthUnits units) {
 		double[] size = getPaperSize(service, set, units);
 
-		set.add(new MediaPrintableArea((float) LengthUnits.INCHES.convert(units, margins[1]), (float) LengthUnits.INCHES.convert(units, margins[0]), (float) LengthUnits.INCHES.convert(units, size[0] - (margins[1] + margins[3])), (float) LengthUnits.INCHES.convert(units, size[1] - (margins[0] + margins[2])), Size2DSyntax.INCH));
+		set.add(new MediaPrintableArea((float) LengthUnits.IN.convert(units, margins[1]), (float) LengthUnits.IN.convert(units, margins[0]), (float) LengthUnits.IN.convert(units, size[0] - (margins[1] + margins[3])), (float) LengthUnits.IN.convert(units, size[1] - (margins[0] + margins[2])), Size2DSyntax.INCH));
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class PrintUtilities {
 		if (size == null) {
 			size = MediaSize.NA.LETTER;
 		}
-		return new double[] { units.convert(LengthUnits.INCHES, size.getX(Size2DSyntax.INCH)), units.convert(LengthUnits.INCHES, size.getY(Size2DSyntax.INCH)) };
+		return new double[] { units.convert(LengthUnits.IN, size.getX(Size2DSyntax.INCH)), units.convert(LengthUnits.IN, size.getY(Size2DSyntax.INCH)) };
 	}
 
 	/**
@@ -193,7 +193,7 @@ public class PrintUtilities {
 	 */
 	public static void setPaperSize(PrintService service, PrintRequestAttributeSet set, double[] size, LengthUnits units) {
 		double[] margins = getPaperMargins(service, set, units);
-		MediaSizeName mediaSizeName = MediaSize.findMedia((float) LengthUnits.INCHES.convert(units, size[0]), (float) LengthUnits.INCHES.convert(units, size[1]), Size2DSyntax.INCH);
+		MediaSizeName mediaSizeName = MediaSize.findMedia((float) LengthUnits.IN.convert(units, size[0]), (float) LengthUnits.IN.convert(units, size[1]), Size2DSyntax.INCH);
 
 		if (mediaSizeName == null) {
 			mediaSizeName = MediaSizeName.NA_LETTER;

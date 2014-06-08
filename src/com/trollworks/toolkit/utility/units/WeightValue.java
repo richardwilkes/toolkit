@@ -11,6 +11,7 @@
 
 package com.trollworks.toolkit.utility.units;
 
+import com.trollworks.toolkit.utility.text.Enums;
 import com.trollworks.toolkit.utility.text.Numbers;
 
 /** Holds a value and {@link WeightUnits} pair. */
@@ -21,11 +22,11 @@ public class WeightValue extends UnitsValue<WeightUnits> {
 	 * @return The result.
 	 */
 	public static WeightValue extract(String buffer, boolean localized) {
-		WeightUnits units = WeightUnits.POUNDS;
+		WeightUnits units = WeightUnits.LB;
 		if (buffer != null) {
 			buffer = buffer.trim();
 			for (WeightUnits lu : WeightUnits.values()) {
-				String text = lu.toString();
+				String text = Enums.toId(lu);
 				if (buffer.endsWith(text)) {
 					units = lu;
 					buffer = buffer.substring(0, buffer.length() - text.length());
@@ -57,7 +58,7 @@ public class WeightValue extends UnitsValue<WeightUnits> {
 
 	@Override
 	public WeightUnits getDefaultUnits() {
-		return WeightUnits.POUNDS;
+		return WeightUnits.LB;
 	}
 
 	@Override

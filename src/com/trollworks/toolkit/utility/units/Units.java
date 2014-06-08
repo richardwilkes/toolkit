@@ -40,7 +40,14 @@ public interface Units {
 	/** @return The factor used. */
 	double getFactor();
 
+	/** @return The description, which includes the localized name and the abbreviation. */
 	String getDescription();
+
+	/** @return The localized name. */
+	String getLocalizedName();
+
+	/** @return The abbreviation to use for this unit. */
+	String getAbbreviation();
 
 	/** @return The reference name of the units (not localized). */
 	String name();
