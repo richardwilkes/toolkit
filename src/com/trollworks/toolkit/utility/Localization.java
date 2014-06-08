@@ -21,8 +21,11 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * Loads localized messages into classes. This provides similar functionality to the
@@ -31,12 +34,13 @@ import java.util.Properties;
  */
 @SuppressWarnings("nls")
 public class Localization extends Properties implements PrivilegedAction<Object> {
-	private static final String		EXTENSION		= ".properties";
-	private static final int		MOD_EXPECTED	= Modifier.STATIC;
-	private static final int		MOD_MASK		= MOD_EXPECTED | Modifier.FINAL;
+	private static final String		EXTENSION			= ".properties";
+	private static final int		MOD_EXPECTED		= Modifier.STATIC;
+	private static final int		MOD_MASK			= MOD_EXPECTED | Modifier.FINAL;
 	private static final String[]	SUFFIXES;
 	private Class<?>				mClass;
-	private HashMap<String, Field>	mFields			= new HashMap<>();
+	private Map<String, Field>		mFields				= new HashMap<>();
+	private Set<Object>				mAlreadyProcessed	= new HashSet<>();
 	private String					mBundleName;
 	private boolean					mIsAccessible;
 
@@ -140,18 +144,21 @@ public class Localization extends Properties implements PrivilegedAction<Object>
 
 	@Override
 	public synchronized Object put(Object key, Object value) {
-		Field field = mFields.remove(key);
-		if (field != null) {
-			try {
-				if (!mIsAccessible || (field.getModifiers() & Modifier.PUBLIC) == 0) {
-					field.setAccessible(true);
+		if (!mAlreadyProcessed.contains(key)) {
+			Field field = mFields.remove(key);
+			if (field != null) {
+				try {
+					if (!mIsAccessible || (field.getModifiers() & Modifier.PUBLIC) == 0) {
+						field.setAccessible(true);
+					}
+					field.set(null, value);
+					mAlreadyProcessed.add(key);
+				} catch (Exception e) {
+					System.err.println("Unable to set value of localized message for '" + key + "' in " + mBundleName);
 				}
-				field.set(null, value);
-			} catch (Exception e) {
-				System.err.println("Unable to set value of localized message for '" + key + "' in " + mBundleName);
+			} else {
+				System.err.println("Unused localized message for '" + key + "' in " + mBundleName);
 			}
-		} else {
-			System.err.println("Unused localized message for '" + key + "' in " + mBundleName);
 		}
 		return null;
 	}
