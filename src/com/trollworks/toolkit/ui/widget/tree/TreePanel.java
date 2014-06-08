@@ -1714,11 +1714,15 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 		return null;
 	}
 
-	private static ArrayList<TreeContainerRow> getTreeContainerRows(Collection<TreeRow> rows) {
+	private static ArrayList<TreeContainerRow> getTreeContainerRows(Collection<TreeRow> rows, boolean includeChildren) {
 		ArrayList<TreeContainerRow> result = new ArrayList<>();
 		for (TreeRow row : rows) {
 			if (row instanceof TreeContainerRow) {
-				result.add((TreeContainerRow) row);
+				TreeContainerRow container = (TreeContainerRow) row;
+				result.add(container);
+				if (includeChildren) {
+					container.getRecursiveChildContainers(result);
+				}
 			}
 		}
 		return result;
@@ -1728,10 +1732,10 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	public void keyPressed(KeyEvent event) {
 		switch (event.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
-				setOpen(false, getTreeContainerRows(mSelectedRows));
+				setOpen(false, getTreeContainerRows(mSelectedRows, event.isAltDown()));
 				break;
 			case KeyEvent.VK_RIGHT:
-				setOpen(true, getTreeContainerRows(mSelectedRows));
+				setOpen(true, getTreeContainerRows(mSelectedRows, event.isAltDown()));
 				break;
 			case KeyEvent.VK_UP:
 				keyScroll(selectUp(event.isShiftDown()));
