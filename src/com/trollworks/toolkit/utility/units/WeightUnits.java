@@ -128,9 +128,9 @@ public enum WeightUnits implements Units {
 	static String	LONG_TONS_DESCRIPTION;
 	@Localize("lt")
 	static String	LONG_TONS_TITLE;
-	@Localize("Metric Tons (mt)")
+	@Localize("Metric Tons (t)")
 	static String	METRIC_TONS_DESCRIPTION;
-	@Localize("mt")
+	@Localize("t")
 	static String	METRIC_TONS_TITLE;
 	@Localize("{0} {1}")
 	static String	FORMAT;
