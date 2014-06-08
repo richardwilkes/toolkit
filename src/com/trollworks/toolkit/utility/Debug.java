@@ -61,6 +61,16 @@ public final class Debug {
 	}
 
 	/**
+	 * Extracts a stack trace for the calling site. The stack trace will be formatted such that
+	 * Eclipse's console will make each node into a hyperlink.
+	 *
+	 * @return The formatted stack trace.
+	 */
+	public static final String stackTrace() {
+		return stackTrace(new Exception(), 1, new StringBuilder()).toString();
+	}
+
+	/**
 	 * Extracts a stack trace from the specified {@link Throwable}. The stack trace will be
 	 * formatted such that Eclipse's console will make each node into a hyperlink.
 	 *
