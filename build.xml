@@ -55,7 +55,7 @@
 		<delete file="${toolkit_src_jar}"/>
 	</target>
 	
-	<target name="toolkit" description="Build the toolkit" depends="clean_toolkit">
+	<target name="toolkit" description="Build the toolkit" depends="annotations,clean_toolkit">
 		<mkdir dir="${toolkit_build}"/>
 		<mkdir dir="${generated_src}"/>
 		
