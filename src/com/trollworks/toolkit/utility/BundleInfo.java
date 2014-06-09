@@ -24,14 +24,17 @@ import java.util.jar.Attributes;
 /** Provides information for a bundle of code. */
 public class BundleInfo {
 	@Localize("Development")
+	@Localize(value = "Entwicklung", locale = "de")
 	private static String		DEVELOPMENT;
 	@Localize("Unspecified")
+	@Localize(value = "Nicht angegeben", locale = "de")
 	private static String		UNSPECIFIED;
 	@Localize("%s %s\n%s\n%s")
 	private static String		APP_BANNER_FORMAT;
 	@Localize("Copyright \u00A9 %s by %s")
 	private static String		COPYRIGHT_FORMAT;
 	@Localize("All rights reserved")
+	@Localize(value = "Alle Rechte vorbehalten", locale = "de")
 	private static String		ALL_RIGHTS_RESERVED;
 	@Localize("%s. %s.")
 	private static String		COPYRIGHT_BANNER_FORMAT;
