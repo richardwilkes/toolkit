@@ -11,21 +11,15 @@
 
 package com.trollworks.toolkit.utility;
 
+import com.trollworks.toolkit.annotation.Localizations;
 import com.trollworks.toolkit.annotation.Localize;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 /**
  * Loads localized messages into classes. This provides similar functionality to the
@@ -33,14 +27,11 @@ import java.util.Set;
  * part of Eclipse.
  */
 @SuppressWarnings("nls")
-public class Localization extends Properties implements PrivilegedAction<Object> {
-	private static final String		EXTENSION			= ".properties";
-	private static final int		MOD_EXPECTED		= Modifier.STATIC;
-	private static final int		MOD_MASK			= MOD_EXPECTED | Modifier.FINAL;
-	private static final String[]	SUFFIXES;
+public class Localization implements PrivilegedAction<Object> {
+	private static final int		MOD_EXPECTED	= Modifier.STATIC;
+	private static final int		MOD_MASK		= MOD_EXPECTED | Modifier.FINAL;
+	private static final String[]	LOCALES;
 	private Class<?>				mClass;
-	private Map<String, Field>		mFields				= new HashMap<>();
-	private Set<Object>				mAlreadyProcessed	= new HashSet<>();
 	private String					mBundleName;
 	private boolean					mIsAccessible;
 
@@ -48,15 +39,15 @@ public class Localization extends Properties implements PrivilegedAction<Object>
 		String nl = Locale.getDefault().toString();
 		ArrayList<String> result = new ArrayList<>(4);
 		while (true) {
-			result.add('_' + nl + EXTENSION);
+			result.add(nl);
 			int lastSeparator = nl.lastIndexOf('_');
 			if (lastSeparator == -1) {
 				break;
 			}
 			nl = nl.substring(0, lastSeparator);
 		}
-		result.add(EXTENSION);
-		SUFFIXES = result.toArray(new String[result.size()]);
+		result.add("");
+		LOCALES = result.toArray(new String[result.size()]);
 	}
 
 	/**
@@ -96,70 +87,32 @@ public class Localization extends Properties implements PrivilegedAction<Object>
 
 	@Override
 	public Object run() {
-		Field[] fieldArray = mClass.getDeclaredFields();
-		ClassLoader loader = mClass.getClassLoader();
-		String root = mBundleName.replace('.', '/');
-		String[] variants = new String[SUFFIXES.length];
-		int len = fieldArray.length;
-
-		for (int i = 0; i < len; i++) {
-			Field field = fieldArray[i];
-			if (field.isAnnotationPresent(Localize.class) && (field.getModifiers() & MOD_MASK) == MOD_EXPECTED) {
-				mFields.put(field.getName(), field);
-			}
-		}
-
-		for (int i = 0; i < variants.length; i++) {
-			variants[i] = root + SUFFIXES[i];
-		}
-
-		for (String variant : variants) {
-			try (InputStream input = loader == null ? ClassLoader.getSystemResourceAsStream(variant) : loader.getResourceAsStream(variant);) {
-				if (input != null) {
-					load(input);
-				}
-			} catch (IOException exception) {
-				System.err.println("Error: Unable to load " + variant); //$NON-NLS-1$
-				exception.printStackTrace(System.err);
-			} finally {
-				clear();
-			}
-		}
-
-		for (Field field : mFields.values()) {
-			String name = field.getName();
-			System.err.println("Missing localized message for '" + name + "' in " + mBundleName);
-			try {
-				if (!mIsAccessible || (field.getModifiers() & Modifier.PUBLIC) == 0) {
-					field.setAccessible(true);
-				}
-				field.set(null, "*!*" + name + "*!*");
-			} catch (Exception exception) {
-				System.err.println("Unable to set default value of localized message for '" + name + "' in " + mBundleName);
-			}
-		}
-
-		return null;
-	}
-
-	@Override
-	public synchronized Object put(Object key, Object value) {
-		if (!mAlreadyProcessed.contains(key)) {
-			Field field = mFields.remove(key);
-			if (field != null) {
+		for (Field field : mClass.getDeclaredFields()) {
+			if ((field.isAnnotationPresent(Localize.class) || field.isAnnotationPresent(Localizations.class)) && (field.getModifiers() & MOD_MASK) == MOD_EXPECTED) {
 				try {
 					if (!mIsAccessible || (field.getModifiers() & Modifier.PUBLIC) == 0) {
 						field.setAccessible(true);
 					}
-					field.set(null, value);
-					mAlreadyProcessed.add(key);
+					field.set(null, getMessage(field));
 				} catch (Exception e) {
-					System.err.println("Unable to set value of localized message for '" + key + "' in " + mBundleName);
+					System.err.println("Unable to set value of localized message for '" + field.getName() + "' in " + mBundleName);
 				}
-			} else {
-				System.err.println("Unused localized message for '" + key + "' in " + mBundleName);
 			}
 		}
 		return null;
+	}
+
+	private static String getMessage(Field field) {
+		Localize[] annotations = field.getAnnotationsByType(Localize.class);
+		if (annotations.length > 0) {
+			for (String locale : LOCALES) {
+				for (Localize one : annotations) {
+					if (locale.equals(one.locale())) {
+						return one.value();
+					}
+				}
+			}
+		}
+		return "*!*" + field.getName() + "*!*";
 	}
 }

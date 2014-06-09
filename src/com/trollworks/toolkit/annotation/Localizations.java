@@ -12,19 +12,14 @@
 package com.trollworks.toolkit.annotation;
 
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/** Marks a field for localization. */
+/** The localizations available for a field. */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-@Repeatable(Localizations.class)
-public @interface Localize {
-	/** @return The locale of this message. An empty string is the fallback locale. */
-	String locale() default "";
-
-	/** @return The localized message. */
-	String value();
+public @interface Localizations {
+	/** @return The localizations available for a field. */
+	Localize[] value();
 }
