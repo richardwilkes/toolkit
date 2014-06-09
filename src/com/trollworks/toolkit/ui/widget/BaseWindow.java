@@ -27,7 +27,6 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 /** The base window class for the application windows. */
-public class BaseWindow extends JFrame implements WindowListener, WindowFocusListener {
+public class BaseWindow extends JFrame implements WindowListener {
 	private static final String	WINDOW_PREFERENCES			= "WindowPrefs";	//$NON-NLS-1$
 	private static final int	WINDOW_PREFERENCES_VERSION	= 3;
 	private static final String	KEY_LOCATION				= "Location";		//$NON-NLS-1$
@@ -125,7 +124,6 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 		((JComponent) getContentPane()).setDoubleBuffered(true);
 		getToolkit().setDynamicLayout(true);
 		addWindowListener(this);
-		addWindowFocusListener(this);
 		WindowSizeEnforcer.monitor(this);
 	}
 
@@ -224,16 +222,6 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 	public void windowOpened(WindowEvent event) {
 		// On windows, this is necessary to prevent the window from opening in the background.
 		toFront();
-	}
-
-	@Override
-	public void windowGainedFocus(WindowEvent event) {
-		// Nothing to do...
-	}
-
-	@Override
-	public void windowLostFocus(WindowEvent event) {
-		UIUtilities.forceFocusToAccept();
 	}
 
 	/**
