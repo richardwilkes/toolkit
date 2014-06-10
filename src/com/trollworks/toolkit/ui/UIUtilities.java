@@ -25,6 +25,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
@@ -402,8 +403,15 @@ public class UIUtilities {
 			focus = focusManager.getFocusOwner();
 		}
 		if (focus != null) {
-			focusManager.dispatchEvent(new FocusEvent(focus, FocusEvent.FOCUS_LOST, false, null));
-			focusManager.dispatchEvent(new FocusEvent(focus, FocusEvent.FOCUS_GAINED, false, null));
+			FocusListener[] listeners = focus.getListeners(FocusListener.class);
+			FocusEvent event = new FocusEvent(focus, FocusEvent.FOCUS_LOST, false, null);
+			for (FocusListener listener : listeners) {
+				listener.focusLost(event);
+			}
+			event = new FocusEvent(focus, FocusEvent.FOCUS_GAINED, false, null);
+			for (FocusListener listener : listeners) {
+				listener.focusGained(event);
+			}
 		}
 	}
 

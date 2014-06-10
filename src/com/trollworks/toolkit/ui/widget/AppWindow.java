@@ -31,14 +31,13 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JToolBar;
 
 /** Provides a base OS-level window. */
-public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undoable, WindowFocusListener {
+public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undoable {
 	private static StdImageSet					DEFAULT_WINDOW_ICONSET	= null;
 	private static final ArrayList<AppWindow>	WINDOW_LIST				= new ArrayList<>();
 	private StdImage							mMenuIcon;
@@ -101,7 +100,6 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 			setMenuIcon(iconset.getImage(16));
 		}
 		mUndoManager = new StdUndoManager();
-		addWindowFocusListener(this);
 		enableEvents(AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
 		WINDOW_LIST.add(this);
 	}
@@ -224,11 +222,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 				window.setAppWindow(this);
 			}
 		}
-	}
-
-	@Override
-	public void windowLostFocus(WindowEvent event) {
-		// Unused
+		super.windowGainedFocus(event);
 	}
 
 	/** @return The window's {@link StdUndoManager}. */
