@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui.widget;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.MouseCapture;
 import com.trollworks.toolkit.ui.UIUtilities;
+import com.trollworks.toolkit.ui.image.StdImage;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -27,18 +28,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import javax.swing.Icon;
 import javax.swing.JComponent;
 
 public class IconButton extends JComponent implements MouseListener, MouseMotionListener, ComponentListener {
 	private static final int	MARGIN	= 4;
-	private Icon				mIcon;
+	private StdImage			mIcon;
 	private Runnable			mClickFunction;
 	private boolean				mInMouseDown;
 	private boolean				mPressed;
 	private boolean				mShowBorder;
 
-	public IconButton(Icon icon, String tooltip, Runnable clickFunction) {
+	public IconButton(StdImage icon, String tooltip, Runnable clickFunction) {
 		setOpaque(false);
 		setBackground(null);
 		setToolTipText(tooltip);
@@ -50,7 +50,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 		addComponentListener(this);
 	}
 
-	public void setIcon(Icon icon) {
+	public void setIcon(StdImage icon) {
 		mIcon = icon;
 		UIUtilities.setOnlySize(this, new Dimension(icon.getIconWidth() + MARGIN * 2, icon.getIconHeight() + MARGIN * 2));
 		repaint();
@@ -71,15 +71,20 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 		int y = insets.top;
 		int width = getWidth() - (insets.left + insets.right);
 		int height = getHeight() - (insets.top + insets.bottom);
-		if (mInMouseDown && mPressed) {
-			gc.setColor(Colors.adjustBrightness(getBackground(), -0.2f));
-			gc.fillRect(x, y, width, height);
+		StdImage icon = mIcon;
+		if (isEnabled()) {
+			if (mInMouseDown && mPressed) {
+				gc.setColor(Colors.adjustBrightness(getBackground(), -0.2f));
+				gc.fillRect(x, y, width, height);
+			}
+			if (mShowBorder || mInMouseDown) {
+				gc.setColor(Colors.adjustBrightness(getBackground(), -0.4f));
+				gc.drawRect(x, y, width - 1, height - 1);
+			}
+		} else {
+			icon = StdImage.createDisabledImage(icon);
 		}
-		if (mShowBorder || mInMouseDown) {
-			gc.setColor(Colors.adjustBrightness(getBackground(), -0.4f));
-			gc.drawRect(x, y, width - 1, height - 1);
-		}
-		mIcon.paintIcon(this, gc, x + (width - mIcon.getIconWidth()) / 2, y + (height - mIcon.getIconHeight()) / 2);
+		icon.paintIcon(this, gc, x + (width - icon.getIconWidth()) / 2, y + (height - icon.getIconHeight()) / 2);
 	}
 
 	private boolean isOver(int x, int y) {
@@ -99,7 +104,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 
 	@Override
 	public void mousePressed(MouseEvent event) {
-		if (!event.isPopupTrigger() && event.getButton() == 1) {
+		if (isEnabled() && !event.isPopupTrigger() && event.getButton() == 1) {
 			mInMouseDown = true;
 			mPressed = true;
 			repaint();
@@ -109,24 +114,28 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 
 	@Override
 	public void mouseDragged(MouseEvent event) {
-		boolean wasPressed = mPressed;
-		mPressed = isOver(event.getX(), event.getY());
-		if (mPressed != wasPressed) {
-			repaint();
+		if (isEnabled()) {
+			boolean wasPressed = mPressed;
+			mPressed = isOver(event.getX(), event.getY());
+			if (mPressed != wasPressed) {
+				repaint();
+			}
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent event) {
-		mouseDragged(event);
-		mShowBorder = mPressed;
-		mInMouseDown = false;
-		MouseCapture.stop(this);
-		if (mPressed) {
-			mPressed = false;
-			click();
+		if (isEnabled()) {
+			mouseDragged(event);
+			mShowBorder = mPressed;
+			mInMouseDown = false;
+			MouseCapture.stop(this);
+			if (mPressed) {
+				mPressed = false;
+				click();
+			}
+			repaint();
 		}
-		repaint();
 	}
 
 	@Override
