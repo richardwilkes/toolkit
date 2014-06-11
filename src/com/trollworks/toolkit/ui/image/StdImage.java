@@ -51,10 +51,13 @@ import org.w3c.dom.Node;
 /** Provides a {@link BufferedImage} that implements Swing's {@link Icon} interface for convenience. */
 public class StdImage extends BufferedImage implements Icon {
 	@Localize("Unable to load image")
+	@Localize(locale = "de", value = "Kann Bild nicht laden")
 	private static String							UNABLE_TO_LOAD_IMAGE;
 	@Localize("Invalid angle: %d")
+	@Localize(locale = "de", value = "Ungültiger Winkel: %d")
 	private static String							INVALID_ANGLE;
 	@Localize("Invalid transparency")
+	@Localize(locale = "de", value = "Ungültige Transparenz")
 	private static String							INVALID_TRANSPARENCY;
 
 	static {

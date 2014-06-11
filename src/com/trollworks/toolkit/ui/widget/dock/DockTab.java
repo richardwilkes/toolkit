@@ -50,6 +50,7 @@ import javax.swing.border.EmptyBorder;
 /** Provides a tab that contains the {@link Dockable}'s icon, title, and close button, if any. */
 public class DockTab extends JPanel implements ContainerListener, MouseListener, DragGestureListener, DataModifiedListener, Comparable<DockTab> {
 	@Localize("Close")
+	@Localize(locale = "de", value = "Schließen")
 	private static String	CLOSE_TOOLTIP;
 
 	static {

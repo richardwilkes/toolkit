@@ -23,6 +23,7 @@ import java.awt.event.WindowEvent;
 /** Provides the "Close" command. */
 public class CloseCommand extends Command {
 	@Localize("Close")
+	@Localize(locale = "de", value = "Schließen")
 	private static String				CLOSE;
 
 	static {

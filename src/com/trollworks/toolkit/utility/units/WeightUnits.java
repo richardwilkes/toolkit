@@ -70,18 +70,25 @@ public enum WeightUnits implements Units {
 	};
 
 	@Localize("Ounces")
+	@Localize(locale = "de", value = "Unzen")
 	static String	OUNCES_DESCRIPTION;
 	@Localize("Pounds")
+	@Localize(locale = "de", value = "Pfund")
 	static String	POUNDS_DESCRIPTION;
 	@Localize("Grams")
+	@Localize(locale = "de", value = "Gramm")
 	static String	GRAMS_DESCRIPTION;
 	@Localize("Kilograms")
+	@Localize(locale = "de", value = "Kilogramm")
 	static String	KILOGRAMS_DESCRIPTION;
 	@Localize("Short Tons")
+	@Localize(locale = "de", value = "Amerikanische Tonnen")
 	static String	SHORT_TONS_DESCRIPTION;
 	@Localize("Long Tons")
+	@Localize(locale = "de", value = "Britische Tonnen")
 	static String	LONG_TONS_DESCRIPTION;
 	@Localize("Metric Tons")
+	@Localize(locale = "de", value = "Tonnen")
 	static String	METRIC_TONS_DESCRIPTION;
 	@Localize("{0} {1}")
 	static String	FORMAT;

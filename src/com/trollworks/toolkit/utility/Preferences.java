@@ -34,6 +34,7 @@ import java.util.Properties;
 /** Provides the implementation of preferences. */
 public class Preferences {
 	@Localize("Global preferences have not been initialized yet!")
+	@Localize(locale = "de", value = "Globale Einstellungen wurden noch nicht initialisiert!")
 	private static String		UNINITIALIZED;
 
 	static {

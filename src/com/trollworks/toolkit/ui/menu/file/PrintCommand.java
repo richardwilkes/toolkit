@@ -32,8 +32,10 @@ import java.util.concurrent.TimeUnit;
 /** Provides the "Print..." command. */
 public class PrintCommand extends Command implements PrintFilesHandler {
 	@Localize("Print\u2026")
+	@Localize(locale = "de", value = "Drucken\u2026")
 	private static String				PRINT;
 	@Localize("There is no system printer available.")
+	@Localize(locale = "de", value = "Es wurde kein Standard-Drucker gefunden.")
 	private static String				NO_PRINTER_SELECTED;
 
 	static {

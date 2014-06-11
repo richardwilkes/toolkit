@@ -24,10 +24,13 @@ import java.io.File;
 /** Provides the "Save As..." command. */
 public class ExportToCommand extends Command {
 	@Localize("Export To HTML\u2026")
+	@Localize(locale = "de", value = "Exportiere als HTML\u2026")
 	private static String				HTML;
 	@Localize("Export To PDF\u2026")
+	@Localize(locale = "de", value = "Exportiere als PDF\u2026")
 	private static String				PDF;
-	@Localize("Export to PNG\\u2026")
+	@Localize("Export to PNG\u2026")
+	@Localize(locale = "de", value = "Exportiere als PNG\u2026")
 	private static String				PNG;
 
 	static {

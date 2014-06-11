@@ -31,8 +31,10 @@ import javax.swing.text.JTextComponent;
 /** Utilities for use with windows. */
 public class WindowUtils {
 	@Localize("Error")
+	@Localize(locale = "de", value = "Fehler")
 	private static String	ERROR;
 	@Localize("Warning")
+	@Localize(locale = "de", value = "Warnung")
 	private static String	WARNING;
 
 	static {

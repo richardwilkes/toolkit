@@ -25,6 +25,7 @@ import java.io.File;
 /** Provides the "Save As..." command. */
 public class SaveAsCommand extends Command {
 	@Localize("Save As\u2026")
+	@Localize(locale = "de", value = "Speichern unter\u2026")
 	private static String				SAVE_AS;
 
 	static {

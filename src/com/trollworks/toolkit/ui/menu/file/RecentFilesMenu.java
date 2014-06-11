@@ -29,6 +29,7 @@ import javax.swing.event.MenuListener;
 /** The standard "Recent Files" menu. */
 public class RecentFilesMenu extends JMenu implements MenuListener {
 	@Localize("Recent Files")
+	@Localize(locale = "de", value = "Zuletzt verwendete Dateien")
 	private static String					RECENT_FILES;
 
 	static {

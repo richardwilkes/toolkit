@@ -53,24 +53,34 @@ import javax.swing.text.DefaultFormatterFactory;
 /** Provides the basic page setup panel. */
 public class PageSetupPanel extends JPanel implements ActionListener {
 	@Localize("Printer")
+	@Localize(locale = "de", value = "Drucker")
 	private static String						PRINTER;
 	@Localize("Paper Type")
+	@Localize(locale = "de", value = "Papierformat")
 	private static String						PAPER_TYPE;
 	@Localize("Orientation")
+	@Localize(locale = "de", value = "Ausrichtung")
 	private static String						ORIENTATION;
 	@Localize("Sides")
+	@Localize(locale = "de", value = "Beidseitig")
 	private static String						SIDES;
 	@Localize("Number Up")
+	@Localize(locale = "de", value = "Seiten pro Blatt")
 	private static String						NUMBER_UP;
 	@Localize("Color")
+	@Localize(locale = "de", value = "Farbmodus")
 	private static String						CHROMATICITY;
 	@Localize("Quality")
+	@Localize(locale = "de", value = "Qualität")
 	private static String						QUALITY;
 	@Localize("Resolution")
+	@Localize(locale = "de", value = "Auflösung")
 	private static String						RESOLUTION;
 	@Localize(" dpi")
+	@Localize(locale = "de", value = " DPI")
 	private static String						DPI;
 	@Localize("<html>Margins<br>(inches)")
+	@Localize(locale = "de", value = "<html>Ränder<br>(in Zoll)")
 	private static String						MARGINS;
 
 	static {

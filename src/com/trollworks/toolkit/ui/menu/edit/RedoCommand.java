@@ -23,6 +23,7 @@ import javax.swing.undo.UndoManager;
 /** Provides the "Redo" command. */
 public class RedoCommand extends Command {
 	@Localize("Can't Redo")
+	@Localize(locale = "de", value = "Kann nicht Wiederherstellen")
 	private static String			CANT_REDO;
 
 	static {

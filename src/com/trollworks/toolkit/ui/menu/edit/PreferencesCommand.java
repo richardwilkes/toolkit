@@ -25,6 +25,7 @@ import java.awt.event.KeyEvent;
 /** Provides the "Preferences..." command. */
 public class PreferencesCommand extends Command implements PreferencesHandler {
 	@Localize("Preferences\u2026")
+	@Localize(locale = "de", value = "Einstellungen\u2026")
 	private static String					PREFERENCES;
 
 	static {

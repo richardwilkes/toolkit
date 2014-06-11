@@ -25,8 +25,10 @@ import java.awt.event.KeyEvent;
 /** Provides the "Page Setup..." command. */
 public class PageSetupCommand extends Command {
 	@Localize("Page Setup\u2026")
+	@Localize(locale = "de", value = "Seite einrichten\u2026")
 	private static String					PAGE_SETUP;
 	@Localize("There is no system printer available.")
+	@Localize(locale = "de", value = "Es wurde kein Standard-Drucker gefunden.")
 	private static String					NO_PRINTER_SELECTED;
 
 	static {

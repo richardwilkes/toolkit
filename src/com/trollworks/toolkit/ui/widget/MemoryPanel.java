@@ -41,8 +41,10 @@ import javax.swing.border.BevelBorder;
 /** Displays the current memory usage. */
 public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, MouseListener {
 	@Localize("{0}MB used of {1}MB")
+	@Localize(locale = "de", value = "{0}MiB von {1}MiB benutzt")
 	private static String		FORMAT;
 	@Localize("Click to run garbage collection")
+	@Localize(locale = "de", value = "Klicken, um eine Speicherbereinigung durchzuführen")
 	private static String		TOOLTIP;
 
 	static {

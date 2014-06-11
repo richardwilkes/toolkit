@@ -41,6 +41,7 @@ import javax.swing.UIManager;
 /** Provides general graphics settings and manipulation. */
 public class GraphicsUtilities {
 	@Localize("There is no valid graphics display.")
+	@Localize(locale = "de", value = "Kein gültiges Grafikausgabegerät gefunden.")
 	private static String			HEADLESS;
 
 	static {

@@ -24,6 +24,7 @@ import javax.swing.text.JTextComponent;
 /** Provides the "Cut" command. */
 public class CutCommand extends Command {
 	@Localize("Cut")
+	@Localize(locale = "de", value = "Ausschneiden")
 	private static String			CUT;
 
 	static {

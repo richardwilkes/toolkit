@@ -31,8 +31,10 @@ import java.awt.event.KeyEvent;
 /** Provides the "Quit"/"Exit" command. */
 public class QuitCommand extends Command implements QuitHandler {
 	@Localize("Quit")
+	@Localize(locale = "de", value = "Beenden")
 	private static String			QUIT;
 	@Localize("Exit")
+	@Localize(locale = "de", value = "Beenden")
 	private static String			EXIT;
 
 	static {

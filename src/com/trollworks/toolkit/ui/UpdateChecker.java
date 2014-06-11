@@ -34,15 +34,20 @@ import javax.swing.JOptionPane;
 
 /** Provides a background check for updates. */
 public class UpdateChecker implements Runnable {
-	@Localize("Checking for updates")
+	@Localize("Checking for updates\u2026")
+	@Localize(locale = "de", value = "Prüfe auf neue Version\u2026")
 	private static String		CHECKING;
-	@Localize("There are no updates available")
+	@Localize("There are no updates available.")
+	@Localize(locale = "de", value = "Programm ist aktuell.")
 	private static String		UP_TO_DATE;
-	@Localize("Version %s is available")
+	@Localize("Version %s is available.")
+	@Localize(locale = "de", value = "Version %s ist verfügbar.")
 	private static String		OUT_OF_DATE;
 	@Localize("Update")
+	@Localize(locale = "de", value = "Aktualisieren")
 	private static String		UPDATE_TITLE;
 	@Localize("Ignore")
+	@Localize(locale = "de", value = "Ignorieren")
 	private static String		IGNORE_TITLE;
 
 	static {
@@ -109,6 +114,7 @@ public class UpdateChecker implements Runnable {
 				RESULT = UP_TO_DATE;
 				return;
 			}
+			RESULT = CHECKING;
 			long versionAvailable = currentVersion;
 			mMode = 2;
 			try {

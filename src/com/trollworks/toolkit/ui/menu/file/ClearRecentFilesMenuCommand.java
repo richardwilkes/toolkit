@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 /** Provides the "Clear" command in the {@link RecentFilesMenu}. */
 public class ClearRecentFilesMenuCommand extends Command {
 	@Localize("Clear")
+	@Localize(locale = "de", value = "Liste löschen")
 	private static String							CLEAR;
 
 	static {

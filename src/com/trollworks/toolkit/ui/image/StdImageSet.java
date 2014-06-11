@@ -33,10 +33,13 @@ import java.util.Map;
 /** Provides a set of images at different resolutions. */
 public class StdImageSet implements Comparator<StdImage> {
 	@Localize("Invalid ICNS")
+	@Localize(locale = "de", value = "Fehlerhafte ICNS-Datei")
 	private static String					INVALID_ICNS;
 	@Localize("Invalid ICO")
+	@Localize(locale = "de", value = "Fehlerhafte ICO-Datei")
 	private static String					INVALID_ICO;
 	@Localize("Unable to create PNG")
+	@Localize(locale = "de", value = "Kann PNG-Datei nicht erstellen")
 	private static String					UNABLE_TO_CREATE_PNG;
 
 	static {

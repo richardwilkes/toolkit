@@ -37,24 +37,33 @@ public class AdjustFileNotice {
 	@Localize("PATH")
 	private static String				PATH;
 	@Localize("The path containing the Java files to process. May be a directory or a file.")
+	@Localize(locale = "de", value = "Der Pfad, in dem die zu Verändernden Java-Dateien sind. Kann ein Verzeichnis oder eine Datei sein.")
 	private static String				PATH_DESCRIPTION;
 	@Localize("You must specify a path with the %s option.\n")
+	@Localize(locale = "de", value = "Ein Pfad muss mittels der Option %s angeben werden.\n")
 	private static String				PATH_MUST_BE_SPECIFIED;
 	@Localize("TEMPLATE")
 	private static String				TEMPLATE;
 	@Localize("The template to use for the new file header. All occurrences of $YEAR$ within the template will be replaced with the current year. If this option is not specified, the default template for the toolkit will be used.")
+	@Localize(locale = "de", value = "Die Vorlage für den neuen Dateikopf. Jedes Auftreten von $YEAR$ in der Vorlage wird durch das aktuelle Jahr ersetzt. Wenn diese Option nicht gesetzt wird, wird die Standard-Vorlage des Toolkit benutzt.")
 	private static String				TEMPLATE_DESCRIPTION;
 	@Localize("Unexpected argument: ")
+	@Localize(locale = "de", value = "Unerwartetes Argument: ")
 	private static String				UNEXPECTED_ARGUMENT;
 	@Localize("\nAdjusted %,d %s\n")
+	@Localize(locale = "de", value = "\nErgebnis: %,d %s verändert\n")
 	private static String				RESULT;
 	@Localize("file")
+	@Localize(locale = "de", value = "Datei")
 	private static String				FILE;
 	@Localize("files")
+	@Localize(locale = "de", value = "Dateien")
 	private static String				FILES;
 	@Localize("Adjusted %s\n")
+	@Localize(locale = "de", value = "Verändert: %s\n")
 	private static String				ADJUSTED;
 	@Localize("Skipped %s\n")
+	@Localize(locale = "de", value = "Übersprungen: %s\n")
 	private static String				SKIPPED;
 
 	static {

@@ -19,8 +19,10 @@ import javax.swing.undo.CompoundEdit;
 /** Provides a convenient way to collect multiple undos into a single undo. */
 public class MultipleUndo extends CompoundEdit {
 	@Localize("Redo ")
+	@Localize(locale = "de", value = "Wiederherstellen: ")
 	private static String	REDO_PREFIX;
 	@Localize("Undo ")
+	@Localize(locale = "de", value = "Rückgängig: ")
 	private static String	UNDO_PREFIX;
 
 	static {

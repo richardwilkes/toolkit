@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 /** Provides the "Open Item" command. */
 public class OpenItemCommand extends Command {
 	@Localize("Open Item")
+	@Localize(locale = "de", value = "Element öffnen")
 	private static String				OPEN_ITEM;
 
 	static {

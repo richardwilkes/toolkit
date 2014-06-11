@@ -26,6 +26,7 @@ import javax.swing.text.JTextComponent;
 /** Provides the "Delete" command. */
 public class DeleteCommand extends Command {
 	@Localize("Delete")
+	@Localize(locale = "de", value = "Löschen")
 	private static String				DELETE;
 
 	static {

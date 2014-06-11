@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 /** Provides the "About" command. */
 public class AboutCommand extends Command implements AboutHandler {
 	@Localize("About {0}")
+	@Localize(locale = "de", value = "Über {0}")
 	private static String				ABOUT;
 
 	static {

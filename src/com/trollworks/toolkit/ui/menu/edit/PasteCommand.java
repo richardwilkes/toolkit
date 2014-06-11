@@ -25,6 +25,7 @@ import javax.swing.text.JTextComponent;
 /** Provides the "Paste" command. */
 public class PasteCommand extends Command {
 	@Localize("Paste")
+	@Localize(locale = "de", value = "Einfügen")
 	private static String				PASTE;
 
 	static {

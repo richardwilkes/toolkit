@@ -518,6 +518,7 @@ public class QuadTree<T extends Bounds> {
 
 	static class Node<T extends Bounds> implements Bounds {
 		@Localize("Objects must have a width and height greater than zero.")
+		@Localize(locale = "de", value = "Objekte müssen eine Höhe und Breite größer als Null haben.")
 		private static String	MUST_HAVE_SIZE_GREATER_THAN_ZERO;
 		private int				mX;
 		private int				mY;

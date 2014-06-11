@@ -17,25 +17,38 @@ import java.text.DecimalFormatSymbols;
 
 /** Various number utilities. */
 public class Numbers {
+	// In German, you say "Erster" if the word is referring to a male, and "Erste" if it is
+	// referring to a female. Plural forms not counted. Cases not counted. German is complicated.
+	// This way it is an universal form and should be ok.
 	@Localize("First")
+	@Localize(locale = "de", value = "Erste(r)")
 	private static String			FIRST;
 	@Localize("Second")
+	@Localize(locale = "de", value = "Zweite(r)")
 	private static String			SECOND;
 	@Localize("Third")
+	@Localize(locale = "de", value = "Dritte(r)")
 	private static String			THIRD;
 	@Localize("Fourth")
+	@Localize(locale = "de", value = "Vierte(r)")
 	private static String			FOURTH;
 	@Localize("Fifth")
+	@Localize(locale = "de", value = "Fünfte(r)")
 	private static String			FIFTH;
 	@Localize("Sixth")
+	@Localize(locale = "de", value = "Sechste(r)")
 	private static String			SIXTH;
 	@Localize("Seventh")
+	@Localize(locale = "de", value = "Siebte(r)")
 	private static String			SEVENTH;
 	@Localize("Eighth")
+	@Localize(locale = "de", value = "Achte(r)")
 	private static String			EIGHTH;
 	@Localize("Ninth")
+	@Localize(locale = "de", value = "Neunte(r)")
 	private static String			NINTH;
 	@Localize("Tenth")
+	@Localize(locale = "de", value = "Zehnte(r)")
 	private static String			TENTH;
 
 	static {

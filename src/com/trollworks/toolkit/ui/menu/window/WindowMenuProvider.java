@@ -29,6 +29,7 @@ import javax.swing.JMenu;
 /** Provides the standard "Window" menu. */
 public class WindowMenuProvider implements MenuProvider {
 	@Localize("Window")
+	@Localize(locale = "de", value = "Fenster")
 	private static String		WINDOW;
 
 	static {

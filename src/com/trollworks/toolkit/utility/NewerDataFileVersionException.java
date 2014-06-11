@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 /** An exception for data files that are too new to be loaded. */
 public class NewerDataFileVersionException extends IOException {
 	@Localize("The data file is from a newer version of {0} and cannot be loaded.")
+	@Localize(locale = "de", value = "Die Datendatei ist von einer neueren Version von {0} und kann nicht geladen werden.")
 	private static String	VERSION_NEWER;
 
 	static {

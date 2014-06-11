@@ -29,6 +29,7 @@ import javax.print.event.PrintServiceAttributeListener;
 
 class DummyPrintService implements PrintService {
 	@Localize("No printer is available!")
+	@Localize(locale = "de", value = "Kein Drucker verfügbar!")
 	private static String	NO_PRINTER_AVAILABLE;
 
 	static {

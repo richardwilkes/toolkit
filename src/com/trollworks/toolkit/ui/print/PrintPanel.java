@@ -36,14 +36,19 @@ import javax.swing.text.DefaultFormatterFactory;
 /** Provides the basic print panel. */
 public class PrintPanel extends PageSetupPanel {
 	@Localize("Copies")
+	@Localize(locale = "de", value = "Kopien")
 	private static String	COPIES;
 	@Localize("Print Range")
+	@Localize(locale = "de", value = "Seiten")
 	private static String	PAGE_RANGE;
 	@Localize("All")
+	@Localize(locale = "de", value = "alle")
 	private static String	ALL;
 	@Localize("Pages")
+	@Localize(locale = "de", value = "von Seite")
 	private static String	PAGES;
 	@Localize("to")
+	@Localize(locale = "de", value = "bis")
 	private static String	TO;
 
 	static {

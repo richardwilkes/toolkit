@@ -31,6 +31,7 @@ import java.io.IOException;
 /** Provides the "Open..." command. */
 public class OpenCommand extends Command implements OpenFilesHandler {
 	@Localize("Open\u2026")
+	@Localize(locale = "de", value = "Öffnen\u2026")
 	private static String			OPEN;
 
 	static {

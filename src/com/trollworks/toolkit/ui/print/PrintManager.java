@@ -43,14 +43,19 @@ import javax.swing.JOptionPane;
 /** Manages printing. */
 public class PrintManager {
 	@Localize("Printing failed!")
+	@Localize(locale = "de", value = "Druck fehlgeschlagen!")
 	private static String					PRINTING_FAILED;
 	@Localize("No printer is available!")
+	@Localize(locale = "de", value = "Kein Drucker verfügbar!")
 	private static String					NO_PRINTER_AVAILABLE;
 	@Localize("Unable to switch printers!")
+	@Localize(locale = "de", value = "Kann Drucker nicht wechseln!")
 	private static String					UNABLE_TO_SWITCH_PRINTERS;
 	@Localize("Page Setup")
+	@Localize(locale = "de", value = "Seite einrichten")
 	private static String					PAGE_SETUP_TITLE;
 	@Localize("Print")
+	@Localize(locale = "de", value = "Drucken")
 	private static String					PRINT_TITLE;
 
 	static {

@@ -23,6 +23,7 @@ import javax.swing.undo.UndoManager;
 /** Provides the "Undo" command. */
 public class UndoCommand extends Command {
 	@Localize("Can't Undo")
+	@Localize(locale = "de", value = "Kann nicht Rückgängig machen")
 	private static String			CANT_UNDO;
 
 	static {

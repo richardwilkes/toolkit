@@ -49,6 +49,7 @@ import javax.swing.UIManager;
 
 public class ShowTabsButton extends JComponent implements MouseListener, MouseMotionListener, ComponentListener, ActionListener {
 	@Localize("Show Hidden Tabs List")
+	@Localize(locale = "de", value = "Zeigt die Liste mit ausgeblendeten Tabs an")
 	private static String		TOOLTIP;
 
 	static {

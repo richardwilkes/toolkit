@@ -24,17 +24,18 @@ import java.util.jar.Attributes;
 /** Provides information for a bundle of code. */
 public class BundleInfo {
 	@Localize("Development")
-	@Localize(value = "Entwicklung", locale = "de")
+	@Localize(locale = "de", value = "Entwicklung")
 	private static String		DEVELOPMENT;
 	@Localize("Unspecified")
-	@Localize(value = "Nicht angegeben", locale = "de")
+	@Localize(locale = "de", value = "Nicht angegeben")
 	private static String		UNSPECIFIED;
 	@Localize("%s %s\n%s\n%s")
 	private static String		APP_BANNER_FORMAT;
 	@Localize("Copyright \u00A9 %s by %s")
+	@Localize(locale = "de", value = "Copyright \u00A9 %2$s, %1$s")
 	private static String		COPYRIGHT_FORMAT;
 	@Localize("All rights reserved")
-	@Localize(value = "Alle Rechte vorbehalten", locale = "de")
+	@Localize(locale = "de", value = "Alle Rechte vorbehalten")
 	private static String		ALL_RIGHTS_RESERVED;
 	@Localize("%s. %s.")
 	private static String		COPYRIGHT_BANNER_FORMAT;

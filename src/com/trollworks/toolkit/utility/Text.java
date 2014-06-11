@@ -24,8 +24,10 @@ public class Text {
 	@Localize("an")
 	private static String		AN;
 	@Localize("was")
+	@Localize(locale = "de", value = "wurde")
 	private static String		WAS;
 	@Localize("were")
+	@Localize(locale = "de", value = "wurden")
 	private static String		WERE;
 
 	static {

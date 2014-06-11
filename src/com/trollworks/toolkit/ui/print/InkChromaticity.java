@@ -44,8 +44,10 @@ public enum InkChromaticity {
 	};
 
 	@Localize("Color")
+	@Localize(locale = "de", value = "Farbe")
 	static String	COLOR_TITLE;
 	@Localize("Monochrome")
+	@Localize(locale = "de", value = "Graustufen")
 	static String	MONOCHROME_TITLE;
 
 	static {

@@ -41,8 +41,10 @@ import javax.swing.border.EmptyBorder;
 /** The header for a {@link DockContainer}. */
 public class DockHeader extends JPanel implements LayoutManager, DropTargetListener {
 	@Localize("Maximize")
+	@Localize(locale = "de", value = "Maximieren")
 	private static String		MAXIMIZE_TOOLTIP;
 	@Localize("Restore")
+	@Localize(locale = "de", value = "Wiederherstellen")
 	private static String		RESTORE_TOOLTIP;
 
 	static {

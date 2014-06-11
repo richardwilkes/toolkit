@@ -24,6 +24,7 @@ import javax.swing.text.JTextComponent;
 /** Provides the "Copy" command. */
 public class CopyCommand extends Command {
 	@Localize("Copy")
+	@Localize(locale = "de", value = "Kopieren")
 	private static String			COPY;
 
 	static {

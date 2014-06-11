@@ -114,26 +114,37 @@ public enum LengthUnits implements Units {
 	};
 
 	@Localize("Points")
+	@Localize(locale = "de", value = "Punkte")
 	static String	POINTS_DESCRIPTION;
 	@Localize("Inches")
+	@Localize(locale = "de", value = "Zoll")
 	static String	INCHES_DESCRIPTION;
 	@Localize("Feet")
+	@Localize(locale = "de", value = "Fuß")
 	static String	FEET_DESCRIPTION;
 	@Localize("Feet & Inches")
+	@Localize(locale = "de", value = "Fuß & Zoll")
 	static String	FEET_AND_INCHES_NAME;
 	@Localize("Feet (') & Inches (\")")
+	@Localize(locale = "de", value = "Fuß (') & Zoll (\")")
 	static String	FEET_AND_INCHES_DESCRIPTION;
 	@Localize("Yards")
+	@Localize(locale = "de", value = "Schritt")
 	static String	YARDS_DESCRIPTION;
 	@Localize("Miles")
+	@Localize(locale = "de", value = "Meilen")
 	static String	MILES_DESCRIPTION;
 	@Localize("Millimeters")
+	@Localize(locale = "de", value = "Millimeter")
 	static String	MILLIMETERS_DESCRIPTION;
 	@Localize("Centimeters")
+	@Localize(locale = "de", value = "Zentimeter")
 	static String	CENTIMETERS_DESCRIPTION;
 	@Localize("Meters")
+	@Localize(locale = "de", value = "Meter")
 	static String	METERS_DESCRIPTION;
 	@Localize("Kilometers")
+	@Localize(locale = "de", value = "Kilometer")
 	static String	KILOMETERS_DESCRIPTION;
 	@Localize("{0} {1}")
 	static String	FORMAT;

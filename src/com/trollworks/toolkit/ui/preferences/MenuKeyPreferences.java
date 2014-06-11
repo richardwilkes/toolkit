@@ -40,14 +40,19 @@ import javax.swing.border.EmptyBorder;
 /** The menu keys preferences panel. */
 public class MenuKeyPreferences extends PreferencePanel implements ActionListener {
 	@Localize("Menu Keys")
+	@Localize(locale = "de", value = "Tastaturkürzel")
 	private static String				MENU_KEYS;
 	@Localize("Type a keystroke\u2026")
+	@Localize(locale = "de", value = "Tastenkombination drücken\u2026")
 	private static String				TYPE_KEYSTROKE;
 	@Localize("Clear")
+	@Localize(locale = "de", value = "Löschen")
 	private static String				CLEAR;
 	@Localize("Accept")
+	@Localize(locale = "de", value = "Setzen")
 	private static String				ACCEPT;
 	@Localize("Reset")
+	@Localize(locale = "de", value = "Standard")
 	private static String				RESET;
 
 	static {

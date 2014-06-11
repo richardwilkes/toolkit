@@ -29,6 +29,7 @@ import javax.swing.UIManager;
 /** The font preferences panel. */
 public class FontPreferences extends PreferencePanel implements ActionListener {
 	@Localize("Fonts")
+	@Localize(locale = "de", value = "Schriftarten")
 	private static String	FONTS;
 
 	static {

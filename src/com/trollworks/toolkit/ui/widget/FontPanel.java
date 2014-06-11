@@ -26,18 +26,25 @@ import javax.swing.JComboBox;
 /** A standard font selection panel. */
 public class FontPanel extends ActionPanel implements ActionListener {
 	@Localize("Plain")
+	@Localize(locale = "de", value = "Normal")
 	private static String			PLAIN;
 	@Localize("Bold")
+	@Localize(locale = "de", value = "Fett")
 	private static String			BOLD;
 	@Localize("Italic")
+	@Localize(locale = "de", value = "Kursiv")
 	private static String			ITALIC;
 	@Localize("Bold Italic")
+	@Localize(locale = "de", value = "Fett Kursiv")
 	private static String			BOLD_ITALIC;
 	@Localize("Changes the font")
+	@Localize(locale = "de", value = "Ändert die Schriftart")
 	private static String			NAME_TOOLTIP;
 	@Localize("Changes the font size")
+	@Localize(locale = "de", value = "Ändert die Schriftgröße")
 	private static String			SIZE_TOOLTIP;
 	@Localize("Changes the font style")
+	@Localize(locale = "de", value = "Ändert den Schriftstil")
 	private static String			STYLE_TOOLTIP;
 
 	static {

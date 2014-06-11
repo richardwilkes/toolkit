@@ -24,6 +24,7 @@ import javax.swing.text.JTextComponent;
 /** Provides the "Select All" command. */
 public class SelectAllCommand extends Command {
 	@Localize("Select All")
+	@Localize(locale = "de", value = "Alles auswählen")
 	private static String					SELECT_ALL;
 
 	static {

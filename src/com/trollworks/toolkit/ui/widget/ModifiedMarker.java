@@ -21,8 +21,10 @@ import javax.swing.JRootPane;
 /** A toolbar marker that tracks the modified state. */
 public class ModifiedMarker extends JLabel implements DataModifiedListener {
 	@Localize("Changes have been made")
+	@Localize(locale = "de", value = "Nicht gespeicherte Änderungen")
 	private static String	MODIFIED;
 	@Localize("No changes have been made")
+	@Localize(locale = "de", value = "Unverändert")
 	private static String	NOT_MODIFIED;
 
 	static {

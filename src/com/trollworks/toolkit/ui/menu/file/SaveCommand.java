@@ -27,8 +27,10 @@ import javax.swing.JOptionPane;
 /** Provides the "Save" command. */
 public class SaveCommand extends Command {
 	@Localize("Save")
+	@Localize(locale = "de", value = "Speichern")
 	private static String			SAVE;
 	@Localize("Save changes to \"{0}\"?")
+	@Localize(locale = "de", value = "Änderungen in \"{0}\" speichern?")
 	private static String			SAVE_CHANGES;
 
 	static {

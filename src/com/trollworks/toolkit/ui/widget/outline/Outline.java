@@ -77,8 +77,10 @@ import javax.swing.undo.UndoableEdit;
 /** A panel that can show both hierarchical and tabular data. */
 public class Outline extends ActionPanel implements OutlineModelListener, ComponentListener, FocusListener, Autoscroll, Scrollable, Deletable, SelectAllCapable, DragGestureListener, DropTargetListener, MouseListener, MouseMotionListener, KeyListener {
 	@Localize("Sort")
+	@Localize(locale = "de", value = "Sortieren")
 	private static String			SORT_UNDO_TITLE;
 	@Localize("Row Drag & Drop")
+	@Localize(locale = "de", value = "Zeile verschieben")
 	private static String			ROW_DROP_UNDO_TITLE;
 
 	static {
@@ -114,10 +116,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	private String					mDefaultConfig;
 	private boolean					mUseBanding;
 	private ArrayList<Column>		mSavedColumns;
-	private StdImage			mDownTriangle;
-	private StdImage			mDownTriangleRoll;
-	private StdImage			mRightTriangle;
-	private StdImage			mRightTriangleRoll;
+	private StdImage				mDownTriangle;
+	private StdImage				mDownTriangleRoll;
+	private StdImage				mRightTriangle;
+	private StdImage				mRightTriangleRoll;
 	private Row						mRollRow;
 	private Row						mDragParentRow;
 	private int						mDragChildInsertIndex;

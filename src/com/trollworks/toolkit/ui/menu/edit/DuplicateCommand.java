@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 /** Provides the "Duplicate" command. */
 public class DuplicateCommand extends Command {
 	@Localize("Duplicate")
+	@Localize(locale = "de", value = "Duplizieren")
 	private static String					DUPLICATE;
 
 	static {
