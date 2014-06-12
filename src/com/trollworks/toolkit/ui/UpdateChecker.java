@@ -37,11 +37,10 @@ public class UpdateChecker implements Runnable {
 	@Localize("Checking for updates\u2026")
 	@Localize(locale = "de", value = "Prüfe auf neue Version\u2026")
 	private static String		CHECKING;
-	@Localize("There are no updates available.")
-	@Localize(locale = "de", value = "Programm ist aktuell.")
+	@Localize("There are no updates available")
+	@Localize(locale = "de", value = "Programm ist aktuell")
 	private static String		UP_TO_DATE;
-	@Localize("Version %s is available.")
-	@Localize(locale = "de", value = "Version %s ist verfügbar.")
+	@Localize("A new version is available")
 	private static String		OUT_OF_DATE;
 	@Localize("Update")
 	@Localize(locale = "de", value = "Aktualisieren")
@@ -54,8 +53,8 @@ public class UpdateChecker implements Runnable {
 		Localization.initialize();
 	}
 
-	private static final String	MODULE					= "Updates";			//$NON-NLS-1$
-	private static final String	LAST_VERSION_KEY		= "LastVersionSeen";	//$NON-NLS-1$
+	private static final String	MODULE					= "Updates";		//$NON-NLS-1$
+	private static final String	LAST_VERSION_KEY		= "LastVersion";	//$NON-NLS-1$
 	private static boolean		NEW_VERSION_AVAILABLE	= false;
 	private static String		RESULT;
 	private static String		UPDATE_URL;
@@ -162,7 +161,7 @@ public class UpdateChecker implements Runnable {
 			if (versionAvailable > currentVersion) {
 				Preferences prefs = Preferences.getInstance();
 				NEW_VERSION_AVAILABLE = true;
-				RESULT = String.format(OUT_OF_DATE, Version.toString(versionAvailable, false));
+				RESULT = OUT_OF_DATE;
 				if (versionAvailable > prefs.getLongValue(MODULE, LAST_VERSION_KEY, BundleInfo.getDefault().getVersion())) {
 					prefs.setValue(MODULE, LAST_VERSION_KEY, versionAvailable);
 					prefs.save();
