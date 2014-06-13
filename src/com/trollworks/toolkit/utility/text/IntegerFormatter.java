@@ -20,6 +20,7 @@ public class IntegerFormatter extends JFormattedTextField.AbstractFormatter {
 	private int		mMinValue;
 	private int		mMaxValue;
 	private boolean	mForceSign;
+	private boolean	mBlankOnZero;
 
 	/**
 	 * Creates a new {@link IntegerFormatter}.
@@ -27,9 +28,7 @@ public class IntegerFormatter extends JFormattedTextField.AbstractFormatter {
 	 * @param forceSign Whether or not a plus sign should be forced for positive numbers.
 	 */
 	public IntegerFormatter(boolean forceSign) {
-		mMinValue = Integer.MIN_VALUE;
-		mMaxValue = Integer.MAX_VALUE;
-		mForceSign = forceSign;
+		this(Integer.MIN_VALUE, Integer.MAX_VALUE, forceSign, false);
 	}
 
 	/**
@@ -40,9 +39,23 @@ public class IntegerFormatter extends JFormattedTextField.AbstractFormatter {
 	 * @param forceSign Whether or not a plus sign should be forced for positive numbers.
 	 */
 	public IntegerFormatter(int minValue, int maxValue, boolean forceSign) {
+		this(minValue, maxValue, forceSign, false);
+	}
+
+	/**
+	 * Creates a new {@link IntegerFormatter}.
+	 *
+	 * @param minValue The minimum value allowed.
+	 * @param maxValue The maximum value allowed.
+	 * @param forceSign Whether or not a plus sign should be forced for positive numbers.
+	 * @param blankOnZero When <code>true</code>, a value of zero resolves to the empty string when
+	 *            calling {@link #valueToString(Object)}.
+	 */
+	public IntegerFormatter(int minValue, int maxValue, boolean forceSign, boolean blankOnZero) {
 		mMinValue = minValue;
 		mMaxValue = maxValue;
 		mForceSign = forceSign;
+		mBlankOnZero = blankOnZero;
 	}
 
 	@Override
@@ -53,6 +66,9 @@ public class IntegerFormatter extends JFormattedTextField.AbstractFormatter {
 	@Override
 	public String valueToString(Object value) throws ParseException {
 		int val = ((Integer) value).intValue();
+		if (mBlankOnZero && val == 0) {
+			return ""; //$NON-NLS-1$
+		}
 		return mForceSign ? Numbers.formatWithForcedSign(val) : Numbers.format(val);
 	}
 }

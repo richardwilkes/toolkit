@@ -19,6 +19,16 @@ import javax.swing.JFormattedTextField;
 
 /** Provides weight field conversion. */
 public class WeightFormatter extends JFormattedTextField.AbstractFormatter {
+	private boolean	mBlankOnZero;
+
+	/**
+	 * @param blankOnZero When <code>true</code>, a value of zero resolves to the empty string when
+	 *            calling {@link #valueToString(Object)}.
+	 */
+	public WeightFormatter(boolean blankOnZero) {
+		mBlankOnZero = blankOnZero;
+	}
+
 	@Override
 	public Object stringToValue(String text) throws ParseException {
 		return WeightValue.extract(text, true);
@@ -26,6 +36,10 @@ public class WeightFormatter extends JFormattedTextField.AbstractFormatter {
 
 	@Override
 	public String valueToString(Object value) throws ParseException {
-		return ((WeightValue) value).toString();
+		WeightValue weight = (WeightValue) value;
+		if (mBlankOnZero && weight.getValue() == 0) {
+			return ""; //$NON-NLS-1$
+		}
+		return weight.toString();
 	}
 }
