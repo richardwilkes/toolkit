@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.menu.file.RecentFilesMenu;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.NewerDataFileVersionException;
@@ -97,6 +98,9 @@ public class StdFileDialog implements FilenameFilter {
 		if (throwable instanceof NewerDataFileVersionException) {
 			WindowUtils.showError(comp, MessageFormat.format(UNABLE_TO_OPEN_WITH_EXCEPTION, name, throwable.getMessage()));
 		} else {
+			if (throwable != null) {
+				Log.error(throwable);
+			}
 			WindowUtils.showError(comp, MessageFormat.format(UNABLE_TO_OPEN, name));
 		}
 	}
