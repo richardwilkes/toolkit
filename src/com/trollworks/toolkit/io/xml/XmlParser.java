@@ -11,9 +11,23 @@
 
 package com.trollworks.toolkit.io.xml;
 
+import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.annotation.XmlAttr;
+import com.trollworks.toolkit.annotation.XmlTag;
+import com.trollworks.toolkit.utility.Introspection;
+import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.Numbers;
 
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
@@ -23,7 +37,20 @@ import javax.xml.stream.XMLStreamReader;
 
 /** Provides simple XML parsing. */
 public class XmlParser implements AutoCloseable {
-	private static final String	SEPARATOR	= "\u0000"; //$NON-NLS-1$
+	@Localize("The tag '%s' is from an older version and cannot be loaded.")
+	@Localize(locale = "de", value = "Das Tag '%s' ist von einer älteren Version und kann nicht geladen werden.")
+	private static String		TOO_OLD;
+	@Localize("The tag '%s' is from a newer version and cannot be loaded.")
+	@Localize(locale = "de", value = "Das Tag '%s' ist von einer neueren Version und kann nicht geladen werden.")
+	private static String		TOO_NEW;
+	@Localize("Unable to create object for collection tag '%s'")
+	private static String		UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION;
+
+	static {
+		Localization.initialize();
+	}
+
+	private static final String	SEPARATOR	= "\u0000";				//$NON-NLS-1$
 	private XMLStreamReader		mReader;
 	private int					mDepth;
 	private String				mMarker;
@@ -37,6 +64,141 @@ public class XmlParser implements AutoCloseable {
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		factory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
 		mReader = factory.createXMLStreamReader(stream);
+	}
+
+	/**
+	 * Load the XML data into an object.
+	 *
+	 * @param obj The object to load the data into.
+	 * @param context The {@link XmlParserContext} to use. Pass in <code>null</code> to have a new
+	 *            one created.
+	 */
+	public void loadTagIntoObject(Object obj, XmlParserContext context) throws XMLStreamException {
+		try {
+			if (context == null) {
+				context = new XmlParserContext(this);
+			}
+			String marker = getMarker();
+			Class<?> tagClass = obj.getClass();
+			int version = getIntegerAttribute(XmlGenerator.ATTR_VERSION, 0);
+			if (version > XmlGenerator.getVersionOfTag(tagClass)) {
+				throw new XMLStreamException(String.format(TOO_NEW, getCurrentTag()), getLocation());
+			}
+			if (version < XmlGenerator.getMinimumLoadableVersionOfTag(tagClass)) {
+				throw new XMLStreamException(String.format(TOO_OLD, getCurrentTag()), getLocation());
+			}
+			if (version != 0) {
+				context.pushVersion(version);
+			}
+			Set<String> unmatchedAttributes = new HashSet<>();
+			for (int i = getAttributeCount(); --i > 0;) {
+				unmatchedAttributes.add(getAttributeName(i));
+			}
+			unmatchedAttributes.remove(XmlGenerator.ATTR_VERSION);
+			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, XmlAttr.class, true)) {
+				Introspection.makeFieldAccessible(field);
+				XmlAttr attr = field.getAnnotation(XmlAttr.class);
+				String name = attr.value();
+				unmatchedAttributes.remove(name);
+				Class<?> type = field.getType();
+				if (type == boolean.class) {
+					field.setBoolean(obj, isAttributeSet(name, false));
+				} else if (type == int.class) {
+					field.setInt(obj, getIntegerAttribute(name, 0));
+				} else if (type == long.class) {
+					field.setLong(obj, getLongAttribute(name, 0));
+				} else if (type == short.class) {
+					field.setShort(obj, (short) getIntegerAttribute(name, 0));
+				} else if (type == double.class) {
+					field.setDouble(obj, getDoubleAttribute(name, 0.0));
+				} else if (type == float.class) {
+					field.setFloat(obj, (float) getDoubleAttribute(name, 0.0));
+				} else if (type == char.class) {
+					String charStr = getAttribute(name);
+					field.setChar(obj, charStr == null || charStr.isEmpty() ? 0 : charStr.charAt(0));
+				} else if (type == String.class) {
+					field.set(obj, getAttribute(name, "")); //$NON-NLS-1$
+				} else {
+					Constructor<?> constructor = type.getConstructor(String.class);
+					field.set(obj, constructor.newInstance(getAttribute(name, ""))); //$NON-NLS-1$
+				}
+			}
+			if (obj instanceof XmlParserAssistant) {
+				((XmlParserAssistant) obj).xmlAttributesLoaded(context, unmatchedAttributes);
+			}
+			Map<String, Field> subTags = new HashMap<>();
+			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, XmlTag.class, true)) {
+				subTags.put(field.getAnnotation(XmlTag.class).value(), field);
+			}
+			String tag;
+			while ((tag = nextTag(marker)) != null) {
+				Field field = subTags.get(tag);
+				if (field != null) {
+					Class<?> type = field.getType();
+					if (Collection.class.isAssignableFrom(type)) {
+						loadCollection(obj, context, field);
+					} else {
+						Object fieldObj = null;
+						if (obj instanceof XmlParserAssistant) {
+							fieldObj = ((XmlParserAssistant) obj).createObjectForXmlTag(context, tag);
+						}
+						if (fieldObj == null) {
+							fieldObj = type.newInstance();
+						}
+						loadTagIntoObject(fieldObj, context);
+						field.set(obj, fieldObj);
+					}
+				} else if (obj instanceof XmlParserAssistant) {
+					((XmlParserAssistant) obj).processUnmatchedXmlTag(context, tag);
+				} else {
+					skip();
+				}
+			}
+			if (obj instanceof XmlParserAssistant) {
+				((XmlParserAssistant) obj).xmlLoaded(context);
+			}
+			if (version != 0) {
+				context.popVersion();
+			}
+		} catch (XMLStreamException exception) {
+			throw exception;
+		} catch (Exception exception) {
+			throw new XMLStreamException(exception);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void loadCollection(Object obj, XmlParserContext context, Field field) throws XMLStreamException, IllegalArgumentException, IllegalAccessException, InstantiationException {
+		Object collection = null;
+		String marker = getMarker();
+		String tag;
+		while ((tag = nextTag(marker)) != null) {
+			Object fieldObj = null;
+			if (obj instanceof XmlParserAssistant) {
+				fieldObj = ((XmlParserAssistant) obj).createObjectForXmlTag(context, tag);
+			}
+			if (fieldObj == null) {
+				throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), getLocation());
+			}
+			loadTagIntoObject(fieldObj, context);
+			if (collection == null) {
+				collection = field.get(obj);
+				if (collection == null) {
+					Class<?> type = field.getType();
+					if (type == List.class) {
+						collection = new ArrayList<>();
+					} else if (type == Set.class) {
+						collection = new HashSet<>();
+					} else {
+						collection = type.newInstance();
+					}
+					field.set(obj, collection);
+				}
+			}
+			if (collection instanceof Collection) {
+				((Collection<Object>) collection).add(fieldObj);
+			}
+		}
 	}
 
 	/** @return The current line:column position. */
