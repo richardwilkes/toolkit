@@ -124,7 +124,12 @@ public class WebSocket extends Personality {
 						}
 						break;
 					case PING:
-						send(Opcode.PONG, new byte[0]);
+						int length = mData != null ? mData.length : 0;
+						byte[] response = new byte[length];
+						if (length > 0) {
+							System.arraycopy(mData, 0, response, 0, length);
+						}
+						send(Opcode.PONG, response);
 						break;
 					case PONG:
 						// Ignore
