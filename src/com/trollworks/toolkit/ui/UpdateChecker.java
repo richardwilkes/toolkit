@@ -37,10 +37,11 @@ public class UpdateChecker implements Runnable {
 	@Localize("Checking for updates\u2026")
 	@Localize(locale = "de", value = "Prüfe auf neue Version\u2026")
 	private static String		CHECKING;
-	@Localize("There are no updates available")
+	@Localize("You have the most recent version")
 	@Localize(locale = "de", value = "Programm ist aktuell")
 	private static String		UP_TO_DATE;
 	@Localize("A new version is available")
+	@Localize(locale = "de", value = "Eine neue Version ist verfügbar")
 	private static String		OUT_OF_DATE;
 	@Localize("Update")
 	@Localize(locale = "de", value = "Aktualisieren")

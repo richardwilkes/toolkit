@@ -32,14 +32,18 @@ import javax.xml.stream.XMLStreamWriter;
 
 /** Provides simple XML generation. */
 public class XmlGenerator implements AutoCloseable {
-	@Localize("%s has not been annotated with @%s")
+	@Localize("%s has not been annotated with @%s.")
+	@Localize(locale = "de", value = "%s wurde nicht mit @%s annotiert.")
 	private static String		NOT_TAGGED;
 
 	static {
 		Localization.initialize();
 	}
 
-	/** The attribute that will be used for a tag's version, if {@link #add(Object)} or {@link #add(String, Object)} is called. */
+	/**
+	 * The attribute that will be used for a tag's version, if {@link #add(Object)} or
+	 * {@link #add(String, Object)} is called.
+	 */
 	public static final String	ATTR_VERSION	= "version";	//$NON-NLS-1$
 	private String				mIndent			= "\t";		//$NON-NLS-1$
 	private XMLStreamWriter		mWriter;

@@ -43,7 +43,8 @@ public class XmlParser implements AutoCloseable {
 	@Localize("The tag '%s' is from a newer version and cannot be loaded.")
 	@Localize(locale = "de", value = "Das Tag '%s' ist von einer neueren Version und kann nicht geladen werden.")
 	private static String		TOO_NEW;
-	@Localize("Unable to create object for collection tag '%s'")
+	@Localize("Unable to create object for collection tag '%s'.")
+	@Localize(locale = "de", value = "Kann Objekt für Sammlungs-Tag '%s' nicht erstellen.")
 	private static String		UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION;
 
 	static {
