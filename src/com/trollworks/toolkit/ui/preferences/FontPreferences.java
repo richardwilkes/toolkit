@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -29,6 +29,7 @@ import javax.swing.UIManager;
 /** The font preferences panel. */
 public class FontPreferences extends PreferencePanel implements ActionListener {
 	@Localize("Fonts")
+	@Localize(locale = "ru", value = "Шрифты")
 	@Localize(locale = "de", value = "Schriftarten")
 	private static String	FONTS;
 

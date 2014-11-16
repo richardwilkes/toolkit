@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -29,6 +29,7 @@ import javax.swing.JMenu;
 /** Provides the standard "Window" menu. */
 public class WindowMenuProvider implements MenuProvider {
 	@Localize("Window")
+	@Localize(locale = "ru", value = "Окно")
 	@Localize(locale = "de", value = "Fenster")
 	private static String		WINDOW;
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -40,18 +40,23 @@ import javax.swing.border.EmptyBorder;
 /** The menu keys preferences panel. */
 public class MenuKeyPreferences extends PreferencePanel implements ActionListener {
 	@Localize("Menu Keys")
+	@Localize(locale = "ru", value = "Меню Клавиши")
 	@Localize(locale = "de", value = "Tastaturkürzel")
 	private static String				MENU_KEYS;
 	@Localize("Type a keystroke\u2026")
+	@Localize(locale = "ru", value = "Ввести сочетание клавиш\u2026")
 	@Localize(locale = "de", value = "Tastenkombination drücken\u2026")
 	private static String				TYPE_KEYSTROKE;
 	@Localize("Clear")
+	@Localize(locale = "ru", value = "Очистить")
 	@Localize(locale = "de", value = "Löschen")
 	private static String				CLEAR;
 	@Localize("Accept")
+	@Localize(locale = "ru", value = "Применить")
 	@Localize(locale = "de", value = "Setzen")
 	private static String				ACCEPT;
 	@Localize("Reset")
+	@Localize(locale = "ru", value = "Сброс")
 	@Localize(locale = "de", value = "Standard")
 	private static String				RESET;
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -77,9 +77,11 @@ import javax.swing.undo.UndoableEdit;
 /** A panel that can show both hierarchical and tabular data. */
 public class Outline extends ActionPanel implements OutlineModelListener, ComponentListener, FocusListener, Autoscroll, Scrollable, Deletable, SelectAllCapable, DragGestureListener, DropTargetListener, MouseListener, MouseMotionListener, KeyListener {
 	@Localize("Sort")
+	@Localize(locale = "ru", value = "Сортировка")
 	@Localize(locale = "de", value = "Sortieren")
 	private static String			SORT_UNDO_TITLE;
 	@Localize("Row Drag & Drop")
+	@Localize(locale = "ru", value = "Перетянуть строку")
 	@Localize(locale = "de", value = "Zeile verschieben")
 	private static String			ROW_DROP_UNDO_TITLE;
 

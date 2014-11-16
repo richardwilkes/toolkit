@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -31,6 +31,7 @@ import java.io.IOException;
 /** Provides the "Open..." command. */
 public class OpenCommand extends Command implements OpenFilesHandler {
 	@Localize("Open\u2026")
+	@Localize(locale = "ru", value = "Открыть\u2026")
 	@Localize(locale = "de", value = "Öffnen\u2026")
 	private static String			OPEN;
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -26,6 +26,7 @@ import javax.swing.text.JTextComponent;
 /** Provides the "Delete" command. */
 public class DeleteCommand extends Command {
 	@Localize("Delete")
+	@Localize(locale = "ru", value = "Удалить")
 	@Localize(locale = "de", value = "Löschen")
 	private static String				DELETE;
 

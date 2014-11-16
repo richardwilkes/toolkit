@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 /** Provides the "Clear" command in the {@link RecentFilesMenu}. */
 public class ClearRecentFilesMenuCommand extends Command {
 	@Localize("Clear")
+	@Localize(locale = "ru", value = "Очистить")
 	@Localize(locale = "de", value = "Liste löschen")
 	private static String							CLEAR;
 

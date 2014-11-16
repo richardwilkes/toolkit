@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -25,6 +25,7 @@ import java.awt.event.KeyEvent;
 /** Provides the "Preferences..." command. */
 public class PreferencesCommand extends Command implements PreferencesHandler {
 	@Localize("Preferences\u2026")
+	@Localize(locale = "ru", value = "Настройки\u2026")
 	@Localize(locale = "de", value = "Einstellungen\u2026")
 	private static String					PREFERENCES;
 

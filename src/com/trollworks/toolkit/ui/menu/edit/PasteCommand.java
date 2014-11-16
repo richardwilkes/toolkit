@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -25,6 +25,7 @@ import javax.swing.text.JTextComponent;
 /** Provides the "Paste" command. */
 public class PasteCommand extends Command {
 	@Localize("Paste")
+	@Localize(locale = "ru", value = "Вставка")
 	@Localize(locale = "de", value = "Einfügen")
 	private static String				PASTE;
 

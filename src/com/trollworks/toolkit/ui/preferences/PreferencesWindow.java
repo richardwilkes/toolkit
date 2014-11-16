@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -37,9 +37,11 @@ import javax.swing.event.ChangeListener;
 /** A window for editing application preferences. */
 public class PreferencesWindow extends AppWindow implements ActionListener, ChangeListener, CloseHandler {
 	@Localize("Preferences")
+	@Localize(locale = "ru", value = "Настройки")
 	@Localize(locale = "de", value = "Einstellungen")
 	private static String									PREFERENCES;
 	@Localize("Reset to Factory Defaults")
+	@Localize(locale = "ru", value = "Сброс в настройки по умолчанию")
 	@Localize(locale = "de", value = "Standardeinstellungen wiederherstellen")
 	private static String									RESET;
 

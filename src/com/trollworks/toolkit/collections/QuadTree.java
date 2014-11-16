@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -518,6 +518,7 @@ public class QuadTree<T extends Bounds> {
 
 	static class Node<T extends Bounds> implements Bounds {
 		@Localize("Objects must have a width and height greater than zero.")
+		@Localize(locale = "ru", value = "Объекты должны иметь ширину и высоту больше нуля.")
 		@Localize(locale = "de", value = "Objekte müssen eine Höhe und Breite größer als Null haben.")
 		private static String	MUST_HAVE_SIZE_GREATER_THAN_ZERO;
 		private int				mX;

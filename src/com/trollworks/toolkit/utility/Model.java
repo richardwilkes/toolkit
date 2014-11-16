@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -24,12 +24,15 @@ import javax.xml.stream.XMLStreamException;
 /** The abstract base model object, responsible for providing basic i/o. */
 public abstract class Model implements Cloneable {
 	@Localize("Expected tag \"{0}\", but found \"{1}\".")
+	@Localize(locale = "ru", value = "Ожидаемый тег \"{0}\", но найден \"{1}\".")
 	@Localize(locale = "de", value = "Tag \"{0}\" erwartet, aber \"{1}\" erhalten.")
 	private static String		INVALID_ROOT_TAG;
 	@Localize("The tag \"{0}\" is from an older version and cannot be loaded.")
+	@Localize(locale = "ru", value = "Тег \"{0}\" относится к более старой версии и не может быть загружен.")
 	@Localize(locale = "de", value = "Das Tag \"{0}\" ist von einer älteren Version und kann nicht geladen werden.")
 	private static String		TOO_OLD;
 	@Localize("The tag \"{0}\" is from a newer version and cannot be loaded.")
+	@Localize(locale = "ru", value = "Тег \"{0}\" относится к более новой версии и не может быть загружен.")
 	@Localize(locale = "de", value = "Das Tag \"{0}\" ist von einer neueren Version und kann nicht geladen werden.")
 	private static String		TOO_NEW;
 

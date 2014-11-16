@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -24,6 +24,7 @@ import javax.swing.text.JTextComponent;
 /** Provides the "Cut" command. */
 public class CutCommand extends Command {
 	@Localize("Cut")
+	@Localize(locale = "ru", value = "Вырезать")
 	@Localize(locale = "de", value = "Ausschneiden")
 	private static String			CUT;
 

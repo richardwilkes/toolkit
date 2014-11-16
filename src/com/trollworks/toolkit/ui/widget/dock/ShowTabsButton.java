@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -49,6 +49,7 @@ import javax.swing.UIManager;
 
 public class ShowTabsButton extends JComponent implements MouseListener, MouseMotionListener, ComponentListener, ActionListener {
 	@Localize("Show Hidden Tabs List")
+	@Localize(locale = "ru", value = "Показать список скрытых закладок")
 	@Localize(locale = "de", value = "Zeigt die Liste mit ausgeblendeten Tabs an")
 	private static String		TOOLTIP;
 

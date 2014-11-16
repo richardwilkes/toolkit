@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -114,36 +114,47 @@ public enum LengthUnits implements Units {
 	};
 
 	@Localize("Points")
+	@Localize(locale = "ru", value = "Очки")
 	@Localize(locale = "de", value = "Punkte")
 	static String	POINTS_DESCRIPTION;
 	@Localize("Inches")
+	@Localize(locale = "ru", value = "Дюймы")
 	@Localize(locale = "de", value = "Zoll")
 	static String	INCHES_DESCRIPTION;
 	@Localize("Feet")
+	@Localize(locale = "ru", value = "Футы")
 	@Localize(locale = "de", value = "Fuß")
 	static String	FEET_DESCRIPTION;
 	@Localize("Feet & Inches")
+	@Localize(locale = "ru", value = "Футы и дюймы")
 	@Localize(locale = "de", value = "Fuß & Zoll")
 	static String	FEET_AND_INCHES_NAME;
 	@Localize("Feet (') & Inches (\")")
+	@Localize(locale = "ru", value = "Футы (') и дюймы (\")")
 	@Localize(locale = "de", value = "Fuß (') & Zoll (\")")
 	static String	FEET_AND_INCHES_DESCRIPTION;
 	@Localize("Yards")
+	@Localize(locale = "ru", value = "Ярды")
 	@Localize(locale = "de", value = "Schritt")
 	static String	YARDS_DESCRIPTION;
 	@Localize("Miles")
+	@Localize(locale = "ru", value = "Мили")
 	@Localize(locale = "de", value = "Meilen")
 	static String	MILES_DESCRIPTION;
 	@Localize("Millimeters")
+	@Localize(locale = "ru", value = "Миллиметры")
 	@Localize(locale = "de", value = "Millimeter")
 	static String	MILLIMETERS_DESCRIPTION;
 	@Localize("Centimeters")
+	@Localize(locale = "ru", value = "Сантиметры")
 	@Localize(locale = "de", value = "Zentimeter")
 	static String	CENTIMETERS_DESCRIPTION;
 	@Localize("Meters")
+	@Localize(locale = "ru", value = "Метры")
 	@Localize(locale = "de", value = "Meter")
 	static String	METERS_DESCRIPTION;
 	@Localize("Kilometers")
+	@Localize(locale = "ru", value = "Километры")
 	@Localize(locale = "de", value = "Kilometer")
 	static String	KILOMETERS_DESCRIPTION;
 	@Localize("{0} {1}")

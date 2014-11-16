@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -25,6 +25,7 @@ import java.io.File;
 /** Provides the "Save As..." command. */
 public class SaveAsCommand extends Command {
 	@Localize("Save As\u2026")
+	@Localize(locale = "ru", value = "Сохранить как\u2026")
 	@Localize(locale = "de", value = "Speichern unter\u2026")
 	private static String				SAVE_AS;
 

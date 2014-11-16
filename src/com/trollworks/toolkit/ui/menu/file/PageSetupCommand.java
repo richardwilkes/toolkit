@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -25,9 +25,11 @@ import java.awt.event.KeyEvent;
 /** Provides the "Page Setup..." command. */
 public class PageSetupCommand extends Command {
 	@Localize("Page Setup\u2026")
+	@Localize(locale = "ru", value = "Настройка страницы\u2026")
 	@Localize(locale = "de", value = "Seite einrichten\u2026")
 	private static String					PAGE_SETUP;
 	@Localize("There is no system printer available.")
+	@Localize(locale = "ru", value = "Нет доступного системного принтера")
 	@Localize(locale = "de", value = "Es wurde kein Standard-Drucker gefunden.")
 	private static String					NO_PRINTER_SELECTED;
 

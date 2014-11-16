@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -26,24 +26,31 @@ import javax.swing.JComboBox;
 /** A standard font selection panel. */
 public class FontPanel extends ActionPanel implements ActionListener {
 	@Localize("Plain")
+	@Localize(locale = "ru", value = "Обычный")
 	@Localize(locale = "de", value = "Normal")
 	private static String			PLAIN;
 	@Localize("Bold")
+	@Localize(locale = "ru", value = "Полужирный")
 	@Localize(locale = "de", value = "Fett")
 	private static String			BOLD;
 	@Localize("Italic")
+	@Localize(locale = "ru", value = "Курсив")
 	@Localize(locale = "de", value = "Kursiv")
 	private static String			ITALIC;
 	@Localize("Bold Italic")
+	@Localize(locale = "ru", value = "Полужирный Курсив")
 	@Localize(locale = "de", value = "Fett Kursiv")
 	private static String			BOLD_ITALIC;
 	@Localize("Changes the font")
+	@Localize(locale = "ru", value = "Изменить шрифт")
 	@Localize(locale = "de", value = "Ändert die Schriftart")
 	private static String			NAME_TOOLTIP;
 	@Localize("Changes the font size")
+	@Localize(locale = "ru", value = "Изменить размер шрифта")
 	@Localize(locale = "de", value = "Ändert die Schriftgröße")
 	private static String			SIZE_TOOLTIP;
 	@Localize("Changes the font style")
+	@Localize(locale = "ru", value = "Изменить стиль шрифта")
 	@Localize(locale = "de", value = "Ändert den Schriftstil")
 	private static String			STYLE_TOOLTIP;
 

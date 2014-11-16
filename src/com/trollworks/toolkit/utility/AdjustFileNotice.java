@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -37,32 +37,42 @@ public class AdjustFileNotice {
 	@Localize("PATH")
 	private static String				PATH;
 	@Localize("The path containing the Java files to process. May be a directory or a file.")
+	@Localize(locale = "ru", value = "Обрабатывается путь, содержащий Java файлы. Может быть папкой или файлом.")
 	@Localize(locale = "de", value = "Der Pfad, in dem die zu Verändernden Java-Dateien sind. Kann ein Verzeichnis oder eine Datei sein.")
 	private static String				PATH_DESCRIPTION;
 	@Localize("You must specify a path with the %s option.\n")
+	@Localize(locale = "ru", value = "Вы должны указать путь при помощи параметра %s.\n")
 	@Localize(locale = "de", value = "Ein Pfad muss mittels der Option %s angeben werden.\n")
 	private static String				PATH_MUST_BE_SPECIFIED;
 	@Localize("TEMPLATE")
+	@Localize(locale = "ru", value = "ШАБЛОН")
 	private static String				TEMPLATE;
 	@Localize("The template to use for the new file header. All occurrences of $YEAR$ within the template will be replaced with the current year. If this option is not specified, the default template for the toolkit will be used.")
+	@Localize(locale = "ru", value = "Шаблон, используемый для нового заголовка файла. Все вхождения $YEAR$ в шаблоне будет заменены на текущий год. Если этот параметр не указан, будет использоваться шаблон по умолчанию для инструментария.")
 	@Localize(locale = "de", value = "Die Vorlage für den neuen Dateikopf. Jedes Auftreten von $YEAR$ in der Vorlage wird durch das aktuelle Jahr ersetzt. Wenn diese Option nicht gesetzt wird, wird die Standard-Vorlage des Toolkit benutzt.")
 	private static String				TEMPLATE_DESCRIPTION;
 	@Localize("Unexpected argument: ")
+	@Localize(locale = "ru", value = "Неизвестный аргумент:")
 	@Localize(locale = "de", value = "Unerwartetes Argument: ")
 	private static String				UNEXPECTED_ARGUMENT;
 	@Localize("\nAdjusted %,d %s\n")
+	@Localize(locale = "ru", value = "\nНастройка %,d %s\n")
 	@Localize(locale = "de", value = "\nErgebnis: %,d %s verändert\n")
 	private static String				RESULT;
 	@Localize("file")
+	@Localize(locale = "ru", value = "файл")
 	@Localize(locale = "de", value = "Datei")
 	private static String				FILE;
 	@Localize("files")
+	@Localize(locale = "ru", value = "файлы")
 	@Localize(locale = "de", value = "Dateien")
 	private static String				FILES;
 	@Localize("Adjusted %s\n")
+	@Localize(locale = "ru", value = "Настройка %s\n")
 	@Localize(locale = "de", value = "Verändert: %s\n")
 	private static String				ADJUSTED;
 	@Localize("Skipped %s\n")
+	@Localize(locale = "ru", value = "Пропущено %s\n")
 	@Localize(locale = "de", value = "Übersprungen: %s\n")
 	private static String				SKIPPED;
 

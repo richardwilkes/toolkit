@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -24,6 +24,7 @@ import javax.swing.text.JTextComponent;
 /** Provides the "Select All" command. */
 public class SelectAllCommand extends Command {
 	@Localize("Select All")
+	@Localize(locale = "ru", value = "Выбрать всё")
 	@Localize(locale = "de", value = "Alles auswählen")
 	private static String					SELECT_ALL;
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -23,6 +23,7 @@ import javax.swing.undo.UndoManager;
 /** Provides the "Redo" command. */
 public class RedoCommand extends Command {
 	@Localize("Can't Redo")
+	@Localize(locale = "ru", value = "Нельзя повторить")
 	@Localize(locale = "de", value = "Kann nicht Wiederherstellen")
 	private static String			CANT_REDO;
 

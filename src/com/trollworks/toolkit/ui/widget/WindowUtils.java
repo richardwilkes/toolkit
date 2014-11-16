@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -31,9 +31,11 @@ import javax.swing.text.JTextComponent;
 /** Utilities for use with windows. */
 public class WindowUtils {
 	@Localize("Error")
+	@Localize(locale = "ru", value = "Ошибка")
 	@Localize(locale = "de", value = "Fehler")
 	private static String	ERROR;
 	@Localize("Warning")
+	@Localize(locale = "ru", value = "Внимание")
 	@Localize(locale = "de", value = "Warnung")
 	private static String	WARNING;
 

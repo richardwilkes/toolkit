@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -31,9 +31,11 @@ import java.awt.event.KeyEvent;
 /** Provides the "Quit"/"Exit" command. */
 public class QuitCommand extends Command implements QuitHandler {
 	@Localize("Quit")
+	@Localize(locale = "ru", value = "Выход")
 	@Localize(locale = "de", value = "Beenden")
 	private static String			QUIT;
 	@Localize("Exit")
+	@Localize(locale = "ru", value = "Выход")
 	@Localize(locale = "de", value = "Beenden")
 	private static String			EXIT;
 

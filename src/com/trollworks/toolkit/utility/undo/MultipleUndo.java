@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -19,9 +19,11 @@ import javax.swing.undo.CompoundEdit;
 /** Provides a convenient way to collect multiple undos into a single undo. */
 public class MultipleUndo extends CompoundEdit {
 	@Localize("Redo ")
+	@Localize(locale = "ru", value = "Повторить ")
 	@Localize(locale = "de", value = "Wiederherstellen: ")
 	private static String	REDO_PREFIX;
 	@Localize("Undo ")
+	@Localize(locale = "ru", value = "Отменить ")
 	@Localize(locale = "de", value = "Rückgängig: ")
 	private static String	UNDO_PREFIX;
 

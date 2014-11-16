@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -32,9 +32,11 @@ import java.util.HashSet;
 /** Provides standard file dialog handling. */
 public class StdFileDialog implements FilenameFilter {
 	@Localize("Unable to open \"{0}\".")
+	@Localize(locale = "ru", value = "Невозможно открыть \"{0}\".")
 	@Localize(locale = "de", value = "Kann Datei \"{0}\" nicht öffnen.")
 	private static String	UNABLE_TO_OPEN;
 	@Localize("Unable to open \"{0}\"\n{1}")
+	@Localize(locale = "ru", value = "Невозможно открыть \"{0}\"\n{1}")
 	@Localize(locale = "de", value = "Kann Datei \"{0}\" nicht öffnen.\n{1}")
 	private static String	UNABLE_TO_OPEN_WITH_EXCEPTION;
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -41,9 +41,11 @@ import javax.swing.border.BevelBorder;
 /** Displays the current memory usage. */
 public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, MouseListener {
 	@Localize("{0}MB used of {1}MB")
+	@Localize(locale = "ru", value = "{0}Мб использовано из {1}Мб")
 	@Localize(locale = "de", value = "{0}MiB von {1}MiB benutzt")
 	private static String		FORMAT;
 	@Localize("Click to run garbage collection")
+	@Localize(locale = "ru", value = "Нажмите, чтобы запустить сбор мусора")
 	@Localize(locale = "de", value = "Klicken, um eine Speicherbereinigung durchzuführen")
 	private static String		TOOLTIP;
 

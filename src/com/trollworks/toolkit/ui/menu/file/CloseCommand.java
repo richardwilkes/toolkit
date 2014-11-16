@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -23,6 +23,7 @@ import java.awt.event.WindowEvent;
 /** Provides the "Close" command. */
 public class CloseCommand extends Command {
 	@Localize("Close")
+	@Localize(locale = "ru", value = "Закрыть")
 	@Localize(locale = "de", value = "Schließen")
 	private static String				CLOSE;
 

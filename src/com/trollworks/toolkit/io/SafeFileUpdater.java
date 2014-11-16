@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -26,15 +26,19 @@ import java.util.Map;
  */
 public class SafeFileUpdater {
 	@Localize("No transaction in progress.")
+	@Localize(locale = "ru", value = "Нет действий в обработке")
 	@Localize(locale = "de", value = "Keine Transaktion wird ausgeführt.")
 	private static String		NO_TRANSACTION_IN_PROGRESS;
 	@Localize("Unable to swap files.")
+	@Localize(locale = "ru", value = "Невозможно поменять файлы.")
 	@Localize(locale = "de", value = "Kann Dateien nicht auswechseln.")
 	private static String		FILE_SWAP_FAILED;
 	@Localize("\"file\" may not be null.")
+	@Localize(locale = "ru", value = "\"файл\" не может быть пустым.")
 	@Localize(locale = "de", value = "\"file\" darf nicht null sein.")
 	private static String		MAY_NOT_BE_NULL;
 	@Localize("\"file\" may not refer to a directory.")
+	@Localize(locale = "ru", value = "\"файл\" не может ссылаться на папку.")
 	@Localize(locale = "de", value = "\"file\" darf kein Verzeichnis sein.")
 	private static String		MAY_NOT_BE_DIRECTORY;
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -35,18 +35,23 @@ import javax.swing.JOptionPane;
 /** Provides a background check for updates. */
 public class UpdateChecker implements Runnable {
 	@Localize("Checking for updates\u2026")
+	@Localize(locale = "ru", value = "Проверка обновлений\u2026")
 	@Localize(locale = "de", value = "Prüfe auf neue Version\u2026")
 	private static String		CHECKING;
 	@Localize("You have the most recent version")
+	@Localize(locale = "ru", value = "У вас самая последняя версия")
 	@Localize(locale = "de", value = "Programm ist aktuell")
 	private static String		UP_TO_DATE;
 	@Localize("A new version is available")
+	@Localize(locale = "ru", value = "Доступна новая версия")
 	@Localize(locale = "de", value = "Eine neue Version ist verfügbar")
 	private static String		OUT_OF_DATE;
 	@Localize("Update")
+	@Localize(locale = "ru", value = "Обновить")
 	@Localize(locale = "de", value = "Aktualisieren")
 	private static String		UPDATE_TITLE;
 	@Localize("Ignore")
+	@Localize(locale = "ru", value = "Игнорировать")
 	@Localize(locale = "de", value = "Ignorieren")
 	private static String		IGNORE_TITLE;
 

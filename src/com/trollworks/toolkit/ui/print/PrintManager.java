@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -43,18 +43,23 @@ import javax.swing.JOptionPane;
 /** Manages printing. */
 public class PrintManager {
 	@Localize("Printing failed!")
+	@Localize(locale = "ru", value = "Ошибка печати!")
 	@Localize(locale = "de", value = "Druck fehlgeschlagen!")
 	private static String					PRINTING_FAILED;
 	@Localize("No printer is available!")
+	@Localize(locale = "ru", value = "Нет доступного принтера!")
 	@Localize(locale = "de", value = "Kein Drucker verfügbar!")
 	private static String					NO_PRINTER_AVAILABLE;
 	@Localize("Unable to switch printers!")
+	@Localize(locale = "ru", value = "Невозможно переключить принтеры!")
 	@Localize(locale = "de", value = "Kann Drucker nicht wechseln!")
 	private static String					UNABLE_TO_SWITCH_PRINTERS;
 	@Localize("Page Setup")
+	@Localize(locale = "ru", value = "Настройка страницы")
 	@Localize(locale = "de", value = "Seite einrichten")
 	private static String					PAGE_SETUP_TITLE;
 	@Localize("Print")
+	@Localize(locale = "ru", value = "Печать")
 	@Localize(locale = "de", value = "Drucken")
 	private static String					PRINT_TITLE;
 

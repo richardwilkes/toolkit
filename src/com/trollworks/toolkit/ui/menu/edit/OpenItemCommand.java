@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 /** Provides the "Open Item" command. */
 public class OpenItemCommand extends Command {
 	@Localize("Open Item")
+	@Localize(locale = "ru", value = "Открыть элемент")
 	@Localize(locale = "de", value = "Element öffnen")
 	private static String				OPEN_ITEM;
 

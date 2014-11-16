@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -24,9 +24,11 @@ public class Text {
 	@Localize("an")
 	private static String		AN;
 	@Localize("was")
+	@Localize(locale = "ru", value = "был")
 	@Localize(locale = "de", value = "wurde")
 	private static String		WAS;
 	@Localize("were")
+	@Localize(locale = "ru", value = "где")
 	@Localize(locale = "de", value = "wurden")
 	private static String		WERE;
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -18,9 +18,11 @@ import java.io.IOException;
 /** An exception for data files that are too old or new to be loaded. */
 public class VersionException extends IOException {
 	@Localize("The file is from an older version and cannot be loaded.")
+	@Localize(locale = "ru", value = "Файл более старой версии не может быть загружен.")
 	@Localize(locale = "de", value = "Die Datei ist von einer älteren Version und kann nicht geladen werden.")
 	private static String	TOO_OLD;
 	@Localize("The file is from a newer version and cannot be loaded.")
+	@Localize(locale = "ru", value = "Файл более новой версии не может быть загружен.")
 	@Localize(locale = "de", value = "Die Datei ist von einer neueren Version und kann nicht geladen werden.")
 
 	private static String	TOO_NEW;

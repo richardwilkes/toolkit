@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -70,15 +70,19 @@ public enum PageOrientation {
 	};
 
 	@Localize("Portrait")
+	@Localize(locale = "ru", value = "Книжная")
 	@Localize(locale = "de", value = "Hochformat")
 	static String	PORTRAIT_TITLE;
 	@Localize("Landscape")
+	@Localize(locale = "ru", value = "Альбомная")
 	@Localize(locale = "de", value = "Querformat")
 	static String	LANDSCAPE_TITLE;
 	@Localize("Reversed Portrait")
+	@Localize(locale = "ru", value = "Зеркальная книжная")
 	@Localize(locale = "de", value = "Hochformat gedreht")
 	static String	REVERSED_PORTRAIT_TITLE;
 	@Localize("Reversed Landscape")
+	@Localize(locale = "ru", value = "Зеркальная альбомная")
 	@Localize(locale = "de", value = "Querformat gedreht")
 	static String	REVERSED_LANDSCAPE_TITLE;
 

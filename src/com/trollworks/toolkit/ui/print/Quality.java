@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -56,12 +56,15 @@ public enum Quality {
 	};
 
 	@Localize("High")
+	@Localize(locale = "ru", value = "Высокий")
 	@Localize(locale = "de", value = "Hoch")
 	static String	HIGH_TITLE;
 	@Localize("Normal")
+	@Localize(locale = "ru", value = "Обычный")
 	@Localize(locale = "de", value = "Normal")
 	static String	NORMAL_TITLE;
 	@Localize("Draft")
+	@Localize(locale = "ru", value = "Черновик")
 	@Localize(locale = "de", value = "Entwurf")
 	static String	DRAFT_TITLE;
 

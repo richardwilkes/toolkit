@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 /** Provides the "Duplicate" command. */
 public class DuplicateCommand extends Command {
 	@Localize("Duplicate")
+	@Localize(locale = "ru", value = "Дублировать")
 	@Localize(locale = "de", value = "Duplizieren")
 	private static String					DUPLICATE;
 

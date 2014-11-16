@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -44,9 +44,11 @@ public enum InkChromaticity {
 	};
 
 	@Localize("Color")
+	@Localize(locale = "ru", value = "Цвет")
 	@Localize(locale = "de", value = "Farbe")
 	static String	COLOR_TITLE;
 	@Localize("Monochrome")
+	@Localize(locale = "ru", value = "Черно-белый")
 	@Localize(locale = "de", value = "Graustufen")
 	static String	MONOCHROME_TITLE;
 

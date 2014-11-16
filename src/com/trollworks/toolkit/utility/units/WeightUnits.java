@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -70,24 +70,31 @@ public enum WeightUnits implements Units {
 	};
 
 	@Localize("Ounces")
+	@Localize(locale = "ru", value = "Унция")
 	@Localize(locale = "de", value = "Unzen")
 	static String	OUNCES_DESCRIPTION;
 	@Localize("Pounds")
+	@Localize(locale = "ru", value = "Фунт")
 	@Localize(locale = "de", value = "Pfund")
 	static String	POUNDS_DESCRIPTION;
 	@Localize("Grams")
+	@Localize(locale = "ru", value = "Граммы")
 	@Localize(locale = "de", value = "Gramm")
 	static String	GRAMS_DESCRIPTION;
 	@Localize("Kilograms")
+	@Localize(locale = "ru", value = "Килограммы")
 	@Localize(locale = "de", value = "Kilogramm")
 	static String	KILOGRAMS_DESCRIPTION;
 	@Localize("Short Tons")
+	@Localize(locale = "ru", value = "Американские тонны")
 	@Localize(locale = "de", value = "Amerikanische Tonnen")
 	static String	SHORT_TONS_DESCRIPTION;
 	@Localize("Long Tons")
+	@Localize(locale = "ru", value = "Английские тонны")
 	@Localize(locale = "de", value = "Britische Tonnen")
 	static String	LONG_TONS_DESCRIPTION;
 	@Localize("Metric Tons")
+	@Localize(locale = "ru", value = "Метрические тонны")
 	@Localize(locale = "de", value = "Tonnen")
 	static String	METRIC_TONS_DESCRIPTION;
 	@Localize("{0} {1}")

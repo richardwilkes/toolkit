@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -21,33 +21,43 @@ public class Numbers {
 	// referring to a female. Plural forms not counted. Cases not counted. German is complicated.
 	// This way it is an universal form and should be ok.
 	@Localize("First")
+	@Localize(locale = "ru", value = "Первый")
 	@Localize(locale = "de", value = "Erste(r)")
 	private static String			FIRST;
 	@Localize("Second")
+	@Localize(locale = "ru", value = "Второй")
 	@Localize(locale = "de", value = "Zweite(r)")
 	private static String			SECOND;
 	@Localize("Third")
+	@Localize(locale = "ru", value = "Третий")
 	@Localize(locale = "de", value = "Dritte(r)")
 	private static String			THIRD;
 	@Localize("Fourth")
+	@Localize(locale = "ru", value = "Четвертый")
 	@Localize(locale = "de", value = "Vierte(r)")
 	private static String			FOURTH;
 	@Localize("Fifth")
+	@Localize(locale = "ru", value = "Пятый")
 	@Localize(locale = "de", value = "Fünfte(r)")
 	private static String			FIFTH;
 	@Localize("Sixth")
+	@Localize(locale = "ru", value = "Шестой")
 	@Localize(locale = "de", value = "Sechste(r)")
 	private static String			SIXTH;
 	@Localize("Seventh")
+	@Localize(locale = "ru", value = "Седьмой")
 	@Localize(locale = "de", value = "Siebte(r)")
 	private static String			SEVENTH;
 	@Localize("Eighth")
+	@Localize(locale = "ru", value = "Восьмой")
 	@Localize(locale = "de", value = "Achte(r)")
 	private static String			EIGHTH;
 	@Localize("Ninth")
+	@Localize(locale = "ru", value = "Девятый")
 	@Localize(locale = "de", value = "Neunte(r)")
 	private static String			NINTH;
 	@Localize("Tenth")
+	@Localize(locale = "ru", value = "Десятый")
 	@Localize(locale = "de", value = "Zehnte(r)")
 	private static String			TENTH;
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -56,12 +56,15 @@ public enum PageSides {
 	};
 
 	@Localize("Single")
+	@Localize(locale = "ru", value = "Один")
 	@Localize(locale = "de", value = "Einseitig")
 	static String	SINGLE_TITLE;
 	@Localize("Duplex")
+	@Localize(locale = "ru", value = "Двухсторонний")
 	@Localize(locale = "de", value = "Lange Seite")
 	static String	DUPLEX_TITLE;
 	@Localize("Tumble")
+	@Localize(locale = "ru", value = "Ручная подача")
 	@Localize(locale = "de", value = "Kurze Seite")
 	static String	TUMBLE_TITLE;
 

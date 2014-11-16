@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 1998-2014 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -24,6 +24,7 @@ import javax.swing.text.JTextComponent;
 /** Provides the "Copy" command. */
 public class CopyCommand extends Command {
 	@Localize("Copy")
+	@Localize(locale = "ru", value = "Копировать")
 	@Localize(locale = "de", value = "Kopieren")
 	private static String			COPY;
 
