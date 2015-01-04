@@ -33,7 +33,7 @@
 	<property name="package_dir" value="com/trollworks/toolkit"/>
 	<property name="toolkit_build" value="${build_root}/toolkit"/>
 	<property name="min_jdk" value="1.8"/>
-	<property name="primary_version" value="4.0.1"/>
+	<property name="primary_version" value="4.0.2"/>
 	<property name="toolkit_jar" value="${lib}/toolkit-${primary_version}.jar"/>
 	<property name="toolkit_src_jar" value="${lib}/toolkit-${primary_version}-src.jar"/>
 	<tstamp>
