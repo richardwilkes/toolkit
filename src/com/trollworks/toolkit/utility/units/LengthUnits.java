@@ -20,28 +20,28 @@ import java.text.MessageFormat;
 /** Common length units. */
 public enum LengthUnits implements Units {
 	/** Points (1/72 of an inch). */
-	PT(1.0 / 72.0) {
+	PT(1.0 / 72.0, false) {
 		@Override
 		public String getLocalizedName() {
 			return POINTS_DESCRIPTION;
 		}
 	},
 	/** Inches. */
-	IN(1.0) {
+	IN(1.0, false) {
 		@Override
 		public String getLocalizedName() {
 			return INCHES_DESCRIPTION;
 		}
 	},
 	/** Feet. */
-	FT(12.0) {
+	FT(12.0, false) {
 		@Override
 		public String getLocalizedName() {
 			return FEET_DESCRIPTION;
 		}
 	},
 	/** Feet and Inches */
-	FT_IN(1.0) {
+	FT_IN(1.0, false) {
 		@Override
 		public String getLocalizedName() {
 			return FEET_AND_INCHES_NAME;
@@ -71,42 +71,42 @@ public enum LengthUnits implements Units {
 		}
 	},
 	/** Yards. */
-	YD(36.0) {
+	YD(36.0, false) {
 		@Override
 		public String getLocalizedName() {
 			return YARDS_DESCRIPTION;
 		}
 	},
 	/** Miles. */
-	MI(5280.0 * 12.0) {
+	MI(5280.0 * 12.0, false) {
 		@Override
 		public String getLocalizedName() {
 			return MILES_DESCRIPTION;
 		}
 	},
 	/** Millimeters. */
-	MM(0.1 / 2.54) {
+	MM(0.1 / 2.54, true) {
 		@Override
 		public String getLocalizedName() {
 			return MILLIMETERS_DESCRIPTION;
 		}
 	},
 	/** Centimeters. */
-	CM(1.0 / 2.54) {
+	CM(1.0 / 2.54, true) {
 		@Override
 		public String getLocalizedName() {
 			return CENTIMETERS_DESCRIPTION;
 		}
 	},
 	/** Kilometers. */
-	KM(100000.0 / 2.54) {
+	KM(100000.0 / 2.54, true) {
 		@Override
 		public String getLocalizedName() {
 			return KILOMETERS_DESCRIPTION;
 		}
 	},
 	/** Meters. Must be after all the other 'meter' types. */
-	M(100.0 / 2.54) {
+	M(100.0 / 2.54, true) {
 		@Override
 		public String getLocalizedName() {
 			return METERS_DESCRIPTION;
@@ -167,9 +167,11 @@ public enum LengthUnits implements Units {
 	}
 
 	private double	mFactor;
+	private boolean	mIsMetric;
 
-	private LengthUnits(double factor) {
+	private LengthUnits(double factor, boolean isMetric) {
 		mFactor = factor;
+		mIsMetric = isMetric;
 	}
 
 	@Override
@@ -206,5 +208,9 @@ public enum LengthUnits implements Units {
 	@Override
 	public String getDescription() {
 		return String.format(DESCRIPTION_FORMAT, getLocalizedName(), getAbbreviation());
+	}
+
+	public boolean isMetric() {
+		return mIsMetric;
 	}
 }

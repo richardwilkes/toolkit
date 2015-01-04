@@ -20,49 +20,49 @@ import java.text.MessageFormat;
 /** Common weight units. */
 public enum WeightUnits implements Units {
 	/** Ounces. */
-	OZ(1.0 / 16.0) {
+	OZ(1.0 / 16.0, false) {
 		@Override
 		public String getLocalizedName() {
 			return OUNCES_DESCRIPTION;
 		}
 	},
 	/** Pounds. */
-	LB(1.0) {
+	LB(1.0, false) {
 		@Override
 		public String getLocalizedName() {
 			return POUNDS_DESCRIPTION;
 		}
 	},
 	/** Short Tons */
-	TN(2000.0) {
+	TN(2000.0, false) {
 		@Override
 		public String getLocalizedName() {
 			return SHORT_TONS_DESCRIPTION;
 		}
 	},
 	/** Long Tons */
-	LT(2240.0) {
+	LT(2240.0, false) {
 		@Override
 		public String getLocalizedName() {
 			return LONG_TONS_DESCRIPTION;
 		}
 	},
 	/** Metric Tons. Must come after Long Tons and Short Tons since it's abbreviation is a subset. */
-	T(2205.0) {
+	T(2205.0, true) {
 		@Override
 		public String getLocalizedName() {
 			return METRIC_TONS_DESCRIPTION;
 		}
 	},
 	/** Kilograms. */
-	KG(2.205) {
+	KG(2.205, true) {
 		@Override
 		public String getLocalizedName() {
 			return KILOGRAMS_DESCRIPTION;
 		}
 	},
 	/** Grams. Must come after Kilograms since it's abbreviation is a subset. */
-	G(0.002205) {
+	G(0.002205, true) {
 		@Override
 		public String getLocalizedName() {
 			return GRAMS_DESCRIPTION;
@@ -103,13 +103,15 @@ public enum WeightUnits implements Units {
 	static String	DESCRIPTION_FORMAT;
 
 	private double	mFactor;
+	private boolean	mIsMetric;
 
 	static {
 		Localization.initialize();
 	}
 
-	private WeightUnits(double factor) {
+	private WeightUnits(double factor, boolean isMetric) {
 		mFactor = factor;
+		mIsMetric = isMetric;
 	}
 
 	@Override
@@ -146,5 +148,9 @@ public enum WeightUnits implements Units {
 	@Override
 	public String getDescription() {
 		return String.format(DESCRIPTION_FORMAT, getLocalizedName(), getAbbreviation());
+	}
+
+	public boolean isMetric() {
+		return mIsMetric;
 	}
 }
