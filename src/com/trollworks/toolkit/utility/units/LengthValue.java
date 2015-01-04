@@ -54,7 +54,7 @@ public class LengthValue extends UnitsValue<LengthUnits> {
 	}
 
 	/**
-	 * Creates a new {@link UnitsValue}.
+	 * Creates a new {@link LengthValue}.
 	 *
 	 * @param value The value to use.
 	 * @param units The {@link Units} to use.
@@ -70,6 +70,17 @@ public class LengthValue extends UnitsValue<LengthUnits> {
 	 */
 	public LengthValue(LengthValue other) {
 		super(other);
+	}
+
+	/**
+	 * Creates a new {@link LengthValue} from an existing one and converts it to the given
+	 * {@link LengthUnits}.
+	 *
+	 * @param other The {@link LengthValue} to convert.
+	 * @param units The {@link LengthUnits} to use.
+	 */
+	public LengthValue(LengthValue other, LengthUnits units) {
+		super(other, units);
 	}
 
 	@Override

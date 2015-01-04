@@ -41,6 +41,18 @@ public class UnitsValue<T extends Units> implements Comparable<UnitsValue<T>> {
 		mUnits = other.mUnits;
 	}
 
+	/**
+	 * Creates a new {@link UnitsValue} from an existing one and converts it to the given
+	 * {@link Units}.
+	 *
+	 * @param other The {@link UnitsValue} to convert.
+	 * @param units The {@link Units} to use.
+	 */
+	public UnitsValue(UnitsValue<T> other, T units) {
+		mValue = units.convert(other.mUnits, other.mValue);
+		mUnits = units;
+	}
+
 	/** @param other A {@link UnitsValue} to copy state from. */
 	public void set(UnitsValue<T> other) {
 		mValue = other.mValue;
