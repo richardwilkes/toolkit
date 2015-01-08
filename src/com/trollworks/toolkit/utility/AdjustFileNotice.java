@@ -26,14 +26,11 @@ import java.util.Calendar;
 import java.util.jar.Attributes;
 
 public class AdjustFileNotice {
-	@Localize("1.0.0.20140406153944")
-	private static String				VERSION;
-	@Localize("Richard A. Wilkes")
-	private static String				COPYRIGHT_OWNER;
-	@Localize("2014")
-	private static String				COPYRIGHT_YEARS;
-	@Localize("Mozilla Public License 2.0")
-	private static String				LICENSE;
+	private static String				VERSION			= "1.0.0.20150108071600";											//$NON-NLS-1$
+	private static String				COPYRIGHT_OWNER	= "Richard A. Wilkes";												//$NON-NLS-1$
+	private static String				COPYRIGHT_YEARS	= "2014-2015";														//$NON-NLS-1$
+	private static String				LICENSE			= "Mozilla Public License 2.0";									//$NON-NLS-1$
+
 	@Localize("PATH")
 	private static String				PATH;
 	@Localize("The path containing the Java files to process. May be a directory or a file.")
