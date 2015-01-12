@@ -35,6 +35,7 @@ public class AboutCommand extends Command implements AboutHandler {
 	@Localize("About {0}")
 	@Localize(locale = "ru", value = "О программе {0}")
 	@Localize(locale = "de", value = "Über {0}")
+	@Localize(locale = "es", value = "Acerca de {0}")
 	private static String				ABOUT;
 
 	static {

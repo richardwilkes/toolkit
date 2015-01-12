@@ -26,6 +26,7 @@ public class SelectAllCommand extends Command {
 	@Localize("Select All")
 	@Localize(locale = "ru", value = "Выбрать всё")
 	@Localize(locale = "de", value = "Alles auswählen")
+	@Localize(locale = "es", value = "Selecionar todo")
 	private static String					SELECT_ALL;
 
 	static {

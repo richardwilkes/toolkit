@@ -20,10 +20,12 @@ public class Version {
 	@Localize("Invalid version format")
 	@Localize(locale = "ru", value = "Недопустимая верия формата")
 	@Localize(locale = "de", value = "Ungültiges Format der Versionsnumer")
+	@Localize(locale = "es", value = "Formato de versión no válido")
 	private static String		INVALID_VERSION_FORMAT;
 	@Localize("Built on %1$tB %1$te, %1$tY at %1$tr")
 	@Localize(locale = "ru", value = "Сборка программы от %1$tB %1$te, %1$tY в %1$tr")
 	@Localize(locale = "de", value = "Erstellt am %1$te. %1$tB %1$tY um %1$tT")
+	@Localize(locale = "es", value = "Compilado el %1$tB %1$te, %1$tY at %1$tr")
 	private static String		BUILD_FORMAT;
 
 	static {

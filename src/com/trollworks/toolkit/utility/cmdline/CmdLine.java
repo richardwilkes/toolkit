@@ -32,30 +32,37 @@ public class CmdLine {
 	@Localize("Available options:")
 	@Localize(locale = "ru", value = "Доступные параметры:")
 	@Localize(locale = "de", value = "Vorhandene Optionen:")
+	@Localize(locale = "es", value = "Opciones disponibles:")
 	private static String				AVAILABLE_OPTIONS;
 	@Localize("Unknown option \"{0}\".")
 	@Localize(locale = "ru", value = "Неизвестный параметр \"{0}\".")
 	@Localize(locale = "de", value = "Unbekannte Option \"{0}\".")
+	@Localize(locale = "es", value = "Opción desconocida \"{0}\"")
 	private static String				UNEXPECTED_OPTION;
 	@Localize("The option \"{0}\" does not take an argument.")
 	@Localize(locale = "ru", value = "Параметр \"{0}\" не принимает значения.")
 	@Localize(locale = "de", value = "Die Option \"{0}\" benötigt kein Arguemnt.")
+	@Localize(locale = "es", value = "La opción \"{0}\" no tiene argumentos")
 	private static String				UNEXPECTED_OPTION_ARGUMENT;
 	@Localize("The option \"{0}\" requires an argument.")
 	@Localize(locale = "ru", value = "Параметр \"{0}\" требует значения.")
 	@Localize(locale = "de", value = "Die Option \"{0}\" benötigt ein Argument.")
+	@Localize(locale = "es", value = "La opción \"{0}\" requiere un argumento")
 	private static String				MISSING_OPTION_ARGUMENT;
 	@Localize("Displays a description of each option.")
 	@Localize(locale = "ru", value = "Отображать описание каждого параметра.")
 	@Localize(locale = "de", value = "Zeigt eine Beschreibung zu jeder Option an.")
+	@Localize(locale = "es", value = "Muestra una descripción de cada opción")
 	private static String				HELP_DESCRIPTION;
 	@Localize("Displays the program version information.")
 	@Localize(locale = "ru", value = "Отображать версию программы.")
 	@Localize(locale = "de", value = "Zeigt die Version des Programms an.")
+	@Localize(locale = "es", value = "Muestra información de la versión del programa")
 	private static String				VERSION_DESCRIPTION;
 	@Localize("The same as the \"{0}{1}\" option.")
 	@Localize(locale = "ru", value = "Тоже, что и параметр \"{0}{1}\".")
 	@Localize(locale = "de", value = "Dasselbe wie die Option \"{0}{1}\".")
+	@Localize(locale = "es", value = "Equivale a la opción \"{0}{1}\"")
 	private static String				REFERENCE_DESCRIPTION;
 
 	static {

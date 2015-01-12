@@ -53,14 +53,17 @@ public class StdImage extends BufferedImage implements Icon {
 	@Localize("Unable to load image")
 	@Localize(locale = "ru", value = "Невозможно загрузить изображение")
 	@Localize(locale = "de", value = "Kann Bild nicht laden")
+	@Localize(locale = "es", value = "")
 	private static String							UNABLE_TO_LOAD_IMAGE;
 	@Localize("Invalid angle: %d")
 	@Localize(locale = "ru", value = "Недопустимый угол: %d")
 	@Localize(locale = "de", value = "Ungültiger Winkel: %d")
+	@Localize(locale = "es", value = "")
 	private static String							INVALID_ANGLE;
 	@Localize("Invalid transparency")
 	@Localize(locale = "ru", value = "Недопустимая прозрачность")
 	@Localize(locale = "de", value = "Ungültige Transparenz")
+	@Localize(locale = "es", value = "La transparencia no es válida")
 	private static String							INVALID_TRANSPARENCY;
 
 	static {

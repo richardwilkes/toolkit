@@ -35,14 +35,17 @@ public class StdImageSet implements Comparator<StdImage> {
 	@Localize("Invalid ICNS")
 	@Localize(locale = "ru", value = "Недопустимый ICNS")
 	@Localize(locale = "de", value = "Fehlerhafte ICNS-Datei")
+	@Localize(locale = "es", value = "fichero ICNS no es válido")
 	private static String					INVALID_ICNS;
 	@Localize("Invalid ICO")
 	@Localize(locale = "ru", value = "Недопустимый ICO")
 	@Localize(locale = "de", value = "Fehlerhafte ICO-Datei")
+	@Localize(locale = "es", value = "fichero ICO no es válido")
 	private static String					INVALID_ICO;
 	@Localize("Unable to create PNG")
 	@Localize(locale = "ru", value = "Невозможно создать PNG")
 	@Localize(locale = "de", value = "Kann PNG-Datei nicht erstellen")
+	@Localize(locale = "es", value = "Imposible crear fichero PNG")
 	private static String					UNABLE_TO_CREATE_PNG;
 
 	static {

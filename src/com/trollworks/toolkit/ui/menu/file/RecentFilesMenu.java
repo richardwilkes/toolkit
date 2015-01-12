@@ -31,6 +31,7 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
 	@Localize("Recent Files")
 	@Localize(locale = "ru", value = "Недавние файлы")
 	@Localize(locale = "de", value = "Zuletzt verwendete Dateien")
+	@Localize(locale = "es", value = "Archivos recientes")
 	private static String					RECENT_FILES;
 
 	static {

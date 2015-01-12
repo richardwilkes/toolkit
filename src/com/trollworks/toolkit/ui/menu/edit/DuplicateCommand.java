@@ -23,6 +23,7 @@ public class DuplicateCommand extends Command {
 	@Localize("Duplicate")
 	@Localize(locale = "ru", value = "Дублировать")
 	@Localize(locale = "de", value = "Duplizieren")
+	@Localize(locale = "es", value = "Duplicar")
 	private static String					DUPLICATE;
 
 	static {

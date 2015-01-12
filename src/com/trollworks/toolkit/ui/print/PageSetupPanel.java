@@ -55,10 +55,12 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 	@Localize("Printer")
 	@Localize(locale = "ru", value = "Принтер")
 	@Localize(locale = "de", value = "Drucker")
+	@Localize(locale = "es", value = "Impresora")
 	private static String						PRINTER;
 	@Localize("Paper Type")
 	@Localize(locale = "ru", value = "Тип бумаги")
 	@Localize(locale = "de", value = "Papierformat")
+	@Localize(locale = "es", value = "Tipo de papel")
 	private static String						PAPER_TYPE;
 	@Localize("Orientation")
 	@Localize(locale = "ru", value = "Ориентация")
@@ -67,29 +69,37 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 	@Localize("Sides")
 	@Localize(locale = "ru", value = "Стороны")
 	@Localize(locale = "de", value = "Beidseitig")
+	@Localize(locale = "es", value = "Caras")
 	private static String						SIDES;
 	@Localize("Number Up")
 	@Localize(locale = "ru", value = "Увеличить номер")
 	@Localize(locale = "de", value = "Seiten pro Blatt")
+	@Localize(locale = "es", value = "Numeración arriba")
 	private static String						NUMBER_UP;
 	@Localize("Color")
 	@Localize(locale = "ru", value = "Цвет")
 	@Localize(locale = "de", value = "Farbmodus")
+	@Localize(locale = "es", value = "Color")
 	private static String						CHROMATICITY;
 	@Localize("Quality")
 	@Localize(locale = "ru", value = "Качество")
 	@Localize(locale = "de", value = "Qualität")
+	@Localize(locale = "es", value = "Calidad")
 	private static String						QUALITY;
 	@Localize("Resolution")
 	@Localize(locale = "ru", value = "Разрешение")
 	@Localize(locale = "de", value = "Auflösung")
+	@Localize(locale = "es", value = "Resolución")
 	private static String						RESOLUTION;
 	@Localize(" dpi")
+	// TODO [L10n] Missed RU translation? "dots per inch"
 	@Localize(locale = "de", value = " DPI")
+	@Localize(locale = "es", value = " ppp")
 	private static String						DPI;
 	@Localize("<html>Margins<br>(inches)")
 	@Localize(locale = "ru", value = "<html>Поля<br>(дюймы)")
 	@Localize(locale = "de", value = "<html>Ränder<br>(in Zoll)")
+	@Localize(locale = "es", value = "<html>Márgenes<br>(en pulgadas)")
 	private static String						MARGINS;
 
 	static {

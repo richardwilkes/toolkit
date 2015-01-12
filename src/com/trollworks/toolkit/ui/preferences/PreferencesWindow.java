@@ -39,10 +39,12 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
 	@Localize("Preferences")
 	@Localize(locale = "ru", value = "Настройки")
 	@Localize(locale = "de", value = "Einstellungen")
+	@Localize(locale = "es", value = "Preferencias")
 	private static String									PREFERENCES;
 	@Localize("Reset to Factory Defaults")
 	@Localize(locale = "ru", value = "Сброс в настройки по умолчанию")
 	@Localize(locale = "de", value = "Standardeinstellungen wiederherstellen")
+	@Localize(locale = "es", value = "Reiniciar las preferencias")
 	private static String									RESET;
 
 	static {

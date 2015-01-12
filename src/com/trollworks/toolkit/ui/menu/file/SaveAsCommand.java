@@ -27,6 +27,7 @@ public class SaveAsCommand extends Command {
 	@Localize("Save As\u2026")
 	@Localize(locale = "ru", value = "Сохранить как\u2026")
 	@Localize(locale = "de", value = "Speichern unter\u2026")
+	@Localize(locale = "es", value = "Salvar como\u2026")
 	private static String				SAVE_AS;
 
 	static {

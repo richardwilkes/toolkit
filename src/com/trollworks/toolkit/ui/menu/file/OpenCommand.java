@@ -33,6 +33,7 @@ public class OpenCommand extends Command implements OpenFilesHandler {
 	@Localize("Open\u2026")
 	@Localize(locale = "ru", value = "Открыть\u2026")
 	@Localize(locale = "de", value = "Öffnen\u2026")
+	@Localize(locale = "es", value = "Abrir\u2026")
 	private static String			OPEN;
 
 	static {

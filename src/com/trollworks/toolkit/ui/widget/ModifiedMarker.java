@@ -23,10 +23,12 @@ public class ModifiedMarker extends JLabel implements DataModifiedListener {
 	@Localize("Changes have been made")
 	@Localize(locale = "ru", value = "Изменения были внесены")
 	@Localize(locale = "de", value = "Nicht gespeicherte Änderungen")
+	@Localize(locale = "es", value = "Se han realizado los cambios")
 	private static String	MODIFIED;
 	@Localize("No changes have been made")
 	@Localize(locale = "ru", value = "Изменений не было сделано")
 	@Localize(locale = "de", value = "Unverändert")
+	@Localize(locale = "es", value = "No se han hecho cambios")
 	private static String	NOT_MODIFIED;
 
 	static {

@@ -36,6 +36,7 @@ public class Preferences {
 	@Localize("Global preferences have not been initialized yet!")
 	@Localize(locale = "ru", value = "Глобальные парметры ещё не были инициализированы!")
 	@Localize(locale = "de", value = "Globale Einstellungen wurden noch nicht initialisiert!")
+	@Localize(locale = "es", value = "Las preferencias generales no se han iniciallizado todavia")
 	private static String		UNINITIALIZED;
 
 	static {

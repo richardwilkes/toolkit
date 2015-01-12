@@ -26,10 +26,12 @@ public class Text {
 	@Localize("was")
 	@Localize(locale = "ru", value = "был")
 	@Localize(locale = "de", value = "wurde")
+	@Localize(locale = "es", value = "era")
 	private static String		WAS;
 	@Localize("were")
 	@Localize(locale = "ru", value = "где")
 	@Localize(locale = "de", value = "wurden")
+	@Localize(locale = "es", value = "eran")
 	private static String		WERE;
 
 	static {

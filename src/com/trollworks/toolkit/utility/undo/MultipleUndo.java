@@ -21,10 +21,12 @@ public class MultipleUndo extends CompoundEdit {
 	@Localize("Redo ")
 	@Localize(locale = "ru", value = "Повторить ")
 	@Localize(locale = "de", value = "Wiederherstellen: ")
+	@Localize(locale = "es", value = "Rehacer ")
 	private static String	REDO_PREFIX;
 	@Localize("Undo ")
 	@Localize(locale = "ru", value = "Отменить ")
 	@Localize(locale = "de", value = "Rückgängig: ")
+	@Localize(locale = "es", value = "Deshacer ")
 	private static String	UNDO_PREFIX;
 
 	static {

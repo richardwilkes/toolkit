@@ -58,14 +58,17 @@ public enum Quality {
 	@Localize("High")
 	@Localize(locale = "ru", value = "Высокий")
 	@Localize(locale = "de", value = "Hoch")
+	@Localize(locale = "es", value = "Alta")
 	static String	HIGH_TITLE;
 	@Localize("Normal")
 	@Localize(locale = "ru", value = "Обычный")
 	@Localize(locale = "de", value = "Normal")
+	@Localize(locale = "es", value = "Normal")
 	static String	NORMAL_TITLE;
 	@Localize("Draft")
 	@Localize(locale = "ru", value = "Черновик")
 	@Localize(locale = "de", value = "Entwurf")
+	@Localize(locale = "es", value = "Borrador")
 	static String	DRAFT_TITLE;
 
 	static {

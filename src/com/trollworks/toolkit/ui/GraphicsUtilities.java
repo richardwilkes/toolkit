@@ -43,6 +43,7 @@ public class GraphicsUtilities {
 	@Localize("There is no valid graphics display.")
 	@Localize(locale = "ru", value = "Нет доступного графического дисплея")
 	@Localize(locale = "de", value = "Kein gültiges Grafikausgabegerät gefunden.")
+	@Localize(locale = "es", value = "No hay monitor válido disponible")
 	private static String			HEADLESS;
 
 	static {

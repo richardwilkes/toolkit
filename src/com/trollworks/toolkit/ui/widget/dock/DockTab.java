@@ -52,6 +52,7 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 	@Localize("Close")
 	@Localize(locale = "ru", value = "Закрыть")
 	@Localize(locale = "de", value = "Schließen")
+	@Localize(locale = "es", value = "Cerrar")
 	private static String	CLOSE_TOOLTIP;
 
 	static {

@@ -28,6 +28,7 @@ public class DeleteCommand extends Command {
 	@Localize("Delete")
 	@Localize(locale = "ru", value = "Удалить")
 	@Localize(locale = "de", value = "Löschen")
+	@Localize(locale = "es", value = "Eliminar")
 	private static String				DELETE;
 
 	static {

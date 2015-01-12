@@ -26,6 +26,7 @@ public class CopyCommand extends Command {
 	@Localize("Copy")
 	@Localize(locale = "ru", value = "Копировать")
 	@Localize(locale = "de", value = "Kopieren")
+	@Localize(locale = "es", value = "Copiar")
 	private static String			COPY;
 
 	static {

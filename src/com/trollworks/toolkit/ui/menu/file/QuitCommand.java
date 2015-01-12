@@ -33,10 +33,12 @@ public class QuitCommand extends Command implements QuitHandler {
 	@Localize("Quit")
 	@Localize(locale = "ru", value = "Выход")
 	@Localize(locale = "de", value = "Beenden")
+	@Localize(locale = "es", value = "Salir")
 	private static String			QUIT;
 	@Localize("Exit")
 	@Localize(locale = "ru", value = "Выход")
 	@Localize(locale = "de", value = "Beenden")
+	@Localize(locale = "es", value = "Salir")
 	private static String			EXIT;
 
 	static {

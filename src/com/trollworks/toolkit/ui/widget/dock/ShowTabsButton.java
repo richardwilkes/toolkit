@@ -51,6 +51,7 @@ public class ShowTabsButton extends JComponent implements MouseListener, MouseMo
 	@Localize("Show Hidden Tabs List")
 	@Localize(locale = "ru", value = "Показать список скрытых закладок")
 	@Localize(locale = "de", value = "Zeigt die Liste mit ausgeblendeten Tabs an")
+	@Localize(locale = "es", value = "Mostrar las solapas ocultas")
 	private static String		TOOLTIP;
 
 	static {

@@ -26,20 +26,24 @@ public class BundleInfo {
 	@Localize("Development")
 	@Localize(locale = "ru", value = "Разработка")
 	@Localize(locale = "de", value = "Entwicklung")
+	@Localize(locale = "es", value = "Desarrollo")
 	private static String		DEVELOPMENT;
 	@Localize("Unspecified")
 	@Localize(locale = "ru", value = "Не указан")
 	@Localize(locale = "de", value = "Nicht angegeben")
+	@Localize(locale = "es", value = "No especificado")
 	private static String		UNSPECIFIED;
 	@Localize("%s %s\n%s\n%s")
 	private static String		APP_BANNER_FORMAT;
 	@Localize("Copyright \u00A9 %s by %s")
 	@Localize(locale = "ru", value = "Авторское право \u00A9 %s от %s")
 	@Localize(locale = "de", value = "Copyright \u00A9 %2$s, %1$s")
+	@Localize(locale = "es", value = "Copyright \u00A9 %2$s, %1$s")
 	private static String		COPYRIGHT_FORMAT;
 	@Localize("All rights reserved")
 	@Localize(locale = "ru", value = "Все права защищены")
 	@Localize(locale = "de", value = "Alle Rechte vorbehalten")
+	@Localize(locale = "es", value = "Reservados todos los derechos")
 	private static String		ALL_RIGHTS_RESERVED;
 	@Localize("%s. %s.")
 	private static String		COPYRIGHT_BANNER_FORMAT;

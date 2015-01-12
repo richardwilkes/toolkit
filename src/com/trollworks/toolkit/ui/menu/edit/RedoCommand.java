@@ -25,6 +25,7 @@ public class RedoCommand extends Command {
 	@Localize("Can't Redo")
 	@Localize(locale = "ru", value = "Нельзя повторить")
 	@Localize(locale = "de", value = "Kann nicht Wiederherstellen")
+	@Localize(locale = "es", value = "No se puede rehacer")
 	private static String			CANT_REDO;
 
 	static {

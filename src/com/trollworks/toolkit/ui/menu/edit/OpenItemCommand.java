@@ -23,6 +23,7 @@ public class OpenItemCommand extends Command {
 	@Localize("Open Item")
 	@Localize(locale = "ru", value = "Открыть элемент")
 	@Localize(locale = "de", value = "Element öffnen")
+	@Localize(locale = "es", value = "Abrir elemento")
 	private static String				OPEN_ITEM;
 
 	static {

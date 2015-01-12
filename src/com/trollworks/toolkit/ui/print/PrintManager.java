@@ -45,22 +45,27 @@ public class PrintManager {
 	@Localize("Printing failed!")
 	@Localize(locale = "ru", value = "Ошибка печати!")
 	@Localize(locale = "de", value = "Druck fehlgeschlagen!")
+	@Localize(locale = "es", value = "¡Fallo de impresión!")
 	private static String					PRINTING_FAILED;
 	@Localize("No printer is available!")
 	@Localize(locale = "ru", value = "Нет доступного принтера!")
 	@Localize(locale = "de", value = "Kein Drucker verfügbar!")
+	@Localize(locale = "es", value = "¡No hay impresora disponible!")
 	private static String					NO_PRINTER_AVAILABLE;
 	@Localize("Unable to switch printers!")
 	@Localize(locale = "ru", value = "Невозможно переключить принтеры!")
 	@Localize(locale = "de", value = "Kann Drucker nicht wechseln!")
+	@Localize(locale = "es", value = "¡No se puede conectar con las impresoras!")
 	private static String					UNABLE_TO_SWITCH_PRINTERS;
 	@Localize("Page Setup")
 	@Localize(locale = "ru", value = "Настройка страницы")
 	@Localize(locale = "de", value = "Seite einrichten")
+	@Localize(locale = "es", value = "Configuración de página")
 	private static String					PAGE_SETUP_TITLE;
 	@Localize("Print")
 	@Localize(locale = "ru", value = "Печать")
 	@Localize(locale = "de", value = "Drucken")
+	@Localize(locale = "es", value = "Imprimir")
 	private static String					PRINT_TITLE;
 
 	static {

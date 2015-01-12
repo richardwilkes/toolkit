@@ -31,6 +31,7 @@ public class WindowMenuProvider implements MenuProvider {
 	@Localize("Window")
 	@Localize(locale = "ru", value = "Окно")
 	@Localize(locale = "de", value = "Fenster")
+	@Localize(locale = "es", value = "Ventana")
 	private static String		WINDOW;
 
 	static {

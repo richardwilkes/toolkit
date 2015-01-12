@@ -79,10 +79,12 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	@Localize("Sort")
 	@Localize(locale = "ru", value = "Сортировка")
 	@Localize(locale = "de", value = "Sortieren")
+	@Localize(locale = "es", value = "Ordenar")
 	private static String			SORT_UNDO_TITLE;
 	@Localize("Row Drag & Drop")
 	@Localize(locale = "ru", value = "Перетянуть строку")
 	@Localize(locale = "de", value = "Zeile verschieben")
+	@Localize(locale = "es", value = "Mover filas")
 	private static String			ROW_DROP_UNDO_TITLE;
 
 	static {

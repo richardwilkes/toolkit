@@ -22,6 +22,7 @@ public class ClearRecentFilesMenuCommand extends Command {
 	@Localize("Clear")
 	@Localize(locale = "ru", value = "Очистить")
 	@Localize(locale = "de", value = "Liste löschen")
+	@Localize(locale = "es", value = "Vaciar lista")
 	private static String							CLEAR;
 
 	static {

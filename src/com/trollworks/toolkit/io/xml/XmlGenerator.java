@@ -35,6 +35,7 @@ public class XmlGenerator implements AutoCloseable {
 	@Localize("%s has not been annotated with @%s.")
 	@Localize(locale = "ru", value = "%s не имеет комментариев @%s.")
 	@Localize(locale = "de", value = "%s wurde nicht mit @%s annotiert.")
+	@Localize(locale = "es", value = "%s no ha sido anotado con @%s.")
 	private static String		NOT_TAGGED;
 
 	static {

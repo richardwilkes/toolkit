@@ -25,6 +25,7 @@ public class UndoCommand extends Command {
 	@Localize("Can't Undo")
 	@Localize(locale = "ru", value = "Нельзя отменить")
 	@Localize(locale = "de", value = "Kann nicht Rückgängig machen")
+	@Localize(locale = "es", value = "No se puede deshacer")
 	private static String			CANT_UNDO;
 
 	static {

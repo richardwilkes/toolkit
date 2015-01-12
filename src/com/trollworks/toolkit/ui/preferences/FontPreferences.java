@@ -31,6 +31,7 @@ public class FontPreferences extends PreferencePanel implements ActionListener {
 	@Localize("Fonts")
 	@Localize(locale = "ru", value = "Шрифты")
 	@Localize(locale = "de", value = "Schriftarten")
+	@Localize(locale = "es", value = "Fuentes")
 	private static String	FONTS;
 
 	static {

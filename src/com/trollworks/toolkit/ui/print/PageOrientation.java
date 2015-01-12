@@ -72,18 +72,22 @@ public enum PageOrientation {
 	@Localize("Portrait")
 	@Localize(locale = "ru", value = "Книжная")
 	@Localize(locale = "de", value = "Hochformat")
+	@Localize(locale = "es", value = "Vertical")
 	static String	PORTRAIT_TITLE;
 	@Localize("Landscape")
 	@Localize(locale = "ru", value = "Альбомная")
 	@Localize(locale = "de", value = "Querformat")
+	@Localize(locale = "es", value = "Horizontal")
 	static String	LANDSCAPE_TITLE;
 	@Localize("Reversed Portrait")
 	@Localize(locale = "ru", value = "Зеркальная книжная")
 	@Localize(locale = "de", value = "Hochformat gedreht")
+	@Localize(locale = "es", value = "Vertical invertido")
 	static String	REVERSED_PORTRAIT_TITLE;
 	@Localize("Reversed Landscape")
 	@Localize(locale = "ru", value = "Зеркальная альбомная")
 	@Localize(locale = "de", value = "Querformat gedreht")
+	@Localize(locale = "es", value = "Horizontal invertido")
 	static String	REVERSED_LANDSCAPE_TITLE;
 
 	static {

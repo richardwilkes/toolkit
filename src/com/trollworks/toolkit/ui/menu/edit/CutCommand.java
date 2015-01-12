@@ -26,6 +26,7 @@ public class CutCommand extends Command {
 	@Localize("Cut")
 	@Localize(locale = "ru", value = "Вырезать")
 	@Localize(locale = "de", value = "Ausschneiden")
+	@Localize(locale = "es", value = "Cortar")
 	private static String			CUT;
 
 	static {

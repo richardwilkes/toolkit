@@ -23,42 +23,53 @@ public class Numbers {
 	@Localize("First")
 	@Localize(locale = "ru", value = "Первый")
 	@Localize(locale = "de", value = "Erste(r)")
+	@Localize(locale = "es", value = "Primero/a")
+	@Localize(locale = "es", value = "")
 	private static String			FIRST;
 	@Localize("Second")
 	@Localize(locale = "ru", value = "Второй")
 	@Localize(locale = "de", value = "Zweite(r)")
+	@Localize(locale = "es", value = "Segundo/a")
 	private static String			SECOND;
 	@Localize("Third")
 	@Localize(locale = "ru", value = "Третий")
 	@Localize(locale = "de", value = "Dritte(r)")
+	@Localize(locale = "es", value = "Tercero/a")
 	private static String			THIRD;
 	@Localize("Fourth")
 	@Localize(locale = "ru", value = "Четвертый")
 	@Localize(locale = "de", value = "Vierte(r)")
+	@Localize(locale = "es", value = "Cuarto/a")
 	private static String			FOURTH;
 	@Localize("Fifth")
 	@Localize(locale = "ru", value = "Пятый")
 	@Localize(locale = "de", value = "Fünfte(r)")
+	@Localize(locale = "es", value = "Quinto/a")
 	private static String			FIFTH;
 	@Localize("Sixth")
 	@Localize(locale = "ru", value = "Шестой")
 	@Localize(locale = "de", value = "Sechste(r)")
+	@Localize(locale = "es", value = "Sexto/a")
 	private static String			SIXTH;
 	@Localize("Seventh")
 	@Localize(locale = "ru", value = "Седьмой")
 	@Localize(locale = "de", value = "Siebte(r)")
+	@Localize(locale = "es", value = "Séptimo/a")
 	private static String			SEVENTH;
 	@Localize("Eighth")
 	@Localize(locale = "ru", value = "Восьмой")
 	@Localize(locale = "de", value = "Achte(r)")
+	@Localize(locale = "es", value = "Octavo/a")
 	private static String			EIGHTH;
 	@Localize("Ninth")
 	@Localize(locale = "ru", value = "Девятый")
 	@Localize(locale = "de", value = "Neunte(r)")
+	@Localize(locale = "es", value = "Noveno/a")
 	private static String			NINTH;
 	@Localize("Tenth")
 	@Localize(locale = "ru", value = "Десятый")
 	@Localize(locale = "de", value = "Zehnte(r)")
+	@Localize(locale = "es", value = "Décimo/a")
 	private static String			TENTH;
 
 	static {

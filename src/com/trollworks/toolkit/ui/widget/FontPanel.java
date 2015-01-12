@@ -28,30 +28,37 @@ public class FontPanel extends ActionPanel implements ActionListener {
 	@Localize("Plain")
 	@Localize(locale = "ru", value = "Обычный")
 	@Localize(locale = "de", value = "Normal")
+	@Localize(locale = "es", value = "Normal")
 	private static String			PLAIN;
 	@Localize("Bold")
 	@Localize(locale = "ru", value = "Полужирный")
 	@Localize(locale = "de", value = "Fett")
+	@Localize(locale = "es", value = "Negrita")
 	private static String			BOLD;
 	@Localize("Italic")
 	@Localize(locale = "ru", value = "Курсив")
 	@Localize(locale = "de", value = "Kursiv")
+	@Localize(locale = "es", value = "Cursiva")
 	private static String			ITALIC;
 	@Localize("Bold Italic")
 	@Localize(locale = "ru", value = "Полужирный Курсив")
 	@Localize(locale = "de", value = "Fett Kursiv")
+	@Localize(locale = "es", value = "Cursiva Negrita")
 	private static String			BOLD_ITALIC;
 	@Localize("Changes the font")
 	@Localize(locale = "ru", value = "Изменить шрифт")
 	@Localize(locale = "de", value = "Ändert die Schriftart")
+	@Localize(locale = "es", value = "Cambiar la fuente")
 	private static String			NAME_TOOLTIP;
 	@Localize("Changes the font size")
 	@Localize(locale = "ru", value = "Изменить размер шрифта")
 	@Localize(locale = "de", value = "Ändert die Schriftgröße")
+	@Localize(locale = "es", value = "Cambiar el tamaño de la fuente")
 	private static String			SIZE_TOOLTIP;
 	@Localize("Changes the font style")
 	@Localize(locale = "ru", value = "Изменить стиль шрифта")
 	@Localize(locale = "de", value = "Ändert den Schriftstil")
+	@Localize(locale = "es", value = "Cambiar el estilo de la fuente")
 	private static String			STYLE_TOOLTIP;
 
 	static {

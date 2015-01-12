@@ -58,14 +58,17 @@ public enum PageSides {
 	@Localize("Single")
 	@Localize(locale = "ru", value = "Один")
 	@Localize(locale = "de", value = "Einseitig")
+	@Localize(locale = "es", value = "A una cara")
 	static String	SINGLE_TITLE;
 	@Localize("Duplex")
 	@Localize(locale = "ru", value = "Двухсторонний")
 	@Localize(locale = "de", value = "Lange Seite")
+	@Localize(locale = "es", value = "A dos Caras")
 	static String	DUPLEX_TITLE;
 	@Localize("Tumble")
 	@Localize(locale = "ru", value = "Ручная подача")
 	@Localize(locale = "de", value = "Kurze Seite")
+	@Localize(locale = "es", value = "Boca abajo")
 	static String	TUMBLE_TITLE;
 
 	static {

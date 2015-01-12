@@ -38,22 +38,27 @@ public class PrintPanel extends PageSetupPanel {
 	@Localize("Copies")
 	@Localize(locale = "ru", value = "Копии")
 	@Localize(locale = "de", value = "Kopien")
+	@Localize(locale = "es", value = "Copias")
 	private static String	COPIES;
 	@Localize("Print Range")
 	@Localize(locale = "ru", value = "Печать диапазона")
 	@Localize(locale = "de", value = "Seiten")
+	@Localize(locale = "es", value = "Rango de páginas")
 	private static String	PAGE_RANGE;
 	@Localize("All")
 	@Localize(locale = "ru", value = "Всё")
 	@Localize(locale = "de", value = "alle")
+	@Localize(locale = "es", value = "Todo")
 	private static String	ALL;
 	@Localize("Pages")
 	@Localize(locale = "ru", value = "Страницы")
 	@Localize(locale = "de", value = "von Seite")
+	@Localize(locale = "es", value = "Páginas")
 	private static String	PAGES;
 	@Localize("to")
 	@Localize(locale = "ru", value = "-")
 	@Localize(locale = "de", value = "bis")
+	@Localize(locale = "es", value = "a")
 	private static String	TO;
 
 	static {

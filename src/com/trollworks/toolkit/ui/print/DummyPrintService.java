@@ -31,6 +31,7 @@ class DummyPrintService implements PrintService {
 	@Localize("No printer is available!")
 	@Localize(locale = "ru", value = "Нет доступного принтера!")
 	@Localize(locale = "de", value = "Kein Drucker verfügbar!")
+	@Localize(locale = "es", value = "¡No hay impresora disponible!")
 	private static String	NO_PRINTER_AVAILABLE;
 
 	static {

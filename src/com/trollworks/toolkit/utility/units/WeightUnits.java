@@ -72,30 +72,37 @@ public enum WeightUnits implements Units {
 	@Localize("Ounces")
 	@Localize(locale = "ru", value = "Унция")
 	@Localize(locale = "de", value = "Unzen")
+	@Localize(locale = "es", value = "Onzas")
 	static String	OUNCES_DESCRIPTION;
 	@Localize("Pounds")
 	@Localize(locale = "ru", value = "Фунт")
 	@Localize(locale = "de", value = "Pfund")
+	@Localize(locale = "es", value = "Libras")
 	static String	POUNDS_DESCRIPTION;
 	@Localize("Grams")
 	@Localize(locale = "ru", value = "Граммы")
 	@Localize(locale = "de", value = "Gramm")
+	@Localize(locale = "es", value = "Gramos")
 	static String	GRAMS_DESCRIPTION;
 	@Localize("Kilograms")
 	@Localize(locale = "ru", value = "Килограммы")
 	@Localize(locale = "de", value = "Kilogramm")
+	@Localize(locale = "es", value = "Kilogramos")
 	static String	KILOGRAMS_DESCRIPTION;
 	@Localize("Short Tons")
 	@Localize(locale = "ru", value = "Американские тонны")
 	@Localize(locale = "de", value = "Amerikanische Tonnen")
+	@Localize(locale = "es", value = "Tonelada Corta")
 	static String	SHORT_TONS_DESCRIPTION;
 	@Localize("Long Tons")
 	@Localize(locale = "ru", value = "Английские тонны")
 	@Localize(locale = "de", value = "Britische Tonnen")
+	@Localize(locale = "es", value = "Tonelada Larga")
 	static String	LONG_TONS_DESCRIPTION;
 	@Localize("Metric Tons")
 	@Localize(locale = "ru", value = "Метрические тонны")
 	@Localize(locale = "de", value = "Tonnen")
+	@Localize(locale = "es", value = "Tonelada")
 	static String	METRIC_TONS_DESCRIPTION;
 	@Localize("{0} {1}")
 	static String	FORMAT;
