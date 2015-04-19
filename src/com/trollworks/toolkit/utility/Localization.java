@@ -53,9 +53,9 @@ public class Localization implements PrivilegedAction<Object> {
 	/**
 	 * Initialize the calling class with the values from its message bundle. <b>NOTE</b>: This can
 	 * only be called if the calling class shares the same {@link ClassLoader} as the
-	 * {@link Localization} class. Classes from Eclipse plugins, for example, do <b>NOT</b> share
-	 * class loaders and cannot use this method unless they are in the same plugin as the
-	 * {@link Localization} class.
+	 * {@link Localization} class. Classes from different Eclipse plugins, for example, do
+	 * <b>NOT</b> share class loaders and cannot use this method unless they are in the same plugin
+	 * as the {@link Localization} class.
 	 */
 	public static void initialize() {
 		try {
