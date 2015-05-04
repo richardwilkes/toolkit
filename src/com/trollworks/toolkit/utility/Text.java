@@ -38,7 +38,7 @@ public class Text {
 		Localization.initialize();
 	}
 
-	public static final String	UTF8_ENCODING	= "UTF-8";	//$NON-NLS-1$
+	private static final char[]	HEX_DIGITS	= { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	/**
 	 * @param text The text to check.
@@ -80,8 +80,12 @@ public class Text {
 	 * @param data The bytes to compute a hash for.
 	 * @return A SHA-1 hash for the input data.
 	 */
-	public final static byte[] computeSHA1Hash(byte[] data) throws NoSuchAlgorithmException {
-		return computeSHA1Hash(data, 0, data.length);
+	public final static byte[] computeSHA1Hash(byte[] data) {
+		try {
+			return MessageDigest.getInstance("SHA-1").digest(data); //$NON-NLS-1$
+		} catch (final NoSuchAlgorithmException exception) {
+			throw new IllegalArgumentException(exception);
+		}
 	}
 
 	/**
@@ -90,10 +94,14 @@ public class Text {
 	 * @param length The number of bytes to use.
 	 * @return A SHA-1 hash for the input data.
 	 */
-	public final static byte[] computeSHA1Hash(byte[] data, int offset, int length) throws NoSuchAlgorithmException {
-		MessageDigest sha1 = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
-		sha1.update(data, offset, length);
-		return sha1.digest();
+	public final static byte[] computeSHA1Hash(byte[] data, int offset, int length) {
+		try {
+			MessageDigest sha1 = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
+			sha1.update(data, offset, length);
+			return sha1.digest();
+		} catch (final NoSuchAlgorithmException exception) {
+			throw new IllegalArgumentException(exception);
+		}
 	}
 
 	/**
@@ -111,13 +119,11 @@ public class Text {
 	 * @return A string of two character hexadecimal values for each byte.
 	 */
 	public final static String bytesToHex(byte[] data, int offset, int length) {
-		StringBuilder buffer = new StringBuilder();
+		StringBuilder buffer = new StringBuilder(length * 2);
 		for (int i = 0; i < length; i++) {
-			String hex = Integer.toHexString(data[i + offset] & 0xFF);
-			if (hex.length() < 2) {
-				buffer.append('0');
-			}
-			buffer.append(hex);
+			byte b = data[i + offset];
+			buffer.append(HEX_DIGITS[b >>> 4 & 15]);
+			buffer.append(HEX_DIGITS[b & 15]);
 		}
 		return buffer.toString();
 	}
