@@ -11,12 +11,28 @@
 
 package com.trollworks.toolkit.io;
 
+import java.io.Closeable;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /** Utility methods for use with streams. */
 public class StreamUtils {
+	/**
+	 * Copy the contents of <code>in</code> into <code>out</code>.
+	 *
+	 * @param in The {@link InputStream} to read from.
+	 * @param out The {@link OutputStream} to write to.
+	 */
+	public static final void copy(InputStream in, OutputStream out) throws IOException {
+		byte[] data = new byte[8192];
+		int amt;
+		while ((amt = in.read(data)) != -1) {
+			out.write(data, 0, amt);
+		}
+	}
+
 	/**
 	 * Fills the specified buffer with bytes from the stream. Will not return until the buffer is
 	 * full or an {@link IOException} occurs.
@@ -60,6 +76,21 @@ public class StreamUtils {
 		long skipped = 0;
 		while (total < length && (skipped = in.skip(length - total)) > 0) {
 			total += skipped;
+		}
+	}
+
+	/**
+	 * Closes a {@link Closeable} and swallows any {@link IOException} that may be thrown.
+	 *
+	 * @param closeable The {@link Closeable} to close.
+	 */
+	public static final void closeQuietly(Closeable closeable) {
+		if (closeable != null) {
+			try {
+				closeable.close();
+			} catch (IOException ioe) {
+				// ignore
+			}
 		}
 	}
 }
