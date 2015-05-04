@@ -19,10 +19,10 @@ import com.trollworks.toolkit.annotation.XmlTagMinimumVersion;
 import com.trollworks.toolkit.annotation.XmlTagVersion;
 import com.trollworks.toolkit.utility.Introspection;
 import com.trollworks.toolkit.utility.Localization;
-import com.trollworks.toolkit.utility.Text;
 
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -58,7 +58,7 @@ public class XmlGenerator implements AutoCloseable {
 	 * @param stream The {@link OutputStream} to write to.
 	 */
 	public XmlGenerator(OutputStream stream) throws XMLStreamException {
-		mWriter = XMLOutputFactory.newInstance().createXMLStreamWriter(stream, Text.UTF8_ENCODING);
+		mWriter = XMLOutputFactory.newInstance().createXMLStreamWriter(stream, StandardCharsets.UTF_8.name());
 	}
 
 	/** @param indent The characters to use for indentation. */
@@ -68,7 +68,7 @@ public class XmlGenerator implements AutoCloseable {
 
 	/** Emits the XML document header. */
 	public void startDocument() throws XMLStreamException {
-		mWriter.writeStartDocument(Text.UTF8_ENCODING, "1.0");	//$NON-NLS-1$
+		mWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0");	//$NON-NLS-1$
 	}
 
 	/** Finishes the document. */

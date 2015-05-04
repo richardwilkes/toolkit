@@ -16,7 +16,6 @@ import com.trollworks.toolkit.io.server.Personality;
 import com.trollworks.toolkit.io.server.Session;
 import com.trollworks.toolkit.io.server.websocket.WebSocket;
 import com.trollworks.toolkit.io.server.websocket.WebSocketFactory;
-import com.trollworks.toolkit.utility.Text;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -29,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -206,7 +206,7 @@ public class Http extends Personality {
 		response.addHeader("Upgrade", "WebSocket");
 		response.addHeader("Connection", "Upgrade");
 		MessageDigest md = MessageDigest.getInstance("SHA1");
-		md.update((key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").getBytes(Text.UTF8_ENCODING));
+		md.update((key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").getBytes(StandardCharsets.UTF_8));
 		response.addHeader("Sec-WebSocket-Accept", Base64.getEncoder().encodeToString(md.digest()));
 		response.send(this);
 		ws.startConnection();
@@ -341,7 +341,7 @@ public class Http extends Personality {
 
 	private static String decodePercent(String str) {
 		try {
-			return URLDecoder.decode(str, Text.UTF8_ENCODING);
+			return URLDecoder.decode(str, StandardCharsets.UTF_8.name());
 		} catch (UnsupportedEncodingException ignored) {
 			// Ignore. Shouldn't be possible.
 			return str;

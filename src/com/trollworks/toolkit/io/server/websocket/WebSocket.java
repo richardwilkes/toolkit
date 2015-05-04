@@ -13,12 +13,11 @@ package com.trollworks.toolkit.io.server.websocket;
 
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.io.server.Personality;
-import com.trollworks.toolkit.utility.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A {@link Personality} for handling Web Socket connections.<br>
@@ -98,7 +97,7 @@ public class WebSocket extends Personality {
 						mBuffer.write(mData);
 						if (mFinalFragment) {
 							if (mLastOpcode == Opcode.TEXT) {
-								mHandler.webSocketTextData(this, mBuffer.toString(Text.UTF8_ENCODING));
+								mHandler.webSocketTextData(this, mBuffer.toString(StandardCharsets.UTF_8.name()));
 							} else {
 								mHandler.webSocketBinaryData(this, mBuffer.toByteArray());
 							}
@@ -107,7 +106,7 @@ public class WebSocket extends Personality {
 						break;
 					case TEXT:
 						if (mFinalFragment) {
-							mHandler.webSocketTextData(this, new String(mData, Text.UTF8_ENCODING));
+							mHandler.webSocketTextData(this, new String(mData, StandardCharsets.UTF_8));
 							mBuffer.reset();
 						} else {
 							mLastOpcode = mOpcode;
@@ -242,11 +241,7 @@ public class WebSocket extends Personality {
 	 * @param msg The message to send.
 	 */
 	public final void send(String msg) {
-		try {
-			send(Opcode.TEXT, msg.getBytes(Text.UTF8_ENCODING));
-		} catch (UnsupportedEncodingException exception) {
-			Log.error(getSession(), exception);
-		}
+		send(Opcode.TEXT, msg.getBytes(StandardCharsets.UTF_8));
 	}
 
 	/**

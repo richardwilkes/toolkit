@@ -14,7 +14,6 @@ package com.trollworks.toolkit.io.json;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.io.UrlUtils;
 import com.trollworks.toolkit.utility.Geometry;
-import com.trollworks.toolkit.utility.Text;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -24,6 +23,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Map;
 
@@ -56,12 +57,12 @@ public class Json {
 	}
 
 	/**
-	 * @param stream An {@link InputStream} to load JSON data from. {@link Text#UTF8_ENCODING} will
-	 *            be used as the encoding when reading from the stream.
+	 * @param stream An {@link InputStream} to load JSON data from. {@link StandardCharsets#UTF_8}
+	 *            will be used as the encoding when reading from the stream.
 	 * @return The result of loading the data.
 	 */
 	public static final Object parse(InputStream stream) throws IOException {
-		return parse(stream, Text.UTF8_ENCODING);
+		return parse(stream, StandardCharsets.UTF_8);
 	}
 
 	/**
@@ -70,6 +71,15 @@ public class Json {
 	 * @return The result of loading the data.
 	 */
 	public static final Object parse(InputStream stream, String encoding) throws IOException {
+		return parse(new InputStreamReader(stream, encoding));
+	}
+
+	/**
+	 * @param stream An {@link InputStream} to load JSON data from.
+	 * @param encoding The character encoding to use when reading from the stream.
+	 * @return The result of loading the data.
+	 */
+	public static final Object parse(InputStream stream, Charset encoding) throws IOException {
 		return parse(new InputStreamReader(stream, encoding));
 	}
 
@@ -100,8 +110,8 @@ public class Json {
 	}
 
 	/**
-	 * @param stream An {@link InputStream} to load JSON data from. {@link Text#UTF8_ENCODING} will
-	 *            be used as the encoding when reading from the stream.
+	 * @param stream An {@link InputStream} to load JSON data from. {@link StandardCharsets#UTF_8}
+	 *            will be used as the encoding when reading from the stream.
 	 * @return The result of loading the data if it is an array or <code>null</code> if it isn't.
 	 */
 	public static final JsonArray parseArray(InputStream stream) throws IOException {
@@ -147,8 +157,8 @@ public class Json {
 	}
 
 	/**
-	 * @param stream An {@link InputStream} to load JSON data from. {@link Text#UTF8_ENCODING} will
-	 *            be used as the encoding when reading from the stream.
+	 * @param stream An {@link InputStream} to load JSON data from. {@link StandardCharsets#UTF_8}
+	 *            will be used as the encoding when reading from the stream.
 	 * @return The result of loading the data if it is a map or <code>null</code> if it isn't.
 	 */
 	public static final JsonMap parseMap(InputStream stream) throws IOException {

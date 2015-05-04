@@ -12,13 +12,13 @@
 package com.trollworks.toolkit.io.server.http;
 
 import com.trollworks.toolkit.io.Log;
-import com.trollworks.toolkit.utility.Text;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -164,7 +164,7 @@ public class HttpResponse {
 					if (mData instanceof ByteArrayOutputStream) {
 						mData = ((ByteArrayOutputStream) mData).toByteArray();
 					} else if (!(mData instanceof byte[])) {
-						mData = mData.toString().getBytes(Text.UTF8_ENCODING);
+						mData = mData.toString().getBytes(StandardCharsets.UTF_8);
 					}
 					writeHeader(pw, "Content-Length", Integer.toString(((byte[]) mData).length));
 				}
