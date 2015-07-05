@@ -413,6 +413,14 @@ int WINAPI WinMain(HINSTANCE inst,HINSTANCE prevInst,LPSTR cmdLine,int cmdShow) 
 #else
 int main(int argc, char **argv) {
 #endif
+	// Remove the JAVA_TOOL_OPTIONS environment variable, if it exists, as Ubuntu 15.04 and potentially other OS's
+	// are using it to insert bad code, which causes the standard file dialogs to crash under some circumstances.
+#if TARGET_WINDOWS
+	_putenv_s("JAVA_TOOL_OPTIONS", "");
+#else
+	unsetenv("JAVA_TOOL_OPTIONS");
+#endif
+
 	// Setup our paths
 	char *exePath = getExecutablePath();
 	char *exeDir = getParentDir(exePath);
