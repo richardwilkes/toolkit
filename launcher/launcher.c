@@ -153,16 +153,18 @@ static void fail(char *format, ...) {
 
 static char *concat(int count, ...) {
 	int length = 1;
+	int i;
+	char *buffer;
 	va_list args;
 	va_start(args, count);
-	for (int i = 0; i < count; i++) {
+	for (i = 0; i < count; i++) {
 		length += strlen(va_arg(args, char *));
 	}
 	va_end(args);
-	char *buffer = (char *)malloc(length);
+	buffer = (char *)malloc(length);
 	*buffer = 0;
 	va_start(args, count);
-	for (int i = 0; i < count; i++) {
+	for (i = 0; i < count; i++) {
 		strcat(buffer, va_arg(args, char *));
 	}
 	va_end(args);
@@ -261,11 +263,12 @@ static char *getMainJar(char *jarDir, char *exeName) {
 	char *path = concat(3, jarDir, PATH_SEP, "*.jar");
 	HANDLE dp = FindFirstFile(path, &ffd);
 	if (dp != INVALID_HANDLE_VALUE) {
+		char *buffer;
 		if (endsWith(".exe", exeName)) {
 			exeName = strdup(exeName);
 			exeName[strlen(exeName) - 4] = 0;
 		}
-		char *buffer = concat(2, exeName, "-");
+		buffer = concat(2, exeName, "-");
 		do {
 			if (startsWith(buffer, ffd.cFileName) && endsWith(".jar", ffd.cFileName)) {
 				char *jar = concat(3, jarDir, PATH_SEP, ffd.cFileName);
@@ -363,22 +366,24 @@ static int addToArgsArray(LinkPtr head, char **args, int startAt, int printArgs)
 			// and then re-parse it in the new process... which, of course, completely
 			// defeats the purpose of separating them into separate arguments in the
 			// first place. We'll attempt to escape them here.
-			char *arg = (char *)malloc(strlen(head->arg) * 2);
-			int i = 0;
-			int j = 0;
-			arg[j++] = '"';
-			while (head->arg[i]) {
-				char ch = head->arg[i++];
-				if (ch == '"') {
-					arg[j++] = '"';
-					arg[j++] = '"';
+			{
+				char *arg = (char *)malloc(strlen(head->arg) * 2);
+				int i = 0;
+				int j = 0;
+				arg[j++] = '"';
+				while (head->arg[i]) {
+					char ch = head->arg[i++];
+					if (ch == '"') {
+						arg[j++] = '"';
+						arg[j++] = '"';
+					}
+					arg[j++] = ch;
 				}
-				arg[j++] = ch;
+				arg[j++] = '"';
+				arg[j] = 0;
+				args[startAt] = arg;
+				startAt++;
 			}
-			arg[j++] = '"';
-			arg[j] = 0;
-			args[startAt] = arg;
-			startAt++;
 #else
 			args[startAt++] = head->arg;
 #endif
@@ -406,13 +411,7 @@ static int launchViaJLI(char *jreDir, int argc, char **argv) {
 }
 #endif
 
-#if TARGET_WINDOWS
-int WINAPI WinMain(HINSTANCE inst,HINSTANCE prevInst,LPSTR cmdLine,int cmdShow) {
-	int argc = __argc;
-	char **argv = __argv;
-#else
-int main(int argc, char **argv) {
-#endif
+static void removeBadEnvironment() {
 	// Remove the JAVA_TOOL_OPTIONS environment variable, if it exists, as Ubuntu 15.04 and potentially other OS's
 	// are using it to insert bad code, which causes the standard file dialogs to crash under some circumstances.
 #if TARGET_WINDOWS
@@ -420,7 +419,15 @@ int main(int argc, char **argv) {
 #else
 	unsetenv("JAVA_TOOL_OPTIONS");
 #endif
+}
 
+#if TARGET_WINDOWS
+int WINAPI WinMain(HINSTANCE inst,HINSTANCE prevInst,LPSTR cmdLine,int cmdShow) {
+	int argc = __argc;
+	char **argv = __argv;
+#else
+int main(int argc, char **argv) {
+#endif
 	// Setup our paths
 	char *exePath = getExecutablePath();
 	char *exeDir = getParentDir(exePath);
@@ -438,6 +445,8 @@ int main(int argc, char **argv) {
 	}
 #endif
 
+	removeBadEnvironment();
+
 	// Prepare the VM arguments
 	int debugArgs = FALSE;
 	LinkPtr jvmArgs = calloc(1, sizeof(Link));
@@ -446,6 +455,8 @@ int main(int argc, char **argv) {
 	LinkPtr currentAppArgs = appArgs;
 	LinkPtr maxRAMLink = NULL;
 	LinkPtr logLink = NULL;
+	int i;
+
 #if !TARGET_WINDOWS
 	currentJvmArgs = addLink(currentJvmArgs, exePath);
 #endif
@@ -453,7 +464,7 @@ int main(int argc, char **argv) {
 	currentJvmArgs = addLink(currentJvmArgs, strdup("-Xdock:name=" xstr(APP_NAME)));
 	currentJvmArgs = addLink(currentJvmArgs, concat(3, "-Xdock:icon=", getParentDir(exeDir), "/Resources/app.icns"));
 #endif
-	for (int i = 1; i < argc; i++) {
+	for (i = 1; i < argc; i++) {
 		if (startsWith("-J-Xmx", argv[i])) {
 			char *maxRAM = strdup(argv[i] + 2);
 			if (maxRAMLink) {
