@@ -445,8 +445,6 @@ int main(int argc, char **argv) {
 	}
 #endif
 
-	removeBadEnvironment();
-
 	// Prepare the VM arguments
 	int debugArgs = FALSE;
 	LinkPtr jvmArgs = calloc(1, sizeof(Link));
@@ -456,6 +454,8 @@ int main(int argc, char **argv) {
 	LinkPtr maxRAMLink = NULL;
 	LinkPtr logLink = NULL;
 	int i;
+
+	removeBadEnvironment();
 
 #if !TARGET_WINDOWS
 	currentJvmArgs = addLink(currentJvmArgs, exePath);
