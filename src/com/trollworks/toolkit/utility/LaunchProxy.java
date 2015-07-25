@@ -22,6 +22,7 @@ import com.trollworks.toolkit.ui.menu.file.OpenDataFileCommand;
 import java.awt.EventQueue;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -55,7 +56,7 @@ public class LaunchProxy implements ConduitReceiver {
 	 * @param files The files, if any, that should be passed on to another instance of the app that
 	 *            may already be running.
 	 */
-	public synchronized static void configure(File... files) {
+	public synchronized static void configure(List<File> files) {
 		if (INSTANCE == null) {
 			INSTANCE = new LaunchProxy(files);
 			try {
@@ -69,7 +70,7 @@ public class LaunchProxy implements ConduitReceiver {
 		}
 	}
 
-	private LaunchProxy(File... files) {
+	private LaunchProxy(List<File> files) {
 		StringBuilder buffer = new StringBuilder();
 		mFiles = new ArrayList<>();
 		mTimeStamp = System.currentTimeMillis();
@@ -77,13 +78,14 @@ public class LaunchProxy implements ConduitReceiver {
 		buffer.append(' ');
 		buffer.append(mTimeStamp);
 		buffer.append(' ');
-		if (files != null) {
-			for (int i = 0; i < files.length; i++) {
-				if (i != 0) {
-					buffer.append(',');
-				}
-				buffer.append(files[i].getAbsolutePath().replaceAll(AT, AT_MARKER).replaceAll(SPACE, SPACE_MARKER).replaceAll(COMMA, COMMA_MARKER));
+		boolean needComma = false;
+		for (File file : files) {
+			if (needComma) {
+				buffer.append(',');
+			} else {
+				needComma = true;
 			}
+			buffer.append(file.getAbsolutePath().replaceAll(AT, AT_MARKER).replaceAll(SPACE, SPACE_MARKER).replaceAll(COMMA, COMMA_MARKER));
 		}
 		mConduit = new Conduit(this, false);
 		mConduit.send(new ConduitMessage(BundleInfo.getDefault().getName(), buffer.toString()));

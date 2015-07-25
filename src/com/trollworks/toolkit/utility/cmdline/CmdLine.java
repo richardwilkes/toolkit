@@ -310,7 +310,6 @@ public class CmdLine {
 	/** @return The arguments that were not options. */
 	public List<File> getArgumentsAsFiles() {
 		List<File> arguments = new ArrayList<>();
-
 		for (CmdLineData one : mData) {
 			if (!one.isOption()) {
 				arguments.add(new File(one.getArgument()));
