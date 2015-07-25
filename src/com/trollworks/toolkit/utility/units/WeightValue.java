@@ -34,7 +34,7 @@ public class WeightValue extends UnitsValue<WeightUnits> {
 				}
 			}
 		}
-		return new WeightValue(localized ? Numbers.getLocalizedDouble(buffer, 0) : Numbers.getDouble(buffer, 0), units);
+		return new WeightValue(localized ? Numbers.extractDouble(buffer, 0, true) : Numbers.extractDouble(buffer, 0, false), units);
 	}
 
 	/**

@@ -19,6 +19,7 @@ import com.trollworks.toolkit.annotation.XmlTagMinimumVersion;
 import com.trollworks.toolkit.annotation.XmlTagVersion;
 import com.trollworks.toolkit.utility.Introspection;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.io.OutputStream;
 import java.lang.reflect.Field;
@@ -162,7 +163,7 @@ public class XmlGenerator implements AutoCloseable {
 	 * @param value The value of the attribute.
 	 */
 	public void addAttribute(String name, double value) throws XMLStreamException {
-		mWriter.writeAttribute(name, Double.toString(value));
+		mWriter.writeAttribute(name, Numbers.trimTrailingZeroes(Double.toString(value), false));
 	}
 
 	/**

@@ -139,7 +139,7 @@ public enum WeightUnits implements Units {
 	@Override
 	public String format(double value, boolean localize) {
 		String textValue = localize ? Numbers.format(value) : Double.toString(value);
-		return MessageFormat.format(FORMAT, Numbers.trimTrailingZerosAfterDecimal(textValue, localize), getAbbreviation());
+		return MessageFormat.format(FORMAT, Numbers.trimTrailingZeroes(textValue, localize), getAbbreviation());
 	}
 
 	@Override

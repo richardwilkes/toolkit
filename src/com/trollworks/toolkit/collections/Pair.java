@@ -11,7 +11,7 @@
 
 package com.trollworks.toolkit.collections;
 
-import com.trollworks.toolkit.utility.Numbers;
+import com.trollworks.toolkit.utility.text.Numbers;
 
 /** Creates a tuple with two values. */
 public class Pair<F, S> implements Comparable<Pair<F, S>> {

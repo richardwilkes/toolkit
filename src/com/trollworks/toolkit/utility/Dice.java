@@ -16,6 +16,7 @@ import java.util.Random;
 /** Simulates dice. */
 public class Dice implements Cloneable {
 	private static final Random	RANDOM						= new Random();
+	private static boolean		SHOW_SINGLE_DIE_COUNT		= true;
 	private static int			ASSUMED_SIDE_COUNT			= 0;
 	private static boolean		EXTRA_DICE_FROM_MODIFIERS	= false;
 	private int					mCount;
@@ -24,6 +25,17 @@ public class Dice implements Cloneable {
 	private int					mMultiplier;
 	private int					mAltCount;
 	private int					mAltModifier;
+
+	/**
+	 * Determines whether a "1" will be shown when a single die is being displayed.<br>
+	 * <br>
+	 * By default, this is set to <code>true</code>.
+	 *
+	 * @param show <code>true</code> to show "1d6", false to show "d6".
+	 */
+	public static final void setShowSingleDieCount(boolean show) {
+		SHOW_SINGLE_DIE_COUNT = show;
+	}
 
 	/**
 	 * Sets the assumed number of sides per die. When this is set to a positive value greater than
@@ -52,6 +64,11 @@ public class Dice implements Cloneable {
 		EXTRA_DICE_FROM_MODIFIERS = convert;
 	}
 
+	public static final int roll(String text) {
+		Dice dice = new Dice(text);
+		return dice.roll();
+	}
+
 	/** Creates a new 1d6 dice object. */
 	public Dice() {
 		this(1, 6, 0, 1);
@@ -71,6 +88,9 @@ public class Dice implements Cloneable {
 			mSides = extractValue(buffer);
 			if (mSides == 0) {
 				mSides = ASSUMED_SIDE_COUNT;
+			}
+			if (mCount < 1) {
+				mCount = 1;
 			}
 			ch = nextChar(buffer);
 		}
@@ -103,7 +123,7 @@ public class Dice implements Cloneable {
 	 *         specification. If there was no dice specification detected, then <code>null</code>
 	 *         will be returned instead.
 	 */
-	public static int[] extractDicePosition(String text) {
+	public static final int[] extractDicePosition(String text) {
 		int start = -1;
 		int max = text.length();
 		int state = 0;
@@ -236,9 +256,9 @@ public class Dice implements Cloneable {
 	}
 
 	@Override
-	public Object clone() {
+	public Dice clone() {
 		try {
-			return super.clone();
+			return (Dice) super.clone();
 		} catch (CloneNotSupportedException cnse) {
 			return null; // Can't happen.
 		}
@@ -296,7 +316,9 @@ public class Dice implements Cloneable {
 		StringBuilder buffer = new StringBuilder();
 		updateAlt();
 		if (mAltCount > 0 && mSides > 0) {
-			buffer.append(mAltCount);
+			if (SHOW_SINGLE_DIE_COUNT || mAltCount > 1) {
+				buffer.append(mAltCount);
+			}
 			buffer.append('d');
 			if (mSides != ASSUMED_SIDE_COUNT) {
 				buffer.append(mSides);

@@ -1956,9 +1956,9 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 					}
 					columns.remove(column);
 					columns.add(i, column);
-					column.setVisible(Numbers.getBoolean(tokenizer.nextToken()));
+					column.setVisible(Numbers.extractBoolean(tokenizer.nextToken()));
 					column.setWidth(getInteger(tokenizer, column.getWidth()));
-					column.setSortCriteria(getInteger(tokenizer, -1), Numbers.getBoolean(tokenizer.nextToken()));
+					column.setSortCriteria(getInteger(tokenizer, -1), Numbers.extractBoolean(tokenizer.nextToken()));
 					if (column.getSortSequence() != -1) {
 						needSort = true;
 					}

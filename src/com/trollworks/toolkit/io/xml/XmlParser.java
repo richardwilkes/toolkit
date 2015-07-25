@@ -16,7 +16,7 @@ import com.trollworks.toolkit.annotation.XmlAttr;
 import com.trollworks.toolkit.annotation.XmlTag;
 import com.trollworks.toolkit.utility.Introspection;
 import com.trollworks.toolkit.utility.Localization;
-import com.trollworks.toolkit.utility.Numbers;
+import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -344,6 +344,18 @@ public class XmlParser implements AutoCloseable {
 
 	/**
 	 * @param name The name of the attribute to retrieve.
+	 * @param def The default value to use if the attribute value isn't present or cannot be
+	 *            converted.
+	 * @param min The minimum value to return.
+	 * @param max The maximum value to return.
+	 * @return The value of the attribute.
+	 */
+	public int getIntegerAttribute(String name, int def, int min, int max) {
+		return Numbers.extractInteger(getAttribute(name), def, min, max, false);
+	}
+
+	/**
+	 * @param name The name of the attribute to retrieve.
 	 * @return The value of the attribute.
 	 */
 	public long getLongAttribute(String name) {
@@ -362,6 +374,18 @@ public class XmlParser implements AutoCloseable {
 
 	/**
 	 * @param name The name of the attribute to retrieve.
+	 * @param def The default value to use if the attribute value isn't present or cannot be
+	 *            converted.
+	 * @param min The minimum value to return.
+	 * @param max The maximum value to return.
+	 * @return The value of the attribute.
+	 */
+	public long getLongAttribute(String name, long def, long min, long max) {
+		return Numbers.extractLong(getAttribute(name), def, min, max, false);
+	}
+
+	/**
+	 * @param name The name of the attribute to retrieve.
 	 * @return The value of the attribute.
 	 */
 	public double getDoubleAttribute(String name) {
@@ -376,6 +400,18 @@ public class XmlParser implements AutoCloseable {
 	 */
 	public double getDoubleAttribute(String name, double def) {
 		return Numbers.extractDouble(getAttribute(name), def, false);
+	}
+
+	/**
+	 * @param name The name of the attribute to retrieve.
+	 * @param def The default value to use if the attribute value isn't present or cannot be
+	 *            converted.
+	 * @param min The minimum value to return.
+	 * @param max The maximum value to return.
+	 * @return The value of the attribute.
+	 */
+	public double getDoubleAttribute(String name, double def, double min, double max) {
+		return Numbers.extractDouble(getAttribute(name), def, min, max, false);
 	}
 
 	/** @return The number of attributes. */

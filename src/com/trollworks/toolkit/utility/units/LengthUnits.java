@@ -67,7 +67,7 @@ public enum LengthUnits implements Units {
 		}
 
 		private String formatNumber(double value, boolean localize) {
-			return Numbers.trimTrailingZerosAfterDecimal(localize ? Numbers.format(value) : Double.toString(value), localize);
+			return Numbers.trimTrailingZeroes(localize ? Numbers.format(value) : Double.toString(value), localize);
 		}
 	},
 	/** Yards. */
@@ -203,7 +203,7 @@ public enum LengthUnits implements Units {
 	@Override
 	public String format(double value, boolean localize) {
 		String textValue = localize ? Numbers.format(value) : Double.toString(value);
-		return MessageFormat.format(FORMAT, Numbers.trimTrailingZerosAfterDecimal(textValue, localize), getAbbreviation());
+		return MessageFormat.format(FORMAT, Numbers.trimTrailingZeroes(textValue, localize), getAbbreviation());
 	}
 
 	@Override

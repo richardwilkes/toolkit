@@ -596,17 +596,17 @@ public class OutlineModel implements SelectionOwner, StateEditable {
 		if (config != null && config.startsWith("S")) { //$NON-NLS-1$
 			try {
 				StringTokenizer tokenizer = new StringTokenizer(config, "\t"); //$NON-NLS-1$
-				if (Numbers.getInteger(tokenizer.nextToken().substring(1), 0) == CONFIG_VERSION) {
-					int count = Numbers.getInteger(tokenizer.nextToken(), 0);
+				if (Numbers.extractInteger(tokenizer.nextToken().substring(1), 0, false) == CONFIG_VERSION) {
+					int count = Numbers.extractInteger(tokenizer.nextToken(), 0, false);
 					if (clearSortInternal()) {
 						result = 0;
 					}
 					for (int i = 0; i < count; i++) {
-						Column column = getColumnWithID(Numbers.getInteger(tokenizer.nextToken(), 0));
+						Column column = getColumnWithID(Numbers.extractInteger(tokenizer.nextToken(), 0, false));
 						if (column == null) {
 							throw new Exception();
 						}
-						column.setSortCriteria(Numbers.getInteger(tokenizer.nextToken(), -1), Numbers.getBoolean(tokenizer.nextToken()));
+						column.setSortCriteria(Numbers.extractInteger(tokenizer.nextToken(), -1, false), Numbers.extractBoolean(tokenizer.nextToken()));
 						if (column.getSortSequence() != -1) {
 							result = 1;
 						}

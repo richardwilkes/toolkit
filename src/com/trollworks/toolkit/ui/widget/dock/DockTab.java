@@ -22,7 +22,7 @@ import com.trollworks.toolkit.ui.menu.file.Saveable;
 import com.trollworks.toolkit.ui.widget.DataModifiedListener;
 import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
-import com.trollworks.toolkit.utility.NumericComparator;
+import com.trollworks.toolkit.utility.text.NumericComparator;
 
 import java.awt.Color;
 import java.awt.GradientPaint;

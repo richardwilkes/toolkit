@@ -392,10 +392,10 @@ public class PrintManager {
 			int y;
 
 			if (sep != -1 && sep < buffer.length() - 1) {
-				x = Numbers.getInteger(buffer.substring(0, sep), 0);
-				y = Numbers.getInteger(buffer.substring(sep + 1), 0);
+				x = Numbers.extractInteger(buffer.substring(0, sep), 0, false);
+				y = Numbers.extractInteger(buffer.substring(sep + 1), 0, false);
 			} else {
-				x = Numbers.getInteger(buffer, 0);
+				x = Numbers.extractInteger(buffer, 0, false);
 				y = x;
 			}
 			if (x < 1 || y < 1) {

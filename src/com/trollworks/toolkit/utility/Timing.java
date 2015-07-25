@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.utility;
 
+import com.trollworks.toolkit.utility.text.Numbers;
+
 /** Provides basic timing facilities. */
 public final class Timing {
 	private long	mBase;

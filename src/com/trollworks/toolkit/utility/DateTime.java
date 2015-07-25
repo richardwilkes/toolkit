@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.utility;
 
+import com.trollworks.toolkit.utility.text.Numbers;
+
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;

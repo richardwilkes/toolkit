@@ -31,13 +31,13 @@ public class LengthValue extends UnitsValue<LengthUnits> {
 			if (feetMark != -1 || inchesMark != -1) {
 				if (feetMark == -1) {
 					String part = buffer.substring(0, inchesMark);
-					return new LengthValue(localized ? Numbers.getLocalizedDouble(part, 0) : Numbers.getDouble(part, 0), LengthUnits.FT_IN);
+					return new LengthValue(localized ? Numbers.extractDouble(part, 0, true) : Numbers.extractDouble(part, 0, false), LengthUnits.FT_IN);
 				}
 				String part = buffer.substring(inchesMark != -1 && feetMark > inchesMark ? inchesMark + 1 : 0, feetMark);
-				double inches = (localized ? Numbers.getLocalizedDouble(part, 0) : Numbers.getDouble(part, 0)) * 12;
+				double inches = (localized ? Numbers.extractDouble(part, 0, true) : Numbers.extractDouble(part, 0, false)) * 12;
 				if (inchesMark != -1) {
 					part = buffer.substring(feetMark < inchesMark ? feetMark + 1 : 0, inchesMark);
-					inches += localized ? Numbers.getLocalizedDouble(part, 0) : Numbers.getDouble(part, 0);
+					inches += localized ? Numbers.extractDouble(part, 0, true) : Numbers.extractDouble(part, 0, false);
 				}
 				return new LengthValue(inches, LengthUnits.FT_IN);
 			}
@@ -50,7 +50,7 @@ public class LengthValue extends UnitsValue<LengthUnits> {
 				}
 			}
 		}
-		return new LengthValue(localized ? Numbers.getLocalizedDouble(buffer, 0) : Numbers.getDouble(buffer, 0), units);
+		return new LengthValue(localized ? Numbers.extractDouble(buffer, 0, true) : Numbers.extractDouble(buffer, 0, false), units);
 	}
 
 	/**

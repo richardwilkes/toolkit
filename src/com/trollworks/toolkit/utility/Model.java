@@ -15,9 +15,14 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.xml.XmlGenerator;
 import com.trollworks.toolkit.io.xml.XmlParser;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.MessageFormat;
+import java.util.UUID;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -43,7 +48,9 @@ public abstract class Model implements Cloneable {
 		Localization.initialize();
 	}
 
-	private static final String	ATTR_VERSION	= "version";	//$NON-NLS-1$
+	private static final String	ATTR_VERSION	= "version";			//$NON-NLS-1$
+	private static final String	ATTR_ID			= "id";				//$NON-NLS-1$
+	private UUID				mId				= UUID.randomUUID();
 
 	/** @return The root XML tag name. */
 	public abstract String getRootTag();
@@ -53,6 +60,30 @@ public abstract class Model implements Cloneable {
 
 	/** @return The minimum version of the root XML tag. */
 	public abstract int getMinimumVersion();
+
+	/** A globally unique ID. */
+	public UUID getId() {
+		return mId;
+	}
+
+	/** @param id The globally unique ID to set. */
+	public void setId(UUID id) {
+		mId = id;
+	}
+
+	/**
+	 * Load the model's content from the specified {@link File}.
+	 *
+	 * @param file The {@link File} to load from.
+	 * @param context The {@link ModelContext} to use.
+	 */
+	public final void load(File file, ModelContext context) throws XMLStreamException {
+		try (FileInputStream stream = new FileInputStream(file)) {
+			load(stream, context);
+		} catch (IOException exception) {
+			throw new XMLStreamException(exception);
+		}
+	}
 
 	/**
 	 * Load the model's content from the specified {@link InputStream}.
@@ -92,6 +123,7 @@ public abstract class Model implements Cloneable {
 				throw new XMLStreamException(MessageFormat.format(TOO_NEW, parser.getCurrentTag()), parser.getLocation());
 			}
 			context.mVersionStack.push(Integer.valueOf(version));
+			mId = parser.hasAttribute(ATTR_ID) ? UUID.fromString(parser.getAttribute(ATTR_ID)) : UUID.randomUUID();
 			loadAttributes(parser, context);
 			if (!loadContents(parser, context)) {
 				while ((tag = parser.nextTag(marker)) != null) {
@@ -161,6 +193,20 @@ public abstract class Model implements Cloneable {
 	}
 
 	/**
+	 * Saves the model's content to the specified {@link File}.
+	 *
+	 * @param file The {@link File} to save to.
+	 * @param context The {@link ModelContext} to use.
+	 */
+	public final void save(File file, ModelContext context) throws XMLStreamException {
+		try (FileOutputStream out = new FileOutputStream(file)) {
+			save(out, context);
+		} catch (IOException exception) {
+			throw new XMLStreamException(exception);
+		}
+	}
+
+	/**
 	 * Saves the model's content to the specified {@link OutputStream}.
 	 *
 	 * @param stream The {@link OutputStream} to save to.
@@ -183,14 +229,16 @@ public abstract class Model implements Cloneable {
 	public final void save(XmlGenerator generator, ModelContext context) throws XMLStreamException {
 		modelWillSave(context);
 		String tag = getRootTag();
-		if (isEmptyTag()) {
+		boolean isEmpty = isEmptyTag();
+		if (isEmpty) {
 			generator.startEmptyTag(tag);
-			generator.addAttribute(ATTR_VERSION, getCurrentVersion());
-			saveAttributes(generator, context);
 		} else {
 			generator.startTag(tag);
-			generator.addAttribute(ATTR_VERSION, getCurrentVersion());
-			saveAttributes(generator, context);
+		}
+		generator.addAttribute(ATTR_VERSION, getCurrentVersion());
+		generator.addAttribute(ATTR_ID, mId.toString());
+		saveAttributes(generator, context);
+		if (!isEmpty) {
 			saveChildTags(generator, context);
 			generator.endTag();
 		}

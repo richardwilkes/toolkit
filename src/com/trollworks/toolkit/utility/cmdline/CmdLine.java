@@ -15,7 +15,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.Platform;
-import com.trollworks.toolkit.utility.text.TextUtility;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -243,8 +243,8 @@ public class CmdLine {
 				builder.append('=');
 				builder.append(option.getArgumentLabel());
 			}
-			builder.append(TextUtility.makeFiller(cmdWidth - builder.length(), ' '));
-			System.out.print(TextUtility.makeNote(builder.toString(), TextUtility.wrapToCharacterCount(description, 75 - cmdWidth)));
+			builder.append(Text.makeFiller(cmdWidth - builder.length(), ' '));
+			System.out.print(Text.makeNote(builder.toString(), Text.wrapToCharacterCount(description, 75 - cmdWidth)));
 		}
 
 		if (mHelpFooter != null) {

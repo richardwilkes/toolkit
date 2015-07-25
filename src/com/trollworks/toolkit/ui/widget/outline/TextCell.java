@@ -13,7 +13,7 @@ package com.trollworks.toolkit.ui.widget.outline;
 
 import com.trollworks.toolkit.ui.TextDrawing;
 import com.trollworks.toolkit.ui.image.StdImage;
-import com.trollworks.toolkit.utility.NumericComparator;
+import com.trollworks.toolkit.utility.text.NumericComparator;
 
 import java.awt.Color;
 import java.awt.Cursor;

@@ -15,7 +15,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.EndianUtils;
 import com.trollworks.toolkit.io.StreamUtils;
 import com.trollworks.toolkit.utility.Localization;
-import com.trollworks.toolkit.utility.Numbers;
+import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

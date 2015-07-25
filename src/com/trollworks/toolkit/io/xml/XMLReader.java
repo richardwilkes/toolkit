@@ -27,7 +27,7 @@ import java.util.HashMap;
 /** A very simple XML reader with very low memory overhead. */
 public class XMLReader implements AutoCloseable {
 	/** Debug option: whether to output skipped tags to standard out. */
-	public static boolean			SHOW_SKIPPED_TAGS	= Numbers.getBoolean(System.getProperty("SHOW_SKIPPED_TAGS", "false")); //$NON-NLS-1$ //$NON-NLS-2$
+	public static boolean			SHOW_SKIPPED_TAGS	= Numbers.extractBoolean(System.getProperty("SHOW_SKIPPED_TAGS", "false")); //$NON-NLS-1$ //$NON-NLS-2$
 	private static final String		UNEXPECTED_EOF		= "Unexpected EOF";													//$NON-NLS-1$
 	private static final String		COLON				= ":";																	//$NON-NLS-1$
 	private HashMap<String, String>	mEntityMap			= new HashMap<>();
@@ -219,15 +219,7 @@ public class XMLReader implements AutoCloseable {
 
 	/** @return The boolean value of a call to {@link #readText()}. */
 	public boolean readBoolean() throws IOException {
-		return Numbers.getBoolean(readText());
-	}
-
-	/**
-	 * @param defValue The default value to return if the text cannot be converted to a short.
-	 * @return The short value of a call to {@link #readText()}.
-	 */
-	public short readShort(short defValue) throws IOException {
-		return Numbers.getShort(readText(), defValue);
+		return Numbers.extractBoolean(readText());
 	}
 
 	/**
@@ -235,7 +227,7 @@ public class XMLReader implements AutoCloseable {
 	 * @return The integer value of a call to {@link #readText()}.
 	 */
 	public int readInteger(int defValue) throws IOException {
-		return Numbers.getInteger(readText(), defValue);
+		return Numbers.extractInteger(readText(), defValue, false);
 	}
 
 	/**
@@ -243,15 +235,7 @@ public class XMLReader implements AutoCloseable {
 	 * @return The long value of a call to {@link #readText()}.
 	 */
 	public long readLong(long defValue) throws IOException {
-		return Numbers.getLong(readText(), defValue);
-	}
-
-	/**
-	 * @param defValue The default value to return if the text cannot be converted to a float.
-	 * @return The float value of a call to {@link #readText()}.
-	 */
-	public float readFloat(float defValue) throws IOException {
-		return Numbers.getFloat(readText(), defValue);
+		return Numbers.extractLong(readText(), defValue, false);
 	}
 
 	/**
@@ -259,7 +243,7 @@ public class XMLReader implements AutoCloseable {
 	 * @return The double value of a call to {@link #readText()}.
 	 */
 	public double readDouble(double defValue) throws IOException {
-		return Numbers.getDouble(readText(), defValue);
+		return Numbers.extractDouble(readText(), defValue, false);
 	}
 
 	/** @return The {@link Calendar} representing the date and time read. */
@@ -680,17 +664,7 @@ public class XMLReader implements AutoCloseable {
 	 * @return Whether the attribute is present and set to a 'true' value.
 	 */
 	public boolean isAttributeSet(String name) {
-		return Numbers.getBoolean(mAttributeMap.get(name));
-	}
-
-	/**
-	 * @param name The attribute name.
-	 * @param defValue The default value to use if the attribute value can't be converted to a
-	 *            short.
-	 * @return The value of the tag.
-	 */
-	public short getAttributeAsShort(String name, short defValue) {
-		return Numbers.getShort(mAttributeMap.get(name), defValue);
+		return Numbers.extractBoolean(mAttributeMap.get(name));
 	}
 
 	/**
@@ -700,7 +674,7 @@ public class XMLReader implements AutoCloseable {
 	 * @return The value of the tag.
 	 */
 	public int getAttributeAsInteger(String name, int defValue) {
-		return Numbers.getInteger(mAttributeMap.get(name), defValue);
+		return Numbers.extractInteger(mAttributeMap.get(name), defValue, false);
 	}
 
 	/**
@@ -709,17 +683,7 @@ public class XMLReader implements AutoCloseable {
 	 * @return The value of the tag.
 	 */
 	public long getAttributeAsLong(String name, long defValue) {
-		return Numbers.getLong(mAttributeMap.get(name), defValue);
-	}
-
-	/**
-	 * @param name The attribute name.
-	 * @param defValue The default value to use if the attribute value can't be converted to a
-	 *            float.
-	 * @return The value of the tag.
-	 */
-	public float getAttributeAsFloat(String name, float defValue) {
-		return Numbers.getFloat(mAttributeMap.get(name), defValue);
+		return Numbers.extractLong(mAttributeMap.get(name), defValue, false);
 	}
 
 	/**
@@ -729,7 +693,7 @@ public class XMLReader implements AutoCloseable {
 	 * @return The value of the tag.
 	 */
 	public double getAttributeAsDouble(String name, double defValue) {
-		return Numbers.getDouble(mAttributeMap.get(name), defValue);
+		return Numbers.extractDouble(mAttributeMap.get(name), defValue, false);
 	}
 
 	/** @return The map of attributes. */

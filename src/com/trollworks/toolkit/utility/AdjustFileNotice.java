@@ -126,7 +126,7 @@ public class AdjustFileNotice {
 		}
 	}
 
-	public static final String loadDefaultTemplate() { // TODO L10n String Candidate
+	public static final String loadDefaultTemplate() {
 		return loadTemplate(new StringReader("Copyright (c) 1998-$YEAR$ by Richard A. Wilkes. All rights reserved.\n\nThis Source Code Form is subject to the terms of the Mozilla Public License,\nversion 2.0. If a copy of the MPL was not distributed with this file, You\ncan obtain one at http://mozilla.org/MPL/2.0/.\n\nThis Source Code Form is \"Incompatible With Secondary Licenses\", as defined\nby the Mozilla Public License, version 2.0.")); //$NON-NLS-1$
 	}
 

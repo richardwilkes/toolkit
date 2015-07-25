@@ -9,7 +9,7 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.utility;
+package com.trollworks.toolkit.utility.text;
 
 import java.util.Comparator;
 

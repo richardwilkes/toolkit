@@ -11,16 +11,158 @@
 
 package com.trollworks.toolkit.utility.text;
 
+import com.trollworks.toolkit.annotation.Localize;
+import com.trollworks.toolkit.utility.Localization;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import javax.swing.SwingConstants;
 
-/** General text utilities. */
-public class TextUtility {
-	private static final String	SPACE		= " ";		//$NON-NLS-1$
-	private static final String	NEWLINE		= "\n";	//$NON-NLS-1$
+/** Provides text manipulation. */
+public class Text {
+	@Localize("a")
+	private static String		A;
+	@Localize("an")
+	private static String		AN;
+	@Localize("was")
+	@Localize(locale = "ru", value = "был")
+	@Localize(locale = "de", value = "wurde")
+	@Localize(locale = "es", value = "era")
+	private static String		WAS;
+	@Localize("were")
+	@Localize(locale = "ru", value = "где")
+	@Localize(locale = "de", value = "wurden")
+	@Localize(locale = "es", value = "eran")
+	private static String		WERE;
+
+	static {
+		Localization.initialize();
+	}
+
+	private static final char[]	HEX_DIGITS	= { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+	private static final String	SPACE		= " ";																					//$NON-NLS-1$
+	private static final String	NEWLINE		= "\n";																				//$NON-NLS-1$
 	private static final char	ELLIPSIS	= '\u2026';
+
+	/**
+	 * @param text The text to check.
+	 * @return "a" or "an", as appropriate for the text that will be following it.
+	 */
+	public static final String aAn(String text) {
+		return Text.startsWithVowel(text) ? AN : A;
+	}
+
+	/**
+	 * @param amount The number of items.
+	 * @return "was" or "were", as appropriate for the number of items.
+	 */
+	public static final String wasWere(int amount) {
+		return amount == 1 ? WAS : WERE;
+	}
+
+	/**
+	 * @param ch The character to check.
+	 * @return <code>true</code> if the character is a vowel.
+	 */
+	public static final boolean isVowel(char ch) {
+		ch = Character.toLowerCase(ch);
+		return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u';
+	}
+
+	/**
+	 * @param text The text to check.
+	 * @return <code>true</code> if the text starts with a vowel.
+	 */
+	public static final boolean startsWithVowel(String text) {
+		if (text != null && !text.isEmpty()) {
+			return isVowel(text.charAt(0));
+		}
+		return false;
+	}
+
+	/**
+	 * @param data The bytes to compute a hash for.
+	 * @return A SHA-1 hash for the input data.
+	 */
+	public final static byte[] computeSHA1Hash(byte[] data) {
+		try {
+			return MessageDigest.getInstance("SHA-1").digest(data); //$NON-NLS-1$
+		} catch (final NoSuchAlgorithmException exception) {
+			throw new IllegalArgumentException(exception);
+		}
+	}
+
+	/**
+	 * @param data The bytes to compute a hash for.
+	 * @param offset The starting index.
+	 * @param length The number of bytes to use.
+	 * @return A SHA-1 hash for the input data.
+	 */
+	public final static byte[] computeSHA1Hash(byte[] data, int offset, int length) {
+		try {
+			MessageDigest sha1 = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
+			sha1.update(data, offset, length);
+			return sha1.digest();
+		} catch (final NoSuchAlgorithmException exception) {
+			throw new IllegalArgumentException(exception);
+		}
+	}
+
+	/**
+	 * @param data The data to create a hex string for.
+	 * @return A string of two character hexadecimal values for each byte.
+	 */
+	public final static String bytesToHex(byte[] data) {
+		return bytesToHex(data, 0, data.length);
+	}
+
+	/**
+	 * @param data The data to create a hex string for.
+	 * @param offset The starting index.
+	 * @param length The number of bytes to use.
+	 * @return A string of two character hexadecimal values for each byte.
+	 */
+	public final static String bytesToHex(byte[] data, int offset, int length) {
+		StringBuilder buffer = new StringBuilder(length * 2);
+		for (int i = 0; i < length; i++) {
+			byte b = data[i + offset];
+			buffer.append(HEX_DIGITS[b >>> 4 & 15]);
+			buffer.append(HEX_DIGITS[b & 15]);
+		}
+		return buffer.toString();
+	}
+
+	/**
+	 * @param text The text to reflow.
+	 * @return The revised text.
+	 */
+	@SuppressWarnings("nls")
+	public static final String reflow(String text) {
+		if (text == null) {
+			return "";
+		}
+		int count = 0;
+		StringBuilder buffer = new StringBuilder();
+		StringTokenizer tokenizer = new StringTokenizer(text.replaceAll("[\\x00-\\x08]", "").replaceAll("[\\x0b\\x0c]", "").replaceAll("[\\x0e-\\x1f]", "").replaceAll("[\\x7f-\\x9f]", "").replaceAll("\r\n", "\n").replace('\r', '\n').replaceAll("[ \t\f]+", " ").trim(), "\n", true);
+		while (tokenizer.hasMoreTokens()) {
+			String token = tokenizer.nextToken();
+			if (token.equals("\n")) {
+				count++;
+			} else {
+				if (count == 1) {
+					buffer.append(" ");
+				} else if (count > 1) {
+					buffer.append("\n\n");
+				}
+				count = 0;
+				buffer.append(token);
+			}
+		}
+		return buffer.toString();
+	}
 
 	/**
 	 * If the text doesn't fit in the specified character count, it will be shortened and an ellipse

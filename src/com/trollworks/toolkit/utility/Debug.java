@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.utility;
 
+import com.trollworks.toolkit.utility.text.Numbers;
+
 /** Provides various debugging utilities. */
 public final class Debug {
 	/** Controls whether we are in 'development mode' or not. */
