@@ -142,7 +142,9 @@ public class XmlParser implements AutoCloseable {
 				Field field = subTags.get(tag);
 				if (field != null) {
 					Class<?> type = field.getType();
-					if (Collection.class.isAssignableFrom(type)) {
+					if (String.class == type) {
+						field.set(obj, getText());
+					} else if (Collection.class.isAssignableFrom(type)) {
 						loadCollection(obj, context, field);
 					} else {
 						Object fieldObj = null;
@@ -185,9 +187,15 @@ public class XmlParser implements AutoCloseable {
 				fieldObj = ((XmlParserAssistant) obj).createObjectForXmlTag(context, tag);
 			}
 			if (fieldObj == null) {
-				throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), getLocation());
+				if (XmlGenerator.TAG_STRING.equals(tag)) {
+					fieldObj = getText();
+				} else {
+					throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), getLocation());
+				}
 			}
-			loadTagIntoObject(fieldObj, context);
+			if (!(fieldObj instanceof String)) {
+				loadTagIntoObject(fieldObj, context);
+			}
 			if (collection == null) {
 				collection = field.get(obj);
 				if (collection == null) {

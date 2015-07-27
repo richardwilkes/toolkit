@@ -48,6 +48,8 @@ public class XmlGenerator implements AutoCloseable {
 	 * {@link #add(String, Object)} is called.
 	 */
 	public static final String	ATTR_VERSION	= "version";	//$NON-NLS-1$
+	/** Used for automatic string handling. */
+	public static final String	TAG_STRING		= "string";	//$NON-NLS-1$
 	private String				mIndent			= "\t";		//$NON-NLS-1$
 	private XMLStreamWriter		mWriter;
 	private int					mDepth;
@@ -294,13 +296,21 @@ public class XmlGenerator implements AutoCloseable {
 	public void add(String tag, Object obj) throws XMLStreamException {
 		Class<?> objClass = obj.getClass();
 		if (tag == null || tag.isEmpty()) {
-			XmlTag xmlTag = objClass.getAnnotation(XmlTag.class);
-			if (xmlTag == null) {
-				throw new XMLStreamException(String.format(NOT_TAGGED, obj.getClass().getName(), XmlTag.class.getSimpleName()));
+			if (obj instanceof String) {
+				tag = TAG_STRING;
+			} else {
+				XmlTag xmlTag = objClass.getAnnotation(XmlTag.class);
+				if (xmlTag == null) {
+					throw new XMLStreamException(String.format(NOT_TAGGED, obj.getClass().getName(), XmlTag.class.getSimpleName()));
+				}
+				tag = xmlTag.value();
 			}
-			tag = xmlTag.value();
 		}
-		if (hasSubTags(obj, objClass)) {
+		if (obj instanceof String) {
+			startTag(tag);
+			addText((String) obj);
+			endTag();
+		} else if (hasSubTags(obj, objClass)) {
 			startTag(tag);
 			emitAttributes(obj, objClass);
 			emitSubTags(obj, objClass);
