@@ -21,6 +21,8 @@ import com.trollworks.toolkit.utility.text.Numbers;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -180,7 +182,13 @@ public class XmlParser implements AutoCloseable {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void loadCollection(Object obj, XmlParserContext context, Field field) throws XMLStreamException, IllegalArgumentException, IllegalAccessException, InstantiationException {
+	private void loadCollection(Object obj, XmlParserContext context, Field field) throws XMLStreamException, IllegalArgumentException, IllegalAccessException, InstantiationException, ClassNotFoundException {
+		Type genericType = field.getGenericType();
+		if (genericType instanceof ParameterizedType) {
+			genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+		} else {
+			genericType = null;
+		}
 		Object collection = null;
 		String marker = getMarker();
 		String tag;
@@ -192,6 +200,9 @@ public class XmlParser implements AutoCloseable {
 			if (fieldObj == null) {
 				if (XmlGenerator.TAG_STRING.equals(tag)) {
 					fieldObj = getText();
+				} else if (genericType != null) {
+					Class<?> cls = Class.forName(genericType.getTypeName());
+					fieldObj = cls.newInstance();
 				} else {
 					throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), getLocation());
 				}
