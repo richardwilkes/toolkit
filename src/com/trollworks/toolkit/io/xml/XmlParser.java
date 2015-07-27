@@ -13,6 +13,7 @@ package com.trollworks.toolkit.io.xml;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.annotation.XmlAttr;
+import com.trollworks.toolkit.annotation.XmlDirectChild;
 import com.trollworks.toolkit.annotation.XmlTag;
 import com.trollworks.toolkit.utility.Introspection;
 import com.trollworks.toolkit.utility.Localization;
@@ -55,6 +56,10 @@ public class XmlParser implements AutoCloseable {
 	@Localize(locale = "de", value = "Kann Objekt für Sammlungs-Tag '%s' nicht erstellen.")
 	@Localize(locale = "es", value = "Imposible crear el objeto para la colección de etiquetas '%s'.")
 	private static String		UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION;
+	@Localize("Only one direct child is permitted.")
+	private static String		ONLY_ONE_DIRECT_CHILD_PERMITTED;
+	@Localize("The direct child must be a collection.")
+	private static String		DIRECT_CHILD_MUST_BE_COLLECITON;
 
 	static {
 		Localization.initialize();
@@ -83,6 +88,7 @@ public class XmlParser implements AutoCloseable {
 	 * @param context The {@link XmlParserContext} to use. Pass in <code>null</code> to have a new
 	 *            one created.
 	 */
+	@SuppressWarnings("unchecked")
 	public void loadTagIntoObject(Object obj, XmlParserContext context) throws XMLStreamException {
 		try {
 			if (context == null) {
@@ -105,7 +111,7 @@ public class XmlParser implements AutoCloseable {
 				unmatchedAttributes.add(getAttributeName(i));
 			}
 			unmatchedAttributes.remove(XmlGenerator.ATTR_VERSION);
-			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, XmlAttr.class, true)) {
+			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlAttr.class)) {
 				Introspection.makeFieldAccessible(field);
 				XmlAttr attr = field.getAnnotation(XmlAttr.class);
 				String name = attr.value();
@@ -139,8 +145,18 @@ public class XmlParser implements AutoCloseable {
 				((XmlParserAssistant) obj).xmlAttributesLoaded(context, unmatchedAttributes);
 			}
 			Map<String, Field> subTags = new HashMap<>();
-			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, XmlTag.class, true)) {
+			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlTag.class)) {
 				subTags.put(field.getAnnotation(XmlTag.class).value(), field);
+			}
+			Field[] direct = Introspection.getFieldsWithAnnotation(tagClass, true, XmlDirectChild.class);
+			if (direct.length > 1) {
+				throw new XMLStreamException(ONLY_ONE_DIRECT_CHILD_PERMITTED);
+			}
+			if (direct.length == 1) {
+				if (!Collection.class.isAssignableFrom(direct[0].getType())) {
+					throw new XMLStreamException(DIRECT_CHILD_MUST_BE_COLLECITON);
+				}
+				Introspection.makeFieldAccessible(direct[0]);
 			}
 			String tag;
 			while ((tag = nextTag(marker)) != null) {
@@ -162,6 +178,26 @@ public class XmlParser implements AutoCloseable {
 						loadTagIntoObject(fieldObj, context);
 						field.set(obj, fieldObj);
 					}
+				} else if (direct.length == 1 && (!(obj instanceof XmlParserAssistant) || ((XmlParserAssistant) obj).isDirectChildTag(context, tag))) {
+					Type genericType = direct[0].getGenericType();
+					if (genericType instanceof ParameterizedType) {
+						genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+					} else {
+						genericType = null;
+					}
+					Object fieldObj = null;
+					if (XmlGenerator.TAG_STRING.equals(tag)) {
+						fieldObj = getText();
+					} else {
+						if (genericType != null) {
+							Class<?> cls = Class.forName(genericType.getTypeName());
+							fieldObj = cls.newInstance();
+						} else {
+							throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), getLocation());
+						}
+						loadTagIntoObject(fieldObj, context);
+					}
+					((Collection<Object>) ensureCollectionIsAllocated(obj, direct[0], null)).add(fieldObj);
 				} else if (obj instanceof XmlParserAssistant) {
 					((XmlParserAssistant) obj).processUnmatchedXmlTag(context, tag);
 				} else {
@@ -211,23 +247,30 @@ public class XmlParser implements AutoCloseable {
 				loadTagIntoObject(fieldObj, context);
 			}
 			if (collection == null) {
-				collection = field.get(obj);
-				if (collection == null) {
-					Class<?> type = field.getType();
-					if (type == List.class) {
-						collection = new ArrayList<>();
-					} else if (type == Set.class) {
-						collection = new HashSet<>();
-					} else {
-						collection = type.newInstance();
-					}
-					field.set(obj, collection);
-				}
+				collection = ensureCollectionIsAllocated(obj, field, null);
 			}
 			if (collection instanceof Collection) {
 				((Collection<Object>) collection).add(fieldObj);
 			}
 		}
+	}
+
+	private static Object ensureCollectionIsAllocated(Object obj, Field field, Object collection) throws IllegalArgumentException, IllegalAccessException, InstantiationException {
+		if (collection == null) {
+			collection = field.get(obj);
+			if (collection == null) {
+				Class<?> type = field.getType();
+				if (type == List.class) {
+					collection = new ArrayList<>();
+				} else if (type == Set.class) {
+					collection = new HashSet<>();
+				} else {
+					collection = type.newInstance();
+				}
+				field.set(obj, collection);
+			}
+		}
+		return collection;
 	}
 
 	/** @return The current line:column position. */

@@ -13,6 +13,7 @@ package com.trollworks.toolkit.io.xml;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.annotation.XmlAttr;
+import com.trollworks.toolkit.annotation.XmlDirectChild;
 import com.trollworks.toolkit.annotation.XmlNoSort;
 import com.trollworks.toolkit.annotation.XmlTag;
 import com.trollworks.toolkit.annotation.XmlTagMinimumVersion;
@@ -301,6 +302,14 @@ public class XmlGenerator implements AutoCloseable {
 			} else {
 				XmlTag xmlTag = objClass.getAnnotation(XmlTag.class);
 				if (xmlTag == null) {
+					if (obj instanceof Collection) {
+						if (objClass.getAnnotation(XmlDirectChild.class) != null) {
+							for (Object one : (Collection<?>) obj) {
+								add(one);
+							}
+							return;
+						}
+					}
 					throw new XMLStreamException(String.format(NOT_TAGGED, obj.getClass().getName(), XmlTag.class.getSimpleName()));
 				}
 				tag = xmlTag.value();
@@ -322,7 +331,7 @@ public class XmlGenerator implements AutoCloseable {
 	}
 
 	private static boolean hasSubTags(Object obj, Class<?> objClass) throws XMLStreamException {
-		for (Field field : Introspection.getFieldsWithAnnotation(objClass, XmlTag.class, true)) {
+		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class, XmlDirectChild.class)) {
 			try {
 				Introspection.makeFieldAccessible(field);
 				Object content = field.get(obj);
@@ -343,7 +352,7 @@ public class XmlGenerator implements AutoCloseable {
 	}
 
 	private void emitSubTags(Object obj, Class<?> objClass) throws XMLStreamException {
-		for (Field field : Introspection.getFieldsWithAnnotation(objClass, XmlTag.class, true)) {
+		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class, XmlDirectChild.class)) {
 			try {
 				Introspection.makeFieldAccessible(field);
 				Object content = field.get(obj);
@@ -358,14 +367,14 @@ public class XmlGenerator implements AutoCloseable {
 							collection = Arrays.asList(data);
 						}
 						if (!collection.isEmpty()) {
-							String wrapName = subTag.value();
-							if (!wrapName.isEmpty()) {
+							String wrapName = subTag != null ? subTag.value() : null;
+							if (wrapName != null && !wrapName.isEmpty()) {
 								startTag(wrapName);
 							}
 							for (Object one : collection) {
 								add(one);
 							}
-							if (!wrapName.isEmpty()) {
+							if (wrapName != null && !wrapName.isEmpty()) {
 								endTag();
 							}
 						}
@@ -383,7 +392,7 @@ public class XmlGenerator implements AutoCloseable {
 
 	private void emitAttributes(Object obj, Class<?> objClass) throws XMLStreamException {
 		addAttributeNot(ATTR_VERSION, getVersionOfTag(objClass), 0);
-		for (Field field : Introspection.getFieldsWithAnnotation(objClass, XmlAttr.class, true)) {
+		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlAttr.class)) {
 			String name = field.getAnnotation(XmlAttr.class).value();
 			try {
 				Introspection.makeFieldAccessible(field);

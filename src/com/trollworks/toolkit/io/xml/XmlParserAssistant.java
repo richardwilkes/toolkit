@@ -12,13 +12,16 @@
 package com.trollworks.toolkit.io.xml;
 
 import com.trollworks.toolkit.annotation.XmlAttr;
+import com.trollworks.toolkit.annotation.XmlDirectChild;
 import com.trollworks.toolkit.annotation.XmlTag;
 
 import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
 
-/** Objects that wish to have more control over the XML loading process can implement this interface. */
+/**
+ * Objects that wish to have more control over the XML loading process can implement this interface.
+ */
 public interface XmlParserAssistant {
 	/**
 	 * Called after the XML tag attributes have been fully loaded into the object, just prior to
@@ -40,6 +43,18 @@ public interface XmlParserAssistant {
 	 *         no-args constructor can be used).
 	 */
 	Object createObjectForXmlTag(XmlParserContext context, String tag) throws XMLStreamException;
+
+	/**
+	 * Called when a field has been marked with {@link XmlDirectChild} and no {@link XmlTag}-marked
+	 * fields match the specified tag.
+	 *
+	 * @param context The {@link XmlParserContext} for this object.
+	 * @param tag The tag name that will be processed.
+	 * @return <code>true</code> if the tag should be treated as matching the {@link XmlDirectChild}
+	 *         or <code>false</code> if a call to
+	 *         {@link #processUnmatchedXmlTag(XmlParserContext, String)} should be made instead.
+	 */
+	boolean isDirectChildTag(XmlParserContext context, String tag) throws XMLStreamException;
 
 	/**
 	 * Called to process an XML sub-tag that had no matching {@link XmlTag}-marked fields. Upon
