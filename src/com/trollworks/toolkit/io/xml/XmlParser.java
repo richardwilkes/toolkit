@@ -141,8 +141,8 @@ public class XmlParser implements AutoCloseable {
 					field.set(obj, constructor.newInstance(getAttribute(name, ""))); //$NON-NLS-1$
 				}
 			}
-			if (obj instanceof XmlParserAssistant) {
-				((XmlParserAssistant) obj).xmlAttributesLoaded(context, unmatchedAttributes);
+			if (obj instanceof AttributesLoadedListener) {
+				((AttributesLoadedListener) obj).xmlAttributesLoaded(context, unmatchedAttributes);
 			}
 			Map<String, Field> subTags = new HashMap<>();
 			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlTag.class)) {
@@ -162,6 +162,7 @@ public class XmlParser implements AutoCloseable {
 			while ((tag = nextTag(marker)) != null) {
 				Field field = subTags.get(tag);
 				if (field != null) {
+					Introspection.makeFieldAccessible(field);
 					Class<?> type = field.getType();
 					if (String.class == type) {
 						field.set(obj, getText());
@@ -169,8 +170,8 @@ public class XmlParser implements AutoCloseable {
 						loadCollection(obj, context, field);
 					} else {
 						Object fieldObj = null;
-						if (obj instanceof XmlParserAssistant) {
-							fieldObj = ((XmlParserAssistant) obj).createObjectForXmlTag(context, tag);
+						if (obj instanceof ObjectCreator) {
+							fieldObj = ((ObjectCreator) obj).createObjectForXmlTag(context, tag);
 						}
 						if (fieldObj == null) {
 							fieldObj = type.newInstance();
@@ -178,7 +179,7 @@ public class XmlParser implements AutoCloseable {
 						loadTagIntoObject(fieldObj, context);
 						field.set(obj, fieldObj);
 					}
-				} else if (direct.length == 1 && (!(obj instanceof XmlParserAssistant) || ((XmlParserAssistant) obj).isDirectChildTag(context, tag))) {
+				} else if (direct.length == 1 && (!(obj instanceof DirectChildTagManager) || ((DirectChildTagManager) obj).isDirectChildTag(context, tag))) {
 					Type genericType = direct[0].getGenericType();
 					if (genericType instanceof ParameterizedType) {
 						genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
@@ -198,14 +199,14 @@ public class XmlParser implements AutoCloseable {
 						loadTagIntoObject(fieldObj, context);
 					}
 					((Collection<Object>) ensureCollectionIsAllocated(obj, direct[0], null)).add(fieldObj);
-				} else if (obj instanceof XmlParserAssistant) {
-					((XmlParserAssistant) obj).processUnmatchedXmlTag(context, tag);
+				} else if (obj instanceof UnmatchedTagProcessor) {
+					((UnmatchedTagProcessor) obj).processUnmatchedXmlTag(context, tag);
 				} else {
 					skip();
 				}
 			}
-			if (obj instanceof XmlParserAssistant) {
-				((XmlParserAssistant) obj).xmlLoaded(context);
+			if (obj instanceof TagLoadedListener) {
+				((TagLoadedListener) obj).xmlLoaded(context);
 			}
 			if (version != 0) {
 				context.popVersion();
@@ -230,8 +231,8 @@ public class XmlParser implements AutoCloseable {
 		String tag;
 		while ((tag = nextTag(marker)) != null) {
 			Object fieldObj = null;
-			if (obj instanceof XmlParserAssistant) {
-				fieldObj = ((XmlParserAssistant) obj).createObjectForXmlTag(context, tag);
+			if (obj instanceof ObjectCreator) {
+				fieldObj = ((ObjectCreator) obj).createObjectForXmlTag(context, tag);
 			}
 			if (fieldObj == null) {
 				if (XmlGenerator.TAG_STRING.equals(tag)) {
@@ -517,5 +518,88 @@ public class XmlParser implements AutoCloseable {
 				mReader = null;
 			}
 		}
+	}
+
+	/**
+	 * Objects that are being loaded by the {@link XmlParser} that wish to be notified when their
+	 * attributes have been loaded should implement this interface.
+	 */
+	public interface AttributesLoadedListener {
+		/**
+		 * Called after the XML tag attributes have been fully loaded into the object, just prior to
+		 * loading any sub-tags that may be present.
+		 *
+		 * @param context The {@link XmlParserContext} for this object.
+		 * @param unmatchedAttributes A {@link Set} of attribute names found in the XML that had no
+		 *            matching {@link XmlAttr}-marked fields.
+		 */
+		void xmlAttributesLoaded(XmlParserContext context, Set<String> unmatchedAttributes) throws XMLStreamException;
+	}
+
+	/**
+	 * Objects that are being loaded by the {@link XmlParser} that wish to be notified when they
+	 * have been loaded should implement this interface.
+	 */
+	public interface TagLoadedListener {
+		/**
+		 * Called after the XML tag has been fully loaded into the object, just prior to the version
+		 * being popped off the stack and control being returned to the caller.
+		 *
+		 * @param context The {@link XmlParserContext} for this object.
+		 */
+		void xmlLoaded(XmlParserContext context) throws XMLStreamException;
+	}
+
+	/**
+	 * Objects that are being loaded by the {@link XmlParser} that wish to control the object
+	 * creation process for their fields should implement this interface.
+	 */
+	public interface ObjectCreator {
+		/**
+		 * Called to create an object for an XML tag.
+		 *
+		 * @param context The {@link XmlParserContext} for this object.
+		 * @param tag The tag to return an object for.
+		 * @return The newly created object, or <code>null</code> if a new instance of the field's
+		 *         data type should be created (i.e. when there is no need to use a sub-class and
+		 *         the default no-args constructor can be used).
+		 */
+		Object createObjectForXmlTag(XmlParserContext context, String tag) throws XMLStreamException;
+	}
+
+	/**
+	 * Objects that are being loaded by the {@link XmlParser} that wish to control whether how tags
+	 * are added to a direct child should implement this interface.
+	 */
+	public interface DirectChildTagManager {
+		/**
+		 * Called when a field has been marked with {@link XmlDirectChild} and no {@link XmlTag}
+		 * -marked fields match the specified tag.
+		 *
+		 * @param context The {@link XmlParserContext} for this object.
+		 * @param tag The tag name that will be processed.
+		 * @return <code>true</code> if the tag should be treated as matching the
+		 *         {@link XmlDirectChild} or <code>false</code> if a call to
+		 *         {@link UnmatchedTagProcessor#processUnmatchedXmlTag(XmlParserContext, String)}
+		 *         should be made instead.
+		 */
+		boolean isDirectChildTag(XmlParserContext context, String tag) throws XMLStreamException;
+	}
+
+	/**
+	 * Objects that are being loaded by the {@link XmlParser} that wish to control how unmatched
+	 * tags are handled should implement this interface.
+	 */
+	public interface UnmatchedTagProcessor {
+		/**
+		 * Called to process an XML sub-tag that had no matching {@link XmlTag}-marked fields. Upon
+		 * return from this method, the {@link XmlParser} should have been advanced past the current
+		 * tag's contents, either by calling {@link XmlParser#skip()} or appropriate parsing of
+		 * sub-tags.
+		 *
+		 * @param context The {@link XmlParserContext} for this object.
+		 * @param tag The tag name that will be processed.
+		 */
+		void processUnmatchedXmlTag(XmlParserContext context, String tag) throws XMLStreamException;
 	}
 }
