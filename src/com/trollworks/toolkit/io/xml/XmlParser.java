@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
@@ -125,6 +126,8 @@ public class XmlParser implements AutoCloseable {
 					field.setChar(obj, charStr == null || charStr.isEmpty() ? 0 : charStr.charAt(0));
 				} else if (type == String.class) {
 					field.set(obj, getAttribute(name, "")); //$NON-NLS-1$
+				} else if (type == UUID.class) {
+					field.set(obj, UUID.fromString(getAttribute(name, ""))); //$NON-NLS-1$
 				} else {
 					Constructor<?> constructor = type.getConstructor(String.class);
 					field.set(obj, constructor.newInstance(getAttribute(name, ""))); //$NON-NLS-1$
