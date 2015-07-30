@@ -11,29 +11,13 @@
 
 package com.trollworks.toolkit.io.xml;
 
-import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.annotation.XmlAttr;
-import com.trollworks.toolkit.annotation.XmlCollection;
-import com.trollworks.toolkit.annotation.XmlTag;
-import com.trollworks.toolkit.utility.Introspection;
-import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.text.Numbers;
 
-import java.io.File;
+import gnu.trove.stack.TIntStack;
+import gnu.trove.stack.array.TIntArrayStack;
+
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
@@ -43,51 +27,10 @@ import javax.xml.stream.XMLStreamReader;
 
 /** Provides simple XML parsing. */
 public class XmlParser implements AutoCloseable {
-	@Localize("The tag '%s' is from an older version and cannot be loaded.")
-	@Localize(locale = "ru", value = "Тег '%s' относится к более старой версии и не может быть загружен.")
-	@Localize(locale = "de", value = "Das Tag '%s' ist von einer älteren Version und kann nicht geladen werden.")
-	@Localize(locale = "es", value = "La etiqueta '%s' es de una versión anterior y no puede cargarse.")
-	private static String		TOO_OLD;
-	@Localize("The tag '%s' is from a newer version and cannot be loaded.")
-	@Localize(locale = "ru", value = "Тег '%s' относится к более новой версии и не может быть загружен.")
-	@Localize(locale = "de", value = "Das Tag '%s' ist von einer neueren Version und kann nicht geladen werden.")
-	@Localize(locale = "es", value = "La etiqueta '%s' es de una versión demasiado nueva y no puede cargarse.")
-	private static String		TOO_NEW;
-	@Localize("Unable to create object for collection tag '%s'.")
-	@Localize(locale = "ru", value = "Невозможно создать объект для получения тэга '%s'.")
-	@Localize(locale = "de", value = "Kann Objekt für Sammlungs-Tag '%s' nicht erstellen.")
-	@Localize(locale = "es", value = "Imposible crear el objeto para la colección de etiquetas '%s'.")
-	private static String		UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION;
-	@Localize("Only one direct child is permitted.")
-	private static String		ONLY_ONE_DIRECT_CHILD_PERMITTED;
-	@Localize("The direct child must be a collection.")
-	private static String		DIRECT_CHILD_MUST_BE_COLLECITON;
-
-	static {
-		Localization.initialize();
-	}
-
-	private static final String	SEPARATOR	= "\u0000";				//$NON-NLS-1$
+	private static final String	SEPARATOR	= "\u0000";			//$NON-NLS-1$
 	private XMLStreamReader		mReader;
 	private int					mDepth;
 	private String				mMarker;
-
-	public static <T> T loadObject(File file, T obj, XmlParserContext context) throws XMLStreamException {
-		return loadObject(file.toURI(), obj, context);
-	}
-
-	public static <T> T loadObject(URI uri, T obj, XmlParserContext context) throws XMLStreamException {
-		try (XmlParser xml = new XmlParser(uri.toURL().openStream())) {
-			if (xml.nextTag() != null) {
-				xml.loadTagIntoObject(obj, context);
-			}
-			return obj;
-		} catch (XMLStreamException exception) {
-			throw exception;
-		} catch (Exception exception) {
-			throw new XMLStreamException(exception);
-		}
-	}
 
 	/**
 	 * Creates a new {@link XmlParser}.
@@ -98,166 +41,6 @@ public class XmlParser implements AutoCloseable {
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		factory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
 		mReader = factory.createXMLStreamReader(stream);
-	}
-
-	/**
-	 * Load the XML data into an object.
-	 *
-	 * @param obj The object to load the data into.
-	 * @param context The {@link XmlParserContext} to use. Pass in <code>null</code> to have a new
-	 *            one created.
-	 */
-	@SuppressWarnings("unchecked")
-	public void loadTagIntoObject(Object obj, XmlParserContext context) throws XMLStreamException {
-		try {
-			if (context == null) {
-				context = new XmlParserContext(this);
-			}
-			String marker = getMarker();
-			if (obj instanceof TagWillLoadListener) {
-				((TagWillLoadListener) obj).xmlWillLoad(context);
-			}
-			Class<?> tagClass = obj.getClass();
-			int version = getIntegerAttribute(XmlGenerator.ATTR_VERSION, 0);
-			if (version > XmlGenerator.getVersionOfTag(tagClass)) {
-				// throw new XMLStreamException(String.format(TOO_NEW, getCurrentTag()),
-				// getLocation());
-			}
-			if (version < XmlGenerator.getMinimumLoadableVersionOfTag(tagClass)) {
-				throw new XMLStreamException(String.format(TOO_OLD, getCurrentTag()), getLocation());
-			}
-			if (version != 0) {
-				context.pushVersion(version);
-			}
-			Set<String> unmatchedAttributes = new HashSet<>();
-			for (int i = getAttributeCount(); --i > 0;) {
-				unmatchedAttributes.add(getAttributeName(i));
-			}
-			unmatchedAttributes.remove(XmlGenerator.ATTR_VERSION);
-			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlAttr.class)) {
-				Introspection.makeFieldAccessible(field);
-				XmlAttr attr = field.getAnnotation(XmlAttr.class);
-				String name = attr.value();
-				unmatchedAttributes.remove(name);
-				Class<?> type = field.getType();
-				if (type == boolean.class) {
-					field.setBoolean(obj, isAttributeSet(name, false));
-				} else if (type == int.class) {
-					field.setInt(obj, getIntegerAttribute(name, 0));
-				} else if (type == long.class) {
-					field.setLong(obj, getLongAttribute(name, 0));
-				} else if (type == short.class) {
-					field.setShort(obj, (short) getIntegerAttribute(name, 0));
-				} else if (type == double.class) {
-					field.setDouble(obj, getDoubleAttribute(name, 0.0));
-				} else if (type == float.class) {
-					field.setFloat(obj, (float) getDoubleAttribute(name, 0.0));
-				} else if (type == char.class) {
-					String charStr = getAttribute(name);
-					field.setChar(obj, charStr == null || charStr.isEmpty() ? 0 : charStr.charAt(0));
-				} else if (type == String.class) {
-					field.set(obj, getAttribute(name, "")); //$NON-NLS-1$
-				} else if (type == UUID.class) {
-					field.set(obj, UUID.fromString(getAttribute(name, ""))); //$NON-NLS-1$
-				} else if (type.isEnum()) {
-					String value = getAttribute(name, ""); //$NON-NLS-1$
-					for (Object one : type.getEnumConstants()) {
-						XmlTag xmlTag = one.getClass().getField(((Enum<?>) one).name()).getAnnotation(XmlTag.class);
-						if (xmlTag != null && xmlTag.value().equals(value)) {
-							field.set(obj, one);
-							break;
-						}
-					}
-				} else {
-					Constructor<?> constructor = type.getConstructor(String.class);
-					field.set(obj, constructor.newInstance(getAttribute(name, ""))); //$NON-NLS-1$
-				}
-			}
-			if (obj instanceof AttributesLoadedListener) {
-				((AttributesLoadedListener) obj).xmlAttributesLoaded(context, unmatchedAttributes);
-			}
-			Map<String, Field> subTags = new HashMap<>();
-			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlTag.class)) {
-				subTags.put(field.getAnnotation(XmlTag.class).value(), field);
-			}
-			Map<String, Field> collectionSubTags = new HashMap<>();
-			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlCollection.class)) {
-				collectionSubTags.put(field.getAnnotation(XmlCollection.class).value(), field);
-			}
-			String tag;
-			while ((tag = nextTag(marker)) != null) {
-				Field field = subTags.get(tag);
-				if (field != null) {
-					Introspection.makeFieldAccessible(field);
-					Class<?> type = field.getType();
-					if (String.class == type) {
-						field.set(obj, getText());
-					} else {
-						Object fieldObj = null;
-						if (obj instanceof ObjectCreator) {
-							fieldObj = ((ObjectCreator) obj).createObjectForXmlTag(context, tag);
-						}
-						if (fieldObj == null) {
-							fieldObj = type.newInstance();
-						}
-						loadTagIntoObject(fieldObj, context);
-						field.set(obj, fieldObj);
-					}
-				} else {
-					field = collectionSubTags.get(tag);
-					if (field != null) {
-						Introspection.makeFieldAccessible(field);
-						Type genericType = field.getGenericType();
-						if (genericType instanceof ParameterizedType) {
-							genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
-						} else {
-							throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), getLocation());
-						}
-						Object fieldObj = null;
-						Class<?> cls = Class.forName(genericType.getTypeName());
-						if (cls == String.class) {
-							fieldObj = getText();
-						} else {
-							fieldObj = cls.newInstance();
-							loadTagIntoObject(fieldObj, context);
-						}
-						((Collection<Object>) ensureCollectionIsAllocated(obj, field, null)).add(fieldObj);
-					} else if (obj instanceof UnmatchedTagProcessor) {
-						((UnmatchedTagProcessor) obj).processUnmatchedXmlTag(context, tag);
-					} else {
-						skip();
-					}
-				}
-			}
-			if (obj instanceof TagLoadedListener) {
-				((TagLoadedListener) obj).xmlLoaded(context);
-			}
-			if (version != 0) {
-				context.popVersion();
-			}
-		} catch (XMLStreamException exception) {
-			throw exception;
-		} catch (Exception exception) {
-			throw new XMLStreamException(exception);
-		}
-	}
-
-	private static Object ensureCollectionIsAllocated(Object obj, Field field, Object collection) throws IllegalArgumentException, IllegalAccessException, InstantiationException {
-		if (collection == null) {
-			collection = field.get(obj);
-			if (collection == null) {
-				Class<?> type = field.getType();
-				if (type == List.class) {
-					collection = new ArrayList<>();
-				} else if (type == Set.class) {
-					collection = new HashSet<>();
-				} else {
-					collection = type.newInstance();
-				}
-				field.set(obj, collection);
-			}
-		}
-		return collection;
 	}
 
 	/** @return The current line:column position. */
@@ -506,80 +289,34 @@ public class XmlParser implements AutoCloseable {
 		}
 	}
 
-	/**
-	 * Objects that are being loaded by the {@link XmlParser} that wish to be notified when their
-	 * attributes have been loaded should implement this interface.
-	 */
-	public interface AttributesLoadedListener {
-		/**
-		 * Called after the XML tag attributes have been fully loaded into the object, just prior to
-		 * loading any sub-tags that may be present.
-		 *
-		 * @param context The {@link XmlParserContext} for this object.
-		 * @param unmatchedAttributes A {@link Set} of attribute names found in the XML that had no
-		 *            matching {@link XmlAttr}-marked fields.
-		 */
-		void xmlAttributesLoaded(XmlParserContext context, Set<String> unmatchedAttributes) throws XMLStreamException;
-	}
+	/** Provides temporary storage when loading an object from XML. */
+	public static class Context extends HashMap<String, Object> {
+		private XmlParser	mParser;
+		private TIntStack	mVersionStack	= new TIntArrayStack();
 
-	/**
-	 * Objects that are being loaded by the {@link XmlParser} that wish to be notified before they
-	 * are about to be loaded should implement this interface.
-	 */
-	public interface TagWillLoadListener {
-		/**
-		 * Called before the XML tag will be loaded into the object.
-		 *
-		 * @param context The {@link XmlParserContext} for this object.
-		 */
-		void xmlWillLoad(XmlParserContext context) throws XMLStreamException;
-	}
+		/** @param parser The {@link XmlParser} being used. */
+		public Context(XmlParser parser) {
+			mParser = parser;
+		}
 
-	/**
-	 * Objects that are being loaded by the {@link XmlParser} that wish to be notified when they
-	 * have been loaded should implement this interface.
-	 */
-	public interface TagLoadedListener {
-		/**
-		 * Called after the XML tag has been fully loaded into the object, just prior to the version
-		 * being popped off the stack and control being returned to the caller.
-		 *
-		 * @param context The {@link XmlParserContext} for this object.
-		 */
-		void xmlLoaded(XmlParserContext context) throws XMLStreamException;
-	}
+		/** @return The {@link XmlParser} being used. */
+		public XmlParser getParser() {
+			return mParser;
+		}
 
-	/**
-	 * Objects that are being loaded by the {@link XmlParser} that wish to control the object
-	 * creation process for their fields should implement this interface.
-	 */
-	public interface ObjectCreator {
-		/**
-		 * Called to create an object for an XML tag.
-		 *
-		 * @param context The {@link XmlParserContext} for this object.
-		 * @param tag The tag to return an object for.
-		 * @return The newly created object, or <code>null</code> if a new instance of the field's
-		 *         data type should be created (i.e. when there is no need to use a sub-class and
-		 *         the default no-args constructor can be used).
-		 */
-		Object createObjectForXmlTag(XmlParserContext context, String tag) throws XMLStreamException;
-	}
+		/** @return The current version on the stack. */
+		public int getVersion() {
+			return mVersionStack.peek();
+		}
 
-	/**
-	 * Objects that are being loaded by the {@link XmlParser} that wish to control how unmatched
-	 * tags are handled should implement this interface.
-	 */
-	public interface UnmatchedTagProcessor {
-		/**
-		 * Called to process an XML sub-tag that had no matching {@link XmlTag}-marked fields. Upon
-		 * return from this method, the {@link XmlParser} should have been advanced past the current
-		 * tag's contents, either by calling {@link XmlParser#skip()} or appropriate parsing of
-		 * sub-tags.
-		 *
-		 * @param context The {@link XmlParserContext} for this object.
-		 * @param tag The tag name that will be processed.
-		 */
-		void processUnmatchedXmlTag(XmlParserContext context, String tag) throws XMLStreamException;
+		/** @param version The version to push onto the stack. */
+		public void pushVersion(int version) {
+			mVersionStack.push(version);
+		}
+
+		/** Removes the current version from the stack, restoring whatever was before it. */
+		public void popVersion() {
+			mVersionStack.pop();
+		}
 	}
 }
