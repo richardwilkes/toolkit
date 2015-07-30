@@ -18,12 +18,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD })
-/**
- * Fields marked with this annotation that implement the {@link Collection} interface will have their contents
- * emitted into the XML stream directly rather than having a tag created for the {@link Collection}. Note that
- * only one field in a given class and its super-classes should be tagged this way, as only the first one found
- * will be loaded into when parsed.
- */
-public @interface XmlDirectChild {
-	//
+/** Marks classes and fields that correspond to an XML tag. */
+public @interface XmlCollection {
+	/** @return The XML tag name. */
+	String value();
 }

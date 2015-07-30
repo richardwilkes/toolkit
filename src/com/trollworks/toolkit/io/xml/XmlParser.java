@@ -13,17 +13,19 @@ package com.trollworks.toolkit.io.xml;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.annotation.XmlAttr;
-import com.trollworks.toolkit.annotation.XmlDirectChild;
+import com.trollworks.toolkit.annotation.XmlCollection;
 import com.trollworks.toolkit.annotation.XmlTag;
 import com.trollworks.toolkit.utility.Introspection;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.text.Numbers;
 
+import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -70,6 +72,23 @@ public class XmlParser implements AutoCloseable {
 	private int					mDepth;
 	private String				mMarker;
 
+	public static <T> T loadObject(File file, T obj, XmlParserContext context) throws XMLStreamException {
+		return loadObject(file.toURI(), obj, context);
+	}
+
+	public static <T> T loadObject(URI uri, T obj, XmlParserContext context) throws XMLStreamException {
+		try (XmlParser xml = new XmlParser(uri.toURL().openStream())) {
+			if (xml.nextTag() != null) {
+				xml.loadTagIntoObject(obj, context);
+			}
+			return obj;
+		} catch (XMLStreamException exception) {
+			throw exception;
+		} catch (Exception exception) {
+			throw new XMLStreamException(exception);
+		}
+	}
+
 	/**
 	 * Creates a new {@link XmlParser}.
 	 *
@@ -95,10 +114,14 @@ public class XmlParser implements AutoCloseable {
 				context = new XmlParserContext(this);
 			}
 			String marker = getMarker();
+			if (obj instanceof TagWillLoadListener) {
+				((TagWillLoadListener) obj).xmlWillLoad(context);
+			}
 			Class<?> tagClass = obj.getClass();
 			int version = getIntegerAttribute(XmlGenerator.ATTR_VERSION, 0);
 			if (version > XmlGenerator.getVersionOfTag(tagClass)) {
-				throw new XMLStreamException(String.format(TOO_NEW, getCurrentTag()), getLocation());
+				// throw new XMLStreamException(String.format(TOO_NEW, getCurrentTag()),
+				// getLocation());
 			}
 			if (version < XmlGenerator.getMinimumLoadableVersionOfTag(tagClass)) {
 				throw new XMLStreamException(String.format(TOO_OLD, getCurrentTag()), getLocation());
@@ -136,6 +159,15 @@ public class XmlParser implements AutoCloseable {
 					field.set(obj, getAttribute(name, "")); //$NON-NLS-1$
 				} else if (type == UUID.class) {
 					field.set(obj, UUID.fromString(getAttribute(name, ""))); //$NON-NLS-1$
+				} else if (type.isEnum()) {
+					String value = getAttribute(name, ""); //$NON-NLS-1$
+					for (Object one : type.getEnumConstants()) {
+						XmlTag xmlTag = one.getClass().getField(((Enum<?>) one).name()).getAnnotation(XmlTag.class);
+						if (xmlTag != null && xmlTag.value().equals(value)) {
+							field.set(obj, one);
+							break;
+						}
+					}
 				} else {
 					Constructor<?> constructor = type.getConstructor(String.class);
 					field.set(obj, constructor.newInstance(getAttribute(name, ""))); //$NON-NLS-1$
@@ -148,15 +180,9 @@ public class XmlParser implements AutoCloseable {
 			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlTag.class)) {
 				subTags.put(field.getAnnotation(XmlTag.class).value(), field);
 			}
-			Field[] direct = Introspection.getFieldsWithAnnotation(tagClass, true, XmlDirectChild.class);
-			if (direct.length > 1) {
-				throw new XMLStreamException(ONLY_ONE_DIRECT_CHILD_PERMITTED);
-			}
-			if (direct.length == 1) {
-				if (!Collection.class.isAssignableFrom(direct[0].getType())) {
-					throw new XMLStreamException(DIRECT_CHILD_MUST_BE_COLLECITON);
-				}
-				Introspection.makeFieldAccessible(direct[0]);
+			Map<String, Field> collectionSubTags = new HashMap<>();
+			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlCollection.class)) {
+				collectionSubTags.put(field.getAnnotation(XmlCollection.class).value(), field);
 			}
 			String tag;
 			while ((tag = nextTag(marker)) != null) {
@@ -166,8 +192,6 @@ public class XmlParser implements AutoCloseable {
 					Class<?> type = field.getType();
 					if (String.class == type) {
 						field.set(obj, getText());
-					} else if (Collection.class.isAssignableFrom(type)) {
-						loadCollection(obj, context, field);
 					} else {
 						Object fieldObj = null;
 						if (obj instanceof ObjectCreator) {
@@ -179,30 +203,30 @@ public class XmlParser implements AutoCloseable {
 						loadTagIntoObject(fieldObj, context);
 						field.set(obj, fieldObj);
 					}
-				} else if (direct.length == 1 && (!(obj instanceof DirectChildTagManager) || ((DirectChildTagManager) obj).isDirectChildTag(context, tag))) {
-					Type genericType = direct[0].getGenericType();
-					if (genericType instanceof ParameterizedType) {
-						genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
-					} else {
-						genericType = null;
-					}
-					Object fieldObj = null;
-					if (XmlGenerator.TAG_STRING.equals(tag)) {
-						fieldObj = getText();
-					} else {
-						if (genericType != null) {
-							Class<?> cls = Class.forName(genericType.getTypeName());
-							fieldObj = cls.newInstance();
+				} else {
+					field = collectionSubTags.get(tag);
+					if (field != null) {
+						Introspection.makeFieldAccessible(field);
+						Type genericType = field.getGenericType();
+						if (genericType instanceof ParameterizedType) {
+							genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 						} else {
 							throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), getLocation());
 						}
-						loadTagIntoObject(fieldObj, context);
+						Object fieldObj = null;
+						Class<?> cls = Class.forName(genericType.getTypeName());
+						if (cls == String.class) {
+							fieldObj = getText();
+						} else {
+							fieldObj = cls.newInstance();
+							loadTagIntoObject(fieldObj, context);
+						}
+						((Collection<Object>) ensureCollectionIsAllocated(obj, field, null)).add(fieldObj);
+					} else if (obj instanceof UnmatchedTagProcessor) {
+						((UnmatchedTagProcessor) obj).processUnmatchedXmlTag(context, tag);
+					} else {
+						skip();
 					}
-					((Collection<Object>) ensureCollectionIsAllocated(obj, direct[0], null)).add(fieldObj);
-				} else if (obj instanceof UnmatchedTagProcessor) {
-					((UnmatchedTagProcessor) obj).processUnmatchedXmlTag(context, tag);
-				} else {
-					skip();
 				}
 			}
 			if (obj instanceof TagLoadedListener) {
@@ -215,44 +239,6 @@ public class XmlParser implements AutoCloseable {
 			throw exception;
 		} catch (Exception exception) {
 			throw new XMLStreamException(exception);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void loadCollection(Object obj, XmlParserContext context, Field field) throws XMLStreamException, IllegalArgumentException, IllegalAccessException, InstantiationException, ClassNotFoundException {
-		Type genericType = field.getGenericType();
-		if (genericType instanceof ParameterizedType) {
-			genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
-		} else {
-			genericType = null;
-		}
-		Object collection = null;
-		String marker = getMarker();
-		String tag;
-		while ((tag = nextTag(marker)) != null) {
-			Object fieldObj = null;
-			if (obj instanceof ObjectCreator) {
-				fieldObj = ((ObjectCreator) obj).createObjectForXmlTag(context, tag);
-			}
-			if (fieldObj == null) {
-				if (XmlGenerator.TAG_STRING.equals(tag)) {
-					fieldObj = getText();
-				} else if (genericType != null) {
-					Class<?> cls = Class.forName(genericType.getTypeName());
-					fieldObj = cls.newInstance();
-				} else {
-					throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), getLocation());
-				}
-			}
-			if (!(fieldObj instanceof String)) {
-				loadTagIntoObject(fieldObj, context);
-			}
-			if (collection == null) {
-				collection = ensureCollectionIsAllocated(obj, field, null);
-			}
-			if (collection instanceof Collection) {
-				((Collection<Object>) collection).add(fieldObj);
-			}
 		}
 	}
 
@@ -537,6 +523,19 @@ public class XmlParser implements AutoCloseable {
 	}
 
 	/**
+	 * Objects that are being loaded by the {@link XmlParser} that wish to be notified before they
+	 * are about to be loaded should implement this interface.
+	 */
+	public interface TagWillLoadListener {
+		/**
+		 * Called before the XML tag will be loaded into the object.
+		 *
+		 * @param context The {@link XmlParserContext} for this object.
+		 */
+		void xmlWillLoad(XmlParserContext context) throws XMLStreamException;
+	}
+
+	/**
 	 * Objects that are being loaded by the {@link XmlParser} that wish to be notified when they
 	 * have been loaded should implement this interface.
 	 */
@@ -565,25 +564,6 @@ public class XmlParser implements AutoCloseable {
 		 *         the default no-args constructor can be used).
 		 */
 		Object createObjectForXmlTag(XmlParserContext context, String tag) throws XMLStreamException;
-	}
-
-	/**
-	 * Objects that are being loaded by the {@link XmlParser} that wish to control whether how tags
-	 * are added to a direct child should implement this interface.
-	 */
-	public interface DirectChildTagManager {
-		/**
-		 * Called when a field has been marked with {@link XmlDirectChild} and no {@link XmlTag}
-		 * -marked fields match the specified tag.
-		 *
-		 * @param context The {@link XmlParserContext} for this object.
-		 * @param tag The tag name that will be processed.
-		 * @return <code>true</code> if the tag should be treated as matching the
-		 *         {@link XmlDirectChild} or <code>false</code> if a call to
-		 *         {@link UnmatchedTagProcessor#processUnmatchedXmlTag(XmlParserContext, String)}
-		 *         should be made instead.
-		 */
-		boolean isDirectChildTag(XmlParserContext context, String tag) throws XMLStreamException;
 	}
 
 	/**

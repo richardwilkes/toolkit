@@ -13,7 +13,7 @@ package com.trollworks.toolkit.io.xml;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.annotation.XmlAttr;
-import com.trollworks.toolkit.annotation.XmlDirectChild;
+import com.trollworks.toolkit.annotation.XmlCollection;
 import com.trollworks.toolkit.annotation.XmlNoSort;
 import com.trollworks.toolkit.annotation.XmlTag;
 import com.trollworks.toolkit.annotation.XmlTagMinimumVersion;
@@ -22,6 +22,8 @@ import com.trollworks.toolkit.utility.Introspection;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.text.Numbers;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -34,11 +36,10 @@ import javax.xml.stream.XMLStreamWriter;
 
 /** Provides simple XML generation. */
 public class XmlGenerator implements AutoCloseable {
-	@Localize("%s has not been annotated with @%s.")
-	@Localize(locale = "ru", value = "%s не имеет комментариев @%s.")
-	@Localize(locale = "de", value = "%s wurde nicht mit @%s annotiert.")
-	@Localize(locale = "es", value = "%s no ha sido anotado con @%s.")
+	@Localize("%s has not been annotated.")
 	private static String		NOT_TAGGED;
+	@Localize("%s is not a Collection.")
+	private static String		NOT_COLLECTION;
 
 	static {
 		Localization.initialize();
@@ -49,12 +50,22 @@ public class XmlGenerator implements AutoCloseable {
 	 * {@link #add(String, Object)} is called.
 	 */
 	public static final String	ATTR_VERSION	= "version";	//$NON-NLS-1$
-	/** Used for automatic string handling. */
-	public static final String	TAG_STRING		= "string";	//$NON-NLS-1$
 	private String				mIndent			= "\t";		//$NON-NLS-1$
 	private XMLStreamWriter		mWriter;
 	private int					mDepth;
 	private boolean				mHadText;
+
+	public static void save(File file, Object obj) throws XMLStreamException {
+		try (XmlGenerator xml = new XmlGenerator(new FileOutputStream(file))) {
+			xml.startDocument();
+			xml.add(obj);
+			xml.endDocument();
+		} catch (XMLStreamException exception) {
+			throw exception;
+		} catch (Exception exception) {
+			throw new XMLStreamException(exception);
+		}
+	}
 
 	/**
 	 * Creates a new {@link XmlGenerator}.
@@ -284,7 +295,13 @@ public class XmlGenerator implements AutoCloseable {
 	 * @param obj The object to add. Must be annotated with {@link XmlTag}.
 	 */
 	public void add(Object obj) throws XMLStreamException {
-		add(null, obj);
+		Class<?> objClass = obj.getClass();
+		XmlTag tag = objClass.getAnnotation(XmlTag.class);
+		if (tag != null) {
+			add(tag.value(), obj);
+		} else {
+			throw new XMLStreamException(String.format(NOT_TAGGED, objClass.getName()));
+		}
 	}
 
 	/**
@@ -295,47 +312,39 @@ public class XmlGenerator implements AutoCloseable {
 	 *            object must be annotated with {@link XmlTag}.
 	 */
 	public void add(String tag, Object obj) throws XMLStreamException {
-		Class<?> objClass = obj.getClass();
-		if (tag == null || tag.isEmpty()) {
-			if (obj instanceof String) {
-				tag = TAG_STRING;
-			} else {
-				XmlTag xmlTag = objClass.getAnnotation(XmlTag.class);
-				if (xmlTag == null) {
-					if (obj instanceof Collection) {
-						if (objClass.getAnnotation(XmlDirectChild.class) != null) {
-							for (Object one : (Collection<?>) obj) {
-								add(one);
-							}
-							return;
-						}
-					}
-					throw new XMLStreamException(String.format(NOT_TAGGED, obj.getClass().getName(), XmlTag.class.getSimpleName()));
-				}
-				tag = xmlTag.value();
+		if (obj != null) {
+			Class<?> objClass = obj.getClass();
+			if (tag == null || tag.isEmpty()) {
+				throw new XMLStreamException(String.format(NOT_TAGGED, objClass.getName()));
 			}
-		}
-		if (obj instanceof String) {
-			startTag(tag);
-			addText((String) obj);
-			endTag();
-		} else if (hasSubTags(obj, objClass)) {
-			startTag(tag);
-			emitAttributes(obj, objClass);
-			emitSubTags(obj, objClass);
-			endTag();
-		} else {
-			startEmptyTag(tag);
-			emitAttributes(obj, objClass);
+			if (obj instanceof TagWillSaveListener) {
+				((TagWillSaveListener) obj).xmlWillSave(this);
+			}
+			if (obj instanceof String) {
+				String str = (String) obj;
+				if (!str.isEmpty()) {
+					startTag(tag);
+					addText(str);
+					endTag();
+				}
+			} else if (hasSubTags(obj, objClass)) {
+				startTag(tag);
+				emitAttributes(obj, objClass);
+				emitSubTags(obj, objClass);
+				endTag();
+			} else {
+				startEmptyTag(tag);
+				emitAttributes(obj, objClass);
+			}
 		}
 	}
 
 	private static boolean hasSubTags(Object obj, Class<?> objClass) throws XMLStreamException {
-		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class, XmlDirectChild.class)) {
+		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class, XmlCollection.class)) {
 			try {
 				Introspection.makeFieldAccessible(field);
 				Object content = field.get(obj);
-				if (content != null) {
+				if (content != null && (!(content instanceof String) || !((String) content).isEmpty())) {
 					if (Collection.class.isAssignableFrom(field.getType())) {
 						if (!((Collection<?>) content).isEmpty()) {
 							return true;
@@ -352,34 +361,35 @@ public class XmlGenerator implements AutoCloseable {
 	}
 
 	private void emitSubTags(Object obj, Class<?> objClass) throws XMLStreamException {
-		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class, XmlDirectChild.class)) {
+		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class, XmlCollection.class)) {
 			try {
 				Introspection.makeFieldAccessible(field);
 				Object content = field.get(obj);
-				if (content != null) {
+				if (content != null && (!(content instanceof String) || !((String) content).isEmpty())) {
 					XmlTag subTag = field.getAnnotation(XmlTag.class);
-					Class<?> type = field.getType();
-					if (Collection.class.isAssignableFrom(type)) {
-						Collection<?> collection = (Collection<?>) content;
-						if (!field.isAnnotationPresent(XmlNoSort.class)) {
-							Object[] data = collection.toArray();
-							Arrays.sort(data);
-							collection = Arrays.asList(data);
-						}
-						if (!collection.isEmpty()) {
-							String wrapName = subTag != null ? subTag.value() : null;
-							if (wrapName != null && !wrapName.isEmpty()) {
-								startTag(wrapName);
-							}
-							for (Object one : collection) {
-								add(one);
-							}
-							if (wrapName != null && !wrapName.isEmpty()) {
-								endTag();
-							}
-						}
-					} else {
+					if (subTag != null) {
 						add(subTag.value(), content);
+					} else {
+						XmlCollection collectionTag = field.getAnnotation(XmlCollection.class);
+						if (collectionTag != null) {
+							Class<?> type = field.getType();
+							if (Collection.class.isAssignableFrom(type)) {
+								Collection<?> collection = (Collection<?>) content;
+								if (!collection.isEmpty()) {
+									if (!field.isAnnotationPresent(XmlNoSort.class)) {
+										Object[] data = collection.toArray();
+										Arrays.sort(data);
+										collection = Arrays.asList(data);
+									}
+									String tag = collectionTag.value();
+									for (Object one : collection) {
+										add(tag, one);
+									}
+								}
+							} else {
+								throw new XMLStreamException(String.format(NOT_COLLECTION, field.getName()));
+							}
+						}
 					}
 				}
 			} catch (XMLStreamException exception) {
@@ -405,6 +415,14 @@ public class XmlGenerator implements AutoCloseable {
 					addAttributeNot(name, field.getLong(obj), 0);
 				} else if (type == double.class || type == float.class) {
 					addAttributeNot(name, field.getDouble(obj), 0.0);
+				} else if (type.isEnum()) {
+					Object content = field.get(obj);
+					if (content != null) {
+						XmlTag xmlTag = content.getClass().getField(((Enum<?>) content).name()).getAnnotation(XmlTag.class);
+						if (xmlTag != null) {
+							addAttribute(name, xmlTag.value());
+						}
+					}
 				} else {
 					Object content = field.get(obj);
 					if (content != null) {
@@ -414,6 +432,9 @@ public class XmlGenerator implements AutoCloseable {
 			} catch (Exception exception) {
 				throw new XMLStreamException(exception);
 			}
+		}
+		if (obj instanceof ExtraAttributesEmitter) {
+			((ExtraAttributesEmitter) obj).emitExtraAttributes(this);
 		}
 	}
 
@@ -434,5 +455,32 @@ public class XmlGenerator implements AutoCloseable {
 	public static int getMinimumLoadableVersionOfTag(Class<?> objClass) {
 		XmlTagMinimumVersion tagVersion = objClass.getAnnotation(XmlTagMinimumVersion.class);
 		return tagVersion != null ? tagVersion.value() : 0;
+	}
+
+	/**
+	 * Objects that are being written by the {@link XmlGenerator} that wish to be notified before
+	 * they are about to be written should implement this interface.
+	 */
+	public interface TagWillSaveListener {
+		/**
+		 * Called before the XML tag will be written.
+		 *
+		 * @param xml The {@link XmlGenerator} for this object.
+		 */
+		void xmlWillSave(XmlGenerator xml) throws XMLStreamException;
+	}
+
+	/**
+	 * Objects that are being written by the {@link XmlGenerator} that wish to add additional
+	 * attributes should implement this interface.
+	 */
+	public interface ExtraAttributesEmitter {
+		/**
+		 * Called to allow an object to emit additional attributes that the standard processing
+		 * can't handle.
+		 *
+		 * @param xml The {@link XmlGenerator} for this object.
+		 */
+		void emitExtraAttributes(XmlGenerator xml) throws XMLStreamException;
 	}
 }
