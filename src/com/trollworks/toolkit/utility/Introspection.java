@@ -18,7 +18,6 @@ import java.lang.reflect.Field;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +69,11 @@ public class Introspection {
 	 */
 	@SafeVarargs
 	public static synchronized Field[] getFieldsWithAnnotation(Class<?> objClass, boolean cache, Class<? extends Annotation>... annotationClasses) {
-		return getFieldsWithAnnotation(objClass, Arrays.asList(annotationClasses), cache);
+		List<Class<? extends Annotation>> list = new ArrayList<>();
+		for (Class<? extends Annotation> one : annotationClasses) {
+			list.add(one);
+		}
+		return getFieldsWithAnnotation(objClass, list, cache);
 	}
 
 	/**
