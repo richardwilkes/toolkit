@@ -25,7 +25,7 @@ public class GreaterThan extends Operator {
 		try {
 			return Double.valueOf(ArgumentTokenizer.getDouble(left) > ArgumentTokenizer.getDouble(right) ? 1 : 0);
 		} catch (Exception exception) {
-			return Double.valueOf(NumericComparator.CASELESS_COMPARATOR.compare(left.toString(), right.toString()) > 0 ? 1 : 0);
+			return Double.valueOf(NumericComparator.caselessCompareStrings(left.toString(), right.toString()) > 0 ? 1 : 0);
 		}
 	}
 
