@@ -14,6 +14,15 @@ package com.trollworks.toolkit.io.xml;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.annotation.XmlAttr;
 import com.trollworks.toolkit.annotation.XmlCollection;
+import com.trollworks.toolkit.annotation.XmlDefault;
+import com.trollworks.toolkit.annotation.XmlDefaultBoolean;
+import com.trollworks.toolkit.annotation.XmlDefaultByte;
+import com.trollworks.toolkit.annotation.XmlDefaultChar;
+import com.trollworks.toolkit.annotation.XmlDefaultDouble;
+import com.trollworks.toolkit.annotation.XmlDefaultFloat;
+import com.trollworks.toolkit.annotation.XmlDefaultInteger;
+import com.trollworks.toolkit.annotation.XmlDefaultLong;
+import com.trollworks.toolkit.annotation.XmlDefaultShort;
 import com.trollworks.toolkit.annotation.XmlEnumArrayAttr;
 import com.trollworks.toolkit.annotation.XmlNoSort;
 import com.trollworks.toolkit.annotation.XmlTag;
@@ -26,6 +35,7 @@ import com.trollworks.toolkit.utility.Localization;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URI;
@@ -81,11 +91,33 @@ public class Xml {
 	 *
 	 * @param file The file to load from.
 	 * @param obj The object to load the xml data into.
+	 * @return The object that was passed in.
+	 */
+	public static <T> T load(File file, T obj) throws XMLStreamException {
+		return load(file, obj, null);
+	}
+
+	/**
+	 * Loads the contents of an xml file into the specified object.
+	 *
+	 * @param file The file to load from.
+	 * @param obj The object to load the xml data into.
 	 * @param context Optional context for recording state while loading.
 	 * @return The object that was passed in.
 	 */
 	public static <T> T load(File file, T obj, Context context) throws XMLStreamException {
 		return load(file.toURI(), obj, context);
+	}
+
+	/**
+	 * Loads the contents of an xml file into the specified object.
+	 *
+	 * @param uri The URI to load from.
+	 * @param obj The object to load the xml data into.
+	 * @return The object that was passed in.
+	 */
+	public static <T> T load(URI uri, T obj) throws XMLStreamException {
+		return load(uri, obj, null);
 	}
 
 	/**
@@ -148,28 +180,29 @@ public class Xml {
 					unmatchedAttributes.remove(name);
 					Class<?> type = field.getType();
 					if (type == boolean.class) {
-						field.setBoolean(obj, xml.isAttributeSet(name, false));
-					} else if (type == int.class) {
-						field.setInt(obj, xml.getIntegerAttribute(name, 0));
-					} else if (type == long.class) {
-						field.setLong(obj, xml.getLongAttribute(name, 0));
-					} else if (type == short.class) {
-						field.setShort(obj, (short) xml.getIntegerAttribute(name, 0));
-					} else if (type == double.class) {
-						field.setDouble(obj, xml.getDoubleAttribute(name, 0.0));
-					} else if (type == float.class) {
-						field.setFloat(obj, (float) xml.getDoubleAttribute(name, 0.0));
+						field.setBoolean(obj, loadBooleanAttribute(xml, field, name));
+					} else if (type == byte.class) {
+						field.setByte(obj, loadByteAttribute(xml, field, name));
 					} else if (type == char.class) {
-						String charStr = xml.getAttribute(name);
-						field.setChar(obj, charStr == null || charStr.isEmpty() ? 0 : charStr.charAt(0));
+						field.setChar(obj, loadCharAttribute(xml, field, name));
+					} else if (type == short.class) {
+						field.setShort(obj, loadShortAttribute(xml, field, name));
+					} else if (type == int.class) {
+						field.setInt(obj, loadIntegerAttribute(xml, field, name));
+					} else if (type == long.class) {
+						field.setLong(obj, loadLongAttribute(xml, field, name));
+					} else if (type == float.class) {
+						field.setFloat(obj, loadFloatAttribute(xml, field, name));
+					} else if (type == double.class) {
+						field.setDouble(obj, loadDoubleAttribute(xml, field, name));
 					} else if (type == String.class) {
-						field.set(obj, xml.getAttribute(name, "")); //$NON-NLS-1$
+						field.set(obj, loadStringAttribute(xml, field, name));
 					} else if (type == UUID.class) {
-						field.set(obj, UUID.fromString(xml.getAttribute(name, ""))); //$NON-NLS-1$
+						field.set(obj, loadUUIDAttribute(xml, field, name));
 					} else if (type.isEnum()) {
-						field.set(obj, getMatchingEnum(type, xml.getAttribute(name, ""))); //$NON-NLS-1$
+						field.set(obj, loadEnumAttribute(xml, field, name));
 					} else {
-						field.set(obj, type.getConstructor(String.class).newInstance(xml.getAttribute(name, ""))); //$NON-NLS-1$
+						field.set(obj, loadObjectAttribute(xml, field, name));
 					}
 				} else {
 					XmlEnumArrayAttr enumAttr = field.getAnnotation(XmlEnumArrayAttr.class);
@@ -187,28 +220,29 @@ public class Xml {
 								String name = xmlTag.value();
 								unmatchedAttributes.remove(name);
 								if (type == boolean.class) {
-									((boolean[]) arrayObj)[index] = xml.isAttributeSet(name, false);
-								} else if (type == int.class) {
-									((int[]) arrayObj)[index] = xml.getIntegerAttribute(name, 0);
-								} else if (type == long.class) {
-									((long[]) arrayObj)[index] = xml.getLongAttribute(name, 0);
-								} else if (type == short.class) {
-									((short[]) arrayObj)[index] = (short) xml.getIntegerAttribute(name, 0);
-								} else if (type == double.class) {
-									((double[]) arrayObj)[index] = xml.getDoubleAttribute(name, 0.0);
-								} else if (type == float.class) {
-									((float[]) arrayObj)[index] = (float) xml.getDoubleAttribute(name, 0.0);
+									((boolean[]) arrayObj)[index] = loadBooleanAttribute(xml, field, name);
+								} else if (type == byte.class) {
+									((byte[]) arrayObj)[index] = loadByteAttribute(xml, field, name);
 								} else if (type == char.class) {
-									String charStr = xml.getAttribute(name);
-									((char[]) arrayObj)[index] = charStr == null || charStr.isEmpty() ? 0 : charStr.charAt(0);
+									((char[]) arrayObj)[index] = loadCharAttribute(xml, field, name);
+								} else if (type == short.class) {
+									((short[]) arrayObj)[index] = loadShortAttribute(xml, field, name);
+								} else if (type == int.class) {
+									((int[]) arrayObj)[index] = loadIntegerAttribute(xml, field, name);
+								} else if (type == long.class) {
+									((long[]) arrayObj)[index] = loadLongAttribute(xml, field, name);
+								} else if (type == float.class) {
+									((float[]) arrayObj)[index] = loadFloatAttribute(xml, field, name);
+								} else if (type == double.class) {
+									((double[]) arrayObj)[index] = loadDoubleAttribute(xml, field, name);
 								} else if (type == String.class) {
-									((String[]) arrayObj)[index] = xml.getAttribute(name, ""); //$NON-NLS-1$
+									((String[]) arrayObj)[index] = loadStringAttribute(xml, field, name);
 								} else if (type == UUID.class) {
-									((UUID[]) arrayObj)[index] = UUID.fromString(xml.getAttribute(name, "")); //$NON-NLS-1$
+									((UUID[]) arrayObj)[index] = loadUUIDAttribute(xml, field, name);
 								} else if (type.isEnum()) {
-									((Object[]) arrayObj)[index] = getMatchingEnum(type, xml.getAttribute(name, "")); //$NON-NLS-1$
+									((Object[]) arrayObj)[index] = loadEnumAttribute(xml, field, name);
 								} else {
-									((Object[]) arrayObj)[index] = type.getConstructor(String.class).newInstance(xml.getAttribute(name, "")); //$NON-NLS-1$
+									((Object[]) arrayObj)[index] = loadObjectAttribute(xml, field, name);
 								}
 							}
 							index++;
@@ -283,16 +317,6 @@ public class Xml {
 		} catch (Exception exception) {
 			throw new XMLStreamException(exception);
 		}
-	}
-
-	private static Object getMatchingEnum(Class<?> type, String tag) throws NoSuchFieldException, SecurityException {
-		for (Object one : type.getEnumConstants()) {
-			XmlTag xmlTag = one.getClass().getField(((Enum<?>) one).name()).getAnnotation(XmlTag.class);
-			if (xmlTag != null && xmlTag.value().equals(tag)) {
-				return one;
-			}
-		}
-		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -401,28 +425,28 @@ public class Xml {
 				try {
 					Class<?> type = field.getType();
 					if (type == boolean.class) {
-						xml.addAttributeNot(name, field.getBoolean(obj), false);
-					} else if (type == int.class || type == short.class) {
-						xml.addAttributeNot(name, field.getInt(obj), 0);
+						emitBooleanAttribute(xml, field, name, field.getBoolean(obj));
+					} else if (type == byte.class) {
+						emitByteAttribute(xml, field, name, field.getByte(obj));
+					} else if (type == char.class) {
+						emitCharAttribute(xml, field, name, field.getChar(obj));
+					} else if (type == short.class) {
+						emitShortAttribute(xml, field, name, field.getShort(obj));
+					} else if (type == int.class) {
+						emitIntegerAttribute(xml, field, name, field.getInt(obj));
 					} else if (type == long.class) {
-						xml.addAttributeNot(name, field.getLong(obj), 0);
-					} else if (type == double.class || type == float.class) {
-						xml.addAttributeNot(name, field.getDouble(obj), 0.0);
+						emitLongAttribute(xml, field, name, field.getLong(obj));
+					} else if (type == float.class) {
+						emitFloatAttribute(xml, field, name, field.getFloat(obj));
+					} else if (type == double.class) {
+						emitDoubleAttribute(xml, field, name, field.getDouble(obj));
 					} else if (type.isEnum()) {
-						Object content = field.get(obj);
-						if (content != null) {
-							XmlTag xmlTag = content.getClass().getField(((Enum<?>) content).name()).getAnnotation(XmlTag.class);
-							if (xmlTag != null) {
-								xml.addAttribute(name, xmlTag.value());
-							}
-						}
+						emitEnumAttribute(xml, name, (Enum<?>) field.get(obj));
 					} else {
-						Object content = field.get(obj);
-						if (content != null) {
-							xml.addAttributeNotEmpty(name, content.toString());
-						}
+						emitObjectAttribute(xml, field, name, field.get(obj));
 					}
 				} catch (Exception exception) {
+					exception.printStackTrace();
 					throw new XMLStreamException(exception);
 				}
 			} else {
@@ -440,30 +464,25 @@ public class Xml {
 						if (xmlTag != null) {
 							String name = xmlTag.value();
 							if (type == boolean.class) {
-								xml.addAttributeNot(name, ((boolean[]) arrayObj)[index], false);
-							} else if (type == int.class) {
-								xml.addAttributeNot(name, ((int[]) arrayObj)[index], 0);
-							} else if (type == long.class) {
-								xml.addAttributeNot(name, ((long[]) arrayObj)[index], 0);
+								emitBooleanAttribute(xml, field, name, ((boolean[]) arrayObj)[index]);
+							} else if (type == byte.class) {
+								emitByteAttribute(xml, field, name, ((byte[]) arrayObj)[index]);
+							} else if (type == char.class) {
+								emitCharAttribute(xml, field, name, ((char[]) arrayObj)[index]);
 							} else if (type == short.class) {
-								xml.addAttributeNot(name, ((short[]) arrayObj)[index], 0);
-							} else if (type == double.class) {
-								xml.addAttributeNot(name, ((double[]) arrayObj)[index], 0);
+								emitShortAttribute(xml, field, name, ((short[]) arrayObj)[index]);
+							} else if (type == int.class) {
+								emitIntegerAttribute(xml, field, name, ((int[]) arrayObj)[index]);
+							} else if (type == long.class) {
+								emitLongAttribute(xml, field, name, ((long[]) arrayObj)[index]);
 							} else if (type == float.class) {
-								xml.addAttributeNot(name, ((float[]) arrayObj)[index], 0);
+								emitFloatAttribute(xml, field, name, ((float[]) arrayObj)[index]);
+							} else if (type == double.class) {
+								emitDoubleAttribute(xml, field, name, ((double[]) arrayObj)[index]);
 							} else if (type.isEnum()) {
-								Object content = ((Object[]) arrayObj)[index];
-								if (content != null) {
-									XmlTag contentTag = content.getClass().getField(((Enum<?>) content).name()).getAnnotation(XmlTag.class);
-									if (contentTag != null) {
-										xml.addAttribute(name, contentTag.value());
-									}
-								}
+								emitEnumAttribute(xml, name, ((Enum<?>[]) arrayObj)[index]);
 							} else {
-								Object content = ((Object[]) arrayObj)[index];
-								if (content != null) {
-									xml.addAttributeNotEmpty(name, content.toString());
-								}
+								emitObjectAttribute(xml, field, name, ((Object[]) arrayObj)[index]);
 							}
 						}
 						index++;
@@ -476,7 +495,178 @@ public class Xml {
 		}
 	}
 
-	private static void emitSubTags(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException {
+	private static final void emitBooleanAttribute(XmlGenerator xml, Field field, String name, boolean value) throws XMLStreamException {
+		XmlDefaultBoolean def = field.getAnnotation(XmlDefaultBoolean.class);
+		if (def != null) {
+			xml.addAttributeNot(name, value, def.value());
+		} else {
+			xml.addAttribute(name, value);
+		}
+	}
+
+	private static final boolean loadBooleanAttribute(XmlParser xml, Field field, String name) {
+		XmlDefaultBoolean def = field.getAnnotation(XmlDefaultBoolean.class);
+		return xml.isAttributeSet(name, def != null ? def.value() : false);
+	}
+
+	private static final void emitByteAttribute(XmlGenerator xml, Field field, String name, byte value) throws XMLStreamException {
+		XmlDefaultByte def = field.getAnnotation(XmlDefaultByte.class);
+		if (def != null) {
+			xml.addAttributeNot(name, value, def.value());
+		} else {
+			xml.addAttribute(name, value);
+		}
+	}
+
+	private static final byte loadByteAttribute(XmlParser xml, Field field, String name) {
+		XmlDefaultByte def = field.getAnnotation(XmlDefaultByte.class);
+		return (byte) xml.getIntegerAttribute(name, def != null ? def.value() : 0);
+	}
+
+	private static final void emitCharAttribute(XmlGenerator xml, Field field, String name, char value) throws XMLStreamException {
+		XmlDefaultChar def = field.getAnnotation(XmlDefaultChar.class);
+		String strValue = String.valueOf(value);
+		if (def != null) {
+			xml.addAttributeNot(name, strValue, String.valueOf(def.value()));
+		} else {
+			xml.addAttribute(name, strValue);
+		}
+	}
+
+	private static final char loadCharAttribute(XmlParser xml, Field field, String name) {
+		XmlDefaultChar def = field.getAnnotation(XmlDefaultChar.class);
+		String charStr = xml.getAttribute(name);
+		return charStr == null || charStr.isEmpty() ? def != null ? def.value() : 0 : charStr.charAt(0);
+	}
+
+	private static final void emitShortAttribute(XmlGenerator xml, Field field, String name, short value) throws XMLStreamException {
+		XmlDefaultShort def = field.getAnnotation(XmlDefaultShort.class);
+		if (def != null) {
+			xml.addAttributeNot(name, value, def.value());
+		} else {
+			xml.addAttribute(name, value);
+		}
+	}
+
+	private static final short loadShortAttribute(XmlParser xml, Field field, String name) {
+		XmlDefaultShort def = field.getAnnotation(XmlDefaultShort.class);
+		return (short) xml.getIntegerAttribute(name, def != null ? def.value() : 0);
+	}
+
+	private static final void emitIntegerAttribute(XmlGenerator xml, Field field, String name, int value) throws XMLStreamException {
+		XmlDefaultInteger def = field.getAnnotation(XmlDefaultInteger.class);
+		if (def != null) {
+			xml.addAttributeNot(name, value, def.value());
+		} else {
+			xml.addAttribute(name, value);
+		}
+	}
+
+	private static final int loadIntegerAttribute(XmlParser xml, Field field, String name) {
+		XmlDefaultInteger def = field.getAnnotation(XmlDefaultInteger.class);
+		return xml.getIntegerAttribute(name, def != null ? def.value() : 0);
+	}
+
+	private static final void emitLongAttribute(XmlGenerator xml, Field field, String name, long value) throws XMLStreamException {
+		XmlDefaultLong def = field.getAnnotation(XmlDefaultLong.class);
+		if (def != null) {
+			xml.addAttributeNot(name, value, def.value());
+		} else {
+			xml.addAttribute(name, value);
+		}
+	}
+
+	private static final long loadLongAttribute(XmlParser xml, Field field, String name) {
+		XmlDefaultLong def = field.getAnnotation(XmlDefaultLong.class);
+		return xml.getLongAttribute(name, def != null ? def.value() : 0);
+	}
+
+	private static final void emitFloatAttribute(XmlGenerator xml, Field field, String name, float value) throws XMLStreamException {
+		XmlDefaultFloat def = field.getAnnotation(XmlDefaultFloat.class);
+		if (def != null) {
+			xml.addAttributeNot(name, value, def.value());
+		} else {
+			xml.addAttribute(name, value);
+		}
+	}
+
+	private static final float loadFloatAttribute(XmlParser xml, Field field, String name) {
+		XmlDefaultFloat def = field.getAnnotation(XmlDefaultFloat.class);
+		return (float) xml.getDoubleAttribute(name, def != null ? def.value() : 0);
+	}
+
+	private static final void emitDoubleAttribute(XmlGenerator xml, Field field, String name, double value) throws XMLStreamException {
+		XmlDefaultDouble def = field.getAnnotation(XmlDefaultDouble.class);
+		if (def != null) {
+			xml.addAttributeNot(name, value, def.value());
+		} else {
+			xml.addAttribute(name, value);
+		}
+	}
+
+	private static final double loadDoubleAttribute(XmlParser xml, Field field, String name) {
+		XmlDefaultDouble def = field.getAnnotation(XmlDefaultDouble.class);
+		return xml.getDoubleAttribute(name, def != null ? def.value() : 0);
+	}
+
+	private static final void emitEnumAttribute(XmlGenerator xml, String name, Enum<?> value) throws XMLStreamException {
+		if (value != null) {
+			XmlTag xmlTag;
+			try {
+				xmlTag = value.getClass().getField(value.name()).getAnnotation(XmlTag.class);
+			} catch (Exception exception) {
+				throw new XMLStreamException(exception);
+			}
+			if (xmlTag != null) {
+				xml.addAttribute(name, xmlTag.value());
+			}
+		}
+	}
+
+	private static final Object loadEnumAttribute(XmlParser xml, Field field, String name) throws NoSuchFieldException, SecurityException {
+		String tag = xml.getAttribute(name);
+		for (Object one : field.getType().getEnumConstants()) {
+			XmlTag xmlTag = one.getClass().getField(((Enum<?>) one).name()).getAnnotation(XmlTag.class);
+			if (xmlTag != null) {
+				String value = xmlTag.value();
+				if (value.equals(tag)) {
+					return one;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static final String loadStringAttribute(XmlParser xml, Field field, String name) {
+		XmlDefault def = field.getAnnotation(XmlDefault.class);
+		return xml.getAttribute(name, def != null ? def.value() : null);
+	}
+
+	private static final UUID loadUUIDAttribute(XmlParser xml, Field field, String name) {
+		XmlDefault def = field.getAnnotation(XmlDefault.class);
+		String attribute = xml.getAttribute(name, def != null ? def.value() : null);
+		return attribute != null && !attribute.isEmpty() ? UUID.fromString(attribute) : null;
+	}
+
+	private static final void emitObjectAttribute(XmlGenerator xml, Field field, String name, Object value) throws XMLStreamException {
+		if (value != null) {
+			String stringValue = value.toString();
+			XmlDefault def = field.getAnnotation(XmlDefault.class);
+			if (def != null) {
+				xml.addAttributeNot(name, stringValue, def.value());
+			} else {
+				xml.addAttribute(name, stringValue);
+			}
+		}
+	}
+
+	private static final Object loadObjectAttribute(XmlParser xml, Field field, String name) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		XmlDefault def = field.getAnnotation(XmlDefault.class);
+		String attribute = xml.getAttribute(name, def != null ? def.value() : null);
+		return attribute != null && !attribute.isEmpty() ? field.getType().getConstructor(String.class).newInstance(attribute) : null;
+	}
+
+	private static final void emitSubTags(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException {
 		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class, XmlCollection.class)) {
 			try {
 				Introspection.makeFieldAccessible(field);
