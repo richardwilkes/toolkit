@@ -13,7 +13,6 @@ package com.trollworks.toolkit.io.xml;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.annotation.XmlAttr;
-import com.trollworks.toolkit.annotation.XmlCollection;
 import com.trollworks.toolkit.annotation.XmlDefault;
 import com.trollworks.toolkit.annotation.XmlDefaultBoolean;
 import com.trollworks.toolkit.annotation.XmlDefaultByte;
@@ -57,8 +56,6 @@ public class Xml {
 	private static String		TAG_NOT_FOUND;
 	@Localize("%s has not been annotated.")
 	private static String		NOT_TAGGED;
-	@Localize("%s is not a Collection.")
-	private static String		NOT_COLLECTION;
 	@Localize("%s is not an array.")
 	private static String		NOT_ARRAY;
 	@Localize("Unable to create object for collection tag '%s'.")
@@ -256,10 +253,6 @@ public class Xml {
 			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlTag.class)) {
 				subTags.put(field.getAnnotation(XmlTag.class).value(), field);
 			}
-			Map<String, Field> collectionSubTags = new HashMap<>();
-			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlCollection.class)) {
-				collectionSubTags.put(field.getAnnotation(XmlCollection.class).value(), field);
-			}
 			String tag;
 			while ((tag = xml.nextTag(marker)) != null) {
 				Field field = subTags.get(tag);
@@ -268,21 +261,7 @@ public class Xml {
 					Class<?> type = field.getType();
 					if (String.class == type) {
 						field.set(obj, xml.getText());
-					} else {
-						Object fieldObj = null;
-						if (obj instanceof TagObjectCreator) {
-							fieldObj = ((TagObjectCreator) obj).xmlCreateObject(context, tag);
-						}
-						if (fieldObj == null) {
-							fieldObj = type.newInstance();
-						}
-						load(xml, fieldObj, context);
-						field.set(obj, fieldObj);
-					}
-				} else {
-					field = collectionSubTags.get(tag);
-					if (field != null) {
-						Introspection.makeFieldAccessible(field);
+					} else if (Collection.class.isAssignableFrom(type)) {
 						Type genericType = field.getGenericType();
 						if (genericType instanceof ParameterizedType) {
 							genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
@@ -298,11 +277,21 @@ public class Xml {
 							load(xml, fieldObj, context);
 						}
 						((Collection) field.get(obj)).add(fieldObj);
-					} else if (obj instanceof TagUnmatched) {
-						((TagUnmatched) obj).xmlUnmatchedTag(context, tag);
 					} else {
-						xml.skip();
+						Object fieldObj = null;
+						if (obj instanceof TagObjectCreator) {
+							fieldObj = ((TagObjectCreator) obj).xmlCreateObject(context, tag);
+						}
+						if (fieldObj == null) {
+							fieldObj = type.newInstance();
+						}
+						load(xml, fieldObj, context);
+						field.set(obj, fieldObj);
 					}
+				} else if (obj instanceof TagUnmatched) {
+					((TagUnmatched) obj).xmlUnmatchedTag(context, tag);
+				} else {
+					xml.skip();
 				}
 			}
 			if (obj instanceof TagLoaded) {
@@ -375,7 +364,7 @@ public class Xml {
 	}
 
 	private static boolean hasSubTags(Object obj, Class<?> objClass) throws XMLStreamException {
-		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class, XmlCollection.class)) {
+		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class)) {
 			try {
 				Introspection.makeFieldAccessible(field);
 				Object content = field.get(obj);
@@ -647,34 +636,29 @@ public class Xml {
 	}
 
 	private static final void emitSubTags(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException {
-		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class, XmlCollection.class)) {
+		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class)) {
 			try {
 				Introspection.makeFieldAccessible(field);
 				Object content = field.get(obj);
 				if (content != null && (!(content instanceof String) || !((String) content).isEmpty())) {
 					XmlTag subTag = field.getAnnotation(XmlTag.class);
 					if (subTag != null) {
-						add(xml, subTag.value(), content);
-					} else {
-						XmlCollection collectionTag = field.getAnnotation(XmlCollection.class);
-						if (collectionTag != null) {
-							Class<?> type = field.getType();
-							if (Collection.class.isAssignableFrom(type)) {
-								Collection<?> collection = (Collection<?>) content;
-								if (!collection.isEmpty()) {
-									if (!field.isAnnotationPresent(XmlNoSort.class)) {
-										Object[] data = collection.toArray();
-										Arrays.sort(data);
-										collection = Arrays.asList(data);
-									}
-									String tag = collectionTag.value();
-									for (Object one : collection) {
-										add(xml, tag, one);
-									}
+						Class<?> type = field.getType();
+						if (Collection.class.isAssignableFrom(type)) {
+							Collection<?> collection = (Collection<?>) content;
+							if (!collection.isEmpty()) {
+								if (!field.isAnnotationPresent(XmlNoSort.class)) {
+									Object[] data = collection.toArray();
+									Arrays.sort(data);
+									collection = Arrays.asList(data);
 								}
-							} else {
-								throw new XMLStreamException(String.format(NOT_COLLECTION, field.getName()));
+								String tag = subTag.value();
+								for (Object one : collection) {
+									add(xml, tag, one);
+								}
 							}
+						} else {
+							add(xml, subTag.value(), content);
 						}
 					}
 				}
@@ -760,10 +744,10 @@ public class Xml {
 	 */
 	public interface TagUnmatched {
 		/**
-		 * Called to process an XML sub-tag that had no matching fields marked with {@link XmlTag}
-		 * or {@link XmlCollection}. Upon return from this method, the {@link XmlParser} should have
-		 * been advanced past the current tag's contents, either by calling {@link XmlParser#skip()}
-		 * or appropriate parsing of sub-tags.
+		 * Called to process an XML sub-tag that had no matching fields marked with {@link XmlTag}.
+		 * Upon return from this method, the {@link XmlParser} should have been advanced past the
+		 * current tag's contents, either by calling {@link XmlParser#skip()} or appropriate parsing
+		 * of sub-tags.
 		 *
 		 * @param context The {@link Context} for this object.
 		 * @param tag The tag name that will be processed.
