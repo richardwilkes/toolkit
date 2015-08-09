@@ -18,6 +18,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.regex.Pattern;
 
 /** Various number utilities. */
 public class Numbers {
@@ -80,11 +81,11 @@ public class Numbers {
 		Localization.initialize();
 	}
 
-	private static final String			LOCALIZED_DECIMAL_SEPARATOR		= Character.toString(DecimalFormatSymbols.getInstance().getDecimalSeparator());
-	private static final String			LOCALIZED_GROUPING_SEPARATOR	= Character.toString(DecimalFormatSymbols.getInstance().getGroupingSeparator());
-	private static final int[]			ROMAN_VALUES					= { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+	private static final String			LOCALIZED_DECIMAL_SEPARATOR			= Character.toString(DecimalFormatSymbols.getInstance().getDecimalSeparator());
+	private static final String			SAFE_LOCALIZED_GROUPING_SEPARATOR	= Pattern.quote(Character.toString(DecimalFormatSymbols.getInstance().getGroupingSeparator()));
+	private static final int[]			ROMAN_VALUES						= { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
 	@SuppressWarnings("nls")
-	private static final String[]		ROMAN_TEXT						= { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+	private static final String[]		ROMAN_TEXT							= { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
 	private static final DecimalFormat	NUMBER_FORMAT;
 	private static final DecimalFormat	NUMBER_PLUS_FORMAT;
 
@@ -455,7 +456,7 @@ public class Numbers {
 		if (buffer == null) {
 			return "";
 		}
-		buffer = buffer.replaceAll(localized ? LOCALIZED_GROUPING_SEPARATOR : ",", "").trim();
+		buffer = buffer.replaceAll(localized ? SAFE_LOCALIZED_GROUPING_SEPARATOR : ",", "").trim();
 		if (buffer.length() > 0 && buffer.charAt(0) == '+') {
 			return buffer.substring(1).trim();
 		}
