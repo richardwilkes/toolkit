@@ -39,12 +39,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -147,6 +145,7 @@ public class Xml {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static void load(XmlParser xml, Object obj, Context context) throws XMLStreamException {
 		try {
 			if (context == null) {
@@ -298,7 +297,7 @@ public class Xml {
 							fieldObj = cls.newInstance();
 							load(xml, fieldObj, context);
 						}
-						ensureCollectionIsAllocated(obj, field, null).add(fieldObj);
+						((Collection) field.get(obj)).add(fieldObj);
 					} else if (obj instanceof TagUnmatched) {
 						((TagUnmatched) obj).xmlUnmatchedTag(context, tag);
 					} else {
@@ -317,25 +316,6 @@ public class Xml {
 		} catch (Exception exception) {
 			throw new XMLStreamException(exception);
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static Collection<Object> ensureCollectionIsAllocated(Object obj, Field field, Object collection) throws IllegalArgumentException, IllegalAccessException, InstantiationException {
-		if (collection == null) {
-			collection = field.get(obj);
-			if (collection == null) {
-				Class<?> type = field.getType();
-				if (type == List.class) {
-					collection = new ArrayList<>();
-				} else if (type == Set.class) {
-					collection = new HashSet<>();
-				} else {
-					collection = type.newInstance();
-				}
-				field.set(obj, collection);
-			}
-		}
-		return (Collection<Object>) collection;
 	}
 
 	/**
