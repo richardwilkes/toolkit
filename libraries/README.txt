@@ -6,4 +6,4 @@ GNU Trove
          trove-3.0.3-src.jar
   Version: 3.0.3
   License Used: LGPL 2.1
-  Obtained from: https://bitbucket.org/robeden/trove.git
+  Obtained from: https://bitbucket.org/trove4j/trove
