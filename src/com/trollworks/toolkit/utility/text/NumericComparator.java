@@ -142,6 +142,9 @@ public class NumericComparator implements Comparator<String> {
 		// tie breaker
 		if (result == 0) {
 			result = secondaryResult;
+			if (result == 0 && mCaseless) {
+				return compareStrings(left, right);
+			}
 		}
 
 		if (result < 0) {
