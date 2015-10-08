@@ -39,6 +39,7 @@ import com.trollworks.toolkit.expression.operator.NotEqual;
 import com.trollworks.toolkit.expression.operator.OpenParen;
 import com.trollworks.toolkit.expression.operator.Operator;
 import com.trollworks.toolkit.expression.operator.Or;
+import com.trollworks.toolkit.expression.operator.Power;
 import com.trollworks.toolkit.expression.operator.Subtract;
 import com.trollworks.toolkit.utility.Localization;
 
@@ -79,6 +80,7 @@ public class Evaluator {
 		addDefaultOperator(new CloseParen());
 		addDefaultOperator(new Add());
 		addDefaultOperator(new Subtract());
+		addDefaultOperator(new Power());
 		addDefaultOperator(new Multiply());
 		addDefaultOperator(new Divide());
 		addDefaultOperator(new Equal());
@@ -190,6 +192,22 @@ public class Evaluator {
 	public final double evaluateToNumber(String expression) throws EvaluationException {
 		try {
 			return ArgumentTokenizer.getDouble(evaluate(expression));
+		} catch (Exception exception) {
+			throw new EvaluationException(exception);
+		}
+	}
+
+	/**
+	 * Evaluate an expression and return a integer result, truncating any fractions.
+	 *
+	 * @param expression The expression to evaluate.
+	 * @return The result. If the result can't be translated to an integer, an EvaluationException
+	 *         will be thrown.
+	 * @throws EvaluationException
+	 */
+	public final int evaluateToInteger(String expression) throws EvaluationException {
+		try {
+			return (int) Math.floor(ArgumentTokenizer.getDouble(evaluate(expression)));
 		} catch (Exception exception) {
 			throw new EvaluationException(exception);
 		}
