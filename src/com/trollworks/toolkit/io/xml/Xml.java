@@ -198,7 +198,7 @@ public class Xml {
 					} else if (type.isEnum()) {
 						field.set(obj, loadEnumAttribute(xml, field, name));
 					} else {
-						field.set(obj, loadObjectAttribute(xml, field, name));
+						field.set(obj, loadObjectAttribute(xml, field, name, context));
 					}
 				} else {
 					XmlEnumArrayAttr enumAttr = field.getAnnotation(XmlEnumArrayAttr.class);
@@ -238,7 +238,7 @@ public class Xml {
 								} else if (type.isEnum()) {
 									((Object[]) arrayObj)[index] = loadEnumAttribute(xml, field, name);
 								} else {
-									((Object[]) arrayObj)[index] = loadObjectAttribute(xml, field, name);
+									((Object[]) arrayObj)[index] = loadObjectAttribute(xml, field, name, context);
 								}
 							}
 							index++;
@@ -629,10 +629,17 @@ public class Xml {
 		}
 	}
 
-	private static final Object loadObjectAttribute(XmlParser xml, Field field, String name) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	private static final Object loadObjectAttribute(XmlParser xml, Field field, String name, Context context) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		XmlDefault def = field.getAnnotation(XmlDefault.class);
 		String attribute = xml.getAttribute(name, def != null ? def.value() : null);
-		return attribute != null && !attribute.isEmpty() ? field.getType().getConstructor(String.class).newInstance(attribute) : null;
+		if (attribute != null && !attribute.isEmpty()) {
+			try {
+				return field.getType().getConstructor(String.class, Context.class).newInstance(attribute, context);
+			} catch (NoSuchMethodException exception) {
+				return field.getType().getConstructor(String.class).newInstance(attribute);
+			}
+		}
+		return null;
 	}
 
 	private static final void emitSubTags(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException {
