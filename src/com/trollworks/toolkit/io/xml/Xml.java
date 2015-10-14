@@ -410,7 +410,7 @@ public class Xml {
 					} else if (type == double.class) {
 						emitDoubleAttribute(xml, field, name, field.getDouble(obj));
 					} else if (type.isEnum()) {
-						emitEnumAttribute(xml, name, (Enum<?>) field.get(obj));
+						emitEnumAttribute(xml, field, name, (Enum<?>) field.get(obj));
 					} else {
 						emitObjectAttribute(xml, field, name, field.get(obj));
 					}
@@ -449,7 +449,7 @@ public class Xml {
 							} else if (type == double.class) {
 								emitDoubleAttribute(xml, field, name, ((double[]) arrayObj)[index]);
 							} else if (type.isEnum()) {
-								emitEnumAttribute(xml, name, ((Enum<?>[]) arrayObj)[index]);
+								emitEnumAttribute(xml, field, name, ((Enum<?>[]) arrayObj)[index]);
 							} else {
 								emitObjectAttribute(xml, field, name, ((Object[]) arrayObj)[index]);
 							}
@@ -578,32 +578,52 @@ public class Xml {
 		return xml.getDoubleAttribute(name, def != null ? def.value() : 0);
 	}
 
-	private static final void emitEnumAttribute(XmlGenerator xml, String name, Enum<?> value) throws XMLStreamException {
+	private static final void emitEnumAttribute(XmlGenerator xml, Field field, String name, Enum<?> value) throws XMLStreamException {
 		if (value != null) {
-			XmlTag xmlTag;
-			try {
-				xmlTag = value.getClass().getField(value.name()).getAnnotation(XmlTag.class);
-			} catch (Exception exception) {
-				throw new XMLStreamException(exception);
-			}
-			if (xmlTag != null) {
-				xml.addAttribute(name, xmlTag.value());
+			String xmlName = getEnumXmlName(value);
+			XmlDefault def = field.getAnnotation(XmlDefault.class);
+			if (def != null) {
+				xml.addAttributeNot(name, xmlName, def.value());
+			} else {
+				xml.addAttribute(name, xmlName);
 			}
 		}
 	}
 
-	private static final Object loadEnumAttribute(XmlParser xml, Field field, String name) throws NoSuchFieldException, SecurityException {
+	private static final Object loadEnumAttribute(XmlParser xml, Field field, String name) {
 		String tag = xml.getAttribute(name);
-		for (Object one : field.getType().getEnumConstants()) {
-			XmlTag xmlTag = one.getClass().getField(((Enum<?>) one).name()).getAnnotation(XmlTag.class);
-			if (xmlTag != null) {
-				String value = xmlTag.value();
-				if (value.equals(tag)) {
+		Enum<?>[] enumConstants = (Enum<?>[]) field.getType().getEnumConstants();
+		for (Enum<?> one : enumConstants) {
+			String xmlName = getEnumXmlName(one);
+			if (xmlName.equals(tag)) {
+				return one;
+			}
+		}
+		XmlDefault def = field.getAnnotation(XmlDefault.class);
+		if (def != null) {
+			tag = def.value();
+			for (Enum<?> one : enumConstants) {
+				String xmlName = getEnumXmlName(one);
+				if (xmlName.equals(tag)) {
 					return one;
 				}
 			}
 		}
 		return null;
+	}
+
+	private static final String getEnumXmlName(Enum<?> value) {
+		String name = value.name();
+		XmlTag xmlTag;
+		try {
+			xmlTag = value.getClass().getField(name).getAnnotation(XmlTag.class);
+			if (xmlTag != null) {
+				return xmlTag.value();
+			}
+		} catch (Exception exception) {
+			// Fall back to simple case
+		}
+		return name.toLowerCase();
 	}
 
 	private static final String loadStringAttribute(XmlParser xml, Field field, String name) {
