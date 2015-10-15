@@ -50,13 +50,17 @@ class ExpressionTree {
 		} else if (mLeftOperand == null && mRightOperand != null) {
 			operand = right;
 		} else {
+			operand = null;
+		}
+		if (operand != null) {
+			if (mUnaryOperator != null) {
+				operand = mUnaryOperator.evaluate(operand);
+			} else if (mOperator != null) {
+				operand = mOperator.evaluate(operand);
+			}
+		}
+		if (operand == null) {
 			throw new EvaluationException(INVALID_EXPRESSION);
-		}
-		if (mUnaryOperator != null) {
-			return mUnaryOperator.evaluate(operand);
-		}
-		if (mOperator != null) {
-			return mOperator.evaluate(operand);
 		}
 		return operand;
 	}
