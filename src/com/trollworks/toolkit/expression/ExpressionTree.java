@@ -44,15 +44,20 @@ class ExpressionTree {
 			Object result = mOperator.evaluate(left, right);
 			return mUnaryOperator != null ? mUnaryOperator.evaluate(result) : result;
 		}
+		Object operand;
 		if (mLeftOperand != null && mRightOperand == null) {
-			return mUnaryOperator != null ? mUnaryOperator.evaluate(left) : left;
+			operand = left;
+		} else if (mLeftOperand == null && mRightOperand != null) {
+			operand = right;
+		} else {
+			throw new EvaluationException(INVALID_EXPRESSION);
 		}
-		if (mLeftOperand != null) {
-			return left;
+		if (mUnaryOperator != null) {
+			return mUnaryOperator.evaluate(operand);
 		}
-		if (mRightOperand != null) {
-			return right;
+		if (mOperator != null) {
+			return mOperator.evaluate(operand);
 		}
-		throw new EvaluationException(INVALID_EXPRESSION);
+		return operand;
 	}
 }
