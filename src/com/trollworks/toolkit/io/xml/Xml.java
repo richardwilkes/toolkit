@@ -360,6 +360,9 @@ public class Xml {
 				xml.startEmptyTag(tag);
 				emitAttributes(xml, obj, objClass);
 			}
+			if (obj instanceof TagSaved) {
+				((TagSaved) obj).xmlSaved(xml);
+			}
 		}
 	}
 
@@ -793,6 +796,18 @@ public class Xml {
 		 * @param xml The {@link XmlGenerator} for this object.
 		 */
 		void xmlWillSave(XmlGenerator xml) throws XMLStreamException;
+	}
+
+	/**
+	 * Objects that wish to be notified when they have been saved should implement this interface.
+	 */
+	public interface TagSaved {
+		/**
+		 * Called after the XML tag has been fully written to xml.
+		 *
+		 * @param xml The {@link XmlGenerator} for this object.
+		 */
+		void xmlSaved(XmlGenerator xml) throws XMLStreamException;
 	}
 
 	/**
