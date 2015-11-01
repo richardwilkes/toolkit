@@ -23,6 +23,7 @@ import com.trollworks.toolkit.expression.function.Max;
 import com.trollworks.toolkit.expression.function.Min;
 import com.trollworks.toolkit.expression.function.Roll;
 import com.trollworks.toolkit.expression.function.Round;
+import com.trollworks.toolkit.expression.function.Signed;
 import com.trollworks.toolkit.expression.operator.Add;
 import com.trollworks.toolkit.expression.operator.And;
 import com.trollworks.toolkit.expression.operator.CloseParen;
@@ -103,6 +104,7 @@ public class Evaluator {
 		addDefaultFunction(new Min());
 		addDefaultFunction(new Roll());
 		addDefaultFunction(new Round());
+		addDefaultFunction(new Signed());
 	}
 
 	public static final void addDefaultOperator(Operator operator) {
@@ -143,6 +145,11 @@ public class Evaluator {
 	/** @return The current variable resolver. */
 	public VariableResolver getVariableResolver() {
 		return mVariableResolver;
+	}
+
+	/** @param variableResolver The {@link VariableResolver} to use. */
+	public void setVariableResolver(VariableResolver variableResolver) {
+		mVariableResolver = variableResolver;
 	}
 
 	/**
@@ -191,7 +198,7 @@ public class Evaluator {
 	 */
 	public final double evaluateToNumber(String expression) throws EvaluationException {
 		try {
-			return ArgumentTokenizer.getDouble(evaluate(expression));
+			return ArgumentTokenizer.getForcedDouble(evaluate(expression));
 		} catch (Exception exception) {
 			throw new EvaluationException(exception);
 		}
@@ -207,7 +214,7 @@ public class Evaluator {
 	 */
 	public final int evaluateToInteger(String expression) throws EvaluationException {
 		try {
-			return (int) Math.floor(ArgumentTokenizer.getDouble(evaluate(expression)));
+			return (int) Math.floor(ArgumentTokenizer.getForcedDouble(evaluate(expression)));
 		} catch (Exception exception) {
 			throw new EvaluationException(exception);
 		}

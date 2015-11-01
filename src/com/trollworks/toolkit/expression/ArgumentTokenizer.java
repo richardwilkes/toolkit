@@ -67,11 +67,22 @@ public class ArgumentTokenizer implements Enumeration<String> {
 		return token;
 	}
 
-	public static final double getDouble(Object arg) {
+	public static final double getForcedDouble(Object arg) {
 		if (arg instanceof Double) {
 			return ((Double) arg).doubleValue();
 		}
 		return Numbers.extractDouble(arg.toString(), 0, false);
+	}
+
+	public static final double getDouble(Object arg) {
+		if (arg instanceof Double) {
+			return ((Double) arg).doubleValue();
+		}
+		double value = Numbers.extractDouble(arg.toString(), Double.MAX_VALUE, false);
+		if (value == Double.MAX_VALUE) {
+			throw new NumberFormatException(arg.toString());
+		}
+		return value;
 	}
 
 	public static final double getDoubleOperand(Object arg) throws EvaluationException {
