@@ -33,6 +33,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
@@ -388,5 +389,17 @@ public class GraphicsUtilities {
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
 		}
+	}
+
+	/**
+	 * On the Mac (and perhaps Windows now, too), the graphics context will have a scale transform
+	 * of 2x if being drawn onto a retina display.
+	 *
+	 * @param gc The {@link Graphics2D} to check.
+	 * @return <code>true</code> if the specified graphics context is set to a 2x scale transform.
+	 */
+	public static boolean isRetinaDisplay(Graphics2D gc) {
+		AffineTransform transform = gc.getFontRenderContext().getTransform();
+		return transform.getScaleX() == 2 && transform.getScaleY() == 2;
 	}
 }

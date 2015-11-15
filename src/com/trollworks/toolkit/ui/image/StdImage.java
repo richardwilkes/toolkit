@@ -687,6 +687,16 @@ public class StdImage extends BufferedImage implements Icon {
 		gc.dispose();
 	}
 
+	public void paintIcon(Component component, Graphics2D gc, int x, int y, boolean isRetina) {
+		if (isRetina) {
+			gc.scale(0.5, 0.5);
+		}
+		gc.drawImage(this, x, y, component);
+		if (isRetina) {
+			gc.scale(2, 2);
+		}
+	}
+
 	@Override
 	public void paintIcon(Component component, Graphics gc, int x, int y) {
 		gc.drawImage(this, x, y, component);
