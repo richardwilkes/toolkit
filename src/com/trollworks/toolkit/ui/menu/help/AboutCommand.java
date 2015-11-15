@@ -17,6 +17,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.App;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
+import com.trollworks.toolkit.ui.menu.file.CloseHandler;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.Localization;
@@ -77,21 +78,38 @@ public class AboutCommand extends Command implements AboutHandler {
 			}
 			JPanel aboutPanel = App.createAboutPanel();
 			if (aboutPanel != null) {
-				mWindow = new AppWindow(getTitle());
-				mWindow.getContentPane().add(aboutPanel);
-				mWindow.pack();
-				mWindow.addWindowListener(new WindowAdapter() {
-					@Override
-					public void windowClosed(WindowEvent windowEvent) {
-						mWindow = null;
-					}
-				});
-				Rectangle bounds = mWindow.getGraphicsConfiguration().getBounds();
-				Dimension size = mWindow.getSize();
-				mWindow.setLocation(bounds.x + (bounds.width - size.width) / 2, bounds.y + (bounds.height - size.height) / 3);
-				mWindow.setVisible(true);
-				mWindow.setResizable(false);
+				mWindow = new AboutWindow(getTitle(), aboutPanel);
 			}
+		}
+	}
+
+	private class AboutWindow extends AppWindow implements CloseHandler {
+		AboutWindow(String title, JPanel content) {
+			super(title);
+			getContentPane().add(content);
+			pack();
+			addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosed(WindowEvent windowEvent) {
+					mWindow = null;
+				}
+			});
+			Rectangle bounds = getGraphicsConfiguration().getBounds();
+			Dimension size = getSize();
+			setLocation(bounds.x + (bounds.width - size.width) / 2, bounds.y + (bounds.height - size.height) / 3);
+			setVisible(true);
+			setResizable(false);
+		}
+
+		@Override
+		public boolean mayAttemptClose() {
+			return true;
+		}
+
+		@Override
+		public boolean attemptClose() {
+			dispose();
+			return true;
 		}
 	}
 }
