@@ -97,7 +97,7 @@ public class App implements KeyEventDispatcher, Runnable {
 	/**
 	 * Must be called as early as possible and only once.
 	 *
-	 * @param cmdLine The command-line arguments.
+	 * @param cmdLine The command-line arguments. May be <code>null</code>.
 	 */
 	public final void startup(CmdLine cmdLine) {
 		if (mHasStarted) {
@@ -109,8 +109,10 @@ public class App implements KeyEventDispatcher, Runnable {
 			if (launchProxy != null) {
 				launchProxy.setReady(true);
 			}
-			for (File file : cmdLine.getArgumentsAsFiles()) {
-				OpenDataFileCommand.open(file);
+			if (cmdLine != null) {
+				for (File file : cmdLine.getArgumentsAsFiles()) {
+					OpenDataFileCommand.open(file);
+				}
 			}
 			EventQueue.invokeLater(this);
 		}
@@ -120,7 +122,7 @@ public class App implements KeyEventDispatcher, Runnable {
 	 * Called to configure the application and start any asynchronous startup tasks. This method
 	 * should return quickly. Does nothing by default.
 	 *
-	 * @param cmdLine The command-line arguments.
+	 * @param cmdLine The command-line arguments. May be <code>null</code>.
 	 */
 	public void configureApplication(CmdLine cmdLine) {
 		// Does nothing.
