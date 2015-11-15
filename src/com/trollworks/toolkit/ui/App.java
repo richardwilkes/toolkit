@@ -105,7 +105,10 @@ public class App implements KeyEventDispatcher, Runnable {
 		} else {
 			KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
 			configureApplication(cmdLine);
-			LaunchProxy.getInstance().setReady(true);
+			LaunchProxy launchProxy = LaunchProxy.getInstance();
+			if (launchProxy != null) {
+				launchProxy.setReady(true);
+			}
 			for (File file : cmdLine.getArgumentsAsFiles()) {
 				OpenDataFileCommand.open(file);
 			}
