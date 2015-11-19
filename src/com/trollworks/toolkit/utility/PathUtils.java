@@ -13,10 +13,32 @@ package com.trollworks.toolkit.utility;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /** Provides standard file path manipulation facilities. */
+@SuppressWarnings("nls")
 public class PathUtils {
+	private static final char[]		INVALID_CHARACTERS;
+	private static final String[]	INVALID_BASENAMES;
+	private static final String[]	INVALID_FULLNAMES;
+
+	static {
+		if (Platform.isWindows()) {
+			INVALID_CHARACTERS = new char[] { '\\', '/', ':', '*', '?', '"', '<', '>', '|' };
+			INVALID_BASENAMES = new String[] { "aux", "com1", "com2", "com3", "com4", "com5", "com6", "com7", "com8", "com9", "con", "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9", "nul", "prn" };
+			INVALID_FULLNAMES = new String[] { "clock$" };
+		} else if (Platform.isMacintosh()) {
+			INVALID_CHARACTERS = new char[] { '/', ':', '\0', };
+			INVALID_BASENAMES = null;
+			INVALID_FULLNAMES = null;
+		} else {
+			INVALID_CHARACTERS = new char[] { '/', '\0', };
+			INVALID_BASENAMES = null;
+			INVALID_FULLNAMES = null;
+		}
+	}
+
 	/**
 	 * Ensures that the passed in string has the specified extension on it.
 	 *
@@ -127,7 +149,7 @@ public class PathUtils {
 				return path.substring(dot + 1);
 			}
 		}
-		return ""; //$NON-NLS-1$
+		return "";
 	}
 
 	/**
@@ -163,10 +185,10 @@ public class PathUtils {
 				relativePath = relativePath.replace('\\', '/');
 				if (isFullPath(relativePath)) {
 					result = relativePath;
-				} else if (baseFullPath.endsWith("/")) { //$NON-NLS-1$
+				} else if (baseFullPath.endsWith("/")) {
 					result = baseFullPath + relativePath;
 				} else {
-					result = baseFullPath + "/" + relativePath; //$NON-NLS-1$
+					result = baseFullPath + "/" + relativePath;
 				}
 			} else {
 				result = relativePath.replace('\\', '/');
@@ -174,11 +196,11 @@ public class PathUtils {
 		} else if (baseFullPath != null) {
 			result = baseFullPath;
 		} else {
-			result = "./"; //$NON-NLS-1$
+			result = "./";
 		}
 
-		if (result.startsWith("./") || result.startsWith("../")) { //$NON-NLS-1$ //$NON-NLS-2$
-			return getFullPath(getFullPath(new File(".")), result); //$NON-NLS-1$
+		if (result.startsWith("./") || result.startsWith("../")) {
+			return getFullPath(getFullPath(new File(".")), result);
 		}
 
 		return normalizeFullPath(result);
@@ -230,7 +252,7 @@ public class PathUtils {
 			index = path.lastIndexOf('/');
 			if (index != -1) {
 				if (index == path.length() - 1) {
-					return ""; //$NON-NLS-1$
+					return "";
 				}
 				path = path.substring(index + 1);
 			}
@@ -271,7 +293,7 @@ public class PathUtils {
 		path = path.replace('\\', '/');
 		index = path.lastIndexOf('/');
 		if (index == -1) {
-			return ""; //$NON-NLS-1$
+			return "";
 		}
 		return path.substring(0, index + (includeTrailingSep ? 1 : 0));
 	}
@@ -310,7 +332,7 @@ public class PathUtils {
 			int i = remainder.indexOf('/');
 
 			while (i != -1) {
-				buffer.append("../"); //$NON-NLS-1$
+				buffer.append("../");
 				i = remainder.indexOf('/', i + 1);
 			}
 			buffer.append(targetFullPath.substring(common.length()));
@@ -345,7 +367,7 @@ public class PathUtils {
 				path = path.replace('\\', '/');
 				ch = path.charAt(0);
 
-				if (ch == '/' || path.startsWith("//") || length > 1 && path.charAt(1) == ':' && (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z')) { //$NON-NLS-1$
+				if (ch == '/' || path.startsWith("//") || length > 1 && path.charAt(1) == ':' && (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z')) {
 					isFullPath = true;
 				}
 			}
@@ -368,7 +390,7 @@ public class PathUtils {
 			path = path.replace('\\', '/');
 
 			do {
-				index = path.indexOf("/./"); //$NON-NLS-1$
+				index = path.indexOf("/./");
 				if (index != -1) {
 					buffer = new StringBuilder(path);
 					buffer.delete(index, index + 2);
@@ -377,7 +399,7 @@ public class PathUtils {
 			} while (index != -1);
 
 			do {
-				index = path.indexOf("/../"); //$NON-NLS-1$
+				index = path.indexOf("/../");
 				if (index != -1) {
 					int length = 3;
 
@@ -400,11 +422,11 @@ public class PathUtils {
 				}
 			} while (index != -1);
 
-			if (path.endsWith("/.")) { //$NON-NLS-1$
+			if (path.endsWith("/.")) {
 				path = path.substring(0, path.length() - 2);
 			}
 
-			if (path.endsWith("/..")) { //$NON-NLS-1$
+			if (path.endsWith("/..")) {
 				index = path.length() - 3;
 
 				while (index > 0) {
@@ -418,7 +440,7 @@ public class PathUtils {
 			}
 
 			if (path.length() > 1 && path.charAt(1) == ':') {
-				path = Character.toUpperCase(path.charAt(0)) + ":" + path.substring(2); //$NON-NLS-1$
+				path = Character.toUpperCase(path.charAt(0)) + ":" + path.substring(2);
 			}
 		}
 
@@ -449,7 +471,7 @@ public class PathUtils {
 					}
 				}
 
-				String cmdPath = System.getenv("PATH"); //$NON-NLS-1$
+				String cmdPath = System.getenv("PATH");
 				if (cmdPath != null) {
 					StringTokenizer tokenizer = new StringTokenizer(cmdPath, File.pathSeparator);
 
@@ -463,5 +485,33 @@ public class PathUtils {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @param name The name to check. This should be just the name and no path components.
+	 * @return <code>true</code> if the name is valid as a file name on your platform.
+	 */
+	public static final boolean isNameValidForFile(String name) {
+		if (name == null || name.isEmpty() || name.equals(".") || name.equals("..")) {
+			return false;
+		}
+		for (char ch : INVALID_CHARACTERS) {
+			if (name.indexOf(ch) != -1) {
+				return false;
+			}
+		}
+		if (Platform.isWindows()) {
+			char lastChar = name.charAt(name.length() - 1);
+			if (lastChar == '.' || Character.isWhitespace(lastChar)) {
+				return false;
+			}
+			int dot = name.indexOf('.');
+			String basename = dot == -1 ? name : name.substring(0, dot);
+			if (Arrays.binarySearch(INVALID_BASENAMES, basename.toLowerCase()) >= 0) {
+				return false;
+			}
+			return Arrays.binarySearch(INVALID_FULLNAMES, name.toLowerCase()) < 0;
+		}
+		return true;
 	}
 }
