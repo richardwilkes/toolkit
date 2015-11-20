@@ -30,14 +30,18 @@ import com.trollworks.toolkit.annotation.XmlTagVersion;
 import com.trollworks.toolkit.io.xml.XmlParser.Context;
 import com.trollworks.toolkit.utility.Introspection;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.workarounds.PathToUri;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URI;
+import java.net.URLConnection;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -102,6 +106,29 @@ public class Xml {
 	 */
 	public static <T> T load(File file, T obj, Context context) throws XMLStreamException {
 		return load(file.toURI(), obj, context);
+	}
+
+	/**
+	 * Loads the contents of an xml file into the specified object.
+	 *
+	 * @param path The {@link Path} to load from.
+	 * @param obj The object to load the xml data into.
+	 * @return The object that was passed in.
+	 */
+	public static <T> T load(Path path, T obj) throws XMLStreamException {
+		return load(PathToUri.toFixedUri(path), obj, null);
+	}
+
+	/**
+	 * Loads the contents of an xml file into the specified object.
+	 *
+	 * @param path The {@link Path} to load from.
+	 * @param obj The object to load the xml data into.
+	 * @param context Optional context for recording state while loading.
+	 * @return The object that was passed in.
+	 */
+	public static <T> T load(Path path, T obj, Context context) throws XMLStreamException {
+		return load(PathToUri.toFixedUri(path), obj, context);
 	}
 
 	/**
@@ -314,7 +341,44 @@ public class Xml {
 	 * @param obj The object to save the xml data from.
 	 */
 	public static void save(File file, Object obj) throws XMLStreamException {
-		try (XmlGenerator xml = new XmlGenerator(new FileOutputStream(file))) {
+		try (FileOutputStream out = new FileOutputStream(file)) {
+			save(out, obj);
+		} catch (XMLStreamException exception) {
+			throw exception;
+		} catch (Exception exception) {
+			throw new XMLStreamException(exception);
+		}
+	}
+
+	/**
+	 * Saves the contents of an object into an xml file.
+	 *
+	 * @param path The {@link Path} to save to.
+	 * @param obj The object to save the xml data from.
+	 */
+	public static void save(Path path, Object obj) throws XMLStreamException {
+		try {
+			URLConnection connection = PathToUri.toFixedUri(path).toURL().openConnection();
+			connection.setDoInput(false);
+			connection.setDoOutput(true);
+			try (OutputStream out = connection.getOutputStream()) {
+				save(out, obj);
+			}
+		} catch (XMLStreamException exception) {
+			throw exception;
+		} catch (Exception exception) {
+			throw new XMLStreamException(exception);
+		}
+	}
+
+	/**
+	 * Saves the contents of an object into an xml file.
+	 *
+	 * @param out The {@link OutputStream} to save to.
+	 * @param obj The object to save the xml data from.
+	 */
+	public static void save(OutputStream out, Object obj) throws XMLStreamException {
+		try (XmlGenerator xml = new XmlGenerator(out)) {
 			xml.startDocument();
 			add(xml, obj);
 			xml.endDocument();
