@@ -385,12 +385,20 @@ public class Evaluator {
 
 	private static final NextOperator nextOperator(String expression, int start, int max, Operator operator) {
 		int length = operator.getLength();
+		String symbol = operator.getSymbol();
 		if (length == 1) {
-			if (expression.charAt(start) == operator.getSymbol().charAt(0)) {
+			char symbolChar = symbol.charAt(0);
+			if (expression.charAt(start) == symbolChar) {
+				// Hack to allow negative exponents on floating point numbers (i.e. 1.2e-2)
+				if (symbolChar == '-' && start > 1) {
+					if (expression.charAt(start - 1) == 'e' && Character.isDigit(expression.charAt(start - 2))) {
+						return null;
+					}
+				}
 				return new NextOperator(operator, start);
 			}
 		} else {
-			if (expression.regionMatches(start, operator.getSymbol(), 0, start + length <= max ? length : max - start)) {
+			if (expression.regionMatches(start, symbol, 0, start + length <= max ? length : max - start)) {
 				return new NextOperator(operator, start);
 			}
 		}
