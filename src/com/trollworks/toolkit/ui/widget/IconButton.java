@@ -13,6 +13,7 @@ package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.MouseCapture;
+import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.StdImage;
 
@@ -32,13 +33,17 @@ import javax.swing.JComponent;
 
 public class IconButton extends JComponent implements MouseListener, MouseMotionListener, ComponentListener {
 	private static final int	MARGIN	= 4;
-	private StdImage			mIcon;
+	private RetinaIcon			mIcon;
 	private Runnable			mClickFunction;
 	private boolean				mInMouseDown;
 	private boolean				mPressed;
 	private boolean				mShowBorder;
 
-	public IconButton(StdImage icon, String tooltip, Runnable clickFunction) {
+	public IconButton(StdImage img, String tooltip, Runnable clickFunction) {
+		this(new RetinaIcon(img), tooltip, clickFunction);
+	}
+
+	public IconButton(RetinaIcon icon, String tooltip, Runnable clickFunction) {
 		setOpaque(false);
 		setBackground(null);
 		setToolTipText(tooltip);
@@ -50,7 +55,11 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 		addComponentListener(this);
 	}
 
-	public void setIcon(StdImage icon) {
+	public void setIcon(StdImage img) {
+		setIcon(new RetinaIcon(img));
+	}
+
+	public void setIcon(RetinaIcon icon) {
 		mIcon = icon;
 		UIUtilities.setOnlySize(this, new Dimension(icon.getIconWidth() + MARGIN * 2, icon.getIconHeight() + MARGIN * 2));
 		repaint();
@@ -71,7 +80,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 		int y = insets.top;
 		int width = getWidth() - (insets.left + insets.right);
 		int height = getHeight() - (insets.top + insets.bottom);
-		StdImage icon = mIcon;
+		RetinaIcon icon = mIcon;
 		if (isEnabled()) {
 			if (mInMouseDown && mPressed) {
 				gc.setColor(Colors.adjustBrightness(getBackground(), -0.2f));
@@ -82,7 +91,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 				gc.drawRect(x, y, width - 1, height - 1);
 			}
 		} else {
-			icon = StdImage.createDisabledImage(icon);
+			icon = icon.createDisabled();
 		}
 		icon.paintIcon(this, gc, x + (width - icon.getIconWidth()) / 2, y + (height - icon.getIconHeight()) / 2);
 	}
