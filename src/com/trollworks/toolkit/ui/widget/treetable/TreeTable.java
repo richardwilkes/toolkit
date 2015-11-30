@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui.widget.treetable;
 import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.widget.Icons;
+import com.trollworks.toolkit.utility.task.Tasks;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,6 +25,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -518,8 +520,15 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	}
 
 	@Override
-	public void modelWasUpdated() {
-		repaint();
+	public void modelWasUpdated(int flags) {
+		if ((flags & TreeTableModelListener.FLAG_STRUCTURE_MODIFIED) != 0) {
+			Tasks.scheduleOnUIThread(() -> {
+				setSize(getPreferredSize());
+			}, 0, TimeUnit.MILLISECONDS, this);
+		}
+		if ((flags & TreeTableModelListener.FLAG_CONTENT_MODIFIED) != 0) {
+			repaint();
+		}
 	}
 
 	@Override

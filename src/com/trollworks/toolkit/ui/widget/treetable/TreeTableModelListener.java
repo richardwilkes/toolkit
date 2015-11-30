@@ -16,6 +16,13 @@ package com.trollworks.toolkit.ui.widget.treetable;
  * interface.
  */
 public interface TreeTableModelListener {
-	/** Called when the {@link TreeTableModel} has been modified. */
-	void modelWasUpdated();
+	public static final int	FLAG_STRUCTURE_MODIFIED	= 1 << 0;
+	public static final int	FLAG_CONTENT_MODIFIED	= 1 << 1;
+
+	/**
+	 * Called when the {@link TreeTableModel} has been modified.
+	 *
+	 * @param flags An or'd set of flags that provide a hint as to what has changed.
+	 */
+	void modelWasUpdated(int flags);
 }
