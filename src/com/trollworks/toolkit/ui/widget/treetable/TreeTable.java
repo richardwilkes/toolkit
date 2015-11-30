@@ -27,10 +27,12 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.Scrollable;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 /** A widget that can display both tabular and hierarchical data. */
-public class TreeTable extends JPanel implements MouseListener, MouseMotionListener, TreeTableModelListener, SelectionModelListener {
+public class TreeTable extends JPanel implements MouseListener, MouseMotionListener, TreeTableModelListener, SelectionModelListener, Scrollable {
 	private static final int	DISCLOSURE_WIDTH		= Icons.getDisclosure(false, false).getIconWidth();
 	private static final int	DISCLOSURE_HEIGHT		= Icons.getDisclosure(false, false).getIconHeight();
 	private TreeTableModel		mModel;
@@ -39,7 +41,6 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	private boolean				mShowDisclosureControl	= true;
 	private boolean				mShowColumnDividers		= true;
 	private boolean				mShowRowDividers;
-	private ColumnInfo[]		mColumnInfo;
 	private int					mLastMouseX				= Integer.MIN_VALUE;
 	private int					mLastMouseY				= Integer.MIN_VALUE;
 	private Object				mOverRow;
@@ -82,10 +83,6 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	/** @param renderer The {@link TreeTableRenderer} to begin using. */
 	public void setRenderer(TreeTableRenderer renderer) {
 		mRenderer = renderer;
-		mColumnInfo = new ColumnInfo[mRenderer.getColumnCount(this)];
-		for (int i = 0; i < mColumnInfo.length; i++) {
-			mColumnInfo[i] = new ColumnInfo(i, mRenderer.getColumnWidth(this, i, SizeType.PREFERRED));
-		}
 	}
 
 	/** @return The color used when drawing the divider. */
@@ -100,36 +97,27 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 
 	@Override
 	public Dimension getMinimumSize() {
-		return new Dimension(calculateWidth(SizeType.MINIMUM), calculateHeight());
-	}
-
-	@Override
-	public Dimension getPreferredSize() {
-		return new Dimension(calculateWidth(SizeType.PREFERRED), calculateHeight());
+		return getPreferredSize();
 	}
 
 	@Override
 	public Dimension getMaximumSize() {
-		return new Dimension(calculateWidth(SizeType.MAXIMUM), calculateHeight());
+		return getPreferredSize();
 	}
 
-	private int calculateWidth(SizeType sizeType) {
+	@Override
+	public Dimension getPreferredSize() {
 		int width = mShowDisclosureControl ? DISCLOSURE_WIDTH : 0;
-		for (ColumnInfo ci : mColumnInfo) {
-			if (ci.mVisible) {
-				width += sizeType == SizeType.PREFERRED ? ci.mWidth : mRenderer.getColumnWidth(this, ci.mModelIndex, sizeType);
-				if (mShowColumnDividers) {
-					width++;
-				}
+		int count = mRenderer.getColumnCount(this);
+		for (int i = 0; i < count; i++) {
+			width += mRenderer.getPreferredColumnWidth(this, i);
+			if (mShowColumnDividers) {
+				width++;
 			}
 		}
 		if (mShowColumnDividers && width > 0) {
 			width--;
 		}
-		return width;
-	}
-
-	private int calculateHeight() {
 		int height = 0;
 		for (Object row : mModel.getRootRows()) {
 			height += calculateHeight(row);
@@ -137,7 +125,7 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		if (mShowRowDividers && height > 0) {
 			height--;
 		}
-		return height;
+		return new Dimension(width, height);
 	}
 
 	private int calculateHeight(Object row) {
@@ -178,12 +166,11 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 			if (mShowColumnDividers) {
 				gc.setColor(mDividerColor);
 				int x = bounds.x;
-				for (ColumnInfo ci : mColumnInfo) {
-					if (ci.mVisible) {
-						x += ci.mWidth;
-						gc.drawLine(x, bounds.y, x, bounds.height);
-						x++;
-					}
+				int columns = mRenderer.getColumnCount(this);
+				for (int i = 0; i < columns; i++) {
+					x += mRenderer.getColumnWidth(this, i);
+					gc.drawLine(x, bounds.y, x, bounds.height);
+					x++;
 				}
 			}
 		} finally {
@@ -210,22 +197,22 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 				gc.setColor(UIManager.getColor("List.selectionBackground")); //$NON-NLS-1$
 				gc.fillRect(x, y, bounds.x + bounds.width - x, height);
 			}
-			for (ColumnInfo ci : mColumnInfo) {
-				if (ci.mVisible) {
-					if (x + ci.mWidth > clip.x) {
-						Rectangle cellBounds = new Rectangle(x, y, ci.mWidth, height);
-						gc.setClip(clip.intersection(cellBounds));
-						gc.translate(x, y);
-						mRenderer.drawCell(this, gc, row, ci.mModelIndex, ci.mWidth, height, rowSelected);
-						gc.translate(-x, -y);
-					}
-					x += ci.mWidth;
-					if (mShowColumnDividers) {
-						x++;
-					}
-					if (x >= clip.x + clip.width) {
-						break;
-					}
+			int columns = mRenderer.getColumnCount(this);
+			for (int i = 0; i < columns; i++) {
+				int width = mRenderer.getColumnWidth(this, i);
+				if (x + width > clip.x) {
+					Rectangle cellBounds = new Rectangle(x, y, width, height);
+					gc.setClip(clip.intersection(cellBounds));
+					gc.translate(x, y);
+					mRenderer.drawCell(this, gc, row, i, width, height, rowSelected);
+					gc.translate(-x, -y);
+				}
+				x += width;
+				if (mShowColumnDividers) {
+					x++;
+				}
+				if (x >= clip.x + clip.width) {
+					break;
 				}
 			}
 			gc.setClip(clip);
@@ -435,20 +422,33 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 				left += width;
 			}
 			if (x >= left) {
-				for (ColumnInfo ci : mColumnInfo) {
-					if (ci.mVisible) {
-						if (left + ci.mWidth > x) {
-							return ci.mModelIndex;
-						}
-						left += ci.mWidth;
-						if (mShowColumnDividers) {
-							left++;
-						}
+				int columns = mRenderer.getColumnCount(this);
+				for (int i = 0; i < columns; i++) {
+					int width = mRenderer.getColumnWidth(this, i);
+					if (left + width > x) {
+						return i;
+					}
+					left += width;
+					if (mShowColumnDividers) {
+						left++;
 					}
 				}
 			}
 		}
 		return -1;
+	}
+
+	public int getAvailableRowWidth() {
+		Insets insets = getInsets();
+		int width = getWidth();
+		width -= insets.left + insets.right;
+		if (mShowDisclosureControl) {
+			width -= DISCLOSURE_WIDTH;
+		}
+		if (mShowColumnDividers) {
+			width -= mRenderer.getColumnCount(this) - 1;
+		}
+		return width;
 	}
 
 	/**
@@ -499,20 +499,18 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 			if (mShowDisclosureControl) {
 				left += DISCLOSURE_WIDTH;
 			}
-			for (ColumnInfo ci : mColumnInfo) {
-				if (ci.mVisible) {
-					if (ci.mModelIndex == modelColumnIndex) {
-						Rectangle bounds = getRowBounds(row);
-						bounds.x = left;
-						bounds.width = ci.mWidth;
-						return bounds;
-					}
-					left += ci.mWidth;
-					if (mShowColumnDividers) {
-						left++;
-					}
-				} else if (ci.mModelIndex == modelColumnIndex) {
-					break;
+			int columns = mRenderer.getColumnCount(this);
+			for (int i = 0; i < columns; i++) {
+				int width = mRenderer.getColumnWidth(this, i);
+				if (i == modelColumnIndex) {
+					Rectangle bounds = getRowBounds(row);
+					bounds.x = left;
+					bounds.width = width;
+					return bounds;
+				}
+				left += width;
+				if (mShowColumnDividers) {
+					left++;
 				}
 			}
 		}
@@ -529,14 +527,28 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		repaint();
 	}
 
-	private static class ColumnInfo {
-		int		mModelIndex;
-		int		mWidth;
-		boolean	mVisible	= true;
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		return getPreferredSize();
+	}
 
-		ColumnInfo(int modelIndex, int width) {
-			mModelIndex = modelIndex;
-			mWidth = width;
-		}
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return orientation == SwingConstants.VERTICAL ? 16 : 20;
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return orientation == SwingConstants.VERTICAL ? visibleRect.height : visibleRect.width;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return UIUtilities.shouldTrackViewportWidth(this);
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return UIUtilities.shouldTrackViewportHeight(this);
 	}
 }

@@ -27,10 +27,16 @@ public interface TreeTableRenderer {
 	/**
 	 * @param table The {@link TreeTable} being rendered.
 	 * @param column The column index to check.
-	 * @param sizeType The type of width that is being asked for.
+	 * @return The preferred width of the column.
+	 */
+	int getPreferredColumnWidth(TreeTable table, int column);
+
+	/**
+	 * @param table The {@link TreeTable} being rendered.
+	 * @param column The column index to check.
 	 * @return The width of the column.
 	 */
-	int getColumnWidth(TreeTable table, int column, SizeType sizeType);
+	int getColumnWidth(TreeTable table, int column);
 
 	/**
 	 * @param table The {@link TreeTable} containing the row.
