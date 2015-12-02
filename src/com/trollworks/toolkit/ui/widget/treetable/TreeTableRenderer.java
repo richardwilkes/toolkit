@@ -38,6 +38,9 @@ public interface TreeTableRenderer {
 	 */
 	int getColumnWidth(TreeTable table, int column);
 
+	/** @return The column that should contain the disclosure controls, if they are present. */
+	int getDisclosureColumn();
+
 	/**
 	 * @param table The {@link TreeTable} containing the row.
 	 * @param row The row object to check.

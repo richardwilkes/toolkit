@@ -28,7 +28,6 @@ import java.awt.event.MouseMotionListener;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -109,28 +108,24 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 
 	@Override
 	public Dimension getPreferredSize() {
-		int width = mShowDisclosureControl ? DISCLOSURE_WIDTH : 0;
+		Dimension size = new Dimension(0, 0);
+		for (Object row : mModel.getRootRows()) {
+			calculateHeight(row, size);
+		}
+		if (mShowRowDividers && size.height > 0) {
+			size.height--;
+		}
 		int count = mRenderer.getColumnCount(this);
 		for (int i = 0; i < count; i++) {
-			width += mRenderer.getPreferredColumnWidth(this, i);
-			if (mShowColumnDividers) {
-				width++;
-			}
+			size.width += mRenderer.getPreferredColumnWidth(this, i);
 		}
-		if (mShowColumnDividers && width > 0) {
-			width--;
+		if (mShowColumnDividers && count > 0) {
+			size.width += count - 1;
 		}
-		int height = 0;
-		for (Object row : mModel.getRootRows()) {
-			height += calculateHeight(row);
-		}
-		if (mShowRowDividers && height > 0) {
-			height--;
-		}
-		return new Dimension(width, height);
+		return size;
 	}
 
-	private int calculateHeight(Object row) {
+	private void calculateHeight(Object row, Dimension size) {
 		int height = mRenderer.getRowHeight(this, row);
 		if (mShowDisclosureControl) {
 			int iconHeight = DISCLOSURE_HEIGHT;
@@ -141,13 +136,19 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		if (mShowRowDividers) {
 			height++;
 		}
+		size.height += height;
+		if (mShowDisclosureControl) {
+			int indent = (1 + getRowDepth(row)) * DISCLOSURE_WIDTH;
+			if (size.width < indent) {
+				size.width = indent;
+			}
+		}
 		if (!mModel.isLeafRow(row) && mModel.isRowDisclosed(row)) {
 			int count = mModel.getRowChildCount(row);
 			for (int i = 0; i < count; i++) {
-				height += calculateHeight(mModel.getRowChild(row, i));
+				calculateHeight(mModel.getRowChild(row, i), size);
 			}
 		}
-		return height;
 	}
 
 	@Override
@@ -184,23 +185,25 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		int height = mRenderer.getRowHeight(this, row);
 		if (y + height > clip.y) {
 			int x = bounds.x;
-			if (mShowDisclosureControl) {
-				int iconWidth = DISCLOSURE_WIDTH;
-				if (x + iconWidth > clip.x) {
-					if (!mModel.isLeafRow(row)) {
-						RetinaIcon icon = Icons.getDisclosure(mModel.isRowDisclosed(row), mLastMouseY >= y && mLastMouseY < y + DISCLOSURE_HEIGHT && mLastMouseX >= x && mLastMouseX < x + iconWidth);
-						icon.paintIcon(this, gc, x, y);
-					}
-				}
-				x += iconWidth;
-			}
 			boolean rowSelected = mModel.getSelectionModel().isSelected(row);
 			if (rowSelected) {
 				gc.setColor(UIManager.getColor("List.selectionBackground")); //$NON-NLS-1$
 				gc.fillRect(x, y, bounds.x + bounds.width - x, height);
 			}
 			int columns = mRenderer.getColumnCount(this);
+			int disclosureColumn = mShowDisclosureControl ? mRenderer.getDisclosureColumn() : -1;
 			for (int i = 0; i < columns; i++) {
+				if (i == disclosureColumn) {
+					x += getRowDepth(row) * DISCLOSURE_WIDTH;
+					if (x + DISCLOSURE_WIDTH > clip.x) {
+						if (!mModel.isLeafRow(row)) {
+							RetinaIcon icon = Icons.getDisclosure(mModel.isRowDisclosed(row), mLastMouseY >= y && mLastMouseY < y + DISCLOSURE_HEIGHT && mLastMouseX >= x && mLastMouseX < x + DISCLOSURE_WIDTH);
+							gc.setClip(clip.intersection(new Rectangle(x, y, DISCLOSURE_WIDTH, height)));
+							icon.paintIcon(this, gc, x, y);
+						}
+					}
+					x += DISCLOSURE_WIDTH;
+				}
 				int width = mRenderer.getColumnWidth(this, i);
 				if (x + width > clip.x) {
 					Rectangle cellBounds = new Rectangle(x, y, width, height);
@@ -293,9 +296,6 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		int column = getColumnAt(row, event.getX());
 		if (column == -2) {
 			mModel.setRowDisclosed(row, !mModel.isRowDisclosed(row));
-			if (UIUtilities.getAncestorOfType(this, JScrollPane.class) != null) {
-				setSize(getPreferredSize());
-			}
 		} else if (column != -1) {
 			Rectangle cellBounds = getCellBounds(row, column);
 			mRenderer.mousePressed(this, row, column, event.getX() - cellBounds.x, event.getY() - cellBounds.y, cellBounds.width, cellBounds.height, event.getButton(), event.getClickCount(), event.getModifiers(), event.isPopupTrigger());
@@ -353,9 +353,19 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	 * @return <code>true</code> if the x-coordinate is over the disclosure control.
 	 */
 	public boolean isOverDisclosure(Object row, int x) {
-		if (row != null && !mModel.isLeafRow(row)) {
-			int left = getInsets().left;
-			return x >= left && x < left + DISCLOSURE_WIDTH;
+		if (mShowDisclosureControl && row != null && !mModel.isLeafRow(row)) {
+			int column = mRenderer.getDisclosureColumn();
+			if (column != -1) {
+				int left = getInsets().left;
+				for (int i = 0; i < column; i++) {
+					left += mRenderer.getColumnWidth(this, i);
+					if (mShowColumnDividers) {
+						left++;
+					}
+				}
+				left += getRowDepth(row) * DISCLOSURE_WIDTH;
+				return x >= left && x < left + DISCLOSURE_WIDTH;
+			}
 		}
 		return false;
 	}
@@ -370,6 +380,27 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 			}
 		}
 		return depth;
+	}
+
+	public int getDeepestDisclosedDepth() {
+		int deepest = 0;
+		for (Object row : mModel.getRootRows()) {
+			deepest = getDeepestDisclosedDepth(row, 0, deepest);
+		}
+		return deepest;
+	}
+
+	private int getDeepestDisclosedDepth(Object row, int depth, int deepest) {
+		if (deepest < depth) {
+			deepest = depth;
+		}
+		if (!mModel.isLeafRow(row) && mModel.isRowDisclosed(row)) {
+			int count = mModel.getRowChildCount(row);
+			for (int i = 0; i < count; i++) {
+				deepest = getDeepestDisclosedDepth(mModel.getRowChild(row, i), depth + 1, deepest);
+			}
+		}
+		return deepest;
 	}
 
 	/**
@@ -414,18 +445,19 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	private int getColumnAt(Object row, int x) {
 		if (row != null) {
 			int left = getInsets().left;
-			if (mShowDisclosureControl) {
-				int width = DISCLOSURE_WIDTH;
-				if (x >= left && x < left + width) {
-					if (!mModel.isLeafRow(row)) {
-						return -2;
-					}
-				}
-				left += width;
-			}
 			if (x >= left) {
+				int disclosureColumn = mShowDisclosureControl ? mRenderer.getDisclosureColumn() : -1;
 				int columns = mRenderer.getColumnCount(this);
 				for (int i = 0; i < columns; i++) {
+					if (disclosureColumn == i) {
+						left += getRowDepth(row) * DISCLOSURE_WIDTH;
+						if (x >= left && x < left + DISCLOSURE_WIDTH) {
+							if (!mModel.isLeafRow(row)) {
+								return -2;
+							}
+						}
+						left += DISCLOSURE_WIDTH;
+					}
 					int width = mRenderer.getColumnWidth(this, i);
 					if (left + width > x) {
 						return i;
@@ -445,7 +477,7 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		int width = getWidth();
 		width -= insets.left + insets.right;
 		if (mShowDisclosureControl) {
-			width -= DISCLOSURE_WIDTH;
+			width -= (1 + getDeepestDisclosedDepth()) * DISCLOSURE_WIDTH;
 		}
 		if (mShowColumnDividers) {
 			width -= mRenderer.getColumnCount(this) - 1;
@@ -498,11 +530,12 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	public Rectangle getCellBounds(Object row, int modelColumnIndex) {
 		if (row != null) {
 			int left = getInsets().left;
-			if (mShowDisclosureControl) {
-				left += DISCLOSURE_WIDTH;
-			}
+			int disclosureColumn = mShowDisclosureControl ? mRenderer.getDisclosureColumn() : -1;
 			int columns = mRenderer.getColumnCount(this);
 			for (int i = 0; i < columns; i++) {
+				if (i == disclosureColumn) {
+					left += (1 + getRowDepth(row)) * DISCLOSURE_WIDTH;
+				}
 				int width = mRenderer.getColumnWidth(this, i);
 				if (i == modelColumnIndex) {
 					Rectangle bounds = getRowBounds(row);
