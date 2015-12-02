@@ -98,6 +98,15 @@ public class StdImageSet implements Comparator<StdImage> {
 			List<StdImage> images = new ArrayList<>();
 			for (int size : STD_SIZES) {
 				StdImage img = StdImage.get(name + "_" + size); //$NON-NLS-1$
+				if (img == null) {
+					if (size == 16) {
+						// Try without the _16
+						img = StdImage.get(name);
+					} else if (size == 32) {
+						// Try with @2x instead of _32
+						img = StdImage.get(name + "@2x"); //$NON-NLS-1$
+					}
+				}
 				if (img != null) {
 					images.add(img);
 				}
