@@ -9,11 +9,12 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui.widget.treetable;
+package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.widget.Icons;
+import com.trollworks.toolkit.utility.selection.SelectionModel;
+import com.trollworks.toolkit.utility.selection.SelectionModelListener;
 import com.trollworks.toolkit.utility.task.Tasks;
 
 import java.awt.Color;
@@ -25,6 +26,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
@@ -33,25 +35,27 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 /** A widget that can display both tabular and hierarchical data. */
-public class TreeTable extends JPanel implements MouseListener, MouseMotionListener, TreeTableModelListener, SelectionModelListener, Scrollable {
-	private static final int	DISCLOSURE_WIDTH		= Icons.getDisclosure(false, false).getIconWidth();
-	private static final int	DISCLOSURE_HEIGHT		= Icons.getDisclosure(false, false).getIconHeight();
-	private TreeTableModel		mModel;
-	private TreeTableRenderer	mRenderer;
-	private Color				mDividerColor			= Color.LIGHT_GRAY;
-	private boolean				mShowDisclosureControl	= true;
-	private boolean				mShowColumnDividers		= true;
-	private boolean				mShowRowDividers;
-	private int					mLastMouseX				= Integer.MIN_VALUE;
-	private int					mLastMouseY				= Integer.MIN_VALUE;
-	private Object				mOverRow;
-	private boolean				mOverDisclosure;
+public class TreeTable extends JPanel implements MouseListener, MouseMotionListener, Scrollable {
+	private static final int		DISCLOSURE_WIDTH		= Icons.getDisclosure(false, false).getIconWidth();
+	private static final int		DISCLOSURE_HEIGHT		= Icons.getDisclosure(false, false).getIconHeight();
+	private Model					mModel;
+	private ModelListener			mModelListener;
+	private SelectionModelListener	mSelectionModelListener;
+	private Renderer				mRenderer;
+	private Color					mDividerColor			= Color.LIGHT_GRAY;
+	private boolean					mShowDisclosureControl	= true;
+	private boolean					mShowColumnDividers		= true;
+	private boolean					mShowRowDividers;
+	private int						mLastMouseX				= Integer.MIN_VALUE;
+	private int						mLastMouseY				= Integer.MIN_VALUE;
+	private Object					mOverRow;
+	private boolean					mOverDisclosure;
 
 	/**
-	 * @param model The {@link TreeTableModel} to use.
-	 * @param renderer The {@link TreeTableRenderer} to use.
+	 * @param model The {@link Model} to use.
+	 * @param renderer The {@link Renderer} to use.
 	 */
-	public TreeTable(TreeTableModel model, TreeTableRenderer renderer) {
+	public TreeTable(Model model, Renderer renderer) {
 		setFocusable(true);
 		setBackground(Color.WHITE);
 		setModel(model);
@@ -60,29 +64,40 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		addMouseMotionListener(this);
 	}
 
-	/** @return The current {@link TreeTableModel}. */
-	public TreeTableModel getModel() {
+	/** @return The current {@link Model}. */
+	public Model getModel() {
 		return mModel;
 	}
 
-	/** @param model The {@link TreeTableModel} to begin using. */
-	public void setModel(TreeTableModel model) {
+	/** @param model The {@link Model} to begin using. */
+	public void setModel(Model model) {
 		if (mModel != null) {
-			mModel.removeTreeTableModelListener(this);
-			mModel.getSelectionModel().removeSelectionModelListener(this);
+			mModel.removeTreeTableModelListener(mModelListener);
+			mModelListener = null;
+			mModel.getSelectionModel().removeSelectionModelListener(mSelectionModelListener);
+			mSelectionModelListener = null;
 		}
 		mModel = model;
-		mModel.addTreeTableModelListener(this);
-		mModel.getSelectionModel().addSelectionModelListener(this);
+		mModelListener = (flags) -> {
+			if ((flags & ModelListener.FLAG_STRUCTURE_MODIFIED) != 0) {
+				Tasks.scheduleOnUIThread(() -> setSize(getPreferredSize()), 0, TimeUnit.MILLISECONDS, this);
+			}
+			if ((flags & ModelListener.FLAG_CONTENT_MODIFIED) != 0) {
+				repaint();
+			}
+		};
+		mModel.addTreeTableModelListener(mModelListener);
+		mSelectionModelListener = () -> repaint();
+		mModel.getSelectionModel().addSelectionModelListener(mSelectionModelListener);
 	}
 
-	/** @return The current {@link TreeTableRenderer}. */
-	public TreeTableRenderer getRenderer() {
+	/** @return The current {@link Renderer}. */
+	public Renderer getRenderer() {
 		return mRenderer;
 	}
 
-	/** @param renderer The {@link TreeTableRenderer} to begin using. */
-	public void setRenderer(TreeTableRenderer renderer) {
+	/** @param renderer The {@link Renderer} to begin using. */
+	public void setRenderer(Renderer renderer) {
 		mRenderer = renderer;
 	}
 
@@ -524,7 +539,7 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 
 	/**
 	 * @param row The row object to check.
-	 * @param modelColumnIndex The {@link TreeTableModel}'s column index to check.
+	 * @param modelColumnIndex The {@link Model}'s column index to check.
 	 * @return The bounding rectangle of the cell.
 	 */
 	public Rectangle getCellBounds(Object row, int modelColumnIndex) {
@@ -553,23 +568,6 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	}
 
 	@Override
-	public void modelWasUpdated(int flags) {
-		if ((flags & TreeTableModelListener.FLAG_STRUCTURE_MODIFIED) != 0) {
-			Tasks.scheduleOnUIThread(() -> {
-				setSize(getPreferredSize());
-			}, 0, TimeUnit.MILLISECONDS, this);
-		}
-		if ((flags & TreeTableModelListener.FLAG_CONTENT_MODIFIED) != 0) {
-			repaint();
-		}
-	}
-
-	@Override
-	public void selectionChanged() {
-		repaint();
-	}
-
-	@Override
 	public Dimension getPreferredScrollableViewportSize() {
 		return getPreferredSize();
 	}
@@ -592,5 +590,146 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	@Override
 	public boolean getScrollableTracksViewportHeight() {
 		return UIUtilities.shouldTrackViewportHeight(this);
+	}
+
+	/** Objects that want to provide data to a {@link TreeTable} must implement this interface. */
+	public interface Model {
+		/** @return The {@link SelectionModel} to use. */
+		SelectionModel getSelectionModel();
+
+		/** @return A {@link List} containing the root row objects. May be empty. */
+		List<Object> getRootRows();
+
+		/**
+		 * @param row The row object to check.
+		 * @return <code>true</code> if the row is not capable of having child rows.
+		 */
+		boolean isLeafRow(Object row);
+
+		/**
+		 * @param row The row object to check.
+		 * @return <code>true</code> if the row is in the disclosed (open) state.
+		 */
+		boolean isRowDisclosed(Object row);
+
+		/**
+		 * @param row The row object to modify.
+		 * @param disclosed The disclosure state to set.
+		 */
+		void setRowDisclosed(Object row, boolean disclosed);
+
+		/**
+		 * @param row The row object to work on.
+		 * @return The number of direct children the row contains.
+		 */
+		int getRowChildCount(Object row);
+
+		/**
+		 * @param row The row object to work on.
+		 * @param index The index specifying which child to return.
+		 * @return The child at the specified index.
+		 */
+		Object getRowChild(Object row, int index);
+
+		/**
+		 * @param row The row object to work on.
+		 * @param child The child row object.
+		 * @return The child's index within the row.
+		 */
+		int getIndexOfRowChild(Object row, Object child);
+
+		/**
+		 * @param row The row object to work on.
+		 * @return The row object's parent row object, or <code>null</code> if the passed in row is
+		 *         a root.
+		 */
+		Object getRowParent(Object row);
+
+		/** @param listener The {@link ModelListener} to add. */
+		void addTreeTableModelListener(ModelListener listener);
+
+		/** @param listener The {@link ModelListener} to remove. */
+		void removeTreeTableModelListener(ModelListener listener);
+	}
+
+	/**
+	 * Objects that want to be notified when a {@link Model} is modified must implement this
+	 * interface.
+	 */
+	public interface ModelListener {
+		public static final int	FLAG_STRUCTURE_MODIFIED	= 1 << 0;
+		public static final int	FLAG_CONTENT_MODIFIED	= 1 << 1;
+
+		/**
+		 * Called when the {@link Model} has been modified.
+		 *
+		 * @param flags An or'd set of flags that provide a hint as to what has changed.
+		 */
+		void modelWasUpdated(int flags);
+	}
+
+	/**
+	 * Objects that want to provide rendering and UI interaction services for cells within a
+	 * {@link TreeTable} must implement this interface.
+	 */
+	public interface Renderer {
+		/**
+		 * @param table The {@link TreeTable} being rendered.
+		 * @return The number of columns that will be displayed.
+		 */
+		int getColumnCount(TreeTable table);
+
+		/**
+		 * @param table The {@link TreeTable} being rendered.
+		 * @param column The column index to check.
+		 * @return The preferred width of the column.
+		 */
+		int getPreferredColumnWidth(TreeTable table, int column);
+
+		/**
+		 * @param table The {@link TreeTable} being rendered.
+		 * @param column The column index to check.
+		 * @return The width of the column.
+		 */
+		int getColumnWidth(TreeTable table, int column);
+
+		/** @return The column that should contain the disclosure controls, if they are present. */
+		int getDisclosureColumn();
+
+		/**
+		 * @param table The {@link TreeTable} containing the row.
+		 * @param row The row object to check.
+		 * @return The height of the row.
+		 */
+		int getRowHeight(TreeTable table, Object row);
+
+		/**
+		 * Draws the specified cell.
+		 *
+		 * @param table The {@link TreeTable} being rendered.
+		 * @param gc The graphics context. The origin will be set to the upper-left corner of the
+		 *            cell.
+		 * @param row The row being rendered.
+		 * @param column The column index being rendered.
+		 * @param width The width of the cell.
+		 * @param height The height of the cell.
+		 * @param selected <code>true</code> if the row is currently selected.
+		 */
+		void drawCell(TreeTable table, Graphics2D gc, Object row, int column, int width, int height, boolean selected);
+
+		/**
+		 * @param table The {@link TreeTable} being clicked on.
+		 * @param row The row being clicked on.
+		 * @param column The column index being clicked on.
+		 * @param x The x-coordinate of the mouse in cell-relative coordinates.
+		 * @param y The y-coordinate of the mouse in cell-relative coordinates.
+		 * @param width The width of the cell.
+		 * @param height The height of the cell.
+		 * @param button The button that is pressed.
+		 * @param clickCount The number of clicks made by this button so far.
+		 * @param modifiers The key modifiers at the time of the event.
+		 * @param popupTrigger <code>true</code> if this should trigger a contextual menu.
+		 */
+		void mousePressed(TreeTable table, Object row, int column, int x, int y, int width, int height, int button, int clickCount, int modifiers, boolean popupTrigger);
 	}
 }

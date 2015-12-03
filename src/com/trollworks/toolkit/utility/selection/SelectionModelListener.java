@@ -9,7 +9,8 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.ui.widget.treetable;
+package com.trollworks.toolkit.utility.selection;
+
 
 /**
  * Objects that want to be notified when a {@link SelectionModel} is modified must implement this
