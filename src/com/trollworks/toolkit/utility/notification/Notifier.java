@@ -11,23 +11,27 @@
 
 package com.trollworks.toolkit.utility.notification;
 
+import com.trollworks.toolkit.io.Log;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 /** Tracks targets of notifications and provides methods for notifying them. */
 public class Notifier implements Comparator<NotifierTarget> {
 	/** The separator used between parts of a type. */
-	public static final String							SEPARATOR		= ".";				//$NON-NLS-1$
-	private HashSet<BatchNotifierTarget>				mBatchTargets	= new HashSet<>();
-	private HashMap<String, HashSet<NotifierTarget>>	mProductionMap	= new HashMap<>();
-	private HashMap<NotifierTarget, HashSet<String>>	mNameMap		= new HashMap<>();
-	private BatchNotifierTarget[]						mCurrentBatch;
-	private int											mBatchLevel;
-	private boolean										mEnabled		= true;
+	public static final String					SEPARATOR		= ".";																																																																								//$NON-NLS-1$
+	private Set<BatchNotifierTarget>			mBatchTargets	= new HashSet<>();
+	private Map<String, Set<NotifierTarget>>	mProductionMap	= new HashMap<>();
+	private Map<NotifierTarget, Set<String>>	mNameMap		= new HashMap<>();
+	private BatchNotifierTarget[]				mCurrentBatch;
+	private int									mBatchLevel;
+	private boolean								mEnabled		= true;
 
 	/**
 	 * Adds all registrations from the specified {@link Notifier} into this one.
@@ -35,9 +39,9 @@ public class Notifier implements Comparator<NotifierTarget> {
 	 * @param notifier The {@link Notifier} to use.
 	 */
 	public synchronized void add(Notifier notifier) {
-		HashMap<NotifierTarget, HashSet<String>> map = new HashMap<>(notifier.mNameMap);
-		for (Entry<NotifierTarget, HashSet<String>> entry : map.entrySet()) {
-			HashSet<String> set = entry.getValue();
+		Map<NotifierTarget, Set<String>> map = new HashMap<>(notifier.mNameMap);
+		for (Entry<NotifierTarget, Set<String>> entry : map.entrySet()) {
+			Set<String> set = entry.getValue();
 			add(entry.getKey(), set.toArray(new String[set.size()]));
 		}
 	}
@@ -51,7 +55,7 @@ public class Notifier implements Comparator<NotifierTarget> {
 	 *            but also sub-names, such as "foo.bar.a", but not "foo.bart" or "foo.bart.a".
 	 */
 	public synchronized void add(NotifierTarget target, String... names) {
-		HashSet<String> normalizedNames = mNameMap.get(target);
+		Set<String> normalizedNames = mNameMap.get(target);
 		if (normalizedNames == null) {
 			normalizedNames = new HashSet<>();
 			mNameMap.put(target, normalizedNames);
@@ -62,7 +66,7 @@ public class Notifier implements Comparator<NotifierTarget> {
 		for (String name : names) {
 			name = normalizeName(name);
 			if (name.length() > 0) {
-				HashSet<NotifierTarget> set = mProductionMap.get(name);
+				Set<NotifierTarget> set = mProductionMap.get(name);
 				if (set == null) {
 					set = new HashSet<>();
 					mProductionMap.put(name, set);
@@ -81,7 +85,7 @@ public class Notifier implements Comparator<NotifierTarget> {
 		StringBuilder builder = new StringBuilder();
 		while (tokenizer.hasMoreTokens()) {
 			if (builder.length() > 0) {
-				builder.append('.');
+				builder.append(SEPARATOR);
 			}
 			builder.append(tokenizer.nextToken());
 		}
@@ -100,7 +104,7 @@ public class Notifier implements Comparator<NotifierTarget> {
 			}
 			for (String name : mNameMap.get(target)) {
 				if (name.length() > 0) {
-					HashSet<NotifierTarget> set = mProductionMap.get(name);
+					Set<NotifierTarget> set = mProductionMap.get(name);
 					if (set != null) {
 						set.remove(target);
 						if (set.isEmpty()) {
@@ -117,7 +121,7 @@ public class Notifier implements Comparator<NotifierTarget> {
 	 * @return Whether or not this {@link Notifier} is currently enabled (and can therefore be used
 	 *         to notify {@link NotifierTarget}s).
 	 */
-	public boolean isEnabled() {
+	public synchronized boolean isEnabled() {
 		return mEnabled;
 	}
 
@@ -125,8 +129,18 @@ public class Notifier implements Comparator<NotifierTarget> {
 	 * @param enabled Whether or not this {@link Notifier} is currently enabled (and can therefore
 	 *            be used to notify {@link NotifierTarget}s).
 	 */
-	public void setEnabled(boolean enabled) {
+	public synchronized void setEnabled(boolean enabled) {
 		mEnabled = enabled;
+	}
+
+	/**
+	 * Sends a notification to all interested {@link NotifierTarget}s.
+	 *
+	 * @param producer The producer issuing the notification.
+	 * @param name The notification name.
+	 */
+	public void notify(Object producer, String name) {
+		notify(producer, name, null);
 	}
 
 	/**
@@ -144,19 +158,30 @@ public class Notifier implements Comparator<NotifierTarget> {
 				builder.append(tokenizer.nextToken());
 				String value = builder.toString();
 				builder.append(SEPARATOR);
-				HashSet<NotifierTarget> set = mProductionMap.get(value);
-				if (set != null) {
-					int size = set.size();
-					if (size > 0) {
-						NotifierTarget[] targets = set.toArray(new NotifierTarget[size]);
-						Arrays.sort(targets, this);
-						for (NotifierTarget target : targets) {
+				NotifierTarget[] targets = getTargets(value);
+				if (targets != null) {
+					Arrays.sort(targets, this);
+					for (NotifierTarget target : targets) {
+						try {
 							target.handleNotification(producer, name, data);
+						} catch (Throwable throwable) {
+							Log.error(throwable);
 						}
 					}
 				}
 			}
 		}
+	}
+
+	private synchronized NotifierTarget[] getTargets(String value) {
+		Set<NotifierTarget> set = mProductionMap.get(value);
+		if (set != null) {
+			int size = set.size();
+			if (size > 0) {
+				return set.toArray(new NotifierTarget[size]);
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -170,7 +195,11 @@ public class Notifier implements Comparator<NotifierTarget> {
 				if (!mBatchTargets.isEmpty()) {
 					mCurrentBatch = mBatchTargets.toArray(new BatchNotifierTarget[mBatchTargets.size()]);
 					for (BatchNotifierTarget target : mCurrentBatch) {
-						target.enterBatchMode();
+						try {
+							target.enterBatchMode();
+						} catch (Throwable throwable) {
+							Log.error(throwable);
+						}
 					}
 				}
 			}
@@ -192,7 +221,11 @@ public class Notifier implements Comparator<NotifierTarget> {
 			if (--mBatchLevel < 1) {
 				if (mCurrentBatch != null) {
 					for (BatchNotifierTarget target : mCurrentBatch) {
-						target.leaveBatchMode();
+						try {
+							target.leaveBatchMode();
+						} catch (Throwable throwable) {
+							Log.error(throwable);
+						}
 					}
 					mCurrentBatch = null;
 				}
@@ -201,7 +234,7 @@ public class Notifier implements Comparator<NotifierTarget> {
 	}
 
 	/** Removes all targets. */
-	public void reset() {
+	public synchronized void reset() {
 		mBatchTargets.clear();
 		mProductionMap.clear();
 		mNameMap.clear();
@@ -212,11 +245,11 @@ public class Notifier implements Comparator<NotifierTarget> {
 	 *
 	 * @param exclude The {@link NotifierTarget}(s) to exclude.
 	 */
-	public void reset(NotifierTarget... exclude) {
-		HashMap<NotifierTarget, HashSet<String>> set = new HashMap<>();
+	public synchronized void reset(NotifierTarget... exclude) {
+		Map<NotifierTarget, Set<String>> set = new HashMap<>();
 		for (NotifierTarget target : exclude) {
 			if (target != null) {
-				HashSet<String> names = mNameMap.get(target);
+				Set<String> names = mNameMap.get(target);
 				if (names != null && !names.isEmpty()) {
 					set.put(target, names);
 				}
@@ -224,7 +257,7 @@ public class Notifier implements Comparator<NotifierTarget> {
 		}
 		reset();
 		for (NotifierTarget target : set.keySet()) {
-			HashSet<String> names = set.get(target);
+			Set<String> names = set.get(target);
 			add(target, names.toArray(new String[names.size()]));
 		}
 	}
