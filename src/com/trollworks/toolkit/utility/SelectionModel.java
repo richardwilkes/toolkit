@@ -9,7 +9,7 @@
  * by the Mozilla Public License, version 2.0.
  */
 
-package com.trollworks.toolkit.utility.selection;
+package com.trollworks.toolkit.utility;
 
 import java.util.Collection;
 import java.util.Set;
@@ -49,11 +49,5 @@ public interface SelectionModel {
 	void deselect(Collection<?> objs);
 
 	/** Removes all objects from the selection. */
-	void clear();
-
-	/** @param listener The {@link SelectionModelListener} to add. */
-	void addSelectionModelListener(SelectionModelListener listener);
-
-	/** @param listener The {@link SelectionModelListener} to remove. */
-	void removeSelectionModelListener(SelectionModelListener listener);
+	void clearSelection();
 }

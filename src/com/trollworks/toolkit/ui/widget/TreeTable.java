@@ -13,8 +13,9 @@ package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.utility.selection.SelectionModel;
-import com.trollworks.toolkit.utility.selection.SelectionModelListener;
+import com.trollworks.toolkit.utility.SelectionModel;
+import com.trollworks.toolkit.utility.notification.BatchNotifierTarget;
+import com.trollworks.toolkit.utility.notification.Notifier;
 import com.trollworks.toolkit.utility.task.Tasks;
 
 import java.awt.Color;
@@ -26,7 +27,9 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
@@ -35,21 +38,21 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 /** A widget that can display both tabular and hierarchical data. */
-public class TreeTable extends JPanel implements MouseListener, MouseMotionListener, Scrollable {
-	private static final int		DISCLOSURE_WIDTH		= Icons.getDisclosure(false, false).getIconWidth();
-	private static final int		DISCLOSURE_HEIGHT		= Icons.getDisclosure(false, false).getIconHeight();
-	private Model					mModel;
-	private ModelListener			mModelListener;
-	private SelectionModelListener	mSelectionModelListener;
-	private Renderer				mRenderer;
-	private Color					mDividerColor			= Color.LIGHT_GRAY;
-	private boolean					mShowDisclosureControl	= true;
-	private boolean					mShowColumnDividers		= true;
-	private boolean					mShowRowDividers;
-	private int						mLastMouseX				= Integer.MIN_VALUE;
-	private int						mLastMouseY				= Integer.MIN_VALUE;
-	private Object					mOverRow;
-	private boolean					mOverDisclosure;
+public class TreeTable extends JPanel implements MouseListener, MouseMotionListener, Scrollable, BatchNotifierTarget {
+	private static final int	DISCLOSURE_WIDTH		= Icons.getDisclosure(false, false).getIconWidth();
+	private static final int	DISCLOSURE_HEIGHT		= Icons.getDisclosure(false, false).getIconHeight();
+	private Model				mModel;
+	private Renderer			mRenderer;
+	private boolean				mBatchMode;
+	private Set<String>			mBatchNames				= new HashSet<>();
+	private Color				mDividerColor			= Color.LIGHT_GRAY;
+	private boolean				mShowDisclosureControl	= true;
+	private boolean				mShowColumnDividers		= true;
+	private boolean				mShowRowDividers;
+	private int					mLastMouseX				= Integer.MIN_VALUE;
+	private int					mLastMouseY				= Integer.MIN_VALUE;
+	private Object				mOverRow;
+	private boolean				mOverDisclosure;
 
 	/**
 	 * @param model The {@link Model} to use.
@@ -72,23 +75,44 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	/** @param model The {@link Model} to begin using. */
 	public void setModel(Model model) {
 		if (mModel != null) {
-			mModel.removeTreeTableModelListener(mModelListener);
-			mModelListener = null;
-			mModel.getSelectionModel().removeSelectionModelListener(mSelectionModelListener);
-			mSelectionModelListener = null;
+			mModel.getNotifier().remove(this);
 		}
 		mModel = model;
-		mModelListener = (flags) -> {
-			if ((flags & ModelListener.FLAG_STRUCTURE_MODIFIED) != 0) {
-				Tasks.scheduleOnUIThread(() -> setSize(getPreferredSize()), 0, TimeUnit.MILLISECONDS, this);
+		mModel.getNotifier().add(this, mModel.getStructureChangedNotification(), mModel.getContentChangedNotification(), mModel.getSelectionChangedNotification());
+	}
+
+	@Override
+	public int getNotificationPriority() {
+		return 0;
+	}
+
+	@Override
+	public void enterBatchMode() {
+		mBatchMode = true;
+	}
+
+	@Override
+	public void handleNotification(Object producer, String name, Object data) {
+		if (producer == mModel) {
+			if (mBatchMode) {
+				mBatchNames.add(name);
+			} else {
+				if (name.startsWith(mModel.getStructureChangedNotification())) {
+					Tasks.scheduleOnUIThread(() -> setSize(getPreferredSize()), 0, TimeUnit.MILLISECONDS, this);
+				} else if (name.startsWith(mModel.getContentChangedNotification()) || name.startsWith(mModel.getSelectionChangedNotification())) {
+					repaint();
+				}
 			}
-			if ((flags & ModelListener.FLAG_CONTENT_MODIFIED) != 0) {
-				repaint();
-			}
-		};
-		mModel.addTreeTableModelListener(mModelListener);
-		mSelectionModelListener = () -> repaint();
-		mModel.getSelectionModel().addSelectionModelListener(mSelectionModelListener);
+		}
+	}
+
+	@Override
+	public void leaveBatchMode() {
+		mBatchMode = false;
+		for (String one : mBatchNames) {
+			handleNotification(mModel, one, null);
+		}
+		mBatchNames.clear();
 	}
 
 	/** @return The current {@link Renderer}. */
@@ -200,7 +224,7 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		int height = mRenderer.getRowHeight(this, row);
 		if (y + height > clip.y) {
 			int x = bounds.x;
-			boolean rowSelected = mModel.getSelectionModel().isSelected(row);
+			boolean rowSelected = mModel.isSelected(row);
 			if (rowSelected) {
 				gc.setColor(UIManager.getColor("List.selectionBackground")); //$NON-NLS-1$
 				gc.fillRect(x, y, bounds.x + bounds.width - x, height);
@@ -293,20 +317,19 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	@Override
 	public void mousePressed(MouseEvent event) {
 		requestFocusInWindow();
-		SelectionModel selectionModel = mModel.getSelectionModel();
 		Object row = getRowAt(event.getY());
 		if (row != null) {
 			if (event.isMetaDown()) {
-				if (selectionModel.isSelected(row)) {
-					selectionModel.deselect(row);
+				if (mModel.isSelected(row)) {
+					mModel.deselect(row);
 				} else {
-					selectionModel.select(row, true);
+					mModel.select(row, true);
 				}
 			} else {
-				selectionModel.select(row, false);
+				mModel.select(row, false);
 			}
 		} else {
-			selectionModel.clear();
+			mModel.clearSelection();
 		}
 		int column = getColumnAt(row, event.getX());
 		if (column == -2) {
@@ -593,9 +616,18 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	}
 
 	/** Objects that want to provide data to a {@link TreeTable} must implement this interface. */
-	public interface Model {
-		/** @return The {@link SelectionModel} to use. */
-		SelectionModel getSelectionModel();
+	public interface Model extends SelectionModel {
+		/** @return The {@link Notifier} that will be used for notifications of changes. */
+		Notifier getNotifier();
+
+		/** @return The notification name sent when structure changes occur. */
+		String getStructureChangedNotification();
+
+		/** @return The notification name sent when content changes occur. */
+		String getContentChangedNotification();
+
+		/** @return The notification name sent when selection changes occur. */
+		String getSelectionChangedNotification();
 
 		/** @return A {@link List} containing the root row objects. May be empty. */
 		List<Object> getRootRows();
@@ -644,28 +676,6 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		 *         a root.
 		 */
 		Object getRowParent(Object row);
-
-		/** @param listener The {@link ModelListener} to add. */
-		void addTreeTableModelListener(ModelListener listener);
-
-		/** @param listener The {@link ModelListener} to remove. */
-		void removeTreeTableModelListener(ModelListener listener);
-	}
-
-	/**
-	 * Objects that want to be notified when a {@link Model} is modified must implement this
-	 * interface.
-	 */
-	public interface ModelListener {
-		public static final int	FLAG_STRUCTURE_MODIFIED	= 1 << 0;
-		public static final int	FLAG_CONTENT_MODIFIED	= 1 << 1;
-
-		/**
-		 * Called when the {@link Model} has been modified.
-		 *
-		 * @param flags An or'd set of flags that provide a hint as to what has changed.
-		 */
-		void modelWasUpdated(int flags);
 	}
 
 	/**
