@@ -59,6 +59,7 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	 * @param renderer The {@link Renderer} to use.
 	 */
 	public TreeTable(Model model, Renderer renderer) {
+		setDoubleBuffered(true);
 		setFocusable(true);
 		setBackground(Color.WHITE);
 		setModel(model);
