@@ -39,6 +39,15 @@ public class ColorWell extends JPanel implements MouseListener {
 		mListener = listener;
 	}
 
+	public Color getWellColor() {
+		return mColor;
+	}
+
+	public void setWellColor(Color color) {
+		mColor = color;
+		repaint();
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D gc = (Graphics2D) g.create();
