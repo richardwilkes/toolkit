@@ -27,6 +27,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +39,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 /** A widget that can display both tabular and hierarchical data. */
-public class TreeTable extends JPanel implements MouseListener, MouseMotionListener, Scrollable, BatchNotifierTarget {
+public class TreeTable extends JPanel implements MouseListener, MouseMotionListener, Scrollable, BatchNotifierTarget, SelectionModel {
 	private static final int	DISCLOSURE_WIDTH		= Icons.getDisclosure(false, false).getIconWidth();
 	private static final int	DISCLOSURE_HEIGHT		= Icons.getDisclosure(false, false).getIconHeight();
 	private Model				mModel;
@@ -225,7 +226,7 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		int height = mRenderer.getRowHeight(this, row);
 		if (y + height > clip.y) {
 			int x = bounds.x;
-			boolean rowSelected = mModel.isSelected(row);
+			boolean rowSelected = isSelected(row);
 			if (rowSelected) {
 				gc.setColor(UIManager.getColor("List.selectionBackground")); //$NON-NLS-1$
 				gc.fillRect(x, y, bounds.x + bounds.width - x, height);
@@ -321,16 +322,16 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		Object row = getRowAt(event.getY());
 		if (row != null) {
 			if (event.isMetaDown()) {
-				if (mModel.isSelected(row)) {
-					mModel.deselect(row);
+				if (isSelected(row)) {
+					deselect(row);
 				} else {
-					mModel.select(row, true);
+					select(row, true);
 				}
 			} else {
-				mModel.select(row, false);
+				select(row, false);
 			}
 		} else {
-			mModel.clearSelection();
+			clearSelection();
 		}
 		int column = getColumnAt(row, event.getX());
 		if (column == -2) {
@@ -614,6 +615,46 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	@Override
 	public boolean getScrollableTracksViewportHeight() {
 		return UIUtilities.shouldTrackViewportHeight(this);
+	}
+
+	@Override
+	public boolean hasSelection() {
+		return mModel.hasSelection();
+	}
+
+	@Override
+	public Set<Object> getSelection() {
+		return mModel.getSelection();
+	}
+
+	@Override
+	public boolean isSelected(Object obj) {
+		return mModel.isSelected(obj);
+	}
+
+	@Override
+	public void select(Object obj, boolean add) {
+		mModel.select(obj, add);
+	}
+
+	@Override
+	public void select(Collection<?> objs, boolean add) {
+		mModel.select(objs, add);
+	}
+
+	@Override
+	public void deselect(Object obj) {
+		mModel.deselect(obj);
+	}
+
+	@Override
+	public void deselect(Collection<?> objs) {
+		mModel.deselect(objs);
+	}
+
+	@Override
+	public void clearSelection() {
+		mModel.clearSelection();
 	}
 
 	/** Objects that want to provide data to a {@link TreeTable} must implement this interface. */
