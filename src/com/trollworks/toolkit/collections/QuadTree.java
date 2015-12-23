@@ -15,6 +15,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.Rectangle;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ import java.util.Set;
 public class QuadTree<T extends Bounds> {
 	private Node<T>	mRoot;
 	private Set<T>	mOutside;
+	private Set<T>	mAll;
 	private int		mThreshold;
 
 	/** Creates a new, empty {@link QuadTree} with a threshold of 64. */
@@ -52,6 +54,7 @@ public class QuadTree<T extends Bounds> {
 	 * @param obj The object to add to the tree.
 	 */
 	public final void add(T obj) {
+		mAll.add(obj);
 		if (mRoot.containsBounds(obj)) {
 			mRoot.add(obj);
 		} else {
@@ -64,14 +67,12 @@ public class QuadTree<T extends Bounds> {
 
 	/** Forces the {@link QuadTree} to reorganize itself to optimally fit its contents. */
 	public final void reorganize() {
-		mRoot.all(mOutside);
-
 		// Determine the union of all contained bounds
 		int x = 0;
 		int y = 0;
 		int width = 0;
 		int height = 0;
-		for (T one : mOutside) {
+		for (T one : mAll) {
 			int otherWidth = one.getWidth();
 			if (otherWidth > 0) {
 				int otherHeight = one.getHeight();
@@ -96,7 +97,7 @@ public class QuadTree<T extends Bounds> {
 		}
 
 		mRoot = new Node<>(x, y, width, height, mThreshold);
-		for (T one : mOutside) {
+		for (T one : mAll) {
 			mRoot.add(one);
 		}
 		mOutside = new HashSet<>();
@@ -104,6 +105,7 @@ public class QuadTree<T extends Bounds> {
 
 	/** @param obj The object to remove. */
 	public final void remove(T obj) {
+		mAll.remove(obj);
 		if (!mOutside.remove(obj)) {
 			mRoot.remove(obj);
 		}
@@ -113,6 +115,7 @@ public class QuadTree<T extends Bounds> {
 	public final void clear() {
 		mRoot = new Node<>(0, 0, 0, 0, mThreshold);
 		mOutside = new HashSet<>();
+		mAll = new HashSet<>();
 	}
 
 	/**
@@ -310,12 +313,14 @@ public class QuadTree<T extends Bounds> {
 		return false;
 	}
 
+	/** @return The number of objects in this {@link QuadTree}. */
+	public final int size() {
+		return mAll.size();
+	}
+
 	/** @return All objects that have been added to this {@link QuadTree}. */
 	public final Set<T> all() {
-		Set<T> result = new HashSet<>();
-		mRoot.all(result);
-		result.addAll(mOutside);
-		return result;
+		return Collections.unmodifiableSet(mAll);
 	}
 
 	/**
@@ -325,8 +330,7 @@ public class QuadTree<T extends Bounds> {
 	 */
 	public final Set<T> all(Matcher<T> matcher) {
 		Set<T> result = new HashSet<>();
-		mRoot.all(result, matcher);
-		for (T one : mOutside) {
+		for (T one : mAll) {
 			if (matcher.matches(one)) {
 				result.add(one);
 			}
@@ -609,30 +613,6 @@ public class QuadTree<T extends Bounds> {
 				if (mSouthWest.intersectsBounds(obj)) {
 					mSouthWest.add(obj);
 				}
-			}
-		}
-
-		final void all(Set<T> result) {
-			result.addAll(mContents);
-			if (!isLeaf()) {
-				mNorthEast.all(result);
-				mNorthWest.all(result);
-				mSouthEast.all(result);
-				mSouthWest.all(result);
-			}
-		}
-
-		final void all(Set<T> result, Matcher<T> matcher) {
-			for (T one : mContents) {
-				if (matcher.matches(one)) {
-					result.add(one);
-				}
-			}
-			if (!isLeaf()) {
-				mNorthEast.all(result, matcher);
-				mNorthWest.all(result, matcher);
-				mSouthEast.all(result, matcher);
-				mSouthWest.all(result, matcher);
 			}
 		}
 
