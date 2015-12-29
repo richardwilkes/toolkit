@@ -53,14 +53,14 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 	@Localize(locale = "ru", value = "Закрыть")
 	@Localize(locale = "de", value = "Schließen")
 	@Localize(locale = "es", value = "Cerrar")
-	private static String	CLOSE_TOOLTIP;
+	private static String CLOSE_TOOLTIP;
 
 	static {
 		Localization.initialize();
 	}
 
-	private Dockable		mDockable;
-	private JLabel			mTitle;
+	private Dockable	mDockable;
+	private JLabel		mTitle;
 
 	/**
 	 * Creates a new {@link DockTab} for the specified {@link Dockable}.
@@ -188,11 +188,14 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 
 	@Override
 	public void dragGestureRecognized(DragGestureEvent dge) {
+		DockableTransferable transferable = new DockableTransferable(mDockable);
 		if (DragSource.isDragImageSupported()) {
 			Point offset = new Point(dge.getDragOrigin());
 			offset.x = -offset.x;
 			offset.y = -offset.y;
-			dge.startDrag(null, UIUtilities.getImage(this), offset, new DockableTransferable(mDockable), null);
+			dge.startDrag(null, DragSource.isDragImageSupported() ? UIUtilities.getImage(this) : null, offset, transferable, null);
+		} else {
+			dge.startDrag(null, transferable);
 		}
 	}
 
