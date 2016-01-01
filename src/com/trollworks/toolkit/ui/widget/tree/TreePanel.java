@@ -28,8 +28,6 @@ import com.trollworks.toolkit.ui.widget.dock.DockableTransferable;
 import com.trollworks.toolkit.utility.notification.NotifierTarget;
 import com.trollworks.toolkit.utility.task.Tasks;
 
-import gnu.trove.map.hash.TObjectIntHashMap;
-
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
@@ -70,6 +68,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.UIManager;
+
+import gnu.trove.map.hash.TObjectIntHashMap;
 
 /** Provides a flexible tree widget. */
 public class TreePanel extends DirectScrollPanel implements Runnable, Openable, Deletable, SelectAllCapable, DropTargetListener, DragSourceListener, DragGestureListener, FocusListener, KeyListener, MouseListener, MouseMotionListener, NotifierTarget {
@@ -1152,19 +1152,9 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	 * @param active Whether or not the active version of the color is needed.
 	 * @return The foreground color.
 	 */
+	@SuppressWarnings("static-method")
 	public Color getDefaultRowForeground(int position, boolean selected, boolean active) {
-		if (selected) {
-			Color color = UIManager.getColor("List.selectionForeground"); //$NON-NLS-1$
-			if (!active) {
-				Color background = getDefaultRowBackground(position, selected, active);
-				boolean isBright = Colors.isBright(color);
-				if (isBright == Colors.isBright(background)) {
-					return isBright ? Color.BLACK : Color.WHITE;
-				}
-			}
-			return color;
-		}
-		return UIManager.getColor("List.foreground"); //$NON-NLS-1$
+		return Colors.getListForeground(selected, active);
 	}
 
 	/**
@@ -1175,11 +1165,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 	 */
 	public Color getDefaultRowBackground(int position, boolean selected, boolean active) {
 		if (selected) {
-			Color color = UIManager.getColor("List.selectionBackground"); //$NON-NLS-1$
-			if (!active) {
-				color = Colors.adjustSaturation(color, -0.5f);
-			}
-			return color;
+			return Colors.getListBackground(selected, active);
 		}
 		return mUseBanding ? Colors.getBanding(position % 2 == 0) : Color.WHITE;
 	}
