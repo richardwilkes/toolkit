@@ -70,7 +70,6 @@ import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
 import javax.swing.undo.StateEdit;
 import javax.swing.undo.UndoableEdit;
 
@@ -549,7 +548,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		}
 
 		if (!isPrinting && mDragFocus) {
-			gc.setColor(getListBackground(true, true));
+			gc.setColor(Colors.getListBackground(true, true));
 			bounds = getVisibleRect();
 			int x = bounds.x;
 			int y = bounds.y;
@@ -679,7 +678,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	 */
 	public Color getBackground(int rowIndex, boolean selected, boolean active) {
 		if (selected) {
-			return getListBackground(selected, active);
+			return Colors.getListBackground(selected, active);
 		}
 		return useBanding() ? Colors.getBanding(rowIndex % 2 == 0) : Color.white;
 	}
@@ -2810,42 +2809,6 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 			}
 		}
 		return outline;
-	}
-
-	/**
-	 * @param selected Whether or not the selected version of the color is needed.
-	 * @param active Whether or not the active version of the color is needed.
-	 * @return The foreground color.
-	 */
-	public static Color getListForeground(boolean selected, boolean active) {
-		if (selected) {
-			Color color = UIManager.getColor("List.selectionForeground"); //$NON-NLS-1$
-			if (!active) {
-				Color background = getListBackground(selected, active);
-				boolean isBright = Colors.isBright(color);
-				if (isBright == Colors.isBright(background)) {
-					return isBright ? Color.BLACK : Color.WHITE;
-				}
-			}
-			return color;
-		}
-		return Color.BLACK;
-	}
-
-	/**
-	 * @param selected Whether or not the selected version of the color is needed.
-	 * @param active Whether or not the active version of the color is needed.
-	 * @return The background color.
-	 */
-	public static Color getListBackground(boolean selected, boolean active) {
-		if (selected) {
-			Color color = UIManager.getColor("List.selectionBackground"); //$NON-NLS-1$
-			if (!active) {
-				color = Colors.adjustSaturation(color, -0.5f);
-			}
-			return color;
-		}
-		return Color.WHITE;
 	}
 
 	@Override

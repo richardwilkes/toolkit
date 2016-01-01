@@ -11,6 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget.outline;
 
+import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.TextDrawing;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.utility.text.NumericComparator;
@@ -80,7 +81,7 @@ public class TextCell implements Cell {
 	 */
 	@SuppressWarnings("static-method")
 	public Color getColor(boolean selected, boolean active, Row row, Column column) {
-		return Outline.getListForeground(selected, active);
+		return Colors.getListForeground(selected, active);
 	}
 
 	@Override

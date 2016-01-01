@@ -11,6 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget;
 
+import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.utility.SelectionModel;
@@ -24,6 +25,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -36,10 +39,9 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JPanel;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 
 /** A widget that can display both tabular and hierarchical data. */
-public class TreeTable extends JPanel implements MouseListener, MouseMotionListener, Scrollable, BatchNotifierTarget, SelectionModel {
+public class TreeTable extends JPanel implements FocusListener, MouseListener, MouseMotionListener, Scrollable, BatchNotifierTarget, SelectionModel {
 	private static final int	DISCLOSURE_WIDTH		= Icons.getDisclosure(false, false).getIconWidth();
 	private static final int	DISCLOSURE_HEIGHT		= Icons.getDisclosure(false, false).getIconHeight();
 	private Model				mModel;
@@ -67,6 +69,7 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		setRenderer(renderer);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		addFocusListener(this);
 	}
 
 	/** @return The current {@link Model}. */
@@ -193,6 +196,20 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 	}
 
 	@Override
+	public void focusGained(FocusEvent event) {
+		if (hasSelection()) {
+			repaint();
+		}
+	}
+
+	@Override
+	public void focusLost(FocusEvent event) {
+		if (hasSelection()) {
+			repaint();
+		}
+	}
+
+	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D gc = (Graphics2D) g.create();
@@ -201,8 +218,9 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 			Rectangle bounds = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), getHeight() - (insets.top + insets.bottom));
 			Rectangle clip = gc.getClipBounds();
 			int y = bounds.y;
+			boolean active = isFocusOwner();
 			for (Object row : mModel.getRootRows()) {
-				y = drawRow(gc, row, bounds, clip, y);
+				y = drawRow(gc, row, bounds, clip, y, active);
 				if (y >= clip.y + clip.height) {
 					break;
 				}
@@ -222,13 +240,13 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		}
 	}
 
-	private int drawRow(Graphics2D gc, Object row, Rectangle bounds, Rectangle clip, int y) {
+	private int drawRow(Graphics2D gc, Object row, Rectangle bounds, Rectangle clip, int y, boolean active) {
 		int height = mRenderer.getRowHeight(this, row);
 		if (y + height > clip.y) {
 			int x = bounds.x;
 			boolean rowSelected = isSelected(row);
 			if (rowSelected) {
-				gc.setColor(UIManager.getColor("List.selectionBackground")); //$NON-NLS-1$
+				gc.setColor(Colors.getListBackground(rowSelected, active));
 				gc.fillRect(x, y, bounds.x + bounds.width - x, height);
 			}
 			int columns = mRenderer.getColumnCount(this);
@@ -250,7 +268,7 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 					Rectangle cellBounds = new Rectangle(x, y, width, height);
 					gc.setClip(clip.intersection(cellBounds));
 					gc.translate(x, y);
-					mRenderer.drawCell(this, gc, row, i, width, height, rowSelected);
+					mRenderer.drawCell(this, gc, row, i, width, height, rowSelected, active);
 					gc.translate(-x, -y);
 				}
 				x += width;
@@ -272,7 +290,7 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		if (y < clip.y + clip.height && !mModel.isLeafRow(row) && mModel.isRowDisclosed(row)) {
 			int count = mModel.getRowChildCount(row);
 			for (int i = 0; i < count; i++) {
-				y = drawRow(gc, mModel.getRowChild(row, i), bounds, clip, y);
+				y = drawRow(gc, mModel.getRowChild(row, i), bounds, clip, y, active);
 				if (y >= clip.y + clip.height) {
 					break;
 				}
@@ -766,8 +784,9 @@ public class TreeTable extends JPanel implements MouseListener, MouseMotionListe
 		 * @param width The width of the cell.
 		 * @param height The height of the cell.
 		 * @param selected <code>true</code> if the row is currently selected.
+		 * @param active <code>true</code> if the widget is currently active.
 		 */
-		void drawCell(TreeTable table, Graphics2D gc, Object row, int column, int width, int height, boolean selected);
+		void drawCell(TreeTable table, Graphics2D gc, Object row, int column, int width, int height, boolean selected, boolean active);
 
 		/**
 		 * @param table The {@link TreeTable} being clicked on.
