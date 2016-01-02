@@ -22,6 +22,7 @@ import javax.swing.Icon;
 public class RetinaIcon implements Icon {
 	private StdImage	mNormal;
 	private StdImage	mRetina;
+	private RetinaIcon	mOverlay;
 
 	public RetinaIcon(String name) {
 		this(StdImage.get(name), StdImage.get(name + "@2x")); //$NON-NLS-1$
@@ -37,6 +38,14 @@ public class RetinaIcon implements Icon {
 		mRetina = retina;
 	}
 
+	public RetinaIcon getOverlay() {
+		return mOverlay;
+	}
+
+	public void setOverlay(RetinaIcon overlay) {
+		mOverlay = overlay;
+	}
+
 	@Override
 	public void paintIcon(Component component, Graphics g, int x, int y) {
 		Graphics2D gc = (Graphics2D) g;
@@ -48,6 +57,9 @@ public class RetinaIcon implements Icon {
 			gc.translate(-x, -y);
 		} else {
 			gc.drawImage(mNormal, x, y, component);
+		}
+		if (mOverlay != null) {
+			mOverlay.paintIcon(component, gc, x, y);
 		}
 	}
 
@@ -62,9 +74,10 @@ public class RetinaIcon implements Icon {
 	}
 
 	public RetinaIcon createDisabled() {
-		if (mRetina != null) {
-			return new RetinaIcon(StdImage.createDisabledImage(mNormal), StdImage.createDisabledImage(mRetina));
+		RetinaIcon icon = new RetinaIcon(StdImage.createDisabledImage(mNormal), mRetina != null ? StdImage.createDisabledImage(mRetina) : null);
+		if (mOverlay != null) {
+			icon.setOverlay(mOverlay.createDisabled());
 		}
-		return new RetinaIcon(StdImage.createDisabledImage(mNormal), null);
+		return icon;
 	}
 }
