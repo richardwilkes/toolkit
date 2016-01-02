@@ -11,6 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget;
 
+import com.trollworks.toolkit.collections.ReverseListIterator;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.UIUtilities;
@@ -27,9 +28,12 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +45,7 @@ import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 
 /** A widget that can display both tabular and hierarchical data. */
-public class TreeTable extends JPanel implements FocusListener, MouseListener, MouseMotionListener, Scrollable, BatchNotifierTarget, SelectionModel {
+public class TreeTable extends JPanel implements FocusListener, KeyListener, MouseListener, MouseMotionListener, Scrollable, BatchNotifierTarget, SelectionModel {
 	private static final int	DISCLOSURE_WIDTH		= Icons.getDisclosure(false, false).getIconWidth();
 	private static final int	DISCLOSURE_HEIGHT		= Icons.getDisclosure(false, false).getIconHeight();
 	private Model				mModel;
@@ -69,6 +73,7 @@ public class TreeTable extends JPanel implements FocusListener, MouseListener, M
 		setRenderer(renderer);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		addKeyListener(this);
 		addFocusListener(this);
 	}
 
@@ -209,6 +214,93 @@ public class TreeTable extends JPanel implements FocusListener, MouseListener, M
 		}
 	}
 
+	public Object getLastRow() {
+		List<Object> rootRows = mModel.getRootRows();
+		if (!rootRows.isEmpty()) {
+			return getLastRow(rootRows.get(rootRows.size() - 1));
+		}
+		return null;
+	}
+
+	private Object getLastRow(Object row) {
+		if (mModel.isLeafRow(row) || !mModel.isRowDisclosed(row)) {
+			return row;
+		}
+		int count = mModel.getRowChildCount(row);
+		if (count == 0) {
+			return row;
+		}
+		return getLastRow(mModel.getRowChild(row, count - 1));
+	}
+
+	public List<Object> getSelectionInRowOrder() {
+		List<Object> selection = new ArrayList<>();
+		for (Object row : mModel.getRootRows()) {
+			getSelectionInRowOrder(row, selection);
+		}
+		return selection;
+	}
+
+	private void getSelectionInRowOrder(Object row, List<Object> selection) {
+		if (isSelected(row)) {
+			selection.add(row);
+		}
+		if (!mModel.isLeafRow(row) && mModel.isRowDisclosed(row)) {
+			int count = mModel.getRowChildCount(row);
+			for (int i = 0; i < count; i++) {
+				getSelectionInRowOrder(mModel.getRowChild(row, i), selection);
+			}
+		}
+	}
+
+	public Object getFirstSelectedRow() {
+		for (Object row : mModel.getRootRows()) {
+			row = getFirstSelectedRow(row);
+			if (row != null) {
+				return row;
+			}
+		}
+		return null;
+	}
+
+	private Object getFirstSelectedRow(Object row) {
+		if (isSelected(row)) {
+			return row;
+		}
+		if (!mModel.isLeafRow(row) && mModel.isRowDisclosed(row)) {
+			int count = mModel.getRowChildCount(row);
+			for (int i = 0; i < count; i++) {
+				Object child = getFirstSelectedRow(mModel.getRowChild(row, i));
+				if (child != null) {
+					return child;
+				}
+			}
+		}
+		return null;
+	}
+
+	public Object getLastSelectedRow() {
+		for (Object row : new ReverseListIterator<>(mModel.getRootRows())) {
+			row = getLastSelectedRow(row);
+			if (row != null) {
+				return row;
+			}
+		}
+		return null;
+	}
+
+	private Object getLastSelectedRow(Object row) {
+		if (!mModel.isLeafRow(row) && mModel.isRowDisclosed(row)) {
+			for (int i = mModel.getRowChildCount(row); --i >= 0;) {
+				Object child = getLastSelectedRow(mModel.getRowChild(row, i));
+				if (child != null) {
+					return child;
+				}
+			}
+		}
+		return isSelected(row) ? row : null;
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -327,6 +419,147 @@ public class TreeTable extends JPanel implements FocusListener, MouseListener, M
 	/** @param show <code>true</code> if the row dividers should be shown. */
 	public final void setShowRowDividers(boolean show) {
 		mShowRowDividers = show;
+	}
+
+	public void selectUp(boolean extend) {
+		if (hasSelection()) {
+			Set<Object> selection = getSelection();
+			if (selection.size() == 1) {
+				Rectangle bounds = getRowBounds(selection.iterator().next());
+				Object row = getRowAt(bounds.y - 1);
+				if (row != null) {
+					select(row, extend);
+					scrollRectToVisible(getRowBounds(row));
+				}
+			} else {
+				Object row = getFirstSelectedRow();
+				if (extend) {
+					Rectangle bounds = getRowBounds(row);
+					row = getRowAt(bounds.y - 1);
+				}
+				if (row != null) {
+					select(row, extend);
+					scrollRectToVisible(getRowBounds(row));
+				}
+			}
+		} else {
+			List<Object> rootRows = mModel.getRootRows();
+			if (!rootRows.isEmpty()) {
+				Object row = getLastRow();
+				select(row, false);
+				scrollRectToVisible(getRowBounds(row));
+			}
+		}
+	}
+
+	public void selectDown(boolean extend) {
+		if (hasSelection()) {
+			Set<Object> selection = getSelection();
+			if (selection.size() == 1) {
+				Rectangle bounds = getRowBounds(selection.iterator().next());
+				Object row = getRowAt(bounds.y + bounds.height);
+				if (row != null) {
+					select(row, extend);
+					scrollRectToVisible(getRowBounds(row));
+				}
+			} else {
+				Object row = getLastSelectedRow();
+				if (extend) {
+					Rectangle bounds = getRowBounds(row);
+					row = getRowAt(bounds.y + bounds.height);
+				}
+				if (row != null) {
+					select(row, extend);
+					scrollRectToVisible(getRowBounds(row));
+				}
+			}
+		} else {
+			List<Object> rootRows = mModel.getRootRows();
+			if (!rootRows.isEmpty()) {
+				Object row = rootRows.get(0);
+				select(row, false);
+				scrollRectToVisible(getRowBounds(row));
+			}
+		}
+	}
+
+	public void selectHome() {
+		List<Object> rootRows = mModel.getRootRows();
+		if (!rootRows.isEmpty()) {
+			Object row = rootRows.get(0);
+			select(row, false);
+			scrollRectToVisible(getRowBounds(row));
+		}
+	}
+
+	public void selectEnd() {
+		List<Object> rootRows = mModel.getRootRows();
+		if (!rootRows.isEmpty()) {
+			Object row = getLastRow();
+			select(row, false);
+			scrollRectToVisible(getRowBounds(row));
+		}
+	}
+
+	public void openSelectedRows() {
+		Notifier notifier = mModel.getNotifier();
+		notifier.startBatch();
+		for (Object row : getSelection()) {
+			if (!mModel.isLeafRow(row) && !mModel.isRowDisclosed(row)) {
+				mModel.setRowDisclosed(row, true);
+			}
+		}
+		notifier.endBatch();
+	}
+
+	public void closeSelectedRows() {
+		Notifier notifier = mModel.getNotifier();
+		notifier.startBatch();
+		for (Object row : getSelection()) {
+			if (!mModel.isLeafRow(row) && mModel.isRowDisclosed(row)) {
+				mModel.setRowDisclosed(row, false);
+			}
+		}
+		notifier.endBatch();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent event) {
+		// Unused
+	}
+
+	@Override
+	public void keyPressed(KeyEvent event) {
+		if (!event.isConsumed()) {
+			switch (event.getKeyCode()) {
+				case KeyEvent.VK_UP:
+					selectUp(event.isShiftDown());
+					break;
+				case KeyEvent.VK_DOWN:
+					selectDown(event.isShiftDown());
+					break;
+				case KeyEvent.VK_LEFT:
+					closeSelectedRows();
+					break;
+				case KeyEvent.VK_RIGHT:
+					openSelectedRows();
+					break;
+				case KeyEvent.VK_HOME:
+					selectHome();
+					break;
+				case KeyEvent.VK_END:
+					selectEnd();
+					break;
+				default:
+					return;
+			}
+			event.consume();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent event) {
+		// Unused
 	}
 
 	@Override
