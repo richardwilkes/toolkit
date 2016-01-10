@@ -22,7 +22,7 @@ import java.net.URISyntaxException;
 
 /** A command that will open a specific URI in the preferred browser. */
 public class OpenURICommand extends Command {
-	private URI	mURI;
+	private URI mURI;
 
 	/**
 	 * Creates a new {@link OpenURICommand}.

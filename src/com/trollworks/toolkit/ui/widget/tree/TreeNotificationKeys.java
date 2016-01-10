@@ -31,7 +31,7 @@ public class TreeNotificationKeys {
 	 * {@link TreeContainerRow} that was modified. Data: The array of child {@link TreeRow}s that
 	 * were added.
 	 */
-	public static final String	ROW_ADDED		= ROW_PREFIX + "added";					//$NON-NLS-1$
+	public static final String	ROW_ADDED		= ROW_PREFIX + "added";						//$NON-NLS-1$
 	/**
 	 * The notification emitted when one or more child {@link TreeRow}s are removed. Producer: The
 	 * {@link TreeContainerRow} that was modified. Data: The array of child {@link TreeRow}s that
@@ -55,7 +55,7 @@ public class TreeNotificationKeys {
 	 * selection is about to be modified. Data: The array of {@link TreeRow}s that were in the
 	 * previous selection.
 	 */
-	public static final String	ROW_SELECTION	= ROW_PREFIX + "selection";				//$NON-NLS-1$
+	public static final String	ROW_SELECTION	= ROW_PREFIX + "selection";					//$NON-NLS-1$
 	/**
 	 * The notification emitted when one or more {@link TreeContainerRow}s have been opened.
 	 * Producer: The owning {@link TreePanel}. Data: The array of {@link TreeContainerRow}s that

@@ -28,7 +28,7 @@ public class PasteCommand extends Command {
 	@Localize(locale = "ru", value = "Вставка")
 	@Localize(locale = "de", value = "Einfügen")
 	@Localize(locale = "es", value = "Pegar")
-	private static String				PASTE;
+	private static String PASTE;
 
 	static {
 		Localization.initialize();

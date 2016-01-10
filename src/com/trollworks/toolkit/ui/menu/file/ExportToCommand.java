@@ -27,34 +27,34 @@ public class ExportToCommand extends Command {
 	@Localize(locale = "ru", value = "Экспорт в HTML\u2026")
 	@Localize(locale = "de", value = "Exportiere als HTML\u2026")
 	@Localize(locale = "es", value = "Exportar a HTML\u2026")
-	private static String				HTML;
+	private static String	HTML;
 	@Localize("Export To PDF\u2026")
 	@Localize(locale = "ru", value = "Экспорт в PDF\u2026")
 	@Localize(locale = "de", value = "Exportiere als PDF\u2026")
 	@Localize(locale = "es", value = "Exportar a PDF\u2026")
-	private static String				PDF;
+	private static String	PDF;
 	@Localize("Export to PNG\u2026")
 	@Localize(locale = "ru", value = "Экспорт в PNG\u2026")
 	@Localize(locale = "de", value = "Exportiere als PNG\u2026")
 	@Localize(locale = "es", value = "Exportar a PNG\u2026")
-	private static String				PNG;
+	private static String	PNG;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The action command the HTML form of this command will issue. */
-	public static final String			CMD_EXPORT_TO_HTML	= "ExportToHTML";													//$NON-NLS-1$
+	public static final String			CMD_EXPORT_TO_HTML	= "ExportToHTML";												//$NON-NLS-1$
 	/** The action command the PDF form of this command will issue. */
-	public static final String			CMD_EXPORT_TO_PDF	= "ExportToPDF";													//$NON-NLS-1$
+	public static final String			CMD_EXPORT_TO_PDF	= "ExportToPDF";												//$NON-NLS-1$
 	/** The action command the PNG form of this command will issue. */
-	public static final String			CMD_EXPORT_TO_PNG	= "ExportToPNG";													//$NON-NLS-1$
+	public static final String			CMD_EXPORT_TO_PNG	= "ExportToPNG";												//$NON-NLS-1$
 	/** The PNG extension. */
-	public static final String			PNG_EXTENSION		= "png";															//$NON-NLS-1$
+	public static final String			PNG_EXTENSION		= "png";														//$NON-NLS-1$
 	/** The PDF extension. */
-	public static final String			PDF_EXTENSION		= "pdf";															//$NON-NLS-1$
+	public static final String			PDF_EXTENSION		= "pdf";														//$NON-NLS-1$
 	/** The HTML extension. */
-	public static final String			HTML_EXTENSION		= "html";															//$NON-NLS-1$
+	public static final String			HTML_EXTENSION		= "html";														//$NON-NLS-1$
 	/** The "Export To HTML...". */
 	public static final ExportToCommand	EXPORT_TO_HTML		= new ExportToCommand(HTML, CMD_EXPORT_TO_HTML, HTML_EXTENSION);
 	/** The "Export To PDF...". */

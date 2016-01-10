@@ -18,7 +18,10 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-/** Marks array fields that have an enum that is used to map attribute names to the corresponding index within the array. */
+/**
+ * Marks array fields that have an enum that is used to map attribute names to the corresponding
+ * index within the array.
+ */
 public @interface XmlEnumArrayAttr {
 	/** @return The enum that will be used. */
 	Class<? extends Enum<?>> value();

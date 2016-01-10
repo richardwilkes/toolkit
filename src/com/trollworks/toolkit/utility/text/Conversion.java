@@ -16,7 +16,7 @@ import java.awt.Point;
 
 /** Provides conversion routines from one type to another. */
 public class Conversion {
-	private static final String	COMMA	= ",";	//$NON-NLS-1$
+	private static final String COMMA = ","; //$NON-NLS-1$
 
 	/**
 	 * @param dim The dimension.

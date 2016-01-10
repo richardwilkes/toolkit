@@ -39,7 +39,7 @@ public enum LayoutSize {
 	};
 
 	/** The maximum size to allow. */
-	public static final int	MAXIMUM_SIZE	= Integer.MAX_VALUE / 512;
+	public static final int MAXIMUM_SIZE = Integer.MAX_VALUE / 512;
 
 	/**
 	 * @param component The {@link Component} to return the size for.

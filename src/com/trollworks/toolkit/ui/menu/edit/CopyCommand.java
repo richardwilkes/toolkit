@@ -27,14 +27,14 @@ public class CopyCommand extends Command {
 	@Localize(locale = "ru", value = "Копировать")
 	@Localize(locale = "de", value = "Kopieren")
 	@Localize(locale = "es", value = "Copiar")
-	private static String			COPY;
+	private static String COPY;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The action command this command will issue. */
-	public static final String		CMD_COPY	= "Copy";				//$NON-NLS-1$
+	public static final String		CMD_COPY	= "Copy";			//$NON-NLS-1$
 
 	/** The singleton {@link CopyCommand}. */
 	public static final CopyCommand	INSTANCE	= new CopyCommand();

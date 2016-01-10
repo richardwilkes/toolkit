@@ -317,7 +317,7 @@ public class NioServer extends Thread {
 	}
 
 	private class TimeoutMonitor extends Thread {
-		private long	mTimeout;
+		private long mTimeout;
 
 		TimeoutMonitor(long timeoutMilliseconds) {
 			setName(getClass().getSimpleName());

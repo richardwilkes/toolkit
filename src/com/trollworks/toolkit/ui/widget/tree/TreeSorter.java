@@ -16,7 +16,7 @@ import java.util.Comparator;
 
 /** Provides sorting of tree data. */
 public class TreeSorter implements Comparator<TreeRow> {
-	private ArrayList<SortData>	mSortData	= new ArrayList<>();
+	private ArrayList<SortData> mSortData = new ArrayList<>();
 
 	/** @return Whether or not multiple sort criteria exists. */
 	public boolean hasMultipleCriteria() {

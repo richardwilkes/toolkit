@@ -141,19 +141,19 @@ public class SSLSupport {
 		mInboundData = buffer;
 		insertUnderflowData();
 		loop:
-			while (mInboundData.hasRemaining() && canProceed()) {
-				SSLEngineResult result = mEngine.unwrap(mInboundData, mAppData);
-				switch (result.getStatus()) {
-					case BUFFER_OVERFLOW:
-						resizeAppDataBuffer();
-						break;
-					case BUFFER_UNDERFLOW:
-					case CLOSED:
-						break loop;
-					default:
-						break;
-				}
+		while (mInboundData.hasRemaining() && canProceed()) {
+			SSLEngineResult result = mEngine.unwrap(mInboundData, mAppData);
+			switch (result.getStatus()) {
+				case BUFFER_OVERFLOW:
+					resizeAppDataBuffer();
+					break;
+				case BUFFER_UNDERFLOW:
+				case CLOSED:
+					break loop;
+				default:
+					break;
 			}
+		}
 		preserveRemainingInboundData();
 		mAppData.flip();
 		return mAppData;

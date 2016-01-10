@@ -46,7 +46,7 @@ public class StdFileDialog implements FilenameFilter {
 		Localization.initialize();
 	}
 
-	private HashSet<String>	mFileNameMatchers	= new HashSet<>();
+	private HashSet<String> mFileNameMatchers = new HashSet<>();
 
 	/**
 	 * Creates a new {@link StdFileDialog}.

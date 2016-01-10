@@ -23,7 +23,7 @@ import javax.swing.plaf.basic.BasicOptionPaneUI;
 
 /** A wrapper around the {@link BasicOptionPaneUI} that respects component minimum sizes. */
 public class SizeAwareBasicOptionPaneUI extends BasicOptionPaneUI {
-	private OptionPaneUI	mOriginal;
+	private OptionPaneUI mOriginal;
 
 	/**
 	 * Creates a new {@link SizeAwareBasicOptionPaneUI}.

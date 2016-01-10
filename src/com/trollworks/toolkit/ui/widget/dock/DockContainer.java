@@ -27,7 +27,9 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-/** All {@link Dockable}s are wrapped in a {@link DockContainer} when placed within a {@link Dock}. */
+/**
+ * All {@link Dockable}s are wrapped in a {@link DockContainer} when placed within a {@link Dock}.
+ */
 public class DockContainer extends JPanel implements DockLayoutNode, LayoutManager {
 	private Dock			mDock;
 	private DockHeader		mHeader;

@@ -29,13 +29,14 @@ public class DeleteCommand extends Command {
 	@Localize(locale = "ru", value = "Удалить")
 	@Localize(locale = "de", value = "Löschen")
 	@Localize(locale = "es", value = "Eliminar")
-	private static String				DELETE;
+	private static String DELETE;
 
 	static {
 		Localization.initialize();
 	}
+
 	/** The action command this command will issue. */
-	public static final String			CMD_DELETE	= "Delete";			//$NON-NLS-1$
+	public static final String			CMD_DELETE	= "Delete";				//$NON-NLS-1$
 
 	/** The singleton {@link DeleteCommand}. */
 	public static final DeleteCommand	INSTANCE	= new DeleteCommand();

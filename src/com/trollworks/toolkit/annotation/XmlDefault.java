@@ -18,7 +18,10 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-/** Provides a default value for an object that can be constructed with a {@link String} and whose {@link #toString()} method can be used to match the value. */
+/**
+ * Provides a default value for an object that can be constructed with a {@link String} and whose
+ * {@link #toString()} method can be used to match the value.
+ */
 public @interface XmlDefault {
 	/** @return The default value. */
 	String value();

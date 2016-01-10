@@ -20,7 +20,7 @@ import java.nio.channels.SocketChannel;
 
 /** Provides a {@link SessionFactory} for HTTPS sessions. */
 public class HttpsSessionFactory implements SessionFactory {
-	private HttpSessionFactory	mHttpSessionFactory;
+	private HttpSessionFactory mHttpSessionFactory;
 
 	/** @param httpSessionFactory The {@link HttpSessionFactory} to delegate unencrypted data to. */
 	public HttpsSessionFactory(HttpSessionFactory httpSessionFactory) {

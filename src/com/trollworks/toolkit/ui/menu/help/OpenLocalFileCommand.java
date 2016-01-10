@@ -21,7 +21,7 @@ import java.io.IOException;
 
 /** A command that will open a specific file in the preferred browser. */
 public class OpenLocalFileCommand extends Command {
-	private File	mFile;
+	private File mFile;
 
 	/**
 	 * Creates a new {@link OpenLocalFileCommand}.

@@ -33,9 +33,9 @@ public class LaunchProxy implements ConduitReceiver {
 	private static final String	AT					= "@";				//$NON-NLS-1$
 	private static final String	SPACE				= " ";				//$NON-NLS-1$
 	private static final String	COMMA				= ",";				//$NON-NLS-1$
-	private static final String	AT_MARKER			= "@!";			//$NON-NLS-1$
-	private static final String	SPACE_MARKER		= "@%";			//$NON-NLS-1$
-	private static final String	COMMA_MARKER		= "@#";			//$NON-NLS-1$
+	private static final String	AT_MARKER			= "@!";				//$NON-NLS-1$
+	private static final String	SPACE_MARKER		= "@%";				//$NON-NLS-1$
+	private static final String	COMMA_MARKER		= "@#";				//$NON-NLS-1$
 	private static final String	LAUNCH_ID			= "Launched";		//$NON-NLS-1$
 	private static final String	TOOK_OVER_FOR_ID	= "TookOverFor";	//$NON-NLS-1$
 	private static LaunchProxy	INSTANCE			= null;

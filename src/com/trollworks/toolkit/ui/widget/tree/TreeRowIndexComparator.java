@@ -16,7 +16,7 @@ import java.util.Comparator;
 /** Compares {@link TreeRow} indexes. */
 public class TreeRowIndexComparator implements Comparator<TreeRow> {
 	/** The one and only instance. */
-	public static final TreeRowIndexComparator	INSTANCE	= new TreeRowIndexComparator();
+	public static final TreeRowIndexComparator INSTANCE = new TreeRowIndexComparator();
 
 	private TreeRowIndexComparator() {
 		// Here just to prevent multiple copies.

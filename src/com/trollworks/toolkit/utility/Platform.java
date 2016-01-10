@@ -15,12 +15,9 @@ package com.trollworks.toolkit.utility;
 @SuppressWarnings("nls")
 public enum Platform {
 	/** The constant used for the Linux platform. */
-	LINUX("linux", "", "lib", ".so", ".sh"),
-	/** The constant used for the Macintosh platform. */
-	MAC("mac", "", "lib", ".jnilib", ".sh"),
-	/** The constant used for the Windows platform. */
-	WINDOWS("windows", ".exe", "", ".dll", ".bat"),
-	/** The constant used for unknown platforms. */
+	LINUX("linux", "", "lib", ".so", ".sh"), /** The constant used for the Macintosh platform. */
+	MAC("mac", "", "lib", ".jnilib", ".sh"), /** The constant used for the Windows platform. */
+	WINDOWS("windows", ".exe", "", ".dll", ".bat"), /** The constant used for unknown platforms. */
 	UNKNOWN("unknown", "", "", "", "");
 
 	private String	mDirName;
@@ -66,7 +63,7 @@ public enum Platform {
 		return mScriptExtension;
 	}
 
-	private static final Platform	CURRENT;
+	private static final Platform CURRENT;
 
 	static {
 		String osName = System.getProperty("os.name");

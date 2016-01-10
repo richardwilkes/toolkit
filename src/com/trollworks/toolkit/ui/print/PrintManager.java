@@ -46,27 +46,27 @@ public class PrintManager {
 	@Localize(locale = "ru", value = "Ошибка печати!")
 	@Localize(locale = "de", value = "Druck fehlgeschlagen!")
 	@Localize(locale = "es", value = "¡Fallo de impresión!")
-	private static String					PRINTING_FAILED;
+	private static String	PRINTING_FAILED;
 	@Localize("No printer is available!")
 	@Localize(locale = "ru", value = "Нет доступного принтера!")
 	@Localize(locale = "de", value = "Kein Drucker verfügbar!")
 	@Localize(locale = "es", value = "¡No hay impresora disponible!")
-	private static String					NO_PRINTER_AVAILABLE;
+	private static String	NO_PRINTER_AVAILABLE;
 	@Localize("Unable to switch printers!")
 	@Localize(locale = "ru", value = "Невозможно переключить принтеры!")
 	@Localize(locale = "de", value = "Kann Drucker nicht wechseln!")
 	@Localize(locale = "es", value = "¡No se puede conectar con las impresoras!")
-	private static String					UNABLE_TO_SWITCH_PRINTERS;
+	private static String	UNABLE_TO_SWITCH_PRINTERS;
 	@Localize("Page Setup")
 	@Localize(locale = "ru", value = "Настройка страницы")
 	@Localize(locale = "de", value = "Seite einrichten")
 	@Localize(locale = "es", value = "Configuración de página")
-	private static String					PAGE_SETUP_TITLE;
+	private static String	PAGE_SETUP_TITLE;
 	@Localize("Print")
 	@Localize(locale = "ru", value = "Печать")
 	@Localize(locale = "de", value = "Drucken")
 	@Localize(locale = "es", value = "Imprimir")
-	private static String					PRINT_TITLE;
+	private static String	PRINT_TITLE;
 
 	static {
 		Localization.initialize();
@@ -76,13 +76,13 @@ public class PrintManager {
 	private static final int				MODULE_VERSION				= 1;
 	private static final String				NATIVE_DIALOGS_ENABLED_KEY	= "UseNativeDialogs";	//$NON-NLS-1$
 	/** The XML root tag for {@link PrintManager}. */
-	public static final String				TAG_ROOT					= "print_settings";	//$NON-NLS-1$
+	public static final String				TAG_ROOT					= "print_settings";		//$NON-NLS-1$
 	private static final String				ATTRIBUTE_UNITS				= "units";				//$NON-NLS-1$
 	private static final String				ATTRIBUTE_PRINTER			= "printer";			//$NON-NLS-1$
 	private static final String				TAG_ORIENTATION				= "orientation";		//$NON-NLS-1$
 	private static final String				TAG_WIDTH					= "width";				//$NON-NLS-1$
-	private static final String				TAG_HEIGHT					= "height";			//$NON-NLS-1$
-	private static final String				TAG_TOP_MARGIN				= "top_margin";		//$NON-NLS-1$
+	private static final String				TAG_HEIGHT					= "height";				//$NON-NLS-1$
+	private static final String				TAG_TOP_MARGIN				= "top_margin";			//$NON-NLS-1$
 	private static final String				TAG_BOTTOM_MARGIN			= "bottom_margin";		//$NON-NLS-1$
 	private static final String				TAG_LEFT_MARGIN				= "left_margin";		//$NON-NLS-1$
 	private static final String				TAG_RIGHT_MARGIN			= "right_margin";		//$NON-NLS-1$
@@ -90,7 +90,7 @@ public class PrintManager {
 	private static final String				TAG_SIDES					= "sides";				//$NON-NLS-1$
 	private static final String				TAG_NUMBER_UP				= "number_up";			//$NON-NLS-1$
 	private static final String				TAG_QUALITY					= "quality";			//$NON-NLS-1$
-	private static final String				TAG_RESOLUTION				= "resolution";		//$NON-NLS-1$
+	private static final String				TAG_RESOLUTION				= "resolution";			//$NON-NLS-1$
 	private PrinterJob						mJob;
 	private HashPrintRequestAttributeSet	mSet;
 

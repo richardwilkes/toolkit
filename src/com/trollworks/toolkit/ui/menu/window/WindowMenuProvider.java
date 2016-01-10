@@ -32,13 +32,13 @@ public class WindowMenuProvider implements MenuProvider {
 	@Localize(locale = "ru", value = "Окно")
 	@Localize(locale = "de", value = "Fenster")
 	@Localize(locale = "es", value = "Ventana")
-	private static String		WINDOW;
+	private static String WINDOW;
 
 	static {
 		Localization.initialize();
 	}
 
-	public static final String	NAME	= "Window"; //$NON-NLS-1$
+	public static final String NAME = "Window"; //$NON-NLS-1$
 
 	/** Updates the available menu items. */
 	public static void update() {

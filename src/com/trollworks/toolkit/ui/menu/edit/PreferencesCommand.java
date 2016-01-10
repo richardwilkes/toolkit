@@ -28,7 +28,7 @@ public class PreferencesCommand extends Command implements PreferencesHandler {
 	@Localize(locale = "ru", value = "Настройки\u2026")
 	@Localize(locale = "de", value = "Einstellungen\u2026")
 	@Localize(locale = "es", value = "Preferencias\u2026")
-	private static String					PREFERENCES;
+	private static String PREFERENCES;
 
 	static {
 		Localization.initialize();

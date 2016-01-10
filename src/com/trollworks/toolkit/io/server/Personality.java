@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
 
 /** A {@link Personality} provides the actual data handling for a {@link Session}. */
 public abstract class Personality {
-	private Session	mSession;
+	private Session mSession;
 
 	/** @return The {@link Session} this {@link Personality} is associated with. */
 	public final Session getSession() {

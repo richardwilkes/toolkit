@@ -30,19 +30,19 @@ public class SaveCommand extends Command {
 	@Localize(locale = "ru", value = "Сохранить")
 	@Localize(locale = "de", value = "Speichern")
 	@Localize(locale = "es", value = "Salvar")
-	private static String			SAVE;
+	private static String	SAVE;
 	@Localize("Save changes to \"{0}\"?")
 	@Localize(locale = "ru", value = "Сохранить изменения в \"{0}\"?")
 	@Localize(locale = "de", value = "Änderungen in \"{0}\" speichern?")
 	@Localize(locale = "es", value = "Salvar cambios en \"{0}\"?")
-	private static String			SAVE_CHANGES;
+	private static String	SAVE_CHANGES;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The action command this command will issue. */
-	public static final String		CMD_SAVE	= "Save";				//$NON-NLS-1$
+	public static final String		CMD_SAVE	= "Save";			//$NON-NLS-1$
 
 	/** The singleton {@link SaveCommand}. */
 	public static final SaveCommand	INSTANCE	= new SaveCommand();

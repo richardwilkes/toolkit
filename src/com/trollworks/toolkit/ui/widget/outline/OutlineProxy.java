@@ -21,7 +21,7 @@ import java.util.List;
 
 /** An outline which gets its data and selection from another {@link Outline}. */
 public class OutlineProxy extends Outline {
-	private Outline	mOutlineToProxy;
+	private Outline mOutlineToProxy;
 
 	/**
 	 * Creates a new proxy outline.

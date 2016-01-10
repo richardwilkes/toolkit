@@ -22,7 +22,7 @@ public class NewerDataFileVersionException extends IOException {
 	@Localize(locale = "ru", value = "Файл с данными относится к более поздней версии {0} и не может быть загружен.")
 	@Localize(locale = "de", value = "Die Datendatei ist von einer neueren Version von {0} und kann nicht geladen werden.")
 	@Localize(locale = "es", value = "El archivo se ha creado con una versión más reciente {0} y no puede abrirse")
-	private static String	VERSION_NEWER;
+	private static String VERSION_NEWER;
 
 	static {
 		Localization.initialize();

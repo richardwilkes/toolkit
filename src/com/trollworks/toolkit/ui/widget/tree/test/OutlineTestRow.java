@@ -16,7 +16,7 @@ import com.trollworks.toolkit.ui.widget.outline.Column;
 import com.trollworks.toolkit.ui.widget.outline.Row;
 
 public class OutlineTestRow extends Row {
-	private String	mName;
+	private String mName;
 
 	public OutlineTestRow(String name) {
 		mName = name;

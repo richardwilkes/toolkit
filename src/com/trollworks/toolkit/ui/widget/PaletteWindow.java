@@ -15,7 +15,7 @@ import java.awt.GraphicsConfiguration;
 
 /** A standard palette window. */
 public abstract class PaletteWindow extends BaseWindow {
-	private AppWindow	mAppWindow;
+	private AppWindow mAppWindow;
 
 	/**
 	 * Creates a new {@link PaletteWindow}.

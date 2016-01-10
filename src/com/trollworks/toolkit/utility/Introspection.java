@@ -24,7 +24,7 @@ import java.util.Map;
 
 /** Helper utilities for introspection. */
 public class Introspection {
-	private static final Map<Pair<Class<?>, List<Class<? extends Annotation>>>, Field[]>	FIELD_MAP	= new HashMap<>();
+	private static final Map<Pair<Class<?>, List<Class<? extends Annotation>>>, Field[]> FIELD_MAP = new HashMap<>();
 
 	/**
 	 * Marks the specified field as accessible, even if it would normally be off-limits. Requires

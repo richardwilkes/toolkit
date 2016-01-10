@@ -32,14 +32,14 @@ public class FontPreferences extends PreferencePanel implements ActionListener {
 	@Localize(locale = "ru", value = "Шрифты")
 	@Localize(locale = "de", value = "Schriftarten")
 	@Localize(locale = "es", value = "Fuentes")
-	private static String	FONTS;
+	private static String FONTS;
 
 	static {
 		Localization.initialize();
 	}
 
-	private FontPanel[]		mFontPanels;
-	private boolean			mIgnore;
+	private FontPanel[]	mFontPanels;
+	private boolean		mIgnore;
 
 	/**
 	 * Creates a new {@link FontPreferences}.

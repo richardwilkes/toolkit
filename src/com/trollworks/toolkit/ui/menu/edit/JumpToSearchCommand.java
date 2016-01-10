@@ -24,14 +24,14 @@ public class JumpToSearchCommand extends Command {
 	@Localize(locale = "de", value = "Springe zur Suche")
 	@Localize(locale = "ru", value = "Перейти к поиску")
 	@Localize(locale = "es", value = "Pasar a Buscar")
-	private static String					JUMP_TO_SEARCH;
+	private static String JUMP_TO_SEARCH;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The singleton {@link JumpToSearchCommand}. */
-	public static final JumpToSearchCommand	INSTANCE	= new JumpToSearchCommand();
+	public static final JumpToSearchCommand INSTANCE = new JumpToSearchCommand();
 
 	private JumpToSearchCommand() {
 		super(JUMP_TO_SEARCH, null, KeyEvent.VK_J);

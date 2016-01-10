@@ -15,7 +15,7 @@ import java.util.Random;
 
 /** Provides a Perlin noise generator. */
 public class PerlinNoise2D implements Noise2D {
-	private int	mTable[]	= new int[512];
+	private int mTable[] = new int[512];
 
 	/** @param seed The seed to be passed to the random number generator when creating the state. */
 	public PerlinNoise2D(long seed) {

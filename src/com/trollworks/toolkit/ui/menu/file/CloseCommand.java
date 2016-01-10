@@ -26,7 +26,7 @@ public class CloseCommand extends Command {
 	@Localize(locale = "ru", value = "Закрыть")
 	@Localize(locale = "de", value = "Schließen")
 	@Localize(locale = "es", value = "Cerrar")
-	private static String				CLOSE;
+	private static String CLOSE;
 
 	static {
 		Localization.initialize();

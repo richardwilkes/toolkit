@@ -14,11 +14,8 @@ package com.trollworks.toolkit.ui.layout;
 /** Constants used for alignment with {@link PrecisionLayout}. */
 public enum PrecisionLayoutAlignment {
 	/** Position at the left/top. */
-	BEGINNING,
-	/** Position in the middle. */
-	MIDDLE,
-	/** Position at the right/bottom. */
-	END,
-	/** Fill the available space. */
+	BEGINNING, /** Position in the middle. */
+	MIDDLE, /** Position at the right/bottom. */
+	END, /** Fill the available space. */
 	FILL;
 }

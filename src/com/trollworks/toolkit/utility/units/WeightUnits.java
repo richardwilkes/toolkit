@@ -47,7 +47,9 @@ public enum WeightUnits implements Units {
 			return LONG_TONS_DESCRIPTION;
 		}
 	},
-	/** Metric Tons. Must come after Long Tons and Short Tons since it's abbreviation is a subset. */
+	/**
+	 * Metric Tons. Must come after Long Tons and Short Tons since it's abbreviation is a subset.
+	 */
 	T(2205.0, true) {
 		@Override
 		public String getLocalizedName() {

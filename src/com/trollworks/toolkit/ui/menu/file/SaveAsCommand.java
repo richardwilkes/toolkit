@@ -28,14 +28,14 @@ public class SaveAsCommand extends Command {
 	@Localize(locale = "ru", value = "Сохранить как\u2026")
 	@Localize(locale = "de", value = "Speichern unter\u2026")
 	@Localize(locale = "es", value = "Salvar como\u2026")
-	private static String				SAVE_AS;
+	private static String SAVE_AS;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The action command this command will issue. */
-	public static final String			CMD_SAVE_AS	= "SaveAs";			//$NON-NLS-1$
+	public static final String			CMD_SAVE_AS	= "SaveAs";				//$NON-NLS-1$
 
 	/** The singleton {@link SaveAsCommand}. */
 	public static final SaveAsCommand	INSTANCE	= new SaveAsCommand();

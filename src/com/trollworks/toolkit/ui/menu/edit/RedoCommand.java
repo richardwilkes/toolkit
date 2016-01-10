@@ -26,14 +26,14 @@ public class RedoCommand extends Command {
 	@Localize(locale = "ru", value = "Нельзя повторить")
 	@Localize(locale = "de", value = "Kann nicht Wiederherstellen")
 	@Localize(locale = "es", value = "No se puede rehacer")
-	private static String			CANT_REDO;
+	private static String CANT_REDO;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The action command this command will issue. */
-	public static final String		CMD_REDO	= "Redo";				//$NON-NLS-1$
+	public static final String		CMD_REDO	= "Redo";			//$NON-NLS-1$
 
 	/** The singleton {@link RedoCommand}. */
 	public static final RedoCommand	INSTANCE	= new RedoCommand();

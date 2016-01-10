@@ -30,7 +30,7 @@ public class Fonts {
 	private static final String					COMMA					= ",";				//$NON-NLS-1$
 	private static final String					MODULE					= "Font";			//$NON-NLS-1$
 	/** The standard text field font. */
-	public static final String					KEY_STD_TEXT_FIELD		= "TextField.font";			//$NON-NLS-1$
+	public static final String					KEY_STD_TEXT_FIELD		= "TextField.font";	//$NON-NLS-1$
 	private static final TreeMap<String, Fonts>	DEFAULTS				= new TreeMap<>();
 	private String								mDescription;
 	private Font								mDefaultFont;

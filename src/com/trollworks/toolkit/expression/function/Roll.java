@@ -19,7 +19,7 @@ import com.trollworks.toolkit.utility.Localization;
 
 public class Roll implements ExpressionFunction {
 	@Localize("Invalid dice specification: %s")
-	private static String	INVALID_DICE_SPEC;
+	private static String INVALID_DICE_SPEC;
 
 	static {
 		Localization.initialize();

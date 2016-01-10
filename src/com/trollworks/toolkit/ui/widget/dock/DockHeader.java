@@ -44,12 +44,12 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 	@Localize(locale = "ru", value = "Развернуть")
 	@Localize(locale = "de", value = "Maximieren")
 	@Localize(locale = "es", value = "Maximizar")
-	private static String		MAXIMIZE_TOOLTIP;
+	private static String	MAXIMIZE_TOOLTIP;
 	@Localize("Restore")
 	@Localize(locale = "ru", value = "Восстановить")
 	@Localize(locale = "de", value = "Wiederherstellen")
 	@Localize(locale = "es", value = "Restaurar")
-	private static String		RESTORE_TOOLTIP;
+	private static String	RESTORE_TOOLTIP;
 
 	static {
 		Localization.initialize();

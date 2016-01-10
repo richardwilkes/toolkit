@@ -27,9 +27,9 @@ import java.util.HashMap;
 /** A very simple XML reader with very low memory overhead. */
 public class XMLReader implements AutoCloseable {
 	/** Debug option: whether to output skipped tags to standard out. */
-	public static boolean			SHOW_SKIPPED_TAGS	= Numbers.extractBoolean(System.getProperty("SHOW_SKIPPED_TAGS", "false")); //$NON-NLS-1$ //$NON-NLS-2$
-	private static final String		UNEXPECTED_EOF		= "Unexpected EOF";													//$NON-NLS-1$
-	private static final String		COLON				= ":";																	//$NON-NLS-1$
+	public static boolean			SHOW_SKIPPED_TAGS	= Numbers.extractBoolean(System.getProperty("SHOW_SKIPPED_TAGS", "false"));	//$NON-NLS-1$ //$NON-NLS-2$
+	private static final String		UNEXPECTED_EOF		= "Unexpected EOF";															//$NON-NLS-1$
+	private static final String		COLON				= ":";																		//$NON-NLS-1$
 	private HashMap<String, String>	mEntityMap			= new HashMap<>();
 	private HashMap<String, String>	mAttributeMap		= new HashMap<>();
 	private ArrayList<String>		mStack				= new ArrayList<>();

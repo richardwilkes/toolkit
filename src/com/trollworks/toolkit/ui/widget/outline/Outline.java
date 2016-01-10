@@ -79,12 +79,12 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	@Localize(locale = "ru", value = "Сортировка")
 	@Localize(locale = "de", value = "Sortieren")
 	@Localize(locale = "es", value = "Ordenar")
-	private static String			SORT_UNDO_TITLE;
+	private static String	SORT_UNDO_TITLE;
 	@Localize("Row Drag & Drop")
 	@Localize(locale = "ru", value = "Перетянуть строку")
 	@Localize(locale = "de", value = "Zeile verschieben")
 	@Localize(locale = "es", value = "Mover filas")
-	private static String			ROW_DROP_UNDO_TITLE;
+	private static String	ROW_DROP_UNDO_TITLE;
 
 	static {
 		Localization.initialize();
@@ -97,7 +97,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	/** The default potential content size change action command. */
 	public static final String		CMD_POTENTIAL_CONTENT_SIZE_CHANGE	= "Outline.ContentSizeMayHaveChanged";	//$NON-NLS-1$
 	/** The column visibility command. */
-	public static final String		CMD_TOGGLE_COLUMN_VISIBILITY		= "Outline.ToggleColumnVisibility";	//$NON-NLS-1$
+	public static final String		CMD_TOGGLE_COLUMN_VISIBILITY		= "Outline.ToggleColumnVisibility";		//$NON-NLS-1$
 	private static final int		DIVIDER_HIT_SLOP					= 2;
 	private static final int		AUTO_SCROLL_MARGIN					= 10;
 	private OutlineModel			mModel;

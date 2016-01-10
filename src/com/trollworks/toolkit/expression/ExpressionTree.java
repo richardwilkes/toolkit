@@ -17,17 +17,17 @@ import com.trollworks.toolkit.utility.Localization;
 
 class ExpressionTree {
 	@Localize("Expression is invalid")
-	private static String	INVALID_EXPRESSION;
+	private static String INVALID_EXPRESSION;
 
 	static {
 		Localization.initialize();
 	}
 
-	private Evaluator		mEvaluator;
-	private Object			mLeftOperand;
-	private Object			mRightOperand;
-	private Operator		mOperator;
-	private Operator		mUnaryOperator;
+	private Evaluator	mEvaluator;
+	private Object		mLeftOperand;
+	private Object		mRightOperand;
+	private Operator	mOperator;
+	private Operator	mUnaryOperator;
 
 	ExpressionTree(Evaluator evaluator, Object leftOperand, Object rightOperand, Operator operator, Operator unaryOperator) {
 		mEvaluator = evaluator;

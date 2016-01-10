@@ -17,7 +17,7 @@ import javax.swing.undo.UndoManager;
 
 /** The standard {@link UndoManager} for use with our app's windows. */
 public class StdUndoManager extends UndoManager {
-	private boolean	mInTransaction;
+	private boolean mInTransaction;
 
 	@Override
 	public synchronized void undo() throws CannotUndoException {

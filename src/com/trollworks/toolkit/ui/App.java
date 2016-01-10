@@ -150,7 +150,9 @@ public class App implements KeyEventDispatcher, Runnable {
 		// Do nothing.
 	}
 
-	/** Called once right before the final startup processing is completed. Does nothing by default. */
+	/**
+	 * Called once right before the final startup processing is completed. Does nothing by default.
+	 */
 	public void finalStartup() {
 		// Do nothing.
 	}

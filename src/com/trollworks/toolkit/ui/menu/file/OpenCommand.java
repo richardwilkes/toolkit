@@ -34,14 +34,14 @@ public class OpenCommand extends Command implements OpenFilesHandler {
 	@Localize(locale = "ru", value = "Открыть\u2026")
 	@Localize(locale = "de", value = "Öffnen\u2026")
 	@Localize(locale = "es", value = "Abrir\u2026")
-	private static String			OPEN;
+	private static String OPEN;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The action command this command will issue. */
-	public static final String		CMD_OPEN	= "Open";				//$NON-NLS-1$
+	public static final String		CMD_OPEN	= "Open";			//$NON-NLS-1$
 
 	/** The singleton {@link OpenCommand}. */
 	public static final OpenCommand	INSTANCE	= new OpenCommand();

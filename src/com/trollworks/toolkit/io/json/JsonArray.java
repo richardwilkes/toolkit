@@ -22,7 +22,7 @@ import java.util.List;
 
 /** Represents an array in JSON. */
 public class JsonArray extends JsonCollection {
-	private List<Object>	mList	= new ArrayList<>();
+	private List<Object> mList = new ArrayList<>();
 
 	/**
 	 * @param index The index to retrieve.

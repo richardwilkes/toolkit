@@ -46,8 +46,7 @@ public class Pair<F, S> implements Comparable<Pair<F, S>> {
 		}
 		if (obj instanceof Pair) {
 			Pair<?, ?> other = (Pair<?, ?>) obj;
-			return (mFirst == null ? other.mFirst == null : mFirst.equals(other.mFirst)) &&
-							(mSecond == null ? other.mSecond == null : mSecond.equals(other.mSecond));
+			return (mFirst == null ? other.mFirst == null : mFirst.equals(other.mFirst)) && (mSecond == null ? other.mSecond == null : mSecond.equals(other.mSecond));
 		}
 		return false;
 	}

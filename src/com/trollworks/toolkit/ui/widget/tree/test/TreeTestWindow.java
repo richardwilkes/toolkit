@@ -28,7 +28,8 @@ import javax.swing.SwingConstants;
 public class TreeTestWindow extends AppWindow implements SignificantFrame {
 	public TreeTestWindow(String name, boolean allowDropRowCopy) {
 		super(name);
-		//Fonts.register(Fonts.KEY_STD_TEXT_FIELD, "Mine", new Font(Fonts.getDefaultFontName(), Font.PLAIN, 10)); //$NON-NLS-1$
+		// Fonts.register(Fonts.KEY_STD_TEXT_FIELD, "Mine", new Font(Fonts.getDefaultFontName(),
+		// Font.PLAIN, 10)); //$NON-NLS-1$
 		getContentPane().add(createTestPanel(true, allowDropRowCopy), BorderLayout.CENTER);
 	}
 

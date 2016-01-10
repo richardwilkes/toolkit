@@ -32,7 +32,7 @@ class DummyPrintService implements PrintService {
 	@Localize(locale = "ru", value = "Нет доступного принтера!")
 	@Localize(locale = "de", value = "Kein Drucker verfügbar!")
 	@Localize(locale = "es", value = "¡No hay impresora disponible!")
-	private static String	NO_PRINTER_AVAILABLE;
+	private static String NO_PRINTER_AVAILABLE;
 
 	static {
 		Localization.initialize();

@@ -15,7 +15,7 @@ import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.widget.tree.TreeRow;
 
 public class TreeTestRow extends TreeRow implements TreeRowWithName, TreeRowWithIcon {
-	private String	mName;
+	private String mName;
 
 	public TreeTestRow(String name) {
 		mName = name;

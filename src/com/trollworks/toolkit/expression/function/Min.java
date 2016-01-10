@@ -19,7 +19,7 @@ import com.trollworks.toolkit.utility.Localization;
 
 public class Min implements ExpressionFunction {
 	@Localize("Two numeric arguments are required")
-	private static String	INVALID_ARGUMENTS;
+	private static String INVALID_ARGUMENTS;
 
 	static {
 		Localization.initialize();

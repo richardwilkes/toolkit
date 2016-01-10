@@ -16,7 +16,7 @@ import com.trollworks.toolkit.utility.text.Numbers;
 /** Provides various debugging utilities. */
 public final class Debug {
 	/** Controls whether we are in 'development mode' or not. */
-	public static final boolean	DEV_MODE	= false;
+	public static final boolean DEV_MODE = false;
 
 	/**
 	 * Retrieves the specified key, looking first in the system properties and falling back to the

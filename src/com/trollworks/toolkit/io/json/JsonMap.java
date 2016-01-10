@@ -23,7 +23,7 @@ import java.util.Set;
 
 /** Represents a map in JSON. */
 public class JsonMap extends JsonCollection {
-	private Map<String, Object>	mMap	= new HashMap<>();
+	private Map<String, Object> mMap = new HashMap<>();
 
 	/**
 	 * @param key The key to check for.

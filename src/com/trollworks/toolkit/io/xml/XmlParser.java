@@ -27,7 +27,7 @@ import javax.xml.stream.XMLStreamReader;
 
 /** Provides simple XML parsing. */
 public class XmlParser implements AutoCloseable {
-	private static final String	SEPARATOR	= "\u0000";			//$NON-NLS-1$
+	private static final String	SEPARATOR	= "\u0000";	//$NON-NLS-1$
 	private XMLStreamReader		mReader;
 	private int					mDepth;
 	private String				mMarker;

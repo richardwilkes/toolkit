@@ -27,7 +27,7 @@ public class ArgumentTokenizer implements Enumeration<String> {
 		Localization.initialize();
 	}
 
-	private String			mArguments	= null;
+	private String mArguments = null;
 
 	public ArgumentTokenizer(String arguments) {
 		mArguments = arguments;

@@ -93,7 +93,9 @@ public abstract class FlexContainer extends FlexCell {
 		mFillVertical = fill;
 	}
 
-	/** @return Whether all horizontal space will be taken up by expanding the gaps, if necessary. */
+	/**
+	 * @return Whether all horizontal space will be taken up by expanding the gaps, if necessary.
+	 */
 	public boolean getFillHorizontal() {
 		return mFillHorizontal;
 	}
@@ -111,7 +113,9 @@ public abstract class FlexContainer extends FlexCell {
 		return mFillVertical;
 	}
 
-	/** @param fill Whether all vertical space will be taken up by expanding the gaps, if necessary. */
+	/**
+	 * @param fill Whether all vertical space will be taken up by expanding the gaps, if necessary.
+	 */
 	public void setFillVertical(boolean fill) {
 		mFillVertical = fill;
 	}

@@ -15,7 +15,7 @@ import com.trollworks.toolkit.utility.text.Numbers;
 
 /** Provides basic timing facilities. */
 public final class Timing {
-	private long	mBase;
+	private long mBase;
 
 	/** Creates a new {@link Timing}. */
 	public Timing() {
@@ -27,7 +27,9 @@ public final class Timing {
 		mBase = System.nanoTime();
 	}
 
-	/** @return The number of elapsed nanoseconds since the timing object was created or last reset. */
+	/**
+	 * @return The number of elapsed nanoseconds since the timing object was created or last reset.
+	 */
 	public final long elapsed() {
 		return System.nanoTime() - mBase;
 	}

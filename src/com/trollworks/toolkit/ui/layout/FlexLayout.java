@@ -20,7 +20,7 @@ import java.awt.Rectangle;
 
 /** A flexible layout manager. */
 public class FlexLayout implements LayoutManager2 {
-	private FlexCell	mRootCell;
+	private FlexCell mRootCell;
 
 	/** Creates a new {@link FlexLayout}. */
 	public FlexLayout() {

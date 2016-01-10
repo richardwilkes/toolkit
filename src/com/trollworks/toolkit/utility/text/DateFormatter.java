@@ -19,7 +19,7 @@ import javax.swing.JFormattedTextField;
 
 /** Provides date field conversion. */
 public class DateFormatter extends JFormattedTextField.AbstractFormatter {
-	private int	mType;
+	private int mType;
 
 	/**
 	 * Creates a new {@link DateFormatter}.

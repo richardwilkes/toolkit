@@ -48,23 +48,25 @@ import javax.swing.Icon;
 
 import org.w3c.dom.Node;
 
-/** Provides a {@link BufferedImage} that implements Swing's {@link Icon} interface for convenience. */
+/**
+ * Provides a {@link BufferedImage} that implements Swing's {@link Icon} interface for convenience.
+ */
 public class StdImage extends BufferedImage implements Icon {
 	@Localize("Unable to load image")
 	@Localize(locale = "ru", value = "Невозможно загрузить изображение")
 	@Localize(locale = "de", value = "Kann Bild nicht laden")
 	@Localize(locale = "es", value = "")
-	private static String							UNABLE_TO_LOAD_IMAGE;
+	private static String	UNABLE_TO_LOAD_IMAGE;
 	@Localize("Invalid angle: %d")
 	@Localize(locale = "ru", value = "Недопустимый угол: %d")
 	@Localize(locale = "de", value = "Ungültiger Winkel: %d")
 	@Localize(locale = "es", value = "")
-	private static String							INVALID_ANGLE;
+	private static String	INVALID_ANGLE;
 	@Localize("Invalid transparency")
 	@Localize(locale = "ru", value = "Недопустимая прозрачность")
 	@Localize(locale = "de", value = "Ungültige Transparenz")
 	@Localize(locale = "es", value = "La transparencia no es válida")
-	private static String							INVALID_TRANSPARENCY;
+	private static String	INVALID_TRANSPARENCY;
 
 	static {
 		Localization.initialize();
@@ -81,28 +83,28 @@ public class StdImage extends BufferedImage implements Icon {
 		addLocation(StdImage.class.getResource("images/")); //$NON-NLS-1$
 	}
 
-	public static final StdImage					ADD					= get("add");								//$NON-NLS-1$
-	public static final StdImage					COLLAPSE			= get("collapse");							//$NON-NLS-1$
-	public static final StdImage					DOCK_CLOSE			= get("dock_close");						//$NON-NLS-1$
-	public static final StdImage					DOCK_MAXIMIZE		= get("dock_maximize");					//$NON-NLS-1$
-	public static final StdImage					DOCK_RESTORE		= get("dock_restore");						//$NON-NLS-1$
-	public static final StdImage					DOWN_TRIANGLE		= get("down_triangle");					//$NON-NLS-1$
-	public static final StdImage					DOWN_TRIANGLE_ROLL	= get("down_triangle_roll");				//$NON-NLS-1$
-	public static final StdImage					EXPAND				= get("expand");							//$NON-NLS-1$
-	public static final StdImageSet					FILE				= StdImageSet.getOrLoad("file");			//$NON-NLS-1$
-	public static final StdImageSet					FOLDER				= StdImageSet.getOrLoad("folder");			//$NON-NLS-1$
-	public static final StdImage					LOCKED				= get("locked");							//$NON-NLS-1$
-	public static final StdImage					MINI_WARNING		= get("mini_warning");						//$NON-NLS-1$
-	public static final StdImage					MODIFIED_MARKER		= get("modified_marker");					//$NON-NLS-1$
-	public static final StdImage					MORE				= get("more");								//$NON-NLS-1$
-	public static final StdImage					NOT_MODIFIED_MARKER	= get("not_modified_marker");				//$NON-NLS-1$
-	public static final StdImageSet					PREFERENCES			= StdImageSet.getOrLoad("preferences");	//$NON-NLS-1$
-	public static final StdImage					REMOVE				= get("remove");							//$NON-NLS-1$
-	public static final StdImage					RIGHT_TRIANGLE		= get("right_triangle");					//$NON-NLS-1$
-	public static final StdImage					RIGHT_TRIANGLE_ROLL	= get("right_triangle_roll");				//$NON-NLS-1$
-	public static final StdImage					SIZE_TO_FIT			= get("size_to_fit");						//$NON-NLS-1$
-	public static final StdImage					TOGGLE_OPEN			= get("toggle_open");						//$NON-NLS-1$
-	public static final StdImage					UNLOCKED			= get("unlocked");							//$NON-NLS-1$
+	public static final StdImage	ADD					= get("add");							//$NON-NLS-1$
+	public static final StdImage	COLLAPSE			= get("collapse");						//$NON-NLS-1$
+	public static final StdImage	DOCK_CLOSE			= get("dock_close");					//$NON-NLS-1$
+	public static final StdImage	DOCK_MAXIMIZE		= get("dock_maximize");					//$NON-NLS-1$
+	public static final StdImage	DOCK_RESTORE		= get("dock_restore");					//$NON-NLS-1$
+	public static final StdImage	DOWN_TRIANGLE		= get("down_triangle");					//$NON-NLS-1$
+	public static final StdImage	DOWN_TRIANGLE_ROLL	= get("down_triangle_roll");			//$NON-NLS-1$
+	public static final StdImage	EXPAND				= get("expand");						//$NON-NLS-1$
+	public static final StdImageSet	FILE				= StdImageSet.getOrLoad("file");		//$NON-NLS-1$
+	public static final StdImageSet	FOLDER				= StdImageSet.getOrLoad("folder");		//$NON-NLS-1$
+	public static final StdImage	LOCKED				= get("locked");						//$NON-NLS-1$
+	public static final StdImage	MINI_WARNING		= get("mini_warning");					//$NON-NLS-1$
+	public static final StdImage	MODIFIED_MARKER		= get("modified_marker");				//$NON-NLS-1$
+	public static final StdImage	MORE				= get("more");							//$NON-NLS-1$
+	public static final StdImage	NOT_MODIFIED_MARKER	= get("not_modified_marker");			//$NON-NLS-1$
+	public static final StdImageSet	PREFERENCES			= StdImageSet.getOrLoad("preferences");	//$NON-NLS-1$
+	public static final StdImage	REMOVE				= get("remove");						//$NON-NLS-1$
+	public static final StdImage	RIGHT_TRIANGLE		= get("right_triangle");				//$NON-NLS-1$
+	public static final StdImage	RIGHT_TRIANGLE_ROLL	= get("right_triangle_roll");			//$NON-NLS-1$
+	public static final StdImage	SIZE_TO_FIT			= get("size_to_fit");					//$NON-NLS-1$
+	public static final StdImage	TOGGLE_OPEN			= get("toggle_open");					//$NON-NLS-1$
+	public static final StdImage	UNLOCKED			= get("unlocked");						//$NON-NLS-1$
 
 	/**
 	 * Adds a location to search for images.

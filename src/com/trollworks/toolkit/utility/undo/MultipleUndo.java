@@ -33,7 +33,7 @@ public class MultipleUndo extends CompoundEdit {
 		Localization.initialize();
 	}
 
-	private String			mName;
+	private String mName;
 
 	/**
 	 * Create a multiple undo edit.

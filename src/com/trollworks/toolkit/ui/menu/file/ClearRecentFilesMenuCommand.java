@@ -23,14 +23,14 @@ public class ClearRecentFilesMenuCommand extends Command {
 	@Localize(locale = "ru", value = "Очистить")
 	@Localize(locale = "de", value = "Liste löschen")
 	@Localize(locale = "es", value = "Vaciar lista")
-	private static String							CLEAR;
+	private static String CLEAR;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The action command this command will issue. */
-	public static final String						CMD_CLEAR_RECENT_FILES_MENU	= "ClearRecentFilesMenu";				//$NON-NLS-1$
+	public static final String						CMD_CLEAR_RECENT_FILES_MENU	= "ClearRecentFilesMenu";			//$NON-NLS-1$
 
 	/** The singleton {@link ClearRecentFilesMenuCommand}. */
 	public static final ClearRecentFilesMenuCommand	INSTANCE					= new ClearRecentFilesMenuCommand();

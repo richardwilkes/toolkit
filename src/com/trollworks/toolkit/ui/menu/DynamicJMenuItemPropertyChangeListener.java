@@ -57,7 +57,7 @@ class DynamicJMenuItemPropertyChangeListener implements PropertyChangeListener {
 	}
 
 	private class OwnedWeakReference extends WeakReference<JMenuItem> {
-		private DynamicJMenuItemPropertyChangeListener	mOwner;
+		private DynamicJMenuItemPropertyChangeListener mOwner;
 
 		OwnedWeakReference(JMenuItem target, ReferenceQueue<JMenuItem> queue, DynamicJMenuItemPropertyChangeListener owner) {
 			super(target, queue);

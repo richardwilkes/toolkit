@@ -36,17 +36,17 @@ public class StdImageSet implements Comparator<StdImage> {
 	@Localize(locale = "ru", value = "Недопустимый ICNS")
 	@Localize(locale = "de", value = "Fehlerhafte ICNS-Datei")
 	@Localize(locale = "es", value = "fichero ICNS no es válido")
-	private static String					INVALID_ICNS;
+	private static String	INVALID_ICNS;
 	@Localize("Invalid ICO")
 	@Localize(locale = "ru", value = "Недопустимый ICO")
 	@Localize(locale = "de", value = "Fehlerhafte ICO-Datei")
 	@Localize(locale = "es", value = "fichero ICO no es válido")
-	private static String					INVALID_ICO;
+	private static String	INVALID_ICO;
 	@Localize("Unable to create PNG")
 	@Localize(locale = "ru", value = "Невозможно создать PNG")
 	@Localize(locale = "de", value = "Kann PNG-Datei nicht erstellen")
 	@Localize(locale = "es", value = "Imposible crear fichero PNG")
-	private static String					UNABLE_TO_CREATE_PNG;
+	private static String	UNABLE_TO_CREATE_PNG;
 
 	static {
 		Localization.initialize();
@@ -119,9 +119,9 @@ public class StdImageSet implements Comparator<StdImage> {
 	}
 
 	/**
-	 * Loads a Mac OS X icon set file (.icns). The format is described here: <a
-	 * href="http://en.wikipedia.org/wiki/Apple_Icon_Image"
-	 * >http://en.wikipedia.org/wiki/Apple_Icon_Image</a>.
+	 * Loads a Mac OS X icon set file (.icns). The format is described here:
+	 * <a href="http://en.wikipedia.org/wiki/Apple_Icon_Image" >http://en.wikipedia.org/wiki/
+	 * Apple_Icon_Image</a>.
 	 *
 	 * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
 	 *            will replace any existing {@link StdImageSet} with the same name.
@@ -134,9 +134,9 @@ public class StdImageSet implements Comparator<StdImage> {
 	}
 
 	/**
-	 * Loads a Mac OS X icon set file (.icns). The format is described here: <a
-	 * href="http://en.wikipedia.org/wiki/Apple_Icon_Image"
-	 * >http://en.wikipedia.org/wiki/Apple_Icon_Image</a>.
+	 * Loads a Mac OS X icon set file (.icns). The format is described here:
+	 * <a href="http://en.wikipedia.org/wiki/Apple_Icon_Image" >http://en.wikipedia.org/wiki/
+	 * Apple_Icon_Image</a>.
 	 *
 	 * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
 	 *            will replace any existing {@link StdImageSet} with the same name.
@@ -191,10 +191,10 @@ public class StdImageSet implements Comparator<StdImage> {
 	}
 
 	/**
-	 * Loads a Windows OS icon set file (.ico). The format is described here: <a
-	 * href="http://en.wikipedia.org/wiki/ICO_(file_format)"
-	 * >http://en.wikipedia.org/wiki/ICO_(file_format)</a>. Note that only those ICO files that
-	 * embed PNG images can be loaded with this method.
+	 * Loads a Windows OS icon set file (.ico). The format is described here:
+	 * <a href="http://en.wikipedia.org/wiki/ICO_(file_format)" >http://en.wikipedia.org/wiki/ICO_(
+	 * file_format)</a>. Note that only those ICO files that embed PNG images can be loaded with
+	 * this method.
 	 *
 	 * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
 	 *            will replace any existing {@link StdImageSet} with the same name.
@@ -207,10 +207,10 @@ public class StdImageSet implements Comparator<StdImage> {
 	}
 
 	/**
-	 * Loads a Windows OS icon set file (.ico). The format is described here: <a
-	 * href="http://en.wikipedia.org/wiki/ICO_(file_format)"
-	 * >http://en.wikipedia.org/wiki/ICO_(file_format)</a>. Note that only those ICO files that
-	 * embed PNG images can be loaded with this method.
+	 * Loads a Windows OS icon set file (.ico). The format is described here:
+	 * <a href="http://en.wikipedia.org/wiki/ICO_(file_format)" >http://en.wikipedia.org/wiki/ICO_(
+	 * file_format)</a>. Note that only those ICO files that embed PNG images can be loaded with
+	 * this method.
 	 *
 	 * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
 	 *            will replace any existing {@link StdImageSet} with the same name.

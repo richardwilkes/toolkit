@@ -22,7 +22,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 /** Provides simple XML generation. */
 public class XmlGenerator implements AutoCloseable {
-	private String			mIndent	= "\t";		//$NON-NLS-1$
+	private String			mIndent	= "\t";	//$NON-NLS-1$
 	private XMLStreamWriter	mWriter;
 	private int				mDepth;
 	private boolean			mHadText;
@@ -43,7 +43,7 @@ public class XmlGenerator implements AutoCloseable {
 
 	/** Emits the XML document header. */
 	public void startDocument() throws XMLStreamException {
-		mWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0");	//$NON-NLS-1$
+		mWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0"); //$NON-NLS-1$
 	}
 
 	/** Finishes the document. */
@@ -52,7 +52,7 @@ public class XmlGenerator implements AutoCloseable {
 	}
 
 	private void eol() throws XMLStreamException {
-		mWriter.writeCharacters("\n");	//$NON-NLS-1$
+		mWriter.writeCharacters("\n"); //$NON-NLS-1$
 		for (int i = 0; i < mDepth; i++) {
 			mWriter.writeCharacters(mIndent);
 		}
@@ -97,7 +97,7 @@ public class XmlGenerator implements AutoCloseable {
 	 * @param value The value of the attribute.
 	 */
 	public void addAttribute(String name, String value) throws XMLStreamException {
-		mWriter.writeAttribute(name, value == null ? "" : value);	//$NON-NLS-1$
+		mWriter.writeAttribute(name, value == null ? "" : value); //$NON-NLS-1$
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class XmlGenerator implements AutoCloseable {
 	 * @param value The value of the attribute.
 	 */
 	public void addAttribute(String name, boolean value) throws XMLStreamException {
-		mWriter.writeAttribute(name, value ? "yes" : "no");	//$NON-NLS-1$ //$NON-NLS-2$
+		mWriter.writeAttribute(name, value ? "yes" : "no"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

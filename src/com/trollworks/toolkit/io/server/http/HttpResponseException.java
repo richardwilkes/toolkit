@@ -15,7 +15,7 @@ import java.io.IOException;
 
 /** Provides an {@link IOException} that can be easily transformed into a {@link HttpResponse}. */
 public class HttpResponseException extends IOException {
-	private final HttpStatusCode	mStatus;
+	private final HttpStatusCode mStatus;
 
 	/**
 	 * @param status The {@link HttpStatusCode} to use.

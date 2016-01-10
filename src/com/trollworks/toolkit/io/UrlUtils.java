@@ -24,7 +24,7 @@ import java.util.jar.Manifest;
 
 /** Utilities for working with URLs. */
 public class UrlUtils {
-	private static final String	MANIFEST_FILE	= "META-INF/MANIFEST.MF";	//$NON-NLS-1$
+	private static final String MANIFEST_FILE = "META-INF/MANIFEST.MF"; //$NON-NLS-1$
 
 	/**
 	 * @param uri The URI to setup a connection for.

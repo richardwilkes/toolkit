@@ -41,11 +41,7 @@ public class Enums {
 			// Check for the standard forms first
 			for (T type : values) {
 				String name = type.name();
-				if (name.equalsIgnoreCase(buffer) ||
-								name.replace('_', ' ').equalsIgnoreCase(buffer) ||
-								name.replace('_', ',').equalsIgnoreCase(buffer) ||
-								name.replace('_', '-').equalsIgnoreCase(buffer) ||
-								name.replaceAll("_", "").equalsIgnoreCase(buffer)) { //$NON-NLS-1$ //$NON-NLS-2$
+				if (name.equalsIgnoreCase(buffer) || name.replace('_', ' ').equalsIgnoreCase(buffer) || name.replace('_', ',').equalsIgnoreCase(buffer) || name.replace('_', '-').equalsIgnoreCase(buffer) || name.replaceAll("_", "").equalsIgnoreCase(buffer)) { //$NON-NLS-1$ //$NON-NLS-2$
 					return type;
 				}
 			}

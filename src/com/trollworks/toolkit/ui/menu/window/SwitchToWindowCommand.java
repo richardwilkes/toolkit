@@ -18,7 +18,7 @@ import java.awt.event.ActionEvent;
 
 /** A command that will switch to a specific window. */
 public class SwitchToWindowCommand extends Command {
-	private AppWindow	mWindow;
+	private AppWindow mWindow;
 
 	/**
 	 * Creates a new {@link SwitchToWindowCommand}.

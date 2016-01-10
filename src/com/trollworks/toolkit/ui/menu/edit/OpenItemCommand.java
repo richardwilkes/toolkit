@@ -24,14 +24,14 @@ public class OpenItemCommand extends Command {
 	@Localize(locale = "ru", value = "Открыть элемент")
 	@Localize(locale = "de", value = "Element öffnen")
 	@Localize(locale = "es", value = "Abrir elemento")
-	private static String				OPEN_ITEM;
+	private static String OPEN_ITEM;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The action command this command will issue. */
-	public static final String			CMD_OPEN_ITEM	= "Open Item";				//$NON-NLS-1$
+	public static final String			CMD_OPEN_ITEM	= "Open Item";			//$NON-NLS-1$
 
 	/** The singleton {@link OpenItemCommand}. */
 	public static final OpenItemCommand	INSTANCE		= new OpenItemCommand();

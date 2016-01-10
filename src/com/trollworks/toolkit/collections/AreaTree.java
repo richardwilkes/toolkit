@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * time.
  */
 public class AreaTree {
-	private AreaNode	mRoot;
+	private AreaNode mRoot;
 
 	/** Creates an new, empty tree. */
 	public AreaTree() {

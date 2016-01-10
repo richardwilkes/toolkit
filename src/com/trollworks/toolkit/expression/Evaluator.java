@@ -52,17 +52,17 @@ import java.util.Map;
 /** A simple expression evaluator. */
 public class Evaluator {
 	@Localize("Consecutive unary operators are not allowed (index=%d)")
-	private static String							CONSECUTIVE_UNARY_OPS;
+	private static String	CONSECUTIVE_UNARY_OPS;
 	@Localize("Function not closed")
-	private static String							FUNCTION_NOT_CLOSED;
+	private static String	FUNCTION_NOT_CLOSED;
 	@Localize("Function not defined: %s")
-	private static String							FUNCTION_NOT_DEFINED;
+	private static String	FUNCTION_NOT_DEFINED;
 	@Localize("Expression is invalid")
-	private static String							INVALID_EXPRESSION;
+	private static String	INVALID_EXPRESSION;
 	@Localize("Invalid variable at index %d")
-	private static String							INVALID_VARIABLE;
+	private static String	INVALID_VARIABLE;
 	@Localize("Unable to resolve variable $%s")
-	private static String							UNABLE_TO_RESOLVE;
+	private static String	UNABLE_TO_RESOLVE;
 
 	static {
 		Localization.initialize();

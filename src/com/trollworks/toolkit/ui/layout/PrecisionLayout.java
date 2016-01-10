@@ -54,7 +54,9 @@ public final class PrecisionLayout implements LayoutManager2 {
 		return this;
 	}
 
-	/** @return <code>true</code> if all columns in the layout will be forced to have the same width. */
+	/**
+	 * @return <code>true</code> if all columns in the layout will be forced to have the same width.
+	 */
 	public boolean isEqualColumns() {
 		return mEqualColumns;
 	}

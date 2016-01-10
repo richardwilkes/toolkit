@@ -34,19 +34,19 @@ public class QuitCommand extends Command implements QuitHandler {
 	@Localize(locale = "ru", value = "Выход")
 	@Localize(locale = "de", value = "Beenden")
 	@Localize(locale = "es", value = "Salir")
-	private static String			QUIT;
+	private static String	QUIT;
 	@Localize("Exit")
 	@Localize(locale = "ru", value = "Выход")
 	@Localize(locale = "de", value = "Beenden")
 	@Localize(locale = "es", value = "Salir")
-	private static String			EXIT;
+	private static String	EXIT;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The action command this command will issue. */
-	public static final String		CMD_QUIT								= "Quit";				//$NON-NLS-1$
+	public static final String		CMD_QUIT								= "Quit";			//$NON-NLS-1$
 
 	/** The singleton {@link QuitCommand}. */
 	public static final QuitCommand	INSTANCE								= new QuitCommand();

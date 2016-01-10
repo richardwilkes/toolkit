@@ -19,8 +19,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD })
 /**
- * Fields marked with this annotation that implement the {@link Collection} interface will NOT be sorted
- * prior to being emitted into the XML stream. Normally, such fields are emitted in sorted order.
+ * Fields marked with this annotation that implement the {@link Collection} interface will NOT be
+ * sorted prior to being emitted into the XML stream. Normally, such fields are emitted in sorted
+ * order.
  */
 public @interface XmlNoSort {
 	//

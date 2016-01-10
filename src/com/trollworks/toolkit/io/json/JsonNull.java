@@ -14,7 +14,7 @@ package com.trollworks.toolkit.io.json;
 /** Represents a 'null' in JSON. */
 public final class JsonNull {
 	/** The singleton instance. */
-	public static final JsonNull	INSTANCE	= new JsonNull();
+	public static final JsonNull INSTANCE = new JsonNull();
 
 	private JsonNull() {
 		// Singleton

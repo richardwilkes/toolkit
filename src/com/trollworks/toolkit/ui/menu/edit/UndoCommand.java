@@ -26,14 +26,14 @@ public class UndoCommand extends Command {
 	@Localize(locale = "ru", value = "Нельзя отменить")
 	@Localize(locale = "de", value = "Kann nicht Rückgängig machen")
 	@Localize(locale = "es", value = "No se puede deshacer")
-	private static String			CANT_UNDO;
+	private static String CANT_UNDO;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The action command this command will issue. */
-	public static final String		CMD_UNDO	= "Undo";				//$NON-NLS-1$
+	public static final String		CMD_UNDO	= "Undo";			//$NON-NLS-1$
 
 	/** The singleton {@link UndoCommand}. */
 	public static final UndoCommand	INSTANCE	= new UndoCommand();

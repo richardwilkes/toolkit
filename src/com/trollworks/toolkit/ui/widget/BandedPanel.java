@@ -29,7 +29,7 @@ import javax.swing.SwingConstants;
 
 /** A simple panel that draws banded colors behind its contents. */
 public class BandedPanel extends ActionPanel implements Scrollable {
-	private String	mTitle;
+	private String mTitle;
 
 	/**
 	 * Creates a new {@link BandedPanel}.

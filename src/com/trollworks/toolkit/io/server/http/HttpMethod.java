@@ -13,9 +13,7 @@ package com.trollworks.toolkit.io.server.http;
 
 /** The supported HTTP request methods. */
 public enum HttpMethod {
-	GET,
-	POST,
-	HEAD;
+	GET, POST, HEAD;
 
 	/**
 	 * @param text The text representation of the HTTP request method.

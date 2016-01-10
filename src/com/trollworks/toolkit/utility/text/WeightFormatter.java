@@ -19,7 +19,7 @@ import javax.swing.JFormattedTextField;
 
 /** Provides weight field conversion. */
 public class WeightFormatter extends JFormattedTextField.AbstractFormatter {
-	private boolean	mBlankOnZero;
+	private boolean mBlankOnZero;
 
 	/**
 	 * @param blankOnZero When <code>true</code>, a value of zero resolves to the empty string when

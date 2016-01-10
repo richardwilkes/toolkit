@@ -31,7 +31,7 @@ import javax.swing.border.LineBorder;
 
 /** Displays and captures keystrokes typed. */
 public class KeyStrokeDisplay extends JLabel implements KeyListener {
-	private KeyStroke	mKeyStroke;
+	private KeyStroke mKeyStroke;
 
 	/**
 	 * Creates a new {@link KeyStrokeDisplay}.

@@ -14,7 +14,7 @@ package com.trollworks.toolkit.ui.widget.tree.test;
 import com.trollworks.toolkit.ui.widget.tree.TreeContainerRow;
 
 public class TreeTestContainerRow extends TreeContainerRow implements TreeRowWithName {
-	private String	mName;
+	private String mName;
 
 	public TreeTestContainerRow(String name) {
 		mName = name;

@@ -38,10 +38,7 @@ public class EndianUtils {
 	 * @return The next 4 bytes from the buffer, interpreted as a big-endian <code>int</code>.
 	 */
 	public static final int readBEInt(byte[] buffer, int offset) {
-		return (buffer[offset] & 0xFF) << 24 |
-						(buffer[offset + 1] & 0xFF) << 16 |
-						(buffer[offset + 2] & 0xFF) << 8 |
-						(buffer[offset + 3] & 0xFF) << 0;
+		return (buffer[offset] & 0xFF) << 24 | (buffer[offset + 1] & 0xFF) << 16 | (buffer[offset + 2] & 0xFF) << 8 | (buffer[offset + 3] & 0xFF) << 0;
 	}
 
 	/**
@@ -50,14 +47,7 @@ public class EndianUtils {
 	 * @return The next 8 bytes from the buffer, interpreted as a big-endian <code>long</code>.
 	 */
 	public static final long readBELong(byte[] buffer, int offset) {
-		return ((long) buffer[offset] & 0xFF) << 56 |
-						((long) buffer[offset + 1] & 0xFF) << 48 |
-						((long) buffer[offset + 2] & 0xFF) << 40 |
-						((long) buffer[offset + 3] & 0xFF) << 32 |
-						((long) buffer[offset + 4] & 0xFF) << 24 |
-						((long) buffer[offset + 5] & 0xFF) << 16 |
-						((long) buffer[offset + 6] & 0xFF) << 8 |
-						((long) buffer[offset + 7] & 0xFF) << 0;
+		return ((long) buffer[offset] & 0xFF) << 56 | ((long) buffer[offset + 1] & 0xFF) << 48 | ((long) buffer[offset + 2] & 0xFF) << 40 | ((long) buffer[offset + 3] & 0xFF) << 32 | ((long) buffer[offset + 4] & 0xFF) << 24 | ((long) buffer[offset + 5] & 0xFF) << 16 | ((long) buffer[offset + 6] & 0xFF) << 8 | ((long) buffer[offset + 7] & 0xFF) << 0;
 	}
 
 	/**
@@ -159,10 +149,7 @@ public class EndianUtils {
 	 * @return The next 4 bytes from the buffer, interpreted as a little-endian <code>int</code>.
 	 */
 	public static final int readLEInt(byte[] buffer, int offset) {
-		return (buffer[offset] & 0xFF) << 0 |
-						(buffer[offset + 1] & 0xFF) << 8 |
-						(buffer[offset + 2] & 0xFF) << 16 |
-						(buffer[offset + 3] & 0xFF) << 24;
+		return (buffer[offset] & 0xFF) << 0 | (buffer[offset + 1] & 0xFF) << 8 | (buffer[offset + 2] & 0xFF) << 16 | (buffer[offset + 3] & 0xFF) << 24;
 	}
 
 	/**
@@ -171,14 +158,7 @@ public class EndianUtils {
 	 * @return The next 8 bytes from the buffer, interpreted as a little-endian <code>long</code>.
 	 */
 	public static final long readLELong(byte[] buffer, int offset) {
-		return ((long) buffer[offset] & 0xFF) << 0 |
-						((long) buffer[offset + 1] & 0xFF) << 8 |
-						((long) buffer[offset + 2] & 0xFF) << 16 |
-						((long) buffer[offset + 3] & 0xFF) << 24 |
-						((long) buffer[offset + 4] & 0xFF) << 32 |
-						((long) buffer[offset + 5] & 0xFF) << 40 |
-						((long) buffer[offset + 6] & 0xFF) << 48 |
-						((long) buffer[offset + 7] & 0xFF) << 56;
+		return ((long) buffer[offset] & 0xFF) << 0 | ((long) buffer[offset + 1] & 0xFF) << 8 | ((long) buffer[offset + 2] & 0xFF) << 16 | ((long) buffer[offset + 3] & 0xFF) << 24 | ((long) buffer[offset + 4] & 0xFF) << 32 | ((long) buffer[offset + 5] & 0xFF) << 40 | ((long) buffer[offset + 6] & 0xFF) << 48 | ((long) buffer[offset + 7] & 0xFF) << 56;
 	}
 
 	/**

@@ -28,7 +28,7 @@ import javax.swing.UIManager;
 
 /** Provides a standard editor field. */
 public class EditorField extends JFormattedTextField implements ActionListener {
-	private String	mHint;
+	private String mHint;
 
 	/**
 	 * Creates a new {@link EditorField}.

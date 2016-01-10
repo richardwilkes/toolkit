@@ -52,38 +52,40 @@ import java.util.UUID;
 
 import javax.xml.stream.XMLStreamException;
 
-/** Provides easy loading and saving of objects that have been annotated with appropriate xml tags. */
+/**
+ * Provides easy loading and saving of objects that have been annotated with appropriate xml tags.
+ */
 public class Xml {
 	@Localize("The root object has not been annotated.")
-	private static String		ROOT_NOT_TAGGED;
+	private static String	ROOT_NOT_TAGGED;
 	@Localize("The root tag \"%s\" was not present.")
-	private static String		TAG_NOT_FOUND;
+	private static String	TAG_NOT_FOUND;
 	@Localize("%s has not been annotated.")
-	private static String		NOT_TAGGED;
+	private static String	NOT_TAGGED;
 	@Localize("%s is not an array.")
-	private static String		NOT_ARRAY;
+	private static String	NOT_ARRAY;
 	@Localize("Unable to create object for collection tag '%s'.")
 	@Localize(locale = "ru", value = "Невозможно создать объект для получения тэга '%s'.")
 	@Localize(locale = "de", value = "Kann Objekt für Sammlungs-Tag '%s' nicht erstellen.")
 	@Localize(locale = "es", value = "Imposible crear el objeto para la colección de etiquetas '%s'.")
-	private static String		UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION;
+	private static String	UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION;
 	@Localize("The tag '%s' is from an older version and cannot be loaded.")
 	@Localize(locale = "ru", value = "Тег '%s' относится к более старой версии и не может быть загружен.")
 	@Localize(locale = "de", value = "Das Tag '%s' ist von einer älteren Version und kann nicht geladen werden.")
 	@Localize(locale = "es", value = "La etiqueta '%s' es de una versión anterior y no puede cargarse.")
-	private static String		TOO_OLD;
+	private static String	TOO_OLD;
 	@Localize("The tag '%s' is from a newer version and cannot be loaded.")
 	@Localize(locale = "ru", value = "Тег '%s' относится к более новой версии и не может быть загружен.")
 	@Localize(locale = "de", value = "Das Tag '%s' ist von einer neueren Version und kann nicht geladen werden.")
 	@Localize(locale = "es", value = "La etiqueta '%s' es de una versión demasiado nueva y no puede cargarse.")
-	private static String		TOO_NEW;
+	private static String	TOO_NEW;
 
 	static {
 		Localization.initialize();
 	}
 
 	/** The attribute that will be used for a tag's version. */
-	public static final String	ATTR_VERSION	= "version";			//$NON-NLS-1$
+	public static final String ATTR_VERSION = "version"; //$NON-NLS-1$
 
 	/**
 	 * Loads the contents of an xml file into the specified object.

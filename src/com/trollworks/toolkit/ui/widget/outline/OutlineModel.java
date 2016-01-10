@@ -29,7 +29,7 @@ import javax.swing.undo.StateEditable;
 public class OutlineModel implements SelectionOwner, StateEditable {
 	private static final String				UNDO_KEY_ROWS			= "Rows";		//$NON-NLS-1$
 	private static final String				UNDO_KEY_SELECTION		= "Selection";	//$NON-NLS-1$
-	private static final String				UNDO_KEY_SORT_CONFIG	= "SortConfig"; //$NON-NLS-1$
+	private static final String				UNDO_KEY_SORT_CONFIG	= "SortConfig";	//$NON-NLS-1$
 	/** The current config version. */
 	public static final int					CONFIG_VERSION			= 4;
 	private ArrayList<OutlineModelListener>	mListeners;

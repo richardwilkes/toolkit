@@ -22,7 +22,7 @@ import java.util.Map.Entry;
 
 /** A {@link TreeRow} which can have children. */
 public class TreeContainerRow extends TreeRow {
-	private ArrayList<TreeRow>	mChildren	= new ArrayList<>();
+	private ArrayList<TreeRow> mChildren = new ArrayList<>();
 
 	@Override
 	protected TreeContainerRow clone() {

@@ -825,7 +825,9 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
 		return mVSBTopCorner;
 	}
 
-	/** @param component The {@link Component} to place on the top side of the vertical scroll bar. */
+	/**
+	 * @param component The {@link Component} to place on the top side of the vertical scroll bar.
+	 */
 	public void setVSBTopCorner(Component component) {
 		if (mVSBTopCorner != component) {
 			if (mVSBTopCorner != null) {

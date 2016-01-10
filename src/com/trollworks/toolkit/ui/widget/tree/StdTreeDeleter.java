@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 /** Provides a standard implementation of {@link Deletable} for the {@link TreePanel}. */
 public class StdTreeDeleter implements Deletable {
-	private TreePanel	mPanel;
+	private TreePanel mPanel;
 
 	/**
 	 * Creates a new {@link StdTreeDeleter}.

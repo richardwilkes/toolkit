@@ -16,10 +16,8 @@ import java.awt.Rectangle;
 /** The possible alignments. */
 public enum Alignment {
 	/** The left/top alignment. */
-	LEFT_TOP,
-	/** The center alignment. */
-	CENTER,
-	/** The right/bottom alignment. */
+	LEFT_TOP, /** The center alignment. */
+	CENTER, /** The right/bottom alignment. */
 	RIGHT_BOTTOM;
 
 	/**

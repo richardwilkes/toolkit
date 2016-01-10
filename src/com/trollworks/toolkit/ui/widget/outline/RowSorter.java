@@ -19,7 +19,7 @@ import java.util.List;
 
 /** Sorts rows by the sort sequence specified in the associated columns. */
 public class RowSorter implements Comparator<Row> {
-	private Column[]	mSortingOrder;
+	private Column[] mSortingOrder;
 
 	private RowSorter(ArrayList<Column> columns) {
 		int count = columns.size();
