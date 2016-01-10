@@ -13,6 +13,7 @@ package com.trollworks.toolkit.ui.menu.file;
 
 import com.trollworks.toolkit.ui.widget.DataModifiedListener;
 import com.trollworks.toolkit.utility.FileProxy;
+import com.trollworks.toolkit.utility.FileType;
 
 import java.io.File;
 
@@ -31,10 +32,10 @@ public interface Saveable extends FileProxy {
 	void removeDataModifiedListener(DataModifiedListener listener);
 
 	/**
-	 * @return The file extensions allowed when saving. The first one should be used if the user
+	 * @return The {@link FileType}s allowed when saving. The first one should be used if the user
 	 *         doesn't specify an extension.
 	 */
-	String[] getAllowedExtensions();
+	FileType[] getAllowedFileTypes();
 
 	/** @return The name the user will recognize as the name of the object being saved. */
 	String getSaveTitle();

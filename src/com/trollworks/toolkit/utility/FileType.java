@@ -11,23 +11,53 @@
 
 package com.trollworks.toolkit.utility;
 
+import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.image.StdImageSet;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /** Describes a file. */
 public class FileType {
-	private static final ArrayList<FileType>	TYPES		= new ArrayList<>();
-	private static HashMap<String, StdImageSet>	ICONSET_MAP	= new HashMap<>();
-	private String								mExtension;
-	private StdImageSet							mIconSet;
-	private String								mDescription;
-	private String								mReferenceURL;
-	private FileProxyCreator					mFileProxyCreator;
-	private boolean								mAllowOpen;
+	@Localize("HTML Files")
+	private static String	HTML_FILES;
+	@Localize("PDF Files")
+	private static String	PDF_FILES;
+	@Localize("PNG Files")
+	private static String	PNG_FILES;
+	@Localize("GIF Files")
+	private static String	GIF_FILES;
+	@Localize("JPEG Files")
+	private static String	JPEG_FILES;
+
+	static {
+		Localization.initialize();
+	}
+
+	/** The PNG extension. */
+	public static final String				PNG_EXTENSION	= "png";			//$NON-NLS-1$
+	/** The GIF extension. */
+	public static final String				GIF_EXTENSION	= "gif";			//$NON-NLS-1$
+	/** The JPEG extension. */
+	public static final String				JPEG_EXTENSION	= "jpg";			//$NON-NLS-1$
+	/** The PDF extension. */
+	public static final String				PDF_EXTENSION	= "pdf";			//$NON-NLS-1$
+	/** The HTML extension. */
+	public static final String				HTML_EXTENSION	= "html";			//$NON-NLS-1$
+	private static final List<FileType>		TYPES			= new ArrayList<>();
+	private static Map<String, FileType>	EXTENSION_MAP	= new HashMap<>();
+	private String							mExtension;
+	private StdImageSet						mIconSet;
+	private String							mDescription;
+	private String							mReferenceURL;
+	private FileProxyCreator				mFileProxyCreator;
+	private boolean							mAllowOpen;
 
 	/**
 	 * Registers a new {@link FileType}, replacing any existing entry for the specified extension.
@@ -48,8 +78,53 @@ public class FileType {
 				break;
 			}
 		}
-		TYPES.add(new FileType(extension, iconset, description, referenceURL, fileProxyCreator, allowOpen));
-		ICONSET_MAP.put(extension, iconset);
+		FileType fileType = new FileType(extension, iconset, description, referenceURL, fileProxyCreator, allowOpen);
+		TYPES.add(fileType);
+		EXTENSION_MAP.put(extension, fileType);
+	}
+
+	public static void registerPdf(FileProxyCreator creator, boolean allowOpen) {
+		FileType.register(PDF_EXTENSION, null, PDF_FILES, "https://www.adobe.com/devnet/pdf/pdf_reference_archive.html", creator, allowOpen); //$NON-NLS-1$
+	}
+
+	public static void registerHtml(FileProxyCreator creator, boolean allowOpen) {
+		register(HTML_EXTENSION, null, HTML_FILES, "http://www.w3.org/TR/html", creator, allowOpen); //$NON-NLS-1$
+	}
+
+	public static void registerPng(FileProxyCreator creator, boolean allowOpen) {
+		register(PNG_EXTENSION, null, PNG_FILES, "http://www.libpng.org/pub/png/pngdocs.html", creator, allowOpen); //$NON-NLS-1$
+	}
+
+	public static void registerGif(FileProxyCreator creator, boolean allowOpen) {
+		register(GIF_EXTENSION, null, GIF_FILES, "http://www.w3.org/Graphics/GIF/spec-gif89a.txt", creator, allowOpen); //$NON-NLS-1$
+	}
+
+	public static void registerJpeg(FileProxyCreator creator, boolean allowOpen) {
+		register(JPEG_EXTENSION, null, JPEG_FILES, "http://www.w3.org/Graphics/JPEG/jfif3.pdf", creator, allowOpen); //$NON-NLS-1$
+	}
+
+	public static FileNameExtensionFilter getPdfFilter() {
+		return new FileNameExtensionFilter(PDF_FILES, PDF_EXTENSION);
+	}
+
+	public static FileNameExtensionFilter getHtmlFilter() {
+		return new FileNameExtensionFilter(HTML_FILES, HTML_EXTENSION, "htm"); //$NON-NLS-1$
+	}
+
+	public static FileNameExtensionFilter getPngFilter() {
+		return new FileNameExtensionFilter(PNG_FILES, PNG_EXTENSION);
+	}
+
+	public static FileNameExtensionFilter getGifFilter() {
+		return new FileNameExtensionFilter(GIF_FILES, GIF_EXTENSION);
+	}
+
+	public static FileNameExtensionFilter getJpegFilter() {
+		return new FileNameExtensionFilter(JPEG_FILES, JPEG_EXTENSION, "jpeg"); //$NON-NLS-1$
+	}
+
+	public static final FileType getByExtension(String extension) {
+		return extension != null ? EXTENSION_MAP.get(normalizeExtension(extension)) : null;
 	}
 
 	/**
@@ -82,15 +157,47 @@ public class FileType {
 		return openable.toArray(new FileType[openable.size()]);
 	}
 
+	/**
+	 * @param nameForAggregate The name for a {@link FileNameExtensionFilter} that will open them
+	 *            all, or <code>null</code>.
+	 * @return {@link FileNameExtensionFilter}s for all of the registered {@link FileType}s that can
+	 *         be opened.
+	 */
+	public static final FileNameExtensionFilter[] getOpenableFileFilters(String nameForAggregate) {
+		return getFileFilters(nameForAggregate, getOpenable());
+	}
+
 	/** @return All of the registered {@link FileType} extensions that can be opened. */
 	public static final String[] getOpenableExtensions() {
-		ArrayList<String> openable = new ArrayList<>();
+		List<String> openable = new ArrayList<>();
 		for (FileType type : TYPES) {
-			if (type.mAllowOpen) {
+			if (type.allowOpen()) {
 				openable.add(type.getExtension());
 			}
 		}
 		return openable.toArray(new String[openable.size()]);
+	}
+
+	/**
+	 * @param nameForAggregate The name for a {@link FileNameExtensionFilter} that includes all
+	 *            types, or <code>null</code>.
+	 * @return {@link FileNameExtensionFilter}s for all of the specified {@link FileType}s.
+	 */
+	public static final FileNameExtensionFilter[] getFileFilters(String nameForAggregate, FileType... fileType) {
+		List<FileNameExtensionFilter> filters = new ArrayList<>();
+		if (fileType != null && fileType.length > 0) {
+			if (nameForAggregate != null && !nameForAggregate.isEmpty()) {
+				String[] extensions = new String[fileType.length];
+				for (int i = 0; i < fileType.length; i++) {
+					extensions[i] = fileType[i].getExtension();
+				}
+				filters.add(new FileNameExtensionFilter(nameForAggregate, extensions));
+			}
+			for (FileType one : fileType) {
+				filters.add(new FileNameExtensionFilter(one.getDescription(), one.getExtension()));
+			}
+		}
+		return filters.toArray(new FileNameExtensionFilter[filters.size()]);
 	}
 
 	/**
@@ -115,10 +222,12 @@ public class FileType {
 	 */
 	public static StdImageSet getIconsForFileExtension(String extension) {
 		if (extension != null) {
-			extension = normalizeExtension(extension);
-			StdImageSet icons = ICONSET_MAP.get(extension);
-			if (icons != null) {
-				return icons;
+			FileType fileType = getByExtension(extension);
+			if (fileType != null) {
+				StdImageSet icons = fileType.getIcons();
+				if (icons != null) {
+					return icons;
+				}
 			}
 			return StdImage.FILE;
 		}

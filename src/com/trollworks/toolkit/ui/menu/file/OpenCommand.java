@@ -22,11 +22,12 @@ import com.trollworks.toolkit.utility.FileProxy;
 import com.trollworks.toolkit.utility.FileType;
 import com.trollworks.toolkit.utility.Localization;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /** Provides the "Open..." command. */
 public class OpenCommand extends Command implements OpenFilesHandler {
@@ -34,7 +35,9 @@ public class OpenCommand extends Command implements OpenFilesHandler {
 	@Localize(locale = "ru", value = "Открыть\u2026")
 	@Localize(locale = "de", value = "Öffnen\u2026")
 	@Localize(locale = "es", value = "Abrir\u2026")
-	private static String OPEN;
+	private static String	OPEN;
+	@Localize("All Readable Files")
+	private static String	ALL_READABLE_FILES;
 
 	static {
 		Localization.initialize();
@@ -62,19 +65,17 @@ public class OpenCommand extends Command implements OpenFilesHandler {
 
 	/** Ask the user to open a file. */
 	public static void open() {
-		Component focus = getFocusOwner();
-		open(StdFileDialog.choose(focus, true, OPEN, null, null, FileType.getOpenableExtensions()));
+		open(StdFileDialog.showOpenDialog(getFocusOwner(), OPEN, FileType.getOpenableFileFilters(ALL_READABLE_FILES)));
 	}
 
 	/** @param file The file to open. */
 	public static void open(File file) {
 		if (file != null) {
 			try {
-				String name = file.getName();
 				FileProxy proxy = AppWindow.findFileProxy(file);
 				if (proxy == null) {
 					for (FileType type : FileType.getOpenable()) {
-						if (name.matches(StdFileDialog.createExtensionMatcher(type.getExtension()))) {
+						if (new FileNameExtensionFilter(type.getDescription(), type.getExtension()).accept(file)) {
 							proxy = type.getFileProxyCreator().create(file);
 							break;
 						}

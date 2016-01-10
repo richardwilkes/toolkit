@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.io.server.http;
 
+import com.trollworks.toolkit.utility.FileType;
+
 /** Some standard mime types and utilities. */
 @SuppressWarnings("nls")
 public class MimeTypes {
@@ -44,7 +46,7 @@ public class MimeTypes {
 			case "css":
 				return CSS;
 			case "htm":
-			case "html":
+			case FileType.HTML_EXTENSION:
 				return HTML;
 			case "xml":
 				return XML;
@@ -54,12 +56,12 @@ public class MimeTypes {
 			case "text":
 			case "asc":
 				return TEXT;
-			case "gif":
+			case FileType.GIF_EXTENSION:
 				return GIF;
-			case "jpg":
+			case FileType.JPEG_EXTENSION:
 			case "jpeg":
 				return JPEG;
-			case "png":
+			case FileType.PNG_EXTENSION:
 				return PNG;
 			case "mp3":
 				return MP3;
@@ -77,7 +79,7 @@ public class MimeTypes {
 				return SWF;
 			case "js":
 				return JAVASCRIPT;
-			case "pdf":
+			case FileType.PDF_EXTENSION:
 				return PDF;
 			case "doc":
 				return MSWORD;

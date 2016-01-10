@@ -17,20 +17,21 @@ import com.trollworks.toolkit.ui.menu.file.RecentFilesMenu;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.NewerDataFileVersionException;
 import com.trollworks.toolkit.utility.PathUtils;
-import com.trollworks.toolkit.utility.Platform;
+import com.trollworks.toolkit.utility.Preferences;
 
 import java.awt.Component;
 import java.awt.Dialog;
-import java.awt.FileDialog;
 import java.awt.Frame;
-import java.awt.Window;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.text.MessageFormat;
-import java.util.HashSet;
+import java.util.List;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /** Provides standard file dialog handling. */
-public class StdFileDialog implements FilenameFilter {
+public class StdFileDialog {
 	@Localize("Unable to open \"{0}\".")
 	@Localize(locale = "ru", value = "Невозможно открыть \"{0}\".")
 	@Localize(locale = "de", value = "Kann Datei \"{0}\" nicht öffnen.")
@@ -46,48 +47,128 @@ public class StdFileDialog implements FilenameFilter {
 		Localization.initialize();
 	}
 
-	private HashSet<String> mFileNameMatchers = new HashSet<>();
+	private static final String	MODULE		= "StdFileDialog";	//$NON-NLS-1$
+	private static final String	LAST_DIR	= "LastDir";		//$NON-NLS-1$
 
 	/**
 	 * Creates a new {@link StdFileDialog}.
 	 *
-	 * @param comp The {@link Component} to use for determining the parent {@link Frame} or
-	 *            {@link Dialog}.
-	 * @param open Whether an 'open' or a 'save' dialog is presented.
-	 * @param title The title to use.
-	 * @param dir The initial directory to start with. May be <code>null</code>.
-	 * @param name The initial file name to start with. May be <code>null</code>.
-	 * @param extension One or more file name extensions that should be allowed to be opened or
-	 *            saved. If this is a save dialog, the first extension will be forced if none match
-	 *            what the user has supplied.
+	 * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
+	 * @param title The title to use. May be <code>null</code>.
+	 * @param filters The file filters to make available. If there are none, then the
+	 *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
 	 * @return The chosen {@link File} or <code>null</code>.
 	 */
-	public static File choose(Component comp, boolean open, String title, String dir, String name, String... extension) {
-		StdFileDialog filter = new StdFileDialog(extension);
-		FileDialog dialog;
-		Window window = WindowUtils.getWindowForComponent(comp);
-		int mode = open ? FileDialog.LOAD : FileDialog.SAVE;
-		if (window instanceof Frame) {
-			dialog = new FileDialog((Frame) window, title, mode);
-		} else {
-			dialog = new FileDialog((Dialog) window, title, mode);
-		}
-		dialog.setFilenameFilter(filter);
-		dialog.setDirectory(dir);
-		dialog.setFile(name);
-		dialog.setVisible(true);
-		String result = dialog.getFile();
-		if (result != null) {
-			if (filter.accept(null, result)) {
-				File file = new File(dialog.getDirectory(), result);
-				RecentFilesMenu.addRecent(file);
-				return file;
-			} else if (!open) {
-				File file = new File(dialog.getDirectory(), PathUtils.enforceExtension(result, extension[0]));
-				RecentFilesMenu.addRecent(file);
-				return file;
+	public static File showOpenDialog(Component comp, String title, List<FileNameExtensionFilter> filters) {
+		return showOpenDialog(comp, title, filters != null ? filters.toArray(new FileNameExtensionFilter[filters.size()]) : null);
+	}
+
+	/**
+	 * Creates a new {@link StdFileDialog}.
+	 *
+	 * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
+	 * @param title The title to use. May be <code>null</code>.
+	 * @param filters The file filters to make available. If there are none, then the
+	 *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
+	 * @return The chosen {@link File} or <code>null</code>.
+	 */
+	public static File showOpenDialog(Component comp, String title, FileNameExtensionFilter... filters) {
+		Preferences prefs = Preferences.getInstance();
+		String last = prefs.getStringValue(MODULE, LAST_DIR);
+		if (last != null) {
+			if (!new File(last).isDirectory()) {
+				last = null;
 			}
-			showCannotOpenMsg(comp, result, null);
+		}
+		JFileChooser dialog = new JFileChooser(last);
+		dialog.setDialogTitle(title);
+		if (filters != null && filters.length > 0) {
+			dialog.setAcceptAllFileFilterUsed(false);
+			for (FileNameExtensionFilter filter : filters) {
+				dialog.addChoosableFileFilter(filter);
+			}
+		} else {
+			dialog.setAcceptAllFileFilterUsed(true);
+		}
+		int result = dialog.showOpenDialog(comp);
+		if (result != JFileChooser.ERROR_OPTION) {
+			File current = dialog.getCurrentDirectory();
+			if (current != null) {
+				prefs.setValue(MODULE, LAST_DIR, current.getAbsolutePath());
+			}
+		}
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File file = dialog.getSelectedFile();
+			RecentFilesMenu.addRecent(file);
+			return file;
+		}
+		return null;
+	}
+
+	/**
+	 * Creates a new {@link StdFileDialog}.
+	 *
+	 * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
+	 * @param title The title to use. May be <code>null</code>.
+	 * @param suggestedFile The suggested file to save as. May be <code>null</code>.
+	 * @param filters The file filters to make available. If there are none, then the
+	 *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
+	 * @return The chosen {@link File} or <code>null</code>.
+	 */
+	public static File showSaveDialog(Component comp, String title, File suggestedFile, List<FileNameExtensionFilter> filters) {
+		return showSaveDialog(comp, title, suggestedFile, filters != null ? filters.toArray(new FileNameExtensionFilter[filters.size()]) : null);
+	}
+
+	/**
+	 * Creates a new {@link StdFileDialog}.
+	 *
+	 * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
+	 * @param title The title to use. May be <code>null</code>.
+	 * @param suggestedFile The suggested file to save as. May be <code>null</code>.
+	 * @param filters The file filters to make available. If there are none, then the
+	 *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
+	 * @return The chosen {@link File} or <code>null</code>.
+	 */
+	public static File showSaveDialog(Component comp, String title, File suggestedFile, FileNameExtensionFilter... filters) {
+		Preferences prefs = Preferences.getInstance();
+		String last = suggestedFile != null ? suggestedFile.getParent() : prefs.getStringValue(MODULE, LAST_DIR);
+		if (last != null) {
+			if (!new File(last).isDirectory()) {
+				last = null;
+			}
+		}
+		JFileChooser dialog = new JFileChooser(last);
+		dialog.setDialogTitle(title);
+		if (filters != null && filters.length > 0) {
+			dialog.setAcceptAllFileFilterUsed(false);
+			for (FileNameExtensionFilter filter : filters) {
+				dialog.addChoosableFileFilter(filter);
+			}
+		} else {
+			dialog.setAcceptAllFileFilterUsed(true);
+		}
+		int result = dialog.showSaveDialog(comp);
+		if (result != JFileChooser.ERROR_OPTION) {
+			File current = dialog.getCurrentDirectory();
+			if (current != null) {
+				prefs.setValue(MODULE, LAST_DIR, current.getAbsolutePath());
+			}
+		}
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File file = dialog.getSelectedFile();
+			if (filters != null) {
+				FileFilter fileFilter = dialog.getFileFilter();
+				if (!fileFilter.accept(file)) {
+					for (FileNameExtensionFilter filter : filters) {
+						if (filter == fileFilter) {
+							file = new File(file.getParentFile(), PathUtils.enforceExtension(file.getName(), filter.getExtensions()[0]));
+							break;
+						}
+					}
+				}
+			}
+			RecentFilesMenu.addRecent(file);
+			return file;
 		}
 		return null;
 	}
@@ -107,46 +188,5 @@ public class StdFileDialog implements FilenameFilter {
 			}
 			WindowUtils.showError(comp, MessageFormat.format(UNABLE_TO_OPEN, name));
 		}
-	}
-
-	/**
-	 * Convenience for creating a regular expression that will match a file extension. This takes
-	 * care of turning on case-insensitivity for those platforms that need it.
-	 *
-	 * @param extension A file name extension.
-	 * @return The regular expression that will match the specified file name extension.
-	 */
-	public static String createExtensionMatcher(String extension) {
-		StringBuilder builder = new StringBuilder();
-
-		if (Platform.isMacintosh() || Platform.isWindows()) {
-			builder.append("(?i)"); //$NON-NLS-1$
-		}
-		builder.append("^.*\\"); //$NON-NLS-1$
-		if (!extension.startsWith(".")) { //$NON-NLS-1$
-			builder.append('.');
-		}
-		builder.append(extension);
-		builder.append('$');
-		return builder.toString();
-	}
-
-	private StdFileDialog(String... extension) {
-		for (String one : extension) {
-			mFileNameMatchers.add(createExtensionMatcher(one));
-		}
-	}
-
-	@Override
-	public boolean accept(File dir, String name) {
-		if (mFileNameMatchers.isEmpty()) {
-			return true;
-		}
-		for (String one : mFileNameMatchers) {
-			if (name.matches(one)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

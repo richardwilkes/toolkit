@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui.image;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
+import com.trollworks.toolkit.utility.FileType;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.Color;
@@ -560,7 +561,7 @@ public class StdImage extends BufferedImage implements Icon {
 		try (ImageOutputStream stream = ImageIO.createImageOutputStream(os)) {
 			StdImage img = getToolkitImage(image);
 			ImageTypeSpecifier type = ImageTypeSpecifier.createFromRenderedImage(img);
-			writer = ImageIO.getImageWriters(type, "png").next(); //$NON-NLS-1$
+			writer = ImageIO.getImageWriters(type, FileType.PNG_EXTENSION).next();
 			IIOMetadata metaData = writer.getDefaultImageMetadata(type, null);
 			try {
 				Node root = metaData.getAsTree("javax_imageio_png_1.0"); //$NON-NLS-1$
