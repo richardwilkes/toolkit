@@ -210,10 +210,10 @@ public class Colors {
 			String[] color = buffer.split(",");
 			if (color.length == 3 || color.length == 4) {
 				red = parseColorComponent(color[0]);
-				green = parseColorComponent(color[0]);
-				blue = parseColorComponent(color[0]);
+				green = parseColorComponent(color[1]);
+				blue = parseColorComponent(color[2]);
 				if (color.length == 4) {
-					alpha = parseColorComponent(color[0]);
+					alpha = parseColorComponent(color[3]);
 				} else {
 					alpha = 255;
 				}
