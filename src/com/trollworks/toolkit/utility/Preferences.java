@@ -43,7 +43,7 @@ public class Preferences {
 		Localization.initialize();
 	}
 
-	private static final String	VERSION_KEY	= "Version";	//$NON-NLS-1$
+	public static final String	VERSION_KEY	= "Version";	//$NON-NLS-1$
 	private static final String	DOT			= ".";			//$NON-NLS-1$
 	private static Preferences	INSTANCE	= null;
 	private boolean				mDirty;
