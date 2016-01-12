@@ -65,7 +65,7 @@ public class SaveAsCommand extends Command {
 			return new File[0];
 		}
 		String path = saveable.getPreferredSavePath();
-		File result = StdFileDialog.showSaveDialog(UIUtilities.getComponentForDialog(saveable), SAVE_AS, new File(path), FileType.getFileFilters(null, saveable.getAllowedFileTypes()));
+		File result = StdFileDialog.showSaveDialog(UIUtilities.getComponentForDialog(saveable), SAVE_AS, path != null ? new File(path) : null, FileType.getFileFilters(null, saveable.getAllowedFileTypes()));
 		File[] files = result != null ? saveable.saveTo(result) : new File[0];
 		for (File file : files) {
 			RecentFilesMenu.addRecent(file);
