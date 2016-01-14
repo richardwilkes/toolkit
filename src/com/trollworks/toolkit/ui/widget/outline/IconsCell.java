@@ -11,23 +11,25 @@
 
 package com.trollworks.toolkit.ui.widget.outline;
 
-import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.utility.text.NumericComparator;
 
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.SwingConstants;
 
-/** Represents image cells in a {@link Outline}. */
-public class ImageCell implements Cell {
+/** Represents icons in an {@link Outline}. */
+public class IconsCell implements Cell {
 	private int	mHAlignment;
 	private int	mVAlignment;
 
 	/** Create a new image cell renderer. */
-	public ImageCell() {
+	public IconsCell() {
 		this(SwingConstants.CENTER, SwingConstants.CENTER);
 	}
 
@@ -37,7 +39,7 @@ public class ImageCell implements Cell {
 	 * @param hAlignment The image horizontal alignment to use.
 	 * @param vAlignment The image vertical alignment to use.
 	 */
-	public ImageCell(int hAlignment, int vAlignment) {
+	public IconsCell(int hAlignment, int vAlignment) {
 		mHAlignment = hAlignment;
 		mVAlignment = vAlignment;
 	}
@@ -46,7 +48,6 @@ public class ImageCell implements Cell {
 	public int compare(Column column, Row one, Row two) {
 		String oneText = one.getDataAsText(column);
 		String twoText = two.getDataAsText(column);
-
 		return NumericComparator.caselessCompareStrings(oneText != null ? oneText : "", twoText != null ? twoText : ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -58,55 +59,76 @@ public class ImageCell implements Cell {
 	 * @return The icon, if any.
 	 */
 	@SuppressWarnings("static-method")
-	protected StdImage getIcon(Row row, Column column, boolean selected, boolean active) {
+	protected List<RetinaIcon> getIcons(Row row, Column column, boolean selected, boolean active) {
+		List<RetinaIcon> list = new ArrayList<>();
 		Object data = row.getData(column);
-		return data instanceof StdImage ? (StdImage) data : null;
+		if (data instanceof RetinaIcon) {
+			list.add((RetinaIcon) data);
+		} else if (data instanceof List) {
+			for (Object obj : (List<?>) data) {
+				if (obj instanceof RetinaIcon) {
+					list.add((RetinaIcon) obj);
+				}
+			}
+		}
+		return list;
 	}
 
 	@Override
 	public void drawCell(Outline outline, Graphics gc, Rectangle bounds, Row row, Column column, boolean selected, boolean active) {
 		if (row != null) {
-			StdImage image = getIcon(row, column, selected, active);
-
-			if (image != null) {
+			List<RetinaIcon> images = getIcons(row, column, selected, active);
+			if (!images.isEmpty()) {
 				int x = bounds.x;
 				int y = bounds.y;
-
 				if (mHAlignment != SwingConstants.LEFT) {
-					int hDelta = bounds.width - image.getWidth();
-
+					int hDelta = bounds.width;
+					for (RetinaIcon img : images) {
+						hDelta -= img.getIconWidth();
+					}
 					if (mHAlignment == SwingConstants.CENTER) {
 						hDelta /= 2;
 					}
 					x += hDelta;
 				}
-
 				if (mVAlignment != SwingConstants.TOP) {
-					int vDelta = bounds.height - image.getHeight();
-
+					int max = 0;
+					for (RetinaIcon img : images) {
+						int height = img.getIconHeight();
+						if (max < height) {
+							max = height;
+						}
+					}
+					int vDelta = bounds.height - max;
 					if (mVAlignment == SwingConstants.CENTER) {
 						vDelta /= 2;
 					}
 					y += vDelta;
 				}
-
-				gc.drawImage(image, x, y, null);
+				for (RetinaIcon img : images) {
+					img.paintIcon(outline, gc, x, y);
+					x += img.getIconWidth();
+				}
 			}
 		}
 	}
 
 	@Override
 	public int getPreferredWidth(Row row, Column column) {
-		Object data = row != null ? row.getData(column) : null;
-
-		return data instanceof StdImage ? ((StdImage) data).getWidth() : 0;
+		int width = 0;
+		for (RetinaIcon img : getIcons(row, column, false, true)) {
+			width += img.getIconWidth();
+		}
+		return width;
 	}
 
 	@Override
 	public int getPreferredHeight(Row row, Column column) {
-		Object data = row != null ? row.getData(column) : null;
-
-		return data instanceof StdImage ? ((StdImage) data).getHeight() : 0;
+		int height = 0;
+		for (RetinaIcon img : getIcons(row, column, false, true)) {
+			height += img.getIconHeight();
+		}
+		return height;
 	}
 
 	@Override

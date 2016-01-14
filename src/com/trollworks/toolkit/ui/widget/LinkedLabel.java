@@ -11,7 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget;
 
-import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.ui.RetinaIcon;
 
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
@@ -34,7 +34,7 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
 	 *
 	 * @param icon The icon to be displayed.
 	 */
-	public LinkedLabel(StdImage icon) {
+	public LinkedLabel(RetinaIcon icon) {
 		super(icon);
 		mColor = getForeground();
 	}
@@ -45,7 +45,7 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
 	 * @param icon The icon to be displayed.
 	 * @param link The {@link JComponent} to pair with.
 	 */
-	public LinkedLabel(StdImage icon, JComponent link) {
+	public LinkedLabel(RetinaIcon icon, JComponent link) {
 		super(icon);
 		mColor = getForeground();
 		setLink(link);
