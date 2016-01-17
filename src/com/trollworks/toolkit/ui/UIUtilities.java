@@ -402,8 +402,8 @@ public class UIUtilities {
 			focus = focusManager.getFocusOwner();
 		}
 		if (focus != null) {
-			focus.dispatchEvent(new FocusEvent(focus, FocusEvent.FOCUS_LOST, false, null));
-			focus.dispatchEvent(new FocusEvent(focus, FocusEvent.FOCUS_GAINED, false, null));
+			focus.dispatchEvent(new FocusEvent(focus, FocusEvent.FOCUS_LOST, false, focus.getParent()));
+			focus.dispatchEvent(new FocusEvent(focus, FocusEvent.FOCUS_GAINED, false, focus.getParent()));
 		}
 	}
 
