@@ -16,6 +16,7 @@ import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
 import com.trollworks.toolkit.ui.layout.PrecisionLayoutData;
+import com.trollworks.toolkit.ui.widget.Commitable;
 import com.trollworks.toolkit.ui.widget.EditorField;
 import com.trollworks.toolkit.ui.widget.LinkedLabel;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
@@ -460,7 +461,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 	 * @return The {@link PrintService} selected by the user.
 	 */
 	public PrintService accept(PrintRequestAttributeSet set) {
-		UIUtilities.forceFocusToAccept();
+		Commitable.sendCommitToFocusOwner();
 		mService = UIUtilities.getTypedSelectedItemFromCombo(mServices).getObject();
 		if (mOrientation != null) {
 			PrintUtilities.setPageOrientation(set, (PageOrientation) mOrientation.getSelectedItem());

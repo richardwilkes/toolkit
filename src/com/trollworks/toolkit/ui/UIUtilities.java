@@ -20,11 +20,9 @@ import java.awt.Dialog;
 import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
@@ -389,22 +387,6 @@ public class UIUtilities {
 			}
 		}
 		return offscreen;
-	}
-
-	/**
-	 * Sends a 'focus lost' followed by a 'focus gained' event to the current keyboard focus, with
-	 * the intent that it will cause it to commit any changes it had pending.
-	 */
-	public static void forceFocusToAccept() {
-		KeyboardFocusManager focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-		Component focus = focusManager.getPermanentFocusOwner();
-		if (focus == null) {
-			focus = focusManager.getFocusOwner();
-		}
-		if (focus != null) {
-			focus.dispatchEvent(new FocusEvent(focus, FocusEvent.FOCUS_LOST, false, focus.getParent()));
-			focus.dispatchEvent(new FocusEvent(focus, FocusEvent.FOCUS_GAINED, false, focus.getParent()));
-		}
 	}
 
 	/**

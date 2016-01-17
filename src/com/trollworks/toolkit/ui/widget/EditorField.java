@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 /** Provides a standard editor field. */
-public class EditorField extends JFormattedTextField implements ActionListener {
+public class EditorField extends JFormattedTextField implements ActionListener, Commitable {
 	private String mHint;
 
 	/**
@@ -104,6 +104,11 @@ public class EditorField extends JFormattedTextField implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		attemptCommit();
+	}
+
+	@Override
+	public void attemptCommit() {
 		try {
 			commitEdit();
 		} catch (ParseException exception) {

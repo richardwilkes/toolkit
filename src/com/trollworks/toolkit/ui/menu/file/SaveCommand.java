@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui.menu.file;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
+import com.trollworks.toolkit.ui.widget.Commitable;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.event.ActionEvent;
@@ -54,6 +55,7 @@ public class SaveCommand extends Command {
 	@Override
 	public void adjust() {
 		Saveable saveable = getTarget(Saveable.class);
+		Commitable.sendCommitToFocusOwner();
 		setEnabled(saveable != null ? saveable.isModified() : false);
 	}
 
@@ -69,7 +71,7 @@ public class SaveCommand extends Command {
 	 * @return <code>false</code> if a save was cancelled or failed.
 	 */
 	public static boolean attemptSave(Collection<Saveable> saveables) {
-		UIUtilities.forceFocusToAccept();
+		Commitable.sendCommitToFocusOwner();
 		for (Saveable saveable : saveables) {
 			if (!attemptSaveInternal(saveable)) {
 				return false;
@@ -86,7 +88,7 @@ public class SaveCommand extends Command {
 	 */
 	public static boolean attemptSave(Saveable saveable) {
 		if (saveable != null) {
-			UIUtilities.forceFocusToAccept();
+			Commitable.sendCommitToFocusOwner();
 			return attemptSaveInternal(saveable);
 		}
 		return true;
