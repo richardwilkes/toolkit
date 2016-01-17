@@ -65,6 +65,7 @@ public class EditorField extends JFormattedTextField implements ActionListener {
 			addPropertyChangeListener("value", listener); //$NON-NLS-1$
 		}
 		addActionListener(this);
+		setFocusLostBehavior(COMMIT_OR_REVERT);
 
 		// Reset the selection colors back to what is standard for text fields.
 		// This is necessary, since (at least on the Mac) JFormattedTextField
