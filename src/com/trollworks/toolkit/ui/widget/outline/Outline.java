@@ -456,17 +456,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 											gc.drawImage(image, colBounds.x - image.getWidth(), 1 + colBounds.y + (colBounds.height - image.getHeight()) / 2, null);
 										}
 									}
-									// Under some circumstances, the width calculations
-									// for cells are off by one pixel when printing...
-									// so far, the only way I've found to compensate is
-									// to put this hack in.
-									if (isPrinting) {
-										colBounds.width++;
-									}
 									col.drawRowCell(this, gc, colBounds, row, rowSelected, active);
-									if (isPrinting) {
-										colBounds.width--;
-									}
 									if (showIndent && isFirstCol) {
 										colBounds.x -= shift;
 										colBounds.width += shift;
