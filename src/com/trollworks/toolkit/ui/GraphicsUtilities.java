@@ -35,6 +35,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.print.PrinterGraphics;
 
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -395,11 +396,15 @@ public class GraphicsUtilities {
 	 * On the Mac (and perhaps Windows now, too), the graphics context will have a scale transform
 	 * of 2x if being drawn onto a retina display.
 	 *
-	 * @param gc The {@link Graphics2D} to check.
-	 * @return <code>true</code> if the specified graphics context is set to a 2x scale transform.
+	 * @param gc The {@link Graphics} to check.
+	 * @return <code>true</code> if the specified graphics context is set to a 2x scale transform or
+	 *         is a printer context.
 	 */
-	public static boolean isRetinaDisplay(Graphics2D gc) {
-		AffineTransform transform = gc.getFontRenderContext().getTransform();
+	public static boolean isRetinaDisplay(Graphics gc) {
+		if (gc instanceof PrinterGraphics) {
+			return true;
+		}
+		AffineTransform transform = ((Graphics2D) gc).getFontRenderContext().getTransform();
 		return transform.getScaleX() == 2 && transform.getScaleY() == 2;
 	}
 }
