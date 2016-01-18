@@ -23,15 +23,34 @@ import java.awt.Rectangle;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-/** A border consisting of a frame, drop shadow, and optional title. */
+/** A border consisting of a frame, optional drop shadow, and optional title. */
 public class BoxedDropShadowBorder implements Border {
-	private static BoxedDropShadowBorder	INSTANCE	= null;
-	private String							mTitle;
-	private Font							mFont;
+	private String	mTitle;
+	private Font	mFont;
+	private boolean	mDropShadow;
 
-	/** Creates a new border without a title. */
+	/** Creates a new border with a drop shadow and without a title. */
 	public BoxedDropShadowBorder() {
-		super();
+		mDropShadow = true;
+	}
+
+	/**
+	 * Creates a new border without a title.
+	 *
+	 * @param hasDropShadow <code>true</code> if a drop shadow should be used.
+	 */
+	public BoxedDropShadowBorder(boolean hasDropShadow) {
+		mDropShadow = hasDropShadow;
+	}
+
+	/**
+	 * Creates a new border with a title and drop shadow.
+	 *
+	 * @param font The font to use.
+	 * @param title The title to use.
+	 */
+	public BoxedDropShadowBorder(Font font, String title) {
+		this(font, title, true);
 	}
 
 	/**
@@ -39,19 +58,21 @@ public class BoxedDropShadowBorder implements Border {
 	 *
 	 * @param font The font to use.
 	 * @param title The title to use.
+	 * @param hasDropShadow <code>true</code> if a drop shadow should be used.
 	 */
-	public BoxedDropShadowBorder(Font font, String title) {
+	public BoxedDropShadowBorder(Font font, String title, boolean hasDropShadow) {
 		super();
 		mFont = font;
 		mTitle = title;
+		mDropShadow = hasDropShadow;
 	}
 
-	/** @return The shared, non-titled border. */
-	public static synchronized BoxedDropShadowBorder get() {
-		if (INSTANCE == null) {
-			INSTANCE = new BoxedDropShadowBorder();
-		}
-		return INSTANCE;
+	public boolean hasDropShadow() {
+		return mDropShadow;
+	}
+
+	public void setHasDropShadow(boolean hasDropShadow) {
+		mDropShadow = hasDropShadow;
 	}
 
 	/** @return The title. */
@@ -66,7 +87,8 @@ public class BoxedDropShadowBorder implements Border {
 
 	@Override
 	public Insets getBorderInsets(Component component) {
-		Insets insets = new Insets(1, 1, 3, 3);
+		int rightBottom = mDropShadow ? 3 : 1;
+		Insets insets = new Insets(1, 1, rightBottom, rightBottom);
 		if (mTitle != null) {
 			insets.top += TextDrawing.getPreferredSize(mFont, mTitle).height;
 		}
@@ -75,25 +97,29 @@ public class BoxedDropShadowBorder implements Border {
 
 	@Override
 	public boolean isBorderOpaque() {
-		return false;
+		return !mDropShadow;
 	}
 
 	@Override
 	public void paintBorder(Component component, Graphics gc, int x, int y, int width, int height) {
 		Color savedColor = gc.getColor();
-		gc.setColor(Color.lightGray);
-		gc.drawLine(x + width - 2, y + 2, x + width - 2, y + height - 1);
-		gc.drawLine(x + width - 1, y + 2, x + width - 1, y + height - 1);
-		gc.drawLine(x + 2, y + height - 2, x + width - 1, y + height - 2);
-		gc.drawLine(x + 2, y + height - 1, x + width - 1, y + height - 1);
+		int rightBottomIndent = 1;
+		if (mDropShadow) {
+			gc.setColor(Color.lightGray);
+			gc.drawLine(x + width - 2, y + 2, x + width - 2, y + height - 1);
+			gc.drawLine(x + width - 1, y + 2, x + width - 1, y + height - 1);
+			gc.drawLine(x + 2, y + height - 2, x + width - 1, y + height - 2);
+			gc.drawLine(x + 2, y + height - 1, x + width - 1, y + height - 1);
+			rightBottomIndent = 3;
+		}
 		gc.setColor(Color.black);
-		gc.drawRect(x, y, width - 3, height - 3);
+		gc.drawRect(x, y, width - rightBottomIndent, height - rightBottomIndent);
 		if (mTitle != null) {
 			Font savedFont = gc.getFont();
 			gc.setFont(mFont);
 			int th = TextDrawing.getPreferredSize(mFont, mTitle).height;
-			Rectangle bounds = new Rectangle(x, y, width - 3, th + 2);
-			gc.fillRect(x, y, width - 3, th + 1);
+			Rectangle bounds = new Rectangle(x, y, width - rightBottomIndent, th + 2);
+			gc.fillRect(x, y, width - rightBottomIndent, th + 1);
 			gc.setColor(Color.white);
 			TextDrawing.draw(gc, bounds, mTitle, SwingConstants.CENTER, SwingConstants.TOP);
 			gc.setFont(savedFont);
