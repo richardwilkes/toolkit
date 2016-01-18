@@ -38,6 +38,14 @@ public class RetinaIcon implements Icon {
 		mRetina = retina;
 	}
 
+	public StdImage getNormal() {
+		return mNormal;
+	}
+
+	public StdImage getRetina() {
+		return mRetina;
+	}
+
 	public RetinaIcon getOverlay() {
 		return mOverlay;
 	}
@@ -48,18 +56,18 @@ public class RetinaIcon implements Icon {
 
 	@Override
 	public void paintIcon(Component component, Graphics g, int x, int y) {
-		Graphics2D gc = (Graphics2D) g;
-		if (mRetina != null && GraphicsUtilities.isRetinaDisplay(gc)) {
+		if (mRetina != null && GraphicsUtilities.isRetinaDisplay(g)) {
+			Graphics2D gc = (Graphics2D) g.create();
 			gc.translate(x, y);
 			gc.scale(0.5, 0.5);
-			gc.drawImage(mRetina, 0, 0, component);
-			gc.scale(2, 2);
-			gc.translate(-x, -y);
+			// Using an offset of -1,-1 as printing to PDF seems to be offset slightly otherwise
+			gc.drawImage(mRetina, -1, -1, component);
+			gc.dispose();
 		} else {
-			gc.drawImage(mNormal, x, y, component);
+			g.drawImage(mNormal, x, y, component);
 		}
 		if (mOverlay != null) {
-			mOverlay.paintIcon(component, gc, x, y);
+			mOverlay.paintIcon(component, g, x, y);
 		}
 	}
 
