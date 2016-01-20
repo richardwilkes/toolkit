@@ -11,7 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget.outline;
 
-import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.ui.RetinaIcon;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -29,7 +29,7 @@ public class Column implements Transferable {
 	private boolean					mVisible;
 	private int						mWidth;
 	private String					mName;
-	private StdImage				mIcon;
+	private RetinaIcon				mIcon;
 	private int						mID;
 	private String					mToolTipText;
 
@@ -40,7 +40,7 @@ public class Column implements Transferable {
 	 * @param name The name of the column.
 	 */
 	public Column(int id, String name) {
-		this(id, name, (StdImage) null);
+		this(id, name, (RetinaIcon) null);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class Column implements Transferable {
 	 * @param name The name of the column.
 	 * @param icon The icon to use in the header of the column, if any.
 	 */
-	public Column(int id, String name, StdImage icon) {
+	public Column(int id, String name, RetinaIcon icon) {
 		this(id, name, icon, name);
 	}
 
@@ -84,7 +84,7 @@ public class Column implements Transferable {
 	 * @param icon The icon to use in the header of the column, if any.
 	 * @param toolTipText The tooltip text to use for this column.
 	 */
-	public Column(int id, String name, StdImage icon, String toolTipText) {
+	public Column(int id, String name, RetinaIcon icon, String toolTipText) {
 		this(id, name, icon, toolTipText, new TextCell());
 	}
 
@@ -109,7 +109,7 @@ public class Column implements Transferable {
 	 * @param toolTipText The tooltip text to use for this column.
 	 * @param rowCell The cell to use for rows.
 	 */
-	public Column(int id, String name, StdImage icon, String toolTipText, Cell rowCell) {
+	public Column(int id, String name, RetinaIcon icon, String toolTipText, Cell rowCell) {
 		mName = name == null || name.length() == 0 ? " " : name; //$NON-NLS-1$
 		mIcon = icon;
 		mToolTipText = toolTipText;
@@ -270,12 +270,12 @@ public class Column implements Transferable {
 	}
 
 	/** @return The icon used in the header of this column, if any. */
-	public StdImage getIcon() {
+	public RetinaIcon getIcon() {
 		return mIcon;
 	}
 
 	/** @param icon The icon used in the header of this column. */
-	public void setIcon(StdImage icon) {
+	public void setIcon(RetinaIcon icon) {
 		mIcon = icon;
 	}
 

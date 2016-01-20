@@ -12,8 +12,9 @@
 package com.trollworks.toolkit.ui.widget.outline;
 
 import com.trollworks.toolkit.ui.Colors;
+import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.TextDrawing;
-import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.ui.widget.Icons;
 import com.trollworks.toolkit.utility.text.NumericComparator;
 
 import java.awt.Color;
@@ -87,9 +88,9 @@ public class TextCell implements Cell {
 	@Override
 	public int getPreferredWidth(Row row, Column column) {
 		int width = TextDrawing.getPreferredSize(getFont(row, column), getPresentationText(row, column)).width;
-		StdImage icon = row == null ? column.getIcon() : row.getIcon(column);
+		RetinaIcon icon = getIcon(row, column);
 		if (icon != null) {
-			width += icon.getWidth() + H_MARGIN;
+			width += icon.getIconWidth() + H_MARGIN;
 		}
 		return H_MARGIN_WIDTH + width;
 	}
@@ -99,18 +100,27 @@ public class TextCell implements Cell {
 		Font font = getFont(row, column);
 		int minHeight = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
 		int height = TextDrawing.getPreferredSize(font, getPresentationText(row, column)).height;
-		StdImage icon = row == null ? column.getIcon() : row.getIcon(column);
-		if (icon != null) {
-			int iconHeight = icon.getHeight();
-			if (height < iconHeight) {
-				height = iconHeight;
-			}
+		if (row == null) {
+			height = adjustHeight(column.getIcon(), height);
+		} else {
+			height = adjustHeight(Icons.getDisclosure(true, true), height);
+			height = adjustHeight(row.getIcon(column), height);
 		}
 		return minHeight > height ? minHeight : height;
 	}
 
+	private static int adjustHeight(RetinaIcon icon, int height) {
+		if (icon != null) {
+			int iconHeight = icon.getIconHeight();
+			if (height < iconHeight) {
+				height = iconHeight;
+			}
+		}
+		return height;
+	}
+
 	@SuppressWarnings("static-method")
-	public StdImage getIcon(Row row, Column column) {
+	public RetinaIcon getIcon(Row row, Column column) {
 		return row == null ? column.getIcon() : row.getIcon(column);
 	}
 
@@ -122,8 +132,8 @@ public class TextCell implements Cell {
 		int totalHeight = getPreferredHeight(row, column);
 		int lineHeight = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
 		int lineCount = 0;
-		StdImage icon = getIcon(row, column);
-		int left = icon == null ? 0 : icon.getWidth() + H_MARGIN;
+		RetinaIcon icon = getIcon(row, column);
+		int left = icon == null ? 0 : icon.getIconWidth() + H_MARGIN;
 		int cellWidth = bounds.width - (left + H_MARGIN_WIDTH);
 		int vAlignment = getVAlignment();
 		int hAlignment = getHAlignment();
@@ -134,14 +144,14 @@ public class TextCell implements Cell {
 			int iy = bounds.y;
 
 			if (vAlignment != SwingConstants.TOP) {
-				int ivDelta = bounds.height - icon.getHeight();
+				int ivDelta = bounds.height - icon.getIconHeight();
 
 				if (vAlignment == SwingConstants.CENTER) {
 					ivDelta /= 2;
 				}
 				iy += ivDelta;
 			}
-			gc.drawImage(icon, bounds.x + H_MARGIN, iy, null);
+			icon.paintIcon(outline, gc, bounds.x + H_MARGIN, iy);
 		}
 
 		gc.setFont(font);

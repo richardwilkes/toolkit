@@ -348,9 +348,9 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
 					x += getRowDepth(row) * DISCLOSURE_WIDTH;
 					if (x + DISCLOSURE_WIDTH > clip.x) {
 						if (!mModel.isLeafRow(row)) {
-							RetinaIcon icon = Icons.getDisclosure(mModel.isRowDisclosed(row), mLastMouseY >= y && mLastMouseY < y + DISCLOSURE_HEIGHT && mLastMouseX >= x && mLastMouseX < x + DISCLOSURE_WIDTH);
+							RetinaIcon icon = Icons.getDisclosure(mModel.isRowDisclosed(row), mLastMouseY >= y && mLastMouseY < y + height && mLastMouseX >= x && mLastMouseX < x + DISCLOSURE_WIDTH);
 							gc.setClip(clip.intersection(new Rectangle(x, y, DISCLOSURE_WIDTH, height)));
-							icon.paintIcon(this, gc, x, y);
+							icon.paintIcon(this, gc, x, y + (height - DISCLOSURE_HEIGHT) / 2);
 						}
 					}
 					x += DISCLOSURE_WIDTH;

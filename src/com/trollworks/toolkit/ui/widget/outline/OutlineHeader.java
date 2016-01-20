@@ -196,7 +196,14 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 		gc.setColor(getTopDividerColor());
 		gc.drawLine(clip.x, height - 1, clip.x + clip.width, height - 1);
 		Color dividerColor = mOwner.getDividerColor();
-		for (Column col : mOwner.getModel().getColumns()) {
+		List<Column> columns = mOwner.getModel().getColumns();
+		int count = columns.size();
+		int maxDivider = count - 1;
+		while (maxDivider > 0 && !columns.get(maxDivider).isVisible()) {
+			maxDivider--;
+		}
+		for (int i = 0; i < count; i++) {
+			Column col = columns.get(i);
 			if (col.isVisible()) {
 				bounds.width = col.getWidth();
 				if (clip.intersects(bounds)) {
@@ -212,7 +219,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 					}
 				}
 				bounds.x += bounds.width;
-				if (drawDividers) {
+				if (drawDividers && i < maxDivider) {
 					gc.setColor(dividerColor);
 					gc.drawLine(bounds.x, bounds.y, bounds.x, bounds.y + bounds.height);
 					bounds.x++;

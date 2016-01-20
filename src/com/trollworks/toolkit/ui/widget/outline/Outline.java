@@ -15,6 +15,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
+import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.Selection;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.StdImage;
@@ -23,6 +24,7 @@ import com.trollworks.toolkit.ui.menu.edit.SelectAllCapable;
 import com.trollworks.toolkit.ui.menu.edit.Undoable;
 import com.trollworks.toolkit.ui.print.PrintUtilities;
 import com.trollworks.toolkit.ui.widget.ActionPanel;
+import com.trollworks.toolkit.ui.widget.Icons;
 import com.trollworks.toolkit.ui.widget.dock.Dock;
 import com.trollworks.toolkit.ui.widget.dock.DockableTransferable;
 import com.trollworks.toolkit.utility.Geometry;
@@ -119,10 +121,6 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	private String					mDefaultConfig;
 	private boolean					mUseBanding;
 	private ArrayList<Column>		mSavedColumns;
-	private StdImage				mDownTriangle;
-	private StdImage				mDownTriangleRoll;
-	private StdImage				mRightTriangle;
-	private StdImage				mRightTriangleRoll;
 	private Row						mRollRow;
 	private Row						mDragParentRow;
 	private int						mDragChildInsertIndex;
@@ -186,14 +184,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		mDividerColor = Color.LIGHT_GRAY;
 		mSelectionChangedCommand = CMD_SELECTION_CHANGED;
 		mPotentialContentSizeChangeCommand = CMD_POTENTIAL_CONTENT_SIZE_CHANGE;
-		mDownTriangle = StdImage.DOWN_TRIANGLE;
-		mDownTriangleRoll = StdImage.DOWN_TRIANGLE_ROLL;
-		mRightTriangle = StdImage.RIGHT_TRIANGLE;
-		mRightTriangleRoll = StdImage.RIGHT_TRIANGLE_ROLL;
 		mDragChildInsertIndex = -1;
 		mLastRow = -1;
 		mModel.setShowIndent(showIndent);
-		mModel.setIndentWidth(mDownTriangle.getWidth());
+		mModel.setIndentWidth(Icons.getDisclosure(true, true).getIconWidth());
 
 		setActionCommand(CMD_OPEN_SELECTION);
 		setBackground(Color.white);
@@ -219,8 +213,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
 	/** Causes the {@link RowFilter} to be re-applied. */
 	public void reapplyRowFilter() {
-		mModel.reapplyRowFilter();
-		revalidateView();
+		if (mModel.getRowFilter() != null) {
+			mModel.reapplyRowFilter();
+			revalidateView();
+		}
 	}
 
 	/** @return The underlying data model. */
@@ -452,8 +448,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 										colBounds.x += shift;
 										colBounds.width -= shift;
 										if (row.canHaveChildren()) {
-											StdImage image = getDisclosureControl(row);
-											gc.drawImage(image, colBounds.x - image.getWidth(), 1 + colBounds.y + (colBounds.height - image.getHeight()) / 2, null);
+											RetinaIcon disclosure = getDisclosureControl(row);
+											disclosure.paintIcon(this, gc, colBounds.x - disclosure.getIconWidth(), colBounds.y + (colBounds.height - disclosure.getIconHeight()) / 2);
 										}
 									}
 									col.drawRowCell(this, gc, colBounds, row, rowSelected, active);
@@ -528,7 +524,13 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 			int x = insets.left;
 			bottom += top;
 			gc.setColor(mDividerColor);
-			for (Column col : mModel.getColumns()) {
+			List<Column> columns = mModel.getColumns();
+			int count = columns.size() - 1;
+			while (count > 0 && !columns.get(count).isVisible()) {
+				count--;
+			}
+			for (int i = 0; i < count; i++) {
+				Column col = columns.get(i);
 				if (col.isVisible()) {
 					x += col.getWidth();
 					gc.drawLine(x, top, x, bottom);
@@ -812,8 +814,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		return -1;
 	}
 
-	private StdImage getDisclosureControl(Row row) {
-		return row.isOpen() ? row == mRollRow ? mDownTriangleRoll : mDownTriangle : row == mRollRow ? mRightTriangleRoll : mRightTriangle;
+	private RetinaIcon getDisclosureControl(Row row) {
+		return Icons.getDisclosure(row.isOpen(), row == mRollRow);
 	}
 
 	/**
@@ -825,9 +827,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 	 */
 	public boolean overDisclosureControl(int x, int y, Column column, Row row) {
 		if (showIndent() && column != null && row != null && row.canHaveChildren() && mModel.isFirstColumn(column)) {
-			StdImage image = getDisclosureControl(row);
 			int right = getInsets().left + mModel.getIndentWidth(row, column);
-			return x <= right && x >= right - image.getWidth();
+			return x <= right && x >= right - getDisclosureControl(row).getIconWidth();
 		}
 		return false;
 	}

@@ -11,7 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget.outline;
 
-import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.ui.RetinaIcon;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +69,7 @@ public abstract class Row {
 	 * @return The icon for the specified column, or <code>null</code>.
 	 */
 	@SuppressWarnings("static-method")
-	public StdImage getIcon(Column column) {
+	public RetinaIcon getIcon(Column column) {
 		return null;
 	}
 
