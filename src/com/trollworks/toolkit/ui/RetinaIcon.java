@@ -60,8 +60,7 @@ public class RetinaIcon implements Icon {
 			Graphics2D gc = (Graphics2D) g.create();
 			gc.translate(x, y);
 			gc.scale(0.5, 0.5);
-			// Using an offset of -1,-1 as printing to PDF seems to be offset slightly otherwise
-			gc.drawImage(mRetina, -1, -1, component);
+			gc.drawImage(mRetina, 0, 0, component);
 			gc.dispose();
 		} else {
 			g.drawImage(mNormal, x, y, component);

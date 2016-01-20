@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui.border;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.TextDrawing;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -71,24 +72,26 @@ public class TitledBorder implements Border {
 	}
 
 	@Override
-	public void paintBorder(Component component, Graphics gc, int x, int y, int width, int height) {
+	public void paintBorder(Component component, Graphics graphics, int x, int y, int width, int height) {
+		Graphics2D gc = (Graphics2D) graphics;
 		Color savedColor = gc.getColor();
 		gc.setColor(Color.BLACK);
-		gc.drawRect(x, y, width - 1, height - 1);
 		if (GraphicsUtilities.isRetinaDisplay(gc)) {
 			// This should not be necessary, but the top & left edges are too thin otherwise
 			Graphics2D gc2 = (Graphics2D) gc.create();
 			gc2.translate(x, y);
 			gc2.scale(0.5, 0.5);
-			gc2.drawLine(1, 0, 1, (height - 1) * 2);
-			gc2.drawLine(1, 1, (width - 1) * 2, 1);
+			gc2.setStroke(new BasicStroke(2));
+			gc2.drawRect(x + 1, y + 1, (width - 1) * 2, (height - 1) * 2);
+			gc2.dispose();
+		} else {
+			gc.drawRect(x, y, width - 1, height - 1);
 		}
 		if (mTitle != null) {
 			Font savedFont = gc.getFont();
 			gc.setFont(mFont);
-			int th = TextDrawing.getPreferredSize(mFont, mTitle).height;
-			Rectangle bounds = new Rectangle(x, y, width - 1, th + 2);
-			gc.fillRect(x, y, width - 1, th + 1);
+			Rectangle bounds = new Rectangle(x + 1, y + 1, width - 2, TextDrawing.getPreferredSize(mFont, mTitle).height + 1);
+			gc.fill(bounds);
 			gc.setColor(Color.WHITE);
 			TextDrawing.draw(gc, bounds, mTitle, SwingConstants.CENTER, SwingConstants.TOP);
 			gc.setFont(savedFont);
