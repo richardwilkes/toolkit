@@ -15,6 +15,7 @@ import com.apple.eawt.AboutHandler;
 import com.apple.eawt.AppEvent.AboutEvent;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.App;
+import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.menu.file.CloseHandler;
@@ -22,8 +23,6 @@ import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.Localization;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -87,16 +86,13 @@ public class AboutCommand extends Command implements AboutHandler {
 		AboutWindow(String title, JPanel content) {
 			super(title);
 			getContentPane().add(content);
-			pack();
 			addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent windowEvent) {
 					mWindow = null;
 				}
 			});
-			Rectangle bounds = getGraphicsConfiguration().getBounds();
-			Dimension size = getSize();
-			setLocation(bounds.x + (bounds.width - size.width) / 2, bounds.y + (bounds.height - size.height) / 3);
+			GraphicsUtilities.packAndCenterWindowOn(this, null);
 			setVisible(true);
 			setResizable(false);
 		}
