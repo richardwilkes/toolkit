@@ -83,24 +83,24 @@ public class FileType {
 		EXTENSION_MAP.put(extension, fileType);
 	}
 
-	public static void registerPdf(FileProxyCreator creator, boolean allowOpen) {
-		FileType.register(PDF_EXTENSION, null, PDF_FILES, "https://www.adobe.com/devnet/pdf/pdf_reference_archive.html", creator, allowOpen); //$NON-NLS-1$
+	public static void registerPdf(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen) {
+		register(PDF_EXTENSION, iconset, PDF_FILES, "https://www.adobe.com/devnet/pdf/pdf_reference_archive.html", creator, allowOpen); //$NON-NLS-1$
 	}
 
-	public static void registerHtml(FileProxyCreator creator, boolean allowOpen) {
-		register(HTML_EXTENSION, null, HTML_FILES, "http://www.w3.org/TR/html", creator, allowOpen); //$NON-NLS-1$
+	public static void registerHtml(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen) {
+		register(HTML_EXTENSION, iconset, HTML_FILES, "http://www.w3.org/TR/html", creator, allowOpen); //$NON-NLS-1$
 	}
 
-	public static void registerPng(FileProxyCreator creator, boolean allowOpen) {
-		register(PNG_EXTENSION, null, PNG_FILES, "http://www.libpng.org/pub/png/pngdocs.html", creator, allowOpen); //$NON-NLS-1$
+	public static void registerPng(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen) {
+		register(PNG_EXTENSION, iconset, PNG_FILES, "http://www.libpng.org/pub/png/pngdocs.html", creator, allowOpen); //$NON-NLS-1$
 	}
 
-	public static void registerGif(FileProxyCreator creator, boolean allowOpen) {
-		register(GIF_EXTENSION, null, GIF_FILES, "http://www.w3.org/Graphics/GIF/spec-gif89a.txt", creator, allowOpen); //$NON-NLS-1$
+	public static void registerGif(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen) {
+		register(GIF_EXTENSION, iconset, GIF_FILES, "http://www.w3.org/Graphics/GIF/spec-gif89a.txt", creator, allowOpen); //$NON-NLS-1$
 	}
 
-	public static void registerJpeg(FileProxyCreator creator, boolean allowOpen) {
-		register(JPEG_EXTENSION, null, JPEG_FILES, "http://www.w3.org/Graphics/JPEG/jfif3.pdf", creator, allowOpen); //$NON-NLS-1$
+	public static void registerJpeg(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen) {
+		register(JPEG_EXTENSION, iconset, JPEG_FILES, "http://www.w3.org/Graphics/JPEG/jfif3.pdf", creator, allowOpen); //$NON-NLS-1$
 	}
 
 	public static FileNameExtensionFilter getPdfFilter() {
