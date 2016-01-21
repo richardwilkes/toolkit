@@ -178,6 +178,28 @@ public class GraphicsUtilities {
 		return gd.getDefaultConfiguration().getBounds();
 	}
 
+	public static void packAndCenterWindowOn(Window window, Component centeredOn) {
+		window.pack();
+		Dimension prefSize = window.getPreferredSize();
+		Dimension minSize = window.getMinimumSize();
+		int width = Math.max(prefSize.width, minSize.width);
+		int height = Math.max(prefSize.height, minSize.height);
+		int x;
+		int y;
+		if (centeredOn != null) {
+			Point where = centeredOn.getLocationOnScreen();
+			Dimension size = centeredOn.getSize();
+			x = where.x + (size.width - width) / 2;
+			y = where.y + (size.height - height) / 2;
+		} else {
+			Rectangle bounds = getMaximumWindowBounds(window);
+			x = bounds.x + (bounds.width - width) / 2;
+			y = bounds.y + (bounds.height - height) / 2;
+		}
+		window.setLocation(x, y);
+		forceOnScreen(window);
+	}
+
 	/**
 	 * Forces the specified window onscreen.
 	 *
