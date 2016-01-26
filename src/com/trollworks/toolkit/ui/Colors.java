@@ -20,8 +20,10 @@ import javax.swing.UIManager;
 /** Provides standardized color access. */
 @SuppressWarnings("nls")
 public class Colors {
-	private static final Map<String, String>	NAME_TO_RGB	= new HashMap<>();
-	private static final Map<String, String>	RGB_TO_NAME	= new HashMap<>();
+	private static final Color					DISABLED_BACKGROUND	= new Color(220, 220, 220);
+	private static final Color					SECONDARY_BANDING	= new Color(232, 255, 232);
+	private static final Map<String, String>	NAME_TO_RGB			= new HashMap<>();
+	private static final Map<String, String>	RGB_TO_NAME			= new HashMap<>();
 
 	static {
 		// The HTML / CSS color list
@@ -266,7 +268,7 @@ public class Colors {
 	 * @return The color.
 	 */
 	public static Color getBanding(boolean primary) {
-		return primary ? Color.WHITE : new Color(232, 255, 232);
+		return primary ? Color.WHITE : SECONDARY_BANDING;
 	}
 
 	/**
@@ -366,7 +368,7 @@ public class Colors {
 	 */
 	public static Color getListBackground(boolean selected, boolean active) {
 		if (selected) {
-			return UIManager.getColor(active ? "List.selectionBackground" : "List.selectionInactiveBackground");
+			return active ? UIManager.getColor("List.selectionBackground") : DISABLED_BACKGROUND;
 		}
 		return UIManager.getColor("List.background");
 	}
@@ -378,7 +380,7 @@ public class Colors {
 	 */
 	public static Color getListForeground(boolean selected, boolean active) {
 		if (selected) {
-			return UIManager.getColor(active ? "List.selectionForeground" : "List.selectionInactiveForeground");
+			return active ? UIManager.getColor("List.selectionForeground") : Color.BLACK;
 		}
 		return UIManager.getColor("List.foreground");
 	}
