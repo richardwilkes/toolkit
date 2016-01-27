@@ -268,13 +268,26 @@ public class StdImage extends BufferedImage implements Icon {
 	 * @return A buffered image.
 	 */
 	public static final StdImage getToolkitImage(Image image) {
+		return getToolkitImage(image, false);
+	}
+
+	/**
+	 * If the image passed in is already a {@link StdImage}, it is returned. However, if it is not,
+	 * then a new {@link StdImage} is created with the contents of the image and returned.
+	 *
+	 * @param image The image to work on.
+	 * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
+	 *            of creating a 1x1 pixel image.
+	 * @return A buffered image.
+	 */
+	public static final StdImage getToolkitImage(Image image, boolean returnNullOnFailure) {
 		if (image instanceof StdImage) {
 			return (StdImage) image;
 		}
-		return createOptimizedImage(image);
+		return createOptimizedImage(image, returnNullOnFailure);
 	}
 
-	private static StdImage createOptimizedImage(Image image) {
+	private static StdImage createOptimizedImage(Image image, boolean returnNullOnFailure) {
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		if (!tk.prepareImage(image, -1, -1, null)) {
 			while (true) {
@@ -297,6 +310,9 @@ public class StdImage extends BufferedImage implements Icon {
 			}
 		}
 		if (image == null) {
+			if (returnNullOnFailure) {
+				return null;
+			}
 			Log.error(new Exception(UNABLE_TO_LOAD_IMAGE));
 			return create(1, 1);
 		}
@@ -492,11 +508,23 @@ public class StdImage extends BufferedImage implements Icon {
 	 * Loads an optimized, buffered image from the specified file.
 	 *
 	 * @param file The file to load from.
-	 * @return The image, or <code>null</code> if it cannot be loaded.
+	 * @return The image.
 	 */
 	public static final StdImage loadImage(File file) {
+		return loadImage(file, false);
+	}
+
+	/**
+	 * Loads an optimized, buffered image from the specified file.
+	 *
+	 * @param file The file to load from.
+	 * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
+	 *            of creating a 1x1 pixel image.
+	 * @return The image.
+	 */
+	public static final StdImage loadImage(File file, boolean returnNullOnFailure) {
 		try {
-			return loadImage(file.toURI().toURL());
+			return loadImage(file.toURI().toURL(), returnNullOnFailure);
 		} catch (Exception exception) {
 			return null;
 		}
@@ -506,11 +534,23 @@ public class StdImage extends BufferedImage implements Icon {
 	 * Loads an optimized, buffered image from the specified URL.
 	 *
 	 * @param url The URL to load from.
-	 * @return The image, or <code>null</code> if it cannot be loaded.
+	 * @return The image.
 	 */
 	public static final StdImage loadImage(URL url) {
+		return loadImage(url, false);
+	}
+
+	/**
+	 * Loads an optimized, buffered image from the specified URL.
+	 *
+	 * @param url The URL to load from.
+	 * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
+	 *            of creating a 1x1 pixel image.
+	 * @return The image.
+	 */
+	public static final StdImage loadImage(URL url, boolean returnNullOnFailure) {
 		try {
-			return createOptimizedImage(ImageIO.read(url));
+			return createOptimizedImage(ImageIO.read(url), returnNullOnFailure);
 		} catch (Exception exception) {
 			return null;
 		}
@@ -520,11 +560,23 @@ public class StdImage extends BufferedImage implements Icon {
 	 * Loads an optimized, buffered image from the specified byte array.
 	 *
 	 * @param data The byte array to load from.
-	 * @return The image, or <code>null</code> if it cannot be loaded.
+	 * @return The image.
 	 */
 	public static final StdImage loadImage(byte[] data) {
+		return loadImage(data, false);
+	}
+
+	/**
+	 * Loads an optimized, buffered image from the specified byte array.
+	 *
+	 * @param data The byte array to load from.
+	 * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
+	 *            of creating a 1x1 pixel image.
+	 * @return The image.
+	 */
+	public static final StdImage loadImage(byte[] data, boolean returnNullOnFailure) {
 		try {
-			return createOptimizedImage(ImageIO.read(new ByteArrayInputStream(data)));
+			return createOptimizedImage(ImageIO.read(new ByteArrayInputStream(data)), returnNullOnFailure);
 		} catch (Exception exception) {
 			return null;
 		}
