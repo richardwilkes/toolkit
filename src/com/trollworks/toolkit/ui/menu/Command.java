@@ -23,6 +23,9 @@ import java.awt.event.InputEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
 /** Represents a command in the user interface. */
@@ -281,5 +284,33 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
 	/** @return The current focused window. */
 	public static final Window getFocusedWindow() {
 		return KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
+	}
+
+	public static void adjustMenuTree(JPopupMenu menu) {
+		for (Component component : menu.getComponents()) {
+			if (component instanceof JMenu) {
+				adjustMenuTree((JMenu) component);
+			} else if (component instanceof JMenuItem) {
+				JMenuItem item = (JMenuItem) component;
+				Action action = item.getAction();
+				if (action instanceof Command) {
+					((Command) action).adjust();
+				}
+			}
+		}
+	}
+
+	public static void adjustMenuTree(JMenu menu) {
+		for (Component component : menu.getMenuComponents()) {
+			if (component instanceof JMenu) {
+				adjustMenuTree((JMenu) component);
+			} else if (component instanceof JMenuItem) {
+				JMenuItem item = (JMenuItem) component;
+				Action action = item.getAction();
+				if (action instanceof Command) {
+					((Command) action).adjust();
+				}
+			}
+		}
 	}
 }
