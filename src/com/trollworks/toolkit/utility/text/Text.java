@@ -14,8 +14,6 @@ package com.trollworks.toolkit.utility.text;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.utility.Localization;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -81,34 +79,6 @@ public class Text {
 			return isVowel(text.charAt(0));
 		}
 		return false;
-	}
-
-	/**
-	 * @param data The bytes to compute a hash for.
-	 * @return A SHA-1 hash for the input data.
-	 */
-	public final static byte[] computeSHA1Hash(byte[] data) {
-		try {
-			return MessageDigest.getInstance("SHA-1").digest(data); //$NON-NLS-1$
-		} catch (final NoSuchAlgorithmException exception) {
-			throw new IllegalArgumentException(exception);
-		}
-	}
-
-	/**
-	 * @param data The bytes to compute a hash for.
-	 * @param offset The starting index.
-	 * @param length The number of bytes to use.
-	 * @return A SHA-1 hash for the input data.
-	 */
-	public final static byte[] computeSHA1Hash(byte[] data, int offset, int length) {
-		try {
-			MessageDigest sha1 = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
-			sha1.update(data, offset, length);
-			return sha1.digest();
-		} catch (final NoSuchAlgorithmException exception) {
-			throw new IllegalArgumentException(exception);
-		}
 	}
 
 	/**
