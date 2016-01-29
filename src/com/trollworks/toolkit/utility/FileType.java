@@ -17,6 +17,7 @@ import com.trollworks.toolkit.ui.image.StdImageSet;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ public class FileType {
 	private static String	GIF_FILES;
 	@Localize("JPEG Files")
 	private static String	JPEG_FILES;
+	@Localize("Image Files")
+	private static String	IMAGE_FILES;
 
 	static {
 		Localization.initialize();
@@ -121,6 +124,14 @@ public class FileType {
 
 	public static FileNameExtensionFilter getJpegFilter() {
 		return new FileNameExtensionFilter(JPEG_FILES, JPEG_EXTENSION, "jpeg"); //$NON-NLS-1$
+	}
+
+	public static FileNameExtensionFilter getImageFilter() {
+		List<String> extensions = new ArrayList<>();
+		extensions.addAll(Arrays.asList(getPngFilter().getExtensions()));
+		extensions.addAll(Arrays.asList(getJpegFilter().getExtensions()));
+		extensions.addAll(Arrays.asList(getGifFilter().getExtensions()));
+		return new FileNameExtensionFilter(IMAGE_FILES, extensions.toArray(new String[extensions.size()]));
 	}
 
 	public static final FileType getByExtension(String extension) {
