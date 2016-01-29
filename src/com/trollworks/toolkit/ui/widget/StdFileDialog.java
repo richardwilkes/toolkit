@@ -26,6 +26,7 @@ import java.io.File;
 import java.text.MessageFormat;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -73,6 +74,20 @@ public class StdFileDialog {
 	 * @return The chosen {@link File} or <code>null</code>.
 	 */
 	public static File showOpenDialog(Component comp, String title, FileNameExtensionFilter... filters) {
+		return showOpenDialog(comp, title, null, filters);
+	}
+
+	/**
+	 * Creates a new {@link StdFileDialog}.
+	 *
+	 * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
+	 * @param title The title to use. May be <code>null</code>.
+	 * @param accessoryPanel An extra panel to show. May be <code>null</code>.
+	 * @param filters The file filters to make available. If there are none, then the
+	 *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
+	 * @return The chosen {@link File} or <code>null</code>.
+	 */
+	public static File showOpenDialog(Component comp, String title, JComponent accessoryPanel, FileNameExtensionFilter... filters) {
 		Preferences prefs = Preferences.getInstance();
 		String last = prefs.getStringValue(MODULE, LAST_DIR);
 		if (last != null) {
@@ -89,6 +104,9 @@ public class StdFileDialog {
 			}
 		} else {
 			dialog.setAcceptAllFileFilterUsed(true);
+		}
+		if (accessoryPanel != null) {
+			dialog.setAccessory(accessoryPanel);
 		}
 		int result = dialog.showOpenDialog(comp);
 		if (result != JFileChooser.ERROR_OPTION) {
@@ -130,6 +148,21 @@ public class StdFileDialog {
 	 * @return The chosen {@link File} or <code>null</code>.
 	 */
 	public static File showSaveDialog(Component comp, String title, File suggestedFile, FileNameExtensionFilter... filters) {
+		return showSaveDialog(comp, title, suggestedFile, null, filters);
+	}
+
+	/**
+	 * Creates a new {@link StdFileDialog}.
+	 *
+	 * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
+	 * @param title The title to use. May be <code>null</code>.
+	 * @param suggestedFile The suggested file to save as. May be <code>null</code>.
+	 * @param accessoryPanel An extra panel to show. May be <code>null</code>.
+	 * @param filters The file filters to make available. If there are none, then the
+	 *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
+	 * @return The chosen {@link File} or <code>null</code>.
+	 */
+	public static File showSaveDialog(Component comp, String title, File suggestedFile, JComponent accessoryPanel, FileNameExtensionFilter... filters) {
 		Preferences prefs = Preferences.getInstance();
 		String last = suggestedFile != null ? suggestedFile.getParent() : prefs.getStringValue(MODULE, LAST_DIR);
 		if (last != null) {
@@ -146,6 +179,9 @@ public class StdFileDialog {
 			}
 		} else {
 			dialog.setAcceptAllFileFilterUsed(true);
+		}
+		if (accessoryPanel != null) {
+			dialog.setAccessory(accessoryPanel);
 		}
 		int result = dialog.showSaveDialog(comp);
 		if (result != JFileChooser.ERROR_OPTION) {
