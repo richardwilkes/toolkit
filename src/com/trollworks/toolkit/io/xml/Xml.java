@@ -13,21 +13,31 @@ package com.trollworks.toolkit.io.xml;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.annotation.XmlAttr;
-import com.trollworks.toolkit.annotation.XmlDefault;
-import com.trollworks.toolkit.annotation.XmlDefaultBoolean;
-import com.trollworks.toolkit.annotation.XmlDefaultByte;
-import com.trollworks.toolkit.annotation.XmlDefaultChar;
-import com.trollworks.toolkit.annotation.XmlDefaultDouble;
-import com.trollworks.toolkit.annotation.XmlDefaultFloat;
-import com.trollworks.toolkit.annotation.XmlDefaultInteger;
-import com.trollworks.toolkit.annotation.XmlDefaultLong;
-import com.trollworks.toolkit.annotation.XmlDefaultShort;
-import com.trollworks.toolkit.annotation.XmlEnumArrayAttr;
 import com.trollworks.toolkit.annotation.XmlNoSort;
 import com.trollworks.toolkit.annotation.XmlTag;
 import com.trollworks.toolkit.annotation.XmlTagMinimumVersion;
 import com.trollworks.toolkit.annotation.XmlTagVersion;
-import com.trollworks.toolkit.io.xml.XmlParser.Context;
+import com.trollworks.toolkit.io.xml.helper.XmlBooleanHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlByteHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlCharacterHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlDoubleHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlEnumHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlFloatHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlGenericHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlIntegerHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlLongHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlObjectHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlPrimitiveBooleanHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlPrimitiveByteHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlPrimitiveCharHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlPrimitiveDoubleHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlPrimitiveFloatHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlPrimitiveIntHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlPrimitiveLongHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlPrimitiveShortHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlShortHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlStringHelper;
+import com.trollworks.toolkit.io.xml.helper.XmlUUIDHelper;
 import com.trollworks.toolkit.utility.Introspection;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.workarounds.PathToUri;
@@ -36,19 +46,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URLConnection;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -84,8 +94,66 @@ public class Xml {
 		Localization.initialize();
 	}
 
+	private static final List<XmlObjectHelper>			HELPERS		= new ArrayList<>();
+	private static final Map<Class<?>, XmlObjectHelper>	HELPER_MAP	= new HashMap<>();
+
+	static {
+		registerHelper(XmlPrimitiveBooleanHelper.SINGLETON);
+		registerHelper(XmlPrimitiveByteHelper.SINGLETON);
+		registerHelper(XmlPrimitiveCharHelper.SINGLETON);
+		registerHelper(XmlPrimitiveShortHelper.SINGLETON);
+		registerHelper(XmlPrimitiveIntHelper.SINGLETON);
+		registerHelper(XmlPrimitiveLongHelper.SINGLETON);
+		registerHelper(XmlPrimitiveFloatHelper.SINGLETON);
+		registerHelper(XmlPrimitiveDoubleHelper.SINGLETON);
+
+		registerHelper(XmlBooleanHelper.SINGLETON);
+		registerHelper(XmlByteHelper.SINGLETON);
+		registerHelper(XmlCharacterHelper.SINGLETON);
+		registerHelper(XmlShortHelper.SINGLETON);
+		registerHelper(XmlIntegerHelper.SINGLETON);
+		registerHelper(XmlLongHelper.SINGLETON);
+		registerHelper(XmlFloatHelper.SINGLETON);
+		registerHelper(XmlDoubleHelper.SINGLETON);
+
+		registerHelper(XmlStringHelper.SINGLETON);
+		registerHelper(XmlEnumHelper.SINGLETON);
+		registerHelper(XmlUUIDHelper.SINGLETON);
+	}
+
 	/** The attribute that will be used for a tag's version. */
 	public static final String ATTR_VERSION = "version"; //$NON-NLS-1$
+
+	public static final void registerHelper(XmlObjectHelper helper) {
+		synchronized (HELPERS) {
+			HELPERS.add(helper);
+			HELPER_MAP.clear();
+		}
+	}
+
+	public static final void unregisterHelper(XmlObjectHelper helper) {
+		synchronized (HELPERS) {
+			HELPERS.remove(helper);
+			HELPER_MAP.clear();
+		}
+	}
+
+	private static final XmlObjectHelper getHelper(Class<?> clazz) {
+		synchronized (HELPERS) {
+			XmlObjectHelper helper = HELPER_MAP.get(clazz);
+			if (helper == null) {
+				helper = XmlGenericHelper.SINGLETON;
+				for (XmlObjectHelper one : HELPERS) {
+					if (one.canHandleClass(clazz)) {
+						helper = one;
+						break;
+					}
+				}
+				HELPER_MAP.put(clazz, helper);
+			}
+			return helper;
+		}
+	}
 
 	/**
 	 * Loads the contents of an xml file into the specified object.
@@ -94,7 +162,7 @@ public class Xml {
 	 * @param obj The object to load the xml data into.
 	 * @return The object that was passed in.
 	 */
-	public static <T> T load(File file, T obj) throws XMLStreamException {
+	public static final <T> T load(File file, T obj) throws XMLStreamException {
 		return load(file, obj, null);
 	}
 
@@ -106,7 +174,7 @@ public class Xml {
 	 * @param context Optional context for recording state while loading.
 	 * @return The object that was passed in.
 	 */
-	public static <T> T load(File file, T obj, Context context) throws XMLStreamException {
+	public static final <T> T load(File file, T obj, XmlParserContext context) throws XMLStreamException {
 		return load(file.toURI(), obj, context);
 	}
 
@@ -117,7 +185,7 @@ public class Xml {
 	 * @param obj The object to load the xml data into.
 	 * @return The object that was passed in.
 	 */
-	public static <T> T load(Path path, T obj) throws XMLStreamException {
+	public static final <T> T load(Path path, T obj) throws XMLStreamException {
 		return load(PathToUri.toFixedUri(path), obj, null);
 	}
 
@@ -129,7 +197,7 @@ public class Xml {
 	 * @param context Optional context for recording state while loading.
 	 * @return The object that was passed in.
 	 */
-	public static <T> T load(Path path, T obj, Context context) throws XMLStreamException {
+	public static final <T> T load(Path path, T obj, XmlParserContext context) throws XMLStreamException {
 		return load(PathToUri.toFixedUri(path), obj, context);
 	}
 
@@ -140,7 +208,7 @@ public class Xml {
 	 * @param obj The object to load the xml data into.
 	 * @return The object that was passed in.
 	 */
-	public static <T> T load(URI uri, T obj) throws XMLStreamException {
+	public static final <T> T load(URI uri, T obj) throws XMLStreamException {
 		return load(uri, obj, null);
 	}
 
@@ -152,7 +220,7 @@ public class Xml {
 	 * @param context Optional context for recording state while loading.
 	 * @return The object that was passed in.
 	 */
-	public static <T> T load(URI uri, T obj, Context context) throws XMLStreamException {
+	public static final <T> T load(URI uri, T obj, XmlParserContext context) throws XMLStreamException {
 		XmlTag xmlTag = obj.getClass().getAnnotation(XmlTag.class);
 		if (xmlTag == null) {
 			throw new XMLStreamException(ROOT_NOT_TAGGED);
@@ -172,10 +240,10 @@ public class Xml {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static void load(XmlParser xml, Object obj, Context context) throws XMLStreamException {
+	private static void load(XmlParser xml, Object obj, XmlParserContext context) throws XMLStreamException {
 		try {
 			if (context == null) {
-				context = new Context(xml);
+				context = new XmlParserContext(xml);
 			}
 			String marker = xml.getMarker();
 			if (obj instanceof TagWillLoad) {
@@ -197,82 +265,13 @@ public class Xml {
 				unmatchedAttributes.add(xml.getAttributeName(i));
 			}
 			unmatchedAttributes.remove(ATTR_VERSION);
-			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlAttr.class, XmlEnumArrayAttr.class)) {
+			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlAttr.class)) {
 				Introspection.makeFieldAccessible(field);
 				XmlAttr attr = field.getAnnotation(XmlAttr.class);
 				if (attr != null) {
 					String name = attr.value();
 					unmatchedAttributes.remove(name);
-					Class<?> type = field.getType();
-					if (type == boolean.class) {
-						field.setBoolean(obj, loadBooleanAttribute(xml, field, name));
-					} else if (type == byte.class) {
-						field.setByte(obj, loadByteAttribute(xml, field, name));
-					} else if (type == char.class) {
-						field.setChar(obj, loadCharAttribute(xml, field, name));
-					} else if (type == short.class) {
-						field.setShort(obj, loadShortAttribute(xml, field, name));
-					} else if (type == int.class) {
-						field.setInt(obj, loadIntegerAttribute(xml, field, name));
-					} else if (type == long.class) {
-						field.setLong(obj, loadLongAttribute(xml, field, name));
-					} else if (type == float.class) {
-						field.setFloat(obj, loadFloatAttribute(xml, field, name));
-					} else if (type == double.class) {
-						field.setDouble(obj, loadDoubleAttribute(xml, field, name));
-					} else if (type == String.class) {
-						field.set(obj, loadStringAttribute(xml, field, name));
-					} else if (type == UUID.class) {
-						field.set(obj, loadUUIDAttribute(xml, field, name));
-					} else if (type.isEnum()) {
-						field.set(obj, loadEnumAttribute(xml, field, name));
-					} else {
-						field.set(obj, loadObjectAttribute(xml, field, name, context));
-					}
-				} else {
-					XmlEnumArrayAttr enumAttr = field.getAnnotation(XmlEnumArrayAttr.class);
-					if (enumAttr != null) {
-						Object arrayObj = field.get(obj);
-						Class<? extends Object> arrayClass = arrayObj.getClass();
-						Class<?> type = arrayClass.getComponentType();
-						if (type == null) {
-							throw new XMLStreamException(String.format(NOT_ARRAY, field.getName()));
-						}
-						int index = 0;
-						for (Enum<?> one : enumAttr.value().getEnumConstants()) {
-							XmlTag xmlTag = one.getClass().getField(((Enum<?>) one).name()).getAnnotation(XmlTag.class);
-							if (xmlTag != null) {
-								String name = xmlTag.value();
-								unmatchedAttributes.remove(name);
-								if (type == boolean.class) {
-									((boolean[]) arrayObj)[index] = loadBooleanAttribute(xml, field, name);
-								} else if (type == byte.class) {
-									((byte[]) arrayObj)[index] = loadByteAttribute(xml, field, name);
-								} else if (type == char.class) {
-									((char[]) arrayObj)[index] = loadCharAttribute(xml, field, name);
-								} else if (type == short.class) {
-									((short[]) arrayObj)[index] = loadShortAttribute(xml, field, name);
-								} else if (type == int.class) {
-									((int[]) arrayObj)[index] = loadIntegerAttribute(xml, field, name);
-								} else if (type == long.class) {
-									((long[]) arrayObj)[index] = loadLongAttribute(xml, field, name);
-								} else if (type == float.class) {
-									((float[]) arrayObj)[index] = loadFloatAttribute(xml, field, name);
-								} else if (type == double.class) {
-									((double[]) arrayObj)[index] = loadDoubleAttribute(xml, field, name);
-								} else if (type == String.class) {
-									((String[]) arrayObj)[index] = loadStringAttribute(xml, field, name);
-								} else if (type == UUID.class) {
-									((UUID[]) arrayObj)[index] = loadUUIDAttribute(xml, field, name);
-								} else if (type.isEnum()) {
-									((Object[]) arrayObj)[index] = loadEnumAttribute(xml, field, name);
-								} else {
-									((Object[]) arrayObj)[index] = loadObjectAttribute(xml, field, name, context);
-								}
-							}
-							index++;
-						}
-					}
+					getHelper(field.getType()).loadAttributeValue(context, obj, field, name);
 				}
 			}
 			if (obj instanceof TagAttributesLoaded) {
@@ -342,7 +341,7 @@ public class Xml {
 	 * @param file The file to save to.
 	 * @param obj The object to save the xml data from.
 	 */
-	public static void save(File file, Object obj) throws XMLStreamException {
+	public static final void save(File file, Object obj) throws XMLStreamException {
 		try (FileOutputStream out = new FileOutputStream(file)) {
 			save(out, obj);
 		} catch (XMLStreamException exception) {
@@ -358,7 +357,7 @@ public class Xml {
 	 * @param path The {@link Path} to save to.
 	 * @param obj The object to save the xml data from.
 	 */
-	public static void save(Path path, Object obj) throws XMLStreamException {
+	public static final void save(Path path, Object obj) throws XMLStreamException {
 		try {
 			URLConnection connection = PathToUri.toFixedUri(path).toURL().openConnection();
 			connection.setDoInput(false);
@@ -379,7 +378,7 @@ public class Xml {
 	 * @param out The {@link OutputStream} to save to.
 	 * @param obj The object to save the xml data from.
 	 */
-	public static void save(OutputStream out, Object obj) throws XMLStreamException {
+	public static final void save(OutputStream out, Object obj) throws XMLStreamException {
 		try (XmlGenerator xml = new XmlGenerator(out)) {
 			xml.startDocument();
 			add(xml, obj);
@@ -391,7 +390,14 @@ public class Xml {
 		}
 	}
 
-	private static void add(XmlGenerator xml, Object obj) throws XMLStreamException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	/**
+	 * Adds the specified object to the current xml stream.
+	 *
+	 * @param xml The {@link XmlGenerator} to use.
+	 * @param obj The object to add. This object must have been annotated with the {@link XmlTag}
+	 *            annotation.
+	 */
+	public static final void add(XmlGenerator xml, Object obj) throws XMLStreamException {
 		Class<?> objClass = obj.getClass();
 		XmlTag tag = objClass.getAnnotation(XmlTag.class);
 		if (tag != null) {
@@ -401,34 +407,46 @@ public class Xml {
 		}
 	}
 
-	private static void add(XmlGenerator xml, String tag, Object obj) throws XMLStreamException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		if (obj != null) {
-			Class<?> objClass = obj.getClass();
-			if (tag == null || tag.isEmpty()) {
-				throw new XMLStreamException(String.format(NOT_TAGGED, objClass.getName()));
-			}
-			if (obj instanceof TagWillSave) {
-				((TagWillSave) obj).xmlWillSave(xml);
-			}
-			if (obj instanceof String) {
-				String str = (String) obj;
-				if (!str.isEmpty()) {
-					xml.startTag(tag);
-					xml.addText(str);
-					xml.endTag();
+	/**
+	 * Adds the specified object to the current xml stream.
+	 *
+	 * @param xml The {@link XmlGenerator} to use.
+	 * @param tag The xml tag to use for the object.
+	 * @param obj The object to add.
+	 */
+	public static final void add(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+		try {
+			if (obj != null) {
+				Class<?> objClass = obj.getClass();
+				if (tag == null || tag.isEmpty()) {
+					throw new XMLStreamException(String.format(NOT_TAGGED, objClass.getName()));
 				}
-			} else if (hasSubTags(obj, objClass)) {
-				xml.startTag(tag);
-				emitAttributes(xml, obj, objClass);
-				emitSubTags(xml, obj, objClass);
-				xml.endTag();
-			} else {
-				xml.startEmptyTag(tag);
-				emitAttributes(xml, obj, objClass);
+				if (obj instanceof TagWillSave) {
+					((TagWillSave) obj).xmlWillSave(xml);
+				}
+				XmlObjectHelper helper = getHelper(objClass);
+				if (helper != XmlGenericHelper.SINGLETON) {
+					helper.emitAsTag(xml, tag, obj);
+				} else if (obj instanceof TagExtraSubTags || hasSubTags(obj, objClass)) {
+					xml.startTag(tag);
+					emitAttributes(xml, obj, objClass);
+					emitSubTags(xml, obj, objClass);
+					if (obj instanceof TagExtraSubTags) {
+						((TagExtraSubTags) obj).xmlEmitExtraSubTags(xml);
+					}
+					xml.endTag();
+				} else {
+					xml.startEmptyTag(tag);
+					emitAttributes(xml, obj, objClass);
+				}
+				if (obj instanceof TagSaved) {
+					((TagSaved) obj).xmlSaved(xml);
+				}
 			}
-			if (obj instanceof TagSaved) {
-				((TagSaved) obj).xmlSaved(xml);
-			}
+		} catch (XMLStreamException exception) {
+			throw exception;
+		} catch (Exception exception) {
+			throw new XMLStreamException(exception);
 		}
 	}
 
@@ -453,282 +471,18 @@ public class Xml {
 		return false;
 	}
 
-	private static void emitAttributes(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	private static void emitAttributes(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException, ReflectiveOperationException {
 		xml.addAttributeNot(ATTR_VERSION, getVersionOfTag(objClass), 0);
-		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlAttr.class, XmlEnumArrayAttr.class)) {
+		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlAttr.class)) {
 			Introspection.makeFieldAccessible(field);
 			XmlAttr xmlAttr = field.getAnnotation(XmlAttr.class);
 			if (xmlAttr != null) {
-				String name = xmlAttr.value();
-				try {
-					Class<?> type = field.getType();
-					if (type == boolean.class) {
-						emitBooleanAttribute(xml, field, name, field.getBoolean(obj));
-					} else if (type == byte.class) {
-						emitByteAttribute(xml, field, name, field.getByte(obj));
-					} else if (type == char.class) {
-						emitCharAttribute(xml, field, name, field.getChar(obj));
-					} else if (type == short.class) {
-						emitShortAttribute(xml, field, name, field.getShort(obj));
-					} else if (type == int.class) {
-						emitIntegerAttribute(xml, field, name, field.getInt(obj));
-					} else if (type == long.class) {
-						emitLongAttribute(xml, field, name, field.getLong(obj));
-					} else if (type == float.class) {
-						emitFloatAttribute(xml, field, name, field.getFloat(obj));
-					} else if (type == double.class) {
-						emitDoubleAttribute(xml, field, name, field.getDouble(obj));
-					} else if (type.isEnum()) {
-						emitEnumAttribute(xml, field, name, (Enum<?>) field.get(obj));
-					} else {
-						emitObjectAttribute(xml, field, name, field.get(obj));
-					}
-				} catch (Exception exception) {
-					exception.printStackTrace();
-					throw new XMLStreamException(exception);
-				}
-			} else {
-				XmlEnumArrayAttr enumAttr = field.getAnnotation(XmlEnumArrayAttr.class);
-				if (enumAttr != null) {
-					Object arrayObj = field.get(obj);
-					Class<? extends Object> arrayClass = arrayObj.getClass();
-					Class<?> type = arrayClass.getComponentType();
-					if (type == null) {
-						throw new XMLStreamException(String.format(NOT_ARRAY, field.getName()));
-					}
-					int index = 0;
-					for (Enum<?> one : enumAttr.value().getEnumConstants()) {
-						XmlTag xmlTag = one.getClass().getField(((Enum<?>) one).name()).getAnnotation(XmlTag.class);
-						if (xmlTag != null) {
-							String name = xmlTag.value();
-							if (type == boolean.class) {
-								emitBooleanAttribute(xml, field, name, ((boolean[]) arrayObj)[index]);
-							} else if (type == byte.class) {
-								emitByteAttribute(xml, field, name, ((byte[]) arrayObj)[index]);
-							} else if (type == char.class) {
-								emitCharAttribute(xml, field, name, ((char[]) arrayObj)[index]);
-							} else if (type == short.class) {
-								emitShortAttribute(xml, field, name, ((short[]) arrayObj)[index]);
-							} else if (type == int.class) {
-								emitIntegerAttribute(xml, field, name, ((int[]) arrayObj)[index]);
-							} else if (type == long.class) {
-								emitLongAttribute(xml, field, name, ((long[]) arrayObj)[index]);
-							} else if (type == float.class) {
-								emitFloatAttribute(xml, field, name, ((float[]) arrayObj)[index]);
-							} else if (type == double.class) {
-								emitDoubleAttribute(xml, field, name, ((double[]) arrayObj)[index]);
-							} else if (type.isEnum()) {
-								emitEnumAttribute(xml, field, name, ((Enum<?>[]) arrayObj)[index]);
-							} else {
-								emitObjectAttribute(xml, field, name, ((Object[]) arrayObj)[index]);
-							}
-						}
-						index++;
-					}
-				}
+				getHelper(field.getType()).emitAsAttribute(xml, obj, field, xmlAttr.value());
 			}
 		}
 		if (obj instanceof TagExtraAttributes) {
 			((TagExtraAttributes) obj).xmlEmitExtraAttributes(xml);
 		}
-	}
-
-	private static final void emitBooleanAttribute(XmlGenerator xml, Field field, String name, boolean value) throws XMLStreamException {
-		XmlDefaultBoolean def = field.getAnnotation(XmlDefaultBoolean.class);
-		if (def != null) {
-			xml.addAttributeNot(name, value, def.value());
-		} else {
-			xml.addAttribute(name, value);
-		}
-	}
-
-	private static final boolean loadBooleanAttribute(XmlParser xml, Field field, String name) {
-		XmlDefaultBoolean def = field.getAnnotation(XmlDefaultBoolean.class);
-		return xml.isAttributeSet(name, def != null ? def.value() : false);
-	}
-
-	private static final void emitByteAttribute(XmlGenerator xml, Field field, String name, byte value) throws XMLStreamException {
-		XmlDefaultByte def = field.getAnnotation(XmlDefaultByte.class);
-		if (def != null) {
-			xml.addAttributeNot(name, value, def.value());
-		} else {
-			xml.addAttribute(name, value);
-		}
-	}
-
-	private static final byte loadByteAttribute(XmlParser xml, Field field, String name) {
-		XmlDefaultByte def = field.getAnnotation(XmlDefaultByte.class);
-		return (byte) xml.getIntegerAttribute(name, def != null ? def.value() : 0);
-	}
-
-	private static final void emitCharAttribute(XmlGenerator xml, Field field, String name, char value) throws XMLStreamException {
-		XmlDefaultChar def = field.getAnnotation(XmlDefaultChar.class);
-		String strValue = String.valueOf(value);
-		if (def != null) {
-			xml.addAttributeNot(name, strValue, String.valueOf(def.value()));
-		} else {
-			xml.addAttribute(name, strValue);
-		}
-	}
-
-	private static final char loadCharAttribute(XmlParser xml, Field field, String name) {
-		XmlDefaultChar def = field.getAnnotation(XmlDefaultChar.class);
-		String charStr = xml.getAttribute(name);
-		return charStr == null || charStr.isEmpty() ? def != null ? def.value() : 0 : charStr.charAt(0);
-	}
-
-	private static final void emitShortAttribute(XmlGenerator xml, Field field, String name, short value) throws XMLStreamException {
-		XmlDefaultShort def = field.getAnnotation(XmlDefaultShort.class);
-		if (def != null) {
-			xml.addAttributeNot(name, value, def.value());
-		} else {
-			xml.addAttribute(name, value);
-		}
-	}
-
-	private static final short loadShortAttribute(XmlParser xml, Field field, String name) {
-		XmlDefaultShort def = field.getAnnotation(XmlDefaultShort.class);
-		return (short) xml.getIntegerAttribute(name, def != null ? def.value() : 0);
-	}
-
-	private static final void emitIntegerAttribute(XmlGenerator xml, Field field, String name, int value) throws XMLStreamException {
-		XmlDefaultInteger def = field.getAnnotation(XmlDefaultInteger.class);
-		if (def != null) {
-			xml.addAttributeNot(name, value, def.value());
-		} else {
-			xml.addAttribute(name, value);
-		}
-	}
-
-	private static final int loadIntegerAttribute(XmlParser xml, Field field, String name) {
-		XmlDefaultInteger def = field.getAnnotation(XmlDefaultInteger.class);
-		return xml.getIntegerAttribute(name, def != null ? def.value() : 0);
-	}
-
-	private static final void emitLongAttribute(XmlGenerator xml, Field field, String name, long value) throws XMLStreamException {
-		XmlDefaultLong def = field.getAnnotation(XmlDefaultLong.class);
-		if (def != null) {
-			xml.addAttributeNot(name, value, def.value());
-		} else {
-			xml.addAttribute(name, value);
-		}
-	}
-
-	private static final long loadLongAttribute(XmlParser xml, Field field, String name) {
-		XmlDefaultLong def = field.getAnnotation(XmlDefaultLong.class);
-		return xml.getLongAttribute(name, def != null ? def.value() : 0);
-	}
-
-	private static final void emitFloatAttribute(XmlGenerator xml, Field field, String name, float value) throws XMLStreamException {
-		XmlDefaultFloat def = field.getAnnotation(XmlDefaultFloat.class);
-		if (def != null) {
-			xml.addAttributeNot(name, value, def.value());
-		} else {
-			xml.addAttribute(name, value);
-		}
-	}
-
-	private static final float loadFloatAttribute(XmlParser xml, Field field, String name) {
-		XmlDefaultFloat def = field.getAnnotation(XmlDefaultFloat.class);
-		return (float) xml.getDoubleAttribute(name, def != null ? def.value() : 0);
-	}
-
-	private static final void emitDoubleAttribute(XmlGenerator xml, Field field, String name, double value) throws XMLStreamException {
-		XmlDefaultDouble def = field.getAnnotation(XmlDefaultDouble.class);
-		if (def != null) {
-			xml.addAttributeNot(name, value, def.value());
-		} else {
-			xml.addAttribute(name, value);
-		}
-	}
-
-	private static final double loadDoubleAttribute(XmlParser xml, Field field, String name) {
-		XmlDefaultDouble def = field.getAnnotation(XmlDefaultDouble.class);
-		return xml.getDoubleAttribute(name, def != null ? def.value() : 0);
-	}
-
-	private static final void emitEnumAttribute(XmlGenerator xml, Field field, String name, Enum<?> value) throws XMLStreamException {
-		if (value != null) {
-			String xmlName = getEnumXmlName(value);
-			XmlDefault def = field.getAnnotation(XmlDefault.class);
-			if (def != null) {
-				xml.addAttributeNot(name, xmlName, def.value());
-			} else {
-				xml.addAttribute(name, xmlName);
-			}
-		}
-	}
-
-	private static final Object loadEnumAttribute(XmlParser xml, Field field, String name) {
-		String tag = xml.getAttribute(name);
-		Enum<?>[] enumConstants = (Enum<?>[]) field.getType().getEnumConstants();
-		for (Enum<?> one : enumConstants) {
-			String xmlName = getEnumXmlName(one);
-			if (xmlName.equals(tag)) {
-				return one;
-			}
-		}
-		XmlDefault def = field.getAnnotation(XmlDefault.class);
-		if (def != null) {
-			tag = def.value();
-			for (Enum<?> one : enumConstants) {
-				String xmlName = getEnumXmlName(one);
-				if (xmlName.equals(tag)) {
-					return one;
-				}
-			}
-		}
-		return null;
-	}
-
-	private static final String getEnumXmlName(Enum<?> value) {
-		String name = value.name();
-		XmlTag xmlTag;
-		try {
-			xmlTag = value.getClass().getField(name).getAnnotation(XmlTag.class);
-			if (xmlTag != null) {
-				return xmlTag.value();
-			}
-		} catch (Exception exception) {
-			// Fall back to simple case
-		}
-		return name.toLowerCase();
-	}
-
-	private static final String loadStringAttribute(XmlParser xml, Field field, String name) {
-		XmlDefault def = field.getAnnotation(XmlDefault.class);
-		return xml.getAttribute(name, def != null ? def.value() : null);
-	}
-
-	private static final UUID loadUUIDAttribute(XmlParser xml, Field field, String name) {
-		XmlDefault def = field.getAnnotation(XmlDefault.class);
-		String attribute = xml.getAttribute(name, def != null ? def.value() : null);
-		return attribute != null && !attribute.isEmpty() ? UUID.fromString(attribute) : null;
-	}
-
-	private static final void emitObjectAttribute(XmlGenerator xml, Field field, String name, Object value) throws XMLStreamException {
-		if (value != null) {
-			String stringValue = value.toString();
-			XmlDefault def = field.getAnnotation(XmlDefault.class);
-			if (def != null) {
-				xml.addAttributeNot(name, stringValue, def.value());
-			} else {
-				xml.addAttribute(name, stringValue);
-			}
-		}
-	}
-
-	private static final Object loadObjectAttribute(XmlParser xml, Field field, String name, Context context) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		XmlDefault def = field.getAnnotation(XmlDefault.class);
-		String attribute = xml.getAttribute(name, def != null ? def.value() : null);
-		if (attribute != null && !attribute.isEmpty()) {
-			try {
-				return field.getType().getConstructor(String.class, Context.class).newInstance(attribute, context);
-			} catch (NoSuchMethodException exception) {
-				return field.getType().getConstructor(String.class).newInstance(attribute);
-			}
-		}
-		return null;
 	}
 
 	private static final void emitSubTags(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException {
@@ -774,119 +528,5 @@ public class Xml {
 	private static int getMinimumLoadableVersionOfTag(Class<?> objClass) {
 		XmlTagMinimumVersion tagVersion = objClass.getAnnotation(XmlTagMinimumVersion.class);
 		return tagVersion != null ? tagVersion.value() : 0;
-	}
-
-	/**
-	 * Objects that wish to be notified before they are about to be loaded should implement this
-	 * interface.
-	 */
-	public interface TagWillLoad {
-		/**
-		 * Called before the XML tag will be loaded into the object.
-		 *
-		 * @param context The {@link Context} for this object.
-		 */
-		void xmlWillLoad(Context context) throws XMLStreamException;
-	}
-
-	/**
-	 * Objects that wish to be notified when their attributes have been loaded should implement this
-	 * interface.
-	 */
-	public interface TagAttributesLoaded {
-		/**
-		 * Called after the XML tag attributes have been fully loaded into the object, just prior to
-		 * loading any sub-tags that may be present.
-		 *
-		 * @param context The {@link Context} for this object.
-		 * @param unmatchedAttributes A {@link Set} of attribute names found in the XML that had no
-		 *            matching {@link XmlAttr}-marked fields.
-		 */
-		void xmlAttributesLoaded(Context context, Set<String> unmatchedAttributes) throws XMLStreamException;
-	}
-
-	/**
-	 * Objects that wish to be notified when they have been loaded should implement this interface.
-	 */
-	public interface TagLoaded {
-		/**
-		 * Called after the XML tag has been fully loaded into the object, just prior to the version
-		 * being popped off the stack and control being returned to the caller.
-		 *
-		 * @param context The {@link Context} for this object.
-		 */
-		void xmlLoaded(Context context) throws XMLStreamException;
-	}
-
-	/**
-	 * Objects that wish to control the object creation process for their fields should implement
-	 * this interface.
-	 */
-	public interface TagObjectCreator {
-		/**
-		 * Called to create an object for an XML tag.
-		 *
-		 * @param context The {@link Context} for this object.
-		 * @param tag The tag to return an object for.
-		 * @return The newly created object, or <code>null</code> if a new instance of the field's
-		 *         data type should be created (i.e. when there is no need to use a sub-class and
-		 *         the default no-args constructor can be used).
-		 */
-		Object xmlCreateObject(Context context, String tag) throws XMLStreamException;
-	}
-
-	/**
-	 * Objects that wish to control how unmatched tags are handled should implement this interface.
-	 */
-	public interface TagUnmatched {
-		/**
-		 * Called to process an XML sub-tag that had no matching fields marked with {@link XmlTag}.
-		 * Upon return from this method, the {@link XmlParser} should have been advanced past the
-		 * current tag's contents, either by calling {@link XmlParser#skip()} or appropriate parsing
-		 * of sub-tags.
-		 *
-		 * @param context The {@link Context} for this object.
-		 * @param tag The tag name that will be processed.
-		 */
-		void xmlUnmatchedTag(Context context, String tag) throws XMLStreamException;
-	}
-
-	/**
-	 * Objects that wish to be notified before they are about to be written to xml should implement
-	 * this interface.
-	 */
-	public interface TagWillSave {
-		/**
-		 * Called before the XML tag will be written.
-		 *
-		 * @param xml The {@link XmlGenerator} for this object.
-		 */
-		void xmlWillSave(XmlGenerator xml) throws XMLStreamException;
-	}
-
-	/**
-	 * Objects that wish to be notified when they have been saved should implement this interface.
-	 */
-	public interface TagSaved {
-		/**
-		 * Called after the XML tag has been fully written to xml.
-		 *
-		 * @param xml The {@link XmlGenerator} for this object.
-		 */
-		void xmlSaved(XmlGenerator xml) throws XMLStreamException;
-	}
-
-	/**
-	 * Objects that wish to add additional attributes when being written to xml should implement
-	 * this interface.
-	 */
-	public interface TagExtraAttributes {
-		/**
-		 * Called to allow an object to emit additional attributes that the standard processing
-		 * can't handle.
-		 *
-		 * @param xml The {@link XmlGenerator} for this object.
-		 */
-		void xmlEmitExtraAttributes(XmlGenerator xml) throws XMLStreamException;
 	}
 }

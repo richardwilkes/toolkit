@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.io.xml;
 
+import com.trollworks.toolkit.utility.text.Numbers;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -158,7 +160,7 @@ public class XMLWriter extends PrintWriter {
 	 * @param value The value of the attribute.
 	 */
 	public void writeAttribute(String name, boolean value) {
-		writeAttribute(name, value ? "yes" : "no"); //$NON-NLS-1$ //$NON-NLS-2$
+		writeAttribute(name, Numbers.format(value));
 	}
 
 	/**

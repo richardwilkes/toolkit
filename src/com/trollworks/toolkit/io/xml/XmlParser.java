@@ -13,11 +13,8 @@ package com.trollworks.toolkit.io.xml;
 
 import com.trollworks.toolkit.utility.text.Numbers;
 
-import gnu.trove.stack.TIntStack;
-import gnu.trove.stack.array.TIntArrayStack;
-
+import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
 
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
@@ -40,7 +37,7 @@ public class XmlParser implements AutoCloseable {
 	public XmlParser(InputStream stream) throws XMLStreamException {
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		factory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
-		mReader = factory.createXMLStreamReader(stream);
+		mReader = factory.createXMLStreamReader(new BufferedInputStream(stream));
 	}
 
 	/** @return The current line:column position. */
@@ -286,37 +283,6 @@ public class XmlParser implements AutoCloseable {
 			} finally {
 				mReader = null;
 			}
-		}
-	}
-
-	/** Provides temporary storage when loading an object from XML. */
-	public static class Context extends HashMap<String, Object> {
-		private XmlParser	mParser;
-		private TIntStack	mVersionStack	= new TIntArrayStack();
-
-		/** @param parser The {@link XmlParser} being used. */
-		public Context(XmlParser parser) {
-			mParser = parser;
-		}
-
-		/** @return The {@link XmlParser} being used. */
-		public XmlParser getParser() {
-			return mParser;
-		}
-
-		/** @return The current version on the stack. */
-		public int getVersion() {
-			return mVersionStack.peek();
-		}
-
-		/** @param version The version to push onto the stack. */
-		public void pushVersion(int version) {
-			mVersionStack.push(version);
-		}
-
-		/** Removes the current version from the stack, restoring whatever was before it. */
-		public void popVersion() {
-			mVersionStack.pop();
 		}
 	}
 }
