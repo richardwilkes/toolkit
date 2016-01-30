@@ -13,6 +13,7 @@ package com.trollworks.toolkit.io.xml;
 
 import com.trollworks.toolkit.utility.text.Numbers;
 
+import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -33,7 +34,7 @@ public class XmlGenerator implements AutoCloseable {
 	 * @param stream The {@link OutputStream} to write to.
 	 */
 	public XmlGenerator(OutputStream stream) throws XMLStreamException {
-		mWriter = XMLOutputFactory.newInstance().createXMLStreamWriter(stream, StandardCharsets.UTF_8.name());
+		mWriter = XMLOutputFactory.newInstance().createXMLStreamWriter(new BufferedOutputStream(stream), StandardCharsets.UTF_8.name());
 	}
 
 	/** @param indent The characters to use for indentation. */
@@ -107,7 +108,7 @@ public class XmlGenerator implements AutoCloseable {
 	 * @param value The value of the attribute.
 	 */
 	public void addAttribute(String name, boolean value) throws XMLStreamException {
-		mWriter.writeAttribute(name, value ? "yes" : "no"); //$NON-NLS-1$ //$NON-NLS-2$
+		mWriter.writeAttribute(name, Numbers.format(value));
 	}
 
 	/**
