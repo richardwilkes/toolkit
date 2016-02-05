@@ -65,7 +65,7 @@ public class IntegerFormatter extends JFormattedTextField.AbstractFormatter {
 
 	@Override
 	public String valueToString(Object value) throws ParseException {
-		int val = ((Integer) value).intValue();
+		int val = value == null ? 0 : ((Integer) value).intValue();
 		if (mBlankOnZero && val == 0) {
 			return ""; //$NON-NLS-1$
 		}
