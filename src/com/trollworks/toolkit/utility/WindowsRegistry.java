@@ -51,7 +51,7 @@ public class WindowsRegistry {
 	 *            in the form 'extension.ico'. For example, the extension 'xyz' would need an icon
 	 *            file named 'xyz.ico' in this directory.
 	 */
-	public static final void register(String prefix, HashMap<String, String> map, Path appFile, Path iconDir) {
+	public static final void register(String prefix, Map<String, String> map, Path appFile, Path iconDir) {
 		String appPath = appFile.normalize().toAbsolutePath().toString();
 		WindowsRegistry reg = new WindowsRegistry(true);
 		for (String extension : map.keySet()) {
@@ -192,7 +192,7 @@ public class WindowsRegistry {
 
 	public Map<String, String> readStringValues(String key) {
 		try {
-			HashMap<String, String> results = new HashMap<>();
+			Map<String, String> results = new HashMap<>();
 			OpenResult openResult = openKey(key, READ_ACCESS);
 			if (openResult.mSuccess) {
 				QueryResult queryResult = queryInfoKey(openResult.mHandle);

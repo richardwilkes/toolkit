@@ -61,6 +61,7 @@ public class FileType {
 	private String							mReferenceURL;
 	private FileProxyCreator				mFileProxyCreator;
 	private boolean							mAllowOpen;
+	private boolean							mRegisterAppForOpening;
 
 	/**
 	 * Registers a new {@link FileType}, replacing any existing entry for the specified extension.
@@ -72,8 +73,10 @@ public class FileType {
 	 * @param fileProxyCreator The {@link FileProxyCreator} responsible for creating a
 	 *            {@link FileProxy} with this file's contents.
 	 * @param allowOpen Whether this {@link FileType} is allowed to be opened via the menu command.
+	 * @param shouldRegisterAppForOpening Whether this {@link FileType} should be registered as a
+	 *            document type that the application can open.
 	 */
-	public static final void register(String extension, StdImageSet iconset, String description, String referenceURL, FileProxyCreator fileProxyCreator, boolean allowOpen) {
+	public static final void register(String extension, StdImageSet iconset, String description, String referenceURL, FileProxyCreator fileProxyCreator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
 		extension = normalizeExtension(extension);
 		for (FileType type : TYPES) {
 			if (type.mExtension.equals(extension)) {
@@ -81,29 +84,29 @@ public class FileType {
 				break;
 			}
 		}
-		FileType fileType = new FileType(extension, iconset, description, referenceURL, fileProxyCreator, allowOpen);
+		FileType fileType = new FileType(extension, iconset, description, referenceURL, fileProxyCreator, allowOpen, shouldRegisterAppForOpening);
 		TYPES.add(fileType);
 		EXTENSION_MAP.put(extension, fileType);
 	}
 
-	public static void registerPdf(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen) {
-		register(PDF_EXTENSION, iconset, PDF_FILES, "https://www.adobe.com/devnet/pdf/pdf_reference_archive.html", creator, allowOpen); //$NON-NLS-1$
+	public static void registerPdf(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
+		register(PDF_EXTENSION, iconset, PDF_FILES, "https://www.adobe.com/devnet/pdf/pdf_reference_archive.html", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
 	}
 
-	public static void registerHtml(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen) {
-		register(HTML_EXTENSION, iconset, HTML_FILES, "http://www.w3.org/TR/html", creator, allowOpen); //$NON-NLS-1$
+	public static void registerHtml(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
+		register(HTML_EXTENSION, iconset, HTML_FILES, "http://www.w3.org/TR/html", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
 	}
 
-	public static void registerPng(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen) {
-		register(PNG_EXTENSION, iconset, PNG_FILES, "http://www.libpng.org/pub/png/pngdocs.html", creator, allowOpen); //$NON-NLS-1$
+	public static void registerPng(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
+		register(PNG_EXTENSION, iconset, PNG_FILES, "http://www.libpng.org/pub/png/pngdocs.html", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
 	}
 
-	public static void registerGif(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen) {
-		register(GIF_EXTENSION, iconset, GIF_FILES, "http://www.w3.org/Graphics/GIF/spec-gif89a.txt", creator, allowOpen); //$NON-NLS-1$
+	public static void registerGif(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
+		register(GIF_EXTENSION, iconset, GIF_FILES, "http://www.w3.org/Graphics/GIF/spec-gif89a.txt", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
 	}
 
-	public static void registerJpeg(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen) {
-		register(JPEG_EXTENSION, iconset, JPEG_FILES, "http://www.w3.org/Graphics/JPEG/jfif3.pdf", creator, allowOpen); //$NON-NLS-1$
+	public static void registerJpeg(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
+		register(JPEG_EXTENSION, iconset, JPEG_FILES, "http://www.w3.org/Graphics/JPEG/jfif3.pdf", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
 	}
 
 	public static FileNameExtensionFilter getPdfFilter() {
@@ -245,13 +248,14 @@ public class FileType {
 		return StdImage.FOLDER;
 	}
 
-	private FileType(String extension, StdImageSet iconset, String description, String referenceURL, FileProxyCreator fileProxyCreator, boolean allowOpen) {
+	private FileType(String extension, StdImageSet iconset, String description, String referenceURL, FileProxyCreator fileProxyCreator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
 		mExtension = extension;
 		mIconSet = iconset;
 		mDescription = description;
 		mReferenceURL = referenceURL;
 		mFileProxyCreator = fileProxyCreator;
 		mAllowOpen = allowOpen;
+		mRegisterAppForOpening = shouldRegisterAppForOpening;
 	}
 
 	/** @return The extension of the file. */
@@ -285,5 +289,13 @@ public class FileType {
 	/** @return Whether this {@link FileType} is allowed to be opened via the menu command. */
 	public boolean allowOpen() {
 		return mAllowOpen;
+	}
+
+	/**
+	 * @return Whether this {@link FileType} should be registered as a document type that the
+	 *         application can open.
+	 */
+	public boolean shouldRegisterAppForOpening() {
+		return mAllowOpen && mRegisterAppForOpening;
 	}
 }
