@@ -40,12 +40,12 @@ public class ImageWell extends JPanel implements DropTargetListener, MouseListen
 		Localization.initialize();
 	}
 
-	private Getter	mGetTile;
-	private Setter	mSetTile;
+	private Getter	mGetter;
+	private Setter	mSetter;
 
 	public ImageWell(String tooltip, Getter getter, Setter setter) {
-		mGetTile = getter;
-		mSetTile = setter;
+		mGetter = getter;
+		mSetter = setter;
 		setToolTipText(tooltip);
 		setBorder(new LineBorder(Color.BLACK));
 		UIUtilities.setOnlySize(this, new Dimension(22, 22));
@@ -57,7 +57,7 @@ public class ImageWell extends JPanel implements DropTargetListener, MouseListen
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Rectangle bounds = GraphicsUtilities.getLocalInsetBounds(this);
-		StdImage img = mGetTile.getWellImage();
+		StdImage img = mGetter.getWellImage();
 		if (img != null) {
 			g.drawImage(img, bounds.x, bounds.y, bounds.width, bounds.height, this);
 		} else {
@@ -131,7 +131,7 @@ public class ImageWell extends JPanel implements DropTargetListener, MouseListen
 	private boolean loadImageFile(File file) {
 		StdImage img = StdImage.loadImage(file, true);
 		if (img != null) {
-			mSetTile.setWellImage(img);
+			mSetter.setWellImage(img);
 			repaint();
 			return true;
 		}
@@ -143,7 +143,7 @@ public class ImageWell extends JPanel implements DropTargetListener, MouseListen
 		JPanel panel = new JPanel(new FlowLayout());
 		JButton button = new JButton(CLEAR);
 		button.addActionListener(action -> {
-			mSetTile.setWellImage(null);
+			mSetter.setWellImage(null);
 			repaint();
 			JFileChooser dialog = UIUtilities.getAncestorOfType(button, JFileChooser.class);
 			if (dialog != null) {
