@@ -57,7 +57,7 @@ public class Colors {
 		add("DarkKhaki", "189,183,107");
 		add("DarkMagenta", "139,0,139");
 		add("DarkOliveGreen", "85,107,47");
-		add("Darkorange", "255,140,0");
+		add("DarkOrange", "255,140,0");
 		add("DarkOrchid", "153,50,204");
 		add("DarkRed", "139,0,0");
 		add("DarkSalmon", "233,150,122");
