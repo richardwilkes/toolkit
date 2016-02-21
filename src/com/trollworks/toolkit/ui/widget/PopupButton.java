@@ -17,13 +17,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.util.List;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
+import javax.swing.MutableComboBoxModel;
 import javax.swing.event.ListDataListener;
 
 public class PopupButton<T> extends JComboBox<T> {
-	ComboBoxModel<T>					mModel;
+	MutableComboBoxModel<T>				mModel;
 	private ListCellRenderer<? super T>	mRenderer;
 
 	@SuppressWarnings("unchecked")
@@ -33,9 +33,9 @@ public class PopupButton<T> extends JComboBox<T> {
 
 	public PopupButton(T[] items) {
 		super(items);
-		mModel = getModel();
+		mModel = (MutableComboBoxModel<T>) getModel();
 		mRenderer = getRenderer();
-		setModel(new ComboBoxModel<T>() {
+		setModel(new MutableComboBoxModel<T>() {
 			@Override
 			public int getSize() {
 				return mModel.getSize();
@@ -69,6 +69,26 @@ public class PopupButton<T> extends JComboBox<T> {
 			@Override
 			public Object getSelectedItem() {
 				return mModel.getSelectedItem();
+			}
+
+			@Override
+			public void addElement(T item) {
+				mModel.addElement(item);
+			}
+
+			@Override
+			public void insertElementAt(T item, int index) {
+				mModel.insertElementAt(item, index);
+			}
+
+			@Override
+			public void removeElement(Object obj) {
+				mModel.removeElement(obj);
+			}
+
+			@Override
+			public void removeElementAt(int index) {
+				mModel.removeElementAt(index);
 			}
 		});
 		setRenderer((list, value, index, isSelected, cellHasFocus) -> {
