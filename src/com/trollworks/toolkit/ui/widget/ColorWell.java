@@ -11,20 +11,18 @@
 
 package com.trollworks.toolkit.ui.widget;
 
+import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.UIUtilities;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 
 public class ColorWell extends JPanel implements MouseListener {
@@ -32,11 +30,16 @@ public class ColorWell extends JPanel implements MouseListener {
 	private ColorChangedListener	mListener;
 
 	public ColorWell(Color color, ColorChangedListener listener) {
+		this(color, listener, null);
+	}
+
+	public ColorWell(Color color, ColorChangedListener listener, String tooltip) {
 		mColor = color;
-		setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new LineBorder(Color.WHITE)));
-		UIUtilities.setOnlySize(this, new Dimension(20, 20));
-		addMouseListener(this);
 		mListener = listener;
+		setToolTipText(tooltip);
+		setBorder(new LineBorder(Color.BLACK));
+		UIUtilities.setOnlySize(this, new Dimension(22, 22));
+		addMouseListener(this);
 	}
 
 	public Color getWellColor() {
@@ -50,23 +53,22 @@ public class ColorWell extends JPanel implements MouseListener {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		Graphics2D gc = (Graphics2D) g.create();
-		Insets insets = getInsets();
-		Rectangle bounds = getBounds();
-		bounds.x = insets.left;
-		bounds.y = insets.top;
-		bounds.width -= insets.left + insets.right;
-		bounds.height -= insets.top + insets.bottom;
-		gc.setColor(Color.WHITE);
-		gc.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-		gc.setColor(Color.LIGHT_GRAY);
-		for (int y = bounds.y; y < bounds.y + bounds.height; y += 4) {
-			for (int x = bounds.x + ((y - bounds.y) / 4 & 1) * 4; x < bounds.x + bounds.height; x += 8) {
-				gc.fillRect(x, y, 4, 4);
+		super.paintComponent(g);
+		Rectangle bounds = GraphicsUtilities.getLocalInsetBounds(this);
+		g.setColor(Color.WHITE);
+		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+		g.setColor(Color.LIGHT_GRAY);
+		int xs = bounds.width / 4;
+		int ys = bounds.height / 4;
+		int offset = 0;
+		for (int y = bounds.y; y < bounds.y + bounds.height; y += ys) {
+			for (int x = bounds.x + offset; x < bounds.x + bounds.width; x += xs * 2) {
+				g.fillRect(x, y, xs, ys);
 			}
+			offset = offset == 0 ? xs : 0;
 		}
-		gc.setColor(mColor);
-		gc.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+		g.setColor(mColor);
+		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 
 	@Override
