@@ -78,7 +78,9 @@ public class ColorWell extends JPanel implements MouseListener {
 			if (!mColor.equals(color)) {
 				mColor = color;
 				repaint();
-				mListener.colorChanged(mColor);
+				if (mListener != null) {
+					mListener.colorChanged(mColor);
+				}
 			}
 		}
 	}
