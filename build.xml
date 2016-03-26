@@ -58,7 +58,7 @@
 		<mkdir dir="${toolkit_build}"/>
 		
 		<!-- Compile the code. -->
-		<javac srcdir="${src}" destdir="${toolkit_build}"
+		<javac srcdir="${src}" destdir="${toolkit_build}" encoding="UTF-8"
 			debug="no" optimize="yes" target="${min_jdk}" source="${min_jdk}" deprecation="true"
 			includeantruntime="no" fork="yes">
 			<classpath>
