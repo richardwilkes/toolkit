@@ -43,8 +43,6 @@ public class Introspection {
 				});
 			}
 		}
-		int[] foo = new int[] { 1, 2 };
-		foo.equals(foo);
 	}
 
 	/**
