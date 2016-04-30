@@ -11,9 +11,12 @@
 
 package com.trollworks.toolkit.io.json;
 
+import com.trollworks.toolkit.annotation.JsonKey;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.io.UrlUtils;
 import com.trollworks.toolkit.utility.Geometry;
+import com.trollworks.toolkit.utility.introspection.FieldAnnotation;
+import com.trollworks.toolkit.utility.introspection.Introspection;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -22,13 +25,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /** Json utilities. */
+@SuppressWarnings("nls")
 public class Json {
 	private Reader	mReader;
 	private int		mIndex;
@@ -37,6 +48,270 @@ public class Json {
 	private char	mPrevious;
 	private boolean	mEOF;
 	private boolean	mUsePrevious;
+
+	/**
+	 * Load the contents of a JSON string into an object that has been marked with {@link JsonKey}
+	 * annotations.
+	 *
+	 * @param obj The object to load data into.
+	 * @param json The JSON-formatted string.
+	 * @return The object that was passed in.
+	 */
+	public static final <T> T load(T obj, String json) throws IOException {
+		if (Introspection.hasDeepFieldAnnotation(obj.getClass(), JsonKey.class)) {
+			return load(obj, asMap(parse(json), false));
+		}
+		return obj;
+	}
+
+	/**
+	 * Load the contents of a JSON map into an object that has been marked with {@link JsonKey}
+	 * annotations.
+	 *
+	 * @param obj The object to load data into.
+	 * @param map The {@link JsonMap}.
+	 * @return The object that was passed in.
+	 */
+	public static final <T> T load(T obj, JsonMap map) {
+		for (FieldAnnotation<JsonKey> fa : Introspection.getDeepFieldAnnotations(obj.getClass(), JsonKey.class)) {
+			loadFieldFromMap(fa.getField(), fa.getAnnotation().value(), obj, map);
+		}
+		return obj;
+	}
+
+	private static final void loadFieldFromMap(Field field, String name, Object obj, JsonMap map) {
+		Introspection.makeFieldAccessible(field);
+		Class<?> fieldType = field.getType();
+		try {
+			if (fieldType == boolean.class || fieldType == Boolean.class) {
+				field.setBoolean(obj, map.getBoolean(name));
+			} else if (fieldType == byte.class || fieldType == Byte.class) {
+				field.setByte(obj, map.getByte(name));
+			} else if (fieldType == char.class || fieldType == Character.class) {
+				field.setChar(obj, map.getChar(name));
+			} else if (fieldType == int.class || fieldType == Integer.class) {
+				field.setInt(obj, map.getInt(name));
+			} else if (fieldType == long.class || fieldType == Long.class) {
+				field.setLong(obj, map.getLong(name));
+			} else if (fieldType == float.class || fieldType == Float.class) {
+				field.setFloat(obj, map.getFloat(name));
+			} else if (fieldType == double.class || fieldType == Double.class) {
+				field.setDouble(obj, map.getDouble(name));
+			} else if (fieldType == String.class) {
+				field.set(obj, map.getString(name, true));
+			} else if (fieldType.isEnum()) {
+				field.set(obj, extractEnum(map.getString(name, false), (Enum<?>[]) fieldType.getEnumConstants()));
+			} else if (fieldType.isArray()) {
+				field.set(obj, createArray(field, map.getArray(name, true)));
+			} else if (List.class.isAssignableFrom(fieldType)) {
+				field.set(obj, createList(field, map.getArray(name, true)));
+			} else if (Map.class.isAssignableFrom(fieldType)) {
+				field.set(obj, createMap(field, map.getMap(name, true)));
+			} else if (Introspection.hasDeepFieldAnnotation(fieldType, JsonKey.class)) {
+				try {
+					JsonMap objMap = map.getMap(name, true);
+					if (objMap != null) {
+						Constructor<?> constructor = fieldType.getDeclaredConstructor();
+						Introspection.makeConstructorAccessible(constructor);
+						field.set(obj, load(constructor.newInstance(), objMap));
+					} else {
+						field.set(obj, null);
+					}
+				} catch (Exception exception) {
+					Log.error(exception);
+				}
+			} else {
+				Log.error("Unable to restore " + fieldType.getName() + " for key " + name);
+			}
+		} catch (Exception exception) {
+			Log.error(exception);
+		}
+	}
+
+	/** Does not support creating Arrays containing Arrays, Lists or Maps. */
+	private static final Object createArray(Field field, JsonArray array) {
+		if (array == null) {
+			return null;
+		}
+		int length = array.size();
+		Class<?> fieldType = field.getType().getComponentType();
+		Object data = Array.newInstance(fieldType, length);
+		if (fieldType == boolean.class || fieldType == Boolean.class) {
+			for (int i = 0; i < length; i++) {
+				Array.setBoolean(data, i, array.getBoolean(i));
+			}
+		} else if (fieldType == byte.class || fieldType == Byte.class) {
+			for (int i = 0; i < length; i++) {
+				Array.setByte(data, i, array.getByte(i));
+			}
+		} else if (fieldType == char.class || fieldType == Character.class) {
+			for (int i = 0; i < length; i++) {
+				Array.setChar(data, i, array.getChar(i));
+			}
+		} else if (fieldType == short.class || fieldType == Short.class) {
+			for (int i = 0; i < length; i++) {
+				Array.setShort(data, i, array.getShort(i));
+			}
+		} else if (fieldType == int.class || fieldType == Integer.class) {
+			for (int i = 0; i < length; i++) {
+				Array.setInt(data, i, array.getInt(i));
+			}
+		} else if (fieldType == long.class || fieldType == Long.class) {
+			for (int i = 0; i < length; i++) {
+				Array.setLong(data, i, array.getLong(i));
+			}
+		} else if (fieldType == float.class || fieldType == Float.class) {
+			for (int i = 0; i < length; i++) {
+				Array.setFloat(data, i, array.getFloat(i));
+			}
+		} else if (fieldType == double.class || fieldType == Double.class) {
+			for (int i = 0; i < length; i++) {
+				Array.setDouble(data, i, array.getDouble(i));
+			}
+		} else if (fieldType == String.class) {
+			for (int i = 0; i < length; i++) {
+				Array.set(data, i, array.getString(i, true));
+			}
+		} else if (fieldType.isEnum()) {
+			Enum<?>[] constants = (Enum<?>[]) fieldType.getEnumConstants();
+			for (int i = 0; i < length; i++) {
+				Array.set(data, i, extractEnum(array.getString(i, false), constants));
+			}
+		} else if (Introspection.hasDeepFieldAnnotation(fieldType, JsonKey.class)) {
+			for (int i = 0; i < length; i++) {
+				try {
+					JsonMap objMap = array.getMap(i, true);
+					if (objMap != null) {
+						Constructor<?> constructor = fieldType.getDeclaredConstructor();
+						Introspection.makeConstructorAccessible(constructor);
+						Array.set(data, i, load(constructor.newInstance(), objMap));
+					} else {
+						Array.set(data, i, null);
+					}
+				} catch (Exception exception) {
+					Log.error(exception);
+				}
+			}
+		} else {
+			Log.error("Unable to restore " + fieldType.getName() + " for key " + field.getName());
+		}
+		return data;
+	}
+
+	/** Does not support creating Lists containing Arrays, Lists or Maps. */
+	private static final List<?> createList(Field field, JsonArray array) {
+		if (array != null) {
+			Type genericType = field.getGenericType();
+			if (genericType instanceof ParameterizedType) {
+				try {
+					ParameterizedType pType = (ParameterizedType) genericType;
+					Type[] args = pType.getActualTypeArguments();
+					if (args.length == 1) {
+						Class<?> type = Class.forName(args[0].getTypeName());
+						int length = array.size();
+						List<Object> result = new ArrayList<>(length);
+						for (int i = 0; i < length; i++) {
+							result.add(createObject(type, array.get(i)));
+						}
+						return result;
+					}
+					Log.error("Must have one type argument for a list");
+				} catch (ClassNotFoundException exception) {
+					Log.error(exception);
+				}
+			} else {
+				Log.error("Unable to determine generic type");
+			}
+		}
+		return null;
+	}
+
+	/** Does not support creating Maps containing Arrays, Lists or Maps. */
+	private static final Map<String, ?> createMap(Field field, JsonMap map) {
+		if (map != null) {
+			Type genericType = field.getGenericType();
+			if (genericType instanceof ParameterizedType) {
+				try {
+					ParameterizedType pType = (ParameterizedType) genericType;
+					Type[] args = pType.getActualTypeArguments();
+					if (args.length == 2) {
+						Class<?> keyClass = Class.forName(args[0].getTypeName());
+						if (keyClass == String.class) {
+							Class<?> type = Class.forName(args[1].getTypeName());
+							Map<String, Object> result = new HashMap<>();
+							for (String key : map.keySet()) {
+								result.put(key, createObject(type, map.get(key)));
+							}
+							return result;
+						}
+						Log.error("Only maps with Strings for their keys are permitted");
+					} else {
+						Log.error("Must have two type arguments for a map");
+					}
+				} catch (ClassNotFoundException exception) {
+					Log.error(exception);
+				}
+			} else {
+				Log.error("Unable to determine generic type");
+			}
+		}
+		return null;
+	}
+
+	/** Does not support creating Arrays, Lists or Maps. */
+	private static final Object createObject(Class<?> type, Object jsonData) {
+		if (type == boolean.class || type == Boolean.class) {
+			return asBooleanObject(jsonData);
+		}
+		if (type == byte.class || type == Byte.class) {
+			return asByteObject(jsonData);
+		}
+		if (type == char.class || type == Character.class) {
+			return asCharObject(jsonData);
+		}
+		if (type == int.class || type == Integer.class) {
+			return asIntObject(jsonData);
+		}
+		if (type == long.class || type == Long.class) {
+			return asLongObject(jsonData);
+		}
+		if (type == float.class || type == Float.class) {
+			return asFloatObject(jsonData);
+		}
+		if (type == double.class || type == Double.class) {
+			return asDoubleObject(jsonData);
+		}
+		if (type == String.class) {
+			return asString(jsonData, true);
+		}
+		if (type.isEnum()) {
+			return extractEnum(asString(jsonData, false), (Enum<?>[]) type.getEnumConstants());
+		}
+		if (Introspection.hasDeepFieldAnnotation(type, JsonKey.class)) {
+			try {
+				JsonMap objMap = asMap(jsonData, true);
+				if (objMap != null) {
+					Constructor<?> constructor = type.getDeclaredConstructor();
+					Introspection.makeConstructorAccessible(constructor);
+					return load(constructor.newInstance(), objMap);
+				}
+				return null;
+			} catch (Exception exception) {
+				Log.error(exception);
+			}
+		}
+		Log.error("Unable to create type: " + type.getSimpleName());
+		return null;
+	}
+
+	private static final Enum<?> extractEnum(String value, Enum<?>[] constants) {
+		for (Enum<?> one : constants) {
+			if (one.toString().equals(value)) {
+				return one;
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * @param reader A {@link Reader} to load JSON data from.
@@ -70,15 +345,6 @@ public class Json {
 	 * @param encoding The character encoding to use when reading from the stream.
 	 * @return The result of loading the data.
 	 */
-	public static final Object parse(InputStream stream, String encoding) throws IOException {
-		return parse(new InputStreamReader(stream, encoding));
-	}
-
-	/**
-	 * @param stream An {@link InputStream} to load JSON data from.
-	 * @param encoding The character encoding to use when reading from the stream.
-	 * @return The result of loading the data.
-	 */
 	public static final Object parse(InputStream stream, Charset encoding) throws IOException {
 		return parse(new InputStreamReader(stream, encoding));
 	}
@@ -92,97 +358,295 @@ public class Json {
 	}
 
 	/**
-	 * @param reader A {@link Reader} to load JSON data from.
-	 * @return The result of loading the data if it is an array or <code>null</code> if it isn't.
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>false</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a boolean.
 	 */
-	public static final JsonArray parseArray(Reader reader) throws IOException {
-		Object result = parse(reader);
-		return result instanceof JsonArray ? (JsonArray) result : null;
+	public static final boolean asBoolean(Object obj) {
+		return Boolean.TRUE.equals(obj) || obj instanceof String && Boolean.TRUE.toString().equalsIgnoreCase((String) obj);
 	}
 
 	/**
-	 * @param url A {@link URL} to load JSON data from.
-	 * @return The result of loading the data if it is an array or <code>null</code> if it isn't.
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>false</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a {@link Boolean}.
 	 */
-	public static final JsonArray parseArray(URL url) throws IOException {
-		Object result = parse(url);
-		return result instanceof JsonArray ? (JsonArray) result : null;
+	public static final Boolean asBooleanObject(Object obj) {
+		return asBoolean(obj) ? Boolean.TRUE : Boolean.FALSE;
 	}
 
 	/**
-	 * @param stream An {@link InputStream} to load JSON data from. {@link StandardCharsets#UTF_8}
-	 *            will be used as the encoding when reading from the stream.
-	 * @return The result of loading the data if it is an array or <code>null</code> if it isn't.
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a byte.
 	 */
-	public static final JsonArray parseArray(InputStream stream) throws IOException {
-		Object result = parse(stream);
-		return result instanceof JsonArray ? (JsonArray) result : null;
+	public static final byte asByte(Object obj) {
+		if (obj instanceof Number) {
+			return ((Number) obj).byteValue();
+		}
+		if (obj instanceof String) {
+			try {
+				return Byte.parseByte((String) obj);
+			} catch (Exception exception) {
+				return 0;
+			}
+		}
+		return 0;
 	}
 
 	/**
-	 * @param stream An {@link InputStream} to load JSON data from.
-	 * @param encoding The character encoding to use when reading from the stream.
-	 * @return The result of loading the data if it is an array or <code>null</code> if it isn't.
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a {@link Byte}.
 	 */
-	public static final JsonArray parseArray(InputStream stream, String encoding) throws IOException {
-		Object result = parse(stream, encoding);
-		return result instanceof JsonArray ? (JsonArray) result : null;
+	public static final Byte asByteObject(Object obj) {
+		return Byte.valueOf(asByte(obj));
 	}
 
 	/**
-	 * @param string A {@link String} to load JSON data from.
-	 * @return The result of loading the data if it is an array or <code>null</code> if it isn't.
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a char.
 	 */
-	public static final JsonArray parseArray(String string) throws IOException {
-		Object result = parse(string);
-		return result instanceof JsonArray ? (JsonArray) result : null;
+	public static final char asChar(Object obj) {
+		if (obj instanceof Number) {
+			return (char) ((Number) obj).intValue();
+		}
+		if (obj instanceof String) {
+			String str = (String) obj;
+			if (str.length() > 0) {
+				return str.charAt(0);
+			}
+		}
+		return 0;
 	}
 
 	/**
-	 * @param reader A {@link Reader} to load JSON data from.
-	 * @return The result of loading the data if it is a map or <code>null</code> if it isn't.
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a {@link Character}.
 	 */
-	public static final JsonMap parseMap(Reader reader) throws IOException {
-		Object result = parse(reader);
-		return result instanceof JsonMap ? (JsonMap) result : null;
+	public static final Character asCharObject(Object obj) {
+		return Character.valueOf(asChar(obj));
 	}
 
 	/**
-	 * @param url A {@link URL} to load JSON data from.
-	 * @return The result of loading the data if it is a map or <code>null</code> if it isn't.
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a short.
 	 */
-	public static final JsonMap parseMap(URL url) throws IOException {
-		Object result = parse(url);
-		return result instanceof JsonMap ? (JsonMap) result : null;
+	public static final short asShort(Object obj) {
+		if (obj instanceof Number) {
+			return ((Number) obj).shortValue();
+		}
+		if (obj instanceof String) {
+			try {
+				return Short.parseShort((String) obj);
+			} catch (Exception exception) {
+				return 0;
+			}
+		}
+		return 0;
 	}
 
 	/**
-	 * @param stream An {@link InputStream} to load JSON data from. {@link StandardCharsets#UTF_8}
-	 *            will be used as the encoding when reading from the stream.
-	 * @return The result of loading the data if it is a map or <code>null</code> if it isn't.
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a {@link Short}.
 	 */
-	public static final JsonMap parseMap(InputStream stream) throws IOException {
-		Object result = parse(stream);
-		return result instanceof JsonMap ? (JsonMap) result : null;
+	public static final Short asShortObject(Object obj) {
+		return Short.valueOf(asShort(obj));
 	}
 
 	/**
-	 * @param stream An {@link InputStream} to load JSON data from.
-	 * @param encoding The character encoding to use when reading from the stream.
-	 * @return The result of loading the data if it is a map or <code>null</code> if it isn't.
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to an int.
 	 */
-	public static final JsonMap parseMap(InputStream stream, String encoding) throws IOException {
-		Object result = parse(stream, encoding);
-		return result instanceof JsonMap ? (JsonMap) result : null;
+	public static final int asInt(Object obj) {
+		if (obj instanceof Number) {
+			return ((Number) obj).intValue();
+		}
+		if (obj instanceof String) {
+			try {
+				return Integer.parseInt((String) obj);
+			} catch (Exception exception) {
+				return 0;
+			}
+		}
+		return 0;
 	}
 
 	/**
-	 * @param string A {@link String} to load JSON data from.
-	 * @return The result of loading the data if it is a map or <code>null</code> if it isn't.
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to an {@link Integer}.
 	 */
-	public static final JsonMap parseMap(String string) throws IOException {
-		Object result = parse(string);
-		return result instanceof JsonMap ? (JsonMap) result : null;
+	public static final Integer asIntObject(Object obj) {
+		return Integer.valueOf(asInt(obj));
+	}
+
+	/**
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a long.
+	 */
+	public static final long asLong(Object obj) {
+		if (obj instanceof Number) {
+			return ((Number) obj).longValue();
+		}
+		if (obj instanceof String) {
+			try {
+				return Long.parseLong((String) obj);
+			} catch (Exception exception) {
+				return 0;
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a {@link Long}.
+	 */
+	public static final Long asLongObject(Object obj) {
+		return Long.valueOf(asLong(obj));
+	}
+
+	/**
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a float.
+	 */
+	public static final float asFloat(Object obj) {
+		if (obj instanceof Number) {
+			return ((Number) obj).floatValue();
+		}
+		if (obj instanceof String) {
+			try {
+				return Float.parseFloat((String) obj);
+			} catch (Exception exception) {
+				return 0;
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a {@link Float}.
+	 */
+	public static final Float asFloatObject(Object obj) {
+		return Float.valueOf(asFloat(obj));
+	}
+
+	/**
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a double.
+	 */
+	public static final double asDouble(Object obj) {
+		if (obj instanceof Number) {
+			return ((Number) obj).doubleValue();
+		}
+		if (obj instanceof String) {
+			try {
+				return Double.parseDouble((String) obj);
+			} catch (Exception exception) {
+				return 0;
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * @param obj An object to process.
+	 * @return The value associated with the object or <code>0</code> if the object is
+	 *         <code>null</code> or the value cannot be converted to a {@link Double}.
+	 */
+	public static final Double asDoubleObject(Object obj) {
+		return Double.valueOf(asDouble(obj));
+	}
+
+	/**
+	 * @param obj An object to process.
+	 * @param allowNull <code>false</code> to return an empty string if the result would be
+	 *            <code>null</code>.
+	 * @return The value associated with the object.
+	 */
+	public static final String asString(Object obj, boolean allowNull) {
+		if (JsonNull.INSTANCE.equals(obj)) {
+			return allowNull ? null : "";
+		}
+		return obj.toString();
+	}
+
+	/**
+	 * @param obj An object to process.
+	 * @param allowNull <code>false</code> to return an empty array if the object is
+	 *            <code>null</code> or the value is not a {@link JsonArray}.
+	 * @return The {@link JsonArray}.
+	 */
+	public static final JsonArray asArray(Object obj, boolean allowNull) {
+		if (obj instanceof JsonArray) {
+			return (JsonArray) obj;
+		}
+		return allowNull ? null : new JsonArray();
+	}
+
+	/**
+	 * @param obj An object to process.
+	 * @param allowNull <code>false</code> to return an empty map if the object is <code>null</code>
+	 *            or the value is not a {@link JsonMap}.
+	 * @return The {@link JsonMap}.
+	 */
+	public static final JsonMap asMap(Object obj, boolean allowNull) {
+		if (obj instanceof JsonMap) {
+			return (JsonMap) obj;
+		}
+		return allowNull ? null : new JsonMap();
+	}
+
+	/**
+	 * @param obj An object to process.
+	 * @param allowNull <code>false</code> to return an empty point if the object is
+	 *            <code>null</code> or the value cannot be converted to a {@link Point}.
+	 * @return The value associated with the object.
+	 */
+	public static final Point asPoint(Object obj, boolean allowNull) {
+		if (obj instanceof Point) {
+			return (Point) obj;
+		}
+		if (!JsonNull.INSTANCE.equals(obj)) {
+			try {
+				return Geometry.toPoint(obj.toString());
+			} catch (Exception exception) {
+				// Fall through
+			}
+		}
+		return allowNull ? null : new Point();
+	}
+
+	/**
+	 * @param obj An object to process.
+	 * @param allowNull <code>false</code> to return an empty point if the object is
+	 *            <code>null</code> or the value cannot be converted to a {@link Rectangle}.
+	 * @return The value associated with the object.
+	 */
+	public static final Rectangle asRectangle(Object obj, boolean allowNull) {
+		if (obj instanceof Rectangle) {
+			return (Rectangle) obj;
+		}
+		if (!JsonNull.INSTANCE.equals(obj)) {
+			try {
+				return Geometry.toRectangle(obj.toString());
+			} catch (Exception exception) {
+				// Fall through
+			}
+		}
+		return allowNull ? null : new Rectangle();
 	}
 
 	/**
@@ -196,19 +660,19 @@ public class Json {
 		if (value instanceof Number) {
 			String str = value.toString();
 			if (str.indexOf('.') > 0 && str.indexOf('e') < 0 && str.indexOf('E') < 0) {
-				while (str.endsWith("0")) { //$NON-NLS-1$
+				while (str.endsWith("0")) {
 					str = str.substring(0, str.length() - 1);
 				}
-				if (str.endsWith(".")) { //$NON-NLS-1$
+				if (str.endsWith(".")) {
 					str = str.substring(0, str.length() - 1);
 				}
 			}
 			return str;
 		}
-		if (value instanceof Boolean || value instanceof JsonMap || value instanceof JsonArray) {
+		if (value instanceof Boolean || value instanceof JsonCollection) {
 			return value.toString();
 		}
-		if (value instanceof Map || value instanceof Collection || value.getClass().isArray()) {
+		if (value instanceof Map || value instanceof List || value.getClass().isArray()) {
 			return wrap(value).toString();
 		}
 		if (value instanceof Point) {
@@ -228,62 +692,54 @@ public class Json {
 		if (JsonNull.INSTANCE.equals(object)) {
 			return JsonNull.INSTANCE;
 		}
-		if (object instanceof JsonMap || object instanceof JsonArray || object instanceof Byte || object instanceof Character || object instanceof Short || object instanceof Integer || object instanceof Long || object instanceof Boolean || object instanceof Float || object instanceof Double || object instanceof String) {
+		if (object instanceof JsonCollection || object instanceof Boolean || object instanceof Byte || object instanceof Character || object instanceof Short || object instanceof Integer || object instanceof Long || object instanceof Float || object instanceof Double || object instanceof String) {
 			return object;
 		}
-		if (object instanceof Collection) {
+		if (object instanceof List) {
 			JsonArray array = new JsonArray();
-			for (Object one : (Collection<?>) object) {
+			for (Object one : (List<?>) object) {
 				array.put(wrap(one));
 			}
 			return array;
 		}
-		if (object.getClass().isArray()) {
+		Class<?> type = object.getClass();
+		if (type.isArray()) {
 			JsonArray array = new JsonArray();
-			if (object instanceof Object[]) {
-				Object[] objs = (Object[]) object;
-				for (Object obj : objs) {
-					array.put(wrap(obj));
+			if (object instanceof boolean[]) {
+				for (boolean value : (boolean[]) object) {
+					array.put(value);
 				}
 			} else if (object instanceof byte[]) {
-				byte[] values = (byte[]) object;
-				for (byte value : values) {
-					array.put(wrap(Byte.valueOf(value)));
+				for (byte value : (byte[]) object) {
+					array.put(value);
 				}
 			} else if (object instanceof char[]) {
-				char[] values = (char[]) object;
-				for (char value : values) {
-					array.put(wrap(Character.valueOf(value)));
+				for (char value : (char[]) object) {
+					array.put(value);
 				}
 			} else if (object instanceof short[]) {
-				short[] values = (short[]) object;
-				for (short value : values) {
-					array.put(wrap(Short.valueOf(value)));
+				for (short value : (short[]) object) {
+					array.put(value);
 				}
 			} else if (object instanceof int[]) {
-				int[] values = (int[]) object;
-				for (int value : values) {
-					array.put(wrap(Integer.valueOf(value)));
+				for (int value : (int[]) object) {
+					array.put(value);
 				}
 			} else if (object instanceof long[]) {
-				long[] values = (long[]) object;
-				for (long value : values) {
-					array.put(wrap(Long.valueOf(value)));
+				for (long value : (long[]) object) {
+					array.put(value);
 				}
 			} else if (object instanceof float[]) {
-				float[] values = (float[]) object;
-				for (float value : values) {
-					array.put(wrap(Float.valueOf(value)));
+				for (float value : (float[]) object) {
+					array.put(value);
 				}
 			} else if (object instanceof double[]) {
-				double[] values = (double[]) object;
-				for (double value : values) {
-					array.put(wrap(Double.valueOf(value)));
+				for (double value : (double[]) object) {
+					array.put(value);
 				}
-			} else if (object instanceof boolean[]) {
-				boolean[] values = (boolean[]) object;
-				for (boolean value : values) {
-					array.put(wrap(Boolean.valueOf(value)));
+			} else {
+				for (Object obj : (Object[]) object) {
+					array.put(wrap(obj));
 				}
 			}
 			return array;
@@ -301,6 +757,19 @@ public class Json {
 		if (object instanceof Rectangle) {
 			return Geometry.toString((Rectangle) object);
 		}
+		if (Introspection.hasDeepFieldAnnotation(type, JsonKey.class)) {
+			JsonMap map = new JsonMap();
+			for (FieldAnnotation<JsonKey> fa : Introspection.getDeepFieldAnnotations(type, JsonKey.class)) {
+				Field field = fa.getField();
+				Introspection.makeFieldAccessible(field);
+				try {
+					map.put(fa.getAnnotation().value(), field.get(object));
+				} catch (IllegalAccessException exception) {
+					Log.error(exception);
+				}
+			}
+			return map;
+		}
 		return object.toString();
 	}
 
@@ -311,7 +780,7 @@ public class Json {
 	public static final String quote(String string) {
 		int len;
 		if (string == null || (len = string.length()) == 0) {
-			return "\"\""; //$NON-NLS-1$
+			return "\"\"";
 		}
 		StringBuffer buffer = new StringBuffer(len + 4);
 		buffer.append('"');
@@ -332,24 +801,24 @@ public class Json {
 					buffer.append(ch);
 					break;
 				case '\b':
-					buffer.append("\\b"); //$NON-NLS-1$
+					buffer.append("\\b");
 					break;
 				case '\t':
-					buffer.append("\\t"); //$NON-NLS-1$
+					buffer.append("\\t");
 					break;
 				case '\n':
-					buffer.append("\\n"); //$NON-NLS-1$
+					buffer.append("\\n");
 					break;
 				case '\f':
-					buffer.append("\\f"); //$NON-NLS-1$
+					buffer.append("\\f");
 					break;
 				case '\r':
-					buffer.append("\\r"); //$NON-NLS-1$
+					buffer.append("\\r");
 					break;
 				default:
 					if (ch < ' ' || ch >= '\u0080' && ch < '\u00a0' || ch >= '\u2000' && ch < '\u2100') {
-						String hex = "000" + Integer.toHexString(ch); //$NON-NLS-1$
-						buffer.append("\\u" + hex.substring(hex.length() - 4)); //$NON-NLS-1$
+						String hex = "000" + Integer.toHexString(ch);
+						buffer.append("\\u" + hex.substring(hex.length() - 4));
 					} else {
 						buffer.append(ch);
 					}
@@ -419,23 +888,23 @@ public class Json {
 		}
 
 		StringBuffer sb = new StringBuffer();
-		while (c >= ' ' && ",:]}/\\\"[{;=#".indexOf(c) < 0) { //$NON-NLS-1$
+		while (c >= ' ' && ",:]}/\\\"[{;=#".indexOf(c) < 0) {
 			sb.append(c);
 			c = next();
 		}
 		back();
 
 		s = sb.toString().trim();
-		if (s.equals("")) { //$NON-NLS-1$
-			throw syntaxError("Missing value"); //$NON-NLS-1$
+		if (s.equals("")) {
+			throw syntaxError("Missing value");
 		}
-		if (s.equalsIgnoreCase("true")) { //$NON-NLS-1$
+		if (s.equalsIgnoreCase("true")) {
 			return Boolean.TRUE;
 		}
-		if (s.equalsIgnoreCase("false")) { //$NON-NLS-1$
+		if (s.equalsIgnoreCase("false")) {
 			return Boolean.FALSE;
 		}
-		if (s.equalsIgnoreCase("null")) { //$NON-NLS-1$
+		if (s.equalsIgnoreCase("null")) {
 			return JsonNull.INSTANCE;
 		}
 
@@ -472,7 +941,7 @@ public class Json {
 		} else if (c == '(') {
 			q = ')';
 		} else {
-			throw syntaxError("A JSONArray text must start with '['"); //$NON-NLS-1$
+			throw syntaxError("A JSONArray text must start with '['");
 		}
 		JsonArray array = new JsonArray();
 		if (nextSkippingWhitespace() == ']') {
@@ -499,11 +968,11 @@ public class Json {
 				case ']':
 				case ')':
 					if (q != c) {
-						throw syntaxError("Expected a '" + new Character(q) + "'"); //$NON-NLS-1$ //$NON-NLS-2$
+						throw syntaxError("Expected a '" + Character.toString(q) + "'");
 					}
 					return array;
 				default:
-					throw syntaxError("Expected a ',' or ']'"); //$NON-NLS-1$
+					throw syntaxError("Expected a ',' or ']'");
 			}
 		}
 	}
@@ -513,14 +982,14 @@ public class Json {
 		String key;
 
 		if (nextSkippingWhitespace() != '{') {
-			throw syntaxError("A JSONObject text must begin with '{'"); //$NON-NLS-1$
+			throw syntaxError("JSON object text must begin with '{'");
 		}
 		JsonMap map = new JsonMap();
 		while (true) {
 			c = nextSkippingWhitespace();
 			switch (c) {
 				case 0:
-					throw syntaxError("A JSONObject text must end with '}'"); //$NON-NLS-1$
+					throw syntaxError("JSON object text must end with '}'");
 				case '}':
 					return map;
 				default:
@@ -534,10 +1003,10 @@ public class Json {
 					back();
 				}
 			} else if (c != ':') {
-				throw syntaxError("Expected a ':' after a key"); //$NON-NLS-1$
+				throw syntaxError("Expected a ':' after a key");
 			}
 			if (map.has(key)) {
-				throw new IOException("Duplicate key \"" + key + "\""); //$NON-NLS-1$ //$NON-NLS-2$
+				throw new IOException("Duplicate key \"" + key + "\"");
 			}
 			map.put(key, nextValue());
 
@@ -552,7 +1021,7 @@ public class Json {
 				case '}':
 					return map;
 				default:
-					throw syntaxError("Expected a ',' or '}'"); //$NON-NLS-1$
+					throw syntaxError("Expected a ',' or '}'");
 			}
 		}
 	}
@@ -566,7 +1035,7 @@ public class Json {
 				case 0:
 				case '\n':
 				case '\r':
-					throw syntaxError("Unterminated string"); //$NON-NLS-1$
+					throw syntaxError("Unterminated string");
 				case '\\':
 					c = next();
 					switch (c) {
@@ -595,7 +1064,7 @@ public class Json {
 							buffer.append(c);
 							break;
 						default:
-							throw syntaxError("Illegal escape."); //$NON-NLS-1$
+							throw syntaxError("Illegal escape.");
 					}
 					break;
 				default:
@@ -609,7 +1078,7 @@ public class Json {
 
 	private void back() {
 		if (mUsePrevious || mIndex <= 0) {
-			throw new IllegalStateException("Stepping back two steps is not supported"); //$NON-NLS-1$
+			throw new IllegalStateException("Stepping back two steps is not supported");
 		}
 		mIndex--;
 		mCharacter--;
@@ -619,7 +1088,7 @@ public class Json {
 
 	private String next(int n) throws IOException {
 		if (n == 0) {
-			return ""; //$NON-NLS-1$
+			return "";
 		}
 
 		char[] buffer = new char[n];
@@ -628,7 +1097,7 @@ public class Json {
 		while (pos < n) {
 			buffer[pos] = next();
 			if (mEOF && !mUsePrevious) {
-				throw syntaxError("Substring bounds error"); //$NON-NLS-1$
+				throw syntaxError("Substring bounds error");
 			}
 			pos++;
 		}
@@ -639,7 +1108,6 @@ public class Json {
 		return new IOException(message + toString());
 	}
 
-	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
 		return " at " + mIndex + " [character " + mCharacter + " line " + mLine + "]";

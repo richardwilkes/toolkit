@@ -14,12 +14,21 @@ package com.trollworks.toolkit.io.json;
 /** Common base class for JSON collections. */
 public abstract class JsonCollection {
 	@Override
-	public String toString() {
-		StringBuilder buffer = new StringBuilder();
-		appendTo(buffer);
-		return buffer.toString();
+	public final String toString() {
+		return toString(false);
 	}
 
-	/** @param out The {@link Appendable} to store a text representation into. */
-	public abstract void appendTo(Appendable out);
+	public final String toString(boolean compact) {
+		return appendTo(new StringBuilder(), compact, 0).toString();
+	}
+
+	public abstract StringBuilder appendTo(StringBuilder buffer, boolean compact, int depth);
+
+	protected static void indent(StringBuilder buffer, boolean compact, int depth) {
+		if (!compact) {
+			for (int i = 0; i < depth; i++) {
+				buffer.append('\t');
+			}
+		}
+	}
 }

@@ -11,13 +11,12 @@
 
 package com.trollworks.toolkit.io.json;
 
-import com.trollworks.toolkit.io.Log;
-import com.trollworks.toolkit.utility.Geometry;
-
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,24 +49,29 @@ public class JsonMap extends JsonCollection {
 
 	/**
 	 * @param key The key to retrieve.
-	 * @return The value associated with the key or an empty string if no key matches.
-	 */
-	public String getString(String key) {
-		Object value = get(key);
-		return value != null ? value.toString() : ""; //$NON-NLS-1$
-	}
-
-	/**
-	 * @param key The key to retrieve.
 	 * @return The value associated with the key or <code>false</code> if no key matches or the
 	 *         value cannot be converted to a boolean.
 	 */
 	public boolean getBoolean(String key) {
-		Object value = get(key);
-		if (Boolean.TRUE.equals(value) || value instanceof String && "true".equalsIgnoreCase((String) value)) { //$NON-NLS-1$
-			return true;
-		}
-		return false;
+		return Json.asBoolean(get(key));
+	}
+
+	/**
+	 * @param key The key to retrieve.
+	 * @return The value associated with the key or zero if no key matches or the value cannot be
+	 *         converted to a byte.
+	 */
+	public byte getByte(String key) {
+		return Json.asByte(get(key));
+	}
+
+	/**
+	 * @param key The key to retrieve.
+	 * @return The value associated with the key or zero if no key matches or the value cannot be
+	 *         converted to a char.
+	 */
+	public char getChar(String key) {
+		return Json.asChar(get(key));
 	}
 
 	/**
@@ -76,12 +80,7 @@ public class JsonMap extends JsonCollection {
 	 *         converted to an integer.
 	 */
 	public int getInt(String key) {
-		Object value = get(key);
-		try {
-			return value instanceof Number ? ((Number) value).intValue() : Integer.parseInt((String) value);
-		} catch (Exception exception) {
-			return 0;
-		}
+		return Json.asInt(get(key));
 	}
 
 	/**
@@ -90,12 +89,16 @@ public class JsonMap extends JsonCollection {
 	 *         converted to a long.
 	 */
 	public long getLong(String key) {
-		Object value = get(key);
-		try {
-			return value instanceof Number ? ((Number) value).longValue() : Long.parseLong((String) value);
-		} catch (Exception exception) {
-			return 0;
-		}
+		return Json.asLong(get(key));
+	}
+
+	/**
+	 * @param key The key to retrieve.
+	 * @return The value associated with the key or zero if no key matches or the value cannot be
+	 *         converted to a float.
+	 */
+	public float getFloat(String key) {
+		return Json.asFloat(get(key));
 	}
 
 	/**
@@ -104,65 +107,56 @@ public class JsonMap extends JsonCollection {
 	 *         converted to a double.
 	 */
 	public double getDouble(String key) {
-		Object value = get(key);
-		try {
-			return value instanceof Number ? ((Number) value).doubleValue() : Double.valueOf((String) value).doubleValue();
-		} catch (Exception exception) {
-			return 0;
-		}
+		return Json.asDouble(get(key));
 	}
 
 	/**
 	 * @param key The key to retrieve.
-	 * @return The value associated with the key or an empty array if no key matches or the value
-	 *         cannot be converted to a {@link JsonArray}.
+	 * @param allowNull <code>false</code> to return an empty string if no key matches.
+	 * @return The value associated with the key.
 	 */
-	public JsonArray getArray(String key) {
-		Object value = get(key);
-		if (value instanceof JsonArray) {
-			return (JsonArray) value;
-		}
-		return new JsonArray();
+	public String getString(String key, boolean allowNull) {
+		return Json.asString(get(key), allowNull);
 	}
 
 	/**
 	 * @param key The key to retrieve.
-	 * @return The value associated with the key or an empty map if no key matches or the value
-	 *         cannot be converted to a {@link JsonMap}.
+	 * @param allowNull <code>false</code> to return an empty array if no key matches or the value
+	 *            cannot be converted to a {@link JsonArray}.
+	 * @return The value associated with the key.
 	 */
-	public JsonMap getMap(String key) {
-		Object value = get(key);
-		if (value instanceof JsonMap) {
-			return (JsonMap) value;
-		}
-		return new JsonMap();
+	public JsonArray getArray(String key, boolean allowNull) {
+		return Json.asArray(get(key), allowNull);
 	}
 
 	/**
 	 * @param key The key to retrieve.
-	 * @return The value associated with the key or a {@link Point} with a value of <code>0,0</code>
-	 *         if no key matches or the value cannot be converted to a {@link Point}.
+	 * @param allowNull <code>false</code> to return an empty map if no key matches or the value
+	 *            cannot be converted to a {@link JsonMap}.
+	 * @return The value associated with the key.
 	 */
-	public Point getPoint(String key) {
-		try {
-			return Geometry.toPoint(getString(key));
-		} catch (NumberFormatException nfe) {
-			return new Point();
-		}
+	public JsonMap getMap(String key, boolean allowNull) {
+		return Json.asMap(get(key), allowNull);
 	}
 
 	/**
 	 * @param key The key to retrieve.
-	 * @return The value associated with the key or a {@link Rectangle} with a value of
-	 *         <code>0,0,0,0</code> if no key matches or the value cannot be converted to a
-	 *         {@link Rectangle}.
+	 * @param allowNull <code>false</code> to return an empty point if no such key exists or the
+	 *            value cannot be converted to a {@link Point}.
+	 * @return The value associated with the key.
 	 */
-	public Rectangle getRectangle(String key) {
-		try {
-			return Geometry.toRectangle(getString(key));
-		} catch (NumberFormatException nfe) {
-			return new Rectangle();
-		}
+	public Point getPoint(String key, boolean allowNull) {
+		return Json.asPoint(getString(key, true), allowNull);
+	}
+
+	/**
+	 * @param key The key to retrieve.
+	 * @param allowNull <code>false</code> to return an empty rectangle if no such key exists or the
+	 *            value cannot be converted to a {@link Rectangle}.
+	 * @return The value associated with the key.
+	 */
+	public Rectangle getRectangle(String key, boolean allowNull) {
+		return Json.asRectangle(getString(key, true), allowNull);
 	}
 
 	/**
@@ -181,6 +175,22 @@ public class JsonMap extends JsonCollection {
 	 */
 	public void put(String key, boolean value) {
 		put(key, Boolean.valueOf(value));
+	}
+
+	/**
+	 * @param key The key to store the value with.
+	 * @param value The value to store.
+	 */
+	public void put(String key, byte value) {
+		put(key, Byte.valueOf(value));
+	}
+
+	/**
+	 * @param key The key to store the value with.
+	 * @param value The value to store.
+	 */
+	public void put(String key, char value) {
+		put(key, Character.valueOf(value));
 	}
 
 	/**
@@ -229,28 +239,40 @@ public class JsonMap extends JsonCollection {
 	}
 
 	@Override
-	public void appendTo(Appendable out) {
-		try {
-			boolean needComma = false;
-			out.append('{');
-			for (Map.Entry<String, Object> entry : mMap.entrySet()) {
-				if (needComma) {
-					out.append(',');
-				} else {
-					needComma = true;
-				}
-				out.append(Json.quote(entry.getKey()));
-				out.append(':');
-				Object v = entry.getValue();
-				if (v instanceof JsonCollection) {
-					((JsonCollection) v).appendTo(out);
-				} else {
-					out.append(Json.toString(v));
-				}
+	public StringBuilder appendTo(StringBuilder buffer, boolean compact, int depth) {
+		boolean needComma = false;
+		buffer.append('{');
+		List<String> keys = new ArrayList<>(mMap.keySet());
+		Collections.sort(keys);
+		depth++;
+		for (String key : keys) {
+			if (needComma) {
+				buffer.append(',');
+			} else {
+				needComma = true;
 			}
-			out.append('}');
-		} catch (IOException exception) {
-			Log.error(exception);
+			if (!compact) {
+				buffer.append('\n');
+				indent(buffer, compact, depth);
+			}
+			buffer.append(Json.quote(key));
+			if (compact) {
+				buffer.append(':');
+			} else {
+				buffer.append(" : "); //$NON-NLS-1$
+			}
+			Object value = mMap.get(key);
+			if (value instanceof JsonCollection) {
+				((JsonCollection) value).appendTo(buffer, compact, depth);
+			} else {
+				buffer.append(Json.toString(value));
+			}
 		}
+		if (!compact && !keys.isEmpty()) {
+			buffer.append('\n');
+			indent(buffer, compact, depth - 1);
+		}
+		buffer.append('}');
+		return buffer;
 	}
 }

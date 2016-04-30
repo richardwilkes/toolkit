@@ -38,8 +38,9 @@ import com.trollworks.toolkit.io.xml.helper.XmlPrimitiveShortHelper;
 import com.trollworks.toolkit.io.xml.helper.XmlShortHelper;
 import com.trollworks.toolkit.io.xml.helper.XmlStringHelper;
 import com.trollworks.toolkit.io.xml.helper.XmlUUIDHelper;
-import com.trollworks.toolkit.utility.Introspection;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.introspection.FieldAnnotation;
+import com.trollworks.toolkit.utility.introspection.Introspection;
 import com.trollworks.toolkit.workarounds.PathToUri;
 
 import java.io.File;
@@ -265,21 +266,19 @@ public class Xml {
 				unmatchedAttributes.add(xml.getAttributeName(i));
 			}
 			unmatchedAttributes.remove(ATTR_VERSION);
-			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlAttr.class)) {
+			for (FieldAnnotation<XmlAttr> fa : Introspection.getDeepFieldAnnotations(tagClass, XmlAttr.class)) {
+				Field field = fa.getField();
 				Introspection.makeFieldAccessible(field);
-				XmlAttr attr = field.getAnnotation(XmlAttr.class);
-				if (attr != null) {
-					String name = attr.value();
-					unmatchedAttributes.remove(name);
-					getHelper(field.getType()).loadAttributeValue(context, obj, field, name);
-				}
+				String name = fa.getAnnotation().value();
+				unmatchedAttributes.remove(name);
+				getHelper(field.getType()).loadAttributeValue(context, obj, field, name);
 			}
 			if (obj instanceof TagAttributesLoaded) {
 				((TagAttributesLoaded) obj).xmlAttributesLoaded(context, unmatchedAttributes);
 			}
 			Map<String, Field> subTags = new HashMap<>();
-			for (Field field : Introspection.getFieldsWithAnnotation(tagClass, true, XmlTag.class)) {
-				subTags.put(field.getAnnotation(XmlTag.class).value(), field);
+			for (FieldAnnotation<XmlTag> fa : Introspection.getDeepFieldAnnotations(tagClass, XmlTag.class)) {
+				subTags.put(fa.getAnnotation().value(), fa.getField());
 			}
 			String tag;
 			while ((tag = xml.nextTag(marker)) != null) {
@@ -451,8 +450,9 @@ public class Xml {
 	}
 
 	private static boolean hasSubTags(Object obj, Class<?> objClass) throws XMLStreamException {
-		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class)) {
+		for (FieldAnnotation<XmlTag> fa : Introspection.getDeepFieldAnnotations(objClass, XmlTag.class)) {
 			try {
+				Field field = fa.getField();
 				Introspection.makeFieldAccessible(field);
 				Object content = field.get(obj);
 				if (content != null && (!(content instanceof String) || !((String) content).isEmpty())) {
@@ -473,12 +473,10 @@ public class Xml {
 
 	private static void emitAttributes(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException, ReflectiveOperationException {
 		xml.addAttributeNot(ATTR_VERSION, getVersionOfTag(objClass), 0);
-		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlAttr.class)) {
+		for (FieldAnnotation<XmlAttr> fa : Introspection.getDeepFieldAnnotations(objClass, XmlAttr.class)) {
+			Field field = fa.getField();
 			Introspection.makeFieldAccessible(field);
-			XmlAttr xmlAttr = field.getAnnotation(XmlAttr.class);
-			if (xmlAttr != null) {
-				getHelper(field.getType()).emitAsAttribute(xml, obj, field, xmlAttr.value());
-			}
+			getHelper(field.getType()).emitAsAttribute(xml, obj, field, fa.getAnnotation().value());
 		}
 		if (obj instanceof TagExtraAttributes) {
 			((TagExtraAttributes) obj).xmlEmitExtraAttributes(xml);
@@ -486,30 +484,29 @@ public class Xml {
 	}
 
 	private static final void emitSubTags(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException {
-		for (Field field : Introspection.getFieldsWithAnnotation(objClass, true, XmlTag.class)) {
+		for (FieldAnnotation<XmlTag> fa : Introspection.getDeepFieldAnnotations(objClass, XmlTag.class)) {
 			try {
+				Field field = fa.getField();
 				Introspection.makeFieldAccessible(field);
 				Object content = field.get(obj);
 				if (content != null && (!(content instanceof String) || !((String) content).isEmpty())) {
-					XmlTag subTag = field.getAnnotation(XmlTag.class);
-					if (subTag != null) {
-						Class<?> type = field.getType();
-						if (Collection.class.isAssignableFrom(type)) {
-							Collection<?> collection = (Collection<?>) content;
-							if (!collection.isEmpty()) {
-								if (!field.isAnnotationPresent(XmlNoSort.class)) {
-									Object[] data = collection.toArray();
-									Arrays.sort(data);
-									collection = Arrays.asList(data);
-								}
-								String tag = subTag.value();
-								for (Object one : collection) {
-									add(xml, tag, one);
-								}
+					XmlTag subTag = fa.getAnnotation();
+					Class<?> type = field.getType();
+					if (Collection.class.isAssignableFrom(type)) {
+						Collection<?> collection = (Collection<?>) content;
+						if (!collection.isEmpty()) {
+							if (!field.isAnnotationPresent(XmlNoSort.class)) {
+								Object[] data = collection.toArray();
+								Arrays.sort(data);
+								collection = Arrays.asList(data);
 							}
-						} else {
-							add(xml, subTag.value(), content);
+							String tag = subTag.value();
+							for (Object one : collection) {
+								add(xml, tag, one);
+							}
 						}
+					} else {
+						add(xml, subTag.value(), content);
 					}
 				}
 			} catch (XMLStreamException exception) {

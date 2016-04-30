@@ -22,7 +22,7 @@ public final class JsonNull {
 
 	@Override
 	public final boolean equals(Object other) {
-		return other == null || other == this || other instanceof JsonNull;
+		return other == null || other == this;
 	}
 
 	@Override
