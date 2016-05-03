@@ -59,7 +59,25 @@ public class WindowUtils {
 	 *            {@link Dialog}.
 	 * @param msg The message to display.
 	 */
+	public static void showError(Component comp, Component msg) {
+		JOptionPane.showMessageDialog(comp, msg, ERROR, JOptionPane.ERROR_MESSAGE);
+	}
+
+	/**
+	 * @param comp The {@link Component} to use for determining the parent {@link Frame} or
+	 *            {@link Dialog}.
+	 * @param msg The message to display.
+	 */
 	public static void showWarning(Component comp, String msg) {
+		JOptionPane.showMessageDialog(comp, msg, WARNING, JOptionPane.WARNING_MESSAGE);
+	}
+
+	/**
+	 * @param comp The {@link Component} to use for determining the parent {@link Frame} or
+	 *            {@link Dialog}.
+	 * @param msg The message to display.
+	 */
+	public static void showWarning(Component comp, Component msg) {
 		JOptionPane.showMessageDialog(comp, msg, WARNING, JOptionPane.WARNING_MESSAGE);
 	}
 
