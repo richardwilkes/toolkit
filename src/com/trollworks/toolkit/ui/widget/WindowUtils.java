@@ -34,12 +34,12 @@ public class WindowUtils {
 	@Localize(locale = "ru", value = "Ошибка")
 	@Localize(locale = "de", value = "Fehler")
 	@Localize(locale = "es", value = "Error")
-	private static String	ERROR;
+	public static String	ERROR;
 	@Localize("Warning")
 	@Localize(locale = "ru", value = "Внимание")
 	@Localize(locale = "de", value = "Warnung")
 	@Localize(locale = "es", value = "Aviso")
-	private static String	WARNING;
+	public static String	WARNING;
 
 	static {
 		Localization.initialize();
