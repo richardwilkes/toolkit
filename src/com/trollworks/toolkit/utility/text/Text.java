@@ -359,4 +359,49 @@ public class Text {
 		buffer.setLength(buffer.length() - 1);
 		return buffer.toString();
 	}
+
+	public static String wrapPlainTextForToolTip(String text) {
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("<html><body>"); //$NON-NLS-1$
+		buffer.append(htmlEscape(wrapToCharacterCount(text, 40)).replaceAll(NEWLINE, "<br>")); //$NON-NLS-1$
+		buffer.append("</body></html>"); //$NON-NLS-1$
+		return buffer.toString();
+	}
+
+	public static String htmlEscape(String str) {
+		if (str == null) {
+			return null;
+		}
+		int length = str.length();
+		if (length == 0) {
+			return str;
+		}
+		StringBuilder buffer = new StringBuilder(length + 16);
+		for (int i = 0; i < length; i++) {
+			char ch = str.charAt(i);
+			switch (ch) {
+				case '&':
+					buffer.append("&amp;"); //$NON-NLS-1$
+					break;
+				case '<':
+					buffer.append("&lt;"); //$NON-NLS-1$
+					break;
+				case '>':
+					buffer.append("&gt;"); //$NON-NLS-1$
+					break;
+				case '"':
+					buffer.append("&quot;"); //$NON-NLS-1$
+					break;
+				case '\'':
+					buffer.append("&#39;"); //$NON-NLS-1$
+					break;
+				case '/':
+					buffer.append("&#47;"); //$NON-NLS-1$
+					break;
+				default:
+					buffer.append(ch);
+			}
+		}
+		return buffer.toString();
+	}
 }
