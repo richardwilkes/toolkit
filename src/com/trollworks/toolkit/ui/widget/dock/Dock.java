@@ -13,9 +13,12 @@ package com.trollworks.toolkit.ui.widget.dock;
 
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.MouseCapture;
+import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.Cursors;
 
+import java.awt.AWTEvent;
 import java.awt.Component;
+import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.IllegalComponentStateException;
 import java.awt.KeyboardFocusManager;
@@ -28,6 +31,8 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.AWTEventListener;
+import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -59,6 +64,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 	private DockLayoutNode		mDragOverNode;
 	private DockLocation		mDragOverLocation;
 	private DockContainer		mMaximizedContainer;
+	private MouseMonitor		mMouseMonitor;
 
 	/** Creates a new, empty {@link Dock}. */
 	public Dock() {
@@ -68,6 +74,16 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 		addMouseMotionListener(this);
 		setFocusCycleRoot(true);
 		setDropTarget(new DropTarget(this, DnDConstants.ACTION_MOVE, this));
+		mMouseMonitor = new MouseMonitor();
+		addHierarchyListener((event) -> {
+			if (event.getID() == HierarchyEvent.HIERARCHY_CHANGED && (event.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) == HierarchyEvent.DISPLAYABILITY_CHANGED) {
+				if (isDisplayable()) {
+					getToolkit().addAWTEventListener(mMouseMonitor, AWTEvent.MOUSE_EVENT_MASK);
+				} else {
+					getToolkit().removeAWTEventListener(mMouseMonitor);
+				}
+			}
+		});
 	}
 
 	/**
@@ -678,5 +694,31 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 			}
 		} while (again);
 		return title;
+	}
+
+	class MouseMonitor implements AWTEventListener {
+		@Override
+		public void eventDispatched(AWTEvent event) {
+			if (event.getID() == Event.MOUSE_DOWN) {
+				Object source = event.getSource();
+				if (source instanceof Component) {
+					Component comp = (Component) source;
+					if (Dock.this == UIUtilities.getAncestorOfType(comp, Dock.class)) {
+						Dockable dockable;
+						if (comp instanceof Dockable) {
+							dockable = (Dockable) comp;
+						} else {
+							dockable = UIUtilities.getAncestorOfType(comp, Dockable.class);
+						}
+						if (dockable != null) {
+							DockContainer dc = dockable.getDockContainer();
+							if (dc != null) {
+								dc.setCurrentDockable(dockable);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
