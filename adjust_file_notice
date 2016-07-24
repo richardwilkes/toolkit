@@ -1,3 +1,0 @@
-#!/bin/sh
-
-java -cp libraries/toolkit-4.4.1.jar com.trollworks.toolkit.utility.AdjustFileNotice "$@"
