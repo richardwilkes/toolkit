@@ -158,6 +158,7 @@ public class PrintManager {
 	 * @param reader The XML reader to load from.
 	 */
 	public PrintManager(XMLReader reader) throws IOException {
+		this();
 		load(reader);
 	}
 
