@@ -44,6 +44,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
 	private List<Row>						mSavedSelection;
 	private boolean							mShowIndent;
 	private int								mIndentWidth;
+	private int								mHierarchyColumnID		= -1;
 	private RowFilter						mRowFilter;
 
 	/** Creates a new model. */
@@ -938,19 +939,43 @@ public class OutlineModel implements SelectionOwner, StateEditable {
 		}
 	}
 
+	/** @return The column that contains the hierarchy controls. */
+	public Column getHierarchyColumn() {
+		if (mHierarchyColumnID != -1) {
+			Column column = getColumnWithID(mHierarchyColumnID);
+			if (column != null) {
+				return column;
+			}
+		}
+		return getColumnAtIndex(0);
+	}
+
+	/** @param column The column that should contain the hierarchy controls. */
+	public void setHierarchyColumn(Column column) {
+		if (column == null) {
+			mHierarchyColumnID = -1;
+		} else {
+			mHierarchyColumnID = column.getID();
+		}
+	}
+
 	/**
 	 * @param column The column to check.
-	 * @return <code>true</code> if the specified column is the first visible column.
+	 * @return <code>true</code> if the specified column is the hierarchy column.
 	 */
-	public boolean isFirstColumn(Column column) {
+	public boolean isHierarchyColumn(Column column) {
 		if (column != null) {
-			for (Column col : mColumns) {
-				if (col == column) {
-					return true;
+			if (mHierarchyColumnID == -1) {
+				for (Column col : mColumns) {
+					if (col == column) {
+						return true;
+					}
+					if (col.isVisible()) {
+						return false;
+					}
 				}
-				if (col.isVisible()) {
-					return false;
-				}
+			} else {
+				return mHierarchyColumnID == column.getID();
 			}
 		}
 		return false;
@@ -982,7 +1007,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
 	 * @return The amount the column for this row is indented.
 	 */
 	public int getIndentWidth(Row row, Column column) {
-		if (mShowIndent && isFirstColumn(column)) {
+		if (mShowIndent && isHierarchyColumn(column)) {
 			return getIndentWidth() * (1 + row.getDepth());
 		}
 		return 0;
