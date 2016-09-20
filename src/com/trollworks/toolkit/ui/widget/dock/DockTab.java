@@ -23,6 +23,7 @@ import com.trollworks.toolkit.ui.widget.DataModifiedListener;
 import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.text.NumericComparator;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -83,7 +84,7 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 			((Saveable) dockable).addDataModifiedListener(this);
 		}
 		addMouseListener(this);
-		setToolTipText(dockable.getTitleTooltip());
+		setToolTipText(Text.wrapPlainTextForToolTip(dockable.getTitleTooltip()));
 		DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, this);
 	}
 

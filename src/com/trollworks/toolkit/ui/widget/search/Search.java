@@ -16,6 +16,7 @@ import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.layout.FlexRow;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.text.Numbers;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -70,14 +71,14 @@ public class Search extends JPanel implements DocumentListener, KeyListener, Foc
 		mFilterField.getDocument().addDocumentListener(this);
 		mFilterField.addKeyListener(this);
 		mFilterField.addFocusListener(this);
-		mFilterField.setToolTipText(MSG_SEARCH_FIELD_TOOLTIP);
+		mFilterField.setToolTipText(Text.wrapPlainTextForToolTip(MSG_SEARCH_FIELD_TOOLTIP));
 		// This client property is specific to Mac OS X
 		mFilterField.putClientProperty("JTextField.variant", "search"); //$NON-NLS-1$ //$NON-NLS-2$
 		mFilterField.setMinimumSize(new Dimension(60, mFilterField.getPreferredSize().height));
 		add(mFilterField);
 
 		mHits = new JLabel();
-		mHits.setToolTipText(MSG_HIT_TOOLTIP);
+		mHits.setToolTipText(Text.wrapPlainTextForToolTip(MSG_HIT_TOOLTIP));
 		adjustHits();
 		add(mHits);
 

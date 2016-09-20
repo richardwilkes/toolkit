@@ -30,6 +30,7 @@ import com.trollworks.toolkit.ui.widget.dock.DockableTransferable;
 import com.trollworks.toolkit.utility.Geometry;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.text.Numbers;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -1833,7 +1834,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 		if (column != null) {
 			Row row = overRow(event.getY());
 			if (row != null) {
-				return column.getRowCell(row).getToolTipText(event, getCellBounds(row, column), row, column);
+				return Text.wrapPlainTextForToolTip(column.getRowCell(row).getToolTipText(event, getCellBounds(row, column), row, column));
 			}
 		}
 		return super.getToolTipText(event);

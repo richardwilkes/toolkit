@@ -18,6 +18,7 @@ import com.trollworks.toolkit.ui.TextDrawing;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.text.Numbers;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -68,7 +69,7 @@ public class ShowTabsButton extends JComponent implements MouseListener, MouseMo
 		setOpaque(false);
 		setBackground(null);
 		setFont(UIManager.getFont("Label.font")); //$NON-NLS-1$
-		setToolTipText(TOOLTIP);
+		setToolTipText(Text.wrapPlainTextForToolTip(TOOLTIP));
 		setCursor(Cursor.getDefaultCursor());
 		addMouseListener(this);
 		addMouseMotionListener(this);

@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui.widget;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -82,7 +83,7 @@ public class FontPanel extends ActionPanel implements ActionListener {
 
 		mFontNameMenu = new JComboBox<>(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
 		mFontNameMenu.setOpaque(false);
-		mFontNameMenu.setToolTipText(NAME_TOOLTIP);
+		mFontNameMenu.setToolTipText(Text.wrapPlainTextForToolTip(NAME_TOOLTIP));
 		mFontNameMenu.setMaximumRowCount(25);
 		mFontNameMenu.addActionListener(this);
 		UIUtilities.setOnlySize(mFontNameMenu, mFontNameMenu.getPreferredSize());
@@ -97,7 +98,7 @@ public class FontPanel extends ActionPanel implements ActionListener {
 		sizes[9] = new Integer(18);
 		mFontSizeMenu = new JComboBox<>(sizes);
 		mFontSizeMenu.setOpaque(false);
-		mFontSizeMenu.setToolTipText(SIZE_TOOLTIP);
+		mFontSizeMenu.setToolTipText(Text.wrapPlainTextForToolTip(SIZE_TOOLTIP));
 		mFontSizeMenu.setMaximumRowCount(sizes.length);
 		mFontSizeMenu.addActionListener(this);
 		UIUtilities.setOnlySize(mFontSizeMenu, mFontSizeMenu.getPreferredSize());
@@ -105,7 +106,7 @@ public class FontPanel extends ActionPanel implements ActionListener {
 
 		mFontStyleMenu = new JComboBox<>(STD_STYLES);
 		mFontStyleMenu.setOpaque(false);
-		mFontStyleMenu.setToolTipText(STYLE_TOOLTIP);
+		mFontStyleMenu.setToolTipText(Text.wrapPlainTextForToolTip(STYLE_TOOLTIP));
 		mFontStyleMenu.addActionListener(this);
 		UIUtilities.setOnlySize(mFontStyleMenu, mFontStyleMenu.getPreferredSize());
 		add(mFontStyleMenu);

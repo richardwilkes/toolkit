@@ -18,6 +18,7 @@ import com.trollworks.toolkit.ui.border.SelectiveLineBorder;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -128,14 +129,14 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 	void adjustToMaximizedState() {
 		mMaximizeRestoreButton.setClickFunction(this::restore);
 		mMaximizeRestoreButton.setIcon(StdImage.DOCK_RESTORE);
-		mMaximizeRestoreButton.setToolTipText(RESTORE_TOOLTIP);
+		mMaximizeRestoreButton.setToolTipText(Text.wrapPlainTextForToolTip(RESTORE_TOOLTIP));
 	}
 
 	/** Called when the owning {@link DockContainer} is restored from the maximized state. */
 	void adjustToRestoredState() {
 		mMaximizeRestoreButton.setClickFunction(this::maximize);
 		mMaximizeRestoreButton.setIcon(StdImage.DOCK_MAXIMIZE);
-		mMaximizeRestoreButton.setToolTipText(MAXIMIZE_TOOLTIP);
+		mMaximizeRestoreButton.setToolTipText(Text.wrapPlainTextForToolTip(MAXIMIZE_TOOLTIP));
 	}
 
 	@Override

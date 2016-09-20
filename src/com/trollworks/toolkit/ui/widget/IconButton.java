@@ -16,6 +16,7 @@ import com.trollworks.toolkit.ui.MouseCapture;
 import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -46,7 +47,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 	public IconButton(RetinaIcon icon, String tooltip, Runnable clickFunction) {
 		setOpaque(false);
 		setBackground(null);
-		setToolTipText(tooltip);
+		setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
 		setIcon(icon);
 		setCursor(Cursor.getDefaultCursor());
 		setClickFunction(clickFunction);

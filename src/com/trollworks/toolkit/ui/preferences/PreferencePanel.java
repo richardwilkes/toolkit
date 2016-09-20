@@ -17,6 +17,7 @@ import com.trollworks.toolkit.ui.layout.Alignment;
 import com.trollworks.toolkit.ui.layout.FlexComponent;
 import com.trollworks.toolkit.ui.layout.FlexContainer;
 import com.trollworks.toolkit.ui.layout.LayoutSize;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -117,7 +118,7 @@ public abstract class PreferencePanel extends JPanel {
 	protected JLabel createLabel(String title, String tooltip, StdImage icon, int alignment) {
 		JLabel label = new JLabel(title, alignment);
 		label.setOpaque(false);
-		label.setToolTipText(tooltip);
+		label.setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
 		label.setIcon(icon);
 		UIUtilities.setOnlySize(label, label.getPreferredSize());
 		add(label);
@@ -146,7 +147,7 @@ public abstract class PreferencePanel extends JPanel {
 	protected JCheckBox createCheckBox(String title, String tooltip, boolean checked) {
 		JCheckBox checkbox = new JCheckBox(title, checked);
 		checkbox.setOpaque(false);
-		checkbox.setToolTipText(tooltip);
+		checkbox.setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
 		if (this instanceof ItemListener) {
 			checkbox.addItemListener((ItemListener) this);
 		}
@@ -162,7 +163,7 @@ public abstract class PreferencePanel extends JPanel {
 	 */
 	protected void setupCombo(JComboBox<?> combo, String tooltip) {
 		combo.setOpaque(false);
-		combo.setToolTipText(tooltip);
+		combo.setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
 		add(combo);
 	}
 }

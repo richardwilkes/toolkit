@@ -7,6 +7,7 @@ import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.utility.FileType;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -46,7 +47,7 @@ public class ImageWell extends JPanel implements DropTargetListener, MouseListen
 	public ImageWell(String tooltip, Getter getter, Setter setter) {
 		mGetter = getter;
 		mSetter = setter;
-		setToolTipText(tooltip);
+		setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
 		setBorder(new LineBorder(Color.BLACK));
 		UIUtilities.setOnlySize(this, new Dimension(22, 22));
 		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, this));

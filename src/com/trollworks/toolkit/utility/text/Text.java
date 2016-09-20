@@ -361,11 +361,14 @@ public class Text {
 	}
 
 	public static String wrapPlainTextForToolTip(String text) {
-		StringBuilder buffer = new StringBuilder();
-		buffer.append("<html><body>"); //$NON-NLS-1$
-		buffer.append(htmlEscape(wrapToCharacterCount(text, 40)).replaceAll(NEWLINE, "<br>")); //$NON-NLS-1$
-		buffer.append("</body></html>"); //$NON-NLS-1$
-		return buffer.toString();
+		if (text != null && !text.isEmpty() && !text.startsWith("<html>")) { //$NON-NLS-1$
+			StringBuilder buffer = new StringBuilder();
+			buffer.append("<html><body>"); //$NON-NLS-1$
+			buffer.append(htmlEscape(wrapToCharacterCount(text, 40)).replaceAll(NEWLINE, "<br>")); //$NON-NLS-1$
+			buffer.append("</body></html>"); //$NON-NLS-1$
+			return buffer.toString();
+		}
+		return text;
 	}
 
 	public static String htmlEscape(String str) {

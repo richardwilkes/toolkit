@@ -18,6 +18,7 @@ import com.trollworks.toolkit.ui.TextDrawing;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.task.Tasks;
 import com.trollworks.toolkit.utility.text.Numbers;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -65,7 +66,7 @@ public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, 
 	public MemoryPanel() {
 		super(null);
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
-		setToolTipText(TOOLTIP);
+		setToolTipText(Text.wrapPlainTextForToolTip(TOOLTIP));
 		addMouseListener(this);
 		addHierarchyListener(this);
 		refresh();

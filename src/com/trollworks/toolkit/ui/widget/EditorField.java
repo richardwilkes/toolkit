@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.ui.TextDrawing;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -56,7 +57,7 @@ public class EditorField extends JFormattedTextField implements ActionListener, 
 	public EditorField(AbstractFormatterFactory formatter, PropertyChangeListener listener, int alignment, Object value, Object protoValue, String tooltip) {
 		super(formatter, protoValue != null ? protoValue : value);
 		setHorizontalAlignment(alignment);
-		setToolTipText(tooltip);
+		setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
 		if (protoValue != null) {
 			setPreferredSize(getPreferredSize());
 			setValue(value);

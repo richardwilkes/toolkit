@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui.widget;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.text.Text;
 
 import javax.swing.JLabel;
 import javax.swing.JRootPane;
@@ -38,17 +39,17 @@ public class ModifiedMarker extends JLabel implements DataModifiedListener {
 	/** Creates a new {@link ModifiedMarker}. */
 	public ModifiedMarker() {
 		super(StdImage.NOT_MODIFIED_MARKER);
-		setToolTipText(NOT_MODIFIED);
+		setToolTipText(Text.wrapPlainTextForToolTip(NOT_MODIFIED));
 	}
 
 	@Override
 	public void dataModificationStateChanged(Object obj, boolean modified) {
 		if (modified) {
 			setIcon(StdImage.MODIFIED_MARKER);
-			setToolTipText(MODIFIED);
+			setToolTipText(Text.wrapPlainTextForToolTip(MODIFIED));
 		} else {
 			setIcon(StdImage.NOT_MODIFIED_MARKER);
-			setToolTipText(NOT_MODIFIED);
+			setToolTipText(Text.wrapPlainTextForToolTip(NOT_MODIFIED));
 		}
 		repaint();
 		JRootPane rootPane = getRootPane();

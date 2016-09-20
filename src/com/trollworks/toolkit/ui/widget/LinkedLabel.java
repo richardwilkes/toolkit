@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.ui.RetinaIcon;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
@@ -173,7 +174,7 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
 			tooltip = null;
 			color = mColor;
 		}
-		setToolTipText(tooltip);
+		setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
 		super.setForeground(color);
 	}
 

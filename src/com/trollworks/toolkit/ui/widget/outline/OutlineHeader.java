@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget.outline;
 
 import com.trollworks.toolkit.ui.GraphicsUtilities;
+import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -260,7 +261,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 	public String getToolTipText(MouseEvent event) {
 		Column column = mOwner.overColumn(event.getX());
 		if (column != null) {
-			return column.getHeaderCell().getToolTipText(event, getColumnBounds(column), null, column);
+			return Text.wrapPlainTextForToolTip(column.getHeaderCell().getToolTipText(event, getColumnBounds(column), null, column));
 		}
 		return super.getToolTipText(event);
 	}
