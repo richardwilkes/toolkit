@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <project name="props" default="platform_props" xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<target name="platform_props">
-		<echo message="executing platform_props"/>
 		<property name="jre.version" value="8u101"/>
 		<condition property="platform.mac" else="false">
 			<os family="mac"/>
