@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<project name="props" default="platform_props" xmlns:if="ant:if" xmlns:unless="ant:unless">
+	<target name="platform_props">
+		<echo message="executing platform_props"/>
+		<property name="jre.version" value="8u101"/>
+		<condition property="platform.mac" else="false">
+			<os family="mac"/>
+		</condition>
+		<condition property="platform.windows" else="false">
+			<os family="windows"/>
+		</condition>
+		<condition property="platform.linux" else="false">
+			<and>
+				<os family="unix"/>
+				<not>
+					<os family="mac"/>
+				</not>
+			</and>
+		</condition>
+		<property if:true="${platform.mac}" name="platform" value="mac"/>
+		<property if:true="${platform.windows}" name="platform" value="windows"/>
+		<property if:true="${platform.linux}" name="platform" value="linux"/>
+		<property if:true="${platform.mac}" name="platform.jre" value="macosx"/>
+		<property unless:true="${platform.mac}" name="platform.jre" value="${platform}"/>
+		<condition property="platformWithBits" value="${platform}-32" else="${platform}">
+			<and>
+				<os arch="i386"/>
+				<or>
+					<os family="unix"/>
+					<os family="windows"/>
+				</or>
+			</and>
+		</condition>
+		<condition property="platformWithArch" value="${platform.jre}-i586" else="${platform.jre}-x64">
+			<and>
+				<os arch="i386"/>
+				<or>
+					<os family="unix"/>
+					<os family="windows"/>
+				</or>
+			</and>
+		</condition>
+	</target>
+</project>

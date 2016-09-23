@@ -1,60 +1,37 @@
 <?xml version="1.0"?>
 <project name="toolkit" default="toolkit" xmlns:if="ant:if" xmlns:unless="ant:unless">
-	<condition property="platform.mac" else="false">
-		<os family="mac"/>
-	</condition>
-	<condition property="platform.windows" else="false">
-		<os family="windows"/>
-	</condition>
-	<condition property="platform.linux" else="false">
-		<and>
-			<os family="unix"/>
-			<not>
-				<os family="mac"/>
-			</not>
-		</and>
-	</condition>
-	<property if:true="${platform.mac}" name="platform" value="mac"/>
-	<property if:true="${platform.windows}" name="platform" value="windows"/>
-	<property if:true="${platform.linux}" name="platform" value="linux"/>
-	<condition property="platformWithBits" value="${platform}-32" else="${platform}">
-		<and>
-			<os arch="i386"/>
-			<or>
-				<os family="unix"/>
-				<os family="windows"/>
-			</or>
-		</and>
-	</condition>
-
-	<property name="src" value="src"/>
-	<property name="lib" value="libraries"/>
-	<property name="build_root" value="ant_build"/>
-	<property name="package_dir" value="com/trollworks/toolkit"/>
-	<property name="toolkit_build" value="${build_root}/toolkit"/>
-	<property name="min_jdk" value="1.8"/>
-	<property name="primary_version" value="4.4.1"/>
-	<property name="toolkit_jar" value="${lib}/toolkit-${primary_version}.jar"/>
-	<property name="toolkit_src_jar" value="${lib}/toolkit-${primary_version}-src.jar"/>
-	<tstamp>
-		<format property="version" pattern="${primary_version}.yyyyMMddHHmmss"/>
-	</tstamp>
-	<tstamp>
-		<format property="year" pattern="yyyy"/>
-	</tstamp>
-
-	<target name="clean" description="Clean up after a build" depends="clean_toolkit">
+	<import file="props.xml"/>
+	
+	<target name="setup" depends="platform_props">
+		<property name="src" value="src"/>
+		<property name="lib" value="libraries"/>
+		<property name="build_root" value="ant_build"/>
+		<property name="package_dir" value="com/trollworks/toolkit"/>
+		<property name="toolkit_build" value="${build_root}/toolkit"/>
+		<property name="min_jdk" value="1.8"/>
+		<property name="primary_version" value="4.4.1"/>
+		<property name="toolkit_jar" value="${lib}/toolkit-${primary_version}.jar"/>
+		<property name="toolkit_src_jar" value="${lib}/toolkit-${primary_version}-src.jar"/>
+		<tstamp>
+			<format property="version" pattern="${primary_version}.yyyyMMddHHmmss"/>
+		</tstamp>
+		<tstamp>
+			<format property="year" pattern="yyyy"/>
+		</tstamp>
+	</target>
+		
+	<target name="clean" depends="clean_toolkit" description="Clean up after a build">
 		<delete dir="${build_root}"/>
 	</target>
 
-	<target name="clean_toolkit" description="Clean up after a toolkit build">
+	<target name="clean_toolkit" depends="setup" description="Clean up after a toolkit build">
 		<delete dir="${toolkit_build}"/>
 		<delete>
 			<fileset dir="${lib}" includes="toolkit-*.jar"/>
 		</delete>
 	</target>
 
-	<target name="toolkit" description="Build the toolkit" depends="clean_toolkit">
+	<target name="toolkit" depends="clean_toolkit" description="Build the toolkit">
 		<mkdir dir="${toolkit_build}"/>
 		
 		<!-- Compile the code. -->
@@ -97,7 +74,7 @@
 		</jar>
 	</target>
 
-	<target name="launcher" description="Compiles a launcher tailored to your app. Note that this must be done on the platform where the app is intended to execute, as platform-specific tasks are required.">
+	<target name="launcher" depends="setup" description="Compiles a launcher tailored to your app. Note that this must be done on the platform where the app is intended to execute, as platform-specific tasks are required.">
 		<fail unless="app.dir" message="You must define 'app.dir'"/>
 		<fail unless="app.name" message="You must define 'app.name'"/>
 		<fail unless="app.exe" message="You must define 'app.exe'"/>
@@ -146,15 +123,28 @@
 		<delete if:true="${platform.windows}" file="${app.dir}/app.rc"/>
 		<delete if:true="${platform.windows}" file="${app.dir}/app.res"/>
 	</target>
-
-	<target name="jre" description="Unpacks a JRE into the ${support} directory.">
+	
+	<target name="jre" depends="setup" description="Unpacks a JRE into the ${support} directory.">
 		<fail unless="support" message="You must define 'support'"/>
-		<property name="jre.archive.name" value="jre-${platformWithBits}.zip"/>
+		<property name="jre.archive.name" value="jre-${jre.version}-${platformWithArch}.tar.gz"/>
 		<property name="jre.archive" value="launcher/${jre.archive.name}"/>
 		<available file="${jre.archive}" property="jre.available"/>
-		<fail unless="jre.available" message="You must provide a zipped copy of the ${platform} JRE in the toolkit launcher directory named '${jre.archive.name}'."/>
+		<fail unless="jre.available" message="You must provide a copy of the ${platform} JRE in the toolkit launcher directory named '${jre.archive.name}'.\nYou can download this from http://www.oracle.com/technetwork/java/javase/downloads/index.html"/>
 		<mkdir dir="${support}"/>
-		<unzip src="${jre.archive}" dest="${support}"/>
+		<untar src="${jre.archive}" dest="${support}" compression="gzip"/>
+		<path unless:true="${platform.mac}" id="jredir">
+			<dirset dir="${support}">
+				<include name="jre*"/>
+			</dirset>
+		</path>
+		<path if:true="${platform.mac}" id="jredir">
+			<dirset dir="${support}">
+				<include name="jre*/Contents/Home"/>
+			</dirset>
+		</path>
+		<property name="jredir.name" refid="jredir"/>
+		<move file="${jredir.name}" tofile="${support}/jre"/>
+		<delete if:true="${platform.mac}" dir="${jredir.name}/../.."/>
 		<chmod dir="${support}/jre" includes="**/java,**/*.so,**/*.dylib,**/jspawnhelper" perm="+x"/>
 	</target>
 </project>
