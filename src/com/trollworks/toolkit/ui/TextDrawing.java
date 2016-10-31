@@ -11,9 +11,7 @@
 
 package com.trollworks.toolkit.ui;
 
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.map.hash.TObjectIntHashMap;
-
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -24,6 +22,9 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import javax.swing.SwingConstants;
+
+import gnu.trove.map.hash.TIntIntHashMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 
 /** General text drawing utilities. */
 public class TextDrawing {
@@ -95,6 +96,24 @@ public class TextDrawing {
 	 * @return The bottom of the drawn text.
 	 */
 	public static final int draw(Graphics gc, Rectangle bounds, String text, int hAlign, int vAlign) {
+		return draw(gc, bounds, text, hAlign, vAlign, null);
+	}
+
+	/**
+	 * Draws the text. Embedded return characters may be present.
+	 *
+	 * @param gc The graphics context.
+	 * @param bounds The bounding rectangle to draw the text within.
+	 * @param text The text to draw.
+	 * @param hAlign The horizontal alignment to use. One of {@link SwingConstants#LEFT},
+	 *            {@link SwingConstants#CENTER}, or {@link SwingConstants#RIGHT}.
+	 * @param vAlign The vertical alignment to use. One of {@link SwingConstants#LEFT},
+	 *            {@link SwingConstants#CENTER}, or {@link SwingConstants#RIGHT}.
+	 * @param strikeThruColor If not <code>null</code>, then a line of this color will be drawn
+	 *            through the text.
+	 * @return The bottom of the drawn text.
+	 */
+	public static final int draw(Graphics gc, Rectangle bounds, String text, int hAlign, int vAlign, Color strikeThruColor) {
 		int y = bounds.y;
 		if (text.length() > 0) {
 			ArrayList<String> list = new ArrayList<>();
@@ -137,13 +156,26 @@ public class TextDrawing {
 				y = bounds.y + bounds.height - textHeight;
 			}
 			for (String piece : list) {
+				width = 0;
 				int x = bounds.x;
 				if (hAlign == SwingConstants.CENTER) {
-					x = x + (bounds.width - getSimpleWidth(font, piece)) / 2;
+					width = getSimpleWidth(font, piece);
+					x = x + (bounds.width - width) / 2;
 				} else if (hAlign == SwingConstants.RIGHT) {
-					x = x + bounds.width - (1 + getSimpleWidth(font, piece));
+					width = getSimpleWidth(font, piece);
+					x = x + bounds.width - (1 + width);
 				}
 				gc.drawString(piece, x, y + ascent);
+				if (strikeThruColor != null) {
+					Color saved = gc.getColor();
+					gc.setColor(strikeThruColor);
+					if (width == 0) {
+						width = getSimpleWidth(font, piece);
+					}
+					int middle = y + ascent / 2 + 1;
+					gc.drawLine(x, middle, x + width, middle);
+					gc.setColor(saved);
+				}
 				y += fHeight;
 			}
 		}
