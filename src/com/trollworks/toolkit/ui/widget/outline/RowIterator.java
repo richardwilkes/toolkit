@@ -21,9 +21,10 @@ import java.util.NoSuchElementException;
  * @param <T> The type of row being iterated over.
  */
 public class RowIterator<T extends Row> implements Iterator<T>, Iterable<T> {
-	private List<Row>		mList;
+	private List<T>			mList;
 	private int				mIndex;
 	private RowIterator<T>	mIterator;
+	private Filter<T>		mFilter;
 
 	/**
 	 * Creates an iterator that will iterate over all rows (disclosed or not) in the specified
@@ -32,11 +33,24 @@ public class RowIterator<T extends Row> implements Iterator<T>, Iterable<T> {
 	 * @param model The model to iterator over.
 	 */
 	public RowIterator(OutlineModel model) {
-		this(model.getTopLevelRows());
+		this(model, null);
 	}
 
-	private RowIterator(List<Row> rows) {
+	/**
+	 * Creates an iterator that will iterate over all rows (disclosed or not) in the specified
+	 * outline model.
+	 *
+	 * @param model The model to iterator over.
+	 * @param filter The filter to use.
+	 */
+	@SuppressWarnings("unchecked")
+	public RowIterator(OutlineModel model, Filter<T> filter) {
+		this((List<T>) model.getTopLevelRows(), filter);
+	}
+
+	private RowIterator(List<T> rows, Filter<T> filter) {
 		mList = rows;
+		mFilter = filter;
 	}
 
 	@Override
@@ -47,10 +61,15 @@ public class RowIterator<T extends Row> implements Iterator<T>, Iterable<T> {
 	@Override
 	public boolean hasNext() {
 		boolean hasNext = mIterator != null && mIterator.hasNext();
-
 		if (!hasNext) {
 			mIterator = null;
-			hasNext = mIndex < mList.size();
+			int size = mList.size();
+			if (mFilter != null) {
+				while (mIndex < size && !mFilter.include(mList.get(mIndex))) {
+					mIndex++;
+				}
+			}
+			hasNext = mIndex < size;
 		}
 		return hasNext;
 	}
@@ -61,9 +80,8 @@ public class RowIterator<T extends Row> implements Iterator<T>, Iterable<T> {
 		if (hasNext()) {
 			if (mIterator == null) {
 				Row row = mList.get(mIndex++);
-
 				if (row.hasChildren()) {
-					mIterator = new RowIterator<>(row.getChildren());
+					mIterator = new RowIterator<>((List<T>) row.getChildren(), mFilter);
 				}
 				return (T) row;
 			}
@@ -75,5 +93,9 @@ public class RowIterator<T extends Row> implements Iterator<T>, Iterable<T> {
 	@Override
 	public Iterator<T> iterator() {
 		return this;
+	}
+
+	public interface Filter<R extends Row> {
+		boolean include(R row);
 	}
 }
