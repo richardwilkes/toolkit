@@ -13,6 +13,8 @@ package com.trollworks.toolkit.ui.layout;
 
 import static com.trollworks.toolkit.ui.layout.PrecisionLayoutAlignment.*;
 
+import com.trollworks.toolkit.ui.scale.Scale;
+
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -491,9 +493,9 @@ public final class PrecisionLayoutData {
 	 *            cell:
 	 *            <ul>
 	 *            <li>If extra vertical space is available in the parent, the cell will grow to be
-	 *            taller than its preferred height. The new height will be
-	 *            "preferred height + delta" where delta is the extra vertical space divided by the
-	 *            number of grabbing rows.</li>
+	 *            taller than its preferred height. The new height will be "preferred height +
+	 *            delta" where delta is the extra vertical space divided by the number of grabbing
+	 *            rows.</li>
 	 *            <li>If there is not enough vertical space available in the parent, the cell will
 	 *            shrink until it reaches its minimum height as specified by
 	 *            {@link #getMinimumHeight()}. The new height will be the maximum of "
@@ -567,15 +569,17 @@ public final class PrecisionLayoutData {
 		mCacheHeight = height;
 	}
 
-	void computeSize(Component component, int wHint, int hHint, boolean useMinimumSize) {
+	void computeSize(Scale scale, Component component, int wHint, int hHint, boolean useMinimumSize) {
+		int scaledMinWidth = scale.scale(mMinWidth);
+		int scaledMinHeight = scale.scale(mMinHeight);
 		Dimension size = null;
 		if (wHint != DEFAULT || hHint != DEFAULT) {
 			size = component.getMinimumSize();
-			mCacheMinWidth = mMinWidth != DEFAULT ? mMinWidth : size.width;
+			mCacheMinWidth = mMinWidth != DEFAULT ? scaledMinWidth : size.width;
 			if (wHint != DEFAULT && wHint < mCacheMinWidth) {
 				wHint = mCacheMinWidth;
 			}
-			int minHeight = mMinHeight != DEFAULT ? mMinHeight : size.height;
+			int minHeight = mMinHeight != DEFAULT ? scaledMinHeight : size.height;
 			if (hHint != DEFAULT && hHint < minHeight) {
 				hHint = minHeight;
 			}
@@ -589,21 +593,21 @@ public final class PrecisionLayoutData {
 		}
 		if (useMinimumSize) {
 			size = component.getMinimumSize();
-			mCacheMinWidth = mMinWidth != DEFAULT ? mMinWidth : size.width;
+			mCacheMinWidth = mMinWidth != DEFAULT ? scaledMinWidth : size.width;
 		} else {
 			size = component.getPreferredSize();
 		}
 		if (mWidthHint != DEFAULT) {
-			size.width = mWidthHint;
+			size.width = scale.scale(mWidthHint);
 		}
-		if (mMinWidth != DEFAULT && size.width < mMinWidth) {
-			size.width = mMinWidth;
+		if (mMinWidth != DEFAULT && size.width < scaledMinWidth) {
+			size.width = scaledMinWidth;
 		}
 		if (mHeightHint != DEFAULT) {
-			size.height = mHeightHint;
+			size.height = scale.scale(mHeightHint);
 		}
-		if (mMinHeight != DEFAULT && size.height < mMinHeight) {
-			size.height = mMinHeight;
+		if (mMinHeight != DEFAULT && size.height < scaledMinHeight) {
+			size.height = scaledMinHeight;
 		}
 		if (wHint != DEFAULT) {
 			size.width = wHint;

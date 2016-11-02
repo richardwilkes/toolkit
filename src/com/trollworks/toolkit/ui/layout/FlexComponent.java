@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.layout;
 
+import com.trollworks.toolkit.ui.scale.Scale;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -65,7 +67,7 @@ public class FlexComponent extends FlexCell {
 	}
 
 	@Override
-	protected Dimension getSizeSelf(LayoutSize type) {
+	protected Dimension getSizeSelf(Scale scale, LayoutSize type) {
 		if (mOnlyPreferredSize) {
 			type = LayoutSize.PREFERRED;
 		}
@@ -73,7 +75,7 @@ public class FlexComponent extends FlexCell {
 	}
 
 	@Override
-	protected void layoutSelf(Rectangle bounds) {
+	protected void layoutSelf(Scale scale, Rectangle bounds) {
 		Rectangle compBounds = new Rectangle(bounds);
 		if (!mOnlyPreferredSize) {
 			Dimension size = LayoutSize.MINIMUM.get(mComponent);

@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.layout;
 
+import com.trollworks.toolkit.ui.scale.Scale;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -55,13 +57,13 @@ public class FlexLayout implements LayoutManager2 {
 			bounds.y = insets.top;
 			bounds.width -= insets.left + insets.right;
 			bounds.height -= insets.top + insets.bottom;
-			mRootCell.layout(bounds);
+			mRootCell.layout(Scale.get(target), bounds);
 		}
 	}
 
 	private Dimension getLayoutSize(Container target, LayoutSize sizeType) {
 		Insets insets = target.getInsets();
-		Dimension size = mRootCell != null ? mRootCell.getSize(sizeType) : new Dimension();
+		Dimension size = mRootCell != null ? mRootCell.getSize(Scale.get(target), sizeType) : new Dimension();
 		size.width += insets.left + insets.right;
 		size.height += insets.top + insets.bottom;
 		return size;

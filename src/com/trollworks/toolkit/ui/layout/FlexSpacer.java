@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.layout;
 
+import com.trollworks.toolkit.ui.scale.Scale;
+
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
@@ -37,9 +39,9 @@ public class FlexSpacer extends FlexCell {
 	}
 
 	@Override
-	protected Dimension getSizeSelf(LayoutSize type) {
-		int width = mWidth;
-		int height = mHeight;
+	protected Dimension getSizeSelf(Scale scale, LayoutSize type) {
+		int width = scale.scale(mWidth);
+		int height = scale.scale(mHeight);
 		if (type == LayoutSize.MAXIMUM) {
 			if (mGrowWidth) {
 				width = Integer.MAX_VALUE;
@@ -52,7 +54,7 @@ public class FlexSpacer extends FlexCell {
 	}
 
 	@Override
-	protected void layoutSelf(Rectangle bounds) {
+	protected void layoutSelf(Scale scale, Rectangle bounds) {
 		// Does nothing
 	}
 }

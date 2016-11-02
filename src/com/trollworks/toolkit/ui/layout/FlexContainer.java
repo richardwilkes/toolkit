@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.layout;
 
+import com.trollworks.toolkit.ui.scale.Scale;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -48,22 +50,26 @@ public abstract class FlexContainer extends FlexCell {
 	}
 
 	/**
+	 * @param scale The {@link Scale} to use.
 	 * @param type The type of size to return.
 	 * @return The sizes for each child.
 	 */
-	protected Dimension[] getChildSizes(LayoutSize type) {
+	protected Dimension[] getChildSizes(Scale scale, LayoutSize type) {
 		int count = getChildCount();
 		Dimension[] sizes = new Dimension[count];
 		for (int i = 0; i < count; i++) {
-			sizes[i] = mChildren.get(i).getSize(type);
+			sizes[i] = mChildren.get(i).getSize(scale, type);
 		}
 		return sizes;
 	}
 
-	/** @param bounds The bounds to use for each child. */
-	protected void layoutChildren(Rectangle[] bounds) {
+	/**
+	 * @param scale The {@link Scale} to use.
+	 * @param bounds The bounds to use for each child.
+	 */
+	protected void layoutChildren(Scale scale, Rectangle[] bounds) {
 		for (int i = 0; i < bounds.length; i++) {
-			mChildren.get(i).layout(bounds[i]);
+			mChildren.get(i).layout(scale, bounds[i]);
 		}
 	}
 

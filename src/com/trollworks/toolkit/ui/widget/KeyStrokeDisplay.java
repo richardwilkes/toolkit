@@ -14,6 +14,8 @@ package com.trollworks.toolkit.ui.widget;
 import static java.awt.event.KeyEvent.*;
 
 import com.trollworks.toolkit.ui.UIUtilities;
+import com.trollworks.toolkit.ui.border.EmptyBorder;
+import com.trollworks.toolkit.ui.border.LineBorder;
 import com.trollworks.toolkit.utility.Platform;
 
 import java.awt.Color;
@@ -26,8 +28,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 /** Displays and captures keystrokes typed. */
 public class KeyStrokeDisplay extends JLabel implements KeyListener {
@@ -42,7 +42,7 @@ public class KeyStrokeDisplay extends JLabel implements KeyListener {
 		super(getKeyStrokeDisplay(KeyStroke.getKeyStroke('Z', InputEvent.META_MASK | InputEvent.ALT_MASK | InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)), SwingConstants.CENTER);
 		setOpaque(true);
 		setBackground(Color.WHITE);
-		setBorder(new CompoundBorder(LineBorder.createBlackLineBorder(), new EmptyBorder(2, 5, 2, 5)));
+		setBorder(new CompoundBorder(new LineBorder(), new EmptyBorder(2, 5, 2, 5)));
 		addKeyListener(this);
 		mKeyStroke = ks;
 		UIUtilities.setOnlySize(this, getPreferredSize());

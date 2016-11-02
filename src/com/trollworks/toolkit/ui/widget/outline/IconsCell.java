@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget.outline;
 
 import com.trollworks.toolkit.ui.RetinaIcon;
+import com.trollworks.toolkit.ui.scale.Scale;
 import com.trollworks.toolkit.utility.text.NumericComparator;
 
 import java.awt.Cursor;
@@ -79,12 +80,13 @@ public class IconsCell implements Cell {
 		if (row != null) {
 			List<RetinaIcon> images = getIcons(row, column, selected, active);
 			if (!images.isEmpty()) {
+				Scale scale = Scale.get(outline);
 				int x = bounds.x;
 				int y = bounds.y;
 				if (mHAlignment != SwingConstants.LEFT) {
 					int hDelta = bounds.width;
 					for (RetinaIcon img : images) {
-						hDelta -= img.getIconWidth();
+						hDelta -= scale.scale(img.getIconWidth());
 					}
 					if (mHAlignment == SwingConstants.CENTER) {
 						hDelta /= 2;
@@ -94,7 +96,7 @@ public class IconsCell implements Cell {
 				if (mVAlignment != SwingConstants.TOP) {
 					int max = 0;
 					for (RetinaIcon img : images) {
-						int height = img.getIconHeight();
+						int height = scale.scale(img.getIconHeight());
 						if (max < height) {
 							max = height;
 						}
@@ -107,26 +109,28 @@ public class IconsCell implements Cell {
 				}
 				for (RetinaIcon img : images) {
 					img.paintIcon(outline, gc, x, y);
-					x += img.getIconWidth();
+					x += scale.scale(img.getIconWidth());
 				}
 			}
 		}
 	}
 
 	@Override
-	public int getPreferredWidth(Row row, Column column) {
+	public int getPreferredWidth(Outline outline, Row row, Column column) {
+		Scale scale = Scale.get(outline);
 		int width = 0;
 		for (RetinaIcon img : getIcons(row, column, false, true)) {
-			width += img.getIconWidth();
+			width += scale.scale(img.getIconWidth());
 		}
 		return width;
 	}
 
 	@Override
-	public int getPreferredHeight(Row row, Column column) {
+	public int getPreferredHeight(Outline outline, Row row, Column column) {
+		Scale scale = Scale.get(outline);
 		int height = 0;
 		for (RetinaIcon img : getIcons(row, column, false, true)) {
-			height += img.getIconHeight();
+			height += scale.scale(img.getIconHeight());
 		}
 		return height;
 	}
@@ -137,7 +141,7 @@ public class IconsCell implements Cell {
 	}
 
 	@Override
-	public String getToolTipText(MouseEvent event, Rectangle bounds, Row row, Column column) {
+	public String getToolTipText(Outline outline, MouseEvent event, Rectangle bounds, Row row, Column column) {
 		return null;
 	}
 

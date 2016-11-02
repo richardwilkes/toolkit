@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.layout;
 
+import com.trollworks.toolkit.ui.scale.Scale;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -22,7 +24,7 @@ import java.util.TreeMap;
 
 /** A grid within a {@link FlexLayout}. */
 public class FlexGrid extends FlexContainer {
-	private HashMap<FlexCell, FlexGridData>				mData		= new HashMap<>();
+	private Map<FlexCell, FlexGridData>					mData		= new HashMap<>();
 	private int											mColumns	= 1;
 	private int											mRows		= 1;
 	private FlexGridData[][]							mGrid;
@@ -181,8 +183,8 @@ public class FlexGrid extends FlexContainer {
 	}
 
 	@Override
-	protected void layoutSelf(Rectangle bounds) {
-		createGrid(LayoutSize.PREFERRED);
+	protected void layoutSelf(Scale scale, Rectangle bounds) {
+		createGrid(scale, LayoutSize.PREFERRED);
 
 		// Size widths appropriately
 		int[] x = new int[mColumns];
@@ -232,12 +234,12 @@ public class FlexGrid extends FlexContainer {
 			cellBounds.add(rect);
 		}
 		flush();
-		layoutChildren(cellBounds.toArray(new Rectangle[cellBounds.size()]));
+		layoutChildren(scale, cellBounds.toArray(new Rectangle[cellBounds.size()]));
 	}
 
 	@Override
-	protected Dimension getSizeSelf(LayoutSize type) {
-		createGrid(type);
+	protected Dimension getSizeSelf(Scale scale, LayoutSize type) {
+		createGrid(scale, type);
 		int width = 0;
 		for (int i = 0; i < mColumns; i++) {
 			width += mColumnWidths[i];
@@ -262,7 +264,7 @@ public class FlexGrid extends FlexContainer {
 		mColumnSpanMap = null;
 	}
 
-	private void createGrid(LayoutSize type) {
+	private void createGrid(Scale scale, LayoutSize type) {
 		mGrid = new FlexGridData[mRows][mColumns];
 		mColumnWidths = new int[mColumns];
 		mMinColumnWidths = new int[mColumns];
@@ -294,19 +296,21 @@ public class FlexGrid extends FlexContainer {
 					mGrid[rp][cp] = data;
 				}
 			}
-			data.mSize = cell.getSize(type);
-			data.mMinSize = cell.getSize(LayoutSize.MINIMUM);
-			data.mMaxSize = cell.getSize(LayoutSize.MAXIMUM);
+			data.mSize = cell.getSize(scale, type);
+			data.mMinSize = cell.getSize(scale, LayoutSize.MINIMUM);
+			data.mMaxSize = cell.getSize(scale, LayoutSize.MAXIMUM);
 			updateRowColumnSizes(data);
 			addToSpanMap(data.mRowSpan, mRowSpanMap, data);
 			addToSpanMap(data.mColumnSpan, mColumnSpanMap, data);
 		}
 
 		// Fill in gaps
+		int scaledHorizontalGap = scale.scale(getHorizontalGap());
+		int scaledVerticalGap = scale.scale(getVerticalGap());
 		for (int row = 0; row < mRows; row++) {
 			for (int column = 0; column < mColumns; column++) {
 				if (mGrid[row][column] == null) {
-					mGrid[row][column] = new FlexGridData(row, column, row % 2 == 1 ? getVerticalGap() : 0, column % 2 == 1 ? getHorizontalGap() : 0);
+					mGrid[row][column] = new FlexGridData(scale, row, column, row % 2 == 1 ? scaledVerticalGap : 0, column % 2 == 1 ? scaledHorizontalGap : 0);
 					updateRowColumnSizes(mGrid[row][column]);
 				}
 			}

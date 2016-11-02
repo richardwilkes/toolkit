@@ -15,6 +15,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.TextDrawing;
+import com.trollworks.toolkit.ui.border.LineBorder;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.task.Tasks;
 import com.trollworks.toolkit.utility.text.Numbers;
@@ -37,7 +38,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.BevelBorder;
 
 /** Displays the current memory usage. */
 public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, MouseListener {
@@ -65,7 +65,7 @@ public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, 
 	/** Creates a new {@link MemoryPanel}. */
 	public MemoryPanel() {
 		super(null);
-		setBorder(new BevelBorder(BevelBorder.LOWERED));
+		setBorder(new LineBorder());
 		setToolTipText(Text.wrapPlainTextForToolTip(TOOLTIP));
 		addMouseListener(this);
 		addHierarchyListener(this);

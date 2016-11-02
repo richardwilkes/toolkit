@@ -14,7 +14,8 @@ package com.trollworks.toolkit.ui.widget.dock;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.ui.border.SelectiveLineBorder;
+import com.trollworks.toolkit.ui.border.EmptyBorder;
+import com.trollworks.toolkit.ui.border.LineBorder;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Localization;
@@ -37,7 +38,6 @@ import java.awt.dnd.DropTargetListener;
 
 import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 
 /** The header for a {@link DockContainer}. */
 public class DockHeader extends JPanel implements LayoutManager, DropTargetListener {
@@ -72,7 +72,7 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 		super.setLayout(this);
 		setOpaque(true);
 		setBackground(DockColors.BACKGROUND);
-		setBorder(new CompoundBorder(new SelectiveLineBorder(DockColors.SHADOW, 0, 0, 1, 0), new EmptyBorder(0, 4, 0, 4)));
+		setBorder(new CompoundBorder(new LineBorder(DockColors.SHADOW, 0, 0, 1, 0), new EmptyBorder(0, 4, 0, 4)));
 		for (Dockable dockable : dc.getDockables()) {
 			add(new DockTab(dockable));
 		}

@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget.outline;
 
 import com.trollworks.toolkit.ui.RetinaIcon;
+import com.trollworks.toolkit.ui.scale.Scale;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -216,24 +217,32 @@ public class Column implements Transferable {
 		return mWidth;
 	}
 
-	/** @param width The width of this column. */
-	public void setWidth(int width) {
-		int minWidth = getPreferredHeaderWidth();
-
+	/**
+	 * @param outline The outline using this column.
+	 * @param width The width of this column.
+	 */
+	public void setWidth(Outline outline, int width) {
+		int minWidth = getPreferredHeaderWidth(outline);
 		if (width < minWidth && width != -1) {
 			width = minWidth;
 		}
 		mWidth = width;
 	}
 
-	/** @return The preferred width of this column's header. */
-	public int getPreferredHeaderWidth() {
-		return getHeaderCell().getPreferredWidth(null, this);
+	/**
+	 * @param outline The outline using this column.
+	 * @return The preferred width of this column's header.
+	 */
+	public int getPreferredHeaderWidth(Outline outline) {
+		return getHeaderCell().getPreferredWidth(outline, null, this);
 	}
 
-	/** @return The preferred height of this column's header. */
-	public int getPreferredHeaderHeight() {
-		return getHeaderCell().getPreferredHeight(null, this);
+	/**
+	 * @param outline The outline using this column.
+	 * @return The preferred height of this column's header.
+	 */
+	public int getPreferredHeaderHeight(Outline outline) {
+		return getHeaderCell().getPreferredHeight(outline, null, this);
 	}
 
 	/**
@@ -241,10 +250,11 @@ public class Column implements Transferable {
 	 * @return The preferred width of this column.
 	 */
 	public int getPreferredWidth(Outline outline) {
-		int preferredWidth = getPreferredHeaderWidth();
+		Scale scale = Scale.get(outline);
+		int preferredWidth = getPreferredHeaderWidth(outline);
 		OutlineModel model = outline.getModel();
 		for (Row row : model.getRows()) {
-			int width = getRowCell(row).getPreferredWidth(row, this) + model.getIndentWidth(row, this);
+			int width = getRowCell(row).getPreferredWidth(outline, row, this) + scale.scale(model.getIndentWidth(row, this));
 			if (width > preferredWidth) {
 				preferredWidth = width;
 			}

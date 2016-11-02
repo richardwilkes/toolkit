@@ -163,12 +163,4 @@ public class OutlineProxy extends Outline {
 		mOutlineToProxy.dropRow(dtde, this);
 		super.dropRow(dtde);
 	}
-
-	// @Override public boolean adjustMenuItem(String command, TKMenuItem item) {
-	// return mOutlineToProxy.adjustMenuItem(command, item);
-	// }
-	//
-	// @Override public boolean obeyCommand(String command, TKMenuItem item) {
-	// return mOutlineToProxy.obeyCommand(command, item);
-	// }
 }

@@ -13,6 +13,7 @@ package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.UIUtilities;
+import com.trollworks.toolkit.ui.border.LineBorder;
 import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Color;
@@ -24,7 +25,6 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 public class ColorWell extends JPanel implements MouseListener {
 	private Color					mColor;
@@ -38,7 +38,7 @@ public class ColorWell extends JPanel implements MouseListener {
 		mColor = color;
 		mListener = listener;
 		setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
-		setBorder(new LineBorder(Color.BLACK));
+		setBorder(new LineBorder());
 		UIUtilities.setOnlySize(this, new Dimension(22, 22));
 		addMouseListener(this);
 	}

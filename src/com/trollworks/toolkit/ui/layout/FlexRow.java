@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.layout;
 
+import com.trollworks.toolkit.ui.scale.Scale;
+
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -18,17 +20,17 @@ import java.util.ArrayList;
 /** A row within a {@link FlexLayout}. */
 public class FlexRow extends FlexContainer {
 	@Override
-	protected void layoutSelf(Rectangle bounds) {
+	protected void layoutSelf(Scale scale, Rectangle bounds) {
 		int count = getChildCount();
-		int hGap = getHorizontalGap();
+		int hGap = scale.scale(getHorizontalGap());
 		int[] gaps = new int[count > 0 ? count - 1 : 0];
 		for (int i = 0; i < gaps.length; i++) {
 			gaps[i] = hGap;
 		}
 		int width = hGap * (count > 0 ? count - 1 : 0);
-		Dimension[] minSizes = getChildSizes(LayoutSize.MINIMUM);
-		Dimension[] prefSizes = getChildSizes(LayoutSize.PREFERRED);
-		Dimension[] maxSizes = getChildSizes(LayoutSize.MAXIMUM);
+		Dimension[] minSizes = getChildSizes(scale, LayoutSize.MINIMUM);
+		Dimension[] prefSizes = getChildSizes(scale, LayoutSize.PREFERRED);
+		Dimension[] maxSizes = getChildSizes(scale, LayoutSize.MAXIMUM);
 		for (int i = 0; i < count; i++) {
 			width += prefSizes[i].width;
 		}
@@ -90,13 +92,13 @@ public class FlexRow extends FlexContainer {
 				x += gaps[i];
 			}
 		}
-		layoutChildren(childBounds);
+		layoutChildren(scale, childBounds);
 	}
 
 	@Override
-	protected Dimension getSizeSelf(LayoutSize type) {
-		Dimension[] sizes = getChildSizes(type);
-		Dimension size = new Dimension(getHorizontalGap() * (sizes.length > 0 ? sizes.length - 1 : 0), 0);
+	protected Dimension getSizeSelf(Scale scale, LayoutSize type) {
+		Dimension[] sizes = getChildSizes(scale, type);
+		Dimension size = new Dimension(scale.scale(getHorizontalGap()) * (sizes.length > 0 ? sizes.length - 1 : 0), 0);
 		for (Dimension one : sizes) {
 			size.width += one.width;
 			if (one.height > size.height) {

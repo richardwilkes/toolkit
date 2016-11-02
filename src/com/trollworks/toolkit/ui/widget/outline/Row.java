@@ -111,12 +111,10 @@ public abstract class Row {
 	 * @param columns The columns used to display this row.
 	 * @return The preferred height of this row.
 	 */
-	public int getPreferredHeight(List<Column> columns) {
+	public int getPreferredHeight(Outline outline, List<Column> columns) {
 		int preferredHeight = 0;
-
 		for (Column column : columns) {
-			int height = column.getRowCell(this).getPreferredHeight(this, column);
-
+			int height = column.getRowCell(this).getPreferredHeight(outline, this, column);
 			if (height > preferredHeight) {
 				preferredHeight = height;
 			}

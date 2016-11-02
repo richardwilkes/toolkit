@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.layout;
 
+import com.trollworks.toolkit.ui.scale.Scale;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -142,6 +144,7 @@ public class ColumnLayout implements LayoutManager2 {
 
 	@Override
 	public void layoutContainer(Container parent) {
+		Scale scale = Scale.get(parent);
 		synchronized (parent.getTreeLock()) {
 			Dimension pSize = parent.getSize();
 			Insets insets = parent.getInsets();
@@ -152,8 +155,10 @@ public class ColumnLayout implements LayoutManager2 {
 			int[] minWidths = new int[mColumns];
 			int[] maxWidths = new int[mColumns];
 			int[] heights = new int[rows];
-			int width = pSize.width - (insets.left + insets.right + (mColumns - 1) * mHGap);
-			int height = pSize.height - (insets.top + insets.bottom + (rows - 1) * mVGap);
+			int scaledHGap = scale.scale(mHGap);
+			int scaledVGap = scale.scale(mVGap);
+			int width = pSize.width - (insets.left + insets.right + (mColumns - 1) * scaledHGap);
+			int height = pSize.height - (insets.top + insets.bottom + (rows - 1) * scaledVGap);
 			Dimension[] prefSizes = new Dimension[compCount];
 			Dimension[] maxSizes = new Dimension[compCount];
 			Dimension[] minSizes = new Dimension[compCount];
@@ -338,18 +343,19 @@ public class ColumnLayout implements LayoutManager2 {
 							}
 						}
 						comp.setBounds(x, compY, widths[j], cheight);
-						x += widths[j] + mHGap;
+						x += widths[j] + scaledHGap;
 					}
 				}
-				y += heights[i] + mVGap;
+				y += heights[i] + scaledVGap;
 			}
 		}
 	}
 
 	@Override
 	public Dimension maximumLayoutSize(Container parent) {
+		Scale scale = Scale.get(parent);
 		long height = 0;
-		long width = (mColumns - 1) * mHGap;
+		long width = (mColumns - 1) * scale.scale(mHGap);
 
 		synchronized (parent.getTreeLock()) {
 			Insets insets = parent.getInsets();
@@ -380,7 +386,7 @@ public class ColumnLayout implements LayoutManager2 {
 			}
 			height += insets.top + insets.bottom;
 			if (rows > 0) {
-				height += (rows - 1) * mVGap;
+				height += (rows - 1) * scale.scale(mVGap);
 			}
 
 			for (i = 0; i < mColumns; i++) {
@@ -400,8 +406,9 @@ public class ColumnLayout implements LayoutManager2 {
 
 	@Override
 	public Dimension minimumLayoutSize(Container parent) {
+		Scale scale = Scale.get(parent);
 		int height = 0;
-		int width = (mColumns - 1) * mHGap;
+		int width = (mColumns - 1) * scale.scale(mHGap);
 
 		synchronized (parent.getTreeLock()) {
 			Insets insets = parent.getInsets();
@@ -432,7 +439,7 @@ public class ColumnLayout implements LayoutManager2 {
 			}
 			height += insets.top + insets.bottom;
 			if (rows > 0) {
-				height += (rows - 1) * mVGap;
+				height += (rows - 1) * scale.scale(mVGap);
 			}
 
 			for (i = 0; i < mColumns; i++) {
@@ -444,8 +451,9 @@ public class ColumnLayout implements LayoutManager2 {
 
 	@Override
 	public Dimension preferredLayoutSize(Container parent) {
+		Scale scale = Scale.get(parent);
 		int height = 0;
-		int width = (mColumns - 1) * mHGap;
+		int width = (mColumns - 1) * scale.scale(mHGap);
 
 		synchronized (parent.getTreeLock()) {
 			Insets insets = parent.getInsets();
@@ -476,7 +484,7 @@ public class ColumnLayout implements LayoutManager2 {
 			}
 			height += insets.top + insets.bottom;
 			if (rows > 0) {
-				height += (rows - 1) * mVGap;
+				height += (rows - 1) * scale.scale(mVGap);
 			}
 
 			for (i = 0; i < mColumns; i++) {

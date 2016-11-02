@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.layout;
 
+import com.trollworks.toolkit.ui.scale.Scale;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -52,43 +54,49 @@ public abstract class FlexCell {
 	/**
 	 * Layout the cell and its children.
 	 *
+	 * @param scale The {@link Scale} to use.
 	 * @param bounds The bounds to use for the cell.
 	 */
-	public final void layout(Rectangle bounds) {
-		bounds.x += mInsets.left;
-		bounds.y += mInsets.top;
-		bounds.width -= mInsets.left + mInsets.right;
-		bounds.height -= mInsets.top + mInsets.bottom;
+	public final void layout(Scale scale, Rectangle bounds) {
+		Insets insets = scale.scale(mInsets);
+		bounds.x += insets.left;
+		bounds.y += insets.top;
+		bounds.width -= insets.left + insets.right;
+		bounds.height -= insets.top + insets.bottom;
 		mX = bounds.x;
 		mY = bounds.y;
 		mWidth = bounds.width;
 		mHeight = bounds.height;
-		layoutSelf(bounds);
+		layoutSelf(scale, bounds);
 	}
 
 	/**
 	 * Called to layout the cell and its children.
 	 *
+	 * @param scale The {@link Scale} to use.
 	 * @param bounds The bounds to use for the cell. Insets have already been applied.
 	 */
-	protected abstract void layoutSelf(Rectangle bounds);
+	protected abstract void layoutSelf(Scale scale, Rectangle bounds);
 
 	/**
+	 * @param scale The {@link Scale} to use.
 	 * @param type The type of size to determine.
 	 * @return The size for this cell.
 	 */
-	public final Dimension getSize(LayoutSize type) {
-		Dimension size = getSizeSelf(type);
-		size.width += mInsets.left + mInsets.right;
-		size.height += mInsets.top + mInsets.bottom;
+	public final Dimension getSize(Scale scale, LayoutSize type) {
+		Insets insets = scale.scale(mInsets);
+		Dimension size = getSizeSelf(scale, type);
+		size.width += insets.left + insets.right;
+		size.height += insets.top + insets.bottom;
 		return LayoutSize.sanitizeSize(size);
 	}
 
 	/**
+	 * @param scale The {@link Scale} to use.
 	 * @param type The type of size to determine.
 	 * @return The size for this cell. Do not include the insets from the cell.
 	 */
-	protected abstract Dimension getSizeSelf(LayoutSize type);
+	protected abstract Dimension getSizeSelf(Scale scale, LayoutSize type);
 
 	/** @return The horizontal alignment. */
 	public Alignment getHorizontalAlignment() {

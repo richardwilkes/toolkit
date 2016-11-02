@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.layout;
 
+import com.trollworks.toolkit.ui.scale.Scale;
+
 import java.awt.Dimension;
 
 class FlexGridData {
@@ -44,7 +46,7 @@ class FlexGridData {
 		mColumnSpan = 1 + (columnSpan - 1) * 2;
 	}
 
-	FlexGridData(int gapRow, int gapColumn, int rowGap, int columnGap) {
+	FlexGridData(Scale scale, int gapRow, int gapColumn, int rowGap, int columnGap) {
 		boolean oddRow = (gapRow & 1) == 1;
 		boolean oddColumn = (gapColumn & 1) == 1;
 		mCell = new FlexSpacer(columnGap, rowGap, oddRow && !oddColumn, !oddRow && oddColumn);
@@ -52,9 +54,9 @@ class FlexGridData {
 		mColumn = gapColumn;
 		mRowSpan = 1;
 		mColumnSpan = 1;
-		mSize = mCell.getSize(LayoutSize.PREFERRED);
-		mMinSize = mCell.getSize(LayoutSize.MINIMUM);
-		mMaxSize = mCell.getSize(LayoutSize.MAXIMUM);
+		mSize = mCell.getSize(scale, LayoutSize.PREFERRED);
+		mMinSize = mCell.getSize(scale, LayoutSize.MINIMUM);
+		mMaxSize = mCell.getSize(scale, LayoutSize.MAXIMUM);
 	}
 
 	int getLastRow() {

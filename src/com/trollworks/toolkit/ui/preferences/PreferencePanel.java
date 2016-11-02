@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.preferences;
 
 import com.trollworks.toolkit.ui.UIUtilities;
+import com.trollworks.toolkit.ui.border.EmptyBorder;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.layout.Alignment;
 import com.trollworks.toolkit.ui.layout.FlexComponent;
@@ -29,7 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 
 /** The abstract base class for all preference panels. */
 public abstract class PreferencePanel extends JPanel {
@@ -44,7 +44,7 @@ public abstract class PreferencePanel extends JPanel {
 	 */
 	public PreferencePanel(String title, PreferencesWindow owner) {
 		super();
-		setBorder(new EmptyBorder(5, 5, 5, 5));
+		setBorder(new EmptyBorder(5));
 		setOpaque(false);
 		mTitle = title;
 		mOwner = owner;

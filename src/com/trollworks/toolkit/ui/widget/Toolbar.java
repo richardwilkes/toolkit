@@ -12,7 +12,8 @@
 package com.trollworks.toolkit.ui.widget;
 
 import com.trollworks.toolkit.io.Log;
-import com.trollworks.toolkit.ui.border.SelectiveLineBorder;
+import com.trollworks.toolkit.ui.border.EmptyBorder;
+import com.trollworks.toolkit.ui.border.LineBorder;
 import com.trollworks.toolkit.ui.widget.dock.DockColors;
 
 import java.awt.Component;
@@ -26,7 +27,6 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 
 public class Toolbar extends JPanel implements LayoutManager2 {
 	public static final String		LAYOUT_FILL			= "fill";			//$NON-NLS-1$
@@ -39,7 +39,7 @@ public class Toolbar extends JPanel implements LayoutManager2 {
 		super.setLayout(this);
 		setOpaque(true);
 		setBackground(DockColors.BACKGROUND);
-		setBorder(new CompoundBorder(new SelectiveLineBorder(DockColors.SHADOW, 0, 0, 1, 0), new EmptyBorder(0, 4, 0, 4)));
+		setBorder(new CompoundBorder(new LineBorder(DockColors.SHADOW, 0, 0, 1, 0), new EmptyBorder(0, 4, 0, 4)));
 	}
 
 	@Override

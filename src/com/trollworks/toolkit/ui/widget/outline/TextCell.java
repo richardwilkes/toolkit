@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui.widget.outline;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.TextDrawing;
+import com.trollworks.toolkit.ui.scale.Scale;
 import com.trollworks.toolkit.ui.widget.Icons;
 import com.trollworks.toolkit.utility.text.NumericComparator;
 
@@ -31,9 +32,7 @@ import javax.swing.UIManager;
 /** Represents text cells in an {@link Outline}. */
 public class TextCell implements Cell {
 	/** The standard horizontal margin. */
-	public static final int	H_MARGIN		= 2;
-	/** The standard horizontal margin width. */
-	public static final int	H_MARGIN_WIDTH	= H_MARGIN * 2;
+	public static final int	H_MARGIN	= 2;
 	private int				mHAlignment;
 	private boolean			mWrapped;
 
@@ -86,32 +85,35 @@ public class TextCell implements Cell {
 	}
 
 	@Override
-	public int getPreferredWidth(Row row, Column column) {
-		int width = TextDrawing.getPreferredSize(getFont(row, column), getPresentationText(row, column)).width;
+	public int getPreferredWidth(Outline outline, Row row, Column column) {
+		Scale scale = Scale.get(outline);
+		int scaledHMargin = scale.scale(H_MARGIN);
+		int width = TextDrawing.getPreferredSize(scale.scale(getFont(row, column)), getPresentationText(outline, row, column)).width;
 		RetinaIcon icon = getIcon(row, column);
 		if (icon != null) {
-			width += icon.getIconWidth() + H_MARGIN;
+			width += scale.scale(icon.getIconWidth()) + scaledHMargin;
 		}
-		return H_MARGIN_WIDTH + width;
+		return scaledHMargin + width + scaledHMargin;
 	}
 
 	@Override
-	public int getPreferredHeight(Row row, Column column) {
-		Font font = getFont(row, column);
+	public int getPreferredHeight(Outline outline, Row row, Column column) {
+		Scale scale = Scale.get(outline);
+		Font font = scale.scale(getFont(row, column));
 		int minHeight = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
-		int height = TextDrawing.getPreferredSize(font, getPresentationText(row, column)).height;
+		int height = TextDrawing.getPreferredSize(font, getPresentationText(outline, row, column)).height;
 		if (row == null) {
-			height = adjustHeight(column.getIcon(), height);
+			height = adjustHeight(scale, column.getIcon(), height);
 		} else {
-			height = adjustHeight(Icons.getDisclosure(true, true), height);
-			height = adjustHeight(row.getIcon(column), height);
+			height = adjustHeight(scale, Icons.getDisclosure(true, true), height);
+			height = adjustHeight(scale, row.getIcon(column), height);
 		}
 		return minHeight > height ? minHeight : height;
 	}
 
-	private static int adjustHeight(RetinaIcon icon, int height) {
+	private static int adjustHeight(Scale scale, RetinaIcon icon, int height) {
 		if (icon != null) {
-			int iconHeight = icon.getIconHeight();
+			int iconHeight = scale.scale(icon.getIconHeight());
 			if (height < iconHeight) {
 				height = iconHeight;
 			}
@@ -126,63 +128,57 @@ public class TextCell implements Cell {
 
 	@Override
 	public void drawCell(Outline outline, Graphics gc, Rectangle bounds, Row row, Column column, boolean selected, boolean active) {
-		Font font = getFont(row, column);
+		Scale scale = Scale.get(outline);
+		Font font = scale.scale(getFont(row, column));
 		int ascent = gc.getFontMetrics(font).getAscent();
-		StringTokenizer tokenizer = new StringTokenizer(getPresentationText(row, column), "\n", true); //$NON-NLS-1$
-		int totalHeight = getPreferredHeight(row, column);
+		StringTokenizer tokenizer = new StringTokenizer(getPresentationText(outline, row, column), "\n", true); //$NON-NLS-1$
+		int totalHeight = getPreferredHeight(outline, row, column);
 		int lineHeight = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
 		int lineCount = 0;
 		RetinaIcon icon = getIcon(row, column);
-		int left = icon == null ? 0 : icon.getIconWidth() + H_MARGIN;
-		int cellWidth = bounds.width - (left + H_MARGIN_WIDTH);
+		int scaledHMargin = scale.scale(H_MARGIN);
+		int left = icon == null ? 0 : scale.scale(icon.getIconWidth()) + scaledHMargin;
+		int cellWidth = bounds.width - (scaledHMargin + left + scaledHMargin);
 		int vAlignment = getVAlignment();
 		int hAlignment = getHAlignment();
 
-		left += bounds.x + H_MARGIN;
+		left += bounds.x + scaledHMargin;
 
 		if (icon != null) {
 			int iy = bounds.y;
-
 			if (vAlignment != SwingConstants.TOP) {
-				int ivDelta = bounds.height - icon.getIconHeight();
-
+				int ivDelta = bounds.height - scale.scale(icon.getIconHeight());
 				if (vAlignment == SwingConstants.CENTER) {
 					ivDelta /= 2;
 				}
 				iy += ivDelta;
 			}
-			icon.paintIcon(outline, gc, bounds.x + H_MARGIN, iy);
+			icon.paintIcon(outline, gc, bounds.x + scaledHMargin, iy);
 		}
 
 		gc.setFont(font);
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
-
 			if (token.equals("\n")) { //$NON-NLS-1$
 				lineCount++;
 			} else {
 				String text = TextDrawing.truncateIfNecessary(font, token, cellWidth, getTruncationPolicy());
 				int x = left;
 				int y = bounds.y + ascent + lineHeight * lineCount;
-
 				if (hAlignment != SwingConstants.LEFT) {
 					int hDelta = cellWidth - TextDrawing.getWidth(font, text);
-
 					if (hAlignment == SwingConstants.CENTER) {
 						hDelta /= 2;
 					}
 					x += hDelta;
 				}
-
 				if (vAlignment != SwingConstants.TOP) {
 					float vDelta = bounds.height - totalHeight;
-
 					if (vAlignment == SwingConstants.CENTER) {
 						vDelta /= 2;
 					}
 					y += vDelta;
 				}
-
 				gc.setColor(getColor(selected, active, row, column));
 				gc.drawString(text, x, y);
 			}
@@ -190,11 +186,12 @@ public class TextCell implements Cell {
 	}
 
 	/**
+	 * @param outline The outline being used.
 	 * @param row The row.
 	 * @param column The column.
 	 * @return The data of this cell as a string that is prepared for display.
 	 */
-	protected String getPresentationText(Row row, Column column) {
+	protected String getPresentationText(Outline outline, Row row, Column column) {
 		String text = getData(row, column, false);
 		if (!mWrapped || row == null) {
 			return text;
@@ -203,7 +200,9 @@ public class TextCell implements Cell {
 		if (width == -1) {
 			return text;
 		}
-		return TextDrawing.wrapToPixelWidth(getFont(row, column), text, width - (H_MARGIN_WIDTH + row.getOwner().getIndentWidth(row, column)));
+		Scale scale = Scale.get(outline);
+		int scaledHMargin = scale.scale(H_MARGIN);
+		return TextDrawing.wrapToPixelWidth(scale.scale(getFont(row, column)), text, width - (scaledHMargin + scale.scale(row.getOwner().getIndentWidth(row, column)) + scaledHMargin));
 	}
 
 	@Override
@@ -227,7 +226,6 @@ public class TextCell implements Cell {
 	protected String getData(Row row, Column column, boolean nullOK) {
 		if (row != null) {
 			String text = row.getDataAsText(column);
-
 			return text == null ? nullOK ? null : "" : text; //$NON-NLS-1$
 		}
 		return column.toString();
@@ -260,8 +258,9 @@ public class TextCell implements Cell {
 	}
 
 	@Override
-	public String getToolTipText(MouseEvent event, Rectangle bounds, Row row, Column column) {
-		if (getPreferredWidth(row, column) - H_MARGIN > column.getWidth() - row.getOwner().getIndentWidth(row, column)) {
+	public String getToolTipText(Outline outline, MouseEvent event, Rectangle bounds, Row row, Column column) {
+		Scale scale = Scale.get(outline);
+		if (getPreferredWidth(outline, row, column) - scale.scale(H_MARGIN) > column.getWidth() - scale.scale(row.getOwner().getIndentWidth(row, column))) {
 			return getData(row, column, true);
 		}
 		return null;

@@ -12,6 +12,7 @@
 package com.trollworks.toolkit.ui.widget.outline;
 
 import com.trollworks.toolkit.ui.GraphicsUtilities;
+import com.trollworks.toolkit.ui.scale.Scale;
 import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.AlphaComposite;
@@ -67,7 +68,6 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 		addMouseMotionListener(this);
 		setAutoscrolls(true);
 		ToolTipManager.sharedInstance().registerComponent(this);
-
 		if (!GraphicsUtilities.inHeadlessPrintMode()) {
 			DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
 			setDropTarget(new DropTarget(this, this));
@@ -158,6 +158,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 
 	@Override
 	public Dimension getPreferredSize() {
+		int one = Scale.get(this).scale(1);
 		List<Column> columns = mOwner.getModel().getColumns();
 		boolean drawDividers = mOwner.shouldDrawColumnDividers();
 		Insets insets = getInsets();
@@ -168,11 +169,11 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 				int tmp = col.getWidth();
 				if (tmp == -1) {
 					tmp = col.getPreferredWidth(mOwner);
-					col.setWidth(tmp);
+					col.setWidth(mOwner, tmp);
 					changed.add(col);
 				}
-				size.width += tmp + (drawDividers ? 1 : 0);
-				tmp = col.getPreferredHeaderHeight() + 1;
+				size.width += tmp + (drawDividers ? one : 0);
+				tmp = col.getPreferredHeaderHeight(mOwner) + one;
 				if (tmp > size.height) {
 					size.height = tmp;
 				}
@@ -188,6 +189,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 
 	@Override
 	protected void paintComponent(Graphics gc) {
+		int one = Scale.get(this).scale(1);
 		super.paintComponent(GraphicsUtilities.prepare(gc));
 		Rectangle clip = gc.getClipBounds();
 		Insets insets = getInsets();
@@ -195,7 +197,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 		Rectangle bounds = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), height - (insets.top + insets.bottom));
 		boolean drawDividers = mOwner.shouldDrawColumnDividers();
 		gc.setColor(getTopDividerColor());
-		gc.drawLine(clip.x, height - 1, clip.x + clip.width, height - 1);
+		gc.fillRect(clip.x, height - one, clip.width, one);
 		Color dividerColor = mOwner.getDividerColor();
 		List<Column> columns = mOwner.getModel().getColumns();
 		int count = columns.size();
@@ -222,8 +224,8 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 				bounds.x += bounds.width;
 				if (drawDividers && i < maxDivider) {
 					gc.setColor(dividerColor);
-					gc.drawLine(bounds.x, bounds.y, bounds.x, bounds.y + bounds.height);
-					bounds.x++;
+					gc.fillRect(bounds.x, bounds.y, one, bounds.y + bounds.height);
+					bounds.x += one;
 				}
 			}
 		}
@@ -261,7 +263,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 	public String getToolTipText(MouseEvent event) {
 		Column column = mOwner.overColumn(event.getX());
 		if (column != null) {
-			return Text.wrapPlainTextForToolTip(column.getHeaderCell().getToolTipText(event, getColumnBounds(column), null, column));
+			return Text.wrapPlainTextForToolTip(column.getHeaderCell().getToolTipText(mOwner, event, getColumnBounds(column), null, column));
 		}
 		return super.getToolTipText(event);
 	}

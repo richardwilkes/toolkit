@@ -4,6 +4,7 @@ import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.UIUtilities;
+import com.trollworks.toolkit.ui.border.LineBorder;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.utility.FileType;
 import com.trollworks.toolkit.utility.Localization;
@@ -29,7 +30,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 public class ImageWell extends JPanel implements DropTargetListener, MouseListener {
 	@Localize("Select an image file")
@@ -48,7 +48,7 @@ public class ImageWell extends JPanel implements DropTargetListener, MouseListen
 		mGetter = getter;
 		mSetter = setter;
 		setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
-		setBorder(new LineBorder(Color.BLACK));
+		setBorder(new LineBorder());
 		UIUtilities.setOnlySize(this, new Dimension(22, 22));
 		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, this));
 		addMouseListener(this);

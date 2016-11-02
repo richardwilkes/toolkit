@@ -11,23 +11,21 @@
 
 package com.trollworks.toolkit.ui.border;
 
-import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.TextDrawing;
+import com.trollworks.toolkit.ui.scale.Scale;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
 /** A border consisting of a frame and optional title. */
-public class TitledBorder implements Border {
+public class TitledBorder extends LineBorder {
+	private Color	mTextColor	= Color.WHITE;
 	private String	mTitle;
 	private Font	mFont;
 
@@ -36,15 +34,34 @@ public class TitledBorder implements Border {
 	}
 
 	/**
-	 * Creates a new border with a title.
+	 * Creates a new border without a title.
 	 *
 	 * @param font The font to use.
 	 * @param title The title to use.
 	 */
 	public TitledBorder(Font font, String title) {
-		super();
 		mFont = font;
 		mTitle = title;
+	}
+
+	/** @return The color to use for the text. */
+	public Color getTextColor() {
+		return mTextColor;
+	}
+
+	/** @param color The color to use for the text. */
+	public void setTextColor(Color color) {
+		mTextColor = color;
+	}
+
+	/** @return The font. */
+	public Font getFont() {
+		return mFont;
+	}
+
+	/** @param font The font to use. */
+	public void setFont(Font font) {
+		mFont = font;
 	}
 
 	/** @return The title. */
@@ -59,43 +76,26 @@ public class TitledBorder implements Border {
 
 	@Override
 	public Insets getBorderInsets(Component component) {
-		Insets insets = new Insets(1, 1, 1, 1);
-		if (mTitle != null) {
-			insets.top += TextDrawing.getPreferredSize(mFont, mTitle).height;
+		int top = 1;
+		if (mTitle != null && mFont != null) {
+			top = TextDrawing.getPreferredSize(mFont, mTitle).height;
 		}
-		return insets;
-	}
-
-	@Override
-	public boolean isBorderOpaque() {
-		return true;
+		setThickness(Edge.TOP, top);
+		return super.getBorderInsets(component);
 	}
 
 	@Override
 	public void paintBorder(Component component, Graphics graphics, int x, int y, int width, int height) {
-		Graphics2D gc = (Graphics2D) graphics;
-		Color savedColor = gc.getColor();
-		gc.setColor(Color.BLACK);
-		if (GraphicsUtilities.isRetinaDisplay(gc)) {
-			// This should not be necessary, but the top & left edges are too thin otherwise
-			Graphics2D gc2 = (Graphics2D) gc.create();
-			gc2.translate(x, y);
-			gc2.scale(0.5, 0.5);
-			gc2.setStroke(new BasicStroke(2));
-			gc2.drawRect(x + 1, y + 1, (width - 1) * 2, (height - 1) * 2);
-			gc2.dispose();
-		} else {
-			gc.drawRect(x, y, width - 1, height - 1);
+		super.paintBorder(component, graphics, x, y, width, height);
+		if (mTitle != null && mFont != null) {
+			Scale scale = Scale.get(component);
+			Font savedFont = graphics.getFont();
+			Font font = scale.scale(mFont);
+			graphics.setFont(font);
+			int one = scale.scale(1);
+			graphics.setColor(mTextColor);
+			TextDrawing.draw(graphics, new Rectangle(x + one, y, width - (one + one), TextDrawing.getPreferredSize(font, mTitle).height), mTitle, SwingConstants.CENTER, SwingConstants.TOP);
+			graphics.setFont(savedFont);
 		}
-		if (mTitle != null) {
-			Font savedFont = gc.getFont();
-			gc.setFont(mFont);
-			Rectangle bounds = new Rectangle(x + 1, y + 1, width - 2, TextDrawing.getPreferredSize(mFont, mTitle).height + 1);
-			gc.fill(bounds);
-			gc.setColor(Color.WHITE);
-			TextDrawing.draw(gc, bounds, mTitle, SwingConstants.CENTER, SwingConstants.TOP);
-			gc.setFont(savedFont);
-		}
-		gc.setColor(savedColor);
 	}
 }

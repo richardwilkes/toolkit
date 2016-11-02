@@ -96,7 +96,7 @@ public class TextDrawing {
 	 * @return The bottom of the drawn text.
 	 */
 	public static final int draw(Graphics gc, Rectangle bounds, String text, int hAlign, int vAlign) {
-		return draw(gc, bounds, text, hAlign, vAlign, null);
+		return draw(gc, bounds, text, hAlign, vAlign, null, 0);
 	}
 
 	/**
@@ -111,9 +111,10 @@ public class TextDrawing {
 	 *            {@link SwingConstants#CENTER}, or {@link SwingConstants#RIGHT}.
 	 * @param strikeThruColor If not <code>null</code>, then a line of this color will be drawn
 	 *            through the text.
+	 * @param strikeThruSize The line width to use when drawing the strike-thru.
 	 * @return The bottom of the drawn text.
 	 */
-	public static final int draw(Graphics gc, Rectangle bounds, String text, int hAlign, int vAlign, Color strikeThruColor) {
+	public static final int draw(Graphics gc, Rectangle bounds, String text, int hAlign, int vAlign, Color strikeThruColor, int strikeThruSize) {
 		int y = bounds.y;
 		if (text.length() > 0) {
 			ArrayList<String> list = new ArrayList<>();
@@ -151,7 +152,7 @@ public class TextDrawing {
 				list.add(text);
 			}
 			if (vAlign == SwingConstants.CENTER) {
-				y = bounds.y + (bounds.height - (textHeight - descent / 2)) / 2;
+				y = bounds.y + (bounds.height - textHeight) / 2;
 			} else if (vAlign == SwingConstants.BOTTOM) {
 				y = bounds.y + bounds.height - textHeight;
 			}
@@ -172,8 +173,7 @@ public class TextDrawing {
 					if (width == 0) {
 						width = getSimpleWidth(font, piece);
 					}
-					int middle = y + ascent / 2 + 1;
-					gc.drawLine(x, middle, x + width, middle);
+					gc.fillRect(x, y + (ascent - strikeThruSize) / 2, x + width, strikeThruSize);
 					gc.setColor(saved);
 				}
 				y += fHeight;

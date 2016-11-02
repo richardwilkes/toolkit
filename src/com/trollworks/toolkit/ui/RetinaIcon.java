@@ -12,10 +12,12 @@
 package com.trollworks.toolkit.ui;
 
 import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.ui.scale.Scale;
 
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import javax.swing.Icon;
 
@@ -56,15 +58,12 @@ public class RetinaIcon implements Icon {
 
 	@Override
 	public void paintIcon(Component component, Graphics g, int x, int y) {
-		if (mRetina != null && GraphicsUtilities.isRetinaDisplay(g)) {
-			Graphics2D gc = (Graphics2D) g.create();
-			gc.translate(x, y);
-			gc.scale(0.5, 0.5);
-			gc.drawImage(mRetina, 0, 0, component);
-			gc.dispose();
-		} else {
-			g.drawImage(mNormal, x, y, component);
-		}
+		Graphics2D gc = (Graphics2D) g;
+		RenderingHints saved = GraphicsUtilities.setMaximumQualityForGraphics(gc);
+		Scale scale = Scale.get(component);
+		StdImage img = mRetina != null && (scale.getScale() > 1 || GraphicsUtilities.isRetinaDisplay(g)) ? mRetina : mNormal;
+		gc.drawImage(img, x, y, scale.scale(getIconWidth()), scale.scale(getIconHeight()), component);
+		gc.setRenderingHints(saved);
 		if (mOverlay != null) {
 			mOverlay.paintIcon(component, g, x, y);
 		}

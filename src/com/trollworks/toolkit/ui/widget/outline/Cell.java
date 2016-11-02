@@ -32,18 +32,20 @@ public interface Cell {
 	public void drawCell(Outline outline, Graphics gc, Rectangle bounds, Row row, Column column, boolean selected, boolean active);
 
 	/**
+	 * @param outline The {@link Outline} being used.
 	 * @param row The row to get data from.
 	 * @param column The column to get data from.
 	 * @return The preferred width of the cell for the specified data.
 	 */
-	public int getPreferredWidth(Row row, Column column);
+	public int getPreferredWidth(Outline outline, Row row, Column column);
 
 	/**
+	 * @param outline The {@link Outline} being used.
 	 * @param row The row to get data from.
 	 * @param column The column to get data from.
 	 * @return The preferred height of the cell for the specified data.
 	 */
-	public int getPreferredHeight(Row row, Column column);
+	public int getPreferredHeight(Outline outline, Row row, Column column);
 
 	/**
 	 * Compare the column in row one with row two.
@@ -72,7 +74,7 @@ public interface Cell {
 	 * @param column The column to get data from.
 	 * @return The tooltip string for this cell.
 	 */
-	public String getToolTipText(MouseEvent event, Rectangle bounds, Row row, Column column);
+	public String getToolTipText(Outline outline, MouseEvent event, Rectangle bounds, Row row, Column column);
 
 	/**
 	 * @return <code>true</code> if this cell wants to participate in dynamic row layout.

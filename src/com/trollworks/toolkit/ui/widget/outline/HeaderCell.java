@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.widget.outline;
 
+import com.trollworks.toolkit.ui.scale.Scale;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -93,22 +95,26 @@ public class HeaderCell extends TextCell {
 	@Override
 	public void drawCell(Outline outline, Graphics gc, Rectangle bounds, Row row, Column column, boolean selected, boolean active) {
 		if (mAllowSort) {
-			bounds.x += 2;
-			bounds.width -= 4;
+			Scale scale = Scale.get(outline);
+			int sorterWidth = scale.scale(SORTER_WIDTH);
+			int two = scale.scale(2);
+			bounds.x += two;
+			bounds.width -= two + two;
 
 			if (mSortSequence != -1) {
-				bounds.width -= SORTER_WIDTH;
+				bounds.width -= sorterWidth;
 			}
 
 			drawCellSuper(outline, gc, bounds, row, column, selected, active);
 
 			if (mSortSequence != -1) {
+				int three = scale.scale(3);
 				int x;
 				int y;
 				int i;
 
-				bounds.width += SORTER_WIDTH;
-				x = bounds.x + bounds.width - 6;
+				bounds.width += sorterWidth;
+				x = bounds.x + bounds.width - (three + three);
 				y = bounds.y + bounds.height / 2 - 1;
 
 				gc.setColor(getSorterColor());
@@ -120,37 +126,40 @@ public class HeaderCell extends TextCell {
 						}
 					}
 				}
+				int one = scale.scale(1);
 				if (count > 1) {
 					for (i = 0; i <= mSortSequence; i++) {
-						gc.fillRect(bounds.x + 1 + 3 * i, bounds.y + bounds.height - 3, 2, 2);
+						gc.fillRect(bounds.x + one + three * i, bounds.y + bounds.height - three, two, two);
 					}
 				}
 
-				for (i = 0; i < 5; i++) {
-					int x1 = mSortAscending ? x - i : x + i - 4;
-					int x2 = mSortAscending ? x + i : x + 4 - i;
-					gc.drawLine(x1, y + i, x2, y + i);
+				int four = scale.scale(4);
+				int five = scale.scale(5);
+				for (i = 0; i < five; i++) {
+					gc.fillRect(mSortAscending ? x - i : x + i - four, y + i, 1 + (mSortAscending ? i + i : (five - 1 - i) * 2), 1);
 				}
 			}
 
-			bounds.x -= 2;
-			bounds.width += 4;
+			bounds.x -= two;
+			bounds.width += two + two;
 		} else {
 			drawCellSuper(outline, gc, bounds, row, column, selected, active);
 		}
 	}
 
 	@Override
-	public int getPreferredWidth(Row row, Column column) {
-		int width = super.getPreferredWidth(row, column);
+	public int getPreferredWidth(Outline outline, Row row, Column column) {
+		int width = super.getPreferredWidth(outline, row, column);
 		if (mAllowSort) {
-			width += SORTER_WIDTH + 4;
+			Scale scale = Scale.get(outline);
+			int margin = scale.scale(2);
+			width += margin + scale.scale(SORTER_WIDTH) + margin;
 		}
 		return width;
 	}
 
 	@Override
-	public String getToolTipText(MouseEvent event, Rectangle bounds, Row row, Column column) {
+	public String getToolTipText(Outline outline, MouseEvent event, Rectangle bounds, Row row, Column column) {
 		return column.getToolTipText(event, bounds);
 	}
 
