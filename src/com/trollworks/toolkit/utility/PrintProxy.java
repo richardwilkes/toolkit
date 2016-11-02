@@ -23,8 +23,12 @@ public interface PrintProxy extends Printable {
 	/** @return The title of the print job. */
 	String getPrintJobTitle();
 
-	/** Called when the page setup has changed. */
-	void adjustToPageSetupChanges();
+	/**
+	 * Called when the page setup has changed.
+	 *
+	 * @param willPrint <code>true</code> when this call will be immediately followed by printing.
+	 */
+	void adjustToPageSetupChanges(boolean willPrint);
 
 	/** @return <code>true</code> when printing is in progress. */
 	boolean isPrinting();

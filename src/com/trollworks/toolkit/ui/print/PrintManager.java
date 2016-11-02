@@ -241,7 +241,7 @@ public class PrintManager {
 			PageFormat format = mJob.pageDialog(createPageFormat());
 			if (format != null) {
 				adjustSettingsToPageFormat(format);
-				proxy.adjustToPageSetupChanges();
+				proxy.adjustToPageSetupChanges(false);
 				return true;
 			}
 		} else {
@@ -252,7 +252,7 @@ public class PrintManager {
 					if (service != null) {
 						mJob.setPrintService(service);
 					}
-					proxy.adjustToPageSetupChanges();
+					proxy.adjustToPageSetupChanges(false);
 					return true;
 				} catch (PrinterException exception) {
 					WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), UNABLE_TO_SWITCH_PRINTERS);
@@ -275,7 +275,7 @@ public class PrintManager {
 					mJob.setJobName(proxy.getPrintJobTitle());
 					if (mJob.printDialog()) {
 						try {
-							proxy.adjustToPageSetupChanges();
+							proxy.adjustToPageSetupChanges(true);
 							proxy.setPrinting(true);
 							mJob.setPrintable(proxy, createPageFormat());
 							mJob.print();
@@ -292,7 +292,7 @@ public class PrintManager {
 						try {
 							mJob.setPrintService(panel.accept(mSet));
 							try {
-								proxy.adjustToPageSetupChanges();
+								proxy.adjustToPageSetupChanges(true);
 								proxy.setPrinting(true);
 								mJob.setPrintable(proxy, createPageFormat());
 								mJob.print(mSet);
