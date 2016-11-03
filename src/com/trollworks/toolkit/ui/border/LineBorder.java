@@ -31,6 +31,17 @@ public class LineBorder implements Border {
 	}
 
 	/**
+	 * Creates a 1 pixel border with the specified color.
+	 *
+	 * @param color The color to use for all sides.
+	 */
+	public LineBorder(Color color) {
+		for (Edge edge : Edge.values()) {
+			setColorAndThickness(edge, color, 1);
+		}
+	}
+
+	/**
 	 * Creates a border with the specified color and thickness on all sides.
 	 *
 	 * @param color The color to use for all sides.
