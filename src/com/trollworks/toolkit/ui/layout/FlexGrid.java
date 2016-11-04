@@ -333,6 +333,9 @@ public class FlexGrid extends FlexContainer {
 					height = data.mSize.height - height;
 					while (height > 0 && count > 0) {
 						int extra = height / count;
+						if (extra < 1) {
+							extra = 1;
+						}
 						count = 0;
 						for (int row = data.mRow; row <= last && height > 0; row += 2) {
 							int rHeight = mRowHeights[row];
@@ -380,6 +383,9 @@ public class FlexGrid extends FlexContainer {
 					width = data.mSize.width - width;
 					while (width > 0 && count > 0) {
 						int extra = width / count;
+						if (extra < 1) {
+							extra = 1;
+						}
 						count = 0;
 						for (int column = data.mColumn; column <= last && width > 0; column += 2) {
 							int cWidth = mColumnWidths[column];
