@@ -19,7 +19,6 @@ import com.trollworks.toolkit.utility.Geometry;
 import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.Platform;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -56,7 +55,6 @@ public class GraphicsUtilities {
 	private static int				HIDDEN_FRAME_ICONSET_SEQUENCE	= -1;
 	private static boolean			HEADLESS_PRINT_MODE				= false;
 	private static int				HEADLESS_CHECK_RESULT			= 0;
-	private static boolean			OK_TO_USE_FULLSCREEN_TRICK		= true;
 	private static BufferedImage	FALLBACK_GRAPHICS_BACKING_STORE	= null;
 
 	/** @return Whether the headless print mode is enabled. */
@@ -336,24 +334,20 @@ public class GraphicsUtilities {
 		return frame;
 	}
 
-	/** @param ok Whether using the momentary fullscreen window trick is OK or not. */
-	public static void setOKToUseFullScreenTrick(boolean ok) {
-		OK_TO_USE_FULLSCREEN_TRICK = ok;
-	}
-
 	/** Attempts to force the app to the front. */
 	public static void forceAppToFront() {
 		if (Platform.isMacintosh()) {
 			Application.getApplication().requestForeground(true);
-		} else if (OK_TO_USE_FULLSCREEN_TRICK) {
-			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			GraphicsDevice gd = ge.getDefaultScreenDevice();
-			AppWindow window = new AppWindow();
-			window.setUndecorated(true);
-			window.getContentPane().setBackground(new Color(0, 0, 0, 0));
-			gd.setFullScreenWindow(window);
-			gd.setFullScreenWindow(null);
-			window.dispose();
+		} else {
+			AppWindow topWindow = AppWindow.getTopWindow();
+			if (topWindow != null) {
+				boolean alwaysOnTop = topWindow.isAlwaysOnTop();
+				topWindow.setExtendedState(topWindow.getExtendedState() & ~Frame.ICONIFIED & Frame.NORMAL);
+				topWindow.setAlwaysOnTop(true);
+				topWindow.toFront();
+				topWindow.requestFocus();
+				topWindow.setAlwaysOnTop(alwaysOnTop);
+			}
 		}
 	}
 
