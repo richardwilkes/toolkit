@@ -14,6 +14,10 @@ package com.trollworks.toolkit.utility;
 import com.trollworks.toolkit.annotation.Localizations;
 import com.trollworks.toolkit.annotation.Localize;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.security.AccessController;
@@ -24,7 +28,10 @@ import java.util.Locale;
 /**
  * Loads localized messages into classes. This provides similar functionality to the
  * org.eclipse.osgi.util.NLS class, but this way we can get localized strings without requiring any
- * part of Eclipse.
+ * part of Eclipse. Prior to this class being used, you can set a system property named
+ * "locale.file" to cause the locale used to be determined based upon the contents of the file
+ * rather than the regular mechanism. The first non-blank line in the file will be used as the
+ * locale name.
  */
 @SuppressWarnings("nls")
 public class Localization implements PrivilegedAction<Object> {
@@ -36,6 +43,10 @@ public class Localization implements PrivilegedAction<Object> {
 	private boolean					mIsAccessible;
 
 	static {
+		Locale override = getLocaleOverride();
+		if (override != null) {
+			Locale.setDefault(override);
+		}
 		String nl = Locale.getDefault().toString();
 		ArrayList<String> result = new ArrayList<>(4);
 		while (true) {
@@ -48,6 +59,41 @@ public class Localization implements PrivilegedAction<Object> {
 		}
 		result.add("");
 		LOCALES = result.toArray(new String[result.size()]);
+	}
+
+	/** @return The file a locale will be read from, or <code>null</code> if no property was set. */
+	public static final File getLocaleOverrideFile() {
+		String localeFile = System.getProperty("locale.file", "");
+		if (!localeFile.isEmpty()) {
+			File base = new File(System.getProperty("user.home", ".")); //$NON-NLS-1$ //$NON-NLS-2$
+			if (Platform.isMacintosh()) {
+				base = new File(base, "Library/Preferences"); //$NON-NLS-1$
+			} else if (Platform.isWindows()) {
+				base = new File(base, "Local Settings/Application Data"); //$NON-NLS-1$
+			}
+			base.mkdirs();
+			return new File(base, localeFile);
+		}
+		return null;
+	}
+
+	/** @return The locale override, or <code>null</code> if no property was set. */
+	public static final Locale getLocaleOverride() {
+		File localeFile = getLocaleOverrideFile();
+		if (localeFile != null) {
+			try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(localeFile)))) {
+				String line;
+				while ((line = in.readLine()) != null) {
+					line = line.trim();
+					if (!line.isEmpty()) {
+						return new Locale(line);
+					}
+				}
+			} catch (Exception ex) {
+				// Ignore
+			}
+		}
+		return null;
 	}
 
 	/**
