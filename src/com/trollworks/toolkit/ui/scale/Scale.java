@@ -35,7 +35,11 @@ public class Scale {
 			return OVERRIDE;
 		}
 		ScaleRoot root = UIUtilities.getSelfOrAncestorOfType(comp, ScaleRoot.class);
-		return root != null ? root.getScale() : Scales.ACTUAL_SIZE.getScale();
+		Scale scale = null;
+		if (root != null) {
+			scale = root.getScale();
+		}
+		return scale != null ? scale : Scales.ACTUAL_SIZE.getScale();
 	}
 
 	/**
