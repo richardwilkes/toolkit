@@ -23,6 +23,7 @@ import java.util.List;
 
 public class DisplayDice implements ExpressionFunction {
 	@Localize("Invalid dice specification: %s")
+	@Localize(locale = "pt-BR", value = "Especificação de dados inválida: %s")
 	private static String INVALID_DICE_SPEC;
 
 	static {

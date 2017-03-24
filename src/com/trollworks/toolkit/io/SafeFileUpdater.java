@@ -26,21 +26,25 @@ import java.util.Map;
  */
 public class SafeFileUpdater {
 	@Localize("No transaction in progress.")
+	@Localize(locale = "pt-BR", value = "Nenhuma transação em progresso")
 	@Localize(locale = "ru", value = "Нет действий в обработке")
 	@Localize(locale = "de", value = "Keine Transaktion wird ausgeführt.")
 	@Localize(locale = "es", value = "No hay transaciones en progreso.")
 	private static String	NO_TRANSACTION_IN_PROGRESS;
 	@Localize("Unable to swap files.")
+	@Localize(locale = "pt-BR", value = "Incapaz de trocar os arquivos")
 	@Localize(locale = "ru", value = "Невозможно поменять файлы.")
 	@Localize(locale = "de", value = "Kann Dateien nicht auswechseln.")
 	@Localize(locale = "es", value = "Imposible crear ficheros de intercambio.")
 	private static String	FILE_SWAP_FAILED;
 	@Localize("\"file\" may not be null.")
+	@Localize(locale = "pt-BR", value = "\"arquivo\" não pode ser nulo")
 	@Localize(locale = "ru", value = "\"файл\" не может быть пустым.")
 	@Localize(locale = "de", value = "\"file\" darf nicht null sein.")
 	@Localize(locale = "es", value = "\"archivo\" no puede ser nulo.")
 	private static String	MAY_NOT_BE_NULL;
 	@Localize("\"file\" may not refer to a directory.")
+	@Localize(locale = "pt-BR", value = "\"arquivo\" não pode se referir a um diretório")
 	@Localize(locale = "ru", value = "\"файл\" не может ссылаться на папку.")
 	@Localize(locale = "de", value = "\"file\" darf kein Verzeichnis sein.")
 	@Localize(locale = "es", value = "\"archivo\" no puede ser un directorio.")
