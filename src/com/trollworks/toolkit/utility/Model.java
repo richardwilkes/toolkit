@@ -29,16 +29,19 @@ import javax.xml.stream.XMLStreamException;
 /** The abstract base model object, responsible for providing basic i/o. */
 public abstract class Model implements Cloneable {
 	@Localize("Expected tag \"{0}\", but found \"{1}\".")
+	@Localize(locale = "pt-BR", value = "A tag esperada era \"{0}\", mas foi encontrada \"{1}\"")
 	@Localize(locale = "ru", value = "Ожидаемый тег \"{0}\", но найден \"{1}\".")
 	@Localize(locale = "de", value = "Tag \"{0}\" erwartet, aber \"{1}\" erhalten.")
 	@Localize(locale = "es", value = "Se esperaba la etiqueta \"{0}\", pero se encontró \"{1}\".")
 	private static String	INVALID_ROOT_TAG;
 	@Localize("The tag \"{0}\" is from an older version and cannot be loaded.")
+	@Localize(locale = "pt-BR", value = "A tag \"{0}\" é de uma versão antiga e não pode ser carregada")
 	@Localize(locale = "ru", value = "Тег \"{0}\" относится к более старой версии и не может быть загружен.")
 	@Localize(locale = "de", value = "Das Tag \"{0}\" ist von einer älteren Version und kann nicht geladen werden.")
 	@Localize(locale = "es", value = "La etiqueta \"{0}\" proviene de una versión anterior y no puede abrirse")
 	private static String	TOO_OLD;
 	@Localize("The tag \"{0}\" is from a newer version and cannot be loaded.")
+	@Localize(locale = "pt-BR", value = "A tag \"{0}\" é de uma versão mais recente e não pode ser carregada")
 	@Localize(locale = "ru", value = "Тег \"{0}\" относится к более новой версии и не может быть загружен.")
 	@Localize(locale = "de", value = "Das Tag \"{0}\" ist von einer neueren Version und kann nicht geladen werden.")
 	@Localize(locale = "es", value = "La etiqueta \"{0}\" proviene de una versión posterior y no puede abrirse")

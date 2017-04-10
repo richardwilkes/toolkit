@@ -27,16 +27,22 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 /** Describes a file. */
 public class FileType {
 	@Localize("HTML Files")
+	@Localize(locale = "pt-BR", value = "Arquivos HTML")
 	private static String	HTML_FILES;
 	@Localize("PDF Files")
+	@Localize(locale = "pt-BR", value = "Arquivos PDF")
 	private static String	PDF_FILES;
 	@Localize("PNG Files")
+	@Localize(locale = "pt-BR", value = "Arquivos PNG")
 	private static String	PNG_FILES;
 	@Localize("GIF Files")
+	@Localize(locale = "pt-BR", value = "Arquivos GIF")
 	private static String	GIF_FILES;
 	@Localize("JPEG Files")
+	@Localize(locale = "pt-BR", value = "Arquivos JPEG")
 	private static String	JPEG_FILES;
 	@Localize("Image Files")
+	@Localize(locale = "pt-BR", value = "Arquivos de imagens")
 	private static String	IMAGE_FILES;
 
 	static {

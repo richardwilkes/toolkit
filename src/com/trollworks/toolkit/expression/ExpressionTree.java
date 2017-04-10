@@ -17,6 +17,7 @@ import com.trollworks.toolkit.utility.Localization;
 
 class ExpressionTree {
 	@Localize("Expression is invalid")
+	@Localize(locale = "pt-BR", value = "A expressão é inválida")
 	private static String INVALID_EXPRESSION;
 
 	static {

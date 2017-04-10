@@ -19,8 +19,10 @@ import java.util.Enumeration;
 
 public class ArgumentTokenizer implements Enumeration<String> {
 	@Localize("Invalid operand: ")
+	@Localize(locale = "pt-BR", value = "Operando inválido")
 	private static String	INVALID_OPERAND;
 	@Localize("Invalid argument: ")
+	@Localize(locale = "pt-BR", value = "Argumento inválido")
 	private static String	INVALID_ARGUMENT;
 
 	static {
