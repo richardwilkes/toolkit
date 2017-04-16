@@ -291,7 +291,7 @@ public class FlexGrid extends FlexContainer {
 					int rp = data.mRow + row;
 					int cp = data.mColumn + column;
 					if (mGrid[rp][cp] != null) {
-						throw new InvalidParameterException(data + ": " + FlexGridData.formatRowColumn(rp / 2, cp / 2, false) + " already occupied by " + mData.get(mGrid[rp][cp])); //$NON-NLS-1$ //$NON-NLS-2$
+						throw new InvalidParameterException(data + ": " + FlexGridData.formatRowColumn(rp / 2, cp / 2, false) + " already occupied by " + mGrid[rp][cp]); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					mGrid[rp][cp] = data;
 				}
