@@ -19,13 +19,13 @@ import javax.swing.JFormattedTextField;
 
 /** Provides dice field conversion. */
 public class DiceFormatter extends JFormattedTextField.AbstractFormatter {
-	@Override
-	public Object stringToValue(String text) throws ParseException {
-		return new Dice(text);
-	}
+    @Override
+    public Object stringToValue(String text) throws ParseException {
+        return new Dice(text);
+    }
 
-	@Override
-	public String valueToString(Object value) throws ParseException {
-		return value instanceof Dice ? value.toString() : ""; //$NON-NLS-1$
-	}
+    @Override
+    public String valueToString(Object value) throws ParseException {
+        return value instanceof Dice ? value.toString() : ""; //$NON-NLS-1$
+    }
 }

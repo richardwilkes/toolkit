@@ -17,31 +17,31 @@ import javax.swing.JFormattedTextField;
 
 /** Provides integer field conversion. */
 public class DoubleFormatter extends JFormattedTextField.AbstractFormatter {
-	private double	mMinValue;
-	private double	mMaxValue;
-	private boolean	mForceSign;
+    private double  mMinValue;
+    private double  mMaxValue;
+    private boolean mForceSign;
 
-	/**
-	 * Creates a new {@link DoubleFormatter}.
-	 *
-	 * @param minValue The minimum value allowed.
-	 * @param maxValue The maximum value allowed.
-	 * @param forceSign Whether or not a plus sign should be forced for positive numbers.
-	 */
-	public DoubleFormatter(double minValue, double maxValue, boolean forceSign) {
-		mMinValue = minValue;
-		mMaxValue = maxValue;
-		mForceSign = forceSign;
-	}
+    /**
+     * Creates a new {@link DoubleFormatter}.
+     *
+     * @param minValue The minimum value allowed.
+     * @param maxValue The maximum value allowed.
+     * @param forceSign Whether or not a plus sign should be forced for positive numbers.
+     */
+    public DoubleFormatter(double minValue, double maxValue, boolean forceSign) {
+        mMinValue = minValue;
+        mMaxValue = maxValue;
+        mForceSign = forceSign;
+    }
 
-	@Override
-	public Object stringToValue(String text) throws ParseException {
-		return new Double(Math.min(Math.max(Numbers.extractDouble(text, mMinValue <= 0 && mMaxValue >= 0 ? 0 : mMinValue, true), mMinValue), mMaxValue));
-	}
+    @Override
+    public Object stringToValue(String text) throws ParseException {
+        return new Double(Math.min(Math.max(Numbers.extractDouble(text, mMinValue <= 0 && mMaxValue >= 0 ? 0 : mMinValue, true), mMinValue), mMaxValue));
+    }
 
-	@Override
-	public String valueToString(Object value) throws ParseException {
-		double val = ((Double) value).doubleValue();
-		return mForceSign ? Numbers.formatWithForcedSign(val) : Numbers.format(val);
-	}
+    @Override
+    public String valueToString(Object value) throws ParseException {
+        double val = ((Double) value).doubleValue();
+        return mForceSign ? Numbers.formatWithForcedSign(val) : Numbers.format(val);
+    }
 }

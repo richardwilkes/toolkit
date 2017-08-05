@@ -21,40 +21,40 @@ import java.util.UUID;
 import javax.xml.stream.XMLStreamException;
 
 public class XmlUUIDHelper implements XmlObjectHelper {
-	public static final XmlUUIDHelper SINGLETON = new XmlUUIDHelper();
+    public static final XmlUUIDHelper SINGLETON = new XmlUUIDHelper();
 
-	private XmlUUIDHelper() {
-	}
+    private XmlUUIDHelper() {
+    }
 
-	@Override
-	public boolean canHandleClass(Class<?> clazz) {
-		return clazz == UUID.class;
-	}
+    @Override
+    public boolean canHandleClass(Class<?> clazz) {
+        return clazz == UUID.class;
+    }
 
-	@Override
-	public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		UUID value = (UUID) field.get(obj);
-		if (value != null) {
-			XmlDefault def = field.getAnnotation(XmlDefault.class);
-			if (def != null) {
-				xml.addAttributeNot(name, value.toString(), def.value());
-			} else {
-				xml.addAttribute(name, value.toString());
-			}
-		}
-	}
+    @Override
+    public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        UUID value = (UUID) field.get(obj);
+        if (value != null) {
+            XmlDefault def = field.getAnnotation(XmlDefault.class);
+            if (def != null) {
+                xml.addAttributeNot(name, value.toString(), def.value());
+            } else {
+                xml.addAttribute(name, value.toString());
+            }
+        }
+    }
 
-	@Override
-	public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		XmlDefault def = field.getAnnotation(XmlDefault.class);
-		String value = context.getParser().getAttribute(name, def != null ? def.value() : null);
-		field.set(obj, value != null && !value.isEmpty() ? UUID.fromString(value) : null);
-	}
+    @Override
+    public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        XmlDefault def = field.getAnnotation(XmlDefault.class);
+        String value = context.getParser().getAttribute(name, def != null ? def.value() : null);
+        field.set(obj, value != null && !value.isEmpty() ? UUID.fromString(value) : null);
+    }
 
-	@Override
-	public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
-		xml.startTag(tag);
-		xml.addText(obj.toString());
-		xml.endTag();
-	}
+    @Override
+    public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+        xml.startTag(tag);
+        xml.addText(obj.toString());
+        xml.endTag();
+    }
 }

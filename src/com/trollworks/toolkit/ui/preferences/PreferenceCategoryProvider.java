@@ -13,9 +13,9 @@ package com.trollworks.toolkit.ui.preferences;
 
 /** Provides preference categories. */
 public interface PreferenceCategoryProvider {
-	/**
-	 * @param window The owning {@link PreferencesWindow}.
-	 * @return A new {@link PreferencePanel} that represents the category.
-	 */
-	PreferencePanel create(PreferencesWindow window);
+    /**
+     * @param window The owning {@link PreferencesWindow}.
+     * @return A new {@link PreferencePanel} that represents the category.
+     */
+    PreferencePanel create(PreferencesWindow window);
 }

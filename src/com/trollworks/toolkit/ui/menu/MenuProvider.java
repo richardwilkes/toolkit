@@ -17,9 +17,9 @@ import javax.swing.JMenu;
 
 /** Provides a single top-level menu for the menu bar. */
 public interface MenuProvider {
-	/** @return The set of {@link Command}s that can have their accelerators modified. */
-	Set<Command> getModifiableCommands();
+    /** @return The set of {@link Command}s that can have their accelerators modified. */
+    Set<Command> getModifiableCommands();
 
-	/** @return A newly created menu. */
-	JMenu createMenu();
+    /** @return A newly created menu. */
+    JMenu createMenu();
 }

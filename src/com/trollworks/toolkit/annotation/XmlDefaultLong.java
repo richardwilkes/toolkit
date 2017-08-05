@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 /** Provides a default value for a long value. */
 public @interface XmlDefaultLong {
-	/** @return The default value. */
-	long value();
+    /** @return The default value. */
+    long value();
 }

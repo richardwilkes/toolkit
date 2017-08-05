@@ -15,21 +15,21 @@ import com.trollworks.toolkit.expression.ArgumentTokenizer;
 import com.trollworks.toolkit.expression.EvaluationException;
 
 public class Add extends Operator {
-	public Add() {
-		super("+", 5, true); //$NON-NLS-1$
-	}
+    public Add() {
+        super("+", 5, true); //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object evaluate(Object left, Object right) throws EvaluationException {
-		try {
-			return Double.valueOf(ArgumentTokenizer.getDouble(left) + ArgumentTokenizer.getDouble(right));
-		} catch (Exception exception) {
-			return left.toString() + right.toString();
-		}
-	}
+    @Override
+    public final Object evaluate(Object left, Object right) throws EvaluationException {
+        try {
+            return Double.valueOf(ArgumentTokenizer.getDouble(left) + ArgumentTokenizer.getDouble(right));
+        } catch (Exception exception) {
+            return left.toString() + right.toString();
+        }
+    }
 
-	@Override
-	public final Object evaluate(Object operand) throws EvaluationException {
-		return Double.valueOf(ArgumentTokenizer.getDoubleOperand(operand));
-	}
+    @Override
+    public final Object evaluate(Object operand) throws EvaluationException {
+        return Double.valueOf(ArgumentTokenizer.getDoubleOperand(operand));
+    }
 }

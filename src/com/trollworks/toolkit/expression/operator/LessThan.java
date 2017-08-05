@@ -16,21 +16,21 @@ import com.trollworks.toolkit.expression.EvaluationException;
 import com.trollworks.toolkit.utility.text.NumericComparator;
 
 public class LessThan extends Operator {
-	public LessThan() {
-		super("<", 4); //$NON-NLS-1$
-	}
+    public LessThan() {
+        super("<", 4); //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object evaluate(Object left, Object right) throws EvaluationException {
-		try {
-			return Double.valueOf(ArgumentTokenizer.getDouble(left) < ArgumentTokenizer.getDouble(right) ? 1 : 0);
-		} catch (Exception exception) {
-			return Double.valueOf(NumericComparator.caselessCompareStrings(left.toString(), right.toString()) < 0 ? 1 : 0);
-		}
-	}
+    @Override
+    public final Object evaluate(Object left, Object right) throws EvaluationException {
+        try {
+            return Double.valueOf(ArgumentTokenizer.getDouble(left) < ArgumentTokenizer.getDouble(right) ? 1 : 0);
+        } catch (Exception exception) {
+            return Double.valueOf(NumericComparator.caselessCompareStrings(left.toString(), right.toString()) < 0 ? 1 : 0);
+        }
+    }
 
-	@Override
-	public final Object evaluate(Object operand) throws EvaluationException {
-		return null;
-	}
+    @Override
+    public final Object evaluate(Object operand) throws EvaluationException {
+        return null;
+    }
 }

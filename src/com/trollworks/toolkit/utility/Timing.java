@@ -15,74 +15,74 @@ import com.trollworks.toolkit.utility.text.Numbers;
 
 /** Provides basic timing facilities. */
 public final class Timing {
-	private long mBase;
+    private long mBase;
 
-	/** Creates a new {@link Timing}. */
-	public Timing() {
-		reset();
-	}
+    /** Creates a new {@link Timing}. */
+    public Timing() {
+        reset();
+    }
 
-	/** Resets the base time to this instant. */
-	public final void reset() {
-		mBase = System.nanoTime();
-	}
+    /** Resets the base time to this instant. */
+    public final void reset() {
+        mBase = System.nanoTime();
+    }
 
-	/**
-	 * @return The number of elapsed nanoseconds since the timing object was created or last reset.
-	 */
-	public final long elapsed() {
-		return System.nanoTime() - mBase;
-	}
+    /**
+     * @return The number of elapsed nanoseconds since the timing object was created or last reset.
+     */
+    public final long elapsed() {
+        return System.nanoTime() - mBase;
+    }
 
-	/**
-	 * @return The number of elapsed nanoseconds since the timing object was created or last reset,
-	 *         then resets it.
-	 */
-	public final long elapsedThenReset() {
-		long oldBase = mBase;
-		mBase = System.nanoTime();
-		return mBase - oldBase;
-	}
+    /**
+     * @return The number of elapsed nanoseconds since the timing object was created or last reset,
+     *         then resets it.
+     */
+    public final long elapsedThenReset() {
+        long oldBase = mBase;
+        mBase = System.nanoTime();
+        return mBase - oldBase;
+    }
 
-	/** @return The number of elapsed seconds since the timing object was created or last reset. */
-	public final double elapsedSeconds() {
-		return elapsed() / 1000000000.0;
-	}
+    /** @return The number of elapsed seconds since the timing object was created or last reset. */
+    public final double elapsedSeconds() {
+        return elapsed() / 1000000000.0;
+    }
 
-	/**
-	 * @return The number of elapsed seconds since the timing object was created or last reset, then
-	 *         resets it.
-	 */
-	public final double elapsedSecondsThenReset() {
-		return elapsedThenReset() / 1000000000.0;
-	}
+    /**
+     * @return The number of elapsed seconds since the timing object was created or last reset, then
+     *         resets it.
+     */
+    public final double elapsedSecondsThenReset() {
+        return elapsedThenReset() / 1000000000.0;
+    }
 
-	public final String toStringWithNanoResolution() {
-		return String.format("%,.9fs", Double.valueOf(elapsedSeconds())); //$NON-NLS-1$
-	}
+    public final String toStringWithNanoResolution() {
+        return String.format("%,.9fs", Double.valueOf(elapsedSeconds())); //$NON-NLS-1$
+    }
 
-	public final String toStringWithNanoResolutionThenReset() {
-		return String.format("%,.9fs", Double.valueOf(elapsedSecondsThenReset())); //$NON-NLS-1$
-	}
+    public final String toStringWithNanoResolutionThenReset() {
+        return String.format("%,.9fs", Double.valueOf(elapsedSecondsThenReset())); //$NON-NLS-1$
+    }
 
-	public final String toStringWithMicroResolution() {
-		return String.format("%,.6fs", Double.valueOf(elapsedSeconds())); //$NON-NLS-1$
-	}
+    public final String toStringWithMicroResolution() {
+        return String.format("%,.6fs", Double.valueOf(elapsedSeconds())); //$NON-NLS-1$
+    }
 
-	public final String toStringWithMicroResolutionThenReset() {
-		return String.format("%,.6fs", Double.valueOf(elapsedSecondsThenReset())); //$NON-NLS-1$
-	}
+    public final String toStringWithMicroResolutionThenReset() {
+        return String.format("%,.6fs", Double.valueOf(elapsedSecondsThenReset())); //$NON-NLS-1$
+    }
 
-	public final String toStringWithMilliResolution() {
-		return String.format("%,.3fs", Double.valueOf(elapsedSeconds())); //$NON-NLS-1$
-	}
+    public final String toStringWithMilliResolution() {
+        return String.format("%,.3fs", Double.valueOf(elapsedSeconds())); //$NON-NLS-1$
+    }
 
-	public final String toStringWithMilliResolutionThenReset() {
-		return String.format("%,.3fs", Double.valueOf(elapsedSecondsThenReset())); //$NON-NLS-1$
-	}
+    public final String toStringWithMilliResolutionThenReset() {
+        return String.format("%,.3fs", Double.valueOf(elapsedSecondsThenReset())); //$NON-NLS-1$
+    }
 
-	@Override
-	public final String toString() {
-		return Numbers.trimTrailingZeroes(toStringWithMicroResolutionThenReset(), true);
-	}
+    @Override
+    public final String toString() {
+        return Numbers.trimTrailingZeroes(toStringWithMicroResolutionThenReset(), true);
+    }
 }

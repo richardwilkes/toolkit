@@ -23,85 +23,85 @@ import javax.swing.SwingUtilities;
 
 /** A command that will open a specific data file. */
 public class OpenDataFileCommand extends Command implements Runnable {
-	private static final String		CMD_PREFIX		= "OpenDataFile[";	//$NON-NLS-1$
-	private static final String		CMD_POSTFIX		= "]";				//$NON-NLS-1$
-	private static boolean			PASS_THROUGH	= false;
-	private static ArrayList<File>	PENDING_FILES	= null;
-	private File					mFile;
-	private boolean					mVerify;
+    private static final String    CMD_PREFIX    = "OpenDataFile[";	//$NON-NLS-1$
+    private static final String    CMD_POSTFIX   = "]";            				//$NON-NLS-1$
+    private static boolean         PASS_THROUGH  = false;
+    private static ArrayList<File> PENDING_FILES = null;
+    private File                   mFile;
+    private boolean                mVerify;
 
-	/** @param file The file to open. */
-	public static synchronized void open(File file) {
-		if (PASS_THROUGH) {
-			OpenDataFileCommand opener = new OpenDataFileCommand(file);
-			if (!SwingUtilities.isEventDispatchThread()) {
-				EventQueue.invokeLater(opener);
-			} else {
-				opener.run();
-			}
-		} else {
-			if (PENDING_FILES == null) {
-				PENDING_FILES = new ArrayList<>();
-			}
-			PENDING_FILES.add(file);
-		}
-	}
+    /** @param file The file to open. */
+    public static synchronized void open(File file) {
+        if (PASS_THROUGH) {
+            OpenDataFileCommand opener = new OpenDataFileCommand(file);
+            if (!SwingUtilities.isEventDispatchThread()) {
+                EventQueue.invokeLater(opener);
+            } else {
+                opener.run();
+            }
+        } else {
+            if (PENDING_FILES == null) {
+                PENDING_FILES = new ArrayList<>();
+            }
+            PENDING_FILES.add(file);
+        }
+    }
 
-	/**
-	 * Enables the pass-through mode so that future calls to {@link #open(File)} will no longer
-	 * queue files for later opening. All queued files will now be opened.
-	 */
-	public static synchronized void enablePassThrough() {
-		PASS_THROUGH = true;
-		if (PENDING_FILES != null) {
-			for (File file : PENDING_FILES) {
-				open(file);
-			}
-			PENDING_FILES = null;
-		}
-	}
+    /**
+     * Enables the pass-through mode so that future calls to {@link #open(File)} will no longer
+     * queue files for later opening. All queued files will now be opened.
+     */
+    public static synchronized void enablePassThrough() {
+        PASS_THROUGH = true;
+        if (PENDING_FILES != null) {
+            for (File file : PENDING_FILES) {
+                open(file);
+            }
+            PENDING_FILES = null;
+        }
+    }
 
-	/**
-	 * Creates a new {@link OpenDataFileCommand}.
-	 *
-	 * @param title The title to use.
-	 * @param file The file to open.
-	 */
-	public OpenDataFileCommand(String title, File file) {
-		super(title, CMD_PREFIX + file.getName() + CMD_POSTFIX, FileType.getIconsForFile(file).getImage(16));
-		mFile = file;
-	}
+    /**
+     * Creates a new {@link OpenDataFileCommand}.
+     *
+     * @param title The title to use.
+     * @param file The file to open.
+     */
+    public OpenDataFileCommand(String title, File file) {
+        super(title, CMD_PREFIX + file.getName() + CMD_POSTFIX, FileType.getIconsForFile(file).getImage(16));
+        mFile = file;
+    }
 
-	/**
-	 * Creates a new {@link OpenDataFileCommand} that can only be invoked successfully if
-	 * {@link OpenCommand} is enabled.
-	 *
-	 * @param file The file to open.
-	 */
-	public OpenDataFileCommand(File file) {
-		super(file.getName(), CMD_PREFIX + file.getName() + CMD_POSTFIX);
-		mFile = file;
-		mVerify = true;
-	}
+    /**
+     * Creates a new {@link OpenDataFileCommand} that can only be invoked successfully if
+     * {@link OpenCommand} is enabled.
+     *
+     * @param file The file to open.
+     */
+    public OpenDataFileCommand(File file) {
+        super(file.getName(), CMD_PREFIX + file.getName() + CMD_POSTFIX);
+        mFile = file;
+        mVerify = true;
+    }
 
-	@Override
-	public void adjust() {
-		// Not used. Always enabled.
-	}
+    @Override
+    public void adjust() {
+        // Not used. Always enabled.
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		run();
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        run();
+    }
 
-	@Override
-	public void run() {
-		if (mVerify) {
-			OpenCommand.INSTANCE.adjust();
-			if (!OpenCommand.INSTANCE.isEnabled()) {
-				return;
-			}
-		}
-		OpenCommand.open(mFile);
-	}
+    @Override
+    public void run() {
+        if (mVerify) {
+            OpenCommand.INSTANCE.adjust();
+            if (!OpenCommand.INSTANCE.isEnabled()) {
+                return;
+            }
+        }
+        OpenCommand.open(mFile);
+    }
 }

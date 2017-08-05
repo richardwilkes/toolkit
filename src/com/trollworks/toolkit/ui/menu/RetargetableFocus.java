@@ -18,9 +18,9 @@ import java.awt.Component;
  * another component when nothing in the normal focus chain would normally be targeted.
  */
 public interface RetargetableFocus {
-	/**
-	 * @return The component to use as the 'current' focus, whether it is in the current focus chain
-	 *         or not.
-	 */
-	Component getRetargetedFocus();
+    /**
+     * @return The component to use as the 'current' focus, whether it is in the current focus chain
+     *         or not.
+     */
+    Component getRetargetedFocus();
 }

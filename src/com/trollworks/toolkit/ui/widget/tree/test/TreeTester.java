@@ -23,39 +23,39 @@ import java.awt.EventQueue;
 import java.io.File;
 
 public class TreeTester extends App {
-	public static final void main(String[] args) {
-		CmdLine cmdLine = new CmdLine();
-		cmdLine.processArguments(args);
-		LaunchProxy.configure(cmdLine.getArgumentsAsFiles());
-		GraphicsUtilities.configureStandardUI();
-		Preferences.setPreferenceFile(new File("/tmp/treetester.prf")); //$NON-NLS-1$
-		TreeTester app = new TreeTester();
-		app.startup(cmdLine);
-		EventQueue.invokeLater(app);
-	}
+    public static final void main(String[] args) {
+        CmdLine cmdLine = new CmdLine();
+        cmdLine.processArguments(args);
+        LaunchProxy.configure(cmdLine.getArgumentsAsFiles());
+        GraphicsUtilities.configureStandardUI();
+        Preferences.setPreferenceFile(new File("/tmp/treetester.prf")); //$NON-NLS-1$
+        TreeTester app = new TreeTester();
+        app.startup(cmdLine);
+        EventQueue.invokeLater(app);
+    }
 
-	@Override
-	public void configureApplication(CmdLine cmdLine) {
-		StdMenuBar.configure(new TreeTesterEditMenuProvider());
-	}
+    @Override
+    public void configureApplication(CmdLine cmdLine) {
+        StdMenuBar.configure(new TreeTesterEditMenuProvider());
+    }
 
-	@Override
-	public void noWindowsAreOpenAtStartup(boolean finalChance) {
-		if (finalChance) {
-			Timing timing = new Timing();
-			TreeTestWindow win = new TreeTestWindow("Test 1 Drop Copy & Move", true); //$NON-NLS-1$
-			win.setBounds(50, 50, 500, 500);
-			win.setVisible(true);
-			System.out.println("Tree 1 took " + timing); //$NON-NLS-1$
-			win = new TreeTestWindow("Test 2 Drop Move Only", false); //$NON-NLS-1$
-			win.setBounds(600, 50, 500, 500);
-			win.setVisible(true);
-			System.out.println("Tree 2 took " + timing); //$NON-NLS-1$
+    @Override
+    public void noWindowsAreOpenAtStartup(boolean finalChance) {
+        if (finalChance) {
+            Timing timing = new Timing();
+            TreeTestWindow win = new TreeTestWindow("Test 1 Drop Copy & Move", true); //$NON-NLS-1$
+            win.setBounds(50, 50, 500, 500);
+            win.setVisible(true);
+            System.out.println("Tree 1 took " + timing); //$NON-NLS-1$
+            win = new TreeTestWindow("Test 2 Drop Move Only", false); //$NON-NLS-1$
+            win.setBounds(600, 50, 500, 500);
+            win.setVisible(true);
+            System.out.println("Tree 2 took " + timing); //$NON-NLS-1$
 
-			OutlineTestWindow win2 = new OutlineTestWindow("Outline"); //$NON-NLS-1$
-			win2.setBounds(50, 600, 500, 500);
-			win2.setVisible(true);
-			System.out.println("Outline took " + timing); //$NON-NLS-1$
-		}
-	}
+            OutlineTestWindow win2 = new OutlineTestWindow("Outline"); //$NON-NLS-1$
+            win2.setBounds(50, 600, 500, 500);
+            win2.setVisible(true);
+            System.out.println("Outline took " + timing); //$NON-NLS-1$
+        }
+    }
 }

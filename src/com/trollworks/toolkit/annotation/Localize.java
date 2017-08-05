@@ -22,9 +22,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Repeatable(Localizations.class)
 public @interface Localize {
-	/** @return The locale of this message. An empty string is the fallback locale. */
-	String locale() default "";
+    /** @return The locale of this message. An empty string is the fallback locale. */
+    String locale() default "";
 
-	/** @return The localized message. */
-	String value();
+    /** @return The localized message. */
+    String value();
 }

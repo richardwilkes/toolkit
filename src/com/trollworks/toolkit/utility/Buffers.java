@@ -14,39 +14,39 @@ package com.trollworks.toolkit.utility;
 import java.nio.ByteBuffer;
 
 public final class Buffers {
-	public final static byte[] toBytes(char[] data) {
-		ByteBuffer bytes = ByteBuffer.allocate(data.length * Character.BYTES);
-		bytes.asCharBuffer().put(data);
-		return bytes.array();
-	}
+    public final static byte[] toBytes(char[] data) {
+        ByteBuffer bytes = ByteBuffer.allocate(data.length * Character.BYTES);
+        bytes.asCharBuffer().put(data);
+        return bytes.array();
+    }
 
-	public final static byte[] toBytes(short[] data) {
-		ByteBuffer bytes = ByteBuffer.allocate(data.length * Short.BYTES);
-		bytes.asShortBuffer().put(data);
-		return bytes.array();
-	}
+    public final static byte[] toBytes(short[] data) {
+        ByteBuffer bytes = ByteBuffer.allocate(data.length * Short.BYTES);
+        bytes.asShortBuffer().put(data);
+        return bytes.array();
+    }
 
-	public final static byte[] toBytes(int[] data) {
-		ByteBuffer bytes = ByteBuffer.allocate(data.length * Integer.BYTES);
-		bytes.asIntBuffer().put(data);
-		return bytes.array();
-	}
+    public final static byte[] toBytes(int[] data) {
+        ByteBuffer bytes = ByteBuffer.allocate(data.length * Integer.BYTES);
+        bytes.asIntBuffer().put(data);
+        return bytes.array();
+    }
 
-	public final static byte[] toBytes(long[] data) {
-		ByteBuffer bytes = ByteBuffer.allocate(data.length * Long.BYTES);
-		bytes.asLongBuffer().put(data);
-		return bytes.array();
-	}
+    public final static byte[] toBytes(long[] data) {
+        ByteBuffer bytes = ByteBuffer.allocate(data.length * Long.BYTES);
+        bytes.asLongBuffer().put(data);
+        return bytes.array();
+    }
 
-	public final static byte[] toBytes(float[] data) {
-		ByteBuffer bytes = ByteBuffer.allocate(data.length * Float.BYTES);
-		bytes.asFloatBuffer().put(data);
-		return bytes.array();
-	}
+    public final static byte[] toBytes(float[] data) {
+        ByteBuffer bytes = ByteBuffer.allocate(data.length * Float.BYTES);
+        bytes.asFloatBuffer().put(data);
+        return bytes.array();
+    }
 
-	public final static byte[] toBytes(double[] data) {
-		ByteBuffer bytes = ByteBuffer.allocate(data.length * Double.BYTES);
-		bytes.asDoubleBuffer().put(data);
-		return bytes.array();
-	}
+    public final static byte[] toBytes(double[] data) {
+        ByteBuffer bytes = ByteBuffer.allocate(data.length * Double.BYTES);
+        bytes.asDoubleBuffer().put(data);
+        return bytes.array();
+    }
 }

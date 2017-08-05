@@ -19,12 +19,12 @@ import javax.swing.text.Document;
 import javax.swing.text.Style;
 
 public class StyledTextPanel extends JTextPane {
-	public void append(String text, Style style) {
-		Document doc = getDocument();
-		try {
-			doc.insertString(doc.getLength(), text, style);
-		} catch (BadLocationException exception) {
-			Log.error(exception);
-		}
-	}
+    public void append(String text, Style style) {
+        Document doc = getDocument();
+        try {
+            doc.insertString(doc.getLength(), text, style);
+        } catch (BadLocationException exception) {
+            Log.error(exception);
+        }
+    }
 }

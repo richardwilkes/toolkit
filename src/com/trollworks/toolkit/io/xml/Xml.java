@@ -67,463 +67,463 @@ import javax.xml.stream.XMLStreamException;
  * Provides easy loading and saving of objects that have been annotated with appropriate xml tags.
  */
 public class Xml {
-	@Localize("The root object has not been annotated.")
-	private static String	ROOT_NOT_TAGGED;
-	@Localize("The root tag \"%s\" was not present.")
-	private static String	TAG_NOT_FOUND;
-	@Localize("%s has not been annotated.")
-	private static String	NOT_TAGGED;
-	@Localize("%s is not an array.")
-	private static String	NOT_ARRAY;
-	@Localize("Unable to create object for collection tag '%s'.")
-	@Localize(locale = "ru", value = "Невозможно создать объект для получения тэга '%s'.")
-	@Localize(locale = "de", value = "Kann Objekt für Sammlungs-Tag '%s' nicht erstellen.")
-	@Localize(locale = "es", value = "Imposible crear el objeto para la colección de etiquetas '%s'.")
-	private static String	UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION;
-	@Localize("The tag '%s' is from an older version and cannot be loaded.")
-	@Localize(locale = "ru", value = "Тег '%s' относится к более старой версии и не может быть загружен.")
-	@Localize(locale = "de", value = "Das Tag '%s' ist von einer älteren Version und kann nicht geladen werden.")
-	@Localize(locale = "es", value = "La etiqueta '%s' es de una versión anterior y no puede cargarse.")
-	private static String	TOO_OLD;
-	@Localize("The tag '%s' is from a newer version and cannot be loaded.")
-	@Localize(locale = "ru", value = "Тег '%s' относится к более новой версии и не может быть загружен.")
-	@Localize(locale = "de", value = "Das Tag '%s' ist von einer neueren Version und kann nicht geladen werden.")
-	@Localize(locale = "es", value = "La etiqueta '%s' es de una versión demasiado nueva y no puede cargarse.")
-	private static String	TOO_NEW;
+    @Localize("The root object has not been annotated.")
+    private static String ROOT_NOT_TAGGED;
+    @Localize("The root tag \"%s\" was not present.")
+    private static String TAG_NOT_FOUND;
+    @Localize("%s has not been annotated.")
+    private static String NOT_TAGGED;
+    @Localize("%s is not an array.")
+    private static String NOT_ARRAY;
+    @Localize("Unable to create object for collection tag '%s'.")
+    @Localize(locale = "ru", value = "Невозможно создать объект для получения тэга '%s'.")
+    @Localize(locale = "de", value = "Kann Objekt für Sammlungs-Tag '%s' nicht erstellen.")
+    @Localize(locale = "es", value = "Imposible crear el objeto para la colección de etiquetas '%s'.")
+    private static String UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION;
+    @Localize("The tag '%s' is from an older version and cannot be loaded.")
+    @Localize(locale = "ru", value = "Тег '%s' относится к более старой версии и не может быть загружен.")
+    @Localize(locale = "de", value = "Das Tag '%s' ist von einer älteren Version und kann nicht geladen werden.")
+    @Localize(locale = "es", value = "La etiqueta '%s' es de una versión anterior y no puede cargarse.")
+    private static String TOO_OLD;
+    @Localize("The tag '%s' is from a newer version and cannot be loaded.")
+    @Localize(locale = "ru", value = "Тег '%s' относится к более новой версии и не может быть загружен.")
+    @Localize(locale = "de", value = "Das Tag '%s' ist von einer neueren Version und kann nicht geladen werden.")
+    @Localize(locale = "es", value = "La etiqueta '%s' es de una versión demasiado nueva y no puede cargarse.")
+    private static String TOO_NEW;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	private static final List<XmlObjectHelper>			HELPERS		= new ArrayList<>();
-	private static final Map<Class<?>, XmlObjectHelper>	HELPER_MAP	= new HashMap<>();
+    private static final List<XmlObjectHelper>          HELPERS    = new ArrayList<>();
+    private static final Map<Class<?>, XmlObjectHelper> HELPER_MAP = new HashMap<>();
 
-	static {
-		registerHelper(XmlPrimitiveBooleanHelper.SINGLETON);
-		registerHelper(XmlPrimitiveByteHelper.SINGLETON);
-		registerHelper(XmlPrimitiveCharHelper.SINGLETON);
-		registerHelper(XmlPrimitiveShortHelper.SINGLETON);
-		registerHelper(XmlPrimitiveIntHelper.SINGLETON);
-		registerHelper(XmlPrimitiveLongHelper.SINGLETON);
-		registerHelper(XmlPrimitiveFloatHelper.SINGLETON);
-		registerHelper(XmlPrimitiveDoubleHelper.SINGLETON);
+    static {
+        registerHelper(XmlPrimitiveBooleanHelper.SINGLETON);
+        registerHelper(XmlPrimitiveByteHelper.SINGLETON);
+        registerHelper(XmlPrimitiveCharHelper.SINGLETON);
+        registerHelper(XmlPrimitiveShortHelper.SINGLETON);
+        registerHelper(XmlPrimitiveIntHelper.SINGLETON);
+        registerHelper(XmlPrimitiveLongHelper.SINGLETON);
+        registerHelper(XmlPrimitiveFloatHelper.SINGLETON);
+        registerHelper(XmlPrimitiveDoubleHelper.SINGLETON);
 
-		registerHelper(XmlBooleanHelper.SINGLETON);
-		registerHelper(XmlByteHelper.SINGLETON);
-		registerHelper(XmlCharacterHelper.SINGLETON);
-		registerHelper(XmlShortHelper.SINGLETON);
-		registerHelper(XmlIntegerHelper.SINGLETON);
-		registerHelper(XmlLongHelper.SINGLETON);
-		registerHelper(XmlFloatHelper.SINGLETON);
-		registerHelper(XmlDoubleHelper.SINGLETON);
+        registerHelper(XmlBooleanHelper.SINGLETON);
+        registerHelper(XmlByteHelper.SINGLETON);
+        registerHelper(XmlCharacterHelper.SINGLETON);
+        registerHelper(XmlShortHelper.SINGLETON);
+        registerHelper(XmlIntegerHelper.SINGLETON);
+        registerHelper(XmlLongHelper.SINGLETON);
+        registerHelper(XmlFloatHelper.SINGLETON);
+        registerHelper(XmlDoubleHelper.SINGLETON);
 
-		registerHelper(XmlStringHelper.SINGLETON);
-		registerHelper(XmlEnumHelper.SINGLETON);
-		registerHelper(XmlUUIDHelper.SINGLETON);
-	}
+        registerHelper(XmlStringHelper.SINGLETON);
+        registerHelper(XmlEnumHelper.SINGLETON);
+        registerHelper(XmlUUIDHelper.SINGLETON);
+    }
 
-	/** The attribute that will be used for a tag's version. */
-	public static final String ATTR_VERSION = "version"; //$NON-NLS-1$
+    /** The attribute that will be used for a tag's version. */
+    public static final String ATTR_VERSION = "version"; //$NON-NLS-1$
 
-	public static final void registerHelper(XmlObjectHelper helper) {
-		synchronized (HELPERS) {
-			HELPERS.add(helper);
-			HELPER_MAP.clear();
-		}
-	}
+    public static final void registerHelper(XmlObjectHelper helper) {
+        synchronized (HELPERS) {
+            HELPERS.add(helper);
+            HELPER_MAP.clear();
+        }
+    }
 
-	public static final void unregisterHelper(XmlObjectHelper helper) {
-		synchronized (HELPERS) {
-			HELPERS.remove(helper);
-			HELPER_MAP.clear();
-		}
-	}
+    public static final void unregisterHelper(XmlObjectHelper helper) {
+        synchronized (HELPERS) {
+            HELPERS.remove(helper);
+            HELPER_MAP.clear();
+        }
+    }
 
-	private static final XmlObjectHelper getHelper(Class<?> clazz) {
-		synchronized (HELPERS) {
-			XmlObjectHelper helper = HELPER_MAP.get(clazz);
-			if (helper == null) {
-				helper = XmlGenericHelper.SINGLETON;
-				for (XmlObjectHelper one : HELPERS) {
-					if (one.canHandleClass(clazz)) {
-						helper = one;
-						break;
-					}
-				}
-				HELPER_MAP.put(clazz, helper);
-			}
-			return helper;
-		}
-	}
+    private static final XmlObjectHelper getHelper(Class<?> clazz) {
+        synchronized (HELPERS) {
+            XmlObjectHelper helper = HELPER_MAP.get(clazz);
+            if (helper == null) {
+                helper = XmlGenericHelper.SINGLETON;
+                for (XmlObjectHelper one : HELPERS) {
+                    if (one.canHandleClass(clazz)) {
+                        helper = one;
+                        break;
+                    }
+                }
+                HELPER_MAP.put(clazz, helper);
+            }
+            return helper;
+        }
+    }
 
-	/**
-	 * Loads the contents of an xml file into the specified object.
-	 *
-	 * @param file The file to load from.
-	 * @param obj The object to load the xml data into.
-	 * @return The object that was passed in.
-	 */
-	public static final <T> T load(File file, T obj) throws XMLStreamException {
-		return load(file, obj, null);
-	}
+    /**
+     * Loads the contents of an xml file into the specified object.
+     *
+     * @param file The file to load from.
+     * @param obj The object to load the xml data into.
+     * @return The object that was passed in.
+     */
+    public static final <T> T load(File file, T obj) throws XMLStreamException {
+        return load(file, obj, null);
+    }
 
-	/**
-	 * Loads the contents of an xml file into the specified object.
-	 *
-	 * @param file The file to load from.
-	 * @param obj The object to load the xml data into.
-	 * @param context Optional context for recording state while loading.
-	 * @return The object that was passed in.
-	 */
-	public static final <T> T load(File file, T obj, XmlParserContext context) throws XMLStreamException {
-		return load(file.toURI(), obj, context);
-	}
+    /**
+     * Loads the contents of an xml file into the specified object.
+     *
+     * @param file The file to load from.
+     * @param obj The object to load the xml data into.
+     * @param context Optional context for recording state while loading.
+     * @return The object that was passed in.
+     */
+    public static final <T> T load(File file, T obj, XmlParserContext context) throws XMLStreamException {
+        return load(file.toURI(), obj, context);
+    }
 
-	/**
-	 * Loads the contents of an xml file into the specified object.
-	 *
-	 * @param path The {@link Path} to load from.
-	 * @param obj The object to load the xml data into.
-	 * @return The object that was passed in.
-	 */
-	public static final <T> T load(Path path, T obj) throws XMLStreamException {
-		return load(PathToUri.toFixedUri(path), obj, null);
-	}
+    /**
+     * Loads the contents of an xml file into the specified object.
+     *
+     * @param path The {@link Path} to load from.
+     * @param obj The object to load the xml data into.
+     * @return The object that was passed in.
+     */
+    public static final <T> T load(Path path, T obj) throws XMLStreamException {
+        return load(PathToUri.toFixedUri(path), obj, null);
+    }
 
-	/**
-	 * Loads the contents of an xml file into the specified object.
-	 *
-	 * @param path The {@link Path} to load from.
-	 * @param obj The object to load the xml data into.
-	 * @param context Optional context for recording state while loading.
-	 * @return The object that was passed in.
-	 */
-	public static final <T> T load(Path path, T obj, XmlParserContext context) throws XMLStreamException {
-		return load(PathToUri.toFixedUri(path), obj, context);
-	}
+    /**
+     * Loads the contents of an xml file into the specified object.
+     *
+     * @param path The {@link Path} to load from.
+     * @param obj The object to load the xml data into.
+     * @param context Optional context for recording state while loading.
+     * @return The object that was passed in.
+     */
+    public static final <T> T load(Path path, T obj, XmlParserContext context) throws XMLStreamException {
+        return load(PathToUri.toFixedUri(path), obj, context);
+    }
 
-	/**
-	 * Loads the contents of an xml file into the specified object.
-	 *
-	 * @param uri The URI to load from.
-	 * @param obj The object to load the xml data into.
-	 * @return The object that was passed in.
-	 */
-	public static final <T> T load(URI uri, T obj) throws XMLStreamException {
-		return load(uri, obj, null);
-	}
+    /**
+     * Loads the contents of an xml file into the specified object.
+     *
+     * @param uri The URI to load from.
+     * @param obj The object to load the xml data into.
+     * @return The object that was passed in.
+     */
+    public static final <T> T load(URI uri, T obj) throws XMLStreamException {
+        return load(uri, obj, null);
+    }
 
-	/**
-	 * Loads the contents of an xml file into the specified object.
-	 *
-	 * @param uri The URI to load from.
-	 * @param obj The object to load the xml data into.
-	 * @param context Optional context for recording state while loading.
-	 * @return The object that was passed in.
-	 */
-	public static final <T> T load(URI uri, T obj, XmlParserContext context) throws XMLStreamException {
-		XmlTag xmlTag = obj.getClass().getAnnotation(XmlTag.class);
-		if (xmlTag == null) {
-			throw new XMLStreamException(ROOT_NOT_TAGGED);
-		}
-		try (XmlParser xml = new XmlParser(uri.toURL().openStream())) {
-			String tag = xml.nextTag();
-			if (tag != null && tag.equals(xmlTag.value())) {
-				load(xml, obj, context);
-				return obj;
-			}
-			throw new XMLStreamException(String.format(TAG_NOT_FOUND, xmlTag.value()));
-		} catch (XMLStreamException exception) {
-			throw exception;
-		} catch (Exception exception) {
-			throw new XMLStreamException(exception);
-		}
-	}
+    /**
+     * Loads the contents of an xml file into the specified object.
+     *
+     * @param uri The URI to load from.
+     * @param obj The object to load the xml data into.
+     * @param context Optional context for recording state while loading.
+     * @return The object that was passed in.
+     */
+    public static final <T> T load(URI uri, T obj, XmlParserContext context) throws XMLStreamException {
+        XmlTag xmlTag = obj.getClass().getAnnotation(XmlTag.class);
+        if (xmlTag == null) {
+            throw new XMLStreamException(ROOT_NOT_TAGGED);
+        }
+        try (XmlParser xml = new XmlParser(uri.toURL().openStream())) {
+            String tag = xml.nextTag();
+            if (tag != null && tag.equals(xmlTag.value())) {
+                load(xml, obj, context);
+                return obj;
+            }
+            throw new XMLStreamException(String.format(TAG_NOT_FOUND, xmlTag.value()));
+        } catch (XMLStreamException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new XMLStreamException(exception);
+        }
+    }
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static void load(XmlParser xml, Object obj, XmlParserContext context) throws XMLStreamException {
-		try {
-			if (context == null) {
-				context = new XmlParserContext(xml);
-			}
-			String marker = xml.getMarker();
-			if (obj instanceof TagWillLoad) {
-				((TagWillLoad) obj).xmlWillLoad(context);
-			}
-			Class<?> tagClass = obj.getClass();
-			int version = xml.getIntegerAttribute(ATTR_VERSION, 0);
-			if (version > getVersionOfTag(tagClass)) {
-				throw new XMLStreamException(String.format(TOO_NEW, xml.getCurrentTag()), xml.getLocation());
-			}
-			if (version < getMinimumLoadableVersionOfTag(tagClass)) {
-				throw new XMLStreamException(String.format(TOO_OLD, xml.getCurrentTag()), xml.getLocation());
-			}
-			if (version != 0) {
-				context.pushVersion(version);
-			}
-			Set<String> unmatchedAttributes = new HashSet<>();
-			for (int i = xml.getAttributeCount(); --i > 0;) {
-				unmatchedAttributes.add(xml.getAttributeName(i));
-			}
-			unmatchedAttributes.remove(ATTR_VERSION);
-			for (FieldAnnotation<XmlAttr> fa : Introspection.getDeepFieldAnnotations(tagClass, XmlAttr.class)) {
-				Field field = fa.getField();
-				Introspection.makeFieldAccessible(field);
-				String name = fa.getAnnotation().value();
-				unmatchedAttributes.remove(name);
-				getHelper(field.getType()).loadAttributeValue(context, obj, field, name);
-			}
-			if (obj instanceof TagAttributesLoaded) {
-				((TagAttributesLoaded) obj).xmlAttributesLoaded(context, unmatchedAttributes);
-			}
-			Map<String, Field> subTags = new HashMap<>();
-			for (FieldAnnotation<XmlTag> fa : Introspection.getDeepFieldAnnotations(tagClass, XmlTag.class)) {
-				subTags.put(fa.getAnnotation().value(), fa.getField());
-			}
-			String tag;
-			while ((tag = xml.nextTag(marker)) != null) {
-				Field field = subTags.get(tag);
-				if (field != null) {
-					Introspection.makeFieldAccessible(field);
-					Class<?> type = field.getType();
-					if (String.class == type) {
-						field.set(obj, xml.getText());
-					} else if (Collection.class.isAssignableFrom(type)) {
-						Type genericType = field.getGenericType();
-						if (genericType instanceof ParameterizedType) {
-							genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
-						} else {
-							throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), xml.getLocation());
-						}
-						Object fieldObj = null;
-						Class<?> cls = Class.forName(genericType.getTypeName());
-						if (cls == String.class) {
-							fieldObj = xml.getText();
-						} else {
-							fieldObj = cls.newInstance();
-							load(xml, fieldObj, context);
-						}
-						((Collection) field.get(obj)).add(fieldObj);
-					} else {
-						Object fieldObj = null;
-						if (obj instanceof TagObjectCreator) {
-							fieldObj = ((TagObjectCreator) obj).xmlCreateObject(context, tag);
-						}
-						if (fieldObj == null) {
-							fieldObj = type.newInstance();
-						}
-						load(xml, fieldObj, context);
-						field.set(obj, fieldObj);
-					}
-				} else if (obj instanceof TagUnmatched) {
-					((TagUnmatched) obj).xmlUnmatchedTag(context, tag);
-				} else {
-					xml.skip();
-				}
-			}
-			if (obj instanceof TagLoaded) {
-				((TagLoaded) obj).xmlLoaded(context);
-			}
-			if (version != 0) {
-				context.popVersion();
-			}
-		} catch (XMLStreamException exception) {
-			throw exception;
-		} catch (Exception exception) {
-			throw new XMLStreamException(exception);
-		}
-	}
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private static void load(XmlParser xml, Object obj, XmlParserContext context) throws XMLStreamException {
+        try {
+            if (context == null) {
+                context = new XmlParserContext(xml);
+            }
+            String marker = xml.getMarker();
+            if (obj instanceof TagWillLoad) {
+                ((TagWillLoad) obj).xmlWillLoad(context);
+            }
+            Class<?> tagClass = obj.getClass();
+            int version = xml.getIntegerAttribute(ATTR_VERSION, 0);
+            if (version > getVersionOfTag(tagClass)) {
+                throw new XMLStreamException(String.format(TOO_NEW, xml.getCurrentTag()), xml.getLocation());
+            }
+            if (version < getMinimumLoadableVersionOfTag(tagClass)) {
+                throw new XMLStreamException(String.format(TOO_OLD, xml.getCurrentTag()), xml.getLocation());
+            }
+            if (version != 0) {
+                context.pushVersion(version);
+            }
+            Set<String> unmatchedAttributes = new HashSet<>();
+            for (int i = xml.getAttributeCount(); --i > 0;) {
+                unmatchedAttributes.add(xml.getAttributeName(i));
+            }
+            unmatchedAttributes.remove(ATTR_VERSION);
+            for (FieldAnnotation<XmlAttr> fa : Introspection.getDeepFieldAnnotations(tagClass, XmlAttr.class)) {
+                Field field = fa.getField();
+                Introspection.makeFieldAccessible(field);
+                String name = fa.getAnnotation().value();
+                unmatchedAttributes.remove(name);
+                getHelper(field.getType()).loadAttributeValue(context, obj, field, name);
+            }
+            if (obj instanceof TagAttributesLoaded) {
+                ((TagAttributesLoaded) obj).xmlAttributesLoaded(context, unmatchedAttributes);
+            }
+            Map<String, Field> subTags = new HashMap<>();
+            for (FieldAnnotation<XmlTag> fa : Introspection.getDeepFieldAnnotations(tagClass, XmlTag.class)) {
+                subTags.put(fa.getAnnotation().value(), fa.getField());
+            }
+            String tag;
+            while ((tag = xml.nextTag(marker)) != null) {
+                Field field = subTags.get(tag);
+                if (field != null) {
+                    Introspection.makeFieldAccessible(field);
+                    Class<?> type = field.getType();
+                    if (String.class == type) {
+                        field.set(obj, xml.getText());
+                    } else if (Collection.class.isAssignableFrom(type)) {
+                        Type genericType = field.getGenericType();
+                        if (genericType instanceof ParameterizedType) {
+                            genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+                        } else {
+                            throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), xml.getLocation());
+                        }
+                        Object fieldObj = null;
+                        Class<?> cls = Class.forName(genericType.getTypeName());
+                        if (cls == String.class) {
+                            fieldObj = xml.getText();
+                        } else {
+                            fieldObj = cls.newInstance();
+                            load(xml, fieldObj, context);
+                        }
+                        ((Collection) field.get(obj)).add(fieldObj);
+                    } else {
+                        Object fieldObj = null;
+                        if (obj instanceof TagObjectCreator) {
+                            fieldObj = ((TagObjectCreator) obj).xmlCreateObject(context, tag);
+                        }
+                        if (fieldObj == null) {
+                            fieldObj = type.newInstance();
+                        }
+                        load(xml, fieldObj, context);
+                        field.set(obj, fieldObj);
+                    }
+                } else if (obj instanceof TagUnmatched) {
+                    ((TagUnmatched) obj).xmlUnmatchedTag(context, tag);
+                } else {
+                    xml.skip();
+                }
+            }
+            if (obj instanceof TagLoaded) {
+                ((TagLoaded) obj).xmlLoaded(context);
+            }
+            if (version != 0) {
+                context.popVersion();
+            }
+        } catch (XMLStreamException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new XMLStreamException(exception);
+        }
+    }
 
-	/**
-	 * Saves the contents of an object into an xml file.
-	 *
-	 * @param file The file to save to.
-	 * @param obj The object to save the xml data from.
-	 */
-	public static final void save(File file, Object obj) throws XMLStreamException {
-		try (FileOutputStream out = new FileOutputStream(file)) {
-			save(out, obj);
-		} catch (XMLStreamException exception) {
-			throw exception;
-		} catch (Exception exception) {
-			throw new XMLStreamException(exception);
-		}
-	}
+    /**
+     * Saves the contents of an object into an xml file.
+     *
+     * @param file The file to save to.
+     * @param obj The object to save the xml data from.
+     */
+    public static final void save(File file, Object obj) throws XMLStreamException {
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            save(out, obj);
+        } catch (XMLStreamException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new XMLStreamException(exception);
+        }
+    }
 
-	/**
-	 * Saves the contents of an object into an xml file.
-	 *
-	 * @param path The {@link Path} to save to.
-	 * @param obj The object to save the xml data from.
-	 */
-	public static final void save(Path path, Object obj) throws XMLStreamException {
-		try {
-			URLConnection connection = PathToUri.toFixedUri(path).toURL().openConnection();
-			connection.setDoInput(false);
-			connection.setDoOutput(true);
-			try (OutputStream out = connection.getOutputStream()) {
-				save(out, obj);
-			}
-		} catch (XMLStreamException exception) {
-			throw exception;
-		} catch (Exception exception) {
-			throw new XMLStreamException(exception);
-		}
-	}
+    /**
+     * Saves the contents of an object into an xml file.
+     *
+     * @param path The {@link Path} to save to.
+     * @param obj The object to save the xml data from.
+     */
+    public static final void save(Path path, Object obj) throws XMLStreamException {
+        try {
+            URLConnection connection = PathToUri.toFixedUri(path).toURL().openConnection();
+            connection.setDoInput(false);
+            connection.setDoOutput(true);
+            try (OutputStream out = connection.getOutputStream()) {
+                save(out, obj);
+            }
+        } catch (XMLStreamException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new XMLStreamException(exception);
+        }
+    }
 
-	/**
-	 * Saves the contents of an object into an xml file.
-	 *
-	 * @param out The {@link OutputStream} to save to.
-	 * @param obj The object to save the xml data from.
-	 */
-	public static final void save(OutputStream out, Object obj) throws XMLStreamException {
-		try (XmlGenerator xml = new XmlGenerator(out)) {
-			xml.startDocument();
-			add(xml, obj);
-			xml.endDocument();
-		} catch (XMLStreamException exception) {
-			throw exception;
-		} catch (Exception exception) {
-			throw new XMLStreamException(exception);
-		}
-	}
+    /**
+     * Saves the contents of an object into an xml file.
+     *
+     * @param out The {@link OutputStream} to save to.
+     * @param obj The object to save the xml data from.
+     */
+    public static final void save(OutputStream out, Object obj) throws XMLStreamException {
+        try (XmlGenerator xml = new XmlGenerator(out)) {
+            xml.startDocument();
+            add(xml, obj);
+            xml.endDocument();
+        } catch (XMLStreamException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new XMLStreamException(exception);
+        }
+    }
 
-	/**
-	 * Adds the specified object to the current xml stream.
-	 *
-	 * @param xml The {@link XmlGenerator} to use.
-	 * @param obj The object to add. This object must have been annotated with the {@link XmlTag}
-	 *            annotation.
-	 */
-	public static final void add(XmlGenerator xml, Object obj) throws XMLStreamException {
-		Class<?> objClass = obj.getClass();
-		XmlTag tag = objClass.getAnnotation(XmlTag.class);
-		if (tag != null) {
-			add(xml, tag.value(), obj);
-		} else {
-			throw new XMLStreamException(String.format(NOT_TAGGED, objClass.getName()));
-		}
-	}
+    /**
+     * Adds the specified object to the current xml stream.
+     *
+     * @param xml The {@link XmlGenerator} to use.
+     * @param obj The object to add. This object must have been annotated with the {@link XmlTag}
+     *            annotation.
+     */
+    public static final void add(XmlGenerator xml, Object obj) throws XMLStreamException {
+        Class<?> objClass = obj.getClass();
+        XmlTag tag = objClass.getAnnotation(XmlTag.class);
+        if (tag != null) {
+            add(xml, tag.value(), obj);
+        } else {
+            throw new XMLStreamException(String.format(NOT_TAGGED, objClass.getName()));
+        }
+    }
 
-	/**
-	 * Adds the specified object to the current xml stream.
-	 *
-	 * @param xml The {@link XmlGenerator} to use.
-	 * @param tag The xml tag to use for the object.
-	 * @param obj The object to add.
-	 */
-	public static final void add(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
-		try {
-			if (obj != null) {
-				Class<?> objClass = obj.getClass();
-				if (tag == null || tag.isEmpty()) {
-					throw new XMLStreamException(String.format(NOT_TAGGED, objClass.getName()));
-				}
-				if (obj instanceof TagWillSave) {
-					((TagWillSave) obj).xmlWillSave(xml);
-				}
-				XmlObjectHelper helper = getHelper(objClass);
-				if (helper != XmlGenericHelper.SINGLETON) {
-					helper.emitAsTag(xml, tag, obj);
-				} else if (obj instanceof TagExtraSubTags || hasSubTags(obj, objClass)) {
-					xml.startTag(tag);
-					emitAttributes(xml, obj, objClass);
-					emitSubTags(xml, obj, objClass);
-					if (obj instanceof TagExtraSubTags) {
-						((TagExtraSubTags) obj).xmlEmitExtraSubTags(xml);
-					}
-					xml.endTag();
-				} else {
-					xml.startEmptyTag(tag);
-					emitAttributes(xml, obj, objClass);
-				}
-				if (obj instanceof TagSaved) {
-					((TagSaved) obj).xmlSaved(xml);
-				}
-			}
-		} catch (XMLStreamException exception) {
-			throw exception;
-		} catch (Exception exception) {
-			throw new XMLStreamException(exception);
-		}
-	}
+    /**
+     * Adds the specified object to the current xml stream.
+     *
+     * @param xml The {@link XmlGenerator} to use.
+     * @param tag The xml tag to use for the object.
+     * @param obj The object to add.
+     */
+    public static final void add(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+        try {
+            if (obj != null) {
+                Class<?> objClass = obj.getClass();
+                if (tag == null || tag.isEmpty()) {
+                    throw new XMLStreamException(String.format(NOT_TAGGED, objClass.getName()));
+                }
+                if (obj instanceof TagWillSave) {
+                    ((TagWillSave) obj).xmlWillSave(xml);
+                }
+                XmlObjectHelper helper = getHelper(objClass);
+                if (helper != XmlGenericHelper.SINGLETON) {
+                    helper.emitAsTag(xml, tag, obj);
+                } else if (obj instanceof TagExtraSubTags || hasSubTags(obj, objClass)) {
+                    xml.startTag(tag);
+                    emitAttributes(xml, obj, objClass);
+                    emitSubTags(xml, obj, objClass);
+                    if (obj instanceof TagExtraSubTags) {
+                        ((TagExtraSubTags) obj).xmlEmitExtraSubTags(xml);
+                    }
+                    xml.endTag();
+                } else {
+                    xml.startEmptyTag(tag);
+                    emitAttributes(xml, obj, objClass);
+                }
+                if (obj instanceof TagSaved) {
+                    ((TagSaved) obj).xmlSaved(xml);
+                }
+            }
+        } catch (XMLStreamException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new XMLStreamException(exception);
+        }
+    }
 
-	private static boolean hasSubTags(Object obj, Class<?> objClass) throws XMLStreamException {
-		for (FieldAnnotation<XmlTag> fa : Introspection.getDeepFieldAnnotations(objClass, XmlTag.class)) {
-			try {
-				Field field = fa.getField();
-				Introspection.makeFieldAccessible(field);
-				Object content = field.get(obj);
-				if (content != null && (!(content instanceof String) || !((String) content).isEmpty())) {
-					if (Collection.class.isAssignableFrom(field.getType())) {
-						if (!((Collection<?>) content).isEmpty()) {
-							return true;
-						}
-					} else {
-						return true;
-					}
-				}
-			} catch (Exception exception) {
-				throw new XMLStreamException(exception);
-			}
-		}
-		return false;
-	}
+    private static boolean hasSubTags(Object obj, Class<?> objClass) throws XMLStreamException {
+        for (FieldAnnotation<XmlTag> fa : Introspection.getDeepFieldAnnotations(objClass, XmlTag.class)) {
+            try {
+                Field field = fa.getField();
+                Introspection.makeFieldAccessible(field);
+                Object content = field.get(obj);
+                if (content != null && (!(content instanceof String) || !((String) content).isEmpty())) {
+                    if (Collection.class.isAssignableFrom(field.getType())) {
+                        if (!((Collection<?>) content).isEmpty()) {
+                            return true;
+                        }
+                    } else {
+                        return true;
+                    }
+                }
+            } catch (Exception exception) {
+                throw new XMLStreamException(exception);
+            }
+        }
+        return false;
+    }
 
-	private static void emitAttributes(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException, ReflectiveOperationException {
-		xml.addAttributeNot(ATTR_VERSION, getVersionOfTag(objClass), 0);
-		for (FieldAnnotation<XmlAttr> fa : Introspection.getDeepFieldAnnotations(objClass, XmlAttr.class)) {
-			Field field = fa.getField();
-			Introspection.makeFieldAccessible(field);
-			getHelper(field.getType()).emitAsAttribute(xml, obj, field, fa.getAnnotation().value());
-		}
-		if (obj instanceof TagExtraAttributes) {
-			((TagExtraAttributes) obj).xmlEmitExtraAttributes(xml);
-		}
-	}
+    private static void emitAttributes(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException, ReflectiveOperationException {
+        xml.addAttributeNot(ATTR_VERSION, getVersionOfTag(objClass), 0);
+        for (FieldAnnotation<XmlAttr> fa : Introspection.getDeepFieldAnnotations(objClass, XmlAttr.class)) {
+            Field field = fa.getField();
+            Introspection.makeFieldAccessible(field);
+            getHelper(field.getType()).emitAsAttribute(xml, obj, field, fa.getAnnotation().value());
+        }
+        if (obj instanceof TagExtraAttributes) {
+            ((TagExtraAttributes) obj).xmlEmitExtraAttributes(xml);
+        }
+    }
 
-	private static final void emitSubTags(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException {
-		for (FieldAnnotation<XmlTag> fa : Introspection.getDeepFieldAnnotations(objClass, XmlTag.class)) {
-			try {
-				Field field = fa.getField();
-				Introspection.makeFieldAccessible(field);
-				Object content = field.get(obj);
-				if (content != null && (!(content instanceof String) || !((String) content).isEmpty())) {
-					XmlTag subTag = fa.getAnnotation();
-					Class<?> type = field.getType();
-					if (Collection.class.isAssignableFrom(type)) {
-						Collection<?> collection = (Collection<?>) content;
-						if (!collection.isEmpty()) {
-							if (!field.isAnnotationPresent(XmlNoSort.class)) {
-								Object[] data = collection.toArray();
-								Arrays.sort(data);
-								collection = Arrays.asList(data);
-							}
-							String tag = subTag.value();
-							for (Object one : collection) {
-								add(xml, tag, one);
-							}
-						}
-					} else {
-						add(xml, subTag.value(), content);
-					}
-				}
-			} catch (XMLStreamException exception) {
-				throw exception;
-			} catch (Exception exception) {
-				throw new XMLStreamException(exception);
-			}
-		}
-	}
+    private static final void emitSubTags(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException {
+        for (FieldAnnotation<XmlTag> fa : Introspection.getDeepFieldAnnotations(objClass, XmlTag.class)) {
+            try {
+                Field field = fa.getField();
+                Introspection.makeFieldAccessible(field);
+                Object content = field.get(obj);
+                if (content != null && (!(content instanceof String) || !((String) content).isEmpty())) {
+                    XmlTag subTag = fa.getAnnotation();
+                    Class<?> type = field.getType();
+                    if (Collection.class.isAssignableFrom(type)) {
+                        Collection<?> collection = (Collection<?>) content;
+                        if (!collection.isEmpty()) {
+                            if (!field.isAnnotationPresent(XmlNoSort.class)) {
+                                Object[] data = collection.toArray();
+                                Arrays.sort(data);
+                                collection = Arrays.asList(data);
+                            }
+                            String tag = subTag.value();
+                            for (Object one : collection) {
+                                add(xml, tag, one);
+                            }
+                        }
+                    } else {
+                        add(xml, subTag.value(), content);
+                    }
+                }
+            } catch (XMLStreamException exception) {
+                throw exception;
+            } catch (Exception exception) {
+                throw new XMLStreamException(exception);
+            }
+        }
+    }
 
-	private static int getVersionOfTag(Class<?> objClass) {
-		XmlTagVersion tagVersion = objClass.getAnnotation(XmlTagVersion.class);
-		return tagVersion != null ? tagVersion.value() : 0;
-	}
+    private static int getVersionOfTag(Class<?> objClass) {
+        XmlTagVersion tagVersion = objClass.getAnnotation(XmlTagVersion.class);
+        return tagVersion != null ? tagVersion.value() : 0;
+    }
 
-	private static int getMinimumLoadableVersionOfTag(Class<?> objClass) {
-		XmlTagMinimumVersion tagVersion = objClass.getAnnotation(XmlTagMinimumVersion.class);
-		return tagVersion != null ? tagVersion.value() : 0;
-	}
+    private static int getMinimumLoadableVersionOfTag(Class<?> objClass) {
+        XmlTagMinimumVersion tagVersion = objClass.getAnnotation(XmlTagMinimumVersion.class);
+        return tagVersion != null ? tagVersion.value() : 0;
+    }
 }

@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 /** Provides a default value for a byte value. */
 public @interface XmlDefaultByte {
-	/** @return The default value. */
-	byte value();
+    /** @return The default value. */
+    byte value();
 }

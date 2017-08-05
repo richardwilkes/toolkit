@@ -21,51 +21,51 @@ import java.util.EmptyStackException;
  * @param <T> The type of objects within the stack.
  */
 public class Stack<T> extends ArrayList<T> {
-	/**
-	 * Pushes an item onto the top of the stack.
-	 *
-	 * @param item The item to be pushed onto the stack.
-	 * @return The <code>item</code> argument.
-	 */
-	public T push(T item) {
-		add(item);
-		return item;
-	}
+    /**
+     * Pushes an item onto the top of the stack.
+     *
+     * @param item The item to be pushed onto the stack.
+     * @return The <code>item</code> argument.
+     */
+    public T push(T item) {
+        add(item);
+        return item;
+    }
 
-	/**
-	 * Pushes the items in the specified {@link Collection} onto the top of the stack.
-	 *
-	 * @param items The items to be pushed onto the stack.
-	 */
-	public void pushAll(Collection<T> items) {
-		addAll(items);
-	}
+    /**
+     * Pushes the items in the specified {@link Collection} onto the top of the stack.
+     *
+     * @param items The items to be pushed onto the stack.
+     */
+    public void pushAll(Collection<T> items) {
+        addAll(items);
+    }
 
-	/**
-	 * Removes the object at the top of the stack.
-	 *
-	 * @return The object at the top of the stack.
-	 * @exception EmptyStackException if the stack is empty.
-	 */
-	public T pop() {
-		int length = size();
-		if (length == 0) {
-			throw new EmptyStackException();
-		}
-		return remove(length - 1);
-	}
+    /**
+     * Removes the object at the top of the stack.
+     *
+     * @return The object at the top of the stack.
+     * @exception EmptyStackException if the stack is empty.
+     */
+    public T pop() {
+        int length = size();
+        if (length == 0) {
+            throw new EmptyStackException();
+        }
+        return remove(length - 1);
+    }
 
-	/**
-	 * Looks at the object at the top of the stack without removing it from the stack.
-	 *
-	 * @return The object at the top of the stack.
-	 * @exception EmptyStackException if the stack is empty.
-	 */
-	public T peek() {
-		int length = size();
-		if (length == 0) {
-			throw new EmptyStackException();
-		}
-		return get(length - 1);
-	}
+    /**
+     * Looks at the object at the top of the stack without removing it from the stack.
+     *
+     * @return The object at the top of the stack.
+     * @exception EmptyStackException if the stack is empty.
+     */
+    public T peek() {
+        int length = size();
+        if (length == 0) {
+            throw new EmptyStackException();
+        }
+        return get(length - 1);
+    }
 }

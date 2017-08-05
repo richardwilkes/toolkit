@@ -16,9 +16,9 @@ package com.trollworks.toolkit.ui.menu.edit;
  * implement this interface.
  */
 public interface Pastable {
-	/** @return Whether the current clipboard contents can be pasted into the selection. */
-	boolean canPasteSelection();
+    /** @return Whether the current clipboard contents can be pasted into the selection. */
+    boolean canPasteSelection();
 
-	/** Called to paste the clipboard contents into the selection. */
-	void pasteSelection();
+    /** Called to paste the clipboard contents into the selection. */
+    void pasteSelection();
 }

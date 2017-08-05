@@ -13,13 +13,20 @@ package com.trollworks.toolkit.io.xml;
 
 /** The various node types that the {@link XMLReader} generates. */
 public enum XMLNodeType {
-	/** The start of the XML document. */
-	START_DOCUMENT, /** The end of XML document. */
-	END_DOCUMENT, /** A start tag. */
-	START_TAG, /** An end tag. */
-	END_TAG, /** A text block. */
-	TEXT, /** A data section. */
-	DATA, /** An entity reference. */
-	ENTITY_REF, /** Other... */
-	OTHER;
+    /** The start of the XML document. */
+    START_DOCUMENT,
+    /** The end of XML document. */
+    END_DOCUMENT,
+    /** A start tag. */
+    START_TAG,
+    /** An end tag. */
+    END_TAG,
+    /** A text block. */
+    TEXT,
+    /** A data section. */
+    DATA,
+    /** An entity reference. */
+    ENTITY_REF,
+    /** Other... */
+    OTHER;
 }

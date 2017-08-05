@@ -14,37 +14,37 @@ package com.trollworks.toolkit.io.server.http;
 @SuppressWarnings("nls")
 /** Stores a HTTP status code. */
 public enum HttpStatusCode {
-	SWITCHING_PROTOCOLS(101, "Switching Protocols"),
-	OK(200, "OK"),
-	CREATED(201, "Created"),
-	ACCEPTED(202, "Accepted"),
-	NO_CONTENT(204, "No Content"),
-	PARTIAL_CONTENT(206, "Partial Content"),
-	REDIRECT(301, "Moved Permanently"),
-	NOT_MODIFIED(304, "Not Modified"),
-	BAD_REQUEST(400, "Bad Request"),
-	UNAUTHORIZED(401, "Unauthorized"),
-	FORBIDDEN(403, "Forbidden"),
-	NOT_FOUND(404, "Not Found"),
-	ENTITY_TOO_LARGE(413, "Request Entity Too Large"),
-	RANGE_NOT_SATISFIABLE(416, "Requested Range Not Satisfiable"),
-	INTERNAL_ERROR(500, "Internal Server Error");
+    SWITCHING_PROTOCOLS(101, "Switching Protocols"),
+    OK(200, "OK"),
+    CREATED(201, "Created"),
+    ACCEPTED(202, "Accepted"),
+    NO_CONTENT(204, "No Content"),
+    PARTIAL_CONTENT(206, "Partial Content"),
+    REDIRECT(301, "Moved Permanently"),
+    NOT_MODIFIED(304, "Not Modified"),
+    BAD_REQUEST(400, "Bad Request"),
+    UNAUTHORIZED(401, "Unauthorized"),
+    FORBIDDEN(403, "Forbidden"),
+    NOT_FOUND(404, "Not Found"),
+    ENTITY_TOO_LARGE(413, "Request Entity Too Large"),
+    RANGE_NOT_SATISFIABLE(416, "Requested Range Not Satisfiable"),
+    INTERNAL_ERROR(500, "Internal Server Error");
 
-	private final int		mRequestStatus;
-	private final String	mDescription;
+    private final int    mRequestStatus;
+    private final String mDescription;
 
-	private HttpStatusCode(int requestStatus, String description) {
-		mRequestStatus = requestStatus;
-		mDescription = description;
-	}
+    private HttpStatusCode(int requestStatus, String description) {
+        mRequestStatus = requestStatus;
+        mDescription = description;
+    }
 
-	/** @return The integer value of the status code. */
-	public final int getRequestStatus() {
-		return mRequestStatus;
-	}
+    /** @return The integer value of the status code. */
+    public final int getRequestStatus() {
+        return mRequestStatus;
+    }
 
-	/** @return A text description of the status code. */
-	public final String getDescription() {
-		return mRequestStatus + " " + mDescription;
-	}
+    /** @return A text description of the status code. */
+    public final String getDescription() {
+        return mRequestStatus + " " + mDescription;
+    }
 }

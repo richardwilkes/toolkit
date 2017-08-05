@@ -14,36 +14,36 @@ package com.trollworks.toolkit.utility.introspection;
 import java.lang.annotation.Annotation;
 
 public final class ClassAnnotation<T extends Annotation> {
-	private Class<?>	mClass;
-	private Class<T>	mAnnotationClass;
+    private Class<?> mClass;
+    private Class<T> mAnnotationClass;
 
-	public ClassAnnotation(Class<?> cls, Class<T> annotationCls) {
-		mClass = cls;
-		mAnnotationClass = annotationCls;
-	}
+    public ClassAnnotation(Class<?> cls, Class<T> annotationCls) {
+        mClass = cls;
+        mAnnotationClass = annotationCls;
+    }
 
-	public final Class<?> getClassWithAnnotation() {
-		return mClass;
-	}
+    public final Class<?> getClassWithAnnotation() {
+        return mClass;
+    }
 
-	public final Class<T> getAnnotationClass() {
-		return mAnnotationClass;
-	}
+    public final Class<T> getAnnotationClass() {
+        return mAnnotationClass;
+    }
 
-	@Override
-	public final int hashCode() {
-		return 31 * (31 + mAnnotationClass.hashCode()) + mClass.hashCode();
-	}
+    @Override
+    public final int hashCode() {
+        return 31 * (31 + mAnnotationClass.hashCode()) + mClass.hashCode();
+    }
 
-	@Override
-	public final boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj instanceof ClassAnnotation) {
-			ClassAnnotation<?> other = (ClassAnnotation<?>) obj;
-			return mClass == other.mClass && mAnnotationClass == other.mAnnotationClass;
-		}
-		return false;
-	}
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof ClassAnnotation) {
+            ClassAnnotation<?> other = (ClassAnnotation<?>) obj;
+            return mClass == other.mClass && mAnnotationClass == other.mAnnotationClass;
+        }
+        return false;
+    }
 }

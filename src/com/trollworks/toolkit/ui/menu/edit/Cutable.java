@@ -16,9 +16,9 @@ package com.trollworks.toolkit.ui.menu.edit;
  * implement this interface.
  */
 public interface Cutable {
-	/** @return Whether the selection can be cut. */
-	boolean canCutSelection();
+    /** @return Whether the selection can be cut. */
+    boolean canCutSelection();
 
-	/** Called to cut the current selection. */
-	void cutSelection();
+    /** Called to cut the current selection. */
+    void cutSelection();
 }

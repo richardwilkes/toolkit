@@ -13,33 +13,33 @@ package com.trollworks.toolkit.io.server.websocket;
 
 /** Provides callbacks for handling a {@link WebSocket}. */
 public interface WebSocketHandler {
-	/**
-	 * Called when a {@link WebSocket} is initially established.
-	 *
-	 * @param webSocket The {@link WebSocket} being established.
-	 */
-	void webSocketConnected(WebSocket webSocket);
+    /**
+     * Called when a {@link WebSocket} is initially established.
+     *
+     * @param webSocket The {@link WebSocket} being established.
+     */
+    void webSocketConnected(WebSocket webSocket);
 
-	/**
-	 * Called when text data has been received.
-	 *
-	 * @param webSocket The {@link WebSocket} the data was received from.
-	 * @param data The text.
-	 */
-	void webSocketTextData(WebSocket webSocket, String data);
+    /**
+     * Called when text data has been received.
+     *
+     * @param webSocket The {@link WebSocket} the data was received from.
+     * @param data The text.
+     */
+    void webSocketTextData(WebSocket webSocket, String data);
 
-	/**
-	 * Called when binary data has been received.
-	 *
-	 * @param webSocket The {@link WebSocket} the data was received from.
-	 * @param data The data.
-	 */
-	void webSocketBinaryData(WebSocket webSocket, byte[] data);
+    /**
+     * Called when binary data has been received.
+     *
+     * @param webSocket The {@link WebSocket} the data was received from.
+     * @param data The data.
+     */
+    void webSocketBinaryData(WebSocket webSocket, byte[] data);
 
-	/**
-	 * Called when the {@link WebSocket} is closed.
-	 *
-	 * @param webSocket The {@link WebSocket} being closed.
-	 */
-	void webSocketClosed(WebSocket webSocket);
+    /**
+     * Called when the {@link WebSocket} is closed.
+     *
+     * @param webSocket The {@link WebSocket} being closed.
+     */
+    void webSocketClosed(WebSocket webSocket);
 }

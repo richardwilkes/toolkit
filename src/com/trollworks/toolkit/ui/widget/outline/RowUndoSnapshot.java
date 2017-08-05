@@ -15,33 +15,33 @@ import java.util.ArrayList;
 
 /** The information an undo for the row needs to operate. */
 public class RowUndoSnapshot {
-	private Row				mParent;
-	private boolean			mOpen;
-	private ArrayList<Row>	mChildren;
+    private Row            mParent;
+    private boolean        mOpen;
+    private ArrayList<Row> mChildren;
 
-	/**
-	 * Creates a snapshot of the information needed to undo any changes to the row.
-	 *
-	 * @param row The row to create a snapshot for.
-	 */
-	public RowUndoSnapshot(Row row) {
-		mParent = row.getParent();
-		mOpen = row.isOpen();
-		mChildren = row.canHaveChildren() ? new ArrayList<>(row.getChildren()) : null;
-	}
+    /**
+     * Creates a snapshot of the information needed to undo any changes to the row.
+     *
+     * @param row The row to create a snapshot for.
+     */
+    public RowUndoSnapshot(Row row) {
+        mParent = row.getParent();
+        mOpen = row.isOpen();
+        mChildren = row.canHaveChildren() ? new ArrayList<>(row.getChildren()) : null;
+    }
 
-	/** @return The children. */
-	public ArrayList<Row> getChildren() {
-		return mChildren;
-	}
+    /** @return The children. */
+    public ArrayList<Row> getChildren() {
+        return mChildren;
+    }
 
-	/** @return Whether the row should be open. */
-	public boolean isOpen() {
-		return mOpen;
-	}
+    /** @return Whether the row should be open. */
+    public boolean isOpen() {
+        return mOpen;
+    }
 
-	/** @return The parent. */
-	public Row getParent() {
-		return mParent;
-	}
+    /** @return The parent. */
+    public Row getParent() {
+        return mParent;
+    }
 }

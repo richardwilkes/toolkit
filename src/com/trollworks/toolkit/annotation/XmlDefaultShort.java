@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 /** Provides a default value for a short value. */
 public @interface XmlDefaultShort {
-	/** @return The default value. */
-	short value();
+    /** @return The default value. */
+    short value();
 }

@@ -18,10 +18,10 @@ import javax.xml.stream.XMLStreamException;
  * interface.
  */
 public interface TagWillLoad {
-	/**
-	 * Called before the XML tag will be loaded into the object.
-	 *
-	 * @param context The {@link XmlParserContext} for this object.
-	 */
-	void xmlWillLoad(XmlParserContext context) throws XMLStreamException;
+    /**
+     * Called before the XML tag will be loaded into the object.
+     *
+     * @param context The {@link XmlParserContext} for this object.
+     */
+    void xmlWillLoad(XmlParserContext context) throws XMLStreamException;
 }

@@ -19,21 +19,21 @@ import java.util.Map;
  * removed. Calling get() or put() will refresh the entry. Calling containsKey() will not.
  */
 public class LRUCache<K, V> extends LinkedHashMap<K, V> {
-	private final int mMaxEntries;
+    private final int mMaxEntries;
 
-	/**
-	 * Creates a new {@link LRUCache}.
-	 *
-	 * @param maxEntries The maximum number of entries to be in the cache. Older entries are removed
-	 *            first.
-	 */
-	public LRUCache(int maxEntries) {
-		super(16, 0.75f, true);
-		mMaxEntries = maxEntries;
-	}
+    /**
+     * Creates a new {@link LRUCache}.
+     *
+     * @param maxEntries The maximum number of entries to be in the cache. Older entries are removed
+     *            first.
+     */
+    public LRUCache(int maxEntries) {
+        super(16, 0.75f, true);
+        mMaxEntries = maxEntries;
+    }
 
-	@Override
-	protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-		return size() > mMaxEntries;
-	}
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+        return size() > mMaxEntries;
+    }
 }

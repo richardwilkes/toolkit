@@ -12,9 +12,9 @@
 package com.trollworks.toolkit.ui.widget.tree;
 
 public interface FieldAccessor {
-	/**
-	 * @param row The {@link TreeRow} to operate on.
-	 * @return The {@link String} representation of the field.
-	 */
-	String getField(TreeRow row);
+    /**
+     * @param row The {@link TreeRow} to operate on.
+     * @return The {@link String} representation of the field.
+     */
+    String getField(TreeRow row);
 }

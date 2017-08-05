@@ -16,21 +16,21 @@ import javax.swing.JMenuBar;
 
 /** Utilities for dealing with menu bars. */
 public class MenuBarUtilities {
-	/**
-	 * @param bar The {@link JMenuBar} to search.
-	 * @param type The {@link Class} to look for as a top-level {@link JMenu}.
-	 * @return The found {@link JMenu}, or <code>null</code>.
-	 */
-	public static JMenu findMenu(JMenuBar bar, Class<? extends JMenu> type) {
-		if (bar != null) {
-			int count = bar.getMenuCount();
-			for (int i = 0; i < count; i++) {
-				JMenu menu = bar.getMenu(i);
-				if (type.isInstance(menu)) {
-					return menu;
-				}
-			}
-		}
-		return null;
-	}
+    /**
+     * @param bar The {@link JMenuBar} to search.
+     * @param type The {@link Class} to look for as a top-level {@link JMenu}.
+     * @return The found {@link JMenu}, or <code>null</code>.
+     */
+    public static JMenu findMenu(JMenuBar bar, Class<? extends JMenu> type) {
+        if (bar != null) {
+            int count = bar.getMenuCount();
+            for (int i = 0; i < count; i++) {
+                JMenu menu = bar.getMenu(i);
+                if (type.isInstance(menu)) {
+                    return menu;
+                }
+            }
+        }
+        return null;
+    }
 }

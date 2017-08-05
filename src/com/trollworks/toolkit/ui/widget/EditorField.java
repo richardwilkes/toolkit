@@ -29,91 +29,91 @@ import javax.swing.UIManager;
 
 /** Provides a standard editor field. */
 public class EditorField extends JFormattedTextField implements ActionListener, Commitable {
-	private String mHint;
+    private String mHint;
 
-	/**
-	 * Creates a new {@link EditorField}.
-	 *
-	 * @param formatter The formatter to use.
-	 * @param listener The listener to use.
-	 * @param alignment The alignment to use.
-	 * @param value The initial value.
-	 * @param tooltip The tooltip to use.
-	 */
-	public EditorField(AbstractFormatterFactory formatter, PropertyChangeListener listener, int alignment, Object value, String tooltip) {
-		this(formatter, listener, alignment, value, null, tooltip);
-	}
+    /**
+     * Creates a new {@link EditorField}.
+     *
+     * @param formatter The formatter to use.
+     * @param listener The listener to use.
+     * @param alignment The alignment to use.
+     * @param value The initial value.
+     * @param tooltip The tooltip to use.
+     */
+    public EditorField(AbstractFormatterFactory formatter, PropertyChangeListener listener, int alignment, Object value, String tooltip) {
+        this(formatter, listener, alignment, value, null, tooltip);
+    }
 
-	/**
-	 * Creates a new {@link EditorField}.
-	 *
-	 * @param formatter The formatter to use.
-	 * @param listener The listener to use.
-	 * @param alignment The alignment to use.
-	 * @param value The initial value.
-	 * @param protoValue The prototype value to use to set the preferred size.
-	 * @param tooltip The tooltip to use.
-	 */
-	public EditorField(AbstractFormatterFactory formatter, PropertyChangeListener listener, int alignment, Object value, Object protoValue, String tooltip) {
-		super(formatter, protoValue != null ? protoValue : value);
-		setHorizontalAlignment(alignment);
-		setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
-		if (protoValue != null) {
-			setPreferredSize(getPreferredSize());
-			setValue(value);
-		}
-		if (listener != null) {
-			addPropertyChangeListener("value", listener); //$NON-NLS-1$
-		}
-		addActionListener(this);
-		setFocusLostBehavior(COMMIT_OR_REVERT);
+    /**
+     * Creates a new {@link EditorField}.
+     *
+     * @param formatter The formatter to use.
+     * @param listener The listener to use.
+     * @param alignment The alignment to use.
+     * @param value The initial value.
+     * @param protoValue The prototype value to use to set the preferred size.
+     * @param tooltip The tooltip to use.
+     */
+    public EditorField(AbstractFormatterFactory formatter, PropertyChangeListener listener, int alignment, Object value, Object protoValue, String tooltip) {
+        super(formatter, protoValue != null ? protoValue : value);
+        setHorizontalAlignment(alignment);
+        setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
+        if (protoValue != null) {
+            setPreferredSize(getPreferredSize());
+            setValue(value);
+        }
+        if (listener != null) {
+            addPropertyChangeListener("value", listener); //$NON-NLS-1$
+        }
+        addActionListener(this);
+        setFocusLostBehavior(COMMIT_OR_REVERT);
 
-		// Reset the selection colors back to what is standard for text fields.
-		// This is necessary, since (at least on the Mac) JFormattedTextField
-		// has the wrong values by default.
-		setCaretColor(UIManager.getColor("TextField.caretForeground")); //$NON-NLS-1$
-		setSelectionColor(UIManager.getColor("TextField.selectionBackground")); //$NON-NLS-1$
-		setSelectedTextColor(UIManager.getColor("TextField.selectionForeground")); //$NON-NLS-1$
-		setDisabledTextColor(UIManager.getColor("TextField.inactiveForeground")); //$NON-NLS-1$
-	}
+        // Reset the selection colors back to what is standard for text fields.
+        // This is necessary, since (at least on the Mac) JFormattedTextField
+        // has the wrong values by default.
+        setCaretColor(UIManager.getColor("TextField.caretForeground")); //$NON-NLS-1$
+        setSelectionColor(UIManager.getColor("TextField.selectionBackground")); //$NON-NLS-1$
+        setSelectedTextColor(UIManager.getColor("TextField.selectionForeground")); //$NON-NLS-1$
+        setDisabledTextColor(UIManager.getColor("TextField.inactiveForeground")); //$NON-NLS-1$
+    }
 
-	@Override
-	protected void processFocusEvent(FocusEvent event) {
-		super.processFocusEvent(event);
-		if (event.getID() == FocusEvent.FOCUS_GAINED) {
-			selectAll();
-		}
-	}
+    @Override
+    protected void processFocusEvent(FocusEvent event) {
+        super.processFocusEvent(event);
+        if (event.getID() == FocusEvent.FOCUS_GAINED) {
+            selectAll();
+        }
+    }
 
-	/** @param hint The hint to use, or <code>null</code>. */
-	public void setHint(String hint) {
-		mHint = hint;
-		repaint();
-	}
+    /** @param hint The hint to use, or <code>null</code>. */
+    public void setHint(String hint) {
+        mHint = hint;
+        repaint();
+    }
 
-	@Override
-	protected void paintComponent(Graphics gc) {
-		super.paintComponent(gc);
-		if (mHint != null && getText().length() == 0) {
-			Rectangle bounds = getBounds();
-			bounds.x = 0;
-			bounds.y = 0;
-			gc.setColor(Color.GRAY);
-			TextDrawing.draw(gc, bounds, mHint, SwingConstants.CENTER, SwingConstants.CENTER);
-		}
-	}
+    @Override
+    protected void paintComponent(Graphics gc) {
+        super.paintComponent(gc);
+        if (mHint != null && getText().length() == 0) {
+            Rectangle bounds = getBounds();
+            bounds.x = 0;
+            bounds.y = 0;
+            gc.setColor(Color.GRAY);
+            TextDrawing.draw(gc, bounds, mHint, SwingConstants.CENTER, SwingConstants.CENTER);
+        }
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		attemptCommit();
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        attemptCommit();
+    }
 
-	@Override
-	public void attemptCommit() {
-		try {
-			commitEdit();
-		} catch (ParseException exception) {
-			invalidEdit();
-		}
-	}
+    @Override
+    public void attemptCommit() {
+        try {
+            commitEdit();
+        } catch (ParseException exception) {
+            invalidEdit();
+        }
+    }
 }

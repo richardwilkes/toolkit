@@ -15,29 +15,29 @@ import java.io.IOException;
 
 /** Provides an {@link IOException} that can be easily transformed into a {@link HttpResponse}. */
 public class HttpResponseException extends IOException {
-	private final HttpStatusCode mStatus;
+    private final HttpStatusCode mStatus;
 
-	/**
-	 * @param status The {@link HttpStatusCode} to use.
-	 * @param message The message to use.
-	 */
-	public HttpResponseException(HttpStatusCode status, String message) {
-		super(message);
-		mStatus = status;
-	}
+    /**
+     * @param status The {@link HttpStatusCode} to use.
+     * @param message The message to use.
+     */
+    public HttpResponseException(HttpStatusCode status, String message) {
+        super(message);
+        mStatus = status;
+    }
 
-	/**
-	 * @param status The {@link HttpStatusCode} to use.
-	 * @param message The message to use.
-	 * @param exception The exception to wrap.
-	 */
-	public HttpResponseException(HttpStatusCode status, String message, Exception exception) {
-		super(message, exception);
-		mStatus = status;
-	}
+    /**
+     * @param status The {@link HttpStatusCode} to use.
+     * @param message The message to use.
+     * @param exception The exception to wrap.
+     */
+    public HttpResponseException(HttpStatusCode status, String message, Exception exception) {
+        super(message, exception);
+        mStatus = status;
+    }
 
-	/** @return The {@link HttpStatusCode}. */
-	public HttpStatusCode getStatus() {
-		return mStatus;
-	}
+    /** @return The {@link HttpStatusCode}. */
+    public HttpStatusCode getStatus() {
+        return mStatus;
+    }
 }

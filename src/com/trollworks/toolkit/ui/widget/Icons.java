@@ -15,14 +15,14 @@ import com.trollworks.toolkit.ui.RetinaIcon;
 
 /** Commonly used icons. */
 public class Icons {
-	/**
-	 * @param open <code>true</code> for the 'open' version.
-	 * @param roll <code>true</code> for the highlighted version.
-	 */
-	public static RetinaIcon getDisclosure(boolean open, boolean roll) {
-		if (open) {
-			return new RetinaIcon(roll ? "disclosure_down_roll" : "disclosure_down"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		return new RetinaIcon(roll ? "disclosure_right_roll" : "disclosure_right"); //$NON-NLS-1$ //$NON-NLS-2$
-	}
+    /**
+     * @param open <code>true</code> for the 'open' version.
+     * @param roll <code>true</code> for the highlighted version.
+     */
+    public static RetinaIcon getDisclosure(boolean open, boolean roll) {
+        if (open) {
+            return new RetinaIcon(roll ? "disclosure_down_roll" : "disclosure_down"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        return new RetinaIcon(roll ? "disclosure_right_roll" : "disclosure_right"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
 }

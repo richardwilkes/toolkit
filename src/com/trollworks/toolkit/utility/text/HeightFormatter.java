@@ -19,27 +19,27 @@ import javax.swing.JFormattedTextField;
 
 /** Provides height field conversion. */
 public class HeightFormatter extends JFormattedTextField.AbstractFormatter {
-	private boolean mBlankOnZero;
+    private boolean mBlankOnZero;
 
-	/**
-	 * @param blankOnZero When <code>true</code>, a value of zero resolves to the empty string when
-	 *            calling {@link #valueToString(Object)}.
-	 */
-	public HeightFormatter(boolean blankOnZero) {
-		mBlankOnZero = blankOnZero;
-	}
+    /**
+     * @param blankOnZero When <code>true</code>, a value of zero resolves to the empty string when
+     *            calling {@link #valueToString(Object)}.
+     */
+    public HeightFormatter(boolean blankOnZero) {
+        mBlankOnZero = blankOnZero;
+    }
 
-	@Override
-	public Object stringToValue(String text) throws ParseException {
-		return LengthValue.extract(text, true);
-	}
+    @Override
+    public Object stringToValue(String text) throws ParseException {
+        return LengthValue.extract(text, true);
+    }
 
-	@Override
-	public String valueToString(Object value) throws ParseException {
-		LengthValue length = (LengthValue) value;
-		if (mBlankOnZero && length.getValue() == 0) {
-			return ""; //$NON-NLS-1$
-		}
-		return length.toString();
-	}
+    @Override
+    public String valueToString(Object value) throws ParseException {
+        LengthValue length = (LengthValue) value;
+        if (mBlankOnZero && length.getValue() == 0) {
+            return ""; //$NON-NLS-1$
+        }
+        return length.toString();
+    }
 }

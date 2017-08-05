@@ -31,76 +31,76 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /** Provides the "Open..." command. */
 public class OpenCommand extends Command implements OpenFilesHandler {
-	@Localize("Open\u2026")
-	@Localize(locale = "ru", value = "Открыть\u2026")
-	@Localize(locale = "de", value = "Öffnen\u2026")
-	@Localize(locale = "es", value = "Abrir\u2026")
-	private static String	OPEN;
-	@Localize("All Readable Files")
-	private static String	ALL_READABLE_FILES;
+    @Localize("Open\u2026")
+    @Localize(locale = "ru", value = "Открыть\u2026")
+    @Localize(locale = "de", value = "Öffnen\u2026")
+    @Localize(locale = "es", value = "Abrir\u2026")
+    private static String OPEN;
+    @Localize("All Readable Files")
+    private static String ALL_READABLE_FILES;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** The action command this command will issue. */
-	public static final String		CMD_OPEN	= "Open";			//$NON-NLS-1$
+    /** The action command this command will issue. */
+    public static final String      CMD_OPEN = "Open";           			//$NON-NLS-1$
 
-	/** The singleton {@link OpenCommand}. */
-	public static final OpenCommand	INSTANCE	= new OpenCommand();
+    /** The singleton {@link OpenCommand}. */
+    public static final OpenCommand INSTANCE = new OpenCommand();
 
-	private OpenCommand() {
-		super(OPEN, CMD_OPEN, KeyEvent.VK_O);
-	}
+    private OpenCommand() {
+        super(OPEN, CMD_OPEN, KeyEvent.VK_O);
+    }
 
-	@Override
-	public void adjust() {
-		// Do nothing. Always enabled.
-	}
+    @Override
+    public void adjust() {
+        // Do nothing. Always enabled.
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		open();
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        open();
+    }
 
-	/** Ask the user to open a file. */
-	public static void open() {
-		open(StdFileDialog.showOpenDialog(getFocusOwner(), OPEN, FileType.getOpenableFileFilters(ALL_READABLE_FILES)));
-	}
+    /** Ask the user to open a file. */
+    public static void open() {
+        open(StdFileDialog.showOpenDialog(getFocusOwner(), OPEN, FileType.getOpenableFileFilters(ALL_READABLE_FILES)));
+    }
 
-	/** @param file The file to open. */
-	public static void open(File file) {
-		if (file != null) {
-			try {
-				FileProxy proxy = AppWindow.findFileProxy(file);
-				if (proxy == null) {
-					for (FileType type : FileType.getOpenable()) {
-						if (new FileNameExtensionFilter(type.getDescription(), type.getExtension()).accept(file)) {
-							proxy = type.getFileProxyCreator().create(file);
-							break;
-						}
-					}
-				} else {
-					proxy.toFrontAndFocus();
-				}
-				if (proxy != null) {
-					RecentFilesMenu.addRecent(file);
-				} else {
-					throw new IOException("Unknown file extension"); //$NON-NLS-1$
-				}
-			} catch (Exception exception) {
-				Log.error(exception);
-				StdFileDialog.showCannotOpenMsg(getFocusOwner(), file.getName(), exception);
-			}
-		}
-	}
+    /** @param file The file to open. */
+    public static void open(File file) {
+        if (file != null) {
+            try {
+                FileProxy proxy = AppWindow.findFileProxy(file);
+                if (proxy == null) {
+                    for (FileType type : FileType.getOpenable()) {
+                        if (new FileNameExtensionFilter(type.getDescription(), type.getExtension()).accept(file)) {
+                            proxy = type.getFileProxyCreator().create(file);
+                            break;
+                        }
+                    }
+                } else {
+                    proxy.toFrontAndFocus();
+                }
+                if (proxy != null) {
+                    RecentFilesMenu.addRecent(file);
+                } else {
+                    throw new IOException("Unknown file extension"); //$NON-NLS-1$
+                }
+            } catch (Exception exception) {
+                Log.error(exception);
+                StdFileDialog.showCannotOpenMsg(getFocusOwner(), file.getName(), exception);
+            }
+        }
+    }
 
-	@Override
-	public void openFiles(OpenFilesEvent event) {
-		for (File file : event.getFiles()) {
-			// We call this rather than directly to open(File) above to allow the file opening to be
-			// deferred until startup has finished
-			OpenDataFileCommand.open(file);
-		}
-	}
+    @Override
+    public void openFiles(OpenFilesEvent event) {
+        for (File file : event.getFiles()) {
+            // We call this rather than directly to open(File) above to allow the file opening to be
+            // deferred until startup has finished
+            OpenDataFileCommand.open(file);
+        }
+    }
 }

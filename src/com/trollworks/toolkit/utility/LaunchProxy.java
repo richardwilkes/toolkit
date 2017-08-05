@@ -30,133 +30,133 @@ import java.util.StringTokenizer;
  * only a single instance.
  */
 public class LaunchProxy implements ConduitReceiver {
-	private static final String	AT					= "@";				//$NON-NLS-1$
-	private static final String	SPACE				= " ";				//$NON-NLS-1$
-	private static final String	COMMA				= ",";				//$NON-NLS-1$
-	private static final String	AT_MARKER			= "@!";				//$NON-NLS-1$
-	private static final String	SPACE_MARKER		= "@%";				//$NON-NLS-1$
-	private static final String	COMMA_MARKER		= "@#";				//$NON-NLS-1$
-	private static final String	LAUNCH_ID			= "Launched";		//$NON-NLS-1$
-	private static final String	TOOK_OVER_FOR_ID	= "TookOverFor";	//$NON-NLS-1$
-	private static LaunchProxy	INSTANCE			= null;
-	private Conduit				mConduit;
-	private long				mTimeStamp;
-	private boolean				mReady;
-	private ArrayList<File>		mFiles;
+    private static final String AT               = "@";          				//$NON-NLS-1$
+    private static final String SPACE            = " ";          				//$NON-NLS-1$
+    private static final String COMMA            = ",";          				//$NON-NLS-1$
+    private static final String AT_MARKER        = "@!";         				//$NON-NLS-1$
+    private static final String SPACE_MARKER     = "@%";         				//$NON-NLS-1$
+    private static final String COMMA_MARKER     = "@#";         				//$NON-NLS-1$
+    private static final String LAUNCH_ID        = "Launched";   		//$NON-NLS-1$
+    private static final String TOOK_OVER_FOR_ID = "TookOverFor";	//$NON-NLS-1$
+    private static LaunchProxy  INSTANCE         = null;
+    private Conduit             mConduit;
+    private long                mTimeStamp;
+    private boolean             mReady;
+    private ArrayList<File>     mFiles;
 
-	/** @return The single instance of the app launch proxy. */
-	public synchronized static LaunchProxy getInstance() {
-		return INSTANCE;
-	}
+    /** @return The single instance of the app launch proxy. */
+    public synchronized static LaunchProxy getInstance() {
+        return INSTANCE;
+    }
 
-	/**
-	 * Configures the one and only instance that may exist. It is an error to call this method more
-	 * than once.
-	 *
-	 * @param files The files, if any, that should be passed on to another instance of the app that
-	 *            may already be running.
-	 */
-	public synchronized static void configure(List<File> files) {
-		if (INSTANCE == null) {
-			INSTANCE = new LaunchProxy(files);
-			try {
-				// Give it a chance to terminate this run...
-				Thread.sleep(1500);
-			} catch (Exception exception) {
-				// Ignore
-			}
-		} else {
-			Log.error("Can only call configure once."); //$NON-NLS-1$
-		}
-	}
+    /**
+     * Configures the one and only instance that may exist. It is an error to call this method more
+     * than once.
+     *
+     * @param files The files, if any, that should be passed on to another instance of the app that
+     *            may already be running.
+     */
+    public synchronized static void configure(List<File> files) {
+        if (INSTANCE == null) {
+            INSTANCE = new LaunchProxy(files);
+            try {
+                // Give it a chance to terminate this run...
+                Thread.sleep(1500);
+            } catch (Exception exception) {
+                // Ignore
+            }
+        } else {
+            Log.error("Can only call configure once."); //$NON-NLS-1$
+        }
+    }
 
-	private LaunchProxy(List<File> files) {
-		StringBuilder buffer = new StringBuilder();
-		mFiles = new ArrayList<>();
-		mTimeStamp = System.currentTimeMillis();
-		buffer.append(LAUNCH_ID);
-		buffer.append(' ');
-		buffer.append(mTimeStamp);
-		buffer.append(' ');
-		boolean needComma = false;
-		for (File file : files) {
-			if (needComma) {
-				buffer.append(',');
-			} else {
-				needComma = true;
-			}
-			buffer.append(file.getAbsolutePath().replaceAll(AT, AT_MARKER).replaceAll(SPACE, SPACE_MARKER).replaceAll(COMMA, COMMA_MARKER));
-		}
-		mConduit = new Conduit(this, false);
-		mConduit.send(new ConduitMessage(BundleInfo.getDefault().getName(), buffer.toString()));
-	}
+    private LaunchProxy(List<File> files) {
+        StringBuilder buffer = new StringBuilder();
+        mFiles = new ArrayList<>();
+        mTimeStamp = System.currentTimeMillis();
+        buffer.append(LAUNCH_ID);
+        buffer.append(' ');
+        buffer.append(mTimeStamp);
+        buffer.append(' ');
+        boolean needComma = false;
+        for (File file : files) {
+            if (needComma) {
+                buffer.append(',');
+            } else {
+                needComma = true;
+            }
+            buffer.append(file.getAbsolutePath().replaceAll(AT, AT_MARKER).replaceAll(SPACE, SPACE_MARKER).replaceAll(COMMA, COMMA_MARKER));
+        }
+        mConduit = new Conduit(this, false);
+        mConduit.send(new ConduitMessage(BundleInfo.getDefault().getName(), buffer.toString()));
+    }
 
-	/**
-	 * Sets whether this application is ready to take over responsibility for other copies being
-	 * launched.
-	 *
-	 * @param ready Whether the application is ready or not.
-	 */
-	public void setReady(boolean ready) {
-		mReady = ready;
-	}
+    /**
+     * Sets whether this application is ready to take over responsibility for other copies being
+     * launched.
+     *
+     * @param ready Whether the application is ready or not.
+     */
+    public void setReady(boolean ready) {
+        mReady = ready;
+    }
 
-	@Override
-	public void conduitMessageReceived(ConduitMessage msg) {
-		StringTokenizer tokenizer = new StringTokenizer(msg.getMessage(), SPACE);
-		if (tokenizer.hasMoreTokens()) {
-			String token = tokenizer.nextToken();
-			if (mReady && LAUNCH_ID.equals(token)) {
-				if (tokenizer.hasMoreTokens()) {
-					long timeStamp = getLong(tokenizer);
-					if (timeStamp != mTimeStamp) {
-						mConduit.send(new ConduitMessage(BundleInfo.getDefault().getName(), TOOK_OVER_FOR_ID + ' ' + timeStamp));
-						GraphicsUtilities.forceAppToFront();
-						if (tokenizer.hasMoreTokens()) {
-							tokenizer = new StringTokenizer(tokenizer.nextToken(), COMMA);
-							while (tokenizer.hasMoreTokens()) {
-								synchronized (mFiles) {
-									mFiles.add(new File(tokenizer.nextToken().replaceAll(COMMA_MARKER, COMMA).replaceAll(SPACE_MARKER, SPACE).replaceAll(AT_MARKER, AT)));
-								}
-							}
-							synchronized (mFiles) {
-								if (!mFiles.isEmpty()) {
-									for (File file : mFiles) {
-										OpenDataFileCommand.open(file);
-									}
-									mFiles.clear();
-								}
-							}
-						} else {
-							EventQueue.invokeLater(() -> OpenCommand.open());
-						}
-					}
-				}
-			} else if (TOOK_OVER_FOR_ID.equals(token)) {
-				if (tokenizer.hasMoreTokens()) {
-					if (getLong(tokenizer) == mTimeStamp) {
-						System.exit(0);
-					}
-				}
-			}
-		}
-	}
+    @Override
+    public void conduitMessageReceived(ConduitMessage msg) {
+        StringTokenizer tokenizer = new StringTokenizer(msg.getMessage(), SPACE);
+        if (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            if (mReady && LAUNCH_ID.equals(token)) {
+                if (tokenizer.hasMoreTokens()) {
+                    long timeStamp = getLong(tokenizer);
+                    if (timeStamp != mTimeStamp) {
+                        mConduit.send(new ConduitMessage(BundleInfo.getDefault().getName(), TOOK_OVER_FOR_ID + ' ' + timeStamp));
+                        GraphicsUtilities.forceAppToFront();
+                        if (tokenizer.hasMoreTokens()) {
+                            tokenizer = new StringTokenizer(tokenizer.nextToken(), COMMA);
+                            while (tokenizer.hasMoreTokens()) {
+                                synchronized (mFiles) {
+                                    mFiles.add(new File(tokenizer.nextToken().replaceAll(COMMA_MARKER, COMMA).replaceAll(SPACE_MARKER, SPACE).replaceAll(AT_MARKER, AT)));
+                                }
+                            }
+                            synchronized (mFiles) {
+                                if (!mFiles.isEmpty()) {
+                                    for (File file : mFiles) {
+                                        OpenDataFileCommand.open(file);
+                                    }
+                                    mFiles.clear();
+                                }
+                            }
+                        } else {
+                            EventQueue.invokeLater(() -> OpenCommand.open());
+                        }
+                    }
+                }
+            } else if (TOOK_OVER_FOR_ID.equals(token)) {
+                if (tokenizer.hasMoreTokens()) {
+                    if (getLong(tokenizer) == mTimeStamp) {
+                        System.exit(0);
+                    }
+                }
+            }
+        }
+    }
 
-	private static long getLong(StringTokenizer tokenizer) {
-		try {
-			return Long.parseLong(tokenizer.nextToken().trim());
-		} catch (Exception exception) {
-			return -1;
-		}
-	}
+    private static long getLong(StringTokenizer tokenizer) {
+        try {
+            return Long.parseLong(tokenizer.nextToken().trim());
+        } catch (Exception exception) {
+            return -1;
+        }
+    }
 
-	@Override
-	public String getConduitMessageIDFilter() {
-		return BundleInfo.getDefault().getName();
-	}
+    @Override
+    public String getConduitMessageIDFilter() {
+        return BundleInfo.getDefault().getName();
+    }
 
-	@Override
-	public String getConduitMessageUserFilter() {
-		return System.getProperty("user.name"); //$NON-NLS-1$
-	}
+    @Override
+    public String getConduitMessageUserFilter() {
+        return System.getProperty("user.name"); //$NON-NLS-1$
+    }
 }

@@ -18,29 +18,29 @@ import com.trollworks.toolkit.expression.Evaluator;
 import com.trollworks.toolkit.utility.Localization;
 
 public class Min implements ExpressionFunction {
-	@Localize("Two numeric arguments are required")
-	@Localize(locale = "pt-BR", value = "Dois argumentos numéricos são requeridos")
-	private static String INVALID_ARGUMENTS;
+    @Localize("Two numeric arguments are required")
+    @Localize(locale = "pt-BR", value = "Dois argumentos numéricos são requeridos")
+    private static String INVALID_ARGUMENTS;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	@Override
-	public final String getName() {
-		return "min"; //$NON-NLS-1$
-	}
+    @Override
+    public final String getName() {
+        return "min"; //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object execute(final Evaluator evaluator, final String arguments) throws EvaluationException {
-		try {
-			Evaluator ev = new Evaluator(evaluator);
-			ArgumentTokenizer tokenizer = new ArgumentTokenizer(arguments);
-			double arg1 = ArgumentTokenizer.getDouble(ev.evaluate(tokenizer.nextToken()));
-			double arg2 = ArgumentTokenizer.getDouble(ev.evaluate(tokenizer.nextToken()));
-			return Double.valueOf(Math.min(arg1, arg2));
-		} catch (Exception exception) {
-			throw new EvaluationException(INVALID_ARGUMENTS, exception);
-		}
-	}
+    @Override
+    public final Object execute(final Evaluator evaluator, final String arguments) throws EvaluationException {
+        try {
+            Evaluator ev = new Evaluator(evaluator);
+            ArgumentTokenizer tokenizer = new ArgumentTokenizer(arguments);
+            double arg1 = ArgumentTokenizer.getDouble(ev.evaluate(tokenizer.nextToken()));
+            double arg2 = ArgumentTokenizer.getDouble(ev.evaluate(tokenizer.nextToken()));
+            return Double.valueOf(Math.min(arg1, arg2));
+        } catch (Exception exception) {
+            throw new EvaluationException(INVALID_ARGUMENTS, exception);
+        }
+    }
 }

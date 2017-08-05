@@ -18,31 +18,31 @@ import gnu.trove.stack.array.TIntArrayStack;
 
 /** Provides temporary storage when loading an object from XML. */
 public class XmlParserContext extends HashMap<String, Object> {
-	private XmlParser	mParser;
-	private TIntStack	mVersionStack	= new TIntArrayStack();
+    private XmlParser mParser;
+    private TIntStack mVersionStack = new TIntArrayStack();
 
-	/** @param parser The {@link XmlParser} being used. */
-	public XmlParserContext(XmlParser parser) {
-		mParser = parser;
-	}
+    /** @param parser The {@link XmlParser} being used. */
+    public XmlParserContext(XmlParser parser) {
+        mParser = parser;
+    }
 
-	/** @return The {@link XmlParser} being used. */
-	public XmlParser getParser() {
-		return mParser;
-	}
+    /** @return The {@link XmlParser} being used. */
+    public XmlParser getParser() {
+        return mParser;
+    }
 
-	/** @return The current version on the stack. */
-	public int getVersion() {
-		return mVersionStack.peek();
-	}
+    /** @return The current version on the stack. */
+    public int getVersion() {
+        return mVersionStack.peek();
+    }
 
-	/** @param version The version to push onto the stack. */
-	public void pushVersion(int version) {
-		mVersionStack.push(version);
-	}
+    /** @param version The version to push onto the stack. */
+    public void pushVersion(int version) {
+        mVersionStack.push(version);
+    }
 
-	/** Removes the current version from the stack, restoring whatever was before it. */
-	public void popVersion() {
-		mVersionStack.pop();
-	}
+    /** Removes the current version from the stack, restoring whatever was before it. */
+    public void popVersion() {
+        mVersionStack.pop();
+    }
 }

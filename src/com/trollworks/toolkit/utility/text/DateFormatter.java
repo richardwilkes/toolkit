@@ -19,26 +19,26 @@ import javax.swing.JFormattedTextField;
 
 /** Provides date field conversion. */
 public class DateFormatter extends JFormattedTextField.AbstractFormatter {
-	private int mType;
+    private int mType;
 
-	/**
-	 * Creates a new {@link DateFormatter}.
-	 *
-	 * @param type The type of date format to use, one of {@link DateFormat#SHORT},
-	 *            {@link DateFormat#MEDIUM}, {@link DateFormat#LONG}, or {@link DateFormat#FULL}.
-	 */
-	public DateFormatter(int type) {
-		mType = type;
-	}
+    /**
+     * Creates a new {@link DateFormatter}.
+     *
+     * @param type The type of date format to use, one of {@link DateFormat#SHORT},
+     *            {@link DateFormat#MEDIUM}, {@link DateFormat#LONG}, or {@link DateFormat#FULL}.
+     */
+    public DateFormatter(int type) {
+        mType = type;
+    }
 
-	@Override
-	public Object stringToValue(String text) throws ParseException {
-		return new Long(Numbers.extractDate(text));
-	}
+    @Override
+    public Object stringToValue(String text) throws ParseException {
+        return new Long(Numbers.extractDate(text));
+    }
 
-	@Override
-	public String valueToString(Object value) throws ParseException {
-		Date date = new Date(((Long) value).longValue());
-		return DateFormat.getDateInstance(mType).format(date);
-	}
+    @Override
+    public String valueToString(Object value) throws ParseException {
+        Date date = new Date(((Long) value).longValue());
+        return DateFormat.getDateInstance(mType).format(date);
+    }
 }

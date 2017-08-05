@@ -20,37 +20,37 @@ import java.lang.reflect.Field;
 import javax.xml.stream.XMLStreamException;
 
 public class XmlPrimitiveShortHelper implements XmlObjectHelper {
-	public static final XmlPrimitiveShortHelper SINGLETON = new XmlPrimitiveShortHelper();
+    public static final XmlPrimitiveShortHelper SINGLETON = new XmlPrimitiveShortHelper();
 
-	private XmlPrimitiveShortHelper() {
-	}
+    private XmlPrimitiveShortHelper() {
+    }
 
-	@Override
-	public boolean canHandleClass(Class<?> clazz) {
-		return short.class == clazz;
-	}
+    @Override
+    public boolean canHandleClass(Class<?> clazz) {
+        return short.class == clazz;
+    }
 
-	@Override
-	public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		short value = field.getShort(obj);
-		XmlDefaultShort def = field.getAnnotation(XmlDefaultShort.class);
-		if (def != null) {
-			xml.addAttributeNot(name, value, def.value());
-		} else {
-			xml.addAttribute(name, value);
-		}
-	}
+    @Override
+    public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        short value = field.getShort(obj);
+        XmlDefaultShort def = field.getAnnotation(XmlDefaultShort.class);
+        if (def != null) {
+            xml.addAttributeNot(name, value, def.value());
+        } else {
+            xml.addAttribute(name, value);
+        }
+    }
 
-	@Override
-	public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		XmlDefaultShort def = field.getAnnotation(XmlDefaultShort.class);
-		field.setShort(obj, (short) context.getParser().getIntegerAttribute(name, def != null ? def.value() : 0));
-	}
+    @Override
+    public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        XmlDefaultShort def = field.getAnnotation(XmlDefaultShort.class);
+        field.setShort(obj, (short) context.getParser().getIntegerAttribute(name, def != null ? def.value() : 0));
+    }
 
-	@Override
-	public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
-		xml.startTag(tag);
-		xml.addText(obj.toString());
-		xml.endTag();
-	}
+    @Override
+    public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+        xml.startTag(tag);
+        xml.addText(obj.toString());
+        xml.endTag();
+    }
 }

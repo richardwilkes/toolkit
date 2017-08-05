@@ -18,76 +18,76 @@ import javax.print.attribute.standard.PrintQuality;
 
 /** Constants representing the various print quality possibilities. */
 public enum Quality {
-	/** Maps to {@link PrintQuality#HIGH}. */
-	HIGH {
-		@Override
-		public PrintQuality getPrintQuality() {
-			return PrintQuality.HIGH;
-		}
+    /** Maps to {@link PrintQuality#HIGH}. */
+    HIGH {
+        @Override
+        public PrintQuality getPrintQuality() {
+            return PrintQuality.HIGH;
+        }
 
-		@Override
-		public String toString() {
-			return HIGH_TITLE;
-		}
-	},
-	/** Maps to {@link PrintQuality#NORMAL}. */
-	NORMAL {
-		@Override
-		public PrintQuality getPrintQuality() {
-			return PrintQuality.NORMAL;
-		}
+        @Override
+        public String toString() {
+            return HIGH_TITLE;
+        }
+    },
+    /** Maps to {@link PrintQuality#NORMAL}. */
+    NORMAL {
+        @Override
+        public PrintQuality getPrintQuality() {
+            return PrintQuality.NORMAL;
+        }
 
-		@Override
-		public String toString() {
-			return NORMAL_TITLE;
-		}
-	},
-	/** Maps to {@link PrintQuality#DRAFT}. */
-	DRAFT {
-		@Override
-		public PrintQuality getPrintQuality() {
-			return PrintQuality.DRAFT;
-		}
+        @Override
+        public String toString() {
+            return NORMAL_TITLE;
+        }
+    },
+    /** Maps to {@link PrintQuality#DRAFT}. */
+    DRAFT {
+        @Override
+        public PrintQuality getPrintQuality() {
+            return PrintQuality.DRAFT;
+        }
 
-		@Override
-		public String toString() {
-			return DRAFT_TITLE;
-		}
-	};
+        @Override
+        public String toString() {
+            return DRAFT_TITLE;
+        }
+    };
 
-	@Localize("High")
-	@Localize(locale = "ru", value = "Высокий")
-	@Localize(locale = "de", value = "Hoch")
-	@Localize(locale = "es", value = "Alta")
-	static String	HIGH_TITLE;
-	@Localize("Normal")
-	@Localize(locale = "ru", value = "Обычный")
-	@Localize(locale = "de", value = "Normal")
-	@Localize(locale = "es", value = "Normal")
-	static String	NORMAL_TITLE;
-	@Localize("Draft")
-	@Localize(locale = "ru", value = "Черновик")
-	@Localize(locale = "de", value = "Entwurf")
-	@Localize(locale = "es", value = "Borrador")
-	static String	DRAFT_TITLE;
+    @Localize("High")
+    @Localize(locale = "ru", value = "Высокий")
+    @Localize(locale = "de", value = "Hoch")
+    @Localize(locale = "es", value = "Alta")
+    static String HIGH_TITLE;
+    @Localize("Normal")
+    @Localize(locale = "ru", value = "Обычный")
+    @Localize(locale = "de", value = "Normal")
+    @Localize(locale = "es", value = "Normal")
+    static String NORMAL_TITLE;
+    @Localize("Draft")
+    @Localize(locale = "ru", value = "Черновик")
+    @Localize(locale = "de", value = "Entwurf")
+    @Localize(locale = "es", value = "Borrador")
+    static String DRAFT_TITLE;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** @return The print quality attribute. */
-	public abstract PrintQuality getPrintQuality();
+    /** @return The print quality attribute. */
+    public abstract PrintQuality getPrintQuality();
 
-	/**
-	 * @param sides The {@link PrintQuality} to load from.
-	 * @return The sides.
-	 */
-	public static final Quality get(PrintQuality sides) {
-		for (Quality one : values()) {
-			if (one.getPrintQuality() == sides) {
-				return one;
-			}
-		}
-		return NORMAL;
-	}
+    /**
+     * @param sides The {@link PrintQuality} to load from.
+     * @return The sides.
+     */
+    public static final Quality get(PrintQuality sides) {
+        for (Quality one : values()) {
+            if (one.getPrintQuality() == sides) {
+                return one;
+            }
+        }
+        return NORMAL;
+    }
 }

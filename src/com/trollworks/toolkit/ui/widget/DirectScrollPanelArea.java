@@ -15,30 +15,30 @@ import java.awt.Point;
 
 /** The possible {@link DirectScrollPanel} areas for mouse tracking. */
 public enum DirectScrollPanelArea {
-	/** In the content area. */
-	CONTENT {
-		@Override
-		public void convertPoint(DirectScrollPanel owner, Point where) {
-			owner.toContentView(where);
-		}
-	},
-	/** In the header area. */
-	HEADER {
-		@Override
-		public void convertPoint(DirectScrollPanel owner, Point where) {
-			owner.toHeaderView(where);
-		}
-	},
-	/** Outside any relevant areas. */
-	NONE;
+    /** In the content area. */
+    CONTENT {
+        @Override
+        public void convertPoint(DirectScrollPanel owner, Point where) {
+            owner.toContentView(where);
+        }
+    },
+    /** In the header area. */
+    HEADER {
+        @Override
+        public void convertPoint(DirectScrollPanel owner, Point where) {
+            owner.toHeaderView(where);
+        }
+    },
+    /** Outside any relevant areas. */
+    NONE;
 
-	/**
-	 * Adjusts the coordinates of the {@link Point} for the {@link DirectScrollPanelArea}.
-	 *
-	 * @param owner The owning {@link DirectScrollPanel}.
-	 * @param where The {@link Point} to convert.
-	 */
-	public void convertPoint(DirectScrollPanel owner, Point where) {
-		// Does nothing by default.
-	}
+    /**
+     * Adjusts the coordinates of the {@link Point} for the {@link DirectScrollPanelArea}.
+     *
+     * @param owner The owning {@link DirectScrollPanel}.
+     * @param where The {@link Point} to convert.
+     */
+    public void convertPoint(DirectScrollPanel owner, Point where) {
+        // Does nothing by default.
+    }
 }

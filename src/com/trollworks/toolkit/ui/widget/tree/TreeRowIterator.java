@@ -19,73 +19,73 @@ import java.util.NoSuchElementException;
 
 /** Iterates through all {@link TreeRow}s. */
 public class TreeRowIterator implements Iterator<TreeRow>, Iterable<TreeRow> {
-	private List<TreeRow>	mRows;
-	private TreeRowIterator	mIterator;
-	private int				mIndex;
+    private List<TreeRow>   mRows;
+    private TreeRowIterator mIterator;
+    private int             mIndex;
 
-	/**
-	 * Creates a new {@link TreeRowIterator}.
-	 *
-	 * @param row The {@link TreeRow} to start iterating over.
-	 */
-	public TreeRowIterator(TreeRow row) {
-		mRows = new ArrayList<>();
-		mRows.add(row);
-	}
+    /**
+     * Creates a new {@link TreeRowIterator}.
+     *
+     * @param row The {@link TreeRow} to start iterating over.
+     */
+    public TreeRowIterator(TreeRow row) {
+        mRows = new ArrayList<>();
+        mRows.add(row);
+    }
 
-	/**
-	 * Creates a new {@link TreeRowIterator}.
-	 *
-	 * @param rows The {@link TreeRow}s to iterator over.
-	 */
-	public TreeRowIterator(TreeRow... rows) {
-		mRows = Arrays.asList(rows);
-	}
+    /**
+     * Creates a new {@link TreeRowIterator}.
+     *
+     * @param rows The {@link TreeRow}s to iterator over.
+     */
+    public TreeRowIterator(TreeRow... rows) {
+        mRows = Arrays.asList(rows);
+    }
 
-	/**
-	 * Creates a new {@link TreeRowIterator}.
-	 *
-	 * @param rows The {@link TreeRow}s to iterator over.
-	 */
-	public TreeRowIterator(List<TreeRow> rows) {
-		mRows = rows;
-	}
+    /**
+     * Creates a new {@link TreeRowIterator}.
+     *
+     * @param rows The {@link TreeRow}s to iterator over.
+     */
+    public TreeRowIterator(List<TreeRow> rows) {
+        mRows = rows;
+    }
 
-	@Override
-	public Iterator<TreeRow> iterator() {
-		return this;
-	}
+    @Override
+    public Iterator<TreeRow> iterator() {
+        return this;
+    }
 
-	@Override
-	public boolean hasNext() {
-		boolean hasNext = mIterator != null && mIterator.hasNext();
-		if (!hasNext) {
-			mIterator = null;
-			hasNext = mIndex < mRows.size();
-		}
-		return hasNext;
-	}
+    @Override
+    public boolean hasNext() {
+        boolean hasNext = mIterator != null && mIterator.hasNext();
+        if (!hasNext) {
+            mIterator = null;
+            hasNext = mIndex < mRows.size();
+        }
+        return hasNext;
+    }
 
-	@Override
-	public TreeRow next() {
-		if (hasNext()) {
-			if (mIterator == null) {
-				TreeRow row = mRows.get(mIndex++);
-				if (row instanceof TreeContainerRow) {
-					TreeContainerRow containerRow = (TreeContainerRow) row;
-					if (containerRow.getChildCount() > 0) {
-						mIterator = new TreeRowIterator(containerRow.getChildren());
-					}
-				}
-				return row;
-			}
-			return mIterator.next();
-		}
-		throw new NoSuchElementException();
-	}
+    @Override
+    public TreeRow next() {
+        if (hasNext()) {
+            if (mIterator == null) {
+                TreeRow row = mRows.get(mIndex++);
+                if (row instanceof TreeContainerRow) {
+                    TreeContainerRow containerRow = (TreeContainerRow) row;
+                    if (containerRow.getChildCount() > 0) {
+                        mIterator = new TreeRowIterator(containerRow.getChildren());
+                    }
+                }
+                return row;
+            }
+            return mIterator.next();
+        }
+        throw new NoSuchElementException();
+    }
 
-	@Override
-	public void remove() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 }

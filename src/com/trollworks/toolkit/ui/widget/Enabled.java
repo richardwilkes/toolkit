@@ -12,5 +12,5 @@
 package com.trollworks.toolkit.ui.widget;
 
 public interface Enabled {
-	boolean isEnabled();
+    boolean isEnabled();
 }

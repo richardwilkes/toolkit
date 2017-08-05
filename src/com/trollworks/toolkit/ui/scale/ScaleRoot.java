@@ -13,9 +13,9 @@ package com.trollworks.toolkit.ui.scale;
 
 /** The root of a scaled area. */
 public interface ScaleRoot {
-	/** @return The scale. */
-	Scale getScale();
+    /** @return The scale. */
+    Scale getScale();
 
-	/** @param scale The scale to use. */
-	void setScale(Scale scale);
+    /** @param scale The scale to use. */
+    void setScale(Scale scale);
 }

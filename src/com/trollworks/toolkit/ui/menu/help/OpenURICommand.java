@@ -22,47 +22,47 @@ import java.net.URISyntaxException;
 
 /** A command that will open a specific URI in the preferred browser. */
 public class OpenURICommand extends Command {
-	private URI mURI;
+    private URI mURI;
 
-	/**
-	 * Creates a new {@link OpenURICommand}.
-	 *
-	 * @param title The title to use.
-	 * @param uri The URI to open.
-	 */
-	public OpenURICommand(String title, URI uri) {
-		super(title, "OpenURL[" + uri + "]"); //$NON-NLS-1$ //$NON-NLS-2$
-		mURI = uri;
-	}
+    /**
+     * Creates a new {@link OpenURICommand}.
+     *
+     * @param title The title to use.
+     * @param uri The URI to open.
+     */
+    public OpenURICommand(String title, URI uri) {
+        super(title, "OpenURL[" + uri + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+        mURI = uri;
+    }
 
-	/**
-	 * Creates a new {@link OpenURICommand}.
-	 *
-	 * @param title The title to use.
-	 * @param uri The URI to open.
-	 */
-	public OpenURICommand(String title, String uri) {
-		super(title, "OpenURL[" + uri + "]"); //$NON-NLS-1$ //$NON-NLS-2$
-		try {
-			mURI = new URI(uri);
-		} catch (URISyntaxException exception) {
-			exception.printStackTrace();
-		}
-	}
+    /**
+     * Creates a new {@link OpenURICommand}.
+     *
+     * @param title The title to use.
+     * @param uri The URI to open.
+     */
+    public OpenURICommand(String title, String uri) {
+        super(title, "OpenURL[" + uri + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+        try {
+            mURI = new URI(uri);
+        } catch (URISyntaxException exception) {
+            exception.printStackTrace();
+        }
+    }
 
-	@Override
-	public void adjust() {
-		setEnabled(mURI != null && Desktop.isDesktopSupported());
-	}
+    @Override
+    public void adjust() {
+        setEnabled(mURI != null && Desktop.isDesktopSupported());
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		if (mURI != null) {
-			try {
-				Desktop.getDesktop().browse(mURI);
-			} catch (IOException exception) {
-				WindowUtils.showError(null, exception.getMessage());
-			}
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        if (mURI != null) {
+            try {
+                Desktop.getDesktop().browse(mURI);
+            } catch (IOException exception) {
+                WindowUtils.showError(null, exception.getMessage());
+            }
+        }
+    }
 }

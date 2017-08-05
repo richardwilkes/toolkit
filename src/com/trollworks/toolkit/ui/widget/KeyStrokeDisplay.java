@@ -31,77 +31,77 @@ import javax.swing.border.CompoundBorder;
 
 /** Displays and captures keystrokes typed. */
 public class KeyStrokeDisplay extends JLabel implements KeyListener {
-	private KeyStroke mKeyStroke;
+    private KeyStroke mKeyStroke;
 
-	/**
-	 * Creates a new {@link KeyStrokeDisplay}.
-	 *
-	 * @param ks The {@link KeyStroke} to start with.
-	 */
-	public KeyStrokeDisplay(KeyStroke ks) {
-		super(getKeyStrokeDisplay(KeyStroke.getKeyStroke('Z', InputEvent.META_MASK | InputEvent.ALT_MASK | InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)), SwingConstants.CENTER);
-		setOpaque(true);
-		setBackground(Color.WHITE);
-		setBorder(new CompoundBorder(new LineBorder(), new EmptyBorder(2, 5, 2, 5)));
-		addKeyListener(this);
-		mKeyStroke = ks;
-		UIUtilities.setOnlySize(this, getPreferredSize());
-		setText(getKeyStrokeDisplay(mKeyStroke));
-	}
+    /**
+     * Creates a new {@link KeyStrokeDisplay}.
+     *
+     * @param ks The {@link KeyStroke} to start with.
+     */
+    public KeyStrokeDisplay(KeyStroke ks) {
+        super(getKeyStrokeDisplay(KeyStroke.getKeyStroke('Z', InputEvent.META_MASK | InputEvent.ALT_MASK | InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)), SwingConstants.CENTER);
+        setOpaque(true);
+        setBackground(Color.WHITE);
+        setBorder(new CompoundBorder(new LineBorder(), new EmptyBorder(2, 5, 2, 5)));
+        addKeyListener(this);
+        mKeyStroke = ks;
+        UIUtilities.setOnlySize(this, getPreferredSize());
+        setText(getKeyStrokeDisplay(mKeyStroke));
+    }
 
-	@Override
-	public void keyPressed(KeyEvent event) {
-		KeyStroke ks = KeyStroke.getKeyStrokeForEvent(event);
-		int code = ks.getKeyCode();
-		if (code != VK_SHIFT && code != VK_CONTROL && code != VK_META && code != VK_ALT && code != VK_CAPS_LOCK && code != VK_ESCAPE) {
-			mKeyStroke = ks;
-			setText(getKeyStrokeDisplay(mKeyStroke));
-		}
-	}
+    @Override
+    public void keyPressed(KeyEvent event) {
+        KeyStroke ks = KeyStroke.getKeyStrokeForEvent(event);
+        int code = ks.getKeyCode();
+        if (code != VK_SHIFT && code != VK_CONTROL && code != VK_META && code != VK_ALT && code != VK_CAPS_LOCK && code != VK_ESCAPE) {
+            mKeyStroke = ks;
+            setText(getKeyStrokeDisplay(mKeyStroke));
+        }
+    }
 
-	@Override
-	public void keyReleased(KeyEvent event) {
-		// Not used.
-	}
+    @Override
+    public void keyReleased(KeyEvent event) {
+        // Not used.
+    }
 
-	@Override
-	public void keyTyped(KeyEvent event) {
-		// Not used.
-	}
+    @Override
+    public void keyTyped(KeyEvent event) {
+        // Not used.
+    }
 
-	/** @return The {@link KeyStroke}. */
-	public KeyStroke getKeyStroke() {
-		return mKeyStroke;
-	}
+    /** @return The {@link KeyStroke}. */
+    public KeyStroke getKeyStroke() {
+        return mKeyStroke;
+    }
 
-	/**
-	 * @param ks The {@link KeyStroke} to use.
-	 * @return The text that represents the {@link KeyStroke}.
-	 */
-	public static String getKeyStrokeDisplay(KeyStroke ks) {
-		StringBuilder buffer = new StringBuilder();
-		if (ks != null) {
-			int modifiers = ks.getModifiers();
-			if (modifiers > 0) {
-				String modifierText = KeyEvent.getKeyModifiersText(modifiers);
-				if (Platform.isMacintosh()) {
-					buffer.append(modifierText.replaceAll("\\+", "")); //$NON-NLS-1$ //$NON-NLS-2$
-				} else {
-					buffer.append(modifierText);
-					String delimiter = UIManager.getString("MenuItem.acceleratorDelimiter"); //$NON-NLS-1$
-					if (delimiter == null) {
-						delimiter = "+"; //$NON-NLS-1$
-					}
-					buffer.append(delimiter);
-				}
-			}
-			int keyCode = ks.getKeyCode();
-			if (keyCode != 0) {
-				buffer.append(KeyEvent.getKeyText(keyCode));
-			} else {
-				buffer.append(ks.getKeyChar());
-			}
-		}
-		return buffer.toString();
-	}
+    /**
+     * @param ks The {@link KeyStroke} to use.
+     * @return The text that represents the {@link KeyStroke}.
+     */
+    public static String getKeyStrokeDisplay(KeyStroke ks) {
+        StringBuilder buffer = new StringBuilder();
+        if (ks != null) {
+            int modifiers = ks.getModifiers();
+            if (modifiers > 0) {
+                String modifierText = KeyEvent.getKeyModifiersText(modifiers);
+                if (Platform.isMacintosh()) {
+                    buffer.append(modifierText.replaceAll("\\+", "")); //$NON-NLS-1$ //$NON-NLS-2$
+                } else {
+                    buffer.append(modifierText);
+                    String delimiter = UIManager.getString("MenuItem.acceleratorDelimiter"); //$NON-NLS-1$
+                    if (delimiter == null) {
+                        delimiter = "+"; //$NON-NLS-1$
+                    }
+                    buffer.append(delimiter);
+                }
+            }
+            int keyCode = ks.getKeyCode();
+            if (keyCode != 0) {
+                buffer.append(KeyEvent.getKeyText(keyCode));
+            } else {
+                buffer.append(ks.getKeyChar());
+            }
+        }
+        return buffer.toString();
+    }
 }

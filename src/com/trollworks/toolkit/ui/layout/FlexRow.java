@@ -19,92 +19,92 @@ import java.util.ArrayList;
 
 /** A row within a {@link FlexLayout}. */
 public class FlexRow extends FlexContainer {
-	@Override
-	protected void layoutSelf(Scale scale, Rectangle bounds) {
-		int count = getChildCount();
-		int hGap = scale.scale(getHorizontalGap());
-		int[] gaps = new int[count > 0 ? count - 1 : 0];
-		for (int i = 0; i < gaps.length; i++) {
-			gaps[i] = hGap;
-		}
-		int width = hGap * (count > 0 ? count - 1 : 0);
-		Dimension[] minSizes = getChildSizes(scale, LayoutSize.MINIMUM);
-		Dimension[] prefSizes = getChildSizes(scale, LayoutSize.PREFERRED);
-		Dimension[] maxSizes = getChildSizes(scale, LayoutSize.MAXIMUM);
-		for (int i = 0; i < count; i++) {
-			width += prefSizes[i].width;
-		}
-		int extra = bounds.width - width;
-		if (extra != 0) {
-			int[] values = new int[count];
-			int[] limits = new int[count];
-			for (int i = 0; i < count; i++) {
-				values[i] = prefSizes[i].width;
-				limits[i] = extra > 0 ? maxSizes[i].width : minSizes[i].width;
-			}
-			extra = distribute(extra, values, limits);
-			for (int i = 0; i < count; i++) {
-				prefSizes[i].width = values[i];
-			}
-			if (extra > 0 && getFillHorizontal() && gaps.length > 0) {
-				int amt = extra / gaps.length;
-				for (int i = 0; i < gaps.length; i++) {
-					gaps[i] += amt;
-				}
-				extra -= amt * gaps.length;
-				for (int i = 0; i < extra; i++) {
-					gaps[i]++;
-				}
-				extra = 0;
-			}
-		}
-		ArrayList<FlexCell> children = getChildren();
-		Rectangle[] childBounds = new Rectangle[count];
-		for (int i = 0; i < count; i++) {
-			childBounds[i] = new Rectangle(prefSizes[i]);
-			if (getFillVertical()) {
-				childBounds[i].height = Math.min(maxSizes[i].height, bounds.height);
-			}
-			switch (children.get(i).getVerticalAlignment()) {
-				case LEFT_TOP:
-				default:
-					childBounds[i].y = bounds.y;
-					break;
-				case CENTER:
-					childBounds[i].y = bounds.y + (bounds.height - childBounds[i].height) / 2;
-					break;
-				case RIGHT_BOTTOM:
-					childBounds[i].y = bounds.y + bounds.height - childBounds[i].height;
-					break;
-			}
-		}
-		int x = bounds.x;
-		Alignment hAlign = getHorizontalAlignment();
-		if (hAlign == Alignment.CENTER) {
-			x += extra / 2;
-		} else if (hAlign == Alignment.RIGHT_BOTTOM) {
-			x += extra;
-		}
-		for (int i = 0; i < count; i++) {
-			childBounds[i].x = x;
-			if (i < count - 1) {
-				x += prefSizes[i].width;
-				x += gaps[i];
-			}
-		}
-		layoutChildren(scale, childBounds);
-	}
+    @Override
+    protected void layoutSelf(Scale scale, Rectangle bounds) {
+        int count = getChildCount();
+        int hGap = scale.scale(getHorizontalGap());
+        int[] gaps = new int[count > 0 ? count - 1 : 0];
+        for (int i = 0; i < gaps.length; i++) {
+            gaps[i] = hGap;
+        }
+        int width = hGap * (count > 0 ? count - 1 : 0);
+        Dimension[] minSizes = getChildSizes(scale, LayoutSize.MINIMUM);
+        Dimension[] prefSizes = getChildSizes(scale, LayoutSize.PREFERRED);
+        Dimension[] maxSizes = getChildSizes(scale, LayoutSize.MAXIMUM);
+        for (int i = 0; i < count; i++) {
+            width += prefSizes[i].width;
+        }
+        int extra = bounds.width - width;
+        if (extra != 0) {
+            int[] values = new int[count];
+            int[] limits = new int[count];
+            for (int i = 0; i < count; i++) {
+                values[i] = prefSizes[i].width;
+                limits[i] = extra > 0 ? maxSizes[i].width : minSizes[i].width;
+            }
+            extra = distribute(extra, values, limits);
+            for (int i = 0; i < count; i++) {
+                prefSizes[i].width = values[i];
+            }
+            if (extra > 0 && getFillHorizontal() && gaps.length > 0) {
+                int amt = extra / gaps.length;
+                for (int i = 0; i < gaps.length; i++) {
+                    gaps[i] += amt;
+                }
+                extra -= amt * gaps.length;
+                for (int i = 0; i < extra; i++) {
+                    gaps[i]++;
+                }
+                extra = 0;
+            }
+        }
+        ArrayList<FlexCell> children = getChildren();
+        Rectangle[] childBounds = new Rectangle[count];
+        for (int i = 0; i < count; i++) {
+            childBounds[i] = new Rectangle(prefSizes[i]);
+            if (getFillVertical()) {
+                childBounds[i].height = Math.min(maxSizes[i].height, bounds.height);
+            }
+            switch (children.get(i).getVerticalAlignment()) {
+                case LEFT_TOP:
+                default:
+                    childBounds[i].y = bounds.y;
+                    break;
+                case CENTER:
+                    childBounds[i].y = bounds.y + (bounds.height - childBounds[i].height) / 2;
+                    break;
+                case RIGHT_BOTTOM:
+                    childBounds[i].y = bounds.y + bounds.height - childBounds[i].height;
+                    break;
+            }
+        }
+        int x = bounds.x;
+        Alignment hAlign = getHorizontalAlignment();
+        if (hAlign == Alignment.CENTER) {
+            x += extra / 2;
+        } else if (hAlign == Alignment.RIGHT_BOTTOM) {
+            x += extra;
+        }
+        for (int i = 0; i < count; i++) {
+            childBounds[i].x = x;
+            if (i < count - 1) {
+                x += prefSizes[i].width;
+                x += gaps[i];
+            }
+        }
+        layoutChildren(scale, childBounds);
+    }
 
-	@Override
-	protected Dimension getSizeSelf(Scale scale, LayoutSize type) {
-		Dimension[] sizes = getChildSizes(scale, type);
-		Dimension size = new Dimension(scale.scale(getHorizontalGap()) * (sizes.length > 0 ? sizes.length - 1 : 0), 0);
-		for (Dimension one : sizes) {
-			size.width += one.width;
-			if (one.height > size.height) {
-				size.height = one.height;
-			}
-		}
-		return size;
-	}
+    @Override
+    protected Dimension getSizeSelf(Scale scale, LayoutSize type) {
+        Dimension[] sizes = getChildSizes(scale, type);
+        Dimension size = new Dimension(scale.scale(getHorizontalGap()) * (sizes.length > 0 ? sizes.length - 1 : 0), 0);
+        for (Dimension one : sizes) {
+            size.width += one.width;
+            if (one.height > size.height) {
+                size.height = one.height;
+            }
+        }
+        return size;
+    }
 }

@@ -15,7 +15,7 @@ import com.trollworks.toolkit.expression.EvaluationException;
 import com.trollworks.toolkit.expression.Evaluator;
 
 public interface ExpressionFunction {
-	String getName();
+    String getName();
 
-	Object execute(Evaluator evaluator, String arguments) throws EvaluationException;
+    Object execute(Evaluator evaluator, String arguments) throws EvaluationException;
 }

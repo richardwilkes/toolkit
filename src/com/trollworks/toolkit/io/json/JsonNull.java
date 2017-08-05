@@ -13,25 +13,25 @@ package com.trollworks.toolkit.io.json;
 
 /** Represents a 'null' in JSON. */
 public final class JsonNull {
-	/** The singleton instance. */
-	public static final JsonNull INSTANCE = new JsonNull();
+    /** The singleton instance. */
+    public static final JsonNull INSTANCE = new JsonNull();
 
-	private JsonNull() {
-		// Singleton
-	}
+    private JsonNull() {
+        // Singleton
+    }
 
-	@Override
-	public final boolean equals(Object other) {
-		return other == null || other == this;
-	}
+    @Override
+    public final boolean equals(Object other) {
+        return other == null || other == this;
+    }
 
-	@Override
-	public final int hashCode() {
-		return super.hashCode();
-	}
+    @Override
+    public final int hashCode() {
+        return super.hashCode();
+    }
 
-	@Override
-	public final String toString() {
-		return "null"; //$NON-NLS-1$
-	}
+    @Override
+    public final String toString() {
+        return "null"; //$NON-NLS-1$
+    }
 }

@@ -13,9 +13,9 @@ package com.trollworks.toolkit.ui.widget.outline;
 
 /** The interface for row filters. */
 public interface RowFilter {
-	/**
-	 * @param row The {@link Row} to check.
-	 * @return Whether the {@link Row} should be filtered from display or not.
-	 */
-	boolean isRowFiltered(Row row);
+    /**
+     * @param row The {@link Row} to check.
+     * @return Whether the {@link Row} should be filtered from display or not.
+     */
+    boolean isRowFiltered(Row row);
 }

@@ -12,5 +12,5 @@
 package com.trollworks.toolkit.expression;
 
 public interface VariableResolver {
-	public String resolveVariable(String variableName);
+    public String resolveVariable(String variableName);
 }

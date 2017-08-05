@@ -16,9 +16,9 @@ package com.trollworks.toolkit.ui.menu.edit;
  * implement this interface.
  */
 public interface Deletable {
-	/** @return Whether the selection can be deleted. */
-	boolean canDeleteSelection();
+    /** @return Whether the selection can be deleted. */
+    boolean canDeleteSelection();
 
-	/** Called to delete the current selection. */
-	void deleteSelection();
+    /** Called to delete the current selection. */
+    void deleteSelection();
 }

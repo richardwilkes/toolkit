@@ -14,5 +14,5 @@ package com.trollworks.toolkit.ui.widget.tree.test;
 import com.trollworks.toolkit.ui.image.StdImage;
 
 public interface TreeRowWithIcon {
-	StdImage getIcon();
+    StdImage getIcon();
 }

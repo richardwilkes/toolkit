@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE, ElementType.FIELD })
 /** Marks classes and fields that correspond to an XML tag. */
 public @interface XmlTag {
-	/** @return The XML tag name. */
-	String value();
+    /** @return The XML tag name. */
+    String value();
 }

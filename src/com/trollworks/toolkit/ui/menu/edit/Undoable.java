@@ -18,6 +18,6 @@ import com.trollworks.toolkit.utility.undo.StdUndoManager;
  * processing must implement this interface.
  */
 public interface Undoable {
-	/** @return The {@link StdUndoManager} to use. */
-	StdUndoManager getUndoManager();
+    /** @return The {@link StdUndoManager} to use. */
+    StdUndoManager getUndoManager();
 }

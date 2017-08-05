@@ -15,96 +15,96 @@ import com.trollworks.toolkit.utility.text.Numbers;
 
 /** Provides various debugging utilities. */
 public final class Debug {
-	/** Controls whether we are in 'development mode' or not. */
-	public static final boolean DEV_MODE = false;
+    /** Controls whether we are in 'development mode' or not. */
+    public static final boolean DEV_MODE = false;
 
-	/**
-	 * Retrieves the specified key, looking first in the system properties and falling back to the
-	 * system environment if it is not set in the system properties.
-	 *
-	 * @param key The key to check.
-	 * @return The value of the specified key, or <code>null</code> if it has not been defined.
-	 */
-	public static final String getPropertyOrEnvironmentSetting(String key) {
-		String value = System.getProperty(key);
-		if (value == null) {
-			value = System.getenv(key);
-		}
-		return value;
-	}
+    /**
+     * Retrieves the specified key, looking first in the system properties and falling back to the
+     * system environment if it is not set in the system properties.
+     *
+     * @param key The key to check.
+     * @return The value of the specified key, or <code>null</code> if it has not been defined.
+     */
+    public static final String getPropertyOrEnvironmentSetting(String key) {
+        String value = System.getProperty(key);
+        if (value == null) {
+            value = System.getenv(key);
+        }
+        return value;
+    }
 
-	/**
-	 * Determines whether the specified key is set, looking first in the system properties and
-	 * falling back to the system environment if it is not set at all in the system properties.
-	 *
-	 * @param key The key to check.
-	 * @return <code>true</code> if the key is enabled.
-	 */
-	public static final boolean isKeySet(String key) {
-		return Numbers.extractBoolean(getPropertyOrEnvironmentSetting(key));
-	}
+    /**
+     * Determines whether the specified key is set, looking first in the system properties and
+     * falling back to the system environment if it is not set at all in the system properties.
+     *
+     * @param key The key to check.
+     * @return <code>true</code> if the key is enabled.
+     */
+    public static final boolean isKeySet(String key) {
+        return Numbers.extractBoolean(getPropertyOrEnvironmentSetting(key));
+    }
 
-	/**
-	 * Extracts the class name, message and stack trace from the specified {@link Throwable}. The
-	 * stack trace will be formatted such that Eclipse's console will make each node into a
-	 * hyperlink.
-	 *
-	 * @param throwable The {@link Throwable} to process.
-	 * @return The formatted {@link Throwable}.
-	 */
-	public static final String toString(Throwable throwable) {
-		StringBuilder buffer = new StringBuilder();
-		buffer.append(throwable.getClass().getSimpleName());
-		buffer.append(": "); //$NON-NLS-1$
-		buffer.append(throwable.getMessage());
-		buffer.append(": "); //$NON-NLS-1$
-		stackTrace(throwable, buffer);
-		return buffer.toString();
-	}
+    /**
+     * Extracts the class name, message and stack trace from the specified {@link Throwable}. The
+     * stack trace will be formatted such that Eclipse's console will make each node into a
+     * hyperlink.
+     *
+     * @param throwable The {@link Throwable} to process.
+     * @return The formatted {@link Throwable}.
+     */
+    public static final String toString(Throwable throwable) {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(throwable.getClass().getSimpleName());
+        buffer.append(": "); //$NON-NLS-1$
+        buffer.append(throwable.getMessage());
+        buffer.append(": "); //$NON-NLS-1$
+        stackTrace(throwable, buffer);
+        return buffer.toString();
+    }
 
-	/**
-	 * Extracts a stack trace for the calling site. The stack trace will be formatted such that
-	 * Eclipse's console will make each node into a hyperlink.
-	 *
-	 * @return The formatted stack trace.
-	 */
-	public static final String stackTrace() {
-		return stackTrace(new Exception(), 1, new StringBuilder()).toString();
-	}
+    /**
+     * Extracts a stack trace for the calling site. The stack trace will be formatted such that
+     * Eclipse's console will make each node into a hyperlink.
+     *
+     * @return The formatted stack trace.
+     */
+    public static final String stackTrace() {
+        return stackTrace(new Exception(), 1, new StringBuilder()).toString();
+    }
 
-	/**
-	 * Extracts a stack trace from the specified {@link Throwable}. The stack trace will be
-	 * formatted such that Eclipse's console will make each node into a hyperlink.
-	 *
-	 * @param throwable The {@link Throwable} to process.
-	 * @param buffer The buffer to store the result in.
-	 * @return The {@link StringBuilder} that was passed in.
-	 */
-	public static final StringBuilder stackTrace(Throwable throwable, StringBuilder buffer) {
-		return stackTrace(throwable, 0, buffer);
-	}
+    /**
+     * Extracts a stack trace from the specified {@link Throwable}. The stack trace will be
+     * formatted such that Eclipse's console will make each node into a hyperlink.
+     *
+     * @param throwable The {@link Throwable} to process.
+     * @param buffer The buffer to store the result in.
+     * @return The {@link StringBuilder} that was passed in.
+     */
+    public static final StringBuilder stackTrace(Throwable throwable, StringBuilder buffer) {
+        return stackTrace(throwable, 0, buffer);
+    }
 
-	/**
-	 * Extracts a stack trace from the specified {@link Throwable}. The stack trace will be
-	 * formatted such that Eclipse's console will make each node into a hyperlink.
-	 *
-	 * @param throwable The {@link Throwable} to process.
-	 * @param startAt The point in the stack to start processing.
-	 * @param buffer The buffer to store the result in.
-	 * @return The {@link StringBuilder} that was passed in.
-	 */
-	public static final StringBuilder stackTrace(Throwable throwable, int startAt, StringBuilder buffer) {
-		StackTraceElement[] stackTrace = throwable.getStackTrace();
-		for (int i = startAt; i < stackTrace.length; i++) {
-			if (i > startAt) {
-				buffer.append(" < "); //$NON-NLS-1$
-			}
-			buffer.append('(');
-			buffer.append(stackTrace[i].getFileName());
-			buffer.append(':');
-			buffer.append(stackTrace[i].getLineNumber());
-			buffer.append(')');
-		}
-		return buffer;
-	}
+    /**
+     * Extracts a stack trace from the specified {@link Throwable}. The stack trace will be
+     * formatted such that Eclipse's console will make each node into a hyperlink.
+     *
+     * @param throwable The {@link Throwable} to process.
+     * @param startAt The point in the stack to start processing.
+     * @param buffer The buffer to store the result in.
+     * @return The {@link StringBuilder} that was passed in.
+     */
+    public static final StringBuilder stackTrace(Throwable throwable, int startAt, StringBuilder buffer) {
+        StackTraceElement[] stackTrace = throwable.getStackTrace();
+        for (int i = startAt; i < stackTrace.length; i++) {
+            if (i > startAt) {
+                buffer.append(" < "); //$NON-NLS-1$
+            }
+            buffer.append('(');
+            buffer.append(stackTrace[i].getFileName());
+            buffer.append(':');
+            buffer.append(stackTrace[i].getLineNumber());
+            buffer.append(')');
+        }
+        return buffer;
+    }
 }

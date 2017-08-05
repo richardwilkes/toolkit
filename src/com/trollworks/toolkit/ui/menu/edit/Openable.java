@@ -16,9 +16,9 @@ package com.trollworks.toolkit.ui.menu.edit;
  * must implement this interface.
  */
 public interface Openable {
-	/** @return Whether the selection can be opened. */
-	boolean canOpenSelection();
+    /** @return Whether the selection can be opened. */
+    boolean canOpenSelection();
 
-	/** Called to open the current selection. */
-	void openSelection();
+    /** Called to open the current selection. */
+    void openSelection();
 }

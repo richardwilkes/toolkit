@@ -15,21 +15,21 @@ import com.trollworks.toolkit.expression.ArgumentTokenizer;
 import com.trollworks.toolkit.expression.EvaluationException;
 
 public class NotEqual extends Operator {
-	public NotEqual() {
-		super("!=", 3); //$NON-NLS-1$
-	}
+    public NotEqual() {
+        super("!=", 3); //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object evaluate(Object left, Object right) {
-		try {
-			return Double.valueOf(ArgumentTokenizer.getDouble(left) != ArgumentTokenizer.getDouble(right) ? 1 : 0);
-		} catch (Exception exception) {
-			return Double.valueOf(left.toString().equals(right.toString()) ? 0 : 1);
-		}
-	}
+    @Override
+    public final Object evaluate(Object left, Object right) {
+        try {
+            return Double.valueOf(ArgumentTokenizer.getDouble(left) != ArgumentTokenizer.getDouble(right) ? 1 : 0);
+        } catch (Exception exception) {
+            return Double.valueOf(left.toString().equals(right.toString()) ? 0 : 1);
+        }
+    }
 
-	@Override
-	public final Object evaluate(Object operand) throws EvaluationException {
-		return null;
-	}
+    @Override
+    public final Object evaluate(Object operand) throws EvaluationException {
+        return null;
+    }
 }

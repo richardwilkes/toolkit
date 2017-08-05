@@ -13,12 +13,12 @@ package com.trollworks.toolkit.ui.menu.edit;
 
 /** Objects which contain a search field should implement this method. */
 public interface JumpToSearchTarget {
-	/**
-	 * @return <code>true</code> if issuing the {@link #jumpToSearchField()} command will do
-	 *         anything.
-	 */
-	boolean isJumpToSearchAvailable();
+    /**
+     * @return <code>true</code> if issuing the {@link #jumpToSearchField()} command will do
+     *         anything.
+     */
+    boolean isJumpToSearchAvailable();
 
-	/** Cause the search field to become focused. */
-	void jumpToSearchField();
+    /** Cause the search field to become focused. */
+    void jumpToSearchField();
 }

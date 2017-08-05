@@ -17,45 +17,45 @@ import java.util.Set;
 
 /** Provides synchronization of an outline to its data. */
 public class OutlineSyncer implements Runnable {
-	private static final OutlineSyncer	INSTANCE	= new OutlineSyncer();
-	private static final Set<Outline>	OUTLINES	= new HashSet<>();
-	private static boolean				PENDING		= false;
+    private static final OutlineSyncer INSTANCE = new OutlineSyncer();
+    private static final Set<Outline>  OUTLINES = new HashSet<>();
+    private static boolean             PENDING  = false;
 
-	/**
-	 * @param outline The {@link Outline} to add to the set of outlines that need to be
-	 *            synchronized.
-	 */
-	public static final void add(Outline outline) {
-		synchronized (OUTLINES) {
-			OUTLINES.add(outline);
-			if (!PENDING) {
-				PENDING = true;
-				EventQueue.invokeLater(INSTANCE);
-			}
-		}
-	}
+    /**
+     * @param outline The {@link Outline} to add to the set of outlines that need to be
+     *            synchronized.
+     */
+    public static final void add(Outline outline) {
+        synchronized (OUTLINES) {
+            OUTLINES.add(outline);
+            if (!PENDING) {
+                PENDING = true;
+                EventQueue.invokeLater(INSTANCE);
+            }
+        }
+    }
 
-	/**
-	 * @param outline The {@link Outline} to remove from the set of outlines that need to be
-	 *            synchronized.
-	 */
-	public static final void remove(Outline outline) {
-		synchronized (OUTLINES) {
-			OUTLINES.remove(outline);
-		}
-	}
+    /**
+     * @param outline The {@link Outline} to remove from the set of outlines that need to be
+     *            synchronized.
+     */
+    public static final void remove(Outline outline) {
+        synchronized (OUTLINES) {
+            OUTLINES.remove(outline);
+        }
+    }
 
-	@Override
-	public void run() {
-		Set<Outline> outlines;
-		synchronized (OUTLINES) {
-			PENDING = false;
-			outlines = new HashSet<>(OUTLINES);
-			OUTLINES.clear();
-		}
-		for (Outline outline : outlines) {
-			outline.sizeColumnsToFit();
-			outline.repaint();
-		}
-	}
+    @Override
+    public void run() {
+        Set<Outline> outlines;
+        synchronized (OUTLINES) {
+            PENDING = false;
+            outlines = new HashSet<>(OUTLINES);
+            OUTLINES.clear();
+        }
+        for (Outline outline : outlines) {
+            outline.sizeColumnsToFit();
+            outline.repaint();
+        }
+    }
 }

@@ -16,10 +16,10 @@ import java.io.IOException;
 
 /** Creates a {@link FileProxy} for files of a specific {@link FileType}. */
 public interface FileProxyCreator {
-	/**
-	 * @param file The {@link File} to load data from.
-	 * @return The resulting {@link FileProxy}, which should have been made visible in the UI and
-	 *         brought to the foreground.
-	 */
-	FileProxy create(File file) throws IOException;
+    /**
+     * @param file The {@link File} to load data from.
+     * @return The resulting {@link FileProxy}, which should have been made visible in the UI and
+     *         brought to the foreground.
+     */
+    FileProxy create(File file) throws IOException;
 }

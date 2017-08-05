@@ -19,14 +19,14 @@ import javax.xml.stream.XMLStreamException;
  * Objects that wish to control how unmatched tags are handled should implement this interface.
  */
 public interface TagUnmatched {
-	/**
-	 * Called to process an XML sub-tag that had no matching fields marked with {@link XmlTag}.
-	 * Upon return from this method, the {@link XmlParser} should have been advanced past the
-	 * current tag's contents, either by calling {@link XmlParser#skip()} or appropriate parsing
-	 * of sub-tags.
-	 *
-	 * @param context The {@link XmlParserContext} for this object.
-	 * @param tag The tag name that will be processed.
-	 */
-	void xmlUnmatchedTag(XmlParserContext context, String tag) throws XMLStreamException;
+    /**
+     * Called to process an XML sub-tag that had no matching fields marked with {@link XmlTag}. Upon
+     * return from this method, the {@link XmlParser} should have been advanced past the current
+     * tag's contents, either by calling {@link XmlParser#skip()} or appropriate parsing of
+     * sub-tags.
+     *
+     * @param context The {@link XmlParserContext} for this object.
+     * @param tag The tag name that will be processed.
+     */
+    void xmlUnmatchedTag(XmlParserContext context, String tag) throws XMLStreamException;
 }

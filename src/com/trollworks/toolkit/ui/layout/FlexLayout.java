@@ -22,95 +22,95 @@ import java.awt.Rectangle;
 
 /** A flexible layout manager. */
 public class FlexLayout implements LayoutManager2 {
-	private FlexCell mRootCell;
+    private FlexCell mRootCell;
 
-	/** Creates a new {@link FlexLayout}. */
-	public FlexLayout() {
-		// Does nothing.
-	}
+    /** Creates a new {@link FlexLayout}. */
+    public FlexLayout() {
+        // Does nothing.
+    }
 
-	/**
-	 * Creates a new {@link FlexLayout}.
-	 *
-	 * @param rootCell The root cell to layout.
-	 */
-	public FlexLayout(FlexCell rootCell) {
-		mRootCell = rootCell;
-	}
+    /**
+     * Creates a new {@link FlexLayout}.
+     *
+     * @param rootCell The root cell to layout.
+     */
+    public FlexLayout(FlexCell rootCell) {
+        mRootCell = rootCell;
+    }
 
-	/** @return The root cell. */
-	public FlexCell getRootCell() {
-		return mRootCell;
-	}
+    /** @return The root cell. */
+    public FlexCell getRootCell() {
+        return mRootCell;
+    }
 
-	/** @param rootCell The value to set for the root cell. */
-	public void setRootCell(FlexCell rootCell) {
-		mRootCell = rootCell;
-	}
+    /** @param rootCell The value to set for the root cell. */
+    public void setRootCell(FlexCell rootCell) {
+        mRootCell = rootCell;
+    }
 
-	@Override
-	public void layoutContainer(Container target) {
-		if (mRootCell != null) {
-			Rectangle bounds = target.getBounds();
-			Insets insets = target.getInsets();
-			bounds.x = insets.left;
-			bounds.y = insets.top;
-			bounds.width -= insets.left + insets.right;
-			bounds.height -= insets.top + insets.bottom;
-			mRootCell.layout(Scale.get(target), bounds);
-		}
-	}
+    @Override
+    public void layoutContainer(Container target) {
+        if (mRootCell != null) {
+            Rectangle bounds = target.getBounds();
+            Insets insets = target.getInsets();
+            bounds.x = insets.left;
+            bounds.y = insets.top;
+            bounds.width -= insets.left + insets.right;
+            bounds.height -= insets.top + insets.bottom;
+            mRootCell.layout(Scale.get(target), bounds);
+        }
+    }
 
-	private Dimension getLayoutSize(Container target, LayoutSize sizeType) {
-		Insets insets = target.getInsets();
-		Dimension size = mRootCell != null ? mRootCell.getSize(Scale.get(target), sizeType) : new Dimension();
-		size.width += insets.left + insets.right;
-		size.height += insets.top + insets.bottom;
-		return size;
-	}
+    private Dimension getLayoutSize(Container target, LayoutSize sizeType) {
+        Insets insets = target.getInsets();
+        Dimension size = mRootCell != null ? mRootCell.getSize(Scale.get(target), sizeType) : new Dimension();
+        size.width += insets.left + insets.right;
+        size.height += insets.top + insets.bottom;
+        return size;
+    }
 
-	@Override
-	public Dimension minimumLayoutSize(Container target) {
-		return getLayoutSize(target, LayoutSize.MINIMUM);
-	}
+    @Override
+    public Dimension minimumLayoutSize(Container target) {
+        return getLayoutSize(target, LayoutSize.MINIMUM);
+    }
 
-	@Override
-	public Dimension preferredLayoutSize(Container target) {
-		return getLayoutSize(target, LayoutSize.PREFERRED);
-	}
+    @Override
+    public Dimension preferredLayoutSize(Container target) {
+        return getLayoutSize(target, LayoutSize.PREFERRED);
+    }
 
-	@Override
-	public Dimension maximumLayoutSize(Container target) {
-		return getLayoutSize(target, LayoutSize.MAXIMUM);
-	}
+    @Override
+    public Dimension maximumLayoutSize(Container target) {
+        return getLayoutSize(target, LayoutSize.MAXIMUM);
+    }
 
-	@Override
-	public float getLayoutAlignmentX(Container target) {
-		return Component.CENTER_ALIGNMENT;
-	}
+    @Override
+    public float getLayoutAlignmentX(Container target) {
+        return Component.CENTER_ALIGNMENT;
+    }
 
-	@Override
-	public float getLayoutAlignmentY(Container target) {
-		return Component.CENTER_ALIGNMENT;
-	}
+    @Override
+    public float getLayoutAlignmentY(Container target) {
+        return Component.CENTER_ALIGNMENT;
+    }
 
-	@Override
-	public void invalidateLayout(Container target) {
-		// Not used.
-	}
+    @Override
+    public void invalidateLayout(Container target) {
+        // Not used.
+    }
 
-	@Override
-	public void addLayoutComponent(Component comp, Object constraints) {
-		// Not used.
-	}
+    @Override
+    public void addLayoutComponent(Component comp, Object constraints) {
+        // Not used.
+    }
 
-	@Override
-	public void addLayoutComponent(String name, Component comp) {
-		// Not used.
-	}
+    @Override
+    public void addLayoutComponent(String name, Component comp) {
+        // Not used.
+    }
 
-	@Override
-	public void removeLayoutComponent(Component comp) {
-		// Not used.
-	}
+    @Override
+    public void removeLayoutComponent(Component comp) {
+        // Not used.
+    }
 }

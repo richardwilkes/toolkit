@@ -21,30 +21,30 @@ import java.io.IOException;
 
 /** A command that will open a specific file in the preferred browser. */
 public class OpenLocalFileCommand extends Command {
-	private File mFile;
+    private File mFile;
 
-	/**
-	 * Creates a new {@link OpenLocalFileCommand}.
-	 *
-	 * @param title The title to use.
-	 * @param file The file to open.
-	 */
-	public OpenLocalFileCommand(String title, File file) {
-		super(title, "OpenLocalFile[" + file.getName() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
-		mFile = file;
-	}
+    /**
+     * Creates a new {@link OpenLocalFileCommand}.
+     *
+     * @param title The title to use.
+     * @param file The file to open.
+     */
+    public OpenLocalFileCommand(String title, File file) {
+        super(title, "OpenLocalFile[" + file.getName() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+        mFile = file;
+    }
 
-	@Override
-	public void adjust() {
-		// Not used. Always enabled.
-	}
+    @Override
+    public void adjust() {
+        // Not used. Always enabled.
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		try {
-			Desktop.getDesktop().open(mFile);
-		} catch (IOException exception) {
-			WindowUtils.showError(null, exception.getMessage());
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        try {
+            Desktop.getDesktop().open(mFile);
+        } catch (IOException exception) {
+            WindowUtils.showError(null, exception.getMessage());
+        }
+    }
 }

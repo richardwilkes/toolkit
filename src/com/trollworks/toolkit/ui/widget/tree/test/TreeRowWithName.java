@@ -12,7 +12,7 @@
 package com.trollworks.toolkit.ui.widget.tree.test;
 
 public interface TreeRowWithName {
-	String getName();
+    String getName();
 
-	String getSecond();
+    String getSecond();
 }

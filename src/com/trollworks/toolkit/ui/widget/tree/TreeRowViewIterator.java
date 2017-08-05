@@ -19,80 +19,80 @@ import java.util.NoSuchElementException;
 
 /** Iterates through all {@link TreeRow}s, ignoring children of closed ones. */
 public class TreeRowViewIterator implements Iterator<TreeRow>, Iterable<TreeRow> {
-	private TreePanel			mPanel;
-	private List<TreeRow>		mRows;
-	private TreeRowViewIterator	mIterator;
-	private int					mIndex;
+    private TreePanel           mPanel;
+    private List<TreeRow>       mRows;
+    private TreeRowViewIterator mIterator;
+    private int                 mIndex;
 
-	/**
-	 * Creates a new {@link TreeRowViewIterator}.
-	 *
-	 * @param panel The owning {@link TreePanel}.
-	 * @param row The {@link TreeRow} to start iterating over.
-	 */
-	public TreeRowViewIterator(TreePanel panel, TreeRow row) {
-		mPanel = panel;
-		mRows = new ArrayList<>();
-		mRows.add(row);
-	}
+    /**
+     * Creates a new {@link TreeRowViewIterator}.
+     *
+     * @param panel The owning {@link TreePanel}.
+     * @param row The {@link TreeRow} to start iterating over.
+     */
+    public TreeRowViewIterator(TreePanel panel, TreeRow row) {
+        mPanel = panel;
+        mRows = new ArrayList<>();
+        mRows.add(row);
+    }
 
-	/**
-	 * Creates a new {@link TreeRowViewIterator}.
-	 *
-	 * @param panel The owning {@link TreePanel}.
-	 * @param rows The {@link TreeRow}s to iterator over.
-	 */
-	public TreeRowViewIterator(TreePanel panel, TreeRow... rows) {
-		mPanel = panel;
-		mRows = Arrays.asList(rows);
-	}
+    /**
+     * Creates a new {@link TreeRowViewIterator}.
+     *
+     * @param panel The owning {@link TreePanel}.
+     * @param rows The {@link TreeRow}s to iterator over.
+     */
+    public TreeRowViewIterator(TreePanel panel, TreeRow... rows) {
+        mPanel = panel;
+        mRows = Arrays.asList(rows);
+    }
 
-	/**
-	 * Creates a new {@link TreeRowViewIterator}.
-	 *
-	 * @param panel The owning {@link TreePanel}.
-	 * @param rows The {@link TreeRow}s to iterator over.
-	 */
-	public TreeRowViewIterator(TreePanel panel, List<TreeRow> rows) {
-		mPanel = panel;
-		mRows = rows;
-	}
+    /**
+     * Creates a new {@link TreeRowViewIterator}.
+     *
+     * @param panel The owning {@link TreePanel}.
+     * @param rows The {@link TreeRow}s to iterator over.
+     */
+    public TreeRowViewIterator(TreePanel panel, List<TreeRow> rows) {
+        mPanel = panel;
+        mRows = rows;
+    }
 
-	@Override
-	public Iterator<TreeRow> iterator() {
-		return this;
-	}
+    @Override
+    public Iterator<TreeRow> iterator() {
+        return this;
+    }
 
-	@Override
-	public boolean hasNext() {
-		boolean hasNext = mIterator != null && mIterator.hasNext();
-		if (!hasNext) {
-			mIterator = null;
-			hasNext = mIndex < mRows.size();
-		}
-		return hasNext;
-	}
+    @Override
+    public boolean hasNext() {
+        boolean hasNext = mIterator != null && mIterator.hasNext();
+        if (!hasNext) {
+            mIterator = null;
+            hasNext = mIndex < mRows.size();
+        }
+        return hasNext;
+    }
 
-	@Override
-	public TreeRow next() {
-		if (hasNext()) {
-			if (mIterator == null) {
-				TreeRow row = mRows.get(mIndex++);
-				if (row instanceof TreeContainerRow) {
-					TreeContainerRow containerRow = (TreeContainerRow) row;
-					if (containerRow.getChildCount() > 0 && mPanel.isOpen(containerRow)) {
-						mIterator = new TreeRowViewIterator(mPanel, containerRow.getChildren());
-					}
-				}
-				return row;
-			}
-			return mIterator.next();
-		}
-		throw new NoSuchElementException();
-	}
+    @Override
+    public TreeRow next() {
+        if (hasNext()) {
+            if (mIterator == null) {
+                TreeRow row = mRows.get(mIndex++);
+                if (row instanceof TreeContainerRow) {
+                    TreeContainerRow containerRow = (TreeContainerRow) row;
+                    if (containerRow.getChildCount() > 0 && mPanel.isOpen(containerRow)) {
+                        mIterator = new TreeRowViewIterator(mPanel, containerRow.getChildren());
+                    }
+                }
+                return row;
+            }
+            return mIterator.next();
+        }
+        throw new NoSuchElementException();
+    }
 
-	@Override
-	public void remove() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 }

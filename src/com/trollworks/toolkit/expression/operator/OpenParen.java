@@ -14,17 +14,17 @@ package com.trollworks.toolkit.expression.operator;
 import com.trollworks.toolkit.expression.EvaluationException;
 
 public class OpenParen extends Operator {
-	public OpenParen() {
-		super("(", 0); //$NON-NLS-1$
-	}
+    public OpenParen() {
+        super("(", 0); //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object evaluate(Object left, Object right) throws EvaluationException {
-		return null;
-	}
+    @Override
+    public final Object evaluate(Object left, Object right) throws EvaluationException {
+        return null;
+    }
 
-	@Override
-	public final Object evaluate(Object operand) throws EvaluationException {
-		return null;
-	}
+    @Override
+    public final Object evaluate(Object operand) throws EvaluationException {
+        return null;
+    }
 }

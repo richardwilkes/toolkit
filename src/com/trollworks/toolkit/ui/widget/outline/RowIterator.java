@@ -21,81 +21,81 @@ import java.util.NoSuchElementException;
  * @param <T> The type of row being iterated over.
  */
 public class RowIterator<T extends Row> implements Iterator<T>, Iterable<T> {
-	private List<T>			mList;
-	private int				mIndex;
-	private RowIterator<T>	mIterator;
-	private Filter<T>		mFilter;
+    private List<T>        mList;
+    private int            mIndex;
+    private RowIterator<T> mIterator;
+    private Filter<T>      mFilter;
 
-	/**
-	 * Creates an iterator that will iterate over all rows (disclosed or not) in the specified
-	 * outline model.
-	 *
-	 * @param model The model to iterator over.
-	 */
-	public RowIterator(OutlineModel model) {
-		this(model, null);
-	}
+    /**
+     * Creates an iterator that will iterate over all rows (disclosed or not) in the specified
+     * outline model.
+     *
+     * @param model The model to iterator over.
+     */
+    public RowIterator(OutlineModel model) {
+        this(model, null);
+    }
 
-	/**
-	 * Creates an iterator that will iterate over all rows (disclosed or not) in the specified
-	 * outline model.
-	 *
-	 * @param model The model to iterator over.
-	 * @param filter The filter to use.
-	 */
-	@SuppressWarnings("unchecked")
-	public RowIterator(OutlineModel model, Filter<T> filter) {
-		this((List<T>) model.getTopLevelRows(), filter);
-	}
+    /**
+     * Creates an iterator that will iterate over all rows (disclosed or not) in the specified
+     * outline model.
+     *
+     * @param model The model to iterator over.
+     * @param filter The filter to use.
+     */
+    @SuppressWarnings("unchecked")
+    public RowIterator(OutlineModel model, Filter<T> filter) {
+        this((List<T>) model.getTopLevelRows(), filter);
+    }
 
-	private RowIterator(List<T> rows, Filter<T> filter) {
-		mList = rows;
-		mFilter = filter;
-	}
+    private RowIterator(List<T> rows, Filter<T> filter) {
+        mList = rows;
+        mFilter = filter;
+    }
 
-	@Override
-	public void remove() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public boolean hasNext() {
-		boolean hasNext = mIterator != null && mIterator.hasNext();
-		if (!hasNext) {
-			mIterator = null;
-			int size = mList.size();
-			if (mFilter != null) {
-				while (mIndex < size && !mFilter.include(mList.get(mIndex))) {
-					mIndex++;
-				}
-			}
-			hasNext = mIndex < size;
-		}
-		return hasNext;
-	}
+    @Override
+    public boolean hasNext() {
+        boolean hasNext = mIterator != null && mIterator.hasNext();
+        if (!hasNext) {
+            mIterator = null;
+            int size = mList.size();
+            if (mFilter != null) {
+                while (mIndex < size && !mFilter.include(mList.get(mIndex))) {
+                    mIndex++;
+                }
+            }
+            hasNext = mIndex < size;
+        }
+        return hasNext;
+    }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public T next() {
-		if (hasNext()) {
-			if (mIterator == null) {
-				Row row = mList.get(mIndex++);
-				if (row.hasChildren()) {
-					mIterator = new RowIterator<>((List<T>) row.getChildren(), mFilter);
-				}
-				return (T) row;
-			}
-			return mIterator.next();
-		}
-		throw new NoSuchElementException();
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public T next() {
+        if (hasNext()) {
+            if (mIterator == null) {
+                Row row = mList.get(mIndex++);
+                if (row.hasChildren()) {
+                    mIterator = new RowIterator<>((List<T>) row.getChildren(), mFilter);
+                }
+                return (T) row;
+            }
+            return mIterator.next();
+        }
+        throw new NoSuchElementException();
+    }
 
-	@Override
-	public Iterator<T> iterator() {
-		return this;
-	}
+    @Override
+    public Iterator<T> iterator() {
+        return this;
+    }
 
-	public interface Filter<R extends Row> {
-		boolean include(R row);
-	}
+    public interface Filter<R extends Row> {
+        boolean include(R row);
+    }
 }

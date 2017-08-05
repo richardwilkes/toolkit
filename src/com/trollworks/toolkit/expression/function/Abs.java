@@ -16,13 +16,13 @@ import com.trollworks.toolkit.expression.EvaluationException;
 import com.trollworks.toolkit.expression.Evaluator;
 
 public class Abs implements ExpressionFunction {
-	@Override
-	public final String getName() {
-		return "abs"; //$NON-NLS-1$
-	}
+    @Override
+    public final String getName() {
+        return "abs"; //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object execute(Evaluator evaluator, String arguments) throws EvaluationException {
-		return Double.valueOf(Math.abs(ArgumentTokenizer.getDoubleArgument(evaluator, arguments)));
-	}
+    @Override
+    public final Object execute(Evaluator evaluator, String arguments) throws EvaluationException {
+        return Double.valueOf(Math.abs(ArgumentTokenizer.getDoubleArgument(evaluator, arguments)));
+    }
 }

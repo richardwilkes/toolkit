@@ -18,23 +18,23 @@ import java.awt.event.ActionEvent;
 
 /** Provides the "Update" command. */
 public class UpdateCommand extends Command {
-	/** The action command this command will issue. */
-	public static final String			CMD_CHECK_FOR_UPDATE	= "CheckForUpdate";		//$NON-NLS-1$
-	/** The singleton {@link UpdateCommand}. */
-	public static final UpdateCommand	INSTANCE				= new UpdateCommand();
+    /** The action command this command will issue. */
+    public static final String        CMD_CHECK_FOR_UPDATE = "CheckForUpdate";   		//$NON-NLS-1$
+    /** The singleton {@link UpdateCommand}. */
+    public static final UpdateCommand INSTANCE             = new UpdateCommand();
 
-	private UpdateCommand() {
-		super(UpdateChecker.getResult(), CMD_CHECK_FOR_UPDATE);
-	}
+    private UpdateCommand() {
+        super(UpdateChecker.getResult(), CMD_CHECK_FOR_UPDATE);
+    }
 
-	@Override
-	public void adjust() {
-		setTitle(UpdateChecker.getResult());
-		setEnabled(UpdateChecker.isNewVersionAvailable());
-	}
+    @Override
+    public void adjust() {
+        setTitle(UpdateChecker.getResult());
+        setEnabled(UpdateChecker.isNewVersionAvailable());
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		UpdateChecker.goToUpdate();
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        UpdateChecker.goToUpdate();
+    }
 }

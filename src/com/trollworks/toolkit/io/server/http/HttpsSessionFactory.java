@@ -20,15 +20,15 @@ import java.nio.channels.SocketChannel;
 
 /** Provides a {@link SessionFactory} for HTTPS sessions. */
 public class HttpsSessionFactory implements SessionFactory {
-	private HttpSessionFactory mHttpSessionFactory;
+    private HttpSessionFactory mHttpSessionFactory;
 
-	/** @param httpSessionFactory The {@link HttpSessionFactory} to delegate unencrypted data to. */
-	public HttpsSessionFactory(HttpSessionFactory httpSessionFactory) {
-		mHttpSessionFactory = httpSessionFactory;
-	}
+    /** @param httpSessionFactory The {@link HttpSessionFactory} to delegate unencrypted data to. */
+    public HttpsSessionFactory(HttpSessionFactory httpSessionFactory) {
+        mHttpSessionFactory = httpSessionFactory;
+    }
 
-	@Override
-	public Session createSession(NioServer server, SocketChannel channel) throws IOException {
-		return new Session(server, channel, server.getSSLContext(), new Http(mHttpSessionFactory));
-	}
+    @Override
+    public Session createSession(NioServer server, SocketChannel channel) throws IOException {
+        return new Session(server, channel, server.getSSLContext(), new Http(mHttpSessionFactory));
+    }
 }

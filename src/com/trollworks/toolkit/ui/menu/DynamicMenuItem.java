@@ -22,60 +22,60 @@ import javax.swing.JMenuItem;
  * accelerator.
  */
 public class DynamicMenuItem extends JMenuItem {
-	/** Creates a new {@link DynamicMenuItem}. */
-	public DynamicMenuItem() {
-		super();
-	}
+    /** Creates a new {@link DynamicMenuItem}. */
+    public DynamicMenuItem() {
+        super();
+    }
 
-	/**
-	 * Creates a new {@link DynamicMenuItem}.
-	 *
-	 * @param icon The icon to use.
-	 */
-	public DynamicMenuItem(Icon icon) {
-		super(icon);
-	}
+    /**
+     * Creates a new {@link DynamicMenuItem}.
+     *
+     * @param icon The icon to use.
+     */
+    public DynamicMenuItem(Icon icon) {
+        super(icon);
+    }
 
-	/**
-	 * Creates a new {@link DynamicMenuItem}.
-	 *
-	 * @param text The text to use.
-	 */
-	public DynamicMenuItem(String text) {
-		super(text);
-	}
+    /**
+     * Creates a new {@link DynamicMenuItem}.
+     *
+     * @param text The text to use.
+     */
+    public DynamicMenuItem(String text) {
+        super(text);
+    }
 
-	/**
-	 * Creates a new {@link DynamicMenuItem}.
-	 *
-	 * @param action The action to use.
-	 */
-	public DynamicMenuItem(Action action) {
-		super(action);
-	}
+    /**
+     * Creates a new {@link DynamicMenuItem}.
+     *
+     * @param action The action to use.
+     */
+    public DynamicMenuItem(Action action) {
+        super(action);
+    }
 
-	/**
-	 * Creates a new {@link DynamicMenuItem}.
-	 *
-	 * @param text The text to use.
-	 * @param icon The icon to use.
-	 */
-	public DynamicMenuItem(String text, Icon icon) {
-		super(text, icon);
-	}
+    /**
+     * Creates a new {@link DynamicMenuItem}.
+     *
+     * @param text The text to use.
+     * @param icon The icon to use.
+     */
+    public DynamicMenuItem(String text, Icon icon) {
+        super(text, icon);
+    }
 
-	/**
-	 * Creates a new {@link DynamicMenuItem}.
-	 *
-	 * @param text The text to use.
-	 * @param mnemonic The mnemonic to use.
-	 */
-	public DynamicMenuItem(String text, int mnemonic) {
-		super(text, mnemonic);
-	}
+    /**
+     * Creates a new {@link DynamicMenuItem}.
+     *
+     * @param text The text to use.
+     * @param mnemonic The mnemonic to use.
+     */
+    public DynamicMenuItem(String text, int mnemonic) {
+        super(text, mnemonic);
+    }
 
-	@Override
-	protected PropertyChangeListener createActionPropertyChangeListener(Action action) {
-		return new DynamicJMenuItemPropertyChangeListener(this, action, super.createActionPropertyChangeListener(action));
-	}
+    @Override
+    protected PropertyChangeListener createActionPropertyChangeListener(Action action) {
+        return new DynamicJMenuItemPropertyChangeListener(this, action, super.createActionPropertyChangeListener(action));
+    }
 }

@@ -18,57 +18,57 @@ import java.awt.event.ComponentListener;
 
 /** Ensures a window is never resized below its minimum size or above its maximum size settings. */
 public class WindowSizeEnforcer implements ComponentListener {
-	/**
-	 * Monitors a window for resizing.
-	 *
-	 * @param window The window to monitor.
-	 */
-	public static void monitor(Window window) {
-		window.addComponentListener(new WindowSizeEnforcer());
-	}
+    /**
+     * Monitors a window for resizing.
+     *
+     * @param window The window to monitor.
+     */
+    public static void monitor(Window window) {
+        window.addComponentListener(new WindowSizeEnforcer());
+    }
 
-	@Override
-	public void componentHidden(ComponentEvent event) {
-		// Not used.
-	}
+    @Override
+    public void componentHidden(ComponentEvent event) {
+        // Not used.
+    }
 
-	@Override
-	public void componentMoved(ComponentEvent event) {
-		// Not used.
-	}
+    @Override
+    public void componentMoved(ComponentEvent event) {
+        // Not used.
+    }
 
-	@Override
-	public void componentResized(ComponentEvent event) {
-		enforce((Window) event.getSource());
-	}
+    @Override
+    public void componentResized(ComponentEvent event) {
+        enforce((Window) event.getSource());
+    }
 
-	@Override
-	public void componentShown(ComponentEvent event) {
-		GraphicsUtilities.forceOnScreen((Window) event.getComponent());
-	}
+    @Override
+    public void componentShown(ComponentEvent event) {
+        GraphicsUtilities.forceOnScreen((Window) event.getComponent());
+    }
 
-	/** @param window The window to enforce min/max size on. */
-	public static void enforce(Window window) {
-		Dimension origSize = window.getSize();
-		Dimension otherSize = window.getMinimumSize();
-		int width = origSize.width;
-		int height = origSize.height;
+    /** @param window The window to enforce min/max size on. */
+    public static void enforce(Window window) {
+        Dimension origSize = window.getSize();
+        Dimension otherSize = window.getMinimumSize();
+        int width = origSize.width;
+        int height = origSize.height;
 
-		if (width < otherSize.width) {
-			width = otherSize.width;
-		}
-		if (height < otherSize.height) {
-			height = otherSize.height;
-		}
-		otherSize = window.getMaximumSize();
-		if (width > otherSize.width) {
-			width = otherSize.width;
-		}
-		if (height > otherSize.height) {
-			height = otherSize.height;
-		}
-		if (width != origSize.width || height != origSize.height) {
-			window.setSize(width, height);
-		}
-	}
+        if (width < otherSize.width) {
+            width = otherSize.width;
+        }
+        if (height < otherSize.height) {
+            height = otherSize.height;
+        }
+        otherSize = window.getMaximumSize();
+        if (width > otherSize.width) {
+            width = otherSize.width;
+        }
+        if (height > otherSize.height) {
+            height = otherSize.height;
+        }
+        if (width != origSize.width || height != origSize.height) {
+            window.setSize(width, height);
+        }
+    }
 }

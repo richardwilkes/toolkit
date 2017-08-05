@@ -22,81 +22,81 @@ import java.util.EnumSet;
 
 /** Walks a file tree, calling your {@link Handler} for each file found. */
 public class FileScanner implements FileVisitor<Path> {
-	private Path	mPath;
-	private Handler	mHandler;
-	private boolean	mSkipHidden;
+    private Path    mPath;
+    private Handler mHandler;
+    private boolean mSkipHidden;
 
-	/**
-	 * Walks a file tree, calling the specified {@link Handler} for each file found. Hidden files
-	 * and directories (those whose names start with a period) are skipped.
-	 *
-	 * @param path The starting point.
-	 * @param handler The {@link Handler} to call for each file.
-	 */
-	public static final void walk(Path path, Handler handler) {
-		walk(path, handler, true);
-	}
+    /**
+     * Walks a file tree, calling the specified {@link Handler} for each file found. Hidden files
+     * and directories (those whose names start with a period) are skipped.
+     *
+     * @param path The starting point.
+     * @param handler The {@link Handler} to call for each file.
+     */
+    public static final void walk(Path path, Handler handler) {
+        walk(path, handler, true);
+    }
 
-	/**
-	 * Walks a file tree, calling the specified {@link Handler} for each file found. Hidden files
-	 * and directories (those that start with a period) are skipped.
-	 *
-	 * @param path The starting point.
-	 * @param handler The {@link Handler} to call for each file.
-	 * @param skipHidden Pass in <code>true</code> if files and directories whose names start with a
-	 *            period should be skipped.
-	 */
-	public static final void walk(Path path, Handler handler, boolean skipHidden) {
-		try {
-			Files.walkFileTree(path, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE, new FileScanner(path, handler, skipHidden));
-		} catch (Exception exception) {
-			Log.error(exception);
-		}
-	}
+    /**
+     * Walks a file tree, calling the specified {@link Handler} for each file found. Hidden files
+     * and directories (those that start with a period) are skipped.
+     *
+     * @param path The starting point.
+     * @param handler The {@link Handler} to call for each file.
+     * @param skipHidden Pass in <code>true</code> if files and directories whose names start with a
+     *            period should be skipped.
+     */
+    public static final void walk(Path path, Handler handler, boolean skipHidden) {
+        try {
+            Files.walkFileTree(path, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE, new FileScanner(path, handler, skipHidden));
+        } catch (Exception exception) {
+            Log.error(exception);
+        }
+    }
 
-	private FileScanner(Path path, Handler handler, boolean skipHidden) {
-		mPath = path;
-		mHandler = handler;
-		mSkipHidden = skipHidden;
-	}
+    private FileScanner(Path path, Handler handler, boolean skipHidden) {
+        mPath = path;
+        mHandler = handler;
+        mSkipHidden = skipHidden;
+    }
 
-	private boolean shouldSkip(Path path) {
-		return mSkipHidden && !mPath.equals(path) && path.getFileName().toString().startsWith("."); //$NON-NLS-1$
-	}
+    private boolean shouldSkip(Path path) {
+        return mSkipHidden && !mPath.equals(path) && path.getFileName().toString().startsWith("."); //$NON-NLS-1$
+    }
 
-	@Override
-	public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes attrs) throws IOException {
-		if (shouldSkip(path)) {
-			return FileVisitResult.SKIP_SUBTREE;
-		}
-		return FileVisitResult.CONTINUE;
-	}
+    @Override
+    public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes attrs) throws IOException {
+        if (shouldSkip(path)) {
+            return FileVisitResult.SKIP_SUBTREE;
+        }
+        return FileVisitResult.CONTINUE;
+    }
 
-	@Override
-	public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
-		if (!shouldSkip(path)) {
-			mHandler.processFile(path);
-		}
-		return FileVisitResult.CONTINUE;
-	}
+    @Override
+    public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+        if (!shouldSkip(path)) {
+            mHandler.processFile(path);
+        }
+        return FileVisitResult.CONTINUE;
+    }
 
-	@Override
-	public FileVisitResult visitFileFailed(Path path, IOException exception) throws IOException {
-		Log.error(exception);
-		return FileVisitResult.CONTINUE;
-	}
+    @Override
+    public FileVisitResult visitFileFailed(Path path, IOException exception) throws IOException {
+        Log.error(exception);
+        return FileVisitResult.CONTINUE;
+    }
 
-	@Override
-	public FileVisitResult postVisitDirectory(Path path, IOException exception) throws IOException {
-		if (exception != null) {
-			Log.error(exception);
-		}
-		return FileVisitResult.CONTINUE;
-	}
+    @Override
+    public FileVisitResult postVisitDirectory(Path path, IOException exception) throws IOException {
+        if (exception != null) {
+            Log.error(exception);
+        }
+        return FileVisitResult.CONTINUE;
+    }
 
-	/** The callback used for {@link FileScanner}. */
-	public interface Handler {
-		/** @param path The {@link Path} to the file to be processed. */
-		void processFile(Path path) throws IOException;
-	}
+    /** The callback used for {@link FileScanner}. */
+    public interface Handler {
+        /** @param path The {@link Path} to the file to be processed. */
+        void processFile(Path path) throws IOException;
+    }
 }

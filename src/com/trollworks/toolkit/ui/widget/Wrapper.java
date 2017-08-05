@@ -21,53 +21,53 @@ import javax.swing.JPanel;
 
 /** A wrapper panel which is initially transparent. */
 public class Wrapper extends JPanel {
-	private int	mWidth	= -1;
-	private int	mHeight	= -1;
+    private int mWidth  = -1;
+    private int mHeight = -1;
 
-	/** Creates a new {@link Wrapper}. */
-	public Wrapper() {
-		super();
-		setOpaque(false);
-	}
+    /** Creates a new {@link Wrapper}. */
+    public Wrapper() {
+        super();
+        setOpaque(false);
+    }
 
-	/**
-	 * Creates a new {@link Wrapper}.
-	 *
-	 * @param layout The layout to use.
-	 */
-	public Wrapper(LayoutManager2 layout) {
-		super(layout);
-		setOpaque(false);
-	}
+    /**
+     * Creates a new {@link Wrapper}.
+     *
+     * @param layout The layout to use.
+     */
+    public Wrapper(LayoutManager2 layout) {
+        super(layout);
+        setOpaque(false);
+    }
 
-	public void setOnlySize(int width, int height) {
-		mWidth = width;
-		mHeight = height;
-	}
+    public void setOnlySize(int width, int height) {
+        mWidth = width;
+        mHeight = height;
+    }
 
-	@Override
-	public Dimension getMinimumSize() {
-		if (mWidth != -1 && mHeight != -1) {
-			return getPreferredSize();
-		}
-		return super.getMinimumSize();
-	}
+    @Override
+    public Dimension getMinimumSize() {
+        if (mWidth != -1 && mHeight != -1) {
+            return getPreferredSize();
+        }
+        return super.getMinimumSize();
+    }
 
-	@Override
-	public Dimension getPreferredSize() {
-		if (mWidth != -1 && mHeight != -1) {
-			Scale scale = Scale.get(this);
-			Insets insets = getInsets();
-			return new Dimension(insets.left + scale.scale(mWidth) + insets.right, insets.top + scale.scale(mHeight) + insets.bottom);
-		}
-		return super.getPreferredSize();
-	}
+    @Override
+    public Dimension getPreferredSize() {
+        if (mWidth != -1 && mHeight != -1) {
+            Scale scale = Scale.get(this);
+            Insets insets = getInsets();
+            return new Dimension(insets.left + scale.scale(mWidth) + insets.right, insets.top + scale.scale(mHeight) + insets.bottom);
+        }
+        return super.getPreferredSize();
+    }
 
-	@Override
-	public Dimension getMaximumSize() {
-		if (mWidth != -1 && mHeight != -1) {
-			return getPreferredSize();
-		}
-		return super.getMaximumSize();
-	}
+    @Override
+    public Dimension getMaximumSize() {
+        if (mWidth != -1 && mHeight != -1) {
+            return getPreferredSize();
+        }
+        return super.getMaximumSize();
+    }
 }

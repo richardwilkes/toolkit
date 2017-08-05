@@ -18,59 +18,59 @@ import javax.print.attribute.standard.Chromaticity;
 
 /** Constants representing the various ink chromaticity possibilities. */
 public enum InkChromaticity {
-	/** Maps to {@link Chromaticity#COLOR}. */
-	COLOR {
-		@Override
-		public Chromaticity getChromaticity() {
-			return Chromaticity.COLOR;
-		}
+    /** Maps to {@link Chromaticity#COLOR}. */
+    COLOR {
+        @Override
+        public Chromaticity getChromaticity() {
+            return Chromaticity.COLOR;
+        }
 
-		@Override
-		public String toString() {
-			return COLOR_TITLE;
-		}
-	},
-	/** Maps to {@link Chromaticity#MONOCHROME}. */
-	MONOCHROME {
-		@Override
-		public Chromaticity getChromaticity() {
-			return Chromaticity.MONOCHROME;
-		}
+        @Override
+        public String toString() {
+            return COLOR_TITLE;
+        }
+    },
+    /** Maps to {@link Chromaticity#MONOCHROME}. */
+    MONOCHROME {
+        @Override
+        public Chromaticity getChromaticity() {
+            return Chromaticity.MONOCHROME;
+        }
 
-		@Override
-		public String toString() {
-			return MONOCHROME_TITLE;
-		}
-	};
+        @Override
+        public String toString() {
+            return MONOCHROME_TITLE;
+        }
+    };
 
-	@Localize("Color")
-	@Localize(locale = "ru", value = "Цвет")
-	@Localize(locale = "de", value = "Farbe")
-	@Localize(locale = "es", value = "Color")
-	static String	COLOR_TITLE;
-	@Localize("Monochrome")
-	@Localize(locale = "ru", value = "Черно-белый")
-	@Localize(locale = "de", value = "Graustufen")
-	@Localize(locale = "es", value = "Monocromo")
-	static String	MONOCHROME_TITLE;
+    @Localize("Color")
+    @Localize(locale = "ru", value = "Цвет")
+    @Localize(locale = "de", value = "Farbe")
+    @Localize(locale = "es", value = "Color")
+    static String COLOR_TITLE;
+    @Localize("Monochrome")
+    @Localize(locale = "ru", value = "Черно-белый")
+    @Localize(locale = "de", value = "Graustufen")
+    @Localize(locale = "es", value = "Monocromo")
+    static String MONOCHROME_TITLE;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** @return The chromaticity attribute. */
-	public abstract Chromaticity getChromaticity();
+    /** @return The chromaticity attribute. */
+    public abstract Chromaticity getChromaticity();
 
-	/**
-	 * @param chromaticity The {@link Chromaticity} to load from.
-	 * @return The chromaticity.
-	 */
-	public static final InkChromaticity get(Chromaticity chromaticity) {
-		for (InkChromaticity one : values()) {
-			if (one.getChromaticity() == chromaticity) {
-				return one;
-			}
-		}
-		return MONOCHROME;
-	}
+    /**
+     * @param chromaticity The {@link Chromaticity} to load from.
+     * @return The chromaticity.
+     */
+    public static final InkChromaticity get(Chromaticity chromaticity) {
+        for (InkChromaticity one : values()) {
+            if (one.getChromaticity() == chromaticity) {
+                return one;
+            }
+        }
+        return MONOCHROME;
+    }
 }

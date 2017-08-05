@@ -15,19 +15,19 @@ import java.net.URI;
 import java.nio.file.Path;
 
 public class PathToUri {
-	/**
-	 * There is a bug in the JDK creation of URI's from Paths (and maybe elsewhere) in which the
-	 * escaping of spaces is done incorrectly. This fixes that up.
-	 */
-	@SuppressWarnings("nls")
-	public static URI toFixedUri(Path path) {
-		URI uri = path.toUri();
-		String text = uri.toString();
-		if (text.contains("%2520")) {
-			text = text.replaceAll("%2520", "%20");
-			uri = URI.create(text);
-		}
-		return uri;
-	}
+    /**
+     * There is a bug in the JDK creation of URI's from Paths (and maybe elsewhere) in which the
+     * escaping of spaces is done incorrectly. This fixes that up.
+     */
+    @SuppressWarnings("nls")
+    public static URI toFixedUri(Path path) {
+        URI uri = path.toUri();
+        String text = uri.toString();
+        if (text.contains("%2520")) {
+            text = text.replaceAll("%2520", "%20");
+            uri = URI.create(text);
+        }
+        return uri;
+    }
 
 }

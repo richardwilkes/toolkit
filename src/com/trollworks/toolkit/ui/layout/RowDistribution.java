@@ -13,8 +13,10 @@ package com.trollworks.toolkit.ui.layout;
 
 /** The options for row distribution within a {@link ColumnLayout}. */
 public enum RowDistribution {
-	/** Gives each component its preferred height. */
-	USE_PREFERRED_HEIGHT, /** Distributes the height equally among the components. */
-	DISTRIBUTE_HEIGHT, /** Gives excess height to the last component. */
-	GIVE_EXCESS_TO_LAST;
+    /** Gives each component its preferred height. */
+    USE_PREFERRED_HEIGHT,
+    /** Distributes the height equally among the components. */
+    DISTRIBUTE_HEIGHT,
+    /** Gives excess height to the last component. */
+    GIVE_EXCESS_TO_LAST;
 }

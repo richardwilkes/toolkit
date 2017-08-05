@@ -21,37 +21,37 @@ import java.lang.reflect.Field;
 import javax.xml.stream.XMLStreamException;
 
 public class XmlPrimitiveBooleanHelper implements XmlObjectHelper {
-	public static final XmlPrimitiveBooleanHelper SINGLETON = new XmlPrimitiveBooleanHelper();
+    public static final XmlPrimitiveBooleanHelper SINGLETON = new XmlPrimitiveBooleanHelper();
 
-	private XmlPrimitiveBooleanHelper() {
-	}
+    private XmlPrimitiveBooleanHelper() {
+    }
 
-	@Override
-	public boolean canHandleClass(Class<?> clazz) {
-		return boolean.class == clazz;
-	}
+    @Override
+    public boolean canHandleClass(Class<?> clazz) {
+        return boolean.class == clazz;
+    }
 
-	@Override
-	public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		boolean value = field.getBoolean(obj);
-		XmlDefaultBoolean def = field.getAnnotation(XmlDefaultBoolean.class);
-		if (def != null) {
-			xml.addAttributeNot(name, value, def.value());
-		} else {
-			xml.addAttribute(name, value);
-		}
-	}
+    @Override
+    public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        boolean value = field.getBoolean(obj);
+        XmlDefaultBoolean def = field.getAnnotation(XmlDefaultBoolean.class);
+        if (def != null) {
+            xml.addAttributeNot(name, value, def.value());
+        } else {
+            xml.addAttribute(name, value);
+        }
+    }
 
-	@Override
-	public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		XmlDefaultBoolean def = field.getAnnotation(XmlDefaultBoolean.class);
-		field.setBoolean(obj, context.getParser().isAttributeSet(name, def != null ? def.value() : false));
-	}
+    @Override
+    public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        XmlDefaultBoolean def = field.getAnnotation(XmlDefaultBoolean.class);
+        field.setBoolean(obj, context.getParser().isAttributeSet(name, def != null ? def.value() : false));
+    }
 
-	@Override
-	public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
-		xml.startTag(tag);
-		xml.addText(Numbers.format(((Boolean) obj).booleanValue()));
-		xml.endTag();
-	}
+    @Override
+    public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+        xml.startTag(tag);
+        xml.addText(Numbers.format(((Boolean) obj).booleanValue()));
+        xml.endTag();
+    }
 }

@@ -14,15 +14,15 @@ package com.trollworks.toolkit.io.xml;
 import javax.xml.stream.XMLStreamException;
 
 /**
- * Objects that wish to add additional attributes when being written to xml should implement
- * this interface.
+ * Objects that wish to add additional attributes when being written to xml should implement this
+ * interface.
  */
 public interface TagExtraAttributes {
-	/**
-	 * Called to allow an object to emit additional attributes that the standard processing
-	 * can't handle.
-	 *
-	 * @param xml The {@link XmlGenerator} for this object.
-	 */
-	void xmlEmitExtraAttributes(XmlGenerator xml) throws XMLStreamException;
+    /**
+     * Called to allow an object to emit additional attributes that the standard processing can't
+     * handle.
+     *
+     * @param xml The {@link XmlGenerator} for this object.
+     */
+    void xmlEmitExtraAttributes(XmlGenerator xml) throws XMLStreamException;
 }

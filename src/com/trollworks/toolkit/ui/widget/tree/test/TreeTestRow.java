@@ -15,45 +15,45 @@ import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.widget.tree.TreeRow;
 
 public class TreeTestRow extends TreeRow implements TreeRowWithName, TreeRowWithIcon {
-	private String mName;
+    private String mName;
 
-	public TreeTestRow(String name) {
-		mName = name;
-	}
+    public TreeTestRow(String name) {
+        mName = name;
+    }
 
-	@Override
-	public String getName() {
-		return mName;
-	}
+    @Override
+    public String getName() {
+        return mName;
+    }
 
-	@Override
-	public String getSecond() {
-		return Integer.toString(mName.length());
-	}
+    @Override
+    public String getSecond() {
+        return Integer.toString(mName.length());
+    }
 
-	@Override
-	public StdImage getIcon() {
-		return StdImage.MINI_WARNING;
-	}
+    @Override
+    public StdImage getIcon() {
+        return StdImage.MINI_WARNING;
+    }
 
-	public static String getName(TreeRow row) {
-		if (row instanceof TreeRowWithName) {
-			return ((TreeRowWithName) row).getName();
-		}
-		return null;
-	}
+    public static String getName(TreeRow row) {
+        if (row instanceof TreeRowWithName) {
+            return ((TreeRowWithName) row).getName();
+        }
+        return null;
+    }
 
-	public static String getSecond(TreeRow row) {
-		if (row instanceof TreeRowWithName) {
-			return ((TreeRowWithName) row).getSecond();
-		}
-		return null;
-	}
+    public static String getSecond(TreeRow row) {
+        if (row instanceof TreeRowWithName) {
+            return ((TreeRowWithName) row).getSecond();
+        }
+        return null;
+    }
 
-	public static StdImage getIcon(TreeRow row) {
-		if (row instanceof TreeRowWithIcon) {
-			return ((TreeRowWithIcon) row).getIcon();
-		}
-		return null;
-	}
+    public static StdImage getIcon(TreeRow row) {
+        if (row instanceof TreeRowWithIcon) {
+            return ((TreeRowWithIcon) row).getIcon();
+        }
+        return null;
+    }
 }

@@ -15,53 +15,53 @@ import java.io.IOException;
 import java.io.Writer;
 
 public class DummyWriter extends Writer {
-	@Override
-	public void write(int c) throws IOException {
-		// Unused
-	}
+    @Override
+    public void write(int c) throws IOException {
+        // Unused
+    }
 
-	@Override
-	public void write(char cbuf[]) throws IOException {
-		// Unused
-	}
+    @Override
+    public void write(char cbuf[]) throws IOException {
+        // Unused
+    }
 
-	@Override
-	public void write(char[] cbuf, int off, int len) throws IOException {
-		// Unused
-	}
+    @Override
+    public void write(char[] cbuf, int off, int len) throws IOException {
+        // Unused
+    }
 
-	@Override
-	public void write(String str) throws IOException {
-		// Unused
-	}
+    @Override
+    public void write(String str) throws IOException {
+        // Unused
+    }
 
-	@Override
-	public void write(String str, int off, int len) throws IOException {
-		// Unused
-	}
+    @Override
+    public void write(String str, int off, int len) throws IOException {
+        // Unused
+    }
 
-	@Override
-	public Writer append(CharSequence csq) throws IOException {
-		return this;
-	}
+    @Override
+    public Writer append(CharSequence csq) throws IOException {
+        return this;
+    }
 
-	@Override
-	public Writer append(CharSequence csq, int start, int end) throws IOException {
-		return this;
-	}
+    @Override
+    public Writer append(CharSequence csq, int start, int end) throws IOException {
+        return this;
+    }
 
-	@Override
-	public Writer append(char c) throws IOException {
-		return this;
-	}
+    @Override
+    public Writer append(char c) throws IOException {
+        return this;
+    }
 
-	@Override
-	public void flush() throws IOException {
-		// Unused
-	}
+    @Override
+    public void flush() throws IOException {
+        // Unused
+    }
 
-	@Override
-	public void close() throws IOException {
-		// Unused
-	}
+    @Override
+    public void close() throws IOException {
+        // Unused
+    }
 }

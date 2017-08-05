@@ -16,9 +16,9 @@ package com.trollworks.toolkit.ui;
  * implement this interface.
  */
 public interface SelectionOwner {
-	/** Called whenever the selection is about to change. */
-	public void selectionAboutToChange();
+    /** Called whenever the selection is about to change. */
+    public void selectionAboutToChange();
 
-	/** Called whenever the selection changes. */
-	public void selectionDidChange();
+    /** Called whenever the selection changes. */
+    public void selectionDidChange();
 }

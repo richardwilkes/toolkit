@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 /** Provides a default value for a boolean value. */
 public @interface XmlDefaultBoolean {
-	/** @return The default value. */
-	boolean value();
+    /** @return The default value. */
+    boolean value();
 }

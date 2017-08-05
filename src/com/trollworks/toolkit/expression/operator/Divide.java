@@ -15,23 +15,23 @@ import com.trollworks.toolkit.expression.ArgumentTokenizer;
 import com.trollworks.toolkit.expression.EvaluationException;
 
 public class Divide extends Operator {
-	public Divide() {
-		super("/", 6); //$NON-NLS-1$
-	}
+    public Divide() {
+        super("/", 6); //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object evaluate(Object left, Object right) throws EvaluationException {
-		double A = ArgumentTokenizer.getDoubleOperand(left);
-		double B = ArgumentTokenizer.getDoubleOperand(right);
-		double R = 0;
-		if (B != 0) {
-			R = A / B;
-		}
-		return Double.valueOf(R);
-	}
+    @Override
+    public final Object evaluate(Object left, Object right) throws EvaluationException {
+        double A = ArgumentTokenizer.getDoubleOperand(left);
+        double B = ArgumentTokenizer.getDoubleOperand(right);
+        double R = 0;
+        if (B != 0) {
+            R = A / B;
+        }
+        return Double.valueOf(R);
+    }
 
-	@Override
-	public final Object evaluate(Object operand) throws EvaluationException {
-		return null;
-	}
+    @Override
+    public final Object evaluate(Object operand) throws EvaluationException {
+        return null;
+    }
 }

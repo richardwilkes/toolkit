@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 /** Provides a default value for a char value. */
 public @interface XmlDefaultChar {
-	/** @return The default value. */
-	char value();
+    /** @return The default value. */
+    char value();
 }

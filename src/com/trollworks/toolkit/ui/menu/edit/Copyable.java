@@ -16,9 +16,9 @@ package com.trollworks.toolkit.ui.menu.edit;
  * implement this interface.
  */
 public interface Copyable {
-	/** @return Whether the selection can be copied. */
-	boolean canCopySelection();
+    /** @return Whether the selection can be copied. */
+    boolean canCopySelection();
 
-	/** Called to copy the current selection. */
-	void copySelection();
+    /** Called to copy the current selection. */
+    void copySelection();
 }

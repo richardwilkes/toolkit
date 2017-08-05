@@ -15,16 +15,16 @@ import java.awt.Component;
 import java.awt.KeyboardFocusManager;
 
 public interface Commitable {
-	void attemptCommit();
+    void attemptCommit();
 
-	public static void sendCommitToFocusOwner() {
-		KeyboardFocusManager focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-		Component focus = focusManager.getPermanentFocusOwner();
-		if (focus == null) {
-			focus = focusManager.getFocusOwner();
-		}
-		if (focus instanceof Commitable) {
-			((Commitable) focus).attemptCommit();
-		}
-	}
+    public static void sendCommitToFocusOwner() {
+        KeyboardFocusManager focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        Component focus = focusManager.getPermanentFocusOwner();
+        if (focus == null) {
+            focus = focusManager.getFocusOwner();
+        }
+        if (focus instanceof Commitable) {
+            ((Commitable) focus).attemptCommit();
+        }
+    }
 }

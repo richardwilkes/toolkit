@@ -22,41 +22,41 @@ import java.lang.reflect.Field;
 import javax.xml.stream.XMLStreamException;
 
 public class XmlColorHelper implements XmlObjectHelper {
-	public static final XmlColorHelper SINGLETON = new XmlColorHelper();
+    public static final XmlColorHelper SINGLETON = new XmlColorHelper();
 
-	private XmlColorHelper() {
-	}
+    private XmlColorHelper() {
+    }
 
-	@Override
-	public boolean canHandleClass(Class<?> clazz) {
-		return clazz == Color.class;
-	}
+    @Override
+    public boolean canHandleClass(Class<?> clazz) {
+        return clazz == Color.class;
+    }
 
-	@Override
-	public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		Color color = (Color) field.get(obj);
-		if (color != null) {
-			String value = Colors.encode(color);
-			XmlDefault def = field.getAnnotation(XmlDefault.class);
-			if (def != null) {
-				xml.addAttributeNot(name, value, def.value());
-			} else {
-				xml.addAttribute(name, value);
-			}
-		}
-	}
+    @Override
+    public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        Color color = (Color) field.get(obj);
+        if (color != null) {
+            String value = Colors.encode(color);
+            XmlDefault def = field.getAnnotation(XmlDefault.class);
+            if (def != null) {
+                xml.addAttributeNot(name, value, def.value());
+            } else {
+                xml.addAttribute(name, value);
+            }
+        }
+    }
 
-	@Override
-	public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		XmlDefault def = field.getAnnotation(XmlDefault.class);
-		String value = context.getParser().getAttribute(name, def != null ? def.value() : null);
-		field.set(obj, value != null && !value.isEmpty() ? Colors.decode(value) : null);
-	}
+    @Override
+    public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        XmlDefault def = field.getAnnotation(XmlDefault.class);
+        String value = context.getParser().getAttribute(name, def != null ? def.value() : null);
+        field.set(obj, value != null && !value.isEmpty() ? Colors.decode(value) : null);
+    }
 
-	@Override
-	public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
-		xml.startTag(tag);
-		xml.addText(Colors.encode((Color) obj));
-		xml.endTag();
-	}
+    @Override
+    public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+        xml.startTag(tag);
+        xml.addText(Colors.encode((Color) obj));
+        xml.endTag();
+    }
 }

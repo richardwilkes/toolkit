@@ -13,50 +13,50 @@ package com.trollworks.toolkit.utility.cmdline;
 
 /** Provides storage of processed command-line arguments. */
 class CmdLineData {
-	private CmdLineOption	mOption;
-	private String			mArgument;
+    private CmdLineOption mOption;
+    private String        mArgument;
 
-	/**
-	 * Creates a new {@link CmdLineData}.
-	 *
-	 * @param option The option.
-	 */
-	CmdLineData(CmdLineOption option) {
-		mOption = option;
-	}
+    /**
+     * Creates a new {@link CmdLineData}.
+     *
+     * @param option The option.
+     */
+    CmdLineData(CmdLineOption option) {
+        mOption = option;
+    }
 
-	/**
-	 * Creates a new {@link CmdLineData}.
-	 *
-	 * @param argument The original command-line argument.
-	 */
-	CmdLineData(String argument) {
-		mArgument = argument;
-	}
+    /**
+     * Creates a new {@link CmdLineData}.
+     *
+     * @param argument The original command-line argument.
+     */
+    CmdLineData(String argument) {
+        mArgument = argument;
+    }
 
-	/**
-	 * Creates a new {@link CmdLineData}.
-	 *
-	 * @param option The option.
-	 * @param argument The option's argument.
-	 */
-	CmdLineData(CmdLineOption option, String argument) {
-		mOption = option;
-		mArgument = argument;
-	}
+    /**
+     * Creates a new {@link CmdLineData}.
+     *
+     * @param option The option.
+     * @param argument The option's argument.
+     */
+    CmdLineData(CmdLineOption option, String argument) {
+        mOption = option;
+        mArgument = argument;
+    }
 
-	/** @return Whether this is an option. */
-	boolean isOption() {
-		return mOption != null;
-	}
+    /** @return Whether this is an option. */
+    boolean isOption() {
+        return mOption != null;
+    }
 
-	/** @return The option, or <code>null</code> if this is not an option. */
-	CmdLineOption getOption() {
-		return mOption;
-	}
+    /** @return The option, or <code>null</code> if this is not an option. */
+    CmdLineOption getOption() {
+        return mOption;
+    }
 
-	/** @return The option's argument, or the original command line argument. */
-	String getArgument() {
-		return mArgument;
-	}
+    /** @return The option's argument, or the original command line argument. */
+    String getArgument() {
+        return mArgument;
+    }
 }

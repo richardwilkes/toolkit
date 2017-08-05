@@ -18,38 +18,38 @@ import java.util.HashMap;
 
 /** Provides a standard implementation of {@link Deletable} for the {@link TreePanel}. */
 public class StdTreeDeleter implements Deletable {
-	private TreePanel mPanel;
+    private TreePanel mPanel;
 
-	/**
-	 * Creates a new {@link StdTreeDeleter}.
-	 *
-	 * @param panel The {@link TreePanel} to work with.
-	 */
-	public StdTreeDeleter(TreePanel panel) {
-		mPanel = panel;
-	}
+    /**
+     * Creates a new {@link StdTreeDeleter}.
+     *
+     * @param panel The {@link TreePanel} to work with.
+     */
+    public StdTreeDeleter(TreePanel panel) {
+        mPanel = panel;
+    }
 
-	@Override
-	public boolean canDeleteSelection() {
-		return true;
-	}
+    @Override
+    public boolean canDeleteSelection() {
+        return true;
+    }
 
-	@Override
-	public void deleteSelection() {
-		HashMap<TreeContainerRow, ArrayList<TreeRow>> map = new HashMap<>();
-		ArrayList<TreeRow> rows = mPanel.getSelectedRows();
-		for (TreeRow row : rows) {
-			TreeContainerRow parent = row.getParent();
-			ArrayList<TreeRow> list = map.get(parent);
-			if (list == null) {
-				list = new ArrayList<>();
-				map.put(parent, list);
-			}
-			list.add(row);
-		}
-		for (TreeContainerRow row : map.keySet()) {
-			row.removeRow(map.get(row));
-		}
-		mPanel.pack();
-	}
+    @Override
+    public void deleteSelection() {
+        HashMap<TreeContainerRow, ArrayList<TreeRow>> map = new HashMap<>();
+        ArrayList<TreeRow> rows = mPanel.getSelectedRows();
+        for (TreeRow row : rows) {
+            TreeContainerRow parent = row.getParent();
+            ArrayList<TreeRow> list = map.get(parent);
+            if (list == null) {
+                list = new ArrayList<>();
+                map.put(parent, list);
+            }
+            list.add(row);
+        }
+        for (TreeContainerRow row : map.keySet()) {
+            row.removeRow(map.get(row));
+        }
+        mPanel.pack();
+    }
 }

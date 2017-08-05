@@ -14,11 +14,11 @@ package com.trollworks.toolkit.expression;
 import com.trollworks.toolkit.expression.operator.Operator;
 
 class ExpressionOperator {
-	Operator	mOperator;
-	Operator	mUnaryOperator;
+    Operator mOperator;
+    Operator mUnaryOperator;
 
-	ExpressionOperator(Operator operator, Operator unaryOperator) {
-		mOperator = operator;
-		mUnaryOperator = unaryOperator;
-	}
+    ExpressionOperator(Operator operator, Operator unaryOperator) {
+        mOperator = operator;
+        mUnaryOperator = unaryOperator;
+    }
 }

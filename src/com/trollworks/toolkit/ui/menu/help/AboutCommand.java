@@ -32,80 +32,80 @@ import javax.swing.JPanel;
 
 /** Provides the "About" command. */
 public class AboutCommand extends Command implements AboutHandler {
-	@Localize("About {0}")
-	@Localize(locale = "ru", value = "О программе {0}")
-	@Localize(locale = "de", value = "Über {0}")
-	@Localize(locale = "es", value = "Acerca de {0}")
-	private static String ABOUT;
+    @Localize("About {0}")
+    @Localize(locale = "ru", value = "О программе {0}")
+    @Localize(locale = "de", value = "Über {0}")
+    @Localize(locale = "es", value = "Acerca de {0}")
+    private static String ABOUT;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** The action command this command will issue. */
-	public static final String			CMD_ABOUT	= "About";				//$NON-NLS-1$
-	/** The singleton {@link AboutCommand}. */
-	public static final AboutCommand	INSTANCE	= new AboutCommand();
-	AppWindow							mWindow		= null;
+    /** The action command this command will issue. */
+    public static final String       CMD_ABOUT = "About";           				//$NON-NLS-1$
+    /** The singleton {@link AboutCommand}. */
+    public static final AboutCommand INSTANCE  = new AboutCommand();
+    AppWindow                        mWindow   = null;
 
-	private AboutCommand() {
-		super(MessageFormat.format(ABOUT, BundleInfo.getDefault().getName()), CMD_ABOUT);
-	}
+    private AboutCommand() {
+        super(MessageFormat.format(ABOUT, BundleInfo.getDefault().getName()), CMD_ABOUT);
+    }
 
-	@Override
-	public void adjust() {
-		setEnabled(!UIUtilities.inModalState());
-	}
+    @Override
+    public void adjust() {
+        setEnabled(!UIUtilities.inModalState());
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		show();
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        show();
+    }
 
-	@Override
-	public void handleAbout(AboutEvent event) {
-		show();
-	}
+    @Override
+    public void handleAbout(AboutEvent event) {
+        show();
+    }
 
-	private void show() {
-		if (!UIUtilities.inModalState()) {
-			if (mWindow != null) {
-				if (mWindow.isDisplayable() && mWindow.isVisible()) {
-					mWindow.toFront();
-					return;
-				}
-			}
-			JPanel aboutPanel = App.createAboutPanel();
-			if (aboutPanel != null) {
-				mWindow = new AboutWindow(getTitle(), aboutPanel);
-			}
-		}
-	}
+    private void show() {
+        if (!UIUtilities.inModalState()) {
+            if (mWindow != null) {
+                if (mWindow.isDisplayable() && mWindow.isVisible()) {
+                    mWindow.toFront();
+                    return;
+                }
+            }
+            JPanel aboutPanel = App.createAboutPanel();
+            if (aboutPanel != null) {
+                mWindow = new AboutWindow(getTitle(), aboutPanel);
+            }
+        }
+    }
 
-	private class AboutWindow extends AppWindow implements CloseHandler {
-		AboutWindow(String title, JPanel content) {
-			super(title);
-			getContentPane().add(content);
-			addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosed(WindowEvent windowEvent) {
-					mWindow = null;
-				}
-			});
-			GraphicsUtilities.packAndCenterWindowOn(this, null);
-			setVisible(true);
-			setResizable(false);
-		}
+    private class AboutWindow extends AppWindow implements CloseHandler {
+        AboutWindow(String title, JPanel content) {
+            super(title);
+            getContentPane().add(content);
+            addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent windowEvent) {
+                    mWindow = null;
+                }
+            });
+            GraphicsUtilities.packAndCenterWindowOn(this, null);
+            setVisible(true);
+            setResizable(false);
+        }
 
-		@Override
-		public boolean mayAttemptClose() {
-			return true;
-		}
+        @Override
+        public boolean mayAttemptClose() {
+            return true;
+        }
 
-		@Override
-		public boolean attemptClose() {
-			dispose();
-			return true;
-		}
-	}
+        @Override
+        public boolean attemptClose() {
+            dispose();
+            return true;
+        }
+    }
 }

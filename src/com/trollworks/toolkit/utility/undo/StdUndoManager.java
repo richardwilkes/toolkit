@@ -17,24 +17,24 @@ import javax.swing.undo.UndoManager;
 
 /** The standard {@link UndoManager} for use with our app's windows. */
 public class StdUndoManager extends UndoManager {
-	private boolean mInTransaction;
+    private boolean mInTransaction;
 
-	@Override
-	public synchronized void undo() throws CannotUndoException {
-		mInTransaction = true;
-		super.undo();
-		mInTransaction = false;
-	}
+    @Override
+    public synchronized void undo() throws CannotUndoException {
+        mInTransaction = true;
+        super.undo();
+        mInTransaction = false;
+    }
 
-	@Override
-	public synchronized void redo() throws CannotRedoException {
-		mInTransaction = true;
-		super.redo();
-		mInTransaction = false;
-	}
+    @Override
+    public synchronized void redo() throws CannotRedoException {
+        mInTransaction = true;
+        super.redo();
+        mInTransaction = false;
+    }
 
-	/** @return Whether this {@link UndoManager} is currently processing an undo or redo. */
-	public boolean isInTransaction() {
-		return mInTransaction;
-	}
+    /** @return Whether this {@link UndoManager} is currently processing an undo or redo. */
+    public boolean isInTransaction() {
+        return mInTransaction;
+    }
 }

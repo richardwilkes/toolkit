@@ -15,10 +15,10 @@ import java.io.File;
 
 /** Provides a way to find a {@link FileProxy} for a {@link File}. */
 public interface FileProxyProvider {
-	/**
-	 * @param file The {@link File} to locate a {@link FileProxy} for.
-	 * @return The {@link FileProxy}. May be <code>null</code> if this provider doesn't have one
-	 *         that represents the specified {@link File}.
-	 */
-	FileProxy getFileProxy(File file);
+    /**
+     * @param file The {@link File} to locate a {@link FileProxy} for.
+     * @return The {@link FileProxy}. May be <code>null</code> if this provider doesn't have one
+     *         that represents the specified {@link File}.
+     */
+    FileProxy getFileProxy(File file);
 }

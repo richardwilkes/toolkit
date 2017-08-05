@@ -18,11 +18,11 @@ import javax.xml.stream.XMLStreamException;
  * interface.
  */
 public interface TagExtraSubTags {
-	/**
-	 * Called to allow an object to emit additional sub-tags that the standard processing can't
-	 * handle.
-	 *
-	 * @param xml The {@link XmlGenerator} for this object.
-	 */
-	void xmlEmitExtraSubTags(XmlGenerator xml) throws XMLStreamException;
+    /**
+     * Called to allow an object to emit additional sub-tags that the standard processing can't
+     * handle.
+     *
+     * @param xml The {@link XmlGenerator} for this object.
+     */
+    void xmlEmitExtraSubTags(XmlGenerator xml) throws XMLStreamException;
 }

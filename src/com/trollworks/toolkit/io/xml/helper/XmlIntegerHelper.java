@@ -20,40 +20,40 @@ import java.lang.reflect.Field;
 import javax.xml.stream.XMLStreamException;
 
 public class XmlIntegerHelper implements XmlObjectHelper {
-	public static final XmlIntegerHelper SINGLETON = new XmlIntegerHelper();
+    public static final XmlIntegerHelper SINGLETON = new XmlIntegerHelper();
 
-	private XmlIntegerHelper() {
-	}
+    private XmlIntegerHelper() {
+    }
 
-	@Override
-	public boolean canHandleClass(Class<?> clazz) {
-		return Integer.class == clazz;
-	}
+    @Override
+    public boolean canHandleClass(Class<?> clazz) {
+        return Integer.class == clazz;
+    }
 
-	@Override
-	public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		Integer value = (Integer) field.get(obj);
-		if (value != null) {
-			int primitive = value.intValue();
-			XmlDefaultInteger def = field.getAnnotation(XmlDefaultInteger.class);
-			if (def != null) {
-				xml.addAttributeNot(name, primitive, def.value());
-			} else {
-				xml.addAttribute(name, primitive);
-			}
-		}
-	}
+    @Override
+    public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        Integer value = (Integer) field.get(obj);
+        if (value != null) {
+            int primitive = value.intValue();
+            XmlDefaultInteger def = field.getAnnotation(XmlDefaultInteger.class);
+            if (def != null) {
+                xml.addAttributeNot(name, primitive, def.value());
+            } else {
+                xml.addAttribute(name, primitive);
+            }
+        }
+    }
 
-	@Override
-	public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		XmlDefaultInteger def = field.getAnnotation(XmlDefaultInteger.class);
-		field.set(obj, Integer.valueOf(context.getParser().getIntegerAttribute(name, def != null ? def.value() : 0)));
-	}
+    @Override
+    public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        XmlDefaultInteger def = field.getAnnotation(XmlDefaultInteger.class);
+        field.set(obj, Integer.valueOf(context.getParser().getIntegerAttribute(name, def != null ? def.value() : 0)));
+    }
 
-	@Override
-	public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
-		xml.startTag(tag);
-		xml.addText(obj.toString());
-		xml.endTag();
-	}
+    @Override
+    public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+        xml.startTag(tag);
+        xml.addText(obj.toString());
+        xml.endTag();
+    }
 }

@@ -17,6 +17,6 @@ import java.util.HashMap;
 
 /** An object for holding state during model loads and saves. */
 public class ModelContext extends HashMap<String, Object> {
-	/** The stack for the versions of the data being loaded. */
-	public Stack<Integer> mVersionStack = new Stack<>();
+    /** The stack for the versions of the data being loaded. */
+    public Stack<Integer> mVersionStack = new Stack<>();
 }

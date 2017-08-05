@@ -20,43 +20,43 @@ import javax.swing.JPanel;
 
 /** Represents dockable items. */
 public abstract class Dockable extends JPanel {
-	/**
-	 * Creates a new {@link Dockable}.
-	 */
-	protected Dockable() {
-		super(true);
-	}
+    /**
+     * Creates a new {@link Dockable}.
+     */
+    protected Dockable() {
+        super(true);
+    }
 
-	/** @param layout The {@link LayoutManager} to use. */
-	protected Dockable(LayoutManager layout) {
-		super(layout, true);
-	}
+    /** @param layout The {@link LayoutManager} to use. */
+    protected Dockable(LayoutManager layout) {
+        super(layout, true);
+    }
 
-	/**
-	 * @return A unique descriptor that can be used by a {@link DockableFactory} to recreate the
-	 *         contents of the {@link Dockable}.
-	 */
-	public abstract String getDescriptor();
+    /**
+     * @return A unique descriptor that can be used by a {@link DockableFactory} to recreate the
+     *         contents of the {@link Dockable}.
+     */
+    public abstract String getDescriptor();
 
-	/** @return An {@link Icon} to represent this {@link Dockable}. */
-	public abstract Icon getTitleIcon();
+    /** @return An {@link Icon} to represent this {@link Dockable}. */
+    public abstract Icon getTitleIcon();
 
-	/** @return The title of this {@link Dockable}. */
-	public abstract String getTitle();
+    /** @return The title of this {@link Dockable}. */
+    public abstract String getTitle();
 
-	/** @return The title tooltip of this {@link Dockable}. */
-	public abstract String getTitleTooltip();
+    /** @return The title tooltip of this {@link Dockable}. */
+    public abstract String getTitleTooltip();
 
-	/**
-	 * Called when this {@link Dockable} is made active within a {@link DockContainer}. This can be
-	 * called many times in a row without other {@link Dockable}s receiving a call in between.
-	 */
-	public void activated() {
-		// Does nothing by default
-	}
+    /**
+     * Called when this {@link Dockable} is made active within a {@link DockContainer}. This can be
+     * called many times in a row without other {@link Dockable}s receiving a call in between.
+     */
+    public void activated() {
+        // Does nothing by default
+    }
 
-	/** @return The containing {@link DockContainer}. */
-	public final DockContainer getDockContainer() {
-		return UIUtilities.getAncestorOfType(this, DockContainer.class);
-	}
+    /** @return The containing {@link DockContainer}. */
+    public final DockContainer getDockContainer() {
+        return UIUtilities.getAncestorOfType(this, DockContainer.class);
+    }
 }

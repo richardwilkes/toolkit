@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Localizations {
-	/** @return The localizations available for a field. */
-	Localize[] value();
+    /** @return The localizations available for a field. */
+    Localize[] value();
 }

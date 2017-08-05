@@ -15,19 +15,19 @@ import com.trollworks.toolkit.expression.ArgumentTokenizer;
 import com.trollworks.toolkit.expression.EvaluationException;
 
 public class And extends Operator {
-	public And() {
-		super("&&", 2); //$NON-NLS-1$
-	}
+    public And() {
+        super("&&", 2); //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object evaluate(Object left, Object right) throws EvaluationException {
-		boolean b1 = ArgumentTokenizer.getDoubleOperand(left) != 0;
-		boolean b2 = ArgumentTokenizer.getDoubleOperand(right) != 0;
-		return Double.valueOf(b1 && b2 ? 1 : 0);
-	}
+    @Override
+    public final Object evaluate(Object left, Object right) throws EvaluationException {
+        boolean b1 = ArgumentTokenizer.getDoubleOperand(left) != 0;
+        boolean b2 = ArgumentTokenizer.getDoubleOperand(right) != 0;
+        return Double.valueOf(b1 && b2 ? 1 : 0);
+    }
 
-	@Override
-	public final Object evaluate(Object operand) throws EvaluationException {
-		return null;
-	}
+    @Override
+    public final Object evaluate(Object operand) throws EvaluationException {
+        return null;
+    }
 }

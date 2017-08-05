@@ -21,62 +21,62 @@ import javax.swing.border.Border;
 
 /** A replacement for the Swing EmptyBorder class that understands scaling. */
 public class EmptyBorder implements Border {
-	private int[] mThickness = new int[Edge.values().length];
+    private int[] mThickness = new int[Edge.values().length];
 
-	/**
-	 * Creates a new border.
-	 *
-	 * @param thickness The thickness of each edge.
-	 */
-	public EmptyBorder(int thickness) {
-		for (Edge edge : Edge.values()) {
-			setThickness(edge, thickness);
-		}
-	}
+    /**
+     * Creates a new border.
+     *
+     * @param thickness The thickness of each edge.
+     */
+    public EmptyBorder(int thickness) {
+        for (Edge edge : Edge.values()) {
+            setThickness(edge, thickness);
+        }
+    }
 
-	/**
-	 * Creates a new border.
-	 *
-	 * @param top The thickness to use for the top side.
-	 * @param left The thickness to use for the left side.
-	 * @param bottom The thickness to use for the bottom side.
-	 * @param right The thickness to use for the right side.
-	 */
-	public EmptyBorder(int top, int left, int bottom, int right) {
-		setThickness(Edge.TOP, top);
-		setThickness(Edge.LEFT, left);
-		setThickness(Edge.BOTTOM, bottom);
-		setThickness(Edge.RIGHT, right);
-	}
+    /**
+     * Creates a new border.
+     *
+     * @param top The thickness to use for the top side.
+     * @param left The thickness to use for the left side.
+     * @param bottom The thickness to use for the bottom side.
+     * @param right The thickness to use for the right side.
+     */
+    public EmptyBorder(int top, int left, int bottom, int right) {
+        setThickness(Edge.TOP, top);
+        setThickness(Edge.LEFT, left);
+        setThickness(Edge.BOTTOM, bottom);
+        setThickness(Edge.RIGHT, right);
+    }
 
-	/**
-	 * @param edge The edge to query.
-	 * @return The thickness being used for the specified edge.
-	 */
-	public int getThickness(Edge edge) {
-		return mThickness[edge.ordinal()];
-	}
+    /**
+     * @param edge The edge to query.
+     * @return The thickness being used for the specified edge.
+     */
+    public int getThickness(Edge edge) {
+        return mThickness[edge.ordinal()];
+    }
 
-	/**
-	 * @param edge The edge to set.
-	 * @param thickness The thickness to use for the specified edge.
-	 */
-	public void setThickness(Edge edge, int thickness) {
-		mThickness[edge.ordinal()] = thickness;
-	}
+    /**
+     * @param edge The edge to set.
+     * @param thickness The thickness to use for the specified edge.
+     */
+    public void setThickness(Edge edge, int thickness) {
+        mThickness[edge.ordinal()] = thickness;
+    }
 
-	@Override
-	public void paintBorder(Component component, Graphics g, int x, int y, int width, int height) {
-		// Does nothing
-	}
+    @Override
+    public void paintBorder(Component component, Graphics g, int x, int y, int width, int height) {
+        // Does nothing
+    }
 
-	@Override
-	public Insets getBorderInsets(Component component) {
-		return Scale.get(component).scale(new Insets(mThickness[Edge.TOP.ordinal()], mThickness[Edge.LEFT.ordinal()], mThickness[Edge.BOTTOM.ordinal()], mThickness[Edge.RIGHT.ordinal()]));
-	}
+    @Override
+    public Insets getBorderInsets(Component component) {
+        return Scale.get(component).scale(new Insets(mThickness[Edge.TOP.ordinal()], mThickness[Edge.LEFT.ordinal()], mThickness[Edge.BOTTOM.ordinal()], mThickness[Edge.RIGHT.ordinal()]));
+    }
 
-	@Override
-	public boolean isBorderOpaque() {
-		return false;
-	}
+    @Override
+    public boolean isBorderOpaque() {
+        return false;
+    }
 }

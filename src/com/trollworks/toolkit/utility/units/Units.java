@@ -13,45 +13,45 @@ package com.trollworks.toolkit.utility.units;
 
 /** Specifies the methods a type of unit must implement. */
 public interface Units {
-	/**
-	 * @param value The value to format.
-	 * @param localize Whether or not the number should be localized.
-	 * @return The formatted value.
-	 */
-	String format(double value, boolean localize);
+    /**
+     * @param value The value to format.
+     * @param localize Whether or not the number should be localized.
+     * @return The formatted value.
+     */
+    String format(double value, boolean localize);
 
-	/**
-	 * Converts from a specified units type into this units type.
-	 *
-	 * @param units The units to convert from.
-	 * @param value The value to convert.
-	 * @return The new value, in units of this type.
-	 */
-	double convert(Units units, double value);
+    /**
+     * Converts from a specified units type into this units type.
+     *
+     * @param units The units to convert from.
+     * @param value The value to convert.
+     * @return The new value, in units of this type.
+     */
+    double convert(Units units, double value);
 
-	/**
-	 * Normalizes a value to a common scale.
-	 *
-	 * @param value The value to normalize.
-	 * @return The normalized value.
-	 */
-	double normalize(double value);
+    /**
+     * Normalizes a value to a common scale.
+     *
+     * @param value The value to normalize.
+     * @return The normalized value.
+     */
+    double normalize(double value);
 
-	/** @return The factor used. */
-	double getFactor();
+    /** @return The factor used. */
+    double getFactor();
 
-	/** @return The description, which includes the localized name and the abbreviation. */
-	String getDescription();
+    /** @return The description, which includes the localized name and the abbreviation. */
+    String getDescription();
 
-	/** @return The localized name. */
-	String getLocalizedName();
+    /** @return The localized name. */
+    String getLocalizedName();
 
-	/** @return The abbreviation to use for this unit. */
-	String getAbbreviation();
+    /** @return The abbreviation to use for this unit. */
+    String getAbbreviation();
 
-	/** @return The reference name of the units (not localized). */
-	String name();
+    /** @return The reference name of the units (not localized). */
+    String name();
 
-	/** @return An array of compatible units. */
-	Units[] getCompatibleUnits();
+    /** @return An array of compatible units. */
+    Units[] getCompatibleUnits();
 }

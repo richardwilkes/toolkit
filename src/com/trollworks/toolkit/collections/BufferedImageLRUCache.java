@@ -19,22 +19,22 @@ import java.util.Map;
  * the cache.
  */
 public class BufferedImageLRUCache<K> extends LRUCache<K, BufferedImage> {
-	/**
-	 * Creates a new {@link BufferedImageLRUCache}.
-	 *
-	 * @param maxEntries The maximum number of entries to be in the cache. Older entries are removed
-	 *            first.
-	 */
-	public BufferedImageLRUCache(int maxEntries) {
-		super(maxEntries);
-	}
+    /**
+     * Creates a new {@link BufferedImageLRUCache}.
+     *
+     * @param maxEntries The maximum number of entries to be in the cache. Older entries are removed
+     *            first.
+     */
+    public BufferedImageLRUCache(int maxEntries) {
+        super(maxEntries);
+    }
 
-	@Override
-	protected boolean removeEldestEntry(Map.Entry<K, BufferedImage> eldest) {
-		if (super.removeEldestEntry(eldest)) {
-			eldest.getValue().flush();
-			return true;
-		}
-		return false;
-	}
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<K, BufferedImage> eldest) {
+        if (super.removeEldestEntry(eldest)) {
+            eldest.getValue().flush();
+            return true;
+        }
+        return false;
+    }
 }

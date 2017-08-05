@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 /** Provides a default value for an int value. */
 public @interface XmlDefaultInteger {
-	/** @return The default value. */
-	int value();
+    /** @return The default value. */
+    int value();
 }

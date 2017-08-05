@@ -14,18 +14,18 @@ package com.trollworks.toolkit.io.xml;
 import javax.xml.stream.XMLStreamException;
 
 /**
- * Objects that wish to control the object creation process for their fields should implement
- * this interface.
+ * Objects that wish to control the object creation process for their fields should implement this
+ * interface.
  */
 public interface TagObjectCreator {
-	/**
-	 * Called to create an object for an XML tag.
-	 *
-	 * @param context The {@link XmlParserContext} for this object.
-	 * @param tag The tag to return an object for.
-	 * @return The newly created object, or <code>null</code> if a new instance of the field's
-	 *         data type should be created (i.e. when there is no need to use a sub-class and
-	 *         the default no-args constructor can be used).
-	 */
-	Object xmlCreateObject(XmlParserContext context, String tag) throws XMLStreamException;
+    /**
+     * Called to create an object for an XML tag.
+     *
+     * @param context The {@link XmlParserContext} for this object.
+     * @param tag The tag to return an object for.
+     * @return The newly created object, or <code>null</code> if a new instance of the field's data
+     *         type should be created (i.e. when there is no need to use a sub-class and the default
+     *         no-args constructor can be used).
+     */
+    Object xmlCreateObject(XmlParserContext context, String tag) throws XMLStreamException;
 }

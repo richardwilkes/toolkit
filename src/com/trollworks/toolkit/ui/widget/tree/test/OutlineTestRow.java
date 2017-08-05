@@ -16,47 +16,47 @@ import com.trollworks.toolkit.ui.widget.outline.Column;
 import com.trollworks.toolkit.ui.widget.outline.Row;
 
 public class OutlineTestRow extends Row {
-	private String mName;
+    private String mName;
 
-	public OutlineTestRow(String name) {
-		mName = name;
-	}
+    public OutlineTestRow(String name) {
+        mName = name;
+    }
 
-	public String getName() {
-		return mName;
-	}
+    public String getName() {
+        return mName;
+    }
 
-	public String getSecond() {
-		return Integer.toString(mName.length());
-	}
+    public String getSecond() {
+        return Integer.toString(mName.length());
+    }
 
-	@SuppressWarnings("static-method")
-	public StdImage getIcon() {
-		return StdImage.MINI_WARNING;
-	}
+    @SuppressWarnings("static-method")
+    public StdImage getIcon() {
+        return StdImage.MINI_WARNING;
+    }
 
-	@Override
-	public Object getData(Column column) {
-		switch (column.getID()) {
-			case 0:
-				return getName();
-			default:
-				return Integer.valueOf(mName.length());
-		}
-	}
+    @Override
+    public Object getData(Column column) {
+        switch (column.getID()) {
+            case 0:
+                return getName();
+            default:
+                return Integer.valueOf(mName.length());
+        }
+    }
 
-	@Override
-	public String getDataAsText(Column column) {
-		switch (column.getID()) {
-			case 0:
-				return getName();
-			default:
-				return getSecond();
-		}
-	}
+    @Override
+    public String getDataAsText(Column column) {
+        switch (column.getID()) {
+            case 0:
+                return getName();
+            default:
+                return getSecond();
+        }
+    }
 
-	@Override
-	public void setData(Column column, Object data) {
-		// Unused
-	}
+    @Override
+    public void setData(Column column, Object data) {
+        // Unused
+    }
 }

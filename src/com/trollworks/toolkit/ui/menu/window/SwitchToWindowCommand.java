@@ -18,25 +18,25 @@ import java.awt.event.ActionEvent;
 
 /** A command that will switch to a specific window. */
 public class SwitchToWindowCommand extends Command {
-	private AppWindow mWindow;
+    private AppWindow mWindow;
 
-	/**
-	 * Creates a new {@link SwitchToWindowCommand}.
-	 *
-	 * @param window The window to switch to.
-	 */
-	public SwitchToWindowCommand(AppWindow window) {
-		super(window.getTitle(), "SwitchToWindow[" + window.getTitle() + "]", window.getMenuIcon()); //$NON-NLS-1$ //$NON-NLS-2$
-		mWindow = window;
-	}
+    /**
+     * Creates a new {@link SwitchToWindowCommand}.
+     *
+     * @param window The window to switch to.
+     */
+    public SwitchToWindowCommand(AppWindow window) {
+        super(window.getTitle(), "SwitchToWindow[" + window.getTitle() + "]", window.getMenuIcon()); //$NON-NLS-1$ //$NON-NLS-2$
+        mWindow = window;
+    }
 
-	@Override
-	public void adjust() {
-		setMarked(getActiveWindow() == mWindow);
-	}
+    @Override
+    public void adjust() {
+        setMarked(getActiveWindow() == mWindow);
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		mWindow.toFront();
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        mWindow.toFront();
+    }
 }

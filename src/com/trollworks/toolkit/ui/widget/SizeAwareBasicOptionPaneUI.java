@@ -23,86 +23,86 @@ import javax.swing.plaf.basic.BasicOptionPaneUI;
 
 /** A wrapper around the {@link BasicOptionPaneUI} that respects component minimum sizes. */
 public class SizeAwareBasicOptionPaneUI extends BasicOptionPaneUI {
-	private OptionPaneUI mOriginal;
+    private OptionPaneUI mOriginal;
 
-	/**
-	 * Creates a new {@link SizeAwareBasicOptionPaneUI}.
-	 *
-	 * @param original The original {@link OptionPaneUI}.
-	 */
-	public SizeAwareBasicOptionPaneUI(OptionPaneUI original) {
-		mOriginal = original;
-	}
+    /**
+     * Creates a new {@link SizeAwareBasicOptionPaneUI}.
+     *
+     * @param original The original {@link OptionPaneUI}.
+     */
+    public SizeAwareBasicOptionPaneUI(OptionPaneUI original) {
+        mOriginal = original;
+    }
 
-	@Override
-	public Dimension getMinimumSize(JComponent c) {
-		if ((JOptionPane) c == optionPane) {
-			Dimension ourMin = getMinimumOptionPaneSize();
-			LayoutManager lm = c.getLayout();
-			if (lm != null) {
-				Dimension lmSize = lm.minimumLayoutSize(c);
-				if (ourMin != null) {
-					return new Dimension(Math.max(lmSize.width, ourMin.width), Math.max(lmSize.height, ourMin.height));
-				}
-				return lmSize;
-			}
-			return ourMin;
-		}
-		return null;
-	}
+    @Override
+    public Dimension getMinimumSize(JComponent c) {
+        if ((JOptionPane) c == optionPane) {
+            Dimension ourMin = getMinimumOptionPaneSize();
+            LayoutManager lm = c.getLayout();
+            if (lm != null) {
+                Dimension lmSize = lm.minimumLayoutSize(c);
+                if (ourMin != null) {
+                    return new Dimension(Math.max(lmSize.width, ourMin.width), Math.max(lmSize.height, ourMin.height));
+                }
+                return lmSize;
+            }
+            return ourMin;
+        }
+        return null;
+    }
 
-	@Override
-	public boolean containsCustomComponents(JOptionPane op) {
-		return mOriginal.containsCustomComponents(op);
-	}
+    @Override
+    public boolean containsCustomComponents(JOptionPane op) {
+        return mOriginal.containsCustomComponents(op);
+    }
 
-	@Override
-	public void selectInitialValue(JOptionPane op) {
-		mOriginal.selectInitialValue(op);
-	}
+    @Override
+    public void selectInitialValue(JOptionPane op) {
+        mOriginal.selectInitialValue(op);
+    }
 
-	@Override
-	public boolean contains(JComponent c, int x, int y) {
-		return mOriginal.contains(c, x, y);
-	}
+    @Override
+    public boolean contains(JComponent c, int x, int y) {
+        return mOriginal.contains(c, x, y);
+    }
 
-	@Override
-	public Accessible getAccessibleChild(JComponent c, int i) {
-		return mOriginal.getAccessibleChild(c, i);
-	}
+    @Override
+    public Accessible getAccessibleChild(JComponent c, int i) {
+        return mOriginal.getAccessibleChild(c, i);
+    }
 
-	@Override
-	public int getAccessibleChildrenCount(JComponent c) {
-		return mOriginal.getAccessibleChildrenCount(c);
-	}
+    @Override
+    public int getAccessibleChildrenCount(JComponent c) {
+        return mOriginal.getAccessibleChildrenCount(c);
+    }
 
-	@Override
-	public Dimension getMaximumSize(JComponent c) {
-		return mOriginal.getMaximumSize(c);
-	}
+    @Override
+    public Dimension getMaximumSize(JComponent c) {
+        return mOriginal.getMaximumSize(c);
+    }
 
-	@Override
-	public Dimension getPreferredSize(JComponent c) {
-		return mOriginal.getPreferredSize(c);
-	}
+    @Override
+    public Dimension getPreferredSize(JComponent c) {
+        return mOriginal.getPreferredSize(c);
+    }
 
-	@Override
-	public void installUI(JComponent c) {
-		mOriginal.installUI(c);
-	}
+    @Override
+    public void installUI(JComponent c) {
+        mOriginal.installUI(c);
+    }
 
-	@Override
-	public void paint(Graphics g, JComponent c) {
-		mOriginal.paint(g, c);
-	}
+    @Override
+    public void paint(Graphics g, JComponent c) {
+        mOriginal.paint(g, c);
+    }
 
-	@Override
-	public void uninstallUI(JComponent c) {
-		mOriginal.uninstallUI(c);
-	}
+    @Override
+    public void uninstallUI(JComponent c) {
+        mOriginal.uninstallUI(c);
+    }
 
-	@Override
-	public void update(Graphics g, JComponent c) {
-		mOriginal.update(g, c);
-	}
+    @Override
+    public void update(Graphics g, JComponent c) {
+        mOriginal.update(g, c);
+    }
 }

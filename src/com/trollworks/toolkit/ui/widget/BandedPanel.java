@@ -29,87 +29,87 @@ import javax.swing.SwingConstants;
 
 /** A simple panel that draws banded colors behind its contents. */
 public class BandedPanel extends ActionPanel implements Scrollable {
-	private String mTitle;
+    private String mTitle;
 
-	/**
-	 * Creates a new {@link BandedPanel}.
-	 *
-	 * @param title The title for this panel.
-	 */
-	public BandedPanel(String title) {
-		super(new ColumnLayout(1, 0, 0));
-		setOpaque(true);
-		setBackground(Color.white);
-		mTitle = title;
-	}
+    /**
+     * Creates a new {@link BandedPanel}.
+     *
+     * @param title The title for this panel.
+     */
+    public BandedPanel(String title) {
+        super(new ColumnLayout(1, 0, 0));
+        setOpaque(true);
+        setBackground(Color.white);
+        mTitle = title;
+    }
 
-	@Override
-	protected void paintComponent(Graphics gc) {
-		super.paintComponent(GraphicsUtilities.prepare(gc));
-		Rectangle bounds = getBounds();
-		bounds.x = 0;
-		bounds.y = 0;
-		int step = getStep();
-		int count = getComponentCount();
-		for (int i = 0; i < count; i += step) {
-			Rectangle compBounds = getComponent(i).getBounds();
-			bounds.y = compBounds.y;
-			bounds.height = compBounds.height;
-			int logical = i / step;
-			gc.setColor(Colors.getBanding(logical % 2 == 0));
-			gc.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-		}
-	}
+    @Override
+    protected void paintComponent(Graphics gc) {
+        super.paintComponent(GraphicsUtilities.prepare(gc));
+        Rectangle bounds = getBounds();
+        bounds.x = 0;
+        bounds.y = 0;
+        int step = getStep();
+        int count = getComponentCount();
+        for (int i = 0; i < count; i += step) {
+            Rectangle compBounds = getComponent(i).getBounds();
+            bounds.y = compBounds.y;
+            bounds.height = compBounds.height;
+            int logical = i / step;
+            gc.setColor(Colors.getBanding(logical % 2 == 0));
+            gc.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+        }
+    }
 
-	private int getStep() {
-		LayoutManager layout = getLayout();
-		if (layout instanceof ColumnLayout) {
-			return ((ColumnLayout) layout).getColumns();
-		} else if (layout instanceof FlexLayout && ((FlexLayout) layout).getRootCell() instanceof FlexGrid) {
-			int columns = ((FlexGrid) ((FlexLayout) layout).getRootCell()).getColumnCount();
-			return columns - columns / 2;
-		}
-		return 1;
-	}
+    private int getStep() {
+        LayoutManager layout = getLayout();
+        if (layout instanceof ColumnLayout) {
+            return ((ColumnLayout) layout).getColumns();
+        } else if (layout instanceof FlexLayout && ((FlexLayout) layout).getRootCell() instanceof FlexGrid) {
+            int columns = ((FlexGrid) ((FlexLayout) layout).getRootCell()).getColumnCount();
+            return columns - columns / 2;
+        }
+        return 1;
+    }
 
-	@Override
-	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-		return orientation == SwingConstants.VERTICAL ? visibleRect.height : visibleRect.width;
-	}
+    @Override
+    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+        return orientation == SwingConstants.VERTICAL ? visibleRect.height : visibleRect.width;
+    }
 
-	@Override
-	public Dimension getPreferredScrollableViewportSize() {
-		return getPreferredSize();
-	}
+    @Override
+    public Dimension getPreferredScrollableViewportSize() {
+        return getPreferredSize();
+    }
 
-	@Override
-	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-		int height = 10;
-		int count = getComponentCount();
-		if (count > 0) {
-			count = Math.min(getStep(), count);
-			for (int i = 0; i < count; i++) {
-				int tmp = getComponent(i).getHeight();
-				if (tmp > height) {
-					height = tmp;
-				}
-			}
-		}
-		return height;
-	}
+    @Override
+    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+        int height = 10;
+        int count = getComponentCount();
+        if (count > 0) {
+            count = Math.min(getStep(), count);
+            for (int i = 0; i < count; i++) {
+                int tmp = getComponent(i).getHeight();
+                if (tmp > height) {
+                    height = tmp;
+                }
+            }
+        }
+        return height;
+    }
 
-	@Override
-	public boolean getScrollableTracksViewportHeight() {
-		return UIUtilities.shouldTrackViewportHeight(this);
-	}
+    @Override
+    public boolean getScrollableTracksViewportHeight() {
+        return UIUtilities.shouldTrackViewportHeight(this);
+    }
 
-	@Override
-	public boolean getScrollableTracksViewportWidth() {
-		return UIUtilities.shouldTrackViewportWidth(this);
-	}
+    @Override
+    public boolean getScrollableTracksViewportWidth() {
+        return UIUtilities.shouldTrackViewportWidth(this);
+    }
 
-	@Override
-	public String toString() {
-		return mTitle;
-	}
+    @Override
+    public String toString() {
+        return mTitle;
+    }
 }

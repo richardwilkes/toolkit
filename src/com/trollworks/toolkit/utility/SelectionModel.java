@@ -16,38 +16,38 @@ import java.util.Set;
 
 /** Objects that want to provide tracking of a selection must implement this interface. */
 public interface SelectionModel {
-	/** @return <code>true</code> if at least one object is currently selected. */
-	boolean hasSelection();
+    /** @return <code>true</code> if at least one object is currently selected. */
+    boolean hasSelection();
 
-	/** @return The set of objects currently selected. */
-	Set<Object> getSelection();
+    /** @return The set of objects currently selected. */
+    Set<Object> getSelection();
 
-	/**
-	 * @param obj The object to check.
-	 * @return <code>true</code> if the specified object is selected.
-	 */
-	boolean isSelected(Object obj);
+    /**
+     * @param obj The object to check.
+     * @return <code>true</code> if the specified object is selected.
+     */
+    boolean isSelected(Object obj);
 
-	/**
-	 * @param obj The object to select.
-	 * @param add <code>true</code> if this should be added to an existing selection.
-	 *            <code>false</code> if it should replace the existing selection.
-	 */
-	void select(Object obj, boolean add);
+    /**
+     * @param obj The object to select.
+     * @param add <code>true</code> if this should be added to an existing selection.
+     *            <code>false</code> if it should replace the existing selection.
+     */
+    void select(Object obj, boolean add);
 
-	/**
-	 * @param objs The objects to select.
-	 * @param add <code>true</code> if these should be added to an existing selection.
-	 *            <code>false</code> if these should replace the existing selection.
-	 */
-	void select(Collection<?> objs, boolean add);
+    /**
+     * @param objs The objects to select.
+     * @param add <code>true</code> if these should be added to an existing selection.
+     *            <code>false</code> if these should replace the existing selection.
+     */
+    void select(Collection<?> objs, boolean add);
 
-	/** @param obj The object to deselect. */
-	void deselect(Object obj);
+    /** @param obj The object to deselect. */
+    void deselect(Object obj);
 
-	/** @param objs The objects to deselect. */
-	void deselect(Collection<?> objs);
+    /** @param objs The objects to deselect. */
+    void deselect(Collection<?> objs);
 
-	/** Removes all objects from the selection. */
-	void clearSelection();
+    /** Removes all objects from the selection. */
+    void clearSelection();
 }

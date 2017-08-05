@@ -15,19 +15,19 @@ import com.trollworks.toolkit.utility.notification.Notifier;
 
 /** Provides the root of a tree of {@link TreeRow}s. */
 public class TreeRoot extends TreeContainerRow {
-	private Notifier mNotifier;
+    private Notifier mNotifier;
 
-	/**
-	 * Creates a new {@link TreeRoot}.
-	 *
-	 * @param notifier The {@link Notifier} to use. Must not be <code>null</code>.
-	 */
-	public TreeRoot(Notifier notifier) {
-		mNotifier = notifier;
-	}
+    /**
+     * Creates a new {@link TreeRoot}.
+     *
+     * @param notifier The {@link Notifier} to use. Must not be <code>null</code>.
+     */
+    public TreeRoot(Notifier notifier) {
+        mNotifier = notifier;
+    }
 
-	/** @return The {@link Notifier} being used. */
-	public Notifier getNotifier() {
-		return mNotifier;
-	}
+    /** @return The {@link Notifier} being used. */
+    public Notifier getNotifier() {
+        return mNotifier;
+    }
 }

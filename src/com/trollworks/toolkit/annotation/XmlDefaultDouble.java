@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 /** Provides a default value for a double value. */
 public @interface XmlDefaultDouble {
-	/** @return The default value. */
-	double value();
+    /** @return The default value. */
+    double value();
 }

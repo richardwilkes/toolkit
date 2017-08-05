@@ -13,18 +13,18 @@ package com.trollworks.toolkit.io.server.http;
 
 /** The supported HTTP request methods. */
 public enum HttpMethod {
-	GET, POST, HEAD;
+    GET, POST, HEAD;
 
-	/**
-	 * @param text The text representation of the HTTP request method.
-	 * @return The {@link HttpMethod}, or <code>null</code> if no match can be found.
-	 */
-	static HttpMethod lookup(String text) {
-		for (HttpMethod method : HttpMethod.values()) {
-			if (method.toString().equalsIgnoreCase(text)) {
-				return method;
-			}
-		}
-		return null;
-	}
+    /**
+     * @param text The text representation of the HTTP request method.
+     * @return The {@link HttpMethod}, or <code>null</code> if no match can be found.
+     */
+    static HttpMethod lookup(String text) {
+        for (HttpMethod method : HttpMethod.values()) {
+            if (method.toString().equalsIgnoreCase(text)) {
+                return method;
+            }
+        }
+        return null;
+    }
 }

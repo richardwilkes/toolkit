@@ -14,16 +14,16 @@ package com.trollworks.toolkit.utility.task;
 import java.awt.EventQueue;
 
 class UITask extends Task {
-	UITask(Runnable runnable, Object key) {
-		super(runnable, key);
-	}
+    UITask(Runnable runnable, Object key) {
+        super(runnable, key);
+    }
 
-	@Override
-	public void run() {
-		if (!EventQueue.isDispatchThread()) {
-			EventQueue.invokeLater(this);
-		} else {
-			super.run();
-		}
-	}
+    @Override
+    public void run() {
+        if (!EventQueue.isDispatchThread()) {
+            EventQueue.invokeLater(this);
+        } else {
+            super.run();
+        }
+    }
 }

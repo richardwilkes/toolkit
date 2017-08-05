@@ -18,5 +18,5 @@ import java.awt.Frame;
  * considered a reason to keep the application open.
  */
 public interface SignificantFrame {
-	// No methods
+    // No methods
 }

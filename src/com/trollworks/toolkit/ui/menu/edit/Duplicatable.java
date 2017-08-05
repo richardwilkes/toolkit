@@ -16,9 +16,9 @@ package com.trollworks.toolkit.ui.menu.edit;
  * must implement this interface.
  */
 public interface Duplicatable {
-	/** @return Whether the selection can be duplicated. */
-	boolean canDuplicateSelection();
+    /** @return Whether the selection can be duplicated. */
+    boolean canDuplicateSelection();
 
-	/** Called to duplicate the current selection. */
-	void duplicateSelection();
+    /** Called to duplicate the current selection. */
+    void duplicateSelection();
 }

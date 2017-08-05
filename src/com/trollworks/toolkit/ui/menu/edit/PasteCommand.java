@@ -24,58 +24,58 @@ import javax.swing.text.JTextComponent;
 
 /** Provides the "Paste" command. */
 public class PasteCommand extends Command {
-	@Localize("Paste")
-	@Localize(locale = "ru", value = "Вставка")
-	@Localize(locale = "de", value = "Einfügen")
-	@Localize(locale = "es", value = "Pegar")
-	private static String PASTE;
+    @Localize("Paste")
+    @Localize(locale = "ru", value = "Вставка")
+    @Localize(locale = "de", value = "Einfügen")
+    @Localize(locale = "es", value = "Pegar")
+    private static String PASTE;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** The action command this command will issue. */
-	public static final String			CMD_PASTE	= "Paste";				//$NON-NLS-1$
+    /** The action command this command will issue. */
+    public static final String       CMD_PASTE = "Paste";           				//$NON-NLS-1$
 
-	/** The singleton {@link PasteCommand}. */
-	public static final PasteCommand	INSTANCE	= new PasteCommand();
+    /** The singleton {@link PasteCommand}. */
+    public static final PasteCommand INSTANCE  = new PasteCommand();
 
-	private PasteCommand() {
-		super(PASTE, CMD_PASTE, KeyEvent.VK_V);
-	}
+    private PasteCommand() {
+        super(PASTE, CMD_PASTE, KeyEvent.VK_V);
+    }
 
-	@Override
-	public void adjust() {
-		boolean enable = false;
-		Component comp = getFocusOwner();
-		if (comp instanceof JTextComponent && comp.isEnabled()) {
-			JTextComponent textComp = (JTextComponent) comp;
-			if (textComp.isEditable()) {
-				try {
-					enable = comp.getToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor);
-				} catch (Exception exception) {
-					// Ignore.
-				}
-			}
-		} else {
-			Pastable pastable = getTarget(Pastable.class);
-			if (pastable != null) {
-				enable = pastable.canPasteSelection();
-			}
-		}
-		setEnabled(enable);
-	}
+    @Override
+    public void adjust() {
+        boolean enable = false;
+        Component comp = getFocusOwner();
+        if (comp instanceof JTextComponent && comp.isEnabled()) {
+            JTextComponent textComp = (JTextComponent) comp;
+            if (textComp.isEditable()) {
+                try {
+                    enable = comp.getToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor);
+                } catch (Exception exception) {
+                    // Ignore.
+                }
+            }
+        } else {
+            Pastable pastable = getTarget(Pastable.class);
+            if (pastable != null) {
+                enable = pastable.canPasteSelection();
+            }
+        }
+        setEnabled(enable);
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		Component comp = getFocusOwner();
-		if (comp instanceof JTextComponent) {
-			((JTextComponent) comp).paste();
-		} else {
-			Pastable pastable = getTarget(Pastable.class);
-			if (pastable != null && pastable.canPasteSelection()) {
-				pastable.pasteSelection();
-			}
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        Component comp = getFocusOwner();
+        if (comp instanceof JTextComponent) {
+            ((JTextComponent) comp).paste();
+        } else {
+            Pastable pastable = getTarget(Pastable.class);
+            if (pastable != null && pastable.canPasteSelection()) {
+                pastable.pasteSelection();
+            }
+        }
+    }
 }

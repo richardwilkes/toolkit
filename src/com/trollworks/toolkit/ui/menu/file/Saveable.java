@@ -22,32 +22,32 @@ import java.io.File;
  * processing must implement this interface.
  */
 public interface Saveable extends FileProxy {
-	/** @return Whether the changes have been made that could be saved. */
-	boolean isModified();
+    /** @return Whether the changes have been made that could be saved. */
+    boolean isModified();
 
-	/** @param listener The listener to add. */
-	void addDataModifiedListener(DataModifiedListener listener);
+    /** @param listener The listener to add. */
+    void addDataModifiedListener(DataModifiedListener listener);
 
-	/** @param listener The listener to remove. */
-	void removeDataModifiedListener(DataModifiedListener listener);
+    /** @param listener The listener to remove. */
+    void removeDataModifiedListener(DataModifiedListener listener);
 
-	/**
-	 * @return The {@link FileType}s allowed when saving. The first one should be used if the user
-	 *         doesn't specify an extension.
-	 */
-	FileType[] getAllowedFileTypes();
+    /**
+     * @return The {@link FileType}s allowed when saving. The first one should be used if the user
+     *         doesn't specify an extension.
+     */
+    FileType[] getAllowedFileTypes();
 
-	/** @return The name the user will recognize as the name of the object being saved. */
-	String getSaveTitle();
+    /** @return The name the user will recognize as the name of the object being saved. */
+    String getSaveTitle();
 
-	/** @return The preferred file path to use when saving. */
-	String getPreferredSavePath();
+    /** @return The preferred file path to use when saving. */
+    String getPreferredSavePath();
 
-	/**
-	 * Called to actually save the contents to a file.
-	 *
-	 * @param file The file to save to.
-	 * @return The file(s) actually written to.
-	 */
-	File[] saveTo(File file);
+    /**
+     * Called to actually save the contents to a file.
+     *
+     * @param file The file to save to.
+     * @return The file(s) actually written to.
+     */
+    File[] saveTo(File file);
 }

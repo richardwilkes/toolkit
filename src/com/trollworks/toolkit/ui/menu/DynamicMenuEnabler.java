@@ -26,67 +26,67 @@ import javax.swing.event.MenuListener;
 
 /** Dynamically enables menu items just prior to them being used. */
 public class DynamicMenuEnabler implements KeyEventDispatcher, MenuListener {
-	private static final HashMap<KeyStroke, Command>	MAP			= new HashMap<>();
-	private static final DynamicMenuEnabler				INSTANCE	= new DynamicMenuEnabler();
+    private static final HashMap<KeyStroke, Command> MAP      = new HashMap<>();
+    private static final DynamicMenuEnabler          INSTANCE = new DynamicMenuEnabler();
 
-	static {
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(INSTANCE);
-	}
+    static {
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(INSTANCE);
+    }
 
-	private DynamicMenuEnabler() {
-		// Just here to prevent external instantiation
-	}
+    private DynamicMenuEnabler() {
+        // Just here to prevent external instantiation
+    }
 
-	/** @param cmd The {@link Command} to add. */
-	public static void add(Command cmd) {
-		MAP.put(cmd.getAccelerator(), cmd);
-	}
+    /** @param cmd The {@link Command} to add. */
+    public static void add(Command cmd) {
+        MAP.put(cmd.getAccelerator(), cmd);
+    }
 
-	/** @param cmd The {@link Command} to remove. */
-	public static void remove(Command cmd) {
-		MAP.remove(cmd.getAccelerator());
-	}
+    /** @param cmd The {@link Command} to remove. */
+    public static void remove(Command cmd) {
+        MAP.remove(cmd.getAccelerator());
+    }
 
-	/** @param menu The {@link JMenu} to add. */
-	public static void add(JMenu menu) {
-		menu.addMenuListener(INSTANCE);
-	}
+    /** @param menu The {@link JMenu} to add. */
+    public static void add(JMenu menu) {
+        menu.addMenuListener(INSTANCE);
+    }
 
-	/** @param menu The {@link JMenu} to remove. */
-	public static void remove(JMenu menu) {
-		menu.removeMenuListener(INSTANCE);
-	}
+    /** @param menu The {@link JMenu} to remove. */
+    public static void remove(JMenu menu) {
+        menu.removeMenuListener(INSTANCE);
+    }
 
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent event) {
-		Command action = MAP.get(KeyStroke.getKeyStrokeForEvent(event));
-		if (action != null) {
-			action.adjust();
-		}
-		return false;
-	}
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        Command action = MAP.get(KeyStroke.getKeyStrokeForEvent(event));
+        if (action != null) {
+            action.adjust();
+        }
+        return false;
+    }
 
-	@Override
-	public void menuCanceled(MenuEvent event) {
-		// Not used.
-	}
+    @Override
+    public void menuCanceled(MenuEvent event) {
+        // Not used.
+    }
 
-	@Override
-	public void menuDeselected(MenuEvent event) {
-		// Not used.
-	}
+    @Override
+    public void menuDeselected(MenuEvent event) {
+        // Not used.
+    }
 
-	@Override
-	public void menuSelected(MenuEvent event) {
-		JMenu menu = (JMenu) event.getSource();
-		for (Component component : menu.getMenuComponents()) {
-			if (component instanceof JMenuItem) {
-				JMenuItem item = (JMenuItem) component;
-				Action action = item.getAction();
-				if (action instanceof Command) {
-					((Command) action).adjust();
-				}
-			}
-		}
-	}
+    @Override
+    public void menuSelected(MenuEvent event) {
+        JMenu menu = (JMenu) event.getSource();
+        for (Component component : menu.getMenuComponents()) {
+            if (component instanceof JMenuItem) {
+                JMenuItem item = (JMenuItem) component;
+                Action action = item.getAction();
+                if (action instanceof Command) {
+                    ((Command) action).adjust();
+                }
+            }
+        }
+    }
 }

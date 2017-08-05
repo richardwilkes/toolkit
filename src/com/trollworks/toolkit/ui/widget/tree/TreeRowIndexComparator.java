@@ -15,23 +15,23 @@ import java.util.Comparator;
 
 /** Compares {@link TreeRow} indexes. */
 public class TreeRowIndexComparator implements Comparator<TreeRow> {
-	/** The one and only instance. */
-	public static final TreeRowIndexComparator INSTANCE = new TreeRowIndexComparator();
+    /** The one and only instance. */
+    public static final TreeRowIndexComparator INSTANCE = new TreeRowIndexComparator();
 
-	private TreeRowIndexComparator() {
-		// Here just to prevent multiple copies.
-	}
+    private TreeRowIndexComparator() {
+        // Here just to prevent multiple copies.
+    }
 
-	@Override
-	public int compare(TreeRow o1, TreeRow o2) {
-		int i1 = o1.getIndex();
-		int i2 = o2.getIndex();
-		if (i1 < i2) {
-			return -1;
-		}
-		if (i1 > i2) {
-			return 1;
-		}
-		return 0;
-	}
+    @Override
+    public int compare(TreeRow o1, TreeRow o2) {
+        int i1 = o1.getIndex();
+        int i2 = o2.getIndex();
+        if (i1 < i2) {
+            return -1;
+        }
+        if (i1 > i2) {
+            return 1;
+        }
+        return 0;
+    }
 }

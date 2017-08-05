@@ -17,29 +17,29 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 
 /** Allows {@link Dockable}s to be part of drag and drop operations internal to the JVM. */
 public class DockableTransferable implements Transferable {
-	/** The data flavor for this class. */
-	public static final DataFlavor	DATA_FLAVOR	= new DataFlavor(DockableTransferable.class, "Dockable");	//$NON-NLS-1$
-	private Dockable				mDockable;
+    /** The data flavor for this class. */
+    public static final DataFlavor DATA_FLAVOR = new DataFlavor(DockableTransferable.class, "Dockable");	//$NON-NLS-1$
+    private Dockable               mDockable;
 
-	public DockableTransferable(Dockable dockable) {
-		mDockable = dockable;
-	}
+    public DockableTransferable(Dockable dockable) {
+        mDockable = dockable;
+    }
 
-	@Override
-	public DataFlavor[] getTransferDataFlavors() {
-		return new DataFlavor[] { DATA_FLAVOR };
-	}
+    @Override
+    public DataFlavor[] getTransferDataFlavors() {
+        return new DataFlavor[] { DATA_FLAVOR };
+    }
 
-	@Override
-	public boolean isDataFlavorSupported(DataFlavor flavor) {
-		return DATA_FLAVOR.equals(flavor);
-	}
+    @Override
+    public boolean isDataFlavorSupported(DataFlavor flavor) {
+        return DATA_FLAVOR.equals(flavor);
+    }
 
-	@Override
-	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
-		if (DATA_FLAVOR.equals(flavor)) {
-			return mDockable;
-		}
-		throw new UnsupportedFlavorException(flavor);
-	}
+    @Override
+    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
+        if (DATA_FLAVOR.equals(flavor)) {
+            return mDockable;
+        }
+        throw new UnsupportedFlavorException(flavor);
+    }
 }

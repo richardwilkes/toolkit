@@ -21,51 +21,51 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 class DynamicJMenuItemPropertyChangeListener implements PropertyChangeListener {
-	private static ReferenceQueue<JMenuItem>	QUEUE	= new ReferenceQueue<>();
-	private WeakReference<JMenuItem>			mTarget;
-	private Action								mAction;
-	private PropertyChangeListener				mChainedListener;
+    private static ReferenceQueue<JMenuItem> QUEUE = new ReferenceQueue<>();
+    private WeakReference<JMenuItem>         mTarget;
+    private Action                           mAction;
+    private PropertyChangeListener           mChainedListener;
 
-	DynamicJMenuItemPropertyChangeListener(JMenuItem menuItem, Action action, PropertyChangeListener chainedListener) {
-		OwnedWeakReference ref;
-		while ((ref = (OwnedWeakReference) QUEUE.poll()) != null) {
-			DynamicJMenuItemPropertyChangeListener old = (DynamicJMenuItemPropertyChangeListener) ref.getOwner();
-			Action oldAction = old.mAction;
-			if (oldAction != null) {
-				oldAction.removePropertyChangeListener(old);
-			}
-		}
-		mTarget = new OwnedWeakReference(menuItem, QUEUE, this);
-		mAction = action;
-		mChainedListener = chainedListener;
-	}
+    DynamicJMenuItemPropertyChangeListener(JMenuItem menuItem, Action action, PropertyChangeListener chainedListener) {
+        OwnedWeakReference ref;
+        while ((ref = (OwnedWeakReference) QUEUE.poll()) != null) {
+            DynamicJMenuItemPropertyChangeListener old = (DynamicJMenuItemPropertyChangeListener) ref.getOwner();
+            Action oldAction = old.mAction;
+            if (oldAction != null) {
+                oldAction.removePropertyChangeListener(old);
+            }
+        }
+        mTarget = new OwnedWeakReference(menuItem, QUEUE, this);
+        mAction = action;
+        mChainedListener = chainedListener;
+    }
 
-	@Override
-	public void propertyChange(PropertyChangeEvent event) {
-		JMenuItem mi = mTarget.get();
-		if (mi == null) {
-			Action action = (Action) event.getSource();
-			action.removePropertyChangeListener(this);
-		} else {
-			if (event.getPropertyName().equals(Action.ACCELERATOR_KEY)) {
-				mi.setAccelerator((KeyStroke) event.getNewValue());
-				mi.invalidate();
-				mi.repaint();
-			}
-		}
-		mChainedListener.propertyChange(event);
-	}
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        JMenuItem mi = mTarget.get();
+        if (mi == null) {
+            Action action = (Action) event.getSource();
+            action.removePropertyChangeListener(this);
+        } else {
+            if (event.getPropertyName().equals(Action.ACCELERATOR_KEY)) {
+                mi.setAccelerator((KeyStroke) event.getNewValue());
+                mi.invalidate();
+                mi.repaint();
+            }
+        }
+        mChainedListener.propertyChange(event);
+    }
 
-	private class OwnedWeakReference extends WeakReference<JMenuItem> {
-		private DynamicJMenuItemPropertyChangeListener mOwner;
+    private class OwnedWeakReference extends WeakReference<JMenuItem> {
+        private DynamicJMenuItemPropertyChangeListener mOwner;
 
-		OwnedWeakReference(JMenuItem target, ReferenceQueue<JMenuItem> queue, DynamicJMenuItemPropertyChangeListener owner) {
-			super(target, queue);
-			mOwner = owner;
-		}
+        OwnedWeakReference(JMenuItem target, ReferenceQueue<JMenuItem> queue, DynamicJMenuItemPropertyChangeListener owner) {
+            super(target, queue);
+            mOwner = owner;
+        }
 
-		public Object getOwner() {
-			return mOwner;
-		}
-	}
+        public Object getOwner() {
+            return mOwner;
+        }
+    }
 }

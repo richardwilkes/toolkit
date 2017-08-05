@@ -15,6 +15,6 @@ import java.awt.Rectangle;
 
 /** Objects which can supply a bounding {@link Rectangle} should implement this interface. */
 public interface AreaObject {
-	/** @return The {@link Rectangle} which defines this object's bounds. */
-	Rectangle getBounds();
+    /** @return The {@link Rectangle} which defines this object's bounds. */
+    Rectangle getBounds();
 }

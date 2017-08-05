@@ -13,64 +13,64 @@ package com.trollworks.toolkit.ui.widget.outline;
 
 /** Stores the configuration of an {@link Column}. */
 public class ColumnConfig {
-	/** The id of the column */
-	public int		mID;
-	/** The visibility of the column */
-	public boolean	mVisible;
-	/** The width of the column */
-	public int		mWidth;
-	/** the sort sequence of the column */
-	public int		mSortSequence;
-	/** <code>true</code> if the sort is ascending */
-	public boolean	mSortAscending;
+    /** The id of the column */
+    public int     mID;
+    /** The visibility of the column */
+    public boolean mVisible;
+    /** The width of the column */
+    public int     mWidth;
+    /** the sort sequence of the column */
+    public int     mSortSequence;
+    /** <code>true</code> if the sort is ascending */
+    public boolean mSortAscending;
 
-	/**
-	 * Creates a new {@link ColumnConfig} with the given id.
-	 *
-	 * @param id The id of the column.
-	 */
-	public ColumnConfig(int id) {
-		this(id, true);
-	}
+    /**
+     * Creates a new {@link ColumnConfig} with the given id.
+     *
+     * @param id The id of the column.
+     */
+    public ColumnConfig(int id) {
+        this(id, true);
+    }
 
-	/**
-	 * Creates a new {@link ColumnConfig} with the given id and visibility.
-	 *
-	 * @param id The id of the column.
-	 * @param visible The visiblity of the column.
-	 */
-	public ColumnConfig(int id, boolean visible) {
-		this(id, visible, -1, false);
-	}
+    /**
+     * Creates a new {@link ColumnConfig} with the given id and visibility.
+     *
+     * @param id The id of the column.
+     * @param visible The visiblity of the column.
+     */
+    public ColumnConfig(int id, boolean visible) {
+        this(id, visible, -1, false);
+    }
 
-	/**
-	 * Creates a new {@link ColumnConfig} with the given id, visibility, sort sequence and if the
-	 * sort is ascending.
-	 *
-	 * @param id The id of the column.
-	 * @param visible The visiblity of the column.
-	 * @param sortSequence The sort sequence of the column.
-	 * @param sortAscending <code>true</code> if the sort is ascending.
-	 */
-	public ColumnConfig(int id, boolean visible, int sortSequence, boolean sortAscending) {
-		this(id, visible, -1, sortSequence, sortAscending);
-	}
+    /**
+     * Creates a new {@link ColumnConfig} with the given id, visibility, sort sequence and if the
+     * sort is ascending.
+     *
+     * @param id The id of the column.
+     * @param visible The visiblity of the column.
+     * @param sortSequence The sort sequence of the column.
+     * @param sortAscending <code>true</code> if the sort is ascending.
+     */
+    public ColumnConfig(int id, boolean visible, int sortSequence, boolean sortAscending) {
+        this(id, visible, -1, sortSequence, sortAscending);
+    }
 
-	/**
-	 * Creates a new {@link ColumnConfig} with the given id, visibility, width, sort sequence and if
-	 * the sort is ascending.
-	 *
-	 * @param id The id of the column.
-	 * @param visible The visiblity of the column.
-	 * @param width The width of the column.
-	 * @param sortSequence The sort sequence of the column.
-	 * @param sortAscending <code>true</code> if the sort is ascending.
-	 */
-	public ColumnConfig(int id, boolean visible, int width, int sortSequence, boolean sortAscending) {
-		mID = id;
-		mVisible = visible;
-		mWidth = width;
-		mSortSequence = sortSequence;
-		mSortAscending = sortAscending;
-	}
+    /**
+     * Creates a new {@link ColumnConfig} with the given id, visibility, width, sort sequence and if
+     * the sort is ascending.
+     *
+     * @param id The id of the column.
+     * @param visible The visiblity of the column.
+     * @param width The width of the column.
+     * @param sortSequence The sort sequence of the column.
+     * @param sortAscending <code>true</code> if the sort is ascending.
+     */
+    public ColumnConfig(int id, boolean visible, int width, int sortSequence, boolean sortAscending) {
+        mID = id;
+        mVisible = visible;
+        mWidth = width;
+        mSortSequence = sortSequence;
+        mSortAscending = sortAscending;
+    }
 }

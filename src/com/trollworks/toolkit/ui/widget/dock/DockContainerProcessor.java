@@ -13,6 +13,6 @@ package com.trollworks.toolkit.ui.widget.dock;
 
 /** Functional interface for doing some work with a {@link DockContainer}. */
 public interface DockContainerProcessor {
-	/** @param dc The {@link DockContainer} to operate on. */
-	void processDockContainer(DockContainer dc);
+    /** @param dc The {@link DockContainer} to operate on. */
+    void processDockContainer(DockContainer dc);
 }

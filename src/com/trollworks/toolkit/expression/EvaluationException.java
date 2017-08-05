@@ -12,15 +12,15 @@
 package com.trollworks.toolkit.expression;
 
 public class EvaluationException extends Exception {
-	public EvaluationException(String message) {
-		super(message);
-	}
+    public EvaluationException(String message) {
+        super(message);
+    }
 
-	public EvaluationException(Exception exception) {
-		super(exception);
-	}
+    public EvaluationException(Exception exception) {
+        super(exception);
+    }
 
-	public EvaluationException(String message, Exception exception) {
-		super(message, exception);
-	}
+    public EvaluationException(String message, Exception exception) {
+        super(message, exception);
+    }
 }

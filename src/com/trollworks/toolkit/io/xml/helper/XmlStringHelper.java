@@ -20,39 +20,39 @@ import java.lang.reflect.Field;
 import javax.xml.stream.XMLStreamException;
 
 public class XmlStringHelper implements XmlObjectHelper {
-	public static final XmlStringHelper SINGLETON = new XmlStringHelper();
+    public static final XmlStringHelper SINGLETON = new XmlStringHelper();
 
-	private XmlStringHelper() {
-	}
+    private XmlStringHelper() {
+    }
 
-	@Override
-	public boolean canHandleClass(Class<?> clazz) {
-		return clazz == String.class;
-	}
+    @Override
+    public boolean canHandleClass(Class<?> clazz) {
+        return clazz == String.class;
+    }
 
-	@Override
-	public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		String value = (String) field.get(obj);
-		if (value != null) {
-			XmlDefault def = field.getAnnotation(XmlDefault.class);
-			if (def != null) {
-				xml.addAttributeNot(name, value, def.value());
-			} else {
-				xml.addAttribute(name, value);
-			}
-		}
-	}
+    @Override
+    public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        String value = (String) field.get(obj);
+        if (value != null) {
+            XmlDefault def = field.getAnnotation(XmlDefault.class);
+            if (def != null) {
+                xml.addAttributeNot(name, value, def.value());
+            } else {
+                xml.addAttribute(name, value);
+            }
+        }
+    }
 
-	@Override
-	public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		XmlDefault def = field.getAnnotation(XmlDefault.class);
-		field.set(obj, context.getParser().getAttribute(name, def != null ? def.value() : null));
-	}
+    @Override
+    public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        XmlDefault def = field.getAnnotation(XmlDefault.class);
+        field.set(obj, context.getParser().getAttribute(name, def != null ? def.value() : null));
+    }
 
-	@Override
-	public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
-		xml.startTag(tag);
-		xml.addText((String) obj);
-		xml.endTag();
-	}
+    @Override
+    public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+        xml.startTag(tag);
+        xml.addText((String) obj);
+        xml.endTag();
+    }
 }

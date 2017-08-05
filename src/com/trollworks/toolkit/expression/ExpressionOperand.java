@@ -14,11 +14,11 @@ package com.trollworks.toolkit.expression;
 import com.trollworks.toolkit.expression.operator.Operator;
 
 class ExpressionOperand {
-	String		mValue;
-	Operator	mUnaryOperator;
+    String   mValue;
+    Operator mUnaryOperator;
 
-	public ExpressionOperand(String value, Operator unaryOperator) {
-		mValue = value;
-		mUnaryOperator = unaryOperator;
-	}
+    public ExpressionOperand(String value, Operator unaryOperator) {
+        mValue = value;
+        mUnaryOperator = unaryOperator;
+    }
 }

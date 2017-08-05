@@ -15,19 +15,19 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 public final class FieldAnnotation<T extends Annotation> {
-	private Field	mField;
-	private T		mAnnotation;
+    private Field mField;
+    private T     mAnnotation;
 
-	public FieldAnnotation(Field field, T annotation) {
-		mField = field;
-		mAnnotation = annotation;
-	}
+    public FieldAnnotation(Field field, T annotation) {
+        mField = field;
+        mAnnotation = annotation;
+    }
 
-	public final Field getField() {
-		return mField;
-	}
+    public final Field getField() {
+        return mField;
+    }
 
-	public final T getAnnotation() {
-		return mAnnotation;
-	}
+    public final T getAnnotation() {
+        return mAnnotation;
+    }
 }

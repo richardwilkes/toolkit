@@ -19,62 +19,62 @@ import java.io.IOException;
 import java.net.Socket;
 
 class Client extends Thread {
-	private Server				mServer;
-	private Socket				mClientSocket;
-	private DataInputStream		mClientInput;
-	private DataOutputStream	mClientOutput;
+    private Server           mServer;
+    private Socket           mClientSocket;
+    private DataInputStream  mClientInput;
+    private DataOutputStream mClientOutput;
 
-	/**
-	 * Creates a new client processor for the server.
-	 *
-	 * @param server The owning server.
-	 * @param socket The socket containing the client connection.
-	 * @throws IOException if the socket's i/o streams cannot be retrieved.
-	 */
-	Client(Server server, Socket socket) throws IOException {
-		super(Conduit.class.getSimpleName() + '$' + Client.class.getSimpleName() + '#' + server.getNextClientCounter() + '@' + server.getServerSocket().getLocalSocketAddress());
-		setPriority(NORM_PRIORITY);
-		setDaemon(true);
-		mServer = server;
-		mClientSocket = socket;
-		mClientInput = new DataInputStream(socket.getInputStream());
-		mClientOutput = new DataOutputStream(socket.getOutputStream());
-	}
+    /**
+     * Creates a new client processor for the server.
+     *
+     * @param server The owning server.
+     * @param socket The socket containing the client connection.
+     * @throws IOException if the socket's i/o streams cannot be retrieved.
+     */
+    Client(Server server, Socket socket) throws IOException {
+        super(Conduit.class.getSimpleName() + '$' + Client.class.getSimpleName() + '#' + server.getNextClientCounter() + '@' + server.getServerSocket().getLocalSocketAddress());
+        setPriority(NORM_PRIORITY);
+        setDaemon(true);
+        mServer = server;
+        mClientSocket = socket;
+        mClientInput = new DataInputStream(socket.getInputStream());
+        mClientOutput = new DataOutputStream(socket.getOutputStream());
+    }
 
-	@Override
-	public void run() {
-		try {
-			while (true) {
-				mServer.send(new ConduitMessage(mClientInput));
-			}
-		} catch (Exception exception) {
-			// An exception here can be ignored, as its just the connection
-			// going away, which we deal with later.
-		}
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                mServer.send(new ConduitMessage(mClientInput));
+            }
+        } catch (Exception exception) {
+            // An exception here can be ignored, as its just the connection
+            // going away, which we deal with later.
+        }
 
-		shutdown();
-	}
+        shutdown();
+    }
 
-	/**
-	 * Sends a message to the client.
-	 *
-	 * @param msg The message.
-	 */
-	void send(ConduitMessage msg) {
-		try {
-			msg.send(mClientOutput);
-		} catch (Exception exception) {
-			shutdown();
-		}
-	}
+    /**
+     * Sends a message to the client.
+     *
+     * @param msg The message.
+     */
+    void send(ConduitMessage msg) {
+        try {
+            msg.send(mClientOutput);
+        } catch (Exception exception) {
+            shutdown();
+        }
+    }
 
-	/** Shuts down this client processor. */
-	synchronized void shutdown() {
-		try {
-			mClientSocket.close();
-		} catch (Exception exception) {
-			Log.error(exception);
-		}
-		mServer.remove(this);
-	}
+    /** Shuts down this client processor. */
+    synchronized void shutdown() {
+        try {
+            mClientSocket.close();
+        } catch (Exception exception) {
+            Log.error(exception);
+        }
+        mServer.remove(this);
+    }
 }

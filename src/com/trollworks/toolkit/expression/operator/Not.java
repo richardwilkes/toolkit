@@ -15,17 +15,17 @@ import com.trollworks.toolkit.expression.ArgumentTokenizer;
 import com.trollworks.toolkit.expression.EvaluationException;
 
 public class Not extends Operator {
-	public Not() {
-		super("!", 0, true); //$NON-NLS-1$
-	}
+    public Not() {
+        super("!", 0, true); //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object evaluate(Object left, Object right) throws EvaluationException {
-		return null;
-	}
+    @Override
+    public final Object evaluate(Object left, Object right) throws EvaluationException {
+        return null;
+    }
 
-	@Override
-	public final Object evaluate(Object operand) throws EvaluationException {
-		return Double.valueOf(ArgumentTokenizer.getDoubleOperand(operand) != 0 ? 0 : 1);
-	}
+    @Override
+    public final Object evaluate(Object operand) throws EvaluationException {
+        return Double.valueOf(ArgumentTokenizer.getDoubleOperand(operand) != 0 ? 0 : 1);
+    }
 }

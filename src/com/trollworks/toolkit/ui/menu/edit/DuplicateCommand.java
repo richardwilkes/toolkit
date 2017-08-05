@@ -20,40 +20,40 @@ import java.awt.event.KeyEvent;
 
 /** Provides the "Duplicate" command. */
 public class DuplicateCommand extends Command {
-	@Localize("Duplicate")
-	@Localize(locale = "ru", value = "Дублировать")
-	@Localize(locale = "de", value = "Duplizieren")
-	@Localize(locale = "es", value = "Duplicar")
-	private static String DUPLICATE;
+    @Localize("Duplicate")
+    @Localize(locale = "ru", value = "Дублировать")
+    @Localize(locale = "de", value = "Duplizieren")
+    @Localize(locale = "es", value = "Duplicar")
+    private static String DUPLICATE;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** The action command this command will issue. */
-	public static final String				CMD_DUPLICATE	= "Duplicate";				//$NON-NLS-1$
-	/** The singleton {@link DuplicateCommand}. */
-	public static final DuplicateCommand	INSTANCE		= new DuplicateCommand();
+    /** The action command this command will issue. */
+    public static final String           CMD_DUPLICATE = "Duplicate";           				//$NON-NLS-1$
+    /** The singleton {@link DuplicateCommand}. */
+    public static final DuplicateCommand INSTANCE      = new DuplicateCommand();
 
-	private DuplicateCommand() {
-		super(DUPLICATE, CMD_DUPLICATE, KeyEvent.VK_D);
-	}
+    private DuplicateCommand() {
+        super(DUPLICATE, CMD_DUPLICATE, KeyEvent.VK_D);
+    }
 
-	@Override
-	public void adjust() {
-		boolean enable = false;
-		Duplicatable duplicatable = getTarget(Duplicatable.class);
-		if (duplicatable != null) {
-			enable = duplicatable.canDuplicateSelection();
-		}
-		setEnabled(enable);
-	}
+    @Override
+    public void adjust() {
+        boolean enable = false;
+        Duplicatable duplicatable = getTarget(Duplicatable.class);
+        if (duplicatable != null) {
+            enable = duplicatable.canDuplicateSelection();
+        }
+        setEnabled(enable);
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		Duplicatable duplicatable = getTarget(Duplicatable.class);
-		if (duplicatable != null) {
-			duplicatable.duplicateSelection();
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        Duplicatable duplicatable = getTarget(Duplicatable.class);
+        if (duplicatable != null) {
+            duplicatable.duplicateSelection();
+        }
+    }
 }

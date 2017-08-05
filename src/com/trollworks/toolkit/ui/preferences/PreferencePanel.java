@@ -33,137 +33,137 @@ import javax.swing.SwingConstants;
 
 /** The abstract base class for all preference panels. */
 public abstract class PreferencePanel extends JPanel {
-	private String				mTitle;
-	private PreferencesWindow	mOwner;
+    private String            mTitle;
+    private PreferencesWindow mOwner;
 
-	/**
-	 * Creates a new preference panel.
-	 *
-	 * @param title The title for this panel.
-	 * @param owner The owning {@link PreferencesWindow}.
-	 */
-	public PreferencePanel(String title, PreferencesWindow owner) {
-		super();
-		setBorder(new EmptyBorder(5));
-		setOpaque(false);
-		mTitle = title;
-		mOwner = owner;
-	}
+    /**
+     * Creates a new preference panel.
+     *
+     * @param title The title for this panel.
+     * @param owner The owning {@link PreferencesWindow}.
+     */
+    public PreferencePanel(String title, PreferencesWindow owner) {
+        super();
+        setBorder(new EmptyBorder(5));
+        setOpaque(false);
+        mTitle = title;
+        mOwner = owner;
+    }
 
-	/** @return The owner. */
-	public PreferencesWindow getOwner() {
-		return mOwner;
-	}
+    /** @return The owner. */
+    public PreferencesWindow getOwner() {
+        return mOwner;
+    }
 
-	/** Resets this panel back to its defaults. */
-	public abstract void reset();
+    /** Resets this panel back to its defaults. */
+    public abstract void reset();
 
-	/** @return Whether the panel is currently set to defaults or not. */
-	public abstract boolean isSetToDefaults();
+    /** @return Whether the panel is currently set to defaults or not. */
+    public abstract boolean isSetToDefaults();
 
-	/** Call to adjust the reset button for any changes that have been made. */
-	protected void adjustResetButton() {
-		mOwner.adjustResetButton();
-	}
+    /** Call to adjust the reset button for any changes that have been made. */
+    protected void adjustResetButton() {
+        mOwner.adjustResetButton();
+    }
 
-	@Override
-	public String toString() {
-		return mTitle;
-	}
+    @Override
+    public String toString() {
+        return mTitle;
+    }
 
-	/**
-	 * Creates a right-aligned {@link JLabel} suitable for use within the preference panel.
-	 *
-	 * @param title The title to use.
-	 * @param tooltip The tooltip to use.
-	 * @return The newly created {@link JLabel}.
-	 */
-	protected JLabel createLabel(String title, String tooltip) {
-		return createLabel(title, tooltip, null, SwingConstants.RIGHT);
-	}
+    /**
+     * Creates a right-aligned {@link JLabel} suitable for use within the preference panel.
+     *
+     * @param title The title to use.
+     * @param tooltip The tooltip to use.
+     * @return The newly created {@link JLabel}.
+     */
+    protected JLabel createLabel(String title, String tooltip) {
+        return createLabel(title, tooltip, null, SwingConstants.RIGHT);
+    }
 
-	/**
-	 * Creates a {@link JLabel} suitable for use within the preference panel.
-	 *
-	 * @param title The title to use.
-	 * @param tooltip The tooltip to use.
-	 * @param alignment The alignment to use.
-	 * @return The newly created {@link JLabel}.
-	 */
-	protected JLabel createLabel(String title, String tooltip, int alignment) {
-		return createLabel(title, tooltip, null, alignment);
-	}
+    /**
+     * Creates a {@link JLabel} suitable for use within the preference panel.
+     *
+     * @param title The title to use.
+     * @param tooltip The tooltip to use.
+     * @param alignment The alignment to use.
+     * @return The newly created {@link JLabel}.
+     */
+    protected JLabel createLabel(String title, String tooltip, int alignment) {
+        return createLabel(title, tooltip, null, alignment);
+    }
 
-	/**
-	 * Creates a right-aligned {@link JLabel} suitable for use within the preference panel.
-	 *
-	 * @param title The title to use.
-	 * @param tooltip The tooltip to use.
-	 * @param icon The {@link Icon} to use.
-	 * @return The newly created {@link JLabel}.
-	 */
-	protected JLabel createLabel(String title, String tooltip, Icon icon) {
-		return createLabel(title, tooltip, icon, SwingConstants.RIGHT);
-	}
+    /**
+     * Creates a right-aligned {@link JLabel} suitable for use within the preference panel.
+     *
+     * @param title The title to use.
+     * @param tooltip The tooltip to use.
+     * @param icon The {@link Icon} to use.
+     * @return The newly created {@link JLabel}.
+     */
+    protected JLabel createLabel(String title, String tooltip, Icon icon) {
+        return createLabel(title, tooltip, icon, SwingConstants.RIGHT);
+    }
 
-	/**
-	 * Creates a {@link JLabel} suitable for use within the preference panel.
-	 *
-	 * @param title The title to use.
-	 * @param tooltip The tooltip to use.
-	 * @param icon The {@link Icon} to use.
-	 * @param alignment The alignment to use.
-	 * @return The newly created {@link JLabel}.
-	 */
-	protected JLabel createLabel(String title, String tooltip, Icon icon, int alignment) {
-		JLabel label = new JLabel(title, alignment);
-		label.setOpaque(false);
-		label.setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
-		label.setIcon(icon);
-		UIUtilities.setOnlySize(label, label.getPreferredSize());
-		add(label);
-		return label;
-	}
+    /**
+     * Creates a {@link JLabel} suitable for use within the preference panel.
+     *
+     * @param title The title to use.
+     * @param tooltip The tooltip to use.
+     * @param icon The {@link Icon} to use.
+     * @param alignment The alignment to use.
+     * @return The newly created {@link JLabel}.
+     */
+    protected JLabel createLabel(String title, String tooltip, Icon icon, int alignment) {
+        JLabel label = new JLabel(title, alignment);
+        label.setOpaque(false);
+        label.setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
+        label.setIcon(icon);
+        UIUtilities.setOnlySize(label, label.getPreferredSize());
+        add(label);
+        return label;
+    }
 
-	/** @param flexContainer The {@link FlexContainer} to add a separator to. */
-	protected void addSeparator(FlexContainer flexContainer) {
-		JSeparator sep = new JSeparator();
-		sep.setOpaque(false);
-		sep.setMaximumSize(new Dimension(LayoutSize.MAXIMUM_SIZE, 1));
-		add(sep);
-		FlexComponent comp = new FlexComponent(sep, Alignment.CENTER, Alignment.CENTER);
-		comp.setInsets(new Insets(5, 0, 5, 0));
-		flexContainer.add(comp);
-	}
+    /** @param flexContainer The {@link FlexContainer} to add a separator to. */
+    protected void addSeparator(FlexContainer flexContainer) {
+        JSeparator sep = new JSeparator();
+        sep.setOpaque(false);
+        sep.setMaximumSize(new Dimension(LayoutSize.MAXIMUM_SIZE, 1));
+        add(sep);
+        FlexComponent comp = new FlexComponent(sep, Alignment.CENTER, Alignment.CENTER);
+        comp.setInsets(new Insets(5, 0, 5, 0));
+        flexContainer.add(comp);
+    }
 
-	/**
-	 * Creates a {@link JCheckBox} suitable for use within the preference panel.
-	 *
-	 * @param title The title to use.
-	 * @param tooltip The tooltip to use.
-	 * @param checked Whether the initial state should be checked.
-	 * @return The newly created {@link JCheckBox}.
-	 */
-	protected JCheckBox createCheckBox(String title, String tooltip, boolean checked) {
-		JCheckBox checkbox = new JCheckBox(title, checked);
-		checkbox.setOpaque(false);
-		checkbox.setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
-		if (this instanceof ItemListener) {
-			checkbox.addItemListener((ItemListener) this);
-		}
-		add(checkbox);
-		return checkbox;
-	}
+    /**
+     * Creates a {@link JCheckBox} suitable for use within the preference panel.
+     *
+     * @param title The title to use.
+     * @param tooltip The tooltip to use.
+     * @param checked Whether the initial state should be checked.
+     * @return The newly created {@link JCheckBox}.
+     */
+    protected JCheckBox createCheckBox(String title, String tooltip, boolean checked) {
+        JCheckBox checkbox = new JCheckBox(title, checked);
+        checkbox.setOpaque(false);
+        checkbox.setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
+        if (this instanceof ItemListener) {
+            checkbox.addItemListener((ItemListener) this);
+        }
+        add(checkbox);
+        return checkbox;
+    }
 
-	/**
-	 * Sets up a {@link JComboBox} suitable for use within the preference panel.
-	 *
-	 * @param combo The {@link JComboBox} to prepare.
-	 * @param tooltip The tooltip to use.
-	 */
-	protected void setupCombo(JComboBox<?> combo, String tooltip) {
-		combo.setOpaque(false);
-		combo.setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
-		add(combo);
-	}
+    /**
+     * Sets up a {@link JComboBox} suitable for use within the preference panel.
+     *
+     * @param combo The {@link JComboBox} to prepare.
+     * @param tooltip The tooltip to use.
+     */
+    protected void setupCombo(JComboBox<?> combo, String tooltip) {
+        combo.setOpaque(false);
+        combo.setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
+        add(combo);
+    }
 }

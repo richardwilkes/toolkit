@@ -20,28 +20,28 @@ import java.awt.Rectangle;
  * interface.
  */
 public interface BoundaryListener {
-	/**
-	 * Called to perform any necessary adjustments on the mouse coordinates before they are used for
-	 * tracking.
-	 *
-	 * @param where The coordinates, relative to the {@link Component} containing the
-	 *            {@link Rectangle} being tracked.
-	 * @return The object that was passed in, adjusted as necessary.
-	 */
-	Point convertToLocalCoordinates(Point where);
+    /**
+     * Called to perform any necessary adjustments on the mouse coordinates before they are used for
+     * tracking.
+     *
+     * @param where The coordinates, relative to the {@link Component} containing the
+     *            {@link Rectangle} being tracked.
+     * @return The object that was passed in, adjusted as necessary.
+     */
+    Point convertToLocalCoordinates(Point where);
 
-	/**
-	 * Called when the {@link BoundaryArea} the mouse is over has changed.
-	 *
-	 * @param area The new {@link BoundaryArea}.
-	 */
-	void boundaryAreaChanged(BoundaryArea area);
+    /**
+     * Called when the {@link BoundaryArea} the mouse is over has changed.
+     *
+     * @param area The new {@link BoundaryArea}.
+     */
+    void boundaryAreaChanged(BoundaryArea area);
 
-	/**
-	 * Called when the {@link Rectangle} representing the boundary is resized or repositioned.
-	 *
-	 * @param oldBounds The old {@link Rectangle}.
-	 * @param newBounds The new {@link Rectangle}.
-	 */
-	void boundaryChanged(Rectangle oldBounds, Rectangle newBounds);
+    /**
+     * Called when the {@link Rectangle} representing the boundary is resized or repositioned.
+     *
+     * @param oldBounds The old {@link Rectangle}.
+     * @param newBounds The new {@link Rectangle}.
+     */
+    void boundaryChanged(Rectangle oldBounds, Rectangle newBounds);
 }

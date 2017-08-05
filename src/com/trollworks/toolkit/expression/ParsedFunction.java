@@ -15,13 +15,13 @@ import com.trollworks.toolkit.expression.function.ExpressionFunction;
 import com.trollworks.toolkit.expression.operator.Operator;
 
 class ParsedFunction {
-	ExpressionFunction	mFunction;
-	String				mArguments;
-	Operator			mUnaryOperator;
+    ExpressionFunction mFunction;
+    String             mArguments;
+    Operator           mUnaryOperator;
 
-	ParsedFunction(ExpressionFunction function, String arguments, Operator unaryOperator) {
-		mFunction = function;
-		mArguments = arguments;
-		mUnaryOperator = unaryOperator;
-	}
+    ParsedFunction(ExpressionFunction function, String arguments, Operator unaryOperator) {
+        mFunction = function;
+        mArguments = arguments;
+        mUnaryOperator = unaryOperator;
+    }
 }

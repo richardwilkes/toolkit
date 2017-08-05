@@ -22,44 +22,44 @@ import javax.swing.undo.UndoManager;
 
 /** Provides the "Redo" command. */
 public class RedoCommand extends Command {
-	@Localize("Can't Redo")
-	@Localize(locale = "ru", value = "Нельзя повторить")
-	@Localize(locale = "de", value = "Kann nicht Wiederherstellen")
-	@Localize(locale = "es", value = "No se puede rehacer")
-	private static String CANT_REDO;
+    @Localize("Can't Redo")
+    @Localize(locale = "ru", value = "Нельзя повторить")
+    @Localize(locale = "de", value = "Kann nicht Wiederherstellen")
+    @Localize(locale = "es", value = "No se puede rehacer")
+    private static String CANT_REDO;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** The action command this command will issue. */
-	public static final String		CMD_REDO	= "Redo";			//$NON-NLS-1$
+    /** The action command this command will issue. */
+    public static final String      CMD_REDO = "Redo";           			//$NON-NLS-1$
 
-	/** The singleton {@link RedoCommand}. */
-	public static final RedoCommand	INSTANCE	= new RedoCommand();
+    /** The singleton {@link RedoCommand}. */
+    public static final RedoCommand INSTANCE = new RedoCommand();
 
-	private RedoCommand() {
-		super(CANT_REDO, CMD_REDO, KeyEvent.VK_Y);
-	}
+    private RedoCommand() {
+        super(CANT_REDO, CMD_REDO, KeyEvent.VK_Y);
+    }
 
-	@Override
-	public void adjust() {
-		Undoable undoable = getTarget(Undoable.class);
-		if (undoable != null) {
-			UndoManager mgr = undoable.getUndoManager();
-			setEnabled(mgr.canRedo());
-			setTitle(mgr.getRedoPresentationName());
-		} else {
-			setEnabled(false);
-			setTitle(CANT_REDO);
-		}
-	}
+    @Override
+    public void adjust() {
+        Undoable undoable = getTarget(Undoable.class);
+        if (undoable != null) {
+            UndoManager mgr = undoable.getUndoManager();
+            setEnabled(mgr.canRedo());
+            setTitle(mgr.getRedoPresentationName());
+        } else {
+            setEnabled(false);
+            setTitle(CANT_REDO);
+        }
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		Undoable undoable = getTarget(Undoable.class);
-		if (undoable != null) {
-			undoable.getUndoManager().redo();
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        Undoable undoable = getTarget(Undoable.class);
+        if (undoable != null) {
+            undoable.getUndoManager().redo();
+        }
+    }
 }

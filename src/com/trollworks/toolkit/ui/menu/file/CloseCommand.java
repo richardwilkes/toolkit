@@ -22,51 +22,51 @@ import java.awt.event.WindowEvent;
 
 /** Provides the "Close" command. */
 public class CloseCommand extends Command {
-	@Localize("Close")
-	@Localize(locale = "ru", value = "Закрыть")
-	@Localize(locale = "de", value = "Schließen")
-	@Localize(locale = "es", value = "Cerrar")
-	private static String CLOSE;
+    @Localize("Close")
+    @Localize(locale = "ru", value = "Закрыть")
+    @Localize(locale = "de", value = "Schließen")
+    @Localize(locale = "es", value = "Cerrar")
+    private static String CLOSE;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** The action command this command will issue. */
-	public static final String			CMD_CLOSE	= "Close";				//$NON-NLS-1$
+    /** The action command this command will issue. */
+    public static final String       CMD_CLOSE = "Close";           				//$NON-NLS-1$
 
-	/** The singleton {@link CloseCommand}. */
-	public static final CloseCommand	INSTANCE	= new CloseCommand();
+    /** The singleton {@link CloseCommand}. */
+    public static final CloseCommand INSTANCE  = new CloseCommand();
 
-	private CloseCommand() {
-		super(CLOSE, CMD_CLOSE, KeyEvent.VK_W);
-	}
+    private CloseCommand() {
+        super(CLOSE, CMD_CLOSE, KeyEvent.VK_W);
+    }
 
-	@Override
-	public void adjust() {
-		CloseHandler handler = getTarget(CloseHandler.class);
-		setEnabled(handler != null ? handler.mayAttemptClose() : false);
-	}
+    @Override
+    public void adjust() {
+        CloseHandler handler = getTarget(CloseHandler.class);
+        setEnabled(handler != null ? handler.mayAttemptClose() : false);
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		CloseHandler handler = getTarget(CloseHandler.class);
-		if (handler != null) {
-			if (handler.mayAttemptClose()) {
-				handler.attemptClose();
-			}
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        CloseHandler handler = getTarget(CloseHandler.class);
+        if (handler != null) {
+            if (handler.mayAttemptClose()) {
+                handler.attemptClose();
+            }
+        }
+    }
 
-	/**
-	 * @param window The {@link Window} to close.
-	 * @return Whether the window was closed or not.
-	 */
-	public static boolean close(Window window) {
-		if (window == null) {
-			return true;
-		}
-		window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-		return !window.isShowing();
-	}
+    /**
+     * @param window The {@link Window} to close.
+     * @return Whether the window was closed or not.
+     */
+    public static boolean close(Window window) {
+        if (window == null) {
+            return true;
+        }
+        window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+        return !window.isShowing();
+    }
 }

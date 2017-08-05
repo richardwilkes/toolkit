@@ -16,34 +16,34 @@ import com.trollworks.toolkit.expression.EvaluationException;
 import com.trollworks.toolkit.expression.Evaluator;
 
 public class If implements ExpressionFunction {
-	@Override
-	public final String getName() {
-		return "if"; //$NON-NLS-1$
-	}
+    @Override
+    public final String getName() {
+        return "if"; //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object execute(final Evaluator evaluator, final String arguments) throws EvaluationException {
-		ArgumentTokenizer tokenizer = new ArgumentTokenizer(arguments);
-		Evaluator ev = new Evaluator(evaluator);
-		Object result = ev.evaluate(tokenizer.nextToken());
-		if (result instanceof Double) {
-			if (((Double) result).doubleValue() == 0) {
-				tokenizer.nextToken();
-			}
-		} else {
-			String str = result.toString();
-			if (str.isEmpty()) {
-				tokenizer.nextToken();
-			} else {
-				try {
-					if (Double.parseDouble(str) == 0) {
-						tokenizer.nextToken();
-					}
-				} catch (NumberFormatException nfe) {
-					// Treat as true
-				}
-			}
-		}
-		return ev.evaluate(tokenizer.nextToken());
-	}
+    @Override
+    public final Object execute(final Evaluator evaluator, final String arguments) throws EvaluationException {
+        ArgumentTokenizer tokenizer = new ArgumentTokenizer(arguments);
+        Evaluator ev = new Evaluator(evaluator);
+        Object result = ev.evaluate(tokenizer.nextToken());
+        if (result instanceof Double) {
+            if (((Double) result).doubleValue() == 0) {
+                tokenizer.nextToken();
+            }
+        } else {
+            String str = result.toString();
+            if (str.isEmpty()) {
+                tokenizer.nextToken();
+            } else {
+                try {
+                    if (Double.parseDouble(str) == 0) {
+                        tokenizer.nextToken();
+                    }
+                } catch (NumberFormatException nfe) {
+                    // Treat as true
+                }
+            }
+        }
+        return ev.evaluate(tokenizer.nextToken());
+    }
 }

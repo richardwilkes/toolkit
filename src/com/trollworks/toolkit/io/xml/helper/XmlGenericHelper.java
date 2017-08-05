@@ -20,48 +20,48 @@ import java.lang.reflect.Field;
 import javax.xml.stream.XMLStreamException;
 
 public class XmlGenericHelper implements XmlObjectHelper {
-	public static final XmlGenericHelper SINGLETON = new XmlGenericHelper();
+    public static final XmlGenericHelper SINGLETON = new XmlGenericHelper();
 
-	private XmlGenericHelper() {
-	}
+    private XmlGenericHelper() {
+    }
 
-	@Override
-	public boolean canHandleClass(Class<?> clazz) {
-		return true;
-	}
+    @Override
+    public boolean canHandleClass(Class<?> clazz) {
+        return true;
+    }
 
-	@Override
-	public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		Object value = field.get(obj);
-		if (value != null) {
-			String stringValue = value.toString();
-			XmlDefault def = field.getAnnotation(XmlDefault.class);
-			if (def != null) {
-				xml.addAttributeNot(name, stringValue, def.value());
-			} else {
-				xml.addAttribute(name, stringValue);
-			}
-		}
-	}
+    @Override
+    public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        Object value = field.get(obj);
+        if (value != null) {
+            String stringValue = value.toString();
+            XmlDefault def = field.getAnnotation(XmlDefault.class);
+            if (def != null) {
+                xml.addAttributeNot(name, stringValue, def.value());
+            } else {
+                xml.addAttribute(name, stringValue);
+            }
+        }
+    }
 
-	@Override
-	public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		Object instance = null;
-		XmlDefault def = field.getAnnotation(XmlDefault.class);
-		String value = context.getParser().getAttribute(name, def != null ? def.value() : null);
-		if (value != null && !value.isEmpty()) {
-			Class<?> type = field.getType();
-			try {
-				instance = type.getConstructor(String.class, XmlParserContext.class).newInstance(value, context);
-			} catch (NoSuchMethodException exception) {
-				instance = type.getConstructor(String.class).newInstance(value);
-			}
-		}
-		field.set(obj, instance);
-	}
+    @Override
+    public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        Object instance = null;
+        XmlDefault def = field.getAnnotation(XmlDefault.class);
+        String value = context.getParser().getAttribute(name, def != null ? def.value() : null);
+        if (value != null && !value.isEmpty()) {
+            Class<?> type = field.getType();
+            try {
+                instance = type.getConstructor(String.class, XmlParserContext.class).newInstance(value, context);
+            } catch (NoSuchMethodException exception) {
+                instance = type.getConstructor(String.class).newInstance(value);
+            }
+        }
+        field.set(obj, instance);
+    }
 
-	@Override
-	public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
-		// Unused
-	}
+    @Override
+    public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+        // Unused
+    }
 }

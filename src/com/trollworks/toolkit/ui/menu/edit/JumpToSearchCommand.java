@@ -20,34 +20,34 @@ import java.awt.event.KeyEvent;
 
 /** Provides the "Jump To Search" command. */
 public class JumpToSearchCommand extends Command {
-	@Localize("Jump To Search")
-	@Localize(locale = "de", value = "Springe zur Suche")
-	@Localize(locale = "ru", value = "Перейти к поиску")
-	@Localize(locale = "es", value = "Pasar a Buscar")
-	private static String JUMP_TO_SEARCH;
+    @Localize("Jump To Search")
+    @Localize(locale = "de", value = "Springe zur Suche")
+    @Localize(locale = "ru", value = "Перейти к поиску")
+    @Localize(locale = "es", value = "Pasar a Buscar")
+    private static String JUMP_TO_SEARCH;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** The singleton {@link JumpToSearchCommand}. */
-	public static final JumpToSearchCommand INSTANCE = new JumpToSearchCommand();
+    /** The singleton {@link JumpToSearchCommand}. */
+    public static final JumpToSearchCommand INSTANCE = new JumpToSearchCommand();
 
-	private JumpToSearchCommand() {
-		super(JUMP_TO_SEARCH, null, KeyEvent.VK_J);
-	}
+    private JumpToSearchCommand() {
+        super(JUMP_TO_SEARCH, null, KeyEvent.VK_J);
+    }
 
-	@Override
-	public void adjust() {
-		JumpToSearchTarget target = getTarget(JumpToSearchTarget.class);
-		setEnabled(target != null && target.isJumpToSearchAvailable());
-	}
+    @Override
+    public void adjust() {
+        JumpToSearchTarget target = getTarget(JumpToSearchTarget.class);
+        setEnabled(target != null && target.isJumpToSearchAvailable());
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		JumpToSearchTarget target = getTarget(JumpToSearchTarget.class);
-		if (target != null) {
-			target.jumpToSearchField();
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        JumpToSearchTarget target = getTarget(JumpToSearchTarget.class);
+        if (target != null) {
+            target.jumpToSearchField();
+        }
+    }
 }

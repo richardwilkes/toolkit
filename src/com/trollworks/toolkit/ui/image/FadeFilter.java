@@ -19,48 +19,48 @@ import java.awt.image.RGBImageFilter;
 
 /** Fades an image by blending the pixels with white or black. */
 public class FadeFilter extends RGBImageFilter {
-	private static final int	OPAQUE	= 0xFF000000;
-	private int					mPercentage;
-	private boolean				mUseWhite;
+    private static final int OPAQUE = 0xFF000000;
+    private int              mPercentage;
+    private boolean          mUseWhite;
 
-	/**
-	 * Constructs an image filter that fades an image by blending the pixels with the specified
-	 * percentage of white or black.
-	 *
-	 * @param percentage The percentage of white or black to use.
-	 * @param useWhite Whether to use white or black.
-	 */
-	public FadeFilter(int percentage, boolean useWhite) {
-		mPercentage = percentage;
-		mUseWhite = useWhite;
-		canFilterIndexColorModel = true;
-	}
+    /**
+     * Constructs an image filter that fades an image by blending the pixels with the specified
+     * percentage of white or black.
+     *
+     * @param percentage The percentage of white or black to use.
+     * @param useWhite Whether to use white or black.
+     */
+    public FadeFilter(int percentage, boolean useWhite) {
+        mPercentage = percentage;
+        mUseWhite = useWhite;
+        canFilterIndexColorModel = true;
+    }
 
-	/**
-	 * Creates a faded image.
-	 *
-	 * @param image The image to fade.
-	 * @param percentage The percentage of white or black to use.
-	 * @param useWhite Whether to use white or black.
-	 * @return The faded image.
-	 */
-	public static StdImage createFadedImage(Image image, int percentage, boolean useWhite) {
-		FadeFilter filter = new FadeFilter(percentage, useWhite);
-		ImageProducer producer = new FilteredImageSource(image.getSource(), filter);
-		return StdImage.getToolkitImage(Toolkit.getDefaultToolkit().createImage(producer));
-	}
+    /**
+     * Creates a faded image.
+     *
+     * @param image The image to fade.
+     * @param percentage The percentage of white or black to use.
+     * @param useWhite Whether to use white or black.
+     * @return The faded image.
+     */
+    public static StdImage createFadedImage(Image image, int percentage, boolean useWhite) {
+        FadeFilter filter = new FadeFilter(percentage, useWhite);
+        ImageProducer producer = new FilteredImageSource(image.getSource(), filter);
+        return StdImage.getToolkitImage(Toolkit.getDefaultToolkit().createImage(producer));
+    }
 
-	@Override
-	public int filterRGB(int x, int y, int argb) {
-		int red = argb >> 16 & 0xFF;
-		int green = argb >> 8 & 0xFF;
-		int blue = argb & 0xFF;
-		int p1 = 100 - mPercentage;
-		int p2 = mUseWhite ? 255 * mPercentage : 0;
+    @Override
+    public int filterRGB(int x, int y, int argb) {
+        int red = argb >> 16 & 0xFF;
+        int green = argb >> 8 & 0xFF;
+        int blue = argb & 0xFF;
+        int p1 = 100 - mPercentage;
+        int p2 = mUseWhite ? 255 * mPercentage : 0;
 
-		red = (red * p1 + p2) / 100;
-		green = (green * p1 + p2) / 100;
-		blue = (blue * p1 + p2) / 100;
-		return argb & OPAQUE | red << 16 | green << 8 | blue;
-	}
+        red = (red * p1 + p2) / 100;
+        green = (green * p1 + p2) / 100;
+        blue = (blue * p1 + p2) / 100;
+        return argb & OPAQUE | red << 16 | green << 8 | blue;
+    }
 }

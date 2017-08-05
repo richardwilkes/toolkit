@@ -20,47 +20,47 @@ import java.util.HashSet;
 
 /** Allows rows to be part of drag and drop operations internal to the JVM. */
 public class TreeRowSelection implements Transferable {
-	/** The data flavor for this class. */
-	public static final DataFlavor		DATA_FLAVOR	= new DataFlavor(TreeRowSelection.class, "Tree Rows");	//$NON-NLS-1$
-	private ArrayList<TreeRow>			mRows;
-	private HashSet<TreeContainerRow>	mOpenRows	= new HashSet<>();
+    /** The data flavor for this class. */
+    public static final DataFlavor    DATA_FLAVOR = new DataFlavor(TreeRowSelection.class, "Tree Rows");	//$NON-NLS-1$
+    private ArrayList<TreeRow>        mRows;
+    private HashSet<TreeContainerRow> mOpenRows   = new HashSet<>();
 
-	/**
-	 * Creates a new transferable row object.
-	 *
-	 * @param rows The {@link TreeRow}s to transfer.
-	 * @param openRows The {@link TreeContainerRow}s within rows which are 'open'.
-	 */
-	public TreeRowSelection(Collection<TreeRow> rows, Collection<TreeContainerRow> openRows) {
-		mRows = new ArrayList<>(rows);
-		mOpenRows = new HashSet<>(openRows);
-	}
+    /**
+     * Creates a new transferable row object.
+     *
+     * @param rows The {@link TreeRow}s to transfer.
+     * @param openRows The {@link TreeContainerRow}s within rows which are 'open'.
+     */
+    public TreeRowSelection(Collection<TreeRow> rows, Collection<TreeContainerRow> openRows) {
+        mRows = new ArrayList<>(rows);
+        mOpenRows = new HashSet<>(openRows);
+    }
 
-	@Override
-	public DataFlavor[] getTransferDataFlavors() {
-		return new DataFlavor[] { DATA_FLAVOR };
-	}
+    @Override
+    public DataFlavor[] getTransferDataFlavors() {
+        return new DataFlavor[] { DATA_FLAVOR };
+    }
 
-	@Override
-	public boolean isDataFlavorSupported(DataFlavor flavor) {
-		return DATA_FLAVOR.equals(flavor);
-	}
+    @Override
+    public boolean isDataFlavorSupported(DataFlavor flavor) {
+        return DATA_FLAVOR.equals(flavor);
+    }
 
-	@Override
-	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
-		if (DATA_FLAVOR.equals(flavor)) {
-			return this;
-		}
-		throw new UnsupportedFlavorException(flavor);
-	}
+    @Override
+    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
+        if (DATA_FLAVOR.equals(flavor)) {
+            return this;
+        }
+        throw new UnsupportedFlavorException(flavor);
+    }
 
-	/** @return The {@link TreeRow}s being transferred. */
-	public ArrayList<TreeRow> getRows() {
-		return mRows;
-	}
+    /** @return The {@link TreeRow}s being transferred. */
+    public ArrayList<TreeRow> getRows() {
+        return mRows;
+    }
 
-	/** @return The {@link TreeContainerRow}s within rows which are 'open'. */
-	public HashSet<TreeContainerRow> getOpenRows() {
-		return mOpenRows;
-	}
+    /** @return The {@link TreeContainerRow}s within rows which are 'open'. */
+    public HashSet<TreeContainerRow> getOpenRows() {
+        return mOpenRows;
+    }
 }

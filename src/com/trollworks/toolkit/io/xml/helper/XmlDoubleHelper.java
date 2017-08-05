@@ -20,40 +20,40 @@ import java.lang.reflect.Field;
 import javax.xml.stream.XMLStreamException;
 
 public class XmlDoubleHelper implements XmlObjectHelper {
-	public static final XmlDoubleHelper SINGLETON = new XmlDoubleHelper();
+    public static final XmlDoubleHelper SINGLETON = new XmlDoubleHelper();
 
-	private XmlDoubleHelper() {
-	}
+    private XmlDoubleHelper() {
+    }
 
-	@Override
-	public boolean canHandleClass(Class<?> clazz) {
-		return Double.class == clazz;
-	}
+    @Override
+    public boolean canHandleClass(Class<?> clazz) {
+        return Double.class == clazz;
+    }
 
-	@Override
-	public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		Double value = (Double) field.get(obj);
-		if (value != null) {
-			double primitive = value.doubleValue();
-			XmlDefaultDouble def = field.getAnnotation(XmlDefaultDouble.class);
-			if (def != null) {
-				xml.addAttributeNot(name, primitive, def.value());
-			} else {
-				xml.addAttribute(name, primitive);
-			}
-		}
-	}
+    @Override
+    public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        Double value = (Double) field.get(obj);
+        if (value != null) {
+            double primitive = value.doubleValue();
+            XmlDefaultDouble def = field.getAnnotation(XmlDefaultDouble.class);
+            if (def != null) {
+                xml.addAttributeNot(name, primitive, def.value());
+            } else {
+                xml.addAttribute(name, primitive);
+            }
+        }
+    }
 
-	@Override
-	public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		XmlDefaultDouble def = field.getAnnotation(XmlDefaultDouble.class);
-		field.set(obj, Double.valueOf(context.getParser().getDoubleAttribute(name, def != null ? def.value() : 0)));
-	}
+    @Override
+    public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        XmlDefaultDouble def = field.getAnnotation(XmlDefaultDouble.class);
+        field.set(obj, Double.valueOf(context.getParser().getDoubleAttribute(name, def != null ? def.value() : 0)));
+    }
 
-	@Override
-	public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
-		xml.startTag(tag);
-		xml.addText(obj.toString());
-		xml.endTag();
-	}
+    @Override
+    public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+        xml.startTag(tag);
+        xml.addText(obj.toString());
+        xml.endTag();
+    }
 }

@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE })
 /** Provides the version for classes that can be represented as XML. */
 public @interface XmlTagVersion {
-	/** @return The version to use when writing. */
-	int value();
+    /** @return The version to use when writing. */
+    int value();
 }

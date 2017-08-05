@@ -19,97 +19,97 @@ import java.util.ArrayList;
 
 /** A column within a {@link FlexLayout}. */
 public class FlexColumn extends FlexContainer {
-	/** Creates a new {@link FlexColumn}. */
-	public FlexColumn() {
-		setFill(true);
-	}
+    /** Creates a new {@link FlexColumn}. */
+    public FlexColumn() {
+        setFill(true);
+    }
 
-	@Override
-	protected void layoutSelf(Scale scale, Rectangle bounds) {
-		int count = getChildCount();
-		int vGap = scale.scale(getVerticalGap());
-		int[] gaps = new int[count > 0 ? count - 1 : 0];
-		for (int i = 0; i < gaps.length; i++) {
-			gaps[i] = vGap;
-		}
-		int height = vGap * (count > 0 ? count - 1 : 0);
-		Dimension[] minSizes = getChildSizes(scale, LayoutSize.MINIMUM);
-		Dimension[] prefSizes = getChildSizes(scale, LayoutSize.PREFERRED);
-		Dimension[] maxSizes = getChildSizes(scale, LayoutSize.MAXIMUM);
-		for (int i = 0; i < count; i++) {
-			height += prefSizes[i].height;
-		}
-		int extra = bounds.height - height;
-		if (extra != 0) {
-			int[] values = new int[count];
-			int[] limits = new int[count];
-			for (int i = 0; i < count; i++) {
-				values[i] = prefSizes[i].height;
-				limits[i] = extra > 0 ? maxSizes[i].height : minSizes[i].height;
-			}
-			extra = distribute(extra, values, limits);
-			for (int i = 0; i < count; i++) {
-				prefSizes[i].height = values[i];
-			}
-			if (extra > 0 && getFillVertical() && gaps.length > 0) {
-				int amt = extra / gaps.length;
-				for (int i = 0; i < gaps.length; i++) {
-					gaps[i] += amt;
-				}
-				extra -= amt * gaps.length;
-				for (int i = 0; i < extra; i++) {
-					gaps[i]++;
-				}
-				extra = 0;
-			}
-		}
-		ArrayList<FlexCell> children = getChildren();
-		Rectangle[] childBounds = new Rectangle[count];
-		for (int i = 0; i < count; i++) {
-			childBounds[i] = new Rectangle(prefSizes[i]);
-			if (getFillHorizontal()) {
-				childBounds[i].width = Math.min(maxSizes[i].width, bounds.width);
-			}
-			switch (children.get(i).getHorizontalAlignment()) {
-				case LEFT_TOP:
-				default:
-					childBounds[i].x = bounds.x;
-					break;
-				case CENTER:
-					childBounds[i].x = bounds.x + (bounds.width - childBounds[i].width) / 2;
-					break;
-				case RIGHT_BOTTOM:
-					childBounds[i].x = bounds.x + bounds.width - childBounds[i].width;
-					break;
-			}
-		}
-		int y = bounds.y;
-		Alignment vAlign = getVerticalAlignment();
-		if (vAlign == Alignment.CENTER) {
-			y += extra / 2;
-		} else if (vAlign == Alignment.RIGHT_BOTTOM) {
-			y += extra;
-		}
-		for (int i = 0; i < count; i++) {
-			childBounds[i].y = y;
-			if (i < count - 1) {
-				y += prefSizes[i].height;
-				y += gaps[i];
-			}
-		}
-		layoutChildren(scale, childBounds);
-	}
+    @Override
+    protected void layoutSelf(Scale scale, Rectangle bounds) {
+        int count = getChildCount();
+        int vGap = scale.scale(getVerticalGap());
+        int[] gaps = new int[count > 0 ? count - 1 : 0];
+        for (int i = 0; i < gaps.length; i++) {
+            gaps[i] = vGap;
+        }
+        int height = vGap * (count > 0 ? count - 1 : 0);
+        Dimension[] minSizes = getChildSizes(scale, LayoutSize.MINIMUM);
+        Dimension[] prefSizes = getChildSizes(scale, LayoutSize.PREFERRED);
+        Dimension[] maxSizes = getChildSizes(scale, LayoutSize.MAXIMUM);
+        for (int i = 0; i < count; i++) {
+            height += prefSizes[i].height;
+        }
+        int extra = bounds.height - height;
+        if (extra != 0) {
+            int[] values = new int[count];
+            int[] limits = new int[count];
+            for (int i = 0; i < count; i++) {
+                values[i] = prefSizes[i].height;
+                limits[i] = extra > 0 ? maxSizes[i].height : minSizes[i].height;
+            }
+            extra = distribute(extra, values, limits);
+            for (int i = 0; i < count; i++) {
+                prefSizes[i].height = values[i];
+            }
+            if (extra > 0 && getFillVertical() && gaps.length > 0) {
+                int amt = extra / gaps.length;
+                for (int i = 0; i < gaps.length; i++) {
+                    gaps[i] += amt;
+                }
+                extra -= amt * gaps.length;
+                for (int i = 0; i < extra; i++) {
+                    gaps[i]++;
+                }
+                extra = 0;
+            }
+        }
+        ArrayList<FlexCell> children = getChildren();
+        Rectangle[] childBounds = new Rectangle[count];
+        for (int i = 0; i < count; i++) {
+            childBounds[i] = new Rectangle(prefSizes[i]);
+            if (getFillHorizontal()) {
+                childBounds[i].width = Math.min(maxSizes[i].width, bounds.width);
+            }
+            switch (children.get(i).getHorizontalAlignment()) {
+                case LEFT_TOP:
+                default:
+                    childBounds[i].x = bounds.x;
+                    break;
+                case CENTER:
+                    childBounds[i].x = bounds.x + (bounds.width - childBounds[i].width) / 2;
+                    break;
+                case RIGHT_BOTTOM:
+                    childBounds[i].x = bounds.x + bounds.width - childBounds[i].width;
+                    break;
+            }
+        }
+        int y = bounds.y;
+        Alignment vAlign = getVerticalAlignment();
+        if (vAlign == Alignment.CENTER) {
+            y += extra / 2;
+        } else if (vAlign == Alignment.RIGHT_BOTTOM) {
+            y += extra;
+        }
+        for (int i = 0; i < count; i++) {
+            childBounds[i].y = y;
+            if (i < count - 1) {
+                y += prefSizes[i].height;
+                y += gaps[i];
+            }
+        }
+        layoutChildren(scale, childBounds);
+    }
 
-	@Override
-	protected Dimension getSizeSelf(Scale scale, LayoutSize type) {
-		Dimension[] sizes = getChildSizes(scale, type);
-		Dimension size = new Dimension(0, scale.scale(getVerticalGap()) * (sizes.length > 0 ? sizes.length - 1 : 0));
-		for (Dimension one : sizes) {
-			size.height += one.height;
-			if (one.width > size.width) {
-				size.width = one.width;
-			}
-		}
-		return size;
-	}
+    @Override
+    protected Dimension getSizeSelf(Scale scale, LayoutSize type) {
+        Dimension[] sizes = getChildSizes(scale, type);
+        Dimension size = new Dimension(0, scale.scale(getVerticalGap()) * (sizes.length > 0 ? sizes.length - 1 : 0));
+        for (Dimension one : sizes) {
+            size.height += one.height;
+            if (one.width > size.width) {
+                size.width = one.width;
+            }
+        }
+        return size;
+    }
 }

@@ -28,82 +28,82 @@ import javax.swing.UIManager;
 
 /** The font preferences panel. */
 public class FontPreferences extends PreferencePanel implements ActionListener {
-	@Localize("Fonts")
-	@Localize(locale = "ru", value = "Шрифты")
-	@Localize(locale = "de", value = "Schriftarten")
-	@Localize(locale = "es", value = "Fuentes")
-	private static String FONTS;
+    @Localize("Fonts")
+    @Localize(locale = "ru", value = "Шрифты")
+    @Localize(locale = "de", value = "Schriftarten")
+    @Localize(locale = "es", value = "Fuentes")
+    private static String FONTS;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	private FontPanel[]	mFontPanels;
-	private boolean		mIgnore;
+    private FontPanel[] mFontPanels;
+    private boolean     mIgnore;
 
-	/**
-	 * Creates a new {@link FontPreferences}.
-	 *
-	 * @param owner The owning {@link PreferencesWindow}.
-	 */
-	public FontPreferences(PreferencesWindow owner) {
-		super(FONTS, owner);
-		FlexGrid grid = new FlexGrid();
-		String[] keys = Fonts.getKeys();
-		mFontPanels = new FontPanel[keys.length];
-		int i = 0;
-		for (String key : keys) {
-			grid.add(new FlexComponent(createLabel(Fonts.getDescription(key), null), Alignment.RIGHT_BOTTOM, Alignment.CENTER), i, 0);
-			mFontPanels[i] = new FontPanel(UIManager.getFont(key));
-			mFontPanels[i].setActionCommand(key);
-			mFontPanels[i].addActionListener(this);
-			add(mFontPanels[i]);
-			grid.add(mFontPanels[i], i, 1);
-			i++;
-		}
-		grid.apply(this);
-	}
+    /**
+     * Creates a new {@link FontPreferences}.
+     *
+     * @param owner The owning {@link PreferencesWindow}.
+     */
+    public FontPreferences(PreferencesWindow owner) {
+        super(FONTS, owner);
+        FlexGrid grid = new FlexGrid();
+        String[] keys = Fonts.getKeys();
+        mFontPanels = new FontPanel[keys.length];
+        int i = 0;
+        for (String key : keys) {
+            grid.add(new FlexComponent(createLabel(Fonts.getDescription(key), null), Alignment.RIGHT_BOTTOM, Alignment.CENTER), i, 0);
+            mFontPanels[i] = new FontPanel(UIManager.getFont(key));
+            mFontPanels[i].setActionCommand(key);
+            mFontPanels[i].addActionListener(this);
+            add(mFontPanels[i]);
+            grid.add(mFontPanels[i], i, 1);
+            i++;
+        }
+        grid.apply(this);
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		if (!mIgnore) {
-			Object source = event.getSource();
-			if (source instanceof FontPanel) {
-				boolean adjusted = false;
-				for (FontPanel panel : mFontPanels) {
-					if (panel == source) {
-						Font font = panel.getCurrentFont();
-						if (!font.equals(UIManager.getFont(panel.getActionCommand()))) {
-							UIManager.put(panel.getActionCommand(), font);
-							adjusted = true;
-						}
-						break;
-					}
-				}
-				if (adjusted) {
-					GraphicsUtilities.forceRepaintAndInvalidate();
-					Fonts.notifyOfFontChanges();
-				}
-			}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        if (!mIgnore) {
+            Object source = event.getSource();
+            if (source instanceof FontPanel) {
+                boolean adjusted = false;
+                for (FontPanel panel : mFontPanels) {
+                    if (panel == source) {
+                        Font font = panel.getCurrentFont();
+                        if (!font.equals(UIManager.getFont(panel.getActionCommand()))) {
+                            UIManager.put(panel.getActionCommand(), font);
+                            adjusted = true;
+                        }
+                        break;
+                    }
+                }
+                if (adjusted) {
+                    GraphicsUtilities.forceRepaintAndInvalidate();
+                    Fonts.notifyOfFontChanges();
+                }
+            }
 
-			adjustResetButton();
-		}
-	}
+            adjustResetButton();
+        }
+    }
 
-	@Override
-	public void reset() {
-		Fonts.restoreDefaults();
-		mIgnore = true;
-		for (FontPanel panel : mFontPanels) {
-			panel.setCurrentFont(UIManager.getFont(panel.getActionCommand()));
-		}
-		mIgnore = false;
-		GraphicsUtilities.forceRepaintAndInvalidate();
-		Fonts.notifyOfFontChanges();
-	}
+    @Override
+    public void reset() {
+        Fonts.restoreDefaults();
+        mIgnore = true;
+        for (FontPanel panel : mFontPanels) {
+            panel.setCurrentFont(UIManager.getFont(panel.getActionCommand()));
+        }
+        mIgnore = false;
+        GraphicsUtilities.forceRepaintAndInvalidate();
+        Fonts.notifyOfFontChanges();
+    }
 
-	@Override
-	public boolean isSetToDefaults() {
-		return Fonts.isSetToDefaults();
-	}
+    @Override
+    public boolean isSetToDefaults() {
+        return Fonts.isSetToDefaults();
+    }
 }

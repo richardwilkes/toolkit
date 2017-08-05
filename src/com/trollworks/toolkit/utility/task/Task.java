@@ -19,80 +19,80 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Task implements Runnable {
-	private static final ScheduledExecutorService	EXECUTOR	= Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() + 1);
-	private static final HashSet<Object>			PENDING		= new HashSet<>();
-	private Runnable								mTask;
-	private Object									mKey;
-	private long									mPeriod		= -1;
-	private boolean									mWasCancelled;
-	private boolean									mWasExecuted;
+    private static final ScheduledExecutorService EXECUTOR = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() + 1);
+    private static final HashSet<Object>          PENDING  = new HashSet<>();
+    private Runnable                              mTask;
+    private Object                                mKey;
+    private long                                  mPeriod  = -1;
+    private boolean                               mWasCancelled;
+    private boolean                               mWasExecuted;
 
-	Task(Runnable runnable, Object key) {
-		mTask = runnable;
-		mKey = key;
-	}
+    Task(Runnable runnable, Object key) {
+        mTask = runnable;
+        mKey = key;
+    }
 
-	void schedule(long delay, TimeUnit delayUnits) {
-		if (mKey != null) {
-			synchronized (PENDING) {
-				if (!PENDING.add(mKey)) {
-					mWasCancelled = true;
-					return;
-				}
-			}
-		}
-		EXECUTOR.schedule(this, delay, delayUnits);
-	}
+    void schedule(long delay, TimeUnit delayUnits) {
+        if (mKey != null) {
+            synchronized (PENDING) {
+                if (!PENDING.add(mKey)) {
+                    mWasCancelled = true;
+                    return;
+                }
+            }
+        }
+        EXECUTOR.schedule(this, delay, delayUnits);
+    }
 
-	void schedulePeriodic(long period, TimeUnit periodUnits) {
-		mPeriod = TimeUnit.MILLISECONDS.convert(period, periodUnits);
-		schedule(period, periodUnits);
-	}
+    void schedulePeriodic(long period, TimeUnit periodUnits) {
+        mPeriod = TimeUnit.MILLISECONDS.convert(period, periodUnits);
+        schedule(period, periodUnits);
+    }
 
-	@Override
-	public void run() {
-		synchronized (this) {
-			if (mWasCancelled) {
-				return;
-			}
-			mWasExecuted = true;
-		}
-		try {
-			if (mKey != null) {
-				synchronized (PENDING) {
-					PENDING.remove(mKey);
-				}
-			}
-			if (isPeriodic()) {
-				long next = System.currentTimeMillis() + mPeriod;
-				mTask.run();
-				EXECUTOR.schedule(this, Math.max(next - System.currentTimeMillis(), 0), TimeUnit.MILLISECONDS);
-			} else {
-				mTask.run();
-			}
-		} catch (Throwable throwable) {
-			cancel();
-			Log.error(throwable);
-		}
-	}
+    @Override
+    public void run() {
+        synchronized (this) {
+            if (mWasCancelled) {
+                return;
+            }
+            mWasExecuted = true;
+        }
+        try {
+            if (mKey != null) {
+                synchronized (PENDING) {
+                    PENDING.remove(mKey);
+                }
+            }
+            if (isPeriodic()) {
+                long next = System.currentTimeMillis() + mPeriod;
+                mTask.run();
+                EXECUTOR.schedule(this, Math.max(next - System.currentTimeMillis(), 0), TimeUnit.MILLISECONDS);
+            } else {
+                mTask.run();
+            }
+        } catch (Throwable throwable) {
+            cancel();
+            Log.error(throwable);
+        }
+    }
 
-	public boolean isPeriodic() {
-		return mPeriod != -1;
-	}
+    public boolean isPeriodic() {
+        return mPeriod != -1;
+    }
 
-	/** @return <code>true</code> if the task was cancelled and will not be executed. */
-	public synchronized boolean wasCancelled() {
-		return mWasCancelled;
-	}
+    /** @return <code>true</code> if the task was cancelled and will not be executed. */
+    public synchronized boolean wasCancelled() {
+        return mWasCancelled;
+    }
 
-	/**
-	 * @return <code>true</code> if the task was successfully cancelled and will not be executed.
-	 */
-	public synchronized boolean cancel() {
-		if (mWasExecuted) {
-			return false;
-		}
-		mWasCancelled = true;
-		return true;
-	}
+    /**
+     * @return <code>true</code> if the task was successfully cancelled and will not be executed.
+     */
+    public synchronized boolean cancel() {
+        if (mWasExecuted) {
+            return false;
+        }
+        mWasCancelled = true;
+        return true;
+    }
 }

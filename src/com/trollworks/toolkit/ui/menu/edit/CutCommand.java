@@ -23,54 +23,54 @@ import javax.swing.text.JTextComponent;
 
 /** Provides the "Cut" command. */
 public class CutCommand extends Command {
-	@Localize("Cut")
-	@Localize(locale = "ru", value = "Вырезать")
-	@Localize(locale = "de", value = "Ausschneiden")
-	@Localize(locale = "es", value = "Cortar")
-	private static String CUT;
+    @Localize("Cut")
+    @Localize(locale = "ru", value = "Вырезать")
+    @Localize(locale = "de", value = "Ausschneiden")
+    @Localize(locale = "es", value = "Cortar")
+    private static String CUT;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** The action command this command will issue. */
-	public static final String		CMD_CUT		= "Cut";			//$NON-NLS-1$
+    /** The action command this command will issue. */
+    public static final String     CMD_CUT  = "Cut";           			//$NON-NLS-1$
 
-	/** The singleton {@link CutCommand}. */
-	public static final CutCommand	INSTANCE	= new CutCommand();
+    /** The singleton {@link CutCommand}. */
+    public static final CutCommand INSTANCE = new CutCommand();
 
-	private CutCommand() {
-		super(CUT, CMD_CUT, KeyEvent.VK_X);
-	}
+    private CutCommand() {
+        super(CUT, CMD_CUT, KeyEvent.VK_X);
+    }
 
-	@Override
-	public void adjust() {
-		boolean enable = false;
-		Component comp = getFocusOwner();
-		if (comp instanceof JTextComponent && comp.isEnabled()) {
-			JTextComponent textComp = (JTextComponent) comp;
-			if (textComp.isEditable()) {
-				enable = textComp.getSelectionStart() != textComp.getSelectionEnd();
-			}
-		} else {
-			Cutable cutable = getTarget(Cutable.class);
-			if (cutable != null) {
-				enable = cutable.canCutSelection();
-			}
-		}
-		setEnabled(enable);
-	}
+    @Override
+    public void adjust() {
+        boolean enable = false;
+        Component comp = getFocusOwner();
+        if (comp instanceof JTextComponent && comp.isEnabled()) {
+            JTextComponent textComp = (JTextComponent) comp;
+            if (textComp.isEditable()) {
+                enable = textComp.getSelectionStart() != textComp.getSelectionEnd();
+            }
+        } else {
+            Cutable cutable = getTarget(Cutable.class);
+            if (cutable != null) {
+                enable = cutable.canCutSelection();
+            }
+        }
+        setEnabled(enable);
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		Component comp = getFocusOwner();
-		if (comp instanceof JTextComponent) {
-			((JTextComponent) comp).cut();
-		} else {
-			Cutable cutable = getTarget(Cutable.class);
-			if (cutable != null && cutable.canCutSelection()) {
-				cutable.cutSelection();
-			}
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        Component comp = getFocusOwner();
+        if (comp instanceof JTextComponent) {
+            ((JTextComponent) comp).cut();
+        } else {
+            Cutable cutable = getTarget(Cutable.class);
+            if (cutable != null && cutable.canCutSelection()) {
+                cutable.cutSelection();
+            }
+        }
+    }
 }

@@ -24,5 +24,5 @@ import java.lang.annotation.Target;
  * order.
  */
 public @interface XmlNoSort {
-	//
+    //
 }

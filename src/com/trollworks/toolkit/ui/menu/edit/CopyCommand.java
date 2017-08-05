@@ -23,52 +23,52 @@ import javax.swing.text.JTextComponent;
 
 /** Provides the "Copy" command. */
 public class CopyCommand extends Command {
-	@Localize("Copy")
-	@Localize(locale = "ru", value = "Копировать")
-	@Localize(locale = "de", value = "Kopieren")
-	@Localize(locale = "es", value = "Copiar")
-	private static String COPY;
+    @Localize("Copy")
+    @Localize(locale = "ru", value = "Копировать")
+    @Localize(locale = "de", value = "Kopieren")
+    @Localize(locale = "es", value = "Copiar")
+    private static String COPY;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** The action command this command will issue. */
-	public static final String		CMD_COPY	= "Copy";			//$NON-NLS-1$
+    /** The action command this command will issue. */
+    public static final String      CMD_COPY = "Copy";           			//$NON-NLS-1$
 
-	/** The singleton {@link CopyCommand}. */
-	public static final CopyCommand	INSTANCE	= new CopyCommand();
+    /** The singleton {@link CopyCommand}. */
+    public static final CopyCommand INSTANCE = new CopyCommand();
 
-	private CopyCommand() {
-		super(COPY, CMD_COPY, KeyEvent.VK_C);
-	}
+    private CopyCommand() {
+        super(COPY, CMD_COPY, KeyEvent.VK_C);
+    }
 
-	@Override
-	public void adjust() {
-		boolean enable = false;
-		Component comp = getFocusOwner();
-		if (comp instanceof JTextComponent) {
-			JTextComponent textComp = (JTextComponent) comp;
-			enable = textComp.getSelectionStart() != textComp.getSelectionEnd();
-		} else {
-			Copyable copyable = getTarget(Copyable.class);
-			if (copyable != null) {
-				enable = copyable.canCopySelection();
-			}
-		}
-		setEnabled(enable);
-	}
+    @Override
+    public void adjust() {
+        boolean enable = false;
+        Component comp = getFocusOwner();
+        if (comp instanceof JTextComponent) {
+            JTextComponent textComp = (JTextComponent) comp;
+            enable = textComp.getSelectionStart() != textComp.getSelectionEnd();
+        } else {
+            Copyable copyable = getTarget(Copyable.class);
+            if (copyable != null) {
+                enable = copyable.canCopySelection();
+            }
+        }
+        setEnabled(enable);
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		Component comp = getFocusOwner();
-		if (comp instanceof JTextComponent) {
-			((JTextComponent) comp).copy();
-		} else {
-			Copyable copyable = getTarget(Copyable.class);
-			if (copyable != null && copyable.canCopySelection()) {
-				copyable.copySelection();
-			}
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        Component comp = getFocusOwner();
+        if (comp instanceof JTextComponent) {
+            ((JTextComponent) comp).copy();
+        } else {
+            Copyable copyable = getTarget(Copyable.class);
+            if (copyable != null && copyable.canCopySelection()) {
+                copyable.copySelection();
+            }
+        }
+    }
 }

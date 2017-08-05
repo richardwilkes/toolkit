@@ -12,21 +12,21 @@
 package com.trollworks.toolkit.ui.print;
 
 class ObjectWrapper<T> {
-	private String	mTitle;
-	private T		mObject;
+    private String mTitle;
+    private T      mObject;
 
-	ObjectWrapper(String title, T object) {
-		mTitle = title;
-		mObject = object;
-	}
+    ObjectWrapper(String title, T object) {
+        mTitle = title;
+        mObject = object;
+    }
 
-	/** @return The object. */
-	public T getObject() {
-		return mObject;
-	}
+    /** @return The object. */
+    public T getObject() {
+        return mObject;
+    }
 
-	@Override
-	public String toString() {
-		return mTitle;
-	}
+    @Override
+    public String toString() {
+        return mTitle;
+    }
 }

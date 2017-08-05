@@ -18,26 +18,26 @@ import com.trollworks.toolkit.utility.Dice;
 import com.trollworks.toolkit.utility.Localization;
 
 public class Roll implements ExpressionFunction {
-	@Localize("Invalid dice specification: %s")
-	@Localize(locale = "pt-BR", value = "Especificação de dados inválida: %s")
-	private static String INVALID_DICE_SPEC;
+    @Localize("Invalid dice specification: %s")
+    @Localize(locale = "pt-BR", value = "Especificação de dados inválida: %s")
+    private static String INVALID_DICE_SPEC;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	@Override
-	public final String getName() {
-		return "roll"; //$NON-NLS-1$
-	}
+    @Override
+    public final String getName() {
+        return "roll"; //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object execute(Evaluator evaluator, String arguments) throws EvaluationException {
-		try {
-			Dice dice = new Dice(arguments);
-			return Double.valueOf(dice.roll());
-		} catch (Exception exception) {
-			throw new EvaluationException(String.format(INVALID_DICE_SPEC, arguments));
-		}
-	}
+    @Override
+    public final Object execute(Evaluator evaluator, String arguments) throws EvaluationException {
+        try {
+            Dice dice = new Dice(arguments);
+            return Double.valueOf(dice.roll());
+        } catch (Exception exception) {
+            throw new EvaluationException(String.format(INVALID_DICE_SPEC, arguments));
+        }
+    }
 }

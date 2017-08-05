@@ -16,53 +16,53 @@ import com.trollworks.toolkit.expression.operator.Operator;
 import com.trollworks.toolkit.utility.Localization;
 
 class ExpressionTree {
-	@Localize("Expression is invalid")
-	@Localize(locale = "pt-BR", value = "A expressão é inválida")
-	private static String INVALID_EXPRESSION;
+    @Localize("Expression is invalid")
+    @Localize(locale = "pt-BR", value = "A expressão é inválida")
+    private static String INVALID_EXPRESSION;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	private Evaluator	mEvaluator;
-	private Object		mLeftOperand;
-	private Object		mRightOperand;
-	private Operator	mOperator;
-	private Operator	mUnaryOperator;
+    private Evaluator mEvaluator;
+    private Object    mLeftOperand;
+    private Object    mRightOperand;
+    private Operator  mOperator;
+    private Operator  mUnaryOperator;
 
-	ExpressionTree(Evaluator evaluator, Object leftOperand, Object rightOperand, Operator operator, Operator unaryOperator) {
-		mEvaluator = evaluator;
-		mLeftOperand = leftOperand;
-		mRightOperand = rightOperand;
-		mOperator = operator;
-		mUnaryOperator = unaryOperator;
-	}
+    ExpressionTree(Evaluator evaluator, Object leftOperand, Object rightOperand, Operator operator, Operator unaryOperator) {
+        mEvaluator = evaluator;
+        mLeftOperand = leftOperand;
+        mRightOperand = rightOperand;
+        mOperator = operator;
+        mUnaryOperator = unaryOperator;
+    }
 
-	final Object evaluate() throws EvaluationException {
-		Object left = mEvaluator.evaluateOperand(mLeftOperand);
-		Object right = mEvaluator.evaluateOperand(mRightOperand);
-		if (mLeftOperand != null && mRightOperand != null) {
-			Object result = mOperator.evaluate(left, right);
-			return mUnaryOperator != null ? mUnaryOperator.evaluate(result) : result;
-		}
-		Object operand;
-		if (mLeftOperand != null && mRightOperand == null) {
-			operand = left;
-		} else if (mLeftOperand == null && mRightOperand != null) {
-			operand = right;
-		} else {
-			operand = null;
-		}
-		if (operand != null) {
-			if (mUnaryOperator != null) {
-				operand = mUnaryOperator.evaluate(operand);
-			} else if (mOperator != null) {
-				operand = mOperator.evaluate(operand);
-			}
-		}
-		if (operand == null) {
-			throw new EvaluationException(INVALID_EXPRESSION);
-		}
-		return operand;
-	}
+    final Object evaluate() throws EvaluationException {
+        Object left = mEvaluator.evaluateOperand(mLeftOperand);
+        Object right = mEvaluator.evaluateOperand(mRightOperand);
+        if (mLeftOperand != null && mRightOperand != null) {
+            Object result = mOperator.evaluate(left, right);
+            return mUnaryOperator != null ? mUnaryOperator.evaluate(result) : result;
+        }
+        Object operand;
+        if (mLeftOperand != null && mRightOperand == null) {
+            operand = left;
+        } else if (mLeftOperand == null && mRightOperand != null) {
+            operand = right;
+        } else {
+            operand = null;
+        }
+        if (operand != null) {
+            if (mUnaryOperator != null) {
+                operand = mUnaryOperator.evaluate(operand);
+            } else if (mOperator != null) {
+                operand = mOperator.evaluate(operand);
+            }
+        }
+        if (operand == null) {
+            throw new EvaluationException(INVALID_EXPRESSION);
+        }
+        return operand;
+    }
 }

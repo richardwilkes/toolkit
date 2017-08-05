@@ -15,17 +15,17 @@ import com.trollworks.toolkit.expression.ArgumentTokenizer;
 import com.trollworks.toolkit.expression.EvaluationException;
 
 public class Multiply extends Operator {
-	public Multiply() {
-		super("*", 6); //$NON-NLS-1$
-	}
+    public Multiply() {
+        super("*", 6); //$NON-NLS-1$
+    }
 
-	@Override
-	public final Object evaluate(Object left, Object right) throws EvaluationException {
-		return Double.valueOf(ArgumentTokenizer.getDoubleOperand(left) * ArgumentTokenizer.getDoubleOperand(right));
-	}
+    @Override
+    public final Object evaluate(Object left, Object right) throws EvaluationException {
+        return Double.valueOf(ArgumentTokenizer.getDoubleOperand(left) * ArgumentTokenizer.getDoubleOperand(right));
+    }
 
-	@Override
-	public final Object evaluate(Object operand) throws EvaluationException {
-		return null;
-	}
+    @Override
+    public final Object evaluate(Object operand) throws EvaluationException {
+        return null;
+    }
 }

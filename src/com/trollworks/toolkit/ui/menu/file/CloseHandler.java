@@ -13,13 +13,13 @@ package com.trollworks.toolkit.ui.menu.file;
 
 /** Objects that want to be closeable by the {@link CloseCommand} must implement this interface. */
 public interface CloseHandler {
-	/** @return <code>true</code> if {@link #attemptClose()} may be called. */
-	boolean mayAttemptClose();
+    /** @return <code>true</code> if {@link #attemptClose()} may be called. */
+    boolean mayAttemptClose();
 
-	/**
-	 * Called to try and close the specified object.
-	 *
-	 * @return <code>true</code> if the object has been closed.
-	 */
-	boolean attemptClose();
+    /**
+     * Called to try and close the specified object.
+     *
+     * @return <code>true</code> if the object has been closed.
+     */
+    boolean attemptClose();
 }

@@ -20,37 +20,37 @@ import java.lang.reflect.Field;
 import javax.xml.stream.XMLStreamException;
 
 public class XmlPrimitiveFloatHelper implements XmlObjectHelper {
-	public static final XmlPrimitiveFloatHelper SINGLETON = new XmlPrimitiveFloatHelper();
+    public static final XmlPrimitiveFloatHelper SINGLETON = new XmlPrimitiveFloatHelper();
 
-	private XmlPrimitiveFloatHelper() {
-	}
+    private XmlPrimitiveFloatHelper() {
+    }
 
-	@Override
-	public boolean canHandleClass(Class<?> clazz) {
-		return float.class == clazz;
-	}
+    @Override
+    public boolean canHandleClass(Class<?> clazz) {
+        return float.class == clazz;
+    }
 
-	@Override
-	public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		float value = field.getFloat(obj);
-		XmlDefaultFloat def = field.getAnnotation(XmlDefaultFloat.class);
-		if (def != null) {
-			xml.addAttributeNot(name, value, def.value());
-		} else {
-			xml.addAttribute(name, value);
-		}
-	}
+    @Override
+    public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        float value = field.getFloat(obj);
+        XmlDefaultFloat def = field.getAnnotation(XmlDefaultFloat.class);
+        if (def != null) {
+            xml.addAttributeNot(name, value, def.value());
+        } else {
+            xml.addAttribute(name, value);
+        }
+    }
 
-	@Override
-	public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		XmlDefaultFloat def = field.getAnnotation(XmlDefaultFloat.class);
-		field.setFloat(obj, (float) context.getParser().getDoubleAttribute(name, def != null ? def.value() : 0));
-	}
+    @Override
+    public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        XmlDefaultFloat def = field.getAnnotation(XmlDefaultFloat.class);
+        field.setFloat(obj, (float) context.getParser().getDoubleAttribute(name, def != null ? def.value() : 0));
+    }
 
-	@Override
-	public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
-		xml.startTag(tag);
-		xml.addText(obj.toString());
-		xml.endTag();
-	}
+    @Override
+    public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+        xml.startTag(tag);
+        xml.addText(obj.toString());
+        xml.endTag();
+    }
 }

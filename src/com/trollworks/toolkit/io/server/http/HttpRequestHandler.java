@@ -15,9 +15,9 @@ import java.io.IOException;
 
 /** Defines the method required to handle a HTTP request. */
 public interface HttpRequestHandler {
-	/**
-	 * @param http The {@link Http} object the request came from.
-	 * @return The {@link HttpResponse} to return to the remote end.
-	 */
-	HttpResponse handleHttpRequest(Http http) throws IOException;
+    /**
+     * @param http The {@link Http} object the request came from.
+     * @return The {@link HttpResponse} to return to the remote end.
+     */
+    HttpResponse handleHttpRequest(Http http) throws IOException;
 }

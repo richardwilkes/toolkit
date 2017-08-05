@@ -24,38 +24,38 @@ import java.awt.event.KeyEvent;
 
 /** Provides the "Preferences..." command. */
 public class PreferencesCommand extends Command implements PreferencesHandler {
-	@Localize("Preferences\u2026")
-	@Localize(locale = "ru", value = "Настройки\u2026")
-	@Localize(locale = "de", value = "Einstellungen\u2026")
-	@Localize(locale = "es", value = "Preferencias\u2026")
-	private static String PREFERENCES;
+    @Localize("Preferences\u2026")
+    @Localize(locale = "ru", value = "Настройки\u2026")
+    @Localize(locale = "de", value = "Einstellungen\u2026")
+    @Localize(locale = "es", value = "Preferencias\u2026")
+    private static String PREFERENCES;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** The action command this command will issue. */
-	public static final String				CMD_PREFERENCES	= "Preferences";			//$NON-NLS-1$
+    /** The action command this command will issue. */
+    public static final String             CMD_PREFERENCES = "Preferences";           			//$NON-NLS-1$
 
-	/** The singleton {@link PreferencesCommand}. */
-	public static final PreferencesCommand	INSTANCE		= new PreferencesCommand();
+    /** The singleton {@link PreferencesCommand}. */
+    public static final PreferencesCommand INSTANCE        = new PreferencesCommand();
 
-	private PreferencesCommand() {
-		super(PREFERENCES, CMD_PREFERENCES, KeyEvent.VK_COMMA);
-	}
+    private PreferencesCommand() {
+        super(PREFERENCES, CMD_PREFERENCES, KeyEvent.VK_COMMA);
+    }
 
-	@Override
-	public void adjust() {
-		setEnabled(!UIUtilities.inModalState());
-	}
+    @Override
+    public void adjust() {
+        setEnabled(!UIUtilities.inModalState());
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		PreferencesWindow.display();
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        PreferencesWindow.display();
+    }
 
-	@Override
-	public void handlePreferences(PreferencesEvent event) {
-		PreferencesWindow.display();
-	}
+    @Override
+    public void handlePreferences(PreferencesEvent event) {
+        PreferencesWindow.display();
+    }
 }

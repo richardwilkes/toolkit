@@ -25,59 +25,59 @@ import javax.swing.text.JTextComponent;
 
 /** Provides the "Delete" command. */
 public class DeleteCommand extends Command {
-	@Localize("Delete")
-	@Localize(locale = "ru", value = "Удалить")
-	@Localize(locale = "de", value = "Löschen")
-	@Localize(locale = "es", value = "Eliminar")
-	private static String DELETE;
+    @Localize("Delete")
+    @Localize(locale = "ru", value = "Удалить")
+    @Localize(locale = "de", value = "Löschen")
+    @Localize(locale = "es", value = "Eliminar")
+    private static String DELETE;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** The action command this command will issue. */
-	public static final String			CMD_DELETE	= "Delete";				//$NON-NLS-1$
+    /** The action command this command will issue. */
+    public static final String        CMD_DELETE = "Delete";           				//$NON-NLS-1$
 
-	/** The singleton {@link DeleteCommand}. */
-	public static final DeleteCommand	INSTANCE	= new DeleteCommand();
+    /** The singleton {@link DeleteCommand}. */
+    public static final DeleteCommand INSTANCE   = new DeleteCommand();
 
-	private DeleteCommand() {
-		super(DELETE, CMD_DELETE, KeyEvent.VK_DELETE, 0);
-	}
+    private DeleteCommand() {
+        super(DELETE, CMD_DELETE, KeyEvent.VK_DELETE, 0);
+    }
 
-	@Override
-	public void adjust() {
-		boolean enable = false;
-		Component comp = getFocusOwner();
-		if (comp instanceof JTextComponent && comp.isEnabled()) {
-			JTextComponent textComp = (JTextComponent) comp;
-			if (textComp.isEditable()) {
-				int selectionEnd = textComp.getSelectionEnd();
-				enable = textComp.getSelectionStart() != selectionEnd || selectionEnd < textComp.getDocument().getLength();
-			}
-		} else {
-			Deletable deletable = getTarget(Deletable.class);
-			if (deletable != null) {
-				enable = deletable.canDeleteSelection();
-			}
-		}
-		setEnabled(enable);
-	}
+    @Override
+    public void adjust() {
+        boolean enable = false;
+        Component comp = getFocusOwner();
+        if (comp instanceof JTextComponent && comp.isEnabled()) {
+            JTextComponent textComp = (JTextComponent) comp;
+            if (textComp.isEditable()) {
+                int selectionEnd = textComp.getSelectionEnd();
+                enable = textComp.getSelectionStart() != selectionEnd || selectionEnd < textComp.getDocument().getLength();
+            }
+        } else {
+            Deletable deletable = getTarget(Deletable.class);
+            if (deletable != null) {
+                enable = deletable.canDeleteSelection();
+            }
+        }
+        setEnabled(enable);
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		Component comp = getFocusOwner();
-		if (comp instanceof JTextComponent && comp.isEnabled()) {
-			JTextComponent textComp = (JTextComponent) comp;
-			ActionListener listener = textComp.getActionForKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-			if (listener != null) {
-				listener.actionPerformed(event);
-			}
-		} else {
-			Deletable deletable = getTarget(Deletable.class);
-			if (deletable != null && deletable.canDeleteSelection()) {
-				deletable.deleteSelection();
-			}
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        Component comp = getFocusOwner();
+        if (comp instanceof JTextComponent && comp.isEnabled()) {
+            JTextComponent textComp = (JTextComponent) comp;
+            ActionListener listener = textComp.getActionForKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+            if (listener != null) {
+                listener.actionPerformed(event);
+            }
+        } else {
+            Deletable deletable = getTarget(Deletable.class);
+            if (deletable != null && deletable.canDeleteSelection()) {
+                deletable.deleteSelection();
+            }
+        }
+    }
 }

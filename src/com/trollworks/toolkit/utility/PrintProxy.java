@@ -17,22 +17,22 @@ import java.awt.print.Printable;
 
 /** Objects that want to be printable by the framework must implement this interface. */
 public interface PrintProxy extends Printable {
-	/** @return The {@link PrintManager} to use. */
-	PrintManager getPrintManager();
+    /** @return The {@link PrintManager} to use. */
+    PrintManager getPrintManager();
 
-	/** @return The title of the print job. */
-	String getPrintJobTitle();
+    /** @return The title of the print job. */
+    String getPrintJobTitle();
 
-	/**
-	 * Called when the page setup has changed.
-	 *
-	 * @param willPrint <code>true</code> when this call will be immediately followed by printing.
-	 */
-	void adjustToPageSetupChanges(boolean willPrint);
+    /**
+     * Called when the page setup has changed.
+     *
+     * @param willPrint <code>true</code> when this call will be immediately followed by printing.
+     */
+    void adjustToPageSetupChanges(boolean willPrint);
 
-	/** @return <code>true</code> when printing is in progress. */
-	boolean isPrinting();
+    /** @return <code>true</code> when printing is in progress. */
+    boolean isPrinting();
 
-	/** @param printing The current state to return from a call to {@link #isPrinting()}. */
-	void setPrinting(boolean printing);
+    /** @param printing The current state to return from a call to {@link #isPrinting()}. */
+    void setPrinting(boolean printing);
 }

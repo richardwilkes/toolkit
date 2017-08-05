@@ -20,41 +20,41 @@ import java.lang.reflect.Field;
 import javax.xml.stream.XMLStreamException;
 
 public class XmlCharacterHelper implements XmlObjectHelper {
-	public static final XmlCharacterHelper SINGLETON = new XmlCharacterHelper();
+    public static final XmlCharacterHelper SINGLETON = new XmlCharacterHelper();
 
-	private XmlCharacterHelper() {
-	}
+    private XmlCharacterHelper() {
+    }
 
-	@Override
-	public boolean canHandleClass(Class<?> clazz) {
-		return Character.class == clazz;
-	}
+    @Override
+    public boolean canHandleClass(Class<?> clazz) {
+        return Character.class == clazz;
+    }
 
-	@Override
-	public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		Character value = (Character) field.get(obj);
-		if (value != null) {
-			String str = value.toString();
-			XmlDefaultChar def = field.getAnnotation(XmlDefaultChar.class);
-			if (def != null) {
-				xml.addAttributeNot(name, str, String.valueOf(def.value()));
-			} else {
-				xml.addAttribute(name, str);
-			}
-		}
-	}
+    @Override
+    public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        Character value = (Character) field.get(obj);
+        if (value != null) {
+            String str = value.toString();
+            XmlDefaultChar def = field.getAnnotation(XmlDefaultChar.class);
+            if (def != null) {
+                xml.addAttributeNot(name, str, String.valueOf(def.value()));
+            } else {
+                xml.addAttribute(name, str);
+            }
+        }
+    }
 
-	@Override
-	public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-		XmlDefaultChar def = field.getAnnotation(XmlDefaultChar.class);
-		String charStr = context.getParser().getAttribute(name);
-		field.set(obj, Character.valueOf(charStr == null || charStr.isEmpty() ? def != null ? def.value() : 0 : charStr.charAt(0)));
-	}
+    @Override
+    public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
+        XmlDefaultChar def = field.getAnnotation(XmlDefaultChar.class);
+        String charStr = context.getParser().getAttribute(name);
+        field.set(obj, Character.valueOf(charStr == null || charStr.isEmpty() ? def != null ? def.value() : 0 : charStr.charAt(0)));
+    }
 
-	@Override
-	public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
-		xml.startTag(tag);
-		xml.addText(obj.toString());
-		xml.endTag();
-	}
+    @Override
+    public void emitAsTag(XmlGenerator xml, String tag, Object obj) throws XMLStreamException {
+        xml.startTag(tag);
+        xml.addText(obj.toString());
+        xml.endTag();
+    }
 }

@@ -13,10 +13,10 @@ package com.trollworks.toolkit.utility.noise;
 
 /** All 2D noise generators will implement this interface. */
 public interface Noise2D {
-	/**
-	 * @param x The horizontal coordinate to produce a noise value for.
-	 * @param y The vertical coordinate to produce a noise value for.
-	 * @return A value between -1 and 1, inclusive.
-	 */
-	double noise(double x, double y);
+    /**
+     * @param x The horizontal coordinate to produce a noise value for.
+     * @param y The vertical coordinate to produce a noise value for.
+     * @return A value between -1 and 1, inclusive.
+     */
+    double noise(double x, double y);
 }

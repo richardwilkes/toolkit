@@ -14,14 +14,14 @@ package com.trollworks.toolkit.io.xml;
 import javax.xml.stream.XMLStreamException;
 
 /**
- * Objects that wish to be notified before they are about to be written to xml should implement
- * this interface.
+ * Objects that wish to be notified before they are about to be written to xml should implement this
+ * interface.
  */
 public interface TagWillSave {
-	/**
-	 * Called before the XML tag will be written.
-	 *
-	 * @param xml The {@link XmlGenerator} for this object.
-	 */
-	void xmlWillSave(XmlGenerator xml) throws XMLStreamException;
+    /**
+     * Called before the XML tag will be written.
+     *
+     * @param xml The {@link XmlGenerator} for this object.
+     */
+    void xmlWillSave(XmlGenerator xml) throws XMLStreamException;
 }

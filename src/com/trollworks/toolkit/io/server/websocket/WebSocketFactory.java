@@ -15,9 +15,9 @@ import com.trollworks.toolkit.io.server.http.Http;
 
 /** A factory for creating {@link WebSocket}s from a {@link Http} connection. */
 public interface WebSocketFactory {
-	/**
-	 * @param http The {@link Http} to use.
-	 * @return The newly created {@link WebSocket}.
-	 */
-	WebSocket createWebSocket(Http http);
+    /**
+     * @param http The {@link Http} to use.
+     * @return The newly created {@link WebSocket}.
+     */
+    WebSocket createWebSocket(Http http);
 }

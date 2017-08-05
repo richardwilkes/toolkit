@@ -15,26 +15,26 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ReverseListIterator<T> implements Iterator<T>, Iterable<T> {
-	private List<T>	mList;
-	private int		mPos;
+    private List<T> mList;
+    private int     mPos;
 
-	public ReverseListIterator(List<T> list) {
-		mList = list;
-		mPos = mList.size() - 1;
-	}
+    public ReverseListIterator(List<T> list) {
+        mList = list;
+        mPos = mList.size() - 1;
+    }
 
-	@Override
-	public boolean hasNext() {
-		return mPos >= 0;
-	}
+    @Override
+    public boolean hasNext() {
+        return mPos >= 0;
+    }
 
-	@Override
-	public T next() {
-		return mList.get(mPos--);
-	}
+    @Override
+    public T next() {
+        return mList.get(mPos--);
+    }
 
-	@Override
-	public Iterator<T> iterator() {
-		return this;
-	}
+    @Override
+    public Iterator<T> iterator() {
+        return this;
+    }
 }

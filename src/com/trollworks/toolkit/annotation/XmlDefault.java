@@ -23,6 +23,6 @@ import java.lang.annotation.Target;
  * {@link #toString()} method can be used to match the value.
  */
 public @interface XmlDefault {
-	/** @return The default value. */
-	String value();
+    /** @return The default value. */
+    String value();
 }

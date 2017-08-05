@@ -16,9 +16,9 @@ package com.trollworks.toolkit.ui.menu.edit;
  * must implement this interface.
  */
 public interface SelectAllCapable {
-	/** @return Whether the {@link #selectAll()} can be called. */
-	boolean canSelectAll();
+    /** @return Whether the {@link #selectAll()} can be called. */
+    boolean canSelectAll();
 
-	/** Called to select all. */
-	void selectAll();
+    /** Called to select all. */
+    void selectAll();
 }

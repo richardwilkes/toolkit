@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE })
 /** Provides the minimum version for classes that can be loaded from XML. */
 public @interface XmlTagMinimumVersion {
-	/** @return The minimum version for classes that can be loaded from XML. */
-	int value();
+    /** @return The minimum version for classes that can be loaded from XML. */
+    int value();
 }

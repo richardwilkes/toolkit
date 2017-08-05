@@ -18,45 +18,45 @@ import javax.swing.undo.CompoundEdit;
 
 /** Provides a convenient way to collect multiple undos into a single undo. */
 public class MultipleUndo extends CompoundEdit {
-	@Localize("Redo ")
-	@Localize(locale = "ru", value = "Повторить ")
-	@Localize(locale = "de", value = "Wiederherstellen: ")
-	@Localize(locale = "es", value = "Rehacer ")
-	private static String	REDO_PREFIX;
-	@Localize("Undo ")
-	@Localize(locale = "ru", value = "Отменить ")
-	@Localize(locale = "de", value = "Rückgängig: ")
-	@Localize(locale = "es", value = "Deshacer ")
-	private static String	UNDO_PREFIX;
+    @Localize("Redo ")
+    @Localize(locale = "ru", value = "Повторить ")
+    @Localize(locale = "de", value = "Wiederherstellen: ")
+    @Localize(locale = "es", value = "Rehacer ")
+    private static String REDO_PREFIX;
+    @Localize("Undo ")
+    @Localize(locale = "ru", value = "Отменить ")
+    @Localize(locale = "de", value = "Rückgängig: ")
+    @Localize(locale = "es", value = "Deshacer ")
+    private static String UNDO_PREFIX;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	private String mName;
+    private String mName;
 
-	/**
-	 * Create a multiple undo edit.
-	 *
-	 * @param name The name of the undo edit.
-	 */
-	public MultipleUndo(String name) {
-		super();
-		mName = name;
-	}
+    /**
+     * Create a multiple undo edit.
+     *
+     * @param name The name of the undo edit.
+     */
+    public MultipleUndo(String name) {
+        super();
+        mName = name;
+    }
 
-	@Override
-	public String getPresentationName() {
-		return mName;
-	}
+    @Override
+    public String getPresentationName() {
+        return mName;
+    }
 
-	@Override
-	public String getRedoPresentationName() {
-		return REDO_PREFIX + mName;
-	}
+    @Override
+    public String getRedoPresentationName() {
+        return REDO_PREFIX + mName;
+    }
 
-	@Override
-	public String getUndoPresentationName() {
-		return UNDO_PREFIX + mName;
-	}
+    @Override
+    public String getUndoPresentationName() {
+        return UNDO_PREFIX + mName;
+    }
 }

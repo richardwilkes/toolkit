@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 /** Marks fields that correspond to an attribute of an XML tag. */
 public @interface XmlAttr {
-	/** @return The XML attribute name. */
-	String value();
+    /** @return The XML attribute name. */
+    String value();
 }

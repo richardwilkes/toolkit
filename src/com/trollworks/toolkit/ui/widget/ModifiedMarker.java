@@ -21,40 +21,40 @@ import javax.swing.JRootPane;
 
 /** A toolbar marker that tracks the modified state. */
 public class ModifiedMarker extends JLabel implements DataModifiedListener {
-	@Localize("Changes have been made")
-	@Localize(locale = "ru", value = "Изменения были внесены")
-	@Localize(locale = "de", value = "Nicht gespeicherte Änderungen")
-	@Localize(locale = "es", value = "Se han realizado los cambios")
-	private static String	MODIFIED;
-	@Localize("No changes have been made")
-	@Localize(locale = "ru", value = "Изменений не было сделано")
-	@Localize(locale = "de", value = "Unverändert")
-	@Localize(locale = "es", value = "No se han hecho cambios")
-	private static String	NOT_MODIFIED;
+    @Localize("Changes have been made")
+    @Localize(locale = "ru", value = "Изменения были внесены")
+    @Localize(locale = "de", value = "Nicht gespeicherte Änderungen")
+    @Localize(locale = "es", value = "Se han realizado los cambios")
+    private static String MODIFIED;
+    @Localize("No changes have been made")
+    @Localize(locale = "ru", value = "Изменений не было сделано")
+    @Localize(locale = "de", value = "Unverändert")
+    @Localize(locale = "es", value = "No se han hecho cambios")
+    private static String NOT_MODIFIED;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	/** Creates a new {@link ModifiedMarker}. */
-	public ModifiedMarker() {
-		super(StdImage.NOT_MODIFIED_MARKER);
-		setToolTipText(Text.wrapPlainTextForToolTip(NOT_MODIFIED));
-	}
+    /** Creates a new {@link ModifiedMarker}. */
+    public ModifiedMarker() {
+        super(StdImage.NOT_MODIFIED_MARKER);
+        setToolTipText(Text.wrapPlainTextForToolTip(NOT_MODIFIED));
+    }
 
-	@Override
-	public void dataModificationStateChanged(Object obj, boolean modified) {
-		if (modified) {
-			setIcon(StdImage.MODIFIED_MARKER);
-			setToolTipText(Text.wrapPlainTextForToolTip(MODIFIED));
-		} else {
-			setIcon(StdImage.NOT_MODIFIED_MARKER);
-			setToolTipText(Text.wrapPlainTextForToolTip(NOT_MODIFIED));
-		}
-		repaint();
-		JRootPane rootPane = getRootPane();
-		if (rootPane != null) {
-			rootPane.putClientProperty("Window.documentModified", modified ? Boolean.TRUE : Boolean.FALSE); //$NON-NLS-1$
-		}
-	}
+    @Override
+    public void dataModificationStateChanged(Object obj, boolean modified) {
+        if (modified) {
+            setIcon(StdImage.MODIFIED_MARKER);
+            setToolTipText(Text.wrapPlainTextForToolTip(MODIFIED));
+        } else {
+            setIcon(StdImage.NOT_MODIFIED_MARKER);
+            setToolTipText(Text.wrapPlainTextForToolTip(NOT_MODIFIED));
+        }
+        repaint();
+        JRootPane rootPane = getRootPane();
+        if (rootPane != null) {
+            rootPane.putClientProperty("Window.documentModified", modified ? Boolean.TRUE : Boolean.FALSE); //$NON-NLS-1$
+        }
+    }
 }

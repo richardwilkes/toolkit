@@ -14,11 +14,11 @@ package com.trollworks.toolkit.expression;
 import com.trollworks.toolkit.expression.operator.Operator;
 
 class NextOperator {
-	Operator	mOperator;
-	int			mIndex;
+    Operator mOperator;
+    int      mIndex;
 
-	NextOperator(Operator operator, int index) {
-		mOperator = operator;
-		mIndex = index;
-	}
+    NextOperator(Operator operator, int index) {
+        mOperator = operator;
+        mIndex = index;
+    }
 }

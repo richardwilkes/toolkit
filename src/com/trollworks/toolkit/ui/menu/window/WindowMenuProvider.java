@@ -28,43 +28,43 @@ import javax.swing.JMenu;
 
 /** Provides the standard "Window" menu. */
 public class WindowMenuProvider implements MenuProvider {
-	@Localize("Window")
-	@Localize(locale = "ru", value = "Окно")
-	@Localize(locale = "de", value = "Fenster")
-	@Localize(locale = "es", value = "Ventana")
-	private static String WINDOW;
+    @Localize("Window")
+    @Localize(locale = "ru", value = "Окно")
+    @Localize(locale = "de", value = "Fenster")
+    @Localize(locale = "es", value = "Ventana")
+    private static String WINDOW;
 
-	static {
-		Localization.initialize();
-	}
+    static {
+        Localization.initialize();
+    }
 
-	public static final String NAME = "Window"; //$NON-NLS-1$
+    public static final String NAME = "Window"; //$NON-NLS-1$
 
-	/** Updates the available menu items. */
-	public static void update() {
-		ArrayList<AppWindow> windows = AppWindow.getAllWindows();
-		Collections.sort(windows);
-		for (AppWindow window : windows) {
-			JMenu windowMenu = StdMenuBar.findMenuByName(window.getJMenuBar(), NAME);
-			if (windowMenu != null) {
-				windowMenu.removeAll();
-				for (AppWindow one : windows) {
-					windowMenu.add(new JCheckBoxMenuItem(new SwitchToWindowCommand(one)));
-				}
-			}
-		}
-	}
+    /** Updates the available menu items. */
+    public static void update() {
+        ArrayList<AppWindow> windows = AppWindow.getAllWindows();
+        Collections.sort(windows);
+        for (AppWindow window : windows) {
+            JMenu windowMenu = StdMenuBar.findMenuByName(window.getJMenuBar(), NAME);
+            if (windowMenu != null) {
+                windowMenu.removeAll();
+                for (AppWindow one : windows) {
+                    windowMenu.add(new JCheckBoxMenuItem(new SwitchToWindowCommand(one)));
+                }
+            }
+        }
+    }
 
-	@Override
-	public Set<Command> getModifiableCommands() {
-		return Collections.emptySet();
-	}
+    @Override
+    public Set<Command> getModifiableCommands() {
+        return Collections.emptySet();
+    }
 
-	@Override
-	public JMenu createMenu() {
-		JMenu menu = new JMenu(WINDOW);
-		menu.setName(NAME);
-		DynamicMenuEnabler.add(menu);
-		return menu;
-	}
+    @Override
+    public JMenu createMenu() {
+        JMenu menu = new JMenu(WINDOW);
+        menu.setName(NAME);
+        DynamicMenuEnabler.add(menu);
+        return menu;
+    }
 }
