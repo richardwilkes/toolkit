@@ -91,11 +91,11 @@ public class FontPanel extends ActionPanel implements ActionListener {
 
         Integer[] sizes = new Integer[10];
         for (int i = 0; i < 7; i++) {
-            sizes[i] = new Integer(6 + i);
+            sizes[i] = Integer.valueOf(6 + i);
         }
-        sizes[7] = new Integer(14);
-        sizes[8] = new Integer(16);
-        sizes[9] = new Integer(18);
+        sizes[7] = Integer.valueOf(14);
+        sizes[8] = Integer.valueOf(16);
+        sizes[9] = Integer.valueOf(18);
         mFontSizeMenu = new JComboBox<>(sizes);
         mFontSizeMenu.setOpaque(false);
         mFontSizeMenu.setToolTipText(Text.wrapPlainTextForToolTip(SIZE_TOOLTIP));
@@ -138,7 +138,7 @@ public class FontPanel extends ActionPanel implements ActionListener {
         if (mFontNameMenu.getSelectedItem() == null) {
             mFontNameMenu.setSelectedIndex(0);
         }
-        mFontSizeMenu.setSelectedItem(new Integer(font.getSize()));
+        mFontSizeMenu.setSelectedItem(Integer.valueOf(font.getSize()));
         if (mFontSizeMenu.getSelectedItem() == null) {
             mFontSizeMenu.setSelectedIndex(3);
         }

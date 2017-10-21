@@ -60,7 +60,7 @@ public class IntegerFormatter extends JFormattedTextField.AbstractFormatter {
 
     @Override
     public Object stringToValue(String text) throws ParseException {
-        return new Integer(Math.min(Math.max(Numbers.extractInteger(text, mMinValue <= 0 && mMaxValue >= 0 ? 0 : mMinValue, true), mMinValue), mMaxValue));
+        return Integer.valueOf(Math.min(Math.max(Numbers.extractInteger(text, mMinValue <= 0 && mMaxValue >= 0 ? 0 : mMinValue, true), mMinValue), mMaxValue));
     }
 
     @Override

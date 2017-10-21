@@ -422,7 +422,7 @@ public class FlexGrid extends FlexContainer {
 
     private static void addToSpanMap(int span, TreeMap<Integer, ArrayList<FlexGridData>> map, FlexGridData data) {
         if (span > 1) {
-            Integer key = new Integer(span);
+            Integer key = Integer.valueOf(span);
             ArrayList<FlexGridData> set = map.get(key);
             if (set == null) {
                 set = new ArrayList<>();

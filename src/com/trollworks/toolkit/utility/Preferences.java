@@ -626,7 +626,7 @@ public class Preferences {
      * @param value The value to set the key to.
      */
     public void setValue(String module, String key, boolean value) {
-        setValue(module, key, new Boolean(value).toString());
+        setValue(module, key, Boolean.valueOf(value).toString());
     }
 
     /**

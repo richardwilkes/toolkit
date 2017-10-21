@@ -912,7 +912,7 @@ public class Json {
         if (b >= '0' && b <= '9' || b == '.' || b == '-' || b == '+') {
             if (b == '0' && s.length() > 2 && (s.charAt(1) == 'x' || s.charAt(1) == 'X')) {
                 try {
-                    return new Integer(Integer.parseInt(s.substring(2), 16));
+                    return Integer.valueOf(Integer.parseInt(s.substring(2), 16));
                 } catch (Exception ignore) {
                     Log.error(ignore);
                 }
@@ -921,9 +921,9 @@ public class Json {
                 if (s.indexOf('.') > -1 || s.indexOf('e') > -1 || s.indexOf('E') > -1) {
                     return Double.valueOf(s);
                 }
-                Long myLong = new Long(s);
+                Long myLong = Long.valueOf(s);
                 if (myLong.longValue() == myLong.intValue()) {
-                    return new Integer(myLong.intValue());
+                    return Integer.valueOf(myLong.intValue());
                 }
                 return myLong;
             } catch (Exception ignore) {

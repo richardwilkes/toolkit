@@ -91,7 +91,7 @@ public class PrintPanel extends PageSetupPanel {
     private void createCopiesField(PrintRequestAttributeSet set) {
         PrintService service = getService();
         if (service.isAttributeCategorySupported(Copies.class)) {
-            mCopies = new EditorField(new DefaultFormatterFactory(new IntegerFormatter(1, 999, false)), null, SwingConstants.RIGHT, new Integer(PrintUtilities.getCopies(service, set)), new Integer(999), null);
+            mCopies = new EditorField(new DefaultFormatterFactory(new IntegerFormatter(1, 999, false)), null, SwingConstants.RIGHT, Integer.valueOf(PrintUtilities.getCopies(service, set)), Integer.valueOf(999), null);
             UIUtilities.setOnlySize(mCopies, mCopies.getPreferredSize());
             LinkedLabel label = new LinkedLabel(COPIES, mCopies);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
@@ -142,7 +142,7 @@ public class PrintPanel extends PageSetupPanel {
     }
 
     private static EditorField createPageRangeField(int value, JPanel parent) {
-        EditorField field = new EditorField(new DefaultFormatterFactory(new IntegerFormatter(1, 9999, false)), null, SwingConstants.RIGHT, new Integer(value), new Integer(9999), null);
+        EditorField field = new EditorField(new DefaultFormatterFactory(new IntegerFormatter(1, 9999, false)), null, SwingConstants.RIGHT, Integer.valueOf(value), Integer.valueOf(9999), null);
         UIUtilities.setOnlySize(field, field.getPreferredSize());
         parent.add(field);
         return field;

@@ -33,7 +33,7 @@ public class DateFormatter extends JFormattedTextField.AbstractFormatter {
 
     @Override
     public Object stringToValue(String text) throws ParseException {
-        return new Long(Numbers.extractDate(text));
+        return Long.valueOf(Numbers.extractDate(text));
     }
 
     @Override

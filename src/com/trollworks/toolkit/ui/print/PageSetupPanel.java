@@ -448,7 +448,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
     }
 
     private static EditorField createMarginField(double margin, JPanel wrapper) {
-        EditorField field = new EditorField(new DefaultFormatterFactory(new DoubleFormatter(0, 999.999, false)), null, SwingConstants.RIGHT, new Double(margin), new Double(999.999), null);
+        EditorField field = new EditorField(new DefaultFormatterFactory(new DoubleFormatter(0, 999.999, false)), null, SwingConstants.RIGHT, Double.valueOf(margin), Double.valueOf(999.999), null);
         UIUtilities.setOnlySize(field, field.getPreferredSize());
         wrapper.add(field);
         return field;

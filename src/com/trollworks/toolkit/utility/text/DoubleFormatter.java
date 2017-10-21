@@ -36,7 +36,7 @@ public class DoubleFormatter extends JFormattedTextField.AbstractFormatter {
 
     @Override
     public Object stringToValue(String text) throws ParseException {
-        return new Double(Math.min(Math.max(Numbers.extractDouble(text, mMinValue <= 0 && mMaxValue >= 0 ? 0 : mMinValue, true), mMinValue), mMaxValue));
+        return Double.valueOf(Math.min(Math.max(Numbers.extractDouble(text, mMinValue <= 0 && mMaxValue >= 0 ? 0 : mMinValue, true), mMinValue), mMaxValue));
     }
 
     @Override
