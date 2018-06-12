@@ -125,7 +125,7 @@ public class MouseCapture implements MouseListener, MouseMotionListener, Hierarc
         Component component = SwingUtilities.getDeepestComponentAt(mCaptureComponent, containerPoint.x, containerPoint.y);
         if (component != null) {
             Point componentPoint = SwingUtilities.convertPoint(mGlassPane, glassPanePoint, component);
-            component.dispatchEvent(new MouseEvent(component, event.getID(), event.getWhen(), event.getModifiers(), componentPoint.x, componentPoint.y, event.getClickCount(), event.isPopupTrigger()));
+            component.dispatchEvent(new MouseEvent(component, event.getID(), event.getWhen(), event.getModifiersEx(), componentPoint.x, componentPoint.y, event.getClickCount(), event.isPopupTrigger()));
         }
     }
 }

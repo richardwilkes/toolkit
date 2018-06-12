@@ -589,7 +589,7 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
             mModel.setRowDisclosed(row, !mModel.isRowDisclosed(row));
         } else if (column != -1) {
             Rectangle cellBounds = getCellBounds(row, column);
-            mRenderer.mousePressed(this, row, column, event.getX() - cellBounds.x, event.getY() - cellBounds.y, cellBounds.width, cellBounds.height, event.getButton(), event.getClickCount(), event.getModifiers(), event.isPopupTrigger());
+            mRenderer.mousePressed(this, row, column, event.getX() - cellBounds.x, event.getY() - cellBounds.y, cellBounds.width, cellBounds.height, event.getButton(), event.getClickCount(), event.getModifiersEx(), event.isPopupTrigger());
         }
     }
 

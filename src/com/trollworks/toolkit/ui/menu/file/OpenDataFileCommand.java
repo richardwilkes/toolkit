@@ -23,8 +23,8 @@ import javax.swing.SwingUtilities;
 
 /** A command that will open a specific data file. */
 public class OpenDataFileCommand extends Command implements Runnable {
-    private static final String    CMD_PREFIX    = "OpenDataFile[";	//$NON-NLS-1$
-    private static final String    CMD_POSTFIX   = "]";            				//$NON-NLS-1$
+    private static final String    CMD_PREFIX    = "OpenDataFile["; //$NON-NLS-1$
+    private static final String    CMD_POSTFIX   = "]"; //$NON-NLS-1$
     private static boolean         PASS_THROUGH  = false;
     private static ArrayList<File> PENDING_FILES = null;
     private File                   mFile;

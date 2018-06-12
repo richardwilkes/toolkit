@@ -18,7 +18,7 @@ import java.awt.Toolkit;
 @SuppressWarnings("nls")
 public class Cursors {
     static {
-        StdImage.addLocation(StdImage.class.getResource("cursors/"));
+        StdImage.addLoader(new ModuleImageLoader(StdImage.class.getModule(), "/com/trollworks/toolkit/ui/image/cursors"));
     }
 
     public static final Cursor HORIZONTAL_RESIZE = create("horizontal_resize_cursor");

@@ -36,7 +36,7 @@ public class DeleteCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String        CMD_DELETE = "Delete";           				//$NON-NLS-1$
+    public static final String        CMD_DELETE = "Delete"; //$NON-NLS-1$
 
     /** The singleton {@link DeleteCommand}. */
     public static final DeleteCommand INSTANCE   = new DeleteCommand();

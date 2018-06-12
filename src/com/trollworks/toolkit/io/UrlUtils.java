@@ -12,20 +12,13 @@
 package com.trollworks.toolkit.io;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.jar.Manifest;
 
 /** Utilities for working with URLs. */
 public class UrlUtils {
-    private static final String MANIFEST_FILE = "META-INF/MANIFEST.MF"; //$NON-NLS-1$
-
     /**
      * @param uri The URI to setup a connection for.
      * @return A {@link URLConnection} configured with a 10 second timeout for connecting and
@@ -71,18 +64,5 @@ public class UrlUtils {
             }
         }
         return buffer.toString();
-    }
-
-    /**
-     * @param theClass A {@link Class} in the bundle you wish to load the manifest from.
-     * @return The loaded {@link Manifest}.
-     */
-    public static final Manifest loadManifest(Class<?> theClass) throws IOException, URISyntaxException {
-        URI uri = theClass.getProtectionDomain().getCodeSource().getLocation().toURI();
-        File file = new File(uri.getPath());
-        URL url = file.isDirectory() ? uri.resolve(MANIFEST_FILE).toURL() : new URL("jar:" + uri.toASCIIString() + "!/" + MANIFEST_FILE); //$NON-NLS-1$ //$NON-NLS-2$
-        try (InputStream in = setupConnection(url).getInputStream()) {
-            return new Manifest(in);
-        }
     }
 }

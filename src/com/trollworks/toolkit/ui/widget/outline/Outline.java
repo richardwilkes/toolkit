@@ -95,13 +95,13 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     }
 
     /** The default double-click action command. */
-    public static final String    CMD_OPEN_SELECTION                = "Outline.OpenSelection";            				//$NON-NLS-1$
+    public static final String    CMD_OPEN_SELECTION                = "Outline.OpenSelection"; //$NON-NLS-1$
     /** The default selection changed action command. */
-    public static final String    CMD_SELECTION_CHANGED             = "Outline.SelectionChanged";         			//$NON-NLS-1$
+    public static final String    CMD_SELECTION_CHANGED             = "Outline.SelectionChanged"; //$NON-NLS-1$
     /** The default potential content size change action command. */
-    public static final String    CMD_POTENTIAL_CONTENT_SIZE_CHANGE = "Outline.ContentSizeMayHaveChanged";	//$NON-NLS-1$
+    public static final String    CMD_POTENTIAL_CONTENT_SIZE_CHANGE = "Outline.ContentSizeMayHaveChanged"; //$NON-NLS-1$
     /** The column visibility command. */
-    public static final String    CMD_TOGGLE_COLUMN_VISIBILITY      = "Outline.ToggleColumnVisibility";   		//$NON-NLS-1$
+    public static final String    CMD_TOGGLE_COLUMN_VISIBILITY      = "Outline.ToggleColumnVisibility"; //$NON-NLS-1$
     private static final int      DIVIDER_HIT_SLOP                  = 2;
     private static final int      AUTO_SCROLL_MARGIN                = 10;
     private OutlineModel          mModel;
@@ -1413,7 +1413,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                     if (event.isShiftDown()) {
                         method |= Selection.MOUSE_EXTEND;
                     }
-                    if ((event.getModifiers() & getToolkit().getMenuShortcutKeyMask()) != 0 && !event.isPopupTrigger()) {
+                    if ((event.getModifiersEx() & getToolkit().getMenuShortcutKeyMaskEx()) != 0 && !event.isPopupTrigger()) {
                         method |= Selection.MOUSE_FLIP;
                     }
                     mSelectOnMouseUp = mModel.getSelection().selectByMouse(rowIndexHit, method);

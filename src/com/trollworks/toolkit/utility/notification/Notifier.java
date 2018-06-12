@@ -25,7 +25,7 @@ import java.util.StringTokenizer;
 /** Tracks targets of notifications and provides methods for notifying them. */
 public class Notifier implements Comparator<NotifierTarget> {
     /** The separator used between parts of a type. */
-    public static final String               SEPARATOR      = ".";            				//$NON-NLS-1$
+    public static final String               SEPARATOR      = "."; //$NON-NLS-1$
     private Set<BatchNotifierTarget>         mBatchTargets  = new HashSet<>();
     private Map<String, Set<NotifierTarget>> mProductionMap = new HashMap<>();
     private Map<NotifierTarget, Set<String>> mNameMap       = new HashMap<>();

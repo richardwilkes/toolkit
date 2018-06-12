@@ -35,7 +35,7 @@ public class PasteCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String       CMD_PASTE = "Paste";           				//$NON-NLS-1$
+    public static final String       CMD_PASTE = "Paste"; //$NON-NLS-1$
 
     /** The singleton {@link PasteCommand}. */
     public static final PasteCommand INSTANCE  = new PasteCommand();

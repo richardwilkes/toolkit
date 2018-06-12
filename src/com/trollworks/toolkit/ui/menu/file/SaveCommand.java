@@ -43,7 +43,7 @@ public class SaveCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String      CMD_SAVE = "Save";           			//$NON-NLS-1$
+    public static final String      CMD_SAVE = "Save"; //$NON-NLS-1$
 
     /** The singleton {@link SaveCommand}. */
     public static final SaveCommand INSTANCE = new SaveCommand();

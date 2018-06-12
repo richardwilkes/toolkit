@@ -38,7 +38,7 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
         Localization.initialize();
     }
 
-    private static final String          PREFS_MODULE  = "RecentFiles";    	//$NON-NLS-1$
+    private static final String          PREFS_MODULE  = "RecentFiles"; //$NON-NLS-1$
     private static final int             PREFS_VERSION = 1;
     private static final int             MAX_RECENTS   = 20;
     private static final ArrayList<File> RECENTS       = new ArrayList<>();

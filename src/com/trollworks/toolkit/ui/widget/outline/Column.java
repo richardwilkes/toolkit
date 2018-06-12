@@ -24,7 +24,7 @@ import java.awt.event.MouseEvent;
 /** Represents a single column within a {@link Outline} panel. */
 public class Column implements Transferable {
     /** The data flavor for this class. */
-    public static final DataFlavor DATA_FLAVOR = new DataFlavor(Column.class, "Outline Column");	//$NON-NLS-1$
+    public static final DataFlavor DATA_FLAVOR = new DataFlavor(Column.class, "Outline Column"); //$NON-NLS-1$
     private HeaderCell             mHeaderCell;
     private Cell                   mRowCell;
     private boolean                mVisible;

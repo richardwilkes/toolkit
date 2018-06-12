@@ -81,8 +81,8 @@ public class Numbers {
         Localization.initialize();
     }
 
-    public static final String         YES                               = "yes";                                                                                       																						//$NON-NLS-1$
-    public static final String         NO                                = "no";                                                                                        																							//$NON-NLS-1$
+    public static final String         YES                               = "yes"; //$NON-NLS-1$
+    public static final String         NO                                = "no"; //$NON-NLS-1$
     private static final String        LOCALIZED_DECIMAL_SEPARATOR       = Character.toString(DecimalFormatSymbols.getInstance().getDecimalSeparator());
     private static final String        SAFE_LOCALIZED_GROUPING_SEPARATOR = Pattern.quote(Character.toString(DecimalFormatSymbols.getInstance().getGroupingSeparator()));
     private static final int[]         ROMAN_VALUES                      = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };

@@ -23,7 +23,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 /** Provides simple XML generation. */
 public class XmlGenerator implements AutoCloseable {
-    private String          mIndent = "\t";	//$NON-NLS-1$
+    private String          mIndent = "\t"; //$NON-NLS-1$
     private XMLStreamWriter mWriter;
     private int             mDepth;
     private boolean         mHadText;

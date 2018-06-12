@@ -51,7 +51,7 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
         Localization.initialize();
     }
 
-    private static final String                           PREFIX     = "PreferencesWindow.";	//$NON-NLS-1$
+    private static final String                           PREFIX     = "PreferencesWindow."; //$NON-NLS-1$
     private static PreferencesWindow                      INSTANCE   = null;
     private static final List<PreferenceCategoryProvider> CATEGORIES = new ArrayList<>();
     private JTabbedPane                                   mTabPanel;

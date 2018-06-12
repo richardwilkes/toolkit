@@ -11,9 +11,6 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
-import com.apple.eawt.AppEvent.QuitEvent;
-import com.apple.eawt.QuitHandler;
-import com.apple.eawt.QuitResponse;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.Fonts;
@@ -25,6 +22,9 @@ import com.trollworks.toolkit.utility.Platform;
 import com.trollworks.toolkit.utility.Preferences;
 
 import java.awt.Frame;
+import java.awt.desktop.QuitEvent;
+import java.awt.desktop.QuitHandler;
+import java.awt.desktop.QuitResponse;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -46,7 +46,7 @@ public class QuitCommand extends Command implements QuitHandler {
     }
 
     /** The action command this command will issue. */
-    public static final String      CMD_QUIT                             = "Quit";           			//$NON-NLS-1$
+    public static final String      CMD_QUIT                             = "Quit"; //$NON-NLS-1$
 
     /** The singleton {@link QuitCommand}. */
     public static final QuitCommand INSTANCE                             = new QuitCommand();

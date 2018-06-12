@@ -11,8 +11,6 @@
 
 package com.trollworks.toolkit.ui;
 
-import com.apple.eawt.Application;
-import com.apple.eawt.QuitStrategy;
 import com.trollworks.toolkit.ui.menu.edit.PreferencesCommand;
 import com.trollworks.toolkit.ui.menu.file.OpenCommand;
 import com.trollworks.toolkit.ui.menu.file.OpenDataFileCommand;
@@ -22,12 +20,13 @@ import com.trollworks.toolkit.ui.menu.help.AboutCommand;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.LaunchProxy;
-import com.trollworks.toolkit.utility.Platform;
 import com.trollworks.toolkit.utility.cmdline.CmdLine;
 
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.desktop.QuitStrategy;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.net.URI;
@@ -53,14 +52,13 @@ public class App implements KeyEventDispatcher, Runnable {
         BundleInfo.setDefault(new BundleInfo(theClass));
         Path path;
         try {
-            URI uri = theClass.getProtectionDomain().getCodeSource().getLocation().toURI();
-            path = Paths.get(uri).normalize().getParent().toAbsolutePath();
-            if (path.endsWith("support/jars")) { //$NON-NLS-1$
-                path = path.getParent().getParent();
-            }
-            if (path.endsWith("Contents/MacOS")) { //$NON-NLS-1$
-                // Note: we go up 3 levels, not 2, to account for the .app dir
-                path = path.getParent().getParent().getParent();
+            path = Paths.get(System.getProperty("java.home")).getParent().getParent(); //$NON-NLS-1$
+            if (path.endsWith("Contents/PlugIns/Java.runtime")) { //$NON-NLS-1$
+                // Running inside a package installation
+                path = path.getParent().getParent().getParent().getParent();
+            } else {
+                URI uri = theClass.getProtectionDomain().getCodeSource().getLocation().toURI();
+                path = Paths.get(uri).normalize().getParent().toAbsolutePath();
             }
         } catch (Throwable throwable) {
             path = Paths.get("."); //$NON-NLS-1$
@@ -75,22 +73,22 @@ public class App implements KeyEventDispatcher, Runnable {
 
     /** Creates a new {@link App}. */
     protected App() {
-        if (Platform.isMacintosh()) {
-            Application app = Application.getApplication();
-            app.setAboutHandler(AboutCommand.INSTANCE);
-            app.setPreferencesHandler(PreferencesCommand.INSTANCE);
-            app.setOpenFileHandler(OpenCommand.INSTANCE);
-            app.setPrintFileHandler(PrintCommand.INSTANCE);
-            app.setQuitHandler(QuitCommand.INSTANCE);
-            app.setQuitStrategy(QuitStrategy.SYSTEM_EXIT_0);
-            app.disableSuddenTermination();
+        if (Desktop.isDesktopSupported()) {
+            Desktop desktop = Desktop.getDesktop();
+            desktop.setAboutHandler(AboutCommand.INSTANCE);
+            desktop.setPreferencesHandler(PreferencesCommand.INSTANCE);
+            desktop.setOpenFileHandler(OpenCommand.INSTANCE);
+            desktop.setPrintFileHandler(PrintCommand.INSTANCE);
+            desktop.setQuitHandler(QuitCommand.INSTANCE);
+            desktop.setQuitStrategy(QuitStrategy.NORMAL_EXIT);
+            desktop.disableSuddenTermination();
         }
     }
 
     /** Set a global menu bar for when no windows are open / focused. */
     public static void setDefaultMenuBar(JMenuBar menuBar) {
-        if (Platform.isMacintosh()) {
-            Application.getApplication().setDefaultMenuBar(menuBar);
+        if (Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().setDefaultMenuBar(menuBar);
         }
     }
 
@@ -179,7 +177,7 @@ public class App implements KeyEventDispatcher, Runnable {
     public static JPanel createAboutPanel() {
         if (ABOUT_PANEL_CLASS != null) {
             try {
-                return ABOUT_PANEL_CLASS.newInstance();
+                return ABOUT_PANEL_CLASS.getDeclaredConstructor().newInstance();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

@@ -48,8 +48,8 @@ public class StdFileDialog {
         Localization.initialize();
     }
 
-    private static final String MODULE   = "StdFileDialog";	//$NON-NLS-1$
-    private static final String LAST_DIR = "LastDir";      		//$NON-NLS-1$
+    private static final String MODULE   = "StdFileDialog"; //$NON-NLS-1$
+    private static final String LAST_DIR = "LastDir"; //$NON-NLS-1$
 
     /**
      * Creates a new {@link StdFileDialog}.

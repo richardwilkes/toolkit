@@ -19,8 +19,8 @@ import java.util.Date;
 
 /** Provides standardized logging. */
 public class Log {
-    private static final String           SEPARATOR = " | ";                                                          															//$NON-NLS-1$
-    private static final SimpleDateFormat FORMAT    = new SimpleDateFormat("yyyy.MM.dd" + SEPARATOR + "HH:mm:ss.SSS");	//$NON-NLS-1$ //$NON-NLS-2$
+    private static final String           SEPARATOR = " | "; //$NON-NLS-1$
+    private static final SimpleDateFormat FORMAT    = new SimpleDateFormat("yyyy.MM.dd" + SEPARATOR + "HH:mm:ss.SSS"); //$NON-NLS-1$ //$NON-NLS-2$
     private static PrintStream            OUT;
 
     static {

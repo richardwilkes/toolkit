@@ -37,12 +37,12 @@ import javax.swing.WindowConstants;
 
 /** The base window class for the application windows. */
 public class BaseWindow extends JFrame implements WindowListener, WindowFocusListener {
-    private static final String WINDOW_PREFERENCES         = "WindowPrefs";	//$NON-NLS-1$
+    private static final String WINDOW_PREFERENCES         = "WindowPrefs"; //$NON-NLS-1$
     private static final int    WINDOW_PREFERENCES_VERSION = 3;
-    private static final String KEY_LOCATION               = "Location";   		//$NON-NLS-1$
-    private static final String KEY_SIZE                   = "Size";       			//$NON-NLS-1$
-    private static final String KEY_MAXIMIZED              = "Maximized";  		//$NON-NLS-1$
-    private static final String KEY_LAST_UPDATED           = "LastUpdated";	//$NON-NLS-1$
+    private static final String KEY_LOCATION               = "Location"; //$NON-NLS-1$
+    private static final String KEY_SIZE                   = "Size"; //$NON-NLS-1$
+    private static final String KEY_MAXIMIZED              = "Maximized"; //$NON-NLS-1$
+    private static final String KEY_LAST_UPDATED           = "LastUpdated"; //$NON-NLS-1$
     boolean                     mWasAlive;
     private boolean             mIsClosed;
 

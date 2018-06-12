@@ -30,8 +30,8 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 public class TextDrawing {
     private static HashMap<Font, TIntIntHashMap> WIDTH_MAP  = new HashMap<>();
     private static TObjectIntHashMap<Font>       HEIGHT_MAP = new TObjectIntHashMap<>();
-    private static final String                  SPACE      = " ";                      						//$NON-NLS-1$
-    private static final String                  NEWLINE    = "\n";                     						//$NON-NLS-1$
+    private static final String                  SPACE      = " "; //$NON-NLS-1$
+    private static final String                  NEWLINE    = "\n"; //$NON-NLS-1$
     private static final char                    ELLIPSIS   = '\u2026';
 
     /**

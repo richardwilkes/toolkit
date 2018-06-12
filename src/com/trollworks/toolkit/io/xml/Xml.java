@@ -300,7 +300,7 @@ public class Xml {
                         if (cls == String.class) {
                             fieldObj = xml.getText();
                         } else {
-                            fieldObj = cls.newInstance();
+                            fieldObj = cls.getDeclaredConstructor().newInstance();
                             load(xml, fieldObj, context);
                         }
                         ((Collection) field.get(obj)).add(fieldObj);
@@ -310,7 +310,7 @@ public class Xml {
                             fieldObj = ((TagObjectCreator) obj).xmlCreateObject(context, tag);
                         }
                         if (fieldObj == null) {
-                            fieldObj = type.newInstance();
+                            fieldObj = type.getDeclaredConstructor().newInstance();
                         }
                         load(xml, fieldObj, context);
                         field.set(obj, fieldObj);

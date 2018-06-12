@@ -31,7 +31,7 @@ import javax.swing.KeyStroke;
 /** Represents a command in the user interface. */
 public abstract class Command extends AbstractAction implements Comparable<Command> {
     /** The standard command modifier for this platform. */
-    public static final int COMMAND_MODIFIER         = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+    public static final int COMMAND_MODIFIER         = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
     /** The standard command modifier for this platform, plus the shift key. */
     public static final int SHIFTED_COMMAND_MODIFIER = COMMAND_MODIFIER | InputEvent.SHIFT_DOWN_MASK;
     private KeyStroke       mOriginalAccelerator;

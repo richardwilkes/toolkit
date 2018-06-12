@@ -34,7 +34,7 @@ public class CopyCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String      CMD_COPY = "Copy";           			//$NON-NLS-1$
+    public static final String      CMD_COPY = "Copy"; //$NON-NLS-1$
 
     /** The singleton {@link CopyCommand}. */
     public static final CopyCommand INSTANCE = new CopyCommand();

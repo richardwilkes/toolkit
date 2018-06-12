@@ -34,7 +34,7 @@ public class CutCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String     CMD_CUT  = "Cut";           			//$NON-NLS-1$
+    public static final String     CMD_CUT  = "Cut"; //$NON-NLS-1$
 
     /** The singleton {@link CutCommand}. */
     public static final CutCommand INSTANCE = new CutCommand();

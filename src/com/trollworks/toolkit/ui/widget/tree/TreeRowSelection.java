@@ -21,7 +21,7 @@ import java.util.HashSet;
 /** Allows rows to be part of drag and drop operations internal to the JVM. */
 public class TreeRowSelection implements Transferable {
     /** The data flavor for this class. */
-    public static final DataFlavor    DATA_FLAVOR = new DataFlavor(TreeRowSelection.class, "Tree Rows");	//$NON-NLS-1$
+    public static final DataFlavor    DATA_FLAVOR = new DataFlavor(TreeRowSelection.class, "Tree Rows"); //$NON-NLS-1$
     private ArrayList<TreeRow>        mRows;
     private HashSet<TreeContainerRow> mOpenRows   = new HashSet<>();
 

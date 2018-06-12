@@ -32,6 +32,7 @@ import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.HashMap;
@@ -75,47 +76,47 @@ public class StdImage extends BufferedImage implements Icon {
 
     private static final String                    COLORIZED_POSTFIX = new String(new char[] { ':', 'C', 22 });
     private static final String                    FADED_POSTFIX     = new String(new char[] { ':', 'F', 22 });
-    private static final HashSet<URL>              LOCATIONS         = new HashSet<>();
+    private static final HashSet<ImageLoader>      LOADERS           = new HashSet<>();
     private static final HashMap<String, StdImage> MAP               = new HashMap<>();
     private static final HashMap<StdImage, String> REVERSE_MAP       = new HashMap<>();
     private static final HashSet<String>           FAILED_LOOKUPS    = new HashSet<>();
 
     static {
-        addLocation(StdImage.class.getResource("images/")); //$NON-NLS-1$
+        StdImage.addLoader(new ModuleImageLoader(StdImage.class.getModule(), "/com/trollworks/toolkit/ui/image/images")); //$NON-NLS-1$
     }
 
-    public static final StdImage    ADD                 = get("add");                          							//$NON-NLS-1$
-    public static final StdImage    COLLAPSE            = get("collapse");                     						//$NON-NLS-1$
-    public static final StdImage    DOCK_CLOSE          = get("dock_close");                   					//$NON-NLS-1$
-    public static final StdImage    DOCK_MAXIMIZE       = get("dock_maximize");                					//$NON-NLS-1$
-    public static final StdImage    DOCK_RESTORE        = get("dock_restore");                 					//$NON-NLS-1$
-    public static final StdImage    DOWN_TRIANGLE       = get("down_triangle");                					//$NON-NLS-1$
-    public static final StdImage    DOWN_TRIANGLE_ROLL  = get("down_triangle_roll");           			//$NON-NLS-1$
-    public static final StdImage    EXPAND              = get("expand");                       						//$NON-NLS-1$
-    public static final StdImageSet FILE                = StdImageSet.getOrLoad("file");       		//$NON-NLS-1$
-    public static final StdImageSet FOLDER              = StdImageSet.getOrLoad("folder");     		//$NON-NLS-1$
-    public static final StdImage    LOCKED              = get("locked");                       						//$NON-NLS-1$
-    public static final StdImage    MINI_WARNING        = get("mini_warning");                 					//$NON-NLS-1$
-    public static final StdImage    MODIFIED_MARKER     = get("modified_marker");              				//$NON-NLS-1$
-    public static final StdImage    MORE                = get("more");                         							//$NON-NLS-1$
-    public static final StdImage    NOT_MODIFIED_MARKER = get("not_modified_marker");          			//$NON-NLS-1$
-    public static final StdImageSet PREFERENCES         = StdImageSet.getOrLoad("preferences");	//$NON-NLS-1$
-    public static final StdImage    REMOVE              = get("remove");                       						//$NON-NLS-1$
-    public static final StdImage    RIGHT_TRIANGLE      = get("right_triangle");               				//$NON-NLS-1$
-    public static final StdImage    RIGHT_TRIANGLE_ROLL = get("right_triangle_roll");          			//$NON-NLS-1$
-    public static final StdImage    SIZE_TO_FIT         = get("size_to_fit");                  					//$NON-NLS-1$
-    public static final StdImage    TOGGLE_OPEN         = get("toggle_open");                  					//$NON-NLS-1$
-    public static final StdImage    UNLOCKED            = get("unlocked");                     						//$NON-NLS-1$
+    public static final StdImage    ADD                 = get("add");                           //$NON-NLS-1$
+    public static final StdImage    COLLAPSE            = get("collapse");                      //$NON-NLS-1$
+    public static final StdImage    DOCK_CLOSE          = get("dock_close");                    //$NON-NLS-1$
+    public static final StdImage    DOCK_MAXIMIZE       = get("dock_maximize");                 //$NON-NLS-1$
+    public static final StdImage    DOCK_RESTORE        = get("dock_restore");                  //$NON-NLS-1$
+    public static final StdImage    DOWN_TRIANGLE       = get("down_triangle");                 //$NON-NLS-1$
+    public static final StdImage    DOWN_TRIANGLE_ROLL  = get("down_triangle_roll");            //$NON-NLS-1$
+    public static final StdImage    EXPAND              = get("expand");                        //$NON-NLS-1$
+    public static final StdImageSet FILE                = StdImageSet.getOrLoad("file");        //$NON-NLS-1$
+    public static final StdImageSet FOLDER              = StdImageSet.getOrLoad("folder");      //$NON-NLS-1$
+    public static final StdImage    LOCKED              = get("locked");                        //$NON-NLS-1$
+    public static final StdImage    MINI_WARNING        = get("mini_warning");                  //$NON-NLS-1$
+    public static final StdImage    MODIFIED_MARKER     = get("modified_marker");               //$NON-NLS-1$
+    public static final StdImage    MORE                = get("more");                          //$NON-NLS-1$
+    public static final StdImage    NOT_MODIFIED_MARKER = get("not_modified_marker");           //$NON-NLS-1$
+    public static final StdImageSet PREFERENCES         = StdImageSet.getOrLoad("preferences"); //$NON-NLS-1$
+    public static final StdImage    REMOVE              = get("remove");                        //$NON-NLS-1$
+    public static final StdImage    RIGHT_TRIANGLE      = get("right_triangle");                //$NON-NLS-1$
+    public static final StdImage    RIGHT_TRIANGLE_ROLL = get("right_triangle_roll");           //$NON-NLS-1$
+    public static final StdImage    SIZE_TO_FIT         = get("size_to_fit");                   //$NON-NLS-1$
+    public static final StdImage    TOGGLE_OPEN         = get("toggle_open");                   //$NON-NLS-1$
+    public static final StdImage    UNLOCKED            = get("unlocked");                      //$NON-NLS-1$
 
     /**
-     * Adds a location to search for images.
+     * Adds a loader to search for images.
      *
      * @param file A directory to be be searched.
      */
-    public static final synchronized void addLocation(File file) {
+    public static final void addLoader(File file) {
         try {
             if (file.isDirectory()) {
-                addLocation(file.toURI().toURL());
+                addLoader(file.toURI().toURL());
             }
         } catch (Exception exception) {
             Log.error(exception);
@@ -123,13 +124,22 @@ public class StdImage extends BufferedImage implements Icon {
     }
 
     /**
-     * Adds a location to search for images.
+     * Adds a loader to search for images.
      *
      * @param url The location this URL points to will be searched.
      */
-    public static final synchronized void addLocation(URL url) {
-        if (!LOCATIONS.contains(url)) {
-            LOCATIONS.add(url);
+    public static final void addLoader(URL url) {
+        addLoader(new URLImageLoader(url));
+    }
+
+    /**
+     * Adds a loader to search for images.
+     *
+     * @param loader The loader to be searched.
+     */
+    public static final synchronized void addLoader(ImageLoader loader) {
+        if (!LOADERS.contains(loader)) {
+            LOADERS.add(loader);
             FAILED_LOOKUPS.clear();
         }
     }
@@ -152,10 +162,10 @@ public class StdImage extends BufferedImage implements Icon {
     public static final synchronized StdImage get(String name, boolean cache) {
         StdImage img = cache ? MAP.get(name) : null;
         if (img == null && !FAILED_LOOKUPS.contains(name)) {
-            for (URL url : LOCATIONS) {
+            for (ImageLoader loader : LOADERS) {
                 String filename = name + ".png"; //$NON-NLS-1$
                 try {
-                    img = loadImage(new URL(url, filename));
+                    img = loader.loadImage(filename);
                 } catch (Exception exception) {
                     // Ignore...
                 }
@@ -551,6 +561,60 @@ public class StdImage extends BufferedImage implements Icon {
     public static final StdImage loadImage(URL url, boolean returnNullOnFailure) {
         try {
             return createOptimizedImage(ImageIO.read(url), returnNullOnFailure);
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    /**
+     * Loads an optimized, buffered image from the specified stream.
+     *
+     * @param module The module to load from.
+     * @param path The path within the module to load from.
+     * @return The image.
+     */
+    public static final StdImage loadImage(Module module, String path) {
+        return loadImage(module, path, false);
+    }
+
+    /**
+     * Loads an optimized, buffered image from the specified stream.
+     *
+     * @param module The module to load from.
+     * @param path The path within the module to load from.
+     * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
+     *            of creating a 1x1 pixel image.
+     * @return The image.
+     */
+    public static final StdImage loadImage(Module module, String path, boolean returnNullOnFailure) {
+        try (InputStream in = module.getResourceAsStream(path)) {
+            return createOptimizedImage(ImageIO.read(in), returnNullOnFailure);
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    /**
+     * Loads an optimized, buffered image from the specified stream.
+     *
+     * @param in The stream to load from.
+     * @return The image.
+     */
+    public static final StdImage loadImage(InputStream in) {
+        return loadImage(in, false);
+    }
+
+    /**
+     * Loads an optimized, buffered image from the specified stream.
+     *
+     * @param in The stream to load from.
+     * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
+     *            of creating a 1x1 pixel image.
+     * @return The image.
+     */
+    public static final StdImage loadImage(InputStream in, boolean returnNullOnFailure) {
+        try {
+            return createOptimizedImage(ImageIO.read(in), returnNullOnFailure);
         } catch (Exception exception) {
             return null;
         }

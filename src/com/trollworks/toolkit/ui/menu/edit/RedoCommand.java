@@ -33,7 +33,7 @@ public class RedoCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String      CMD_REDO = "Redo";           			//$NON-NLS-1$
+    public static final String      CMD_REDO = "Redo"; //$NON-NLS-1$
 
     /** The singleton {@link RedoCommand}. */
     public static final RedoCommand INSTANCE = new RedoCommand();

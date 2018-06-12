@@ -29,8 +29,8 @@ import javax.swing.SwingConstants;
 /** A simple label replacement that is scalable. */
 public class Label extends JComponent implements PropertyChangeListener {
     /** The property key that is monitored for error messages. */
-    public static final String ERROR_MESSAGE_KEY    = "Error Message";      		//$NON-NLS-1$
-    private String             mText                = "";                   					//$NON-NLS-1$
+    public static final String ERROR_MESSAGE_KEY    = "Error Message"; //$NON-NLS-1$
+    private String             mText                = ""; //$NON-NLS-1$
     private int                mHorizontalAlignment = SwingConstants.LEFT;
     private int                mVerticalAlignment   = SwingConstants.CENTER;
     private JComponent         mRefersTo;

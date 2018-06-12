@@ -210,7 +210,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
                             if (row != null) {
                                 if (mAnchorRow != null && event.isShiftDown()) {
                                     select(mAnchorRow, row, true);
-                                } else if ((event.getModifiers() & getToolkit().getMenuShortcutKeyMask()) != 0 && !event.isPopupTrigger()) {
+                                } else if ((event.getModifiersEx() & getToolkit().getMenuShortcutKeyMaskEx()) != 0 && !event.isPopupTrigger()) {
                                     if (isSelected(row)) {
                                         deselect(row);
                                     } else {

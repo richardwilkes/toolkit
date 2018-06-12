@@ -29,8 +29,8 @@ import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 
 public class Toolbar extends JPanel implements LayoutManager2 {
-    public static final String     LAYOUT_FILL         = "fill";         			//$NON-NLS-1$
-    public static final String     LAYOUT_EXTRA_BEFORE = "extra_before"; 	//$NON-NLS-1$
+    public static final String     LAYOUT_FILL         = "fill"; //$NON-NLS-1$
+    public static final String     LAYOUT_EXTRA_BEFORE = "extra_before"; //$NON-NLS-1$
     private static final int       GAP                 = 2;
     private Map<Component, String> mConstraints        = new HashMap<>();
 

@@ -220,9 +220,9 @@ public class UIUtilities {
     public static final MouseEvent cloneMouseEvent(MouseEvent event) {
         if (event instanceof MouseWheelEvent) {
             MouseWheelEvent old = (MouseWheelEvent) event;
-            return new MouseWheelEvent((Component) old.getSource(), old.getID(), System.currentTimeMillis(), old.getModifiers(), old.getX(), old.getY(), old.getClickCount(), old.isPopupTrigger(), old.getScrollType(), old.getScrollAmount(), old.getWheelRotation());
+            return new MouseWheelEvent((Component) old.getSource(), old.getID(), System.currentTimeMillis(), old.getModifiersEx(), old.getX(), old.getY(), old.getClickCount(), old.isPopupTrigger(), old.getScrollType(), old.getScrollAmount(), old.getWheelRotation());
         }
-        return new MouseEvent((Component) event.getSource(), event.getID(), System.currentTimeMillis(), event.getModifiers(), event.getX(), event.getY(), event.getClickCount(), event.isPopupTrigger());
+        return new MouseEvent((Component) event.getSource(), event.getID(), System.currentTimeMillis(), event.getModifiersEx(), event.getX(), event.getY(), event.getClickCount(), event.isPopupTrigger());
     }
 
     /**
@@ -235,9 +235,9 @@ public class UIUtilities {
     public static final MouseEvent cloneMouseEvent(MouseEvent event, boolean refreshTime) {
         if (event instanceof MouseWheelEvent) {
             MouseWheelEvent old = (MouseWheelEvent) event;
-            return new MouseWheelEvent((Component) old.getSource(), old.getID(), refreshTime ? System.currentTimeMillis() : event.getWhen(), old.getModifiers(), old.getX(), old.getY(), old.getClickCount(), old.isPopupTrigger(), old.getScrollType(), old.getScrollAmount(), old.getWheelRotation());
+            return new MouseWheelEvent((Component) old.getSource(), old.getID(), refreshTime ? System.currentTimeMillis() : event.getWhen(), old.getModifiersEx(), old.getX(), old.getY(), old.getClickCount(), old.isPopupTrigger(), old.getScrollType(), old.getScrollAmount(), old.getWheelRotation());
         }
-        return new MouseEvent((Component) event.getSource(), event.getID(), refreshTime ? System.currentTimeMillis() : event.getWhen(), event.getModifiers(), event.getX(), event.getY(), event.getClickCount(), event.isPopupTrigger());
+        return new MouseEvent((Component) event.getSource(), event.getID(), refreshTime ? System.currentTimeMillis() : event.getWhen(), event.getModifiersEx(), event.getX(), event.getY(), event.getClickCount(), event.isPopupTrigger());
     }
 
     /**
@@ -252,9 +252,9 @@ public class UIUtilities {
     public static final MouseEvent cloneMouseEvent(MouseEvent event, Component source, Point where, boolean refreshTime) {
         if (event instanceof MouseWheelEvent) {
             MouseWheelEvent old = (MouseWheelEvent) event;
-            return new MouseWheelEvent(source, old.getID(), refreshTime ? System.currentTimeMillis() : event.getWhen(), old.getModifiers(), where.x, where.y, old.getClickCount(), old.isPopupTrigger(), old.getScrollType(), old.getScrollAmount(), old.getWheelRotation());
+            return new MouseWheelEvent(source, old.getID(), refreshTime ? System.currentTimeMillis() : event.getWhen(), old.getModifiersEx(), where.x, where.y, old.getClickCount(), old.isPopupTrigger(), old.getScrollType(), old.getScrollAmount(), old.getWheelRotation());
         }
-        return new MouseEvent(source, event.getID(), refreshTime ? System.currentTimeMillis() : event.getWhen(), event.getModifiers(), where.x, where.y, event.getClickCount(), event.isPopupTrigger());
+        return new MouseEvent(source, event.getID(), refreshTime ? System.currentTimeMillis() : event.getWhen(), event.getModifiersEx(), where.x, where.y, event.getClickCount(), event.isPopupTrigger());
     }
 
     /**

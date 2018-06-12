@@ -11,8 +11,6 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
-import com.apple.eawt.AppEvent.OpenFilesEvent;
-import com.apple.eawt.OpenFilesHandler;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.menu.Command;
@@ -22,6 +20,8 @@ import com.trollworks.toolkit.utility.FileProxy;
 import com.trollworks.toolkit.utility.FileType;
 import com.trollworks.toolkit.utility.Localization;
 
+import java.awt.desktop.OpenFilesEvent;
+import java.awt.desktop.OpenFilesHandler;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -44,7 +44,7 @@ public class OpenCommand extends Command implements OpenFilesHandler {
     }
 
     /** The action command this command will issue. */
-    public static final String      CMD_OPEN = "Open";           			//$NON-NLS-1$
+    public static final String      CMD_OPEN = "Open"; //$NON-NLS-1$
 
     /** The singleton {@link OpenCommand}. */
     public static final OpenCommand INSTANCE = new OpenCommand();

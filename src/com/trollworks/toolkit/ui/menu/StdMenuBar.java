@@ -11,8 +11,6 @@
 
 package com.trollworks.toolkit.ui.menu;
 
-import com.trollworks.toolkit.workarounds.GtkMenuWorkaround;
-
 import java.util.TreeSet;
 
 import javax.swing.JMenu;
@@ -22,10 +20,6 @@ import javax.swing.JMenuBar;
 public class StdMenuBar extends JMenuBar {
     private static MenuProvider[] MENU_PROVIDERS;
     private static Command[]      COMMANDS;
-
-    static {
-        GtkMenuWorkaround.installGtkPopupBugWorkaround();
-    }
 
     /**
      * Call to configure the standard menu bar. Should be called once prior to actual use of this

@@ -19,7 +19,7 @@ import java.awt.event.ActionEvent;
 /** Provides the "Update" command. */
 public class UpdateCommand extends Command {
     /** The action command this command will issue. */
-    public static final String        CMD_CHECK_FOR_UPDATE = "CheckForUpdate";   		//$NON-NLS-1$
+    public static final String        CMD_CHECK_FOR_UPDATE = "CheckForUpdate"; //$NON-NLS-1$
     /** The singleton {@link UpdateCommand}. */
     public static final UpdateCommand INSTANCE             = new UpdateCommand();
 

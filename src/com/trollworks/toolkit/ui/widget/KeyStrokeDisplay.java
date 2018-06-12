@@ -39,7 +39,7 @@ public class KeyStrokeDisplay extends JLabel implements KeyListener {
      * @param ks The {@link KeyStroke} to start with.
      */
     public KeyStrokeDisplay(KeyStroke ks) {
-        super(getKeyStrokeDisplay(KeyStroke.getKeyStroke('Z', InputEvent.META_MASK | InputEvent.ALT_MASK | InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)), SwingConstants.CENTER);
+        super(getKeyStrokeDisplay(KeyStroke.getKeyStroke('Z', InputEvent.META_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)), SwingConstants.CENTER);
         setOpaque(true);
         setBackground(Color.WHITE);
         setBorder(new CompoundBorder(new LineBorder(), new EmptyBorder(2, 5, 2, 5)));
@@ -83,7 +83,7 @@ public class KeyStrokeDisplay extends JLabel implements KeyListener {
         if (ks != null) {
             int modifiers = ks.getModifiers();
             if (modifiers > 0) {
-                String modifierText = KeyEvent.getKeyModifiersText(modifiers);
+                String modifierText = InputEvent.getModifiersExText(modifiers);
                 if (Platform.isMacintosh()) {
                     buffer.append(modifierText.replaceAll("\\+", "")); //$NON-NLS-1$ //$NON-NLS-2$
                 } else {

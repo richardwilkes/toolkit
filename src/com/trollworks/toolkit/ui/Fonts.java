@@ -26,11 +26,11 @@ import javax.swing.UIManager;
 /** Provides standardized font access and utilities. */
 public class Fonts {
     /** The notification key used when font change notifications are broadcast. */
-    public static final String                  FONT_NOTIFICATION_KEY = "FontsChanged";  	//$NON-NLS-1$
-    private static final String                 COMMA                 = ",";             				//$NON-NLS-1$
-    private static final String                 MODULE                = "Font";          			//$NON-NLS-1$
+    public static final String                  FONT_NOTIFICATION_KEY = "FontsChanged"; //$NON-NLS-1$
+    private static final String                 COMMA                 = ","; //$NON-NLS-1$
+    private static final String                 MODULE                = "Font"; //$NON-NLS-1$
     /** The standard text field font. */
-    public static final String                  KEY_STD_TEXT_FIELD    = "TextField.font";	//$NON-NLS-1$
+    public static final String                  KEY_STD_TEXT_FIELD    = "TextField.font"; //$NON-NLS-1$
     private static final TreeMap<String, Fonts> DEFAULTS              = new TreeMap<>();
     private String                              mDescription;
     private Font                                mDefaultFont;

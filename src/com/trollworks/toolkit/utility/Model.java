@@ -51,8 +51,8 @@ public abstract class Model implements Cloneable {
         Localization.initialize();
     }
 
-    private static final String ATTR_VERSION = "version";        		//$NON-NLS-1$
-    private static final String ATTR_ID      = "id";             				//$NON-NLS-1$
+    private static final String ATTR_VERSION = "version"; //$NON-NLS-1$
+    private static final String ATTR_ID      = "id"; //$NON-NLS-1$
     private UUID                mId          = UUID.randomUUID();
 
     /** @return The root XML tag name. */

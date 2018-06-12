@@ -19,7 +19,7 @@ import javax.swing.UIManager;
 
 /** Provides the colors used by the {@link Dock}. */
 public class DockColors {
-    public static Color BACKGROUND             = UIManager.getColor("Panel.background");                                                 													//$NON-NLS-1$
+    public static Color BACKGROUND             = UIManager.getColor("Panel.background"); //$NON-NLS-1$
     public static Color ACTIVE_TAB_BACKGROUND  = new Color(224, 212, 175);
     public static Color CURRENT_TAB_BACKGROUND = Colors.adjustBrightness(Colors.adjustSaturation(ACTIVE_TAB_BACKGROUND, -0.15f), -0.05f);
     public static Color HIGHLIGHT              = Colors.adjustBrightness(BACKGROUND, 0.2f);

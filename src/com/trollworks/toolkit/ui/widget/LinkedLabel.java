@@ -26,7 +26,7 @@ import javax.swing.UIManager;
 /** A label whose tooltip reflects that of another panel. */
 public class LinkedLabel extends JLabel implements PropertyChangeListener {
     /** The property key that is monitored for error messages. */
-    public static final String ERROR_MESSAGE_KEY = "Error Message";	//$NON-NLS-1$
+    public static final String ERROR_MESSAGE_KEY = "Error Message"; //$NON-NLS-1$
     private JComponent         mLink;
     private Color              mColor;
 

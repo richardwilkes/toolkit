@@ -33,7 +33,7 @@ public class CloseCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String       CMD_CLOSE = "Close";           				//$NON-NLS-1$
+    public static final String       CMD_CLOSE = "Close"; //$NON-NLS-1$
 
     /** The singleton {@link CloseCommand}. */
     public static final CloseCommand INSTANCE  = new CloseCommand();

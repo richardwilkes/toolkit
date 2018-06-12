@@ -50,15 +50,15 @@ public class FileType {
     }
 
     /** The PNG extension. */
-    public static final String           PNG_EXTENSION  = "png";            			//$NON-NLS-1$
+    public static final String           PNG_EXTENSION  = "png"; //$NON-NLS-1$
     /** The GIF extension. */
-    public static final String           GIF_EXTENSION  = "gif";            			//$NON-NLS-1$
+    public static final String           GIF_EXTENSION  = "gif"; //$NON-NLS-1$
     /** The JPEG extension. */
-    public static final String           JPEG_EXTENSION = "jpg";            			//$NON-NLS-1$
+    public static final String           JPEG_EXTENSION = "jpg"; //$NON-NLS-1$
     /** The PDF extension. */
-    public static final String           PDF_EXTENSION  = "pdf";            			//$NON-NLS-1$
+    public static final String           PDF_EXTENSION  = "pdf"; //$NON-NLS-1$
     /** The HTML extension. */
-    public static final String           HTML_EXTENSION = "html";           			//$NON-NLS-1$
+    public static final String           HTML_EXTENSION = "html"; //$NON-NLS-1$
     private static final List<FileType>  TYPES          = new ArrayList<>();
     private static Map<String, FileType> EXTENSION_MAP  = new HashMap<>();
     private String                       mExtension;

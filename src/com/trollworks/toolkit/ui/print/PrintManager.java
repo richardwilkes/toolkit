@@ -72,25 +72,25 @@ public class PrintManager {
         Localization.initialize();
     }
 
-    private static final String          MODULE                     = "PrintManager";    		//$NON-NLS-1$
+    private static final String          MODULE                     = "PrintManager"; //$NON-NLS-1$
     private static final int             MODULE_VERSION             = 1;
-    private static final String          NATIVE_DIALOGS_ENABLED_KEY = "UseNativeDialogs";	//$NON-NLS-1$
+    private static final String          NATIVE_DIALOGS_ENABLED_KEY = "UseNativeDialogs"; //$NON-NLS-1$
     /** The XML root tag for {@link PrintManager}. */
-    public static final String           TAG_ROOT                   = "print_settings";  		//$NON-NLS-1$
-    private static final String          ATTRIBUTE_UNITS            = "units";           				//$NON-NLS-1$
-    private static final String          ATTRIBUTE_PRINTER          = "printer";         			//$NON-NLS-1$
-    private static final String          TAG_ORIENTATION            = "orientation";     		//$NON-NLS-1$
-    private static final String          TAG_WIDTH                  = "width";           				//$NON-NLS-1$
-    private static final String          TAG_HEIGHT                 = "height";          				//$NON-NLS-1$
-    private static final String          TAG_TOP_MARGIN             = "top_margin";      			//$NON-NLS-1$
-    private static final String          TAG_BOTTOM_MARGIN          = "bottom_margin";   		//$NON-NLS-1$
-    private static final String          TAG_LEFT_MARGIN            = "left_margin";     		//$NON-NLS-1$
-    private static final String          TAG_RIGHT_MARGIN           = "right_margin";    		//$NON-NLS-1$
-    private static final String          TAG_CHROMATICITY           = "ink_chromaticity";	//$NON-NLS-1$
-    private static final String          TAG_SIDES                  = "sides";           				//$NON-NLS-1$
-    private static final String          TAG_NUMBER_UP              = "number_up";       			//$NON-NLS-1$
-    private static final String          TAG_QUALITY                = "quality";         			//$NON-NLS-1$
-    private static final String          TAG_RESOLUTION             = "resolution";      			//$NON-NLS-1$
+    public static final String           TAG_ROOT                   = "print_settings"; //$NON-NLS-1$
+    private static final String          ATTRIBUTE_UNITS            = "units"; //$NON-NLS-1$
+    private static final String          ATTRIBUTE_PRINTER          = "printer"; //$NON-NLS-1$
+    private static final String          TAG_ORIENTATION            = "orientation"; //$NON-NLS-1$
+    private static final String          TAG_WIDTH                  = "width"; //$NON-NLS-1$
+    private static final String          TAG_HEIGHT                 = "height"; //$NON-NLS-1$
+    private static final String          TAG_TOP_MARGIN             = "top_margin"; //$NON-NLS-1$
+    private static final String          TAG_BOTTOM_MARGIN          = "bottom_margin"; //$NON-NLS-1$
+    private static final String          TAG_LEFT_MARGIN            = "left_margin"; //$NON-NLS-1$
+    private static final String          TAG_RIGHT_MARGIN           = "right_margin"; //$NON-NLS-1$
+    private static final String          TAG_CHROMATICITY           = "ink_chromaticity"; //$NON-NLS-1$
+    private static final String          TAG_SIDES                  = "sides"; //$NON-NLS-1$
+    private static final String          TAG_NUMBER_UP              = "number_up"; //$NON-NLS-1$
+    private static final String          TAG_QUALITY                = "quality"; //$NON-NLS-1$
+    private static final String          TAG_RESOLUTION             = "resolution"; //$NON-NLS-1$
     private PrinterJob                   mJob;
     private HashPrintRequestAttributeSet mSet;
 

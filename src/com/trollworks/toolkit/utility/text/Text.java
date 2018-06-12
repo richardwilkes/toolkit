@@ -41,8 +41,8 @@ public class Text {
     }
 
     private static final char[] HEX_DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-    private static final String SPACE      = " ";                                                                               																					//$NON-NLS-1$
-    private static final String NEWLINE    = "\n";                                                                              																					//$NON-NLS-1$
+    private static final String SPACE      = " "; //$NON-NLS-1$
+    private static final String NEWLINE    = "\n"; //$NON-NLS-1$
     private static final char   ELLIPSIS   = '\u2026';
 
     /**

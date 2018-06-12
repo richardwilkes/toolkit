@@ -22,26 +22,26 @@ import java.util.Date;
 
 /** A {@link PrintWriter} that has been extended to provide common XML writing helper methods. */
 public class XMLWriter extends PrintWriter {
-    private static final String END_TAG             = "/>";      			//$NON-NLS-1$
-    private static final String ENTITY_CODE_PREFIX  = "&#";      			//$NON-NLS-1$
-    private static final String AMPERSAND_ENTITY    = "&amp;";   		//$NON-NLS-1$
-    private static final String LESS_THAN_ENTITY    = "&lt;";    		//$NON-NLS-1$
-    private static final String GREATER_THAN_ENTITY = "&gt;";    		//$NON-NLS-1$
-    private static final String END_COMMENT         = " -->";    		//$NON-NLS-1$
+    private static final String END_TAG             = "/>"; //$NON-NLS-1$
+    private static final String ENTITY_CODE_PREFIX  = "&#"; //$NON-NLS-1$
+    private static final String AMPERSAND_ENTITY    = "&amp;"; //$NON-NLS-1$
+    private static final String LESS_THAN_ENTITY    = "&lt;"; //$NON-NLS-1$
+    private static final String GREATER_THAN_ENTITY = "&gt;"; //$NON-NLS-1$
+    private static final String END_COMMENT         = " -->"; //$NON-NLS-1$
     /** The encoding used. */
-    public static final String  ENCODING            = "US-ASCII";	//$NON-NLS-1$
+    public static final String  ENCODING            = "US-ASCII"; //$NON-NLS-1$
     /** The 'year' attribute. */
-    public static final String  YEAR                = "year";    		//$NON-NLS-1$
+    public static final String  YEAR                = "year"; //$NON-NLS-1$
     /** The 'month' attribute. */
-    public static final String  MONTH               = "month";   		//$NON-NLS-1$
+    public static final String  MONTH               = "month"; //$NON-NLS-1$
     /** The 'day' attribute. */
-    public static final String  DAY                 = "day";     		//$NON-NLS-1$
+    public static final String  DAY                 = "day"; //$NON-NLS-1$
     /** The 'hour' attribute. */
-    public static final String  HOUR                = "hour";    		//$NON-NLS-1$
+    public static final String  HOUR                = "hour"; //$NON-NLS-1$
     /** The 'minute' attribute. */
-    public static final String  MINUTE              = "minute";  		//$NON-NLS-1$
+    public static final String  MINUTE              = "minute"; //$NON-NLS-1$
     /** The 'second' attribute. */
-    public static final String  SECOND              = "second";  		//$NON-NLS-1$
+    public static final String  SECOND              = "second"; //$NON-NLS-1$
     private int                 mIndent;
 
     /**

@@ -11,8 +11,6 @@
 
 package com.trollworks.toolkit.ui.menu.help;
 
-import com.apple.eawt.AboutHandler;
-import com.apple.eawt.AppEvent.AboutEvent;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.App;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
@@ -23,6 +21,8 @@ import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.Localization;
 
+import java.awt.desktop.AboutEvent;
+import java.awt.desktop.AboutHandler;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -43,7 +43,7 @@ public class AboutCommand extends Command implements AboutHandler {
     }
 
     /** The action command this command will issue. */
-    public static final String       CMD_ABOUT = "About";           				//$NON-NLS-1$
+    public static final String       CMD_ABOUT = "About"; //$NON-NLS-1$
     /** The singleton {@link AboutCommand}. */
     public static final AboutCommand INSTANCE  = new AboutCommand();
     AppWindow                        mWindow   = null;

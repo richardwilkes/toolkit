@@ -31,7 +31,7 @@ public class OpenItemCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String          CMD_OPEN_ITEM = "Open Item";          			//$NON-NLS-1$
+    public static final String          CMD_OPEN_ITEM = "Open Item"; //$NON-NLS-1$
 
     /** The singleton {@link OpenItemCommand}. */
     public static final OpenItemCommand INSTANCE      = new OpenItemCommand();

@@ -33,7 +33,7 @@ public class UndoCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String      CMD_UNDO = "Undo";           			//$NON-NLS-1$
+    public static final String      CMD_UNDO = "Undo"; //$NON-NLS-1$
 
     /** The singleton {@link UndoCommand}. */
     public static final UndoCommand INSTANCE = new UndoCommand();

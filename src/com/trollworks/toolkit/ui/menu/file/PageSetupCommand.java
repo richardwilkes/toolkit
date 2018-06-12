@@ -40,7 +40,7 @@ public class PageSetupCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String           CMD_PAGE_SETUP = "PageSetup";           				//$NON-NLS-1$
+    public static final String           CMD_PAGE_SETUP = "PageSetup"; //$NON-NLS-1$
 
     /** The singleton {@link PageSetupCommand}. */
     public static final PageSetupCommand INSTANCE       = new PageSetupCommand();

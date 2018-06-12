@@ -69,8 +69,8 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
         Localization.initialize();
     }
 
-    private static final String       NONE   = "NONE";         			//$NON-NLS-1$
-    private static final String       MODULE = "MenuKeys";     		//$NON-NLS-1$
+    private static final String       NONE   = "NONE"; //$NON-NLS-1$
+    private static final String       MODULE = "MenuKeys"; //$NON-NLS-1$
     private static boolean            LOADED = false;
     private HashMap<JButton, Command> mMap   = new HashMap<>();
     private BandedPanel               mPanel;
@@ -89,7 +89,7 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
         mPanel.setOpaque(true);
         mPanel.setBackground(Color.WHITE);
         for (Command cmd : StdMenuBar.getCommands()) {
-            JButton button = new JButton(KeyStrokeDisplay.getKeyStrokeDisplay(KeyStroke.getKeyStroke('Z', InputEvent.META_MASK | InputEvent.ALT_MASK | InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)));
+            JButton button = new JButton(KeyStrokeDisplay.getKeyStrokeDisplay(KeyStroke.getKeyStroke('Z', InputEvent.META_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)));
             UIUtilities.setOnlySize(button, button.getPreferredSize());
             button.setText(getAcceleratorText(cmd));
             mMap.put(button, cmd);

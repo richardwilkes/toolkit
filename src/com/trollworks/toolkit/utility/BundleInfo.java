@@ -13,13 +13,14 @@ package com.trollworks.toolkit.utility;
 
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
-import com.trollworks.toolkit.io.UrlUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 /** Provides information for a bundle of code. */
 public class BundleInfo {
@@ -56,15 +57,15 @@ public class BundleInfo {
         Localization.initialize();
     }
 
-    public static final String BUNDLE_NAME            = "bundle-name";           			//$NON-NLS-1$
-    public static final String BUNDLE_VERSION         = "bundle-version";        			//$NON-NLS-1$
-    public static final String BUNDLE_COPYRIGHT_OWNER = "bundle-copyright-owner";	//$NON-NLS-1$
-    public static final String BUNDLE_COPYRIGHT_YEARS = "bundle-copyright-years";	//$NON-NLS-1$
-    public static final String BUNDLE_LICENSE         = "bundle-license";        			//$NON-NLS-1$
-    public static final String BUNDLE_EXECUTABLE      = "bundle-executable";     		//$NON-NLS-1$
-    public static final String BUNDLE_ID              = "bundle-id";             				//$NON-NLS-1$
-    public static final String BUNDLE_SIGNATURE       = "bundle-signature";      		//$NON-NLS-1$
-    public static final String BUNDLE_CATEGORY        = "bundle-category";       		//$NON-NLS-1$
+    public static final String BUNDLE_NAME            = "bundle-name";            //$NON-NLS-1$
+    public static final String BUNDLE_VERSION         = "bundle-version";         //$NON-NLS-1$
+    public static final String BUNDLE_COPYRIGHT_OWNER = "bundle-copyright-owner"; //$NON-NLS-1$
+    public static final String BUNDLE_COPYRIGHT_YEARS = "bundle-copyright-years"; //$NON-NLS-1$
+    public static final String BUNDLE_LICENSE         = "bundle-license";         //$NON-NLS-1$
+    public static final String BUNDLE_EXECUTABLE      = "bundle-executable";      //$NON-NLS-1$
+    public static final String BUNDLE_ID              = "bundle-id";              //$NON-NLS-1$
+    public static final String BUNDLE_SIGNATURE       = "bundle-signature";       //$NON-NLS-1$
+    public static final String BUNDLE_CATEGORY        = "bundle-category";        //$NON-NLS-1$
     private static BundleInfo  DEFAULT;
     private String             mName;
     private long               mVersion;
@@ -100,8 +101,9 @@ public class BundleInfo {
      * @param theClass A class in the code bundle.
      */
     public BundleInfo(Class<?> theClass) {
-        try {
-            load(UrlUtils.loadManifest(theClass).getMainAttributes());
+        Module module = theClass.getModule();
+        try (InputStream in = module.getResourceAsStream("/META-INF/MANIFEST.MF")) { //$NON-NLS-1$
+            load(new Manifest(in).getMainAttributes());
         } catch (Exception exception) {
             // Ignore... we'll fill in default values below
         }
@@ -284,26 +286,27 @@ public class BundleInfo {
             mOut.println("<plist version=\"1.0\">");
             mDepth++;
             startDictionary();
+            emitKeyValue("LSMinimumSystemVersion", "10.9");
             emitKeyValue("CFBundleDevelopmentRegion", "English");
+            emitKeyValue("CFBundleAllowMixedLocalizations", true);
             emitKeyValue("CFBundleExecutable", mExecutableName);
             emitKeyValue("CFBundleIconFile", "app.icns");
             emitKeyValue("CFBundleIdentifier", mId);
-            emitKeyValue("CFBundleName", mName);
             emitKeyValue("CFBundleInfoDictionaryVersion", "6.0");
+            emitKeyValue("CFBundleName", mName);
             emitKeyValue("CFBundlePackageType", "APPL");
-            emitKeyValue("CFBundleShortVersionString", Version.toString(mVersion, false));
             emitKeyValue("CFBundleVersion", Version.toString(mVersion, true));
+            emitKeyValue("CFBundleShortVersionString", Version.toString(mVersion, false));
             emitKeyValue("CFBundleSignature", mSignature);
             emitKeyValue("LSApplicationCategoryType", mCategory);
+            emitKeyValue("NSHumanReadableCopyright", getCopyrightBanner());
+            emitKeyValue("NSHighResolutionCapable", true);
+            emitKeyValue("NSSupportsAutomaticGraphicsSwitching", true);
             emitKeyValues("LSArchitecturePriority", "x86_64", "i386");
             emitKey("LSEnvironment");
             startDictionary();
             emitKeyValue("LC_CTYPE", "UTF-8");
             endDictionary();
-            emitKeyValue("LSMinimumSystemVersion", "10.7.0");
-            emitKeyValue("NSHumanReadableCopyright", getCopyrightBanner());
-            emitKeyValue("NSHighResolutionCapable", true);
-            emitKeyValue("NSSupportsAutomaticGraphicsSwitching", true);
             FileType[] openable = FileType.getOpenable();
             if (openable.length > 0) {
                 emitKey("CFBundleDocumentTypes");

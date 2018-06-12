@@ -11,8 +11,6 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
-import com.apple.eawt.AppEvent.PrintFilesEvent;
-import com.apple.eawt.PrintFilesHandler;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
@@ -24,6 +22,8 @@ import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.PrintProxy;
 
 import java.awt.EventQueue;
+import java.awt.desktop.PrintFilesEvent;
+import java.awt.desktop.PrintFilesHandler;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -47,7 +47,7 @@ public class PrintCommand extends Command implements PrintFilesHandler {
     }
 
     /** The action command this command will issue. */
-    public static final String       CMD_PRINT = "Print";           				//$NON-NLS-1$
+    public static final String       CMD_PRINT = "Print"; //$NON-NLS-1$
 
     /** The singleton {@link PrintCommand}. */
     public static final PrintCommand INSTANCE  = new PrintCommand();

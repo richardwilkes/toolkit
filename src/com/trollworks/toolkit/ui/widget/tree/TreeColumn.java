@@ -30,7 +30,7 @@ import javax.swing.UIManager;
 /** The abstract base class for columns within a {@link TreeRoot}. */
 public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
     /** The data flavor for this class. */
-    public static final DataFlavor DATA_FLAVOR       = new DataFlavor(TreeColumn.class, "Tree Column");	//$NON-NLS-1$
+    public static final DataFlavor DATA_FLAVOR       = new DataFlavor(TreeColumn.class, "Tree Column"); //$NON-NLS-1$
     private static final int       SORTER_WIDTH      = 12;
     private static final int       HALF_SORTER_WIDTH = SORTER_WIDTH / 2;
     private String                 mName;

@@ -1,4 +1,3 @@
-/ant_build
-/build
-/.apt_generated
-/build/
+/.apt_generated/
+/.build/
+/bin/

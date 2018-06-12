@@ -18,7 +18,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 /** Allows {@link Dockable}s to be part of drag and drop operations internal to the JVM. */
 public class DockableTransferable implements Transferable {
     /** The data flavor for this class. */
-    public static final DataFlavor DATA_FLAVOR = new DataFlavor(DockableTransferable.class, "Dockable");	//$NON-NLS-1$
+    public static final DataFlavor DATA_FLAVOR = new DataFlavor(DockableTransferable.class, "Dockable"); //$NON-NLS-1$
     private Dockable               mDockable;
 
     public DockableTransferable(Dockable dockable) {

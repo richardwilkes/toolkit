@@ -69,8 +69,8 @@ public class UpdateChecker implements Runnable {
         Localization.initialize();
     }
 
-    private static final String MODULE                = "Updates";    		//$NON-NLS-1$
-    private static final String LAST_VERSION_KEY      = "LastVersion";	//$NON-NLS-1$
+    private static final String MODULE                = "Updates"; //$NON-NLS-1$
+    private static final String LAST_VERSION_KEY      = "LastVersion"; //$NON-NLS-1$
     private static boolean      NEW_VERSION_AVAILABLE = false;
     private static String       RESULT;
     private static String       UPDATE_URL;

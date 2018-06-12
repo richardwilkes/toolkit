@@ -18,7 +18,6 @@ import com.trollworks.toolkit.ui.image.Cursors;
 
 import java.awt.AWTEvent;
 import java.awt.Component;
-import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.IllegalComponentStateException;
 import java.awt.KeyboardFocusManager;
@@ -45,7 +44,7 @@ import javax.swing.JPanel;
 
 /** Provides an area where {@link Dockable} components can be displayed and rearranged. */
 public class Dock extends JPanel implements MouseListener, MouseMotionListener, PropertyChangeListener, DropTargetListener {
-    private static final String PERMANENT_FOCUS_OWNER_KEY = "permanentFocusOwner";         			//$NON-NLS-1$
+    private static final String PERMANENT_FOCUS_OWNER_KEY = "permanentFocusOwner"; //$NON-NLS-1$
     private static final int    GRIP_GAP                  = 1;
     private static final int    GRIP_WIDTH                = 4;
     private static final int    GRIP_HEIGHT               = 2;
@@ -699,7 +698,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
     class MouseMonitor implements AWTEventListener {
         @Override
         public void eventDispatched(AWTEvent event) {
-            if (event.getID() == Event.MOUSE_DOWN) {
+            if (event.getID() == MouseEvent.MOUSE_PRESSED) {
                 Object source = event.getSource();
                 if (source instanceof Component) {
                     Component comp = (Component) source;

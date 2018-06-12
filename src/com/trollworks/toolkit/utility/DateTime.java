@@ -20,13 +20,13 @@ import java.util.regex.Pattern;
 
 /** Date and time handling. */
 public class DateTime {
-    private static final String  STARTING_WHITESPACE = "^\\s*";                                                                        																			//$NON-NLS-1$
-    private static final String  ENDING_WHITESPACE   = "\\s*$";                                                                        																			//$NON-NLS-1$
-    private static final String  DATE                = "([\\d]{4})-([\\d]{2})-([\\d]{2})";                                             												//$NON-NLS-1$
-    private static final String  TIME                = "([\\d]{2}):([\\d]{2}):([\\d]{2})";                                             												//$NON-NLS-1$
+    private static final String  STARTING_WHITESPACE = "^\\s*"; //$NON-NLS-1$
+    private static final String  ENDING_WHITESPACE   = "\\s*$"; //$NON-NLS-1$
+    private static final String  DATE                = "([\\d]{4})-([\\d]{2})-([\\d]{2})"; //$NON-NLS-1$
+    private static final String  TIME                = "([\\d]{2}):([\\d]{2}):([\\d]{2})"; //$NON-NLS-1$
     private static final Pattern DATE_PATTERN        = Pattern.compile(STARTING_WHITESPACE + DATE + ENDING_WHITESPACE);
     private static final Pattern TIME_PATTERN        = Pattern.compile(STARTING_WHITESPACE + TIME + ENDING_WHITESPACE);
-    private static final Pattern DATE_TIME_PATTERN   = Pattern.compile(STARTING_WHITESPACE + DATE + "\\s+" + TIME + ENDING_WHITESPACE);	//$NON-NLS-1$
+    private static final Pattern DATE_TIME_PATTERN   = Pattern.compile(STARTING_WHITESPACE + DATE + "\\s+" + TIME + ENDING_WHITESPACE); //$NON-NLS-1$
 
     /**
      * @param milliseconds The time to format.

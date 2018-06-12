@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.ui;
 
-import com.apple.eawt.Application;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.image.StdImageSet;
 import com.trollworks.toolkit.ui.widget.AppWindow;
@@ -20,6 +19,7 @@ import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.Platform;
 
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -337,9 +337,15 @@ public class GraphicsUtilities {
 
     /** Attempts to force the app to the front. */
     public static void forceAppToFront() {
-        if (Platform.isMacintosh()) {
-            Application.getApplication().requestForeground(true);
-        } else {
+        boolean useFallback = false;
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().requestForeground(true);
+            } catch (UnsupportedOperationException uoex) {
+                useFallback = true;
+            }
+        }
+        if (useFallback) {
             AppWindow topWindow = AppWindow.getTopWindow();
             if (topWindow != null) {
                 boolean alwaysOnTop = topWindow.isAlwaysOnTop();

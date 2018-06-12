@@ -18,7 +18,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 /** Allows rows to be part of drag and drop operations internal to the JVM. */
 public class RowSelection implements Transferable {
     /** The data flavor for this class. */
-    public static final DataFlavor DATA_FLAVOR = new DataFlavor(RowSelection.class, "Outline Rows");	//$NON-NLS-1$
+    public static final DataFlavor DATA_FLAVOR = new DataFlavor(RowSelection.class, "Outline Rows"); //$NON-NLS-1$
     private OutlineModel           mModel;
     private Row[]                  mRows;
     private String                 mCache;

@@ -34,7 +34,7 @@ public class SelectAllCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String           CMD_SELECT_ALL = "SelectAll";           				//$NON-NLS-1$
+    public static final String           CMD_SELECT_ALL = "SelectAll"; //$NON-NLS-1$
 
     /** The singleton {@link SelectAllCommand}. */
     public static final SelectAllCommand INSTANCE       = new SelectAllCommand();

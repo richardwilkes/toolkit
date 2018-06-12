@@ -30,7 +30,7 @@ public class ClearRecentFilesMenuCommand extends Command {
     }
 
     /** The action command this command will issue. */
-    public static final String                      CMD_CLEAR_RECENT_FILES_MENU = "ClearRecentFilesMenu";           			//$NON-NLS-1$
+    public static final String                      CMD_CLEAR_RECENT_FILES_MENU = "ClearRecentFilesMenu"; //$NON-NLS-1$
 
     /** The singleton {@link ClearRecentFilesMenuCommand}. */
     public static final ClearRecentFilesMenuCommand INSTANCE                    = new ClearRecentFilesMenuCommand();

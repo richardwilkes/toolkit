@@ -11,14 +11,14 @@
 
 package com.trollworks.toolkit.ui.menu.edit;
 
-import com.apple.eawt.AppEvent.PreferencesEvent;
-import com.apple.eawt.PreferencesHandler;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.preferences.PreferencesWindow;
 import com.trollworks.toolkit.utility.Localization;
 
+import java.awt.desktop.PreferencesEvent;
+import java.awt.desktop.PreferencesHandler;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -35,7 +35,7 @@ public class PreferencesCommand extends Command implements PreferencesHandler {
     }
 
     /** The action command this command will issue. */
-    public static final String             CMD_PREFERENCES = "Preferences";           			//$NON-NLS-1$
+    public static final String             CMD_PREFERENCES = "Preferences"; //$NON-NLS-1$
 
     /** The singleton {@link PreferencesCommand}. */
     public static final PreferencesCommand INSTANCE        = new PreferencesCommand();
