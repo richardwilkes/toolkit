@@ -53,10 +53,10 @@ public class App implements KeyEventDispatcher, Runnable {
         BundleInfo.setDefault(new BundleInfo(theClass));
         Path path;
         try {
-            path = Paths.get(System.getProperty("java.home")).getParent().getParent(); //$NON-NLS-1$
-            if (path.endsWith("Contents/PlugIns/Java.runtime")) { //$NON-NLS-1$
-                // Running inside a package installation
-                path = path.getParent().getParent().getParent().getParent();
+            path = Paths.get(System.getProperty("java.home")); //$NON-NLS-1$
+            if (path.endsWith("Contents/PlugIns/Java.runtime/Contents/Home")) { //$NON-NLS-1$
+                // Running inside a macOS package
+                path = path.getParent().getParent().getParent().getParent().getParent().getParent();
             } else {
                 URI uri = theClass.getProtectionDomain().getCodeSource().getLocation().toURI();
                 path = Paths.get(uri).normalize().getParent().toAbsolutePath();
