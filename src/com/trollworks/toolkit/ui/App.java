@@ -23,6 +23,7 @@ import com.trollworks.toolkit.utility.LaunchProxy;
 import com.trollworks.toolkit.utility.cmdline.CmdLine;
 
 import java.awt.Desktop;
+import java.awt.Desktop.Action;
 import java.awt.EventQueue;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -75,20 +76,37 @@ public class App implements KeyEventDispatcher, Runnable {
     protected App() {
         if (Desktop.isDesktopSupported()) {
             Desktop desktop = Desktop.getDesktop();
-            desktop.setAboutHandler(AboutCommand.INSTANCE);
-            desktop.setPreferencesHandler(PreferencesCommand.INSTANCE);
-            desktop.setOpenFileHandler(OpenCommand.INSTANCE);
-            desktop.setPrintFileHandler(PrintCommand.INSTANCE);
-            desktop.setQuitHandler(QuitCommand.INSTANCE);
-            desktop.setQuitStrategy(QuitStrategy.NORMAL_EXIT);
-            desktop.disableSuddenTermination();
+            if (desktop.isSupported(Action.APP_ABOUT)) {
+                desktop.setAboutHandler(AboutCommand.INSTANCE);
+            }
+            if (desktop.isSupported(Action.APP_PREFERENCES)) {
+                desktop.setPreferencesHandler(PreferencesCommand.INSTANCE);
+            }
+            if (desktop.isSupported(Action.APP_OPEN_FILE)) {
+                desktop.setOpenFileHandler(OpenCommand.INSTANCE);
+            }
+            if (desktop.isSupported(Action.APP_PRINT_FILE)) {
+                desktop.setPrintFileHandler(PrintCommand.INSTANCE);
+            }
+            if (desktop.isSupported(Action.APP_QUIT_HANDLER)) {
+                desktop.setQuitHandler(QuitCommand.INSTANCE);
+            }
+            if (desktop.isSupported(Action.APP_QUIT_STRATEGY)) {
+                desktop.setQuitStrategy(QuitStrategy.NORMAL_EXIT);
+            }
+            if (desktop.isSupported(Action.APP_SUDDEN_TERMINATION)) {
+                desktop.disableSuddenTermination();
+            }
         }
     }
 
     /** Set a global menu bar for when no windows are open / focused. */
     public static void setDefaultMenuBar(JMenuBar menuBar) {
         if (Desktop.isDesktopSupported()) {
-            Desktop.getDesktop().setDefaultMenuBar(menuBar);
+            Desktop desktop = Desktop.getDesktop();
+            if (desktop.isSupported(Action.APP_MENU_BAR)) {
+                desktop.setDefaultMenuBar(menuBar);
+            }
         }
     }
 
