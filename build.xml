@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="com.trollworks.toolkit" default="build">
+	<target name="build">
+		<property name="module.name" value="com.trollworks.toolkit"/>
+		<property name="module.version" value="4.11"/>
+		<property name="target.version" value="10"/>
+		<property name="build.dir" value="antbuild"/>
+		<property name="modules.dir" value="../java_modules"/>
+
+	    <delete dir="${build.dir}"/>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${modules.dir}"/>
+		<delete>
+			<fileset dir="${modules.dir}" includes="${module.name}*"/>
+		</delete>
+
+        <javac destdir="${build.dir}" includeantruntime="false" source="${target.version}" target="${target.version}" modulepath="${modules.dir}">
+            <src path="src"/>
+        </javac>
+
+		<exec executable="jar">
+			<arg value="--create"/>
+			<arg value="--file"/>
+			<arg file="${modules.dir}/${module.name}-${module.version}.jar"/>
+			<arg value="--module-version"/>
+			<arg value="${module.version}"/>
+			<arg value="-C"/>
+			<arg value="${build.dir}"/>
+			<arg value="."/>
+			<arg value="-C"/>
+			<arg value="resources"/>
+			<arg value="."/>
+		</exec>
+
+	    <delete dir="${build.dir}"/>
+
+		<zip destfile="${modules.dir}/${module.name}-${module.version}-src.zip" level="9" basedir="." excludes="bin/**"/>
+    </target>
+</project>
