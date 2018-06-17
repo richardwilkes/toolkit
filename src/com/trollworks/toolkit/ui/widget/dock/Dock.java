@@ -44,7 +44,7 @@ import javax.swing.JPanel;
 
 /** Provides an area where {@link Dockable} components can be displayed and rearranged. */
 public class Dock extends JPanel implements MouseListener, MouseMotionListener, PropertyChangeListener, DropTargetListener {
-    private static final String PERMANENT_FOCUS_OWNER_KEY = "permanentFocusOwner"; //$NON-NLS-1$
+    private static final String PERMANENT_FOCUS_OWNER_KEY = "permanentFocusOwner";         //$NON-NLS-1$
     private static final int    GRIP_GAP                  = 1;
     private static final int    GRIP_WIDTH                = 4;
     private static final int    GRIP_HEIGHT               = 2;
@@ -712,7 +712,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
                         if (dockable != null) {
                             DockContainer dc = dockable.getDockContainer();
                             if (dc != null) {
-                                dc.setCurrentDockable(dockable);
+                                dc.setCurrentDockable(dockable, comp);
                             }
                         }
                     }
