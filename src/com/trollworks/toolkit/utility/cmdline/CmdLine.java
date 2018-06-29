@@ -69,7 +69,7 @@ public class CmdLine {
         Localization.initialize();
     }
 
-    private static final CmdLineOption HELP_OPTION    = new CmdLineOption(HELP_DESCRIPTION, null, "h", "?", "help"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    private static final CmdLineOption HELP_OPTION    = new CmdLineOption(HELP_DESCRIPTION, null, "h", "?", "help");  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     private static final CmdLineOption VERSION_OPTION = new CmdLineOption(VERSION_DESCRIPTION, null, "v", "version"); //$NON-NLS-1$ //$NON-NLS-2$
     private Map<String, CmdLineOption> mOptions       = new HashMap<>();
     private String                     mHelpHeader;
@@ -312,7 +312,7 @@ public class CmdLine {
         List<File> arguments = new ArrayList<>();
         for (CmdLineData one : mData) {
             if (!one.isOption()) {
-                arguments.add(new File(one.getArgument()));
+                arguments.add(new File(one.getArgument()).getAbsoluteFile());
             }
         }
         return arguments;

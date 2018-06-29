@@ -50,6 +50,14 @@ public class App implements KeyEventDispatcher, Runnable {
     private boolean                        mHasStarted;
 
     public static final void setup(Class<?> theClass) {
+        // Fix the current working directory, as bundled apps break the normal logic.
+        // Sadly, this still doesn't fix stuff references from the "default" filesystem
+        // class, as it is already initialized to the wrong value and won't pick this
+        // change up.
+        String pwd = System.getenv("PWD"); //$NON-NLS-1$
+        if (!pwd.isEmpty()) {
+            System.setProperty("user.dir", pwd); //$NON-NLS-1$
+        }
         BundleInfo.setDefault(new BundleInfo(theClass));
         Path path;
         try {
