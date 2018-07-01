@@ -55,7 +55,7 @@ public class App implements KeyEventDispatcher, Runnable {
         // class, as it is already initialized to the wrong value and won't pick this
         // change up.
         String pwd = System.getenv("PWD"); //$NON-NLS-1$
-        if (!pwd.isEmpty()) {
+        if (pwd != null && !pwd.isEmpty()) {
             System.setProperty("user.dir", pwd); //$NON-NLS-1$
         }
         BundleInfo.setDefault(new BundleInfo(theClass));
