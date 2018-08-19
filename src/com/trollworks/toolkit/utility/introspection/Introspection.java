@@ -36,7 +36,13 @@ public class Introspection {
      * @param field The {@link Field} to mark as accessible.
      */
     public static void makeFieldAccessible(final Field field) throws SecurityException {
-        if (!field.canAccess(field.getDeclaringClass())) {
+        boolean canAccess = false;
+        try {
+            canAccess = field.canAccess(field.getDeclaringClass());
+        } catch (Exception ex) {
+            // ignore
+        }
+        if (!canAccess) {
             if (System.getSecurityManager() == null) {
                 field.setAccessible(true);
             } else {
@@ -55,7 +61,13 @@ public class Introspection {
      * @param constructor The {@link Constructor} to mark as accessible.
      */
     public static void makeConstructorAccessible(Constructor<?> constructor) {
-        if (!constructor.canAccess(constructor.getDeclaringClass())) {
+        boolean canAccess = false;
+        try {
+            canAccess = constructor.canAccess(constructor.getDeclaringClass());
+        } catch (Exception ex) {
+            // ignore
+        }
+        if (!canAccess) {
             if (System.getSecurityManager() == null) {
                 constructor.setAccessible(true);
             } else {
