@@ -39,9 +39,8 @@ import javax.swing.WindowConstants;
 public class BaseWindow extends JFrame implements WindowListener, WindowFocusListener {
     private static final String WINDOW_PREFERENCES         = "WindowPrefs"; //$NON-NLS-1$
     private static final int    WINDOW_PREFERENCES_VERSION = 3;
-    private static final String KEY_LOCATION               = "Location"; //$NON-NLS-1$
-    private static final String KEY_SIZE                   = "Size"; //$NON-NLS-1$
-    private static final String KEY_MAXIMIZED              = "Maximized"; //$NON-NLS-1$
+    private static final String KEY_LOCATION               = "Location";    //$NON-NLS-1$
+    private static final String KEY_SIZE                   = "Size";        //$NON-NLS-1$
     private static final String KEY_LAST_UPDATED           = "LastUpdated"; //$NON-NLS-1$
     boolean                     mWasAlive;
     private boolean             mIsClosed;
@@ -269,7 +268,6 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
             prefs.startBatch();
             prefs.setValue(WINDOW_PREFERENCES, keyPrefix + KEY_LOCATION, getLocation());
             prefs.setValue(WINDOW_PREFERENCES, keyPrefix + KEY_SIZE, getSize());
-            prefs.setValue(WINDOW_PREFERENCES, keyPrefix + KEY_MAXIMIZED, wasMaximized);
             prefs.setValue(WINDOW_PREFERENCES, keyPrefix + KEY_LAST_UPDATED, System.currentTimeMillis());
             prefs.endBatch();
         }
@@ -297,9 +295,6 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
             pack();
         }
         GraphicsUtilities.forceOnScreen(this);
-        if (prefs.getBooleanValue(WINDOW_PREFERENCES, keyPrefix + KEY_MAXIMIZED, false)) {
-            setExtendedState(MAXIMIZED_BOTH);
-        }
     }
 
     private static void pruneOldWindowPreferences(Preferences prefs) {
