@@ -49,9 +49,9 @@ public class PrintUtilities {
      * Extracts a setting from the specified {@link PrintRequestAttributeSet} or looks up a default
      * value from the specified {@link PrintService} if the set doesn't contain it.
      *
-     * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
-     * @param type The setting type to extract.
+     * @param service          The {@link PrintService} to use.
+     * @param set              The {@link PrintRequestAttributeSet} to use.
+     * @param type             The setting type to extract.
      * @param tryDefaultIfNull Whether to ask for the default if no value is present in the set.
      * @return The value for the setting, or <code>null</code> if neither the set or the service has
      *         a value for it.
@@ -66,7 +66,7 @@ public class PrintUtilities {
 
     /**
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
      * @return The page orientation.
      */
     public static PageOrientation getPageOrientation(PrintService service, PrintRequestAttributeSet set) {
@@ -76,7 +76,7 @@ public class PrintUtilities {
     /**
      * Sets the page orientation.
      *
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set         The {@link PrintRequestAttributeSet} to use.
      * @param orientation The new page orientation.
      */
     public static void setPageOrientation(PrintRequestAttributeSet set, PageOrientation orientation) {
@@ -85,15 +85,15 @@ public class PrintUtilities {
 
     /**
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
-     * @param units The units to return.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
+     * @param units   The units to return.
      * @return The margins of the paper (top, left, bottom, right).
      */
     public static double[] getPaperMargins(PrintService service, PrintRequestAttributeSet set, LengthUnits units) {
-        double[] size = getPaperSize(service, set, LengthUnits.IN);
+        double[]           size    = getPaperSize(service, set, LengthUnits.IN);
         MediaPrintableArea current = (MediaPrintableArea) getSetting(service, set, MediaPrintableArea.class, true);
-        double x;
-        double y;
+        double             x;
+        double             y;
 
         if (current == null) {
             current = new MediaPrintableArea(0.5f, 0.5f, (float) (size[0] - 1.0), (float) (size[1] - 1.0), MediaPrintableArea.INCH);
@@ -107,9 +107,9 @@ public class PrintUtilities {
      * Sets the paper margins.
      *
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
      * @param margins The margins of the paper (top, left, bottom, right).
-     * @param units The type of units being used.
+     * @param units   The type of units being used.
      */
     public static void setPaperMargins(PrintService service, PrintRequestAttributeSet set, double[] margins, LengthUnits units) {
         double[] size = getPaperSize(service, set, units);
@@ -119,13 +119,13 @@ public class PrintUtilities {
 
     /**
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
-     * @param units The units to return.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
+     * @param units   The units to return.
      * @return The margins of the page (top, left, bottom, right).
      */
     public static double[] getPageMargins(PrintService service, PrintRequestAttributeSet set, LengthUnits units) {
         PageOrientation orientation = getPageOrientation(service, set);
-        double[] margins = getPaperMargins(service, set, units);
+        double[]        margins     = getPaperMargins(service, set, units);
 
         if (orientation == PageOrientation.LANDSCAPE) {
             return new double[] { margins[1], margins[2], margins[3], margins[0] };
@@ -141,9 +141,9 @@ public class PrintUtilities {
 
     /**
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
      * @param margins The margins of the page (top, left, bottom, right).
-     * @param units The type of units being used.
+     * @param units   The type of units being used.
      */
     public static void setPageMargins(PrintService service, PrintRequestAttributeSet set, double[] margins, LengthUnits units) {
         PageOrientation orientation = getPageOrientation(service, set);
@@ -161,8 +161,8 @@ public class PrintUtilities {
 
     /**
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
-     * @param units The units to return.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
+     * @param units   The units to return.
      * @return The width and height of the paper.
      */
     public static double[] getPaperSize(PrintService service, PrintRequestAttributeSet set, LengthUnits units) {
@@ -187,12 +187,12 @@ public class PrintUtilities {
      * Sets the paper size.
      *
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
-     * @param size The size of the paper.
-     * @param units The type of units being used.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
+     * @param size    The size of the paper.
+     * @param units   The type of units being used.
      */
     public static void setPaperSize(PrintService service, PrintRequestAttributeSet set, double[] size, LengthUnits units) {
-        double[] margins = getPaperMargins(service, set, units);
+        double[]      margins       = getPaperMargins(service, set, units);
         MediaSizeName mediaSizeName = MediaSize.findMedia((float) LengthUnits.IN.convert(units, size[0]), (float) LengthUnits.IN.convert(units, size[1]), Size2DSyntax.INCH);
 
         if (mediaSizeName == null) {
@@ -204,13 +204,13 @@ public class PrintUtilities {
 
     /**
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
-     * @param units The units to return.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
+     * @param units   The units to return.
      * @return The width and height of the page.
      */
     public static double[] getPageSize(PrintService service, PrintRequestAttributeSet set, LengthUnits units) {
         PageOrientation orientation = getPageOrientation(service, set);
-        double[] size = getPaperSize(service, set, units);
+        double[]        size        = getPaperSize(service, set, units);
 
         if (orientation == PageOrientation.LANDSCAPE || orientation == PageOrientation.REVERSE_LANDSCAPE) {
             double tmp = size[0];
@@ -226,9 +226,9 @@ public class PrintUtilities {
      * Sets the paper size.
      *
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
-     * @param size The size of the page.
-     * @param units The type of units being used.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
+     * @param size    The size of the page.
+     * @param units   The type of units being used.
      */
     public static void setPageSize(PrintService service, PrintRequestAttributeSet set, double[] size, LengthUnits units) {
         PageOrientation orientation = getPageOrientation(service, set);
@@ -240,8 +240,8 @@ public class PrintUtilities {
     }
 
     /**
-     * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param service          The {@link PrintService} to use.
+     * @param set              The {@link PrintRequestAttributeSet} to use.
      * @param tryDefaultIfNull Whether to ask for the default if no value is present in the set.
      * @return The chromaticity.
      */
@@ -252,7 +252,7 @@ public class PrintUtilities {
     /**
      * Sets the chromaticity.
      *
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set          The {@link PrintRequestAttributeSet} to use.
      * @param chromaticity The new chromaticity.
      */
     public static void setChromaticity(PrintRequestAttributeSet set, InkChromaticity chromaticity) {
@@ -261,7 +261,7 @@ public class PrintUtilities {
 
     /**
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
      * @return The sides.
      */
     public static PageSides getSides(PrintService service, PrintRequestAttributeSet set) {
@@ -271,7 +271,7 @@ public class PrintUtilities {
     /**
      * Sets the sides.
      *
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set   The {@link PrintRequestAttributeSet} to use.
      * @param sides The new sides.
      */
     public static void setSides(PrintRequestAttributeSet set, PageSides sides) {
@@ -279,8 +279,8 @@ public class PrintUtilities {
     }
 
     /**
-     * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param service          The {@link PrintService} to use.
+     * @param set              The {@link PrintRequestAttributeSet} to use.
      * @param tryDefaultIfNull Whether to ask for the default if no value is present in the set.
      * @return The print quality.
      */
@@ -291,7 +291,7 @@ public class PrintUtilities {
     /**
      * Sets the print quality.
      *
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
      * @param quality The new print quality.
      */
     public static void setPrintQuality(PrintRequestAttributeSet set, Quality quality) {
@@ -300,7 +300,7 @@ public class PrintUtilities {
 
     /**
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
      * @return The copies to print.
      */
     public static int getCopies(PrintService service, PrintRequestAttributeSet set) {
@@ -311,7 +311,7 @@ public class PrintUtilities {
     /**
      * Sets the copies to print.
      *
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set    The {@link PrintRequestAttributeSet} to use.
      * @param copies The new copies to print.
      */
     public static void setCopies(PrintRequestAttributeSet set, int copies) {
@@ -320,7 +320,7 @@ public class PrintUtilities {
 
     /**
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
      * @return The number up to print.
      */
     public static NumberUp getNumberUp(PrintService service, PrintRequestAttributeSet set) {
@@ -330,7 +330,7 @@ public class PrintUtilities {
     /**
      * Sets the number up to print.
      *
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set      The {@link PrintRequestAttributeSet} to use.
      * @param numberUp The new number up to print.
      */
     public static void setNumberUp(PrintRequestAttributeSet set, NumberUp numberUp) {
@@ -339,7 +339,7 @@ public class PrintUtilities {
 
     /**
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
      * @return The page ranges to print.
      */
     public static PageRanges getPageRanges(PrintService service, PrintRequestAttributeSet set) {
@@ -349,7 +349,7 @@ public class PrintUtilities {
     /**
      * Sets the page ranges to print.
      *
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set    The {@link PrintRequestAttributeSet} to use.
      * @param ranges The new page ranges to print.
      */
     public static void setPageRanges(PrintRequestAttributeSet set, PageRanges ranges) {
@@ -361,8 +361,8 @@ public class PrintUtilities {
     }
 
     /**
-     * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param service          The {@link PrintService} to use.
+     * @param set              The {@link PrintRequestAttributeSet} to use.
      * @param tryDefaultIfNull Whether to ask for the default if no value is present in the set.
      * @return The print resolution.
      */
@@ -373,7 +373,7 @@ public class PrintUtilities {
     /**
      * Sets the print resolution.
      *
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set        The {@link PrintRequestAttributeSet} to use.
      * @param resolution The new print resolution.
      */
     public static void setResolution(PrintRequestAttributeSet set, PrinterResolution resolution) {

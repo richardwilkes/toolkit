@@ -22,8 +22,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlPrimitiveCharHelper implements XmlObjectHelper {
     public static final XmlPrimitiveCharHelper SINGLETON = new XmlPrimitiveCharHelper();
 
-    private XmlPrimitiveCharHelper() {
-    }
+    private XmlPrimitiveCharHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -32,8 +31,8 @@ public class XmlPrimitiveCharHelper implements XmlObjectHelper {
 
     @Override
     public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-        String value = String.valueOf(field.getChar(obj));
-        XmlDefaultChar def = field.getAnnotation(XmlDefaultChar.class);
+        String         value = String.valueOf(field.getChar(obj));
+        XmlDefaultChar def   = field.getAnnotation(XmlDefaultChar.class);
         if (def != null) {
             xml.addAttributeNot(name, value, String.valueOf(def.value()));
         } else {
@@ -43,8 +42,8 @@ public class XmlPrimitiveCharHelper implements XmlObjectHelper {
 
     @Override
     public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-        XmlDefaultChar def = field.getAnnotation(XmlDefaultChar.class);
-        String charStr = context.getParser().getAttribute(name);
+        XmlDefaultChar def     = field.getAnnotation(XmlDefaultChar.class);
+        String         charStr = context.getParser().getAttribute(name);
         field.setChar(obj, charStr == null || charStr.isEmpty() ? def != null ? def.value() : 0 : charStr.charAt(0));
     }
 

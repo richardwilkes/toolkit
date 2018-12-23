@@ -23,8 +23,8 @@ public interface NotifierTarget {
      * Called when a notification is delivered.
      *
      * @param producer The producer of the notification.
-     * @param name The notification name.
-     * @param data Extra data specific to the notification.
+     * @param name     The notification name.
+     * @param data     Extra data specific to the notification.
      */
     public void handleNotification(Object producer, String name, Object data);
 }

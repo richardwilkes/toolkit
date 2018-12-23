@@ -124,8 +124,8 @@ public class StdImageSet implements Comparator<StdImage> {
      * Apple_Icon_Image</a>.
      *
      * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
-     *            will replace any existing {@link StdImageSet} with the same name.
-     * @param url The {@link URL} to load the images from.
+     *             will replace any existing {@link StdImageSet} with the same name.
+     * @param url  The {@link URL} to load the images from.
      */
     public static final StdImageSet loadIcns(String name, URL url) throws IOException {
         try (InputStream in = url.openStream()) {
@@ -139,12 +139,12 @@ public class StdImageSet implements Comparator<StdImage> {
      * Apple_Icon_Image</a>.
      *
      * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
-     *            will replace any existing {@link StdImageSet} with the same name.
-     * @param in The {@link InputStream} to load the images from.
+     *             will replace any existing {@link StdImageSet} with the same name.
+     * @param in   The {@link InputStream} to load the images from.
      */
     public static final StdImageSet loadIcns(String name, InputStream in) throws IOException {
         List<StdImage> images = new ArrayList<>();
-        byte[] header = new byte[8];
+        byte[]         header = new byte[8];
         StreamUtils.readFully(in, header);
         if (EndianUtils.readBEInt(header, 0) != TYPE_icns) {
             throw new IOException(INVALID_ICNS);
@@ -155,26 +155,26 @@ public class StdImageSet implements Comparator<StdImage> {
             header = new byte[8];
             StreamUtils.readFully(in, header);
             pos += header.length;
-            int type = EndianUtils.readBEInt(header, 0);
+            int type   = EndianUtils.readBEInt(header, 0);
             int length = EndianUtils.readBEInt(header, 4);
             pos += length;
             switch (type) {
-                case TYPE_icp4:
-                case TYPE_icp5:
-                case TYPE_icp6:
-                case TYPE_ic07:
-                case TYPE_ic08:
-                case TYPE_ic09:
-                case TYPE_ic10:
-                case TYPE_ic11:
-                case TYPE_ic12:
-                case TYPE_ic13:
-                case TYPE_ic14:
-                    loadImage(in, length - 8, name, images);
-                    break;
-                default:
-                    StreamUtils.skipFully(in, length - 8);
-                    break;
+            case TYPE_icp4:
+            case TYPE_icp5:
+            case TYPE_icp6:
+            case TYPE_ic07:
+            case TYPE_ic08:
+            case TYPE_ic09:
+            case TYPE_ic10:
+            case TYPE_ic11:
+            case TYPE_ic12:
+            case TYPE_ic13:
+            case TYPE_ic14:
+                loadImage(in, length - 8, name, images);
+                break;
+            default:
+                StreamUtils.skipFully(in, length - 8);
+                break;
             }
         }
         return images.isEmpty() ? null : new StdImageSet(name, images);
@@ -197,8 +197,8 @@ public class StdImageSet implements Comparator<StdImage> {
      * this method.
      *
      * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
-     *            will replace any existing {@link StdImageSet} with the same name.
-     * @param url The {@link URL} to load the images from.
+     *             will replace any existing {@link StdImageSet} with the same name.
+     * @param url  The {@link URL} to load the images from.
      */
     public static final StdImageSet loadIco(String name, URL url) throws IOException {
         try (InputStream in = url.openStream()) {
@@ -213,18 +213,18 @@ public class StdImageSet implements Comparator<StdImage> {
      * this method.
      *
      * @param name The name to give this {@link StdImageSet}. Note that this should be unique, as it
-     *            will replace any existing {@link StdImageSet} with the same name.
-     * @param in The {@link InputStream} to load the images from.
+     *             will replace any existing {@link StdImageSet} with the same name.
+     * @param in   The {@link InputStream} to load the images from.
      */
     public static final StdImageSet loadIco(String name, InputStream in) throws IOException {
         List<StdImage> images = new ArrayList<>();
-        byte[] header = new byte[6];
+        byte[]         header = new byte[6];
         StreamUtils.readFully(in, header);
         if (EndianUtils.readLEUnsignedShort(header, 0) != 0 || EndianUtils.readLEUnsignedShort(header, 2) != 1) {
             throw new IOException(INVALID_ICO);
         }
-        int count = EndianUtils.readLEUnsignedShort(header, 4);
-        byte[] data = new byte[count * 16];
+        int    count = EndianUtils.readLEUnsignedShort(header, 4);
+        byte[] data  = new byte[count * 16];
         StreamUtils.readFully(in, data);
         ico[] toc = new ico[count];
         for (int i = 0; i < count; i++) {
@@ -261,8 +261,8 @@ public class StdImageSet implements Comparator<StdImage> {
     /**
      * Creates a new {@link StdImageSet}.
      *
-     * @param name The name of this {@link StdImageSet}. This can be used to retrieve the
-     *            {@link StdImageSet} later, via a call to {@link #get(String)}.
+     * @param name   The name of this {@link StdImageSet}. This can be used to retrieve the
+     *               {@link StdImageSet} later, via a call to {@link #get(String)}.
      * @param images The images that belong in this {@link StdImageSet}.
      */
     public StdImageSet(String name, List<StdImage> images) {
@@ -277,10 +277,10 @@ public class StdImageSet implements Comparator<StdImage> {
      * Creates a new {@link StdImageSet} that composites multiple images together from other
      * {@link StdImageSet}s to form its images.
      *
-     * @param name The name of this {@link StdImageSet}. This can be used to retrieve the
-     *            {@link StdImageSet} later, via a call to {@link #get(String)}.
+     * @param name   The name of this {@link StdImageSet}. This can be used to retrieve the
+     *               {@link StdImageSet} later, via a call to {@link #get(String)}.
      * @param layers Two or more other {@link StdImageSet}s to use. Each one will be layered on top
-     *            of the previous one, creating a single image for a given size.
+     *               of the previous one, creating a single image for a given size.
      */
     public StdImageSet(String name, StdImageSet... layers) {
         if (layers == null || layers.length < 2) {
@@ -320,7 +320,7 @@ public class StdImageSet implements Comparator<StdImage> {
     }
 
     /**
-     * @param width The width of the image.
+     * @param width  The width of the image.
      * @param height The height of the image.
      * @return <code>true</code> if the image exists.
      */
@@ -343,7 +343,7 @@ public class StdImageSet implements Comparator<StdImage> {
     }
 
     /**
-     * @param width The width of the image.
+     * @param width  The width of the image.
      * @param height The height of the image.
      * @return An image from the set, or <code>null</code> if the desired dimensions cannot be
      *         found.
@@ -367,7 +367,7 @@ public class StdImageSet implements Comparator<StdImage> {
     }
 
     /**
-     * @param width The width of the image.
+     * @param width  The width of the image.
      * @param height The height of the image.
      * @return An image from the set. If an exact match cannot be found, one of the existing images
      *         will be scaled to the desired size.
@@ -386,19 +386,19 @@ public class StdImageSet implements Comparator<StdImage> {
                 }
             } else {
                 StdImage inverseMatch = null;
-                int best = Integer.MAX_VALUE;
-                int inverseBest = Integer.MIN_VALUE;
+                int      best         = Integer.MAX_VALUE;
+                int      inverseBest  = Integer.MIN_VALUE;
                 for (StdImage image : mImages) {
-                    int imageWidth = image.getWidth();
+                    int imageWidth  = image.getWidth();
                     int imageHeight = image.getHeight();
-                    int heuristic = (imageWidth - width) * (imageHeight - height);
+                    int heuristic   = (imageWidth - width) * (imageHeight - height);
                     if (imageWidth > width || imageHeight > height) {
                         if (heuristic < best) {
-                            best = heuristic;
+                            best  = heuristic;
                             match = image;
                         }
                     } else if (match == null && heuristic > inverseBest) {
-                        inverseBest = heuristic;
+                        inverseBest  = heuristic;
                         inverseMatch = image;
                     }
                 }
@@ -439,56 +439,56 @@ public class StdImageSet implements Comparator<StdImage> {
      *            appropriate sizes first.
      */
     public void saveAsIcns(OutputStream out) throws IOException {
-        List<byte[]> imageData = new ArrayList<>();
+        List<byte[]>  imageData = new ArrayList<>();
         List<Integer> imageType = new ArrayList<>();
-        int size = 8;
+        int           size      = 8;
         for (StdImage image : mImages) {
             int width = image.getWidth();
             // We currently only write out square images
             if (width == image.getHeight()) {
-                int type = 0;
-                int hiResType = 0;
-                int oldStyleType = 0;
+                int type             = 0;
+                int hiResType        = 0;
+                int oldStyleType     = 0;
                 int oldStyleMaskType = 0;
                 // We currently only write out certain sizes
                 switch (width) {
-                    case 1024:
-                        hiResType = TYPE_ic10;
-                        break;
-                    case 512:
-                        type = TYPE_ic09;
-                        hiResType = TYPE_ic14;
-                        break;
-                    case 256:
-                        type = TYPE_ic08;
-                        hiResType = TYPE_ic13;
-                        break;
-                    case 128:
-                        type = TYPE_ic07;
-                        break;
-                    case 64:
-                        type = TYPE_icp6;
-                        hiResType = TYPE_ic12;
-                        break;
-                    case 32:
-                        // The next line is commented out because, at least in Mac OS X 10.9, the
-                        // Finder is unable to load the type correctly
+                case 1024:
+                    hiResType = TYPE_ic10;
+                    break;
+                case 512:
+                    type = TYPE_ic09;
+                    hiResType = TYPE_ic14;
+                    break;
+                case 256:
+                    type = TYPE_ic08;
+                    hiResType = TYPE_ic13;
+                    break;
+                case 128:
+                    type = TYPE_ic07;
+                    break;
+                case 64:
+                    type = TYPE_icp6;
+                    hiResType = TYPE_ic12;
+                    break;
+                case 32:
+                    // The next line is commented out because, at least in Mac OS X 10.9, the
+                    // Finder is unable to load the type correctly
 
-                        // type = TYPE_icp5;
-                        hiResType = TYPE_ic11;
-                        oldStyleType = TYPE_il32;
-                        oldStyleMaskType = TYPE_l8mk;
-                        break;
-                    case 16:
-                        // The next line is commented out because, at least in Mac OS X 10.9, the
-                        // Finder is unable to load the type correctly
+                    // type = TYPE_icp5;
+                    hiResType = TYPE_ic11;
+                    oldStyleType = TYPE_il32;
+                    oldStyleMaskType = TYPE_l8mk;
+                    break;
+                case 16:
+                    // The next line is commented out because, at least in Mac OS X 10.9, the
+                    // Finder is unable to load the type correctly
 
-                        // type = TYPE_icp4;
-                        oldStyleType = TYPE_is32;
-                        oldStyleMaskType = TYPE_s8mk;
-                        break;
-                    default:
-                        break;
+                    // type = TYPE_icp4;
+                    oldStyleType = TYPE_is32;
+                    oldStyleMaskType = TYPE_s8mk;
+                    break;
+                default:
+                    break;
                 }
                 if (hiResType != 0) {
                     size += createPNG(image, imageData, imageType, hiResType, 144);
@@ -504,8 +504,8 @@ public class StdImageSet implements Comparator<StdImage> {
                 }
             }
         }
-        int count = imageData.size();
-        byte[] toc = new byte[(count + 1) * 8];
+        int    count = imageData.size();
+        byte[] toc   = new byte[(count + 1) * 8];
         EndianUtils.writeBEInt(TYPE_TOC, toc, 0);
         EndianUtils.writeBEInt(toc.length, toc, 4);
         for (int i = 0; i < count; i++) {
@@ -539,9 +539,9 @@ public class StdImageSet implements Comparator<StdImage> {
     }
 
     private static int createOldStyleIcon(StdImage image, List<byte[]> imageData, List<Integer> imageType, int type) {
-        int size = image.getWidth();
+        int    size  = image.getWidth();
         byte[] bytes = new byte[size * size * 4];
-        int i = 0;
+        int    i     = 0;
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
                 EndianUtils.writeBEInt(image.getRGB(x, y), bytes, 4 * i++);
@@ -553,9 +553,9 @@ public class StdImageSet implements Comparator<StdImage> {
     }
 
     private static int createOldStyleMask(StdImage image, List<byte[]> imageData, List<Integer> imageType, int type) {
-        int size = image.getWidth();
+        int    size  = image.getWidth();
         byte[] bytes = new byte[size * size];
-        int i = 0;
+        int    i     = 0;
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
                 bytes[i++] = (byte) (image.getRGB(x, y) >>> 24);
@@ -574,8 +574,8 @@ public class StdImageSet implements Comparator<StdImage> {
      */
     public void saveAsIco(OutputStream out) throws IOException {
         byte[] buffer = new byte[16];
-        int count = 0;
-        int[] sizes = new int[] { 256, 128, 64, 48, 32, 16 };
+        int    count  = 0;
+        int[]  sizes  = new int[] { 256, 128, 64, 48, 32, 16 };
         for (int size : sizes) {
             if (hasImage(size)) {
                 count++;
@@ -585,8 +585,8 @@ public class StdImageSet implements Comparator<StdImage> {
         EndianUtils.writeLEShort(1, buffer, 2);
         EndianUtils.writeLEShort(count, buffer, 4);
         out.write(buffer, 0, 6);
-        int totalImageBytes = 0;
-        List<byte[]> images = new ArrayList<>();
+        int          totalImageBytes = 0;
+        List<byte[]> images          = new ArrayList<>();
         for (int size : sizes) {
             if (hasImage(size)) {
                 buffer[0] = (byte) (size == 256 ? 0 : size);

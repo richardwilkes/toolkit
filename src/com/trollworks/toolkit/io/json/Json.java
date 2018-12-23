@@ -53,7 +53,7 @@ public class Json {
      * Load the contents of a JSON string into an object that has been marked with {@link JsonKey}
      * annotations.
      *
-     * @param obj The object to load data into.
+     * @param obj  The object to load data into.
      * @param json The JSON-formatted string.
      * @return The object that was passed in.
      */
@@ -133,9 +133,9 @@ public class Json {
         if (array == null) {
             return null;
         }
-        int length = array.size();
+        int      length    = array.size();
         Class<?> fieldType = field.getType().getComponentType();
-        Object data = Array.newInstance(fieldType, length);
+        Object   data      = Array.newInstance(fieldType, length);
         if (fieldType == boolean.class || fieldType == Boolean.class) {
             for (int i = 0; i < length; i++) {
                 Array.setBoolean(data, i, array.getBoolean(i));
@@ -205,10 +205,10 @@ public class Json {
             if (genericType instanceof ParameterizedType) {
                 try {
                     ParameterizedType pType = (ParameterizedType) genericType;
-                    Type[] args = pType.getActualTypeArguments();
+                    Type[]            args  = pType.getActualTypeArguments();
                     if (args.length == 1) {
-                        Class<?> type = Class.forName(args[0].getTypeName());
-                        int length = array.size();
+                        Class<?>     type   = Class.forName(args[0].getTypeName());
+                        int          length = array.size();
                         List<Object> result = new ArrayList<>(length);
                         for (int i = 0; i < length; i++) {
                             result.add(createObject(type, array.get(i)));
@@ -233,11 +233,11 @@ public class Json {
             if (genericType instanceof ParameterizedType) {
                 try {
                     ParameterizedType pType = (ParameterizedType) genericType;
-                    Type[] args = pType.getActualTypeArguments();
+                    Type[]            args  = pType.getActualTypeArguments();
                     if (args.length == 2) {
                         Class<?> keyClass = Class.forName(args[0].getTypeName());
                         if (keyClass == String.class) {
-                            Class<?> type = Class.forName(args[1].getTypeName());
+                            Class<?>            type   = Class.forName(args[1].getTypeName());
                             Map<String, Object> result = new HashMap<>();
                             for (String key : map.keySet()) {
                                 result.put(key, createObject(type, map.get(key)));
@@ -333,7 +333,7 @@ public class Json {
 
     /**
      * @param stream An {@link InputStream} to load JSON data from. {@link StandardCharsets#UTF_8}
-     *            will be used as the encoding when reading from the stream.
+     *               will be used as the encoding when reading from the stream.
      * @return The result of loading the data.
      */
     public static final Object parse(InputStream stream) throws IOException {
@@ -341,7 +341,7 @@ public class Json {
     }
 
     /**
-     * @param stream An {@link InputStream} to load JSON data from.
+     * @param stream   An {@link InputStream} to load JSON data from.
      * @param encoding The character encoding to use when reading from the stream.
      * @return The result of loading the data.
      */
@@ -571,9 +571,9 @@ public class Json {
     }
 
     /**
-     * @param obj An object to process.
+     * @param obj       An object to process.
      * @param allowNull <code>false</code> to return an empty string if the result would be
-     *            <code>null</code>.
+     *                  <code>null</code>.
      * @return The value associated with the object.
      */
     public static final String asString(Object obj, boolean allowNull) {
@@ -584,9 +584,9 @@ public class Json {
     }
 
     /**
-     * @param obj An object to process.
+     * @param obj       An object to process.
      * @param allowNull <code>false</code> to return an empty array if the object is
-     *            <code>null</code> or the value is not a {@link JsonArray}.
+     *                  <code>null</code> or the value is not a {@link JsonArray}.
      * @return The {@link JsonArray}.
      */
     public static final JsonArray asArray(Object obj, boolean allowNull) {
@@ -597,9 +597,9 @@ public class Json {
     }
 
     /**
-     * @param obj An object to process.
+     * @param obj       An object to process.
      * @param allowNull <code>false</code> to return an empty map if the object is <code>null</code>
-     *            or the value is not a {@link JsonMap}.
+     *                  or the value is not a {@link JsonMap}.
      * @return The {@link JsonMap}.
      */
     public static final JsonMap asMap(Object obj, boolean allowNull) {
@@ -610,9 +610,9 @@ public class Json {
     }
 
     /**
-     * @param obj An object to process.
+     * @param obj       An object to process.
      * @param allowNull <code>false</code> to return an empty point if the object is
-     *            <code>null</code> or the value cannot be converted to a {@link Point}.
+     *                  <code>null</code> or the value cannot be converted to a {@link Point}.
      * @return The value associated with the object.
      */
     public static final Point asPoint(Object obj, boolean allowNull) {
@@ -630,9 +630,9 @@ public class Json {
     }
 
     /**
-     * @param obj An object to process.
+     * @param obj       An object to process.
      * @param allowNull <code>false</code> to return an empty point if the object is
-     *            <code>null</code> or the value cannot be converted to a {@link Rectangle}.
+     *                  <code>null</code> or the value cannot be converted to a {@link Rectangle}.
      * @return The value associated with the object.
      */
     public static final Rectangle asRectangle(Object obj, boolean allowNull) {
@@ -789,40 +789,40 @@ public class Json {
             char last = ch;
             ch = string.charAt(i);
             switch (ch) {
-                case '\\':
-                case '"':
+            case '\\':
+            case '"':
+                buffer.append('\\');
+                buffer.append(ch);
+                break;
+            case '/':
+                if (last == '<') {
                     buffer.append('\\');
+                }
+                buffer.append(ch);
+                break;
+            case '\b':
+                buffer.append("\\b");
+                break;
+            case '\t':
+                buffer.append("\\t");
+                break;
+            case '\n':
+                buffer.append("\\n");
+                break;
+            case '\f':
+                buffer.append("\\f");
+                break;
+            case '\r':
+                buffer.append("\\r");
+                break;
+            default:
+                if (ch < ' ' || ch >= '\u0080' && ch < '\u00a0' || ch >= '\u2000' && ch < '\u2100') {
+                    String hex = "000" + Integer.toHexString(ch);
+                    buffer.append("\\u" + hex.substring(hex.length() - 4));
+                } else {
                     buffer.append(ch);
-                    break;
-                case '/':
-                    if (last == '<') {
-                        buffer.append('\\');
-                    }
-                    buffer.append(ch);
-                    break;
-                case '\b':
-                    buffer.append("\\b");
-                    break;
-                case '\t':
-                    buffer.append("\\t");
-                    break;
-                case '\n':
-                    buffer.append("\\n");
-                    break;
-                case '\f':
-                    buffer.append("\\f");
-                    break;
-                case '\r':
-                    buffer.append("\\r");
-                    break;
-                default:
-                    if (ch < ' ' || ch >= '\u0080' && ch < '\u00a0' || ch >= '\u2000' && ch < '\u2100') {
-                        String hex = "000" + Integer.toHexString(ch);
-                        buffer.append("\\u" + hex.substring(hex.length() - 4));
-                    } else {
-                        buffer.append(ch);
-                    }
-                    break;
+                }
+                break;
             }
         }
         buffer.append('"');
@@ -837,12 +837,12 @@ public class Json {
         int c;
         if (mUsePrevious) {
             mUsePrevious = false;
-            c = mPrevious;
+            c            = mPrevious;
         } else {
             c = mReader.read();
             if (c <= 0) { // End of stream
                 mEOF = true;
-                c = 0;
+                c    = 0;
             }
         }
         mIndex++;
@@ -869,22 +869,22 @@ public class Json {
     }
 
     private Object nextValue() throws IOException {
-        char c = nextSkippingWhitespace();
+        char   c = nextSkippingWhitespace();
         String s;
 
         switch (c) {
-            case '"':
-            case '\'':
-                return nextString(c);
-            case '{':
-                back();
-                return nextMap();
-            case '[':
-            case '(':
-                back();
-                return nextArray();
-            default:
-                break;
+        case '"':
+        case '\'':
+            return nextString(c);
+        case '{':
+            back();
+            return nextMap();
+        case '[':
+        case '(':
+            back();
+            return nextArray();
+        default:
+            break;
         }
 
         StringBuffer sb = new StringBuffer();
@@ -958,27 +958,27 @@ public class Json {
             }
             c = nextSkippingWhitespace();
             switch (c) {
-                case ';':
-                case ',':
-                    if (nextSkippingWhitespace() == ']') {
-                        return array;
-                    }
-                    back();
-                    break;
-                case ']':
-                case ')':
-                    if (q != c) {
-                        throw syntaxError("Expected a '" + Character.toString(q) + "'");
-                    }
+            case ';':
+            case ',':
+                if (nextSkippingWhitespace() == ']') {
                     return array;
-                default:
-                    throw syntaxError("Expected a ',' or ']'");
+                }
+                back();
+                break;
+            case ']':
+            case ')':
+                if (q != c) {
+                    throw syntaxError("Expected a '" + Character.toString(q) + "'");
+                }
+                return array;
+            default:
+                throw syntaxError("Expected a ',' or ']'");
             }
         }
     }
 
     private JsonMap nextMap() throws IOException {
-        char c;
+        char   c;
         String key;
 
         if (nextSkippingWhitespace() != '{') {
@@ -988,13 +988,13 @@ public class Json {
         while (true) {
             c = nextSkippingWhitespace();
             switch (c) {
-                case 0:
-                    throw syntaxError("JSON object text must end with '}'");
-                case '}':
-                    return map;
-                default:
-                    back();
-                    key = nextValue().toString();
+            case 0:
+                throw syntaxError("JSON object text must end with '}'");
+            case '}':
+                return map;
+            default:
+                back();
+                key = nextValue().toString();
             }
 
             c = nextSkippingWhitespace();
@@ -1011,67 +1011,67 @@ public class Json {
             map.put(key, nextValue());
 
             switch (nextSkippingWhitespace()) {
-                case ';':
-                case ',':
-                    if (nextSkippingWhitespace() == '}') {
-                        return map;
-                    }
-                    back();
-                    break;
-                case '}':
+            case ';':
+            case ',':
+                if (nextSkippingWhitespace() == '}') {
                     return map;
-                default:
-                    throw syntaxError("Expected a ',' or '}'");
+                }
+                back();
+                break;
+            case '}':
+                return map;
+            default:
+                throw syntaxError("Expected a ',' or '}'");
             }
         }
     }
 
     private String nextString(char quote) throws IOException {
-        char c;
+        char         c;
         StringBuffer buffer = new StringBuffer();
         for (;;) {
             c = next();
             switch (c) {
-                case 0:
-                case '\n':
-                case '\r':
-                    throw syntaxError("Unterminated string");
+            case 0:
+            case '\n':
+            case '\r':
+                throw syntaxError("Unterminated string");
+            case '\\':
+                c = next();
+                switch (c) {
+                case 'b':
+                    buffer.append('\b');
+                    break;
+                case 't':
+                    buffer.append('\t');
+                    break;
+                case 'n':
+                    buffer.append('\n');
+                    break;
+                case 'f':
+                    buffer.append('\f');
+                    break;
+                case 'r':
+                    buffer.append('\r');
+                    break;
+                case 'u':
+                    buffer.append((char) Integer.parseInt(next(4), 16));
+                    break;
+                case '"':
+                case '\'':
                 case '\\':
-                    c = next();
-                    switch (c) {
-                        case 'b':
-                            buffer.append('\b');
-                            break;
-                        case 't':
-                            buffer.append('\t');
-                            break;
-                        case 'n':
-                            buffer.append('\n');
-                            break;
-                        case 'f':
-                            buffer.append('\f');
-                            break;
-                        case 'r':
-                            buffer.append('\r');
-                            break;
-                        case 'u':
-                            buffer.append((char) Integer.parseInt(next(4), 16));
-                            break;
-                        case '"':
-                        case '\'':
-                        case '\\':
-                        case '/':
-                            buffer.append(c);
-                            break;
-                        default:
-                            throw syntaxError("Illegal escape.");
-                    }
+                case '/':
+                    buffer.append(c);
                     break;
                 default:
-                    if (c == quote) {
-                        return buffer.toString();
-                    }
-                    buffer.append(c);
+                    throw syntaxError("Illegal escape.");
+                }
+                break;
+            default:
+                if (c == quote) {
+                    return buffer.toString();
+                }
+                buffer.append(c);
             }
         }
     }
@@ -1083,7 +1083,7 @@ public class Json {
         mIndex--;
         mCharacter--;
         mUsePrevious = true;
-        mEOF = false;
+        mEOF         = false;
     }
 
     private String next(int n) throws IOException {
@@ -1092,7 +1092,7 @@ public class Json {
         }
 
         char[] buffer = new char[n];
-        int pos = 0;
+        int    pos    = 0;
 
         while (pos < n) {
             buffer[pos] = next();

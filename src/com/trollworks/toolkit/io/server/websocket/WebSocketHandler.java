@@ -24,7 +24,7 @@ public interface WebSocketHandler {
      * Called when text data has been received.
      *
      * @param webSocket The {@link WebSocket} the data was received from.
-     * @param data The text.
+     * @param data      The text.
      */
     void webSocketTextData(WebSocket webSocket, String data);
 
@@ -32,7 +32,7 @@ public interface WebSocketHandler {
      * Called when binary data has been received.
      *
      * @param webSocket The {@link WebSocket} the data was received from.
-     * @param data The data.
+     * @param data      The data.
      */
     void webSocketBinaryData(WebSocket webSocket, byte[] data);
 

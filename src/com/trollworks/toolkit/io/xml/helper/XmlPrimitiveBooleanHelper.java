@@ -23,8 +23,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlPrimitiveBooleanHelper implements XmlObjectHelper {
     public static final XmlPrimitiveBooleanHelper SINGLETON = new XmlPrimitiveBooleanHelper();
 
-    private XmlPrimitiveBooleanHelper() {
-    }
+    private XmlPrimitiveBooleanHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -33,8 +32,8 @@ public class XmlPrimitiveBooleanHelper implements XmlObjectHelper {
 
     @Override
     public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-        boolean value = field.getBoolean(obj);
-        XmlDefaultBoolean def = field.getAnnotation(XmlDefaultBoolean.class);
+        boolean           value = field.getBoolean(obj);
+        XmlDefaultBoolean def   = field.getAnnotation(XmlDefaultBoolean.class);
         if (def != null) {
             xml.addAttributeNot(name, value, def.value());
         } else {

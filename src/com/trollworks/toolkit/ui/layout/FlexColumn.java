@@ -26,16 +26,16 @@ public class FlexColumn extends FlexContainer {
 
     @Override
     protected void layoutSelf(Scale scale, Rectangle bounds) {
-        int count = getChildCount();
-        int vGap = scale.scale(getVerticalGap());
-        int[] gaps = new int[count > 0 ? count - 1 : 0];
+        int   count = getChildCount();
+        int   vGap  = scale.scale(getVerticalGap());
+        int[] gaps  = new int[count > 0 ? count - 1 : 0];
         for (int i = 0; i < gaps.length; i++) {
             gaps[i] = vGap;
         }
-        int height = vGap * (count > 0 ? count - 1 : 0);
-        Dimension[] minSizes = getChildSizes(scale, LayoutSize.MINIMUM);
+        int         height    = vGap * (count > 0 ? count - 1 : 0);
+        Dimension[] minSizes  = getChildSizes(scale, LayoutSize.MINIMUM);
         Dimension[] prefSizes = getChildSizes(scale, LayoutSize.PREFERRED);
-        Dimension[] maxSizes = getChildSizes(scale, LayoutSize.MAXIMUM);
+        Dimension[] maxSizes  = getChildSizes(scale, LayoutSize.MAXIMUM);
         for (int i = 0; i < count; i++) {
             height += prefSizes[i].height;
         }
@@ -63,27 +63,27 @@ public class FlexColumn extends FlexContainer {
                 extra = 0;
             }
         }
-        ArrayList<FlexCell> children = getChildren();
-        Rectangle[] childBounds = new Rectangle[count];
+        ArrayList<FlexCell> children    = getChildren();
+        Rectangle[]         childBounds = new Rectangle[count];
         for (int i = 0; i < count; i++) {
             childBounds[i] = new Rectangle(prefSizes[i]);
             if (getFillHorizontal()) {
                 childBounds[i].width = Math.min(maxSizes[i].width, bounds.width);
             }
             switch (children.get(i).getHorizontalAlignment()) {
-                case LEFT_TOP:
-                default:
-                    childBounds[i].x = bounds.x;
-                    break;
-                case CENTER:
-                    childBounds[i].x = bounds.x + (bounds.width - childBounds[i].width) / 2;
-                    break;
-                case RIGHT_BOTTOM:
-                    childBounds[i].x = bounds.x + bounds.width - childBounds[i].width;
-                    break;
+            case LEFT_TOP:
+            default:
+                childBounds[i].x = bounds.x;
+                break;
+            case CENTER:
+                childBounds[i].x = bounds.x + (bounds.width - childBounds[i].width) / 2;
+                break;
+            case RIGHT_BOTTOM:
+                childBounds[i].x = bounds.x + bounds.width - childBounds[i].width;
+                break;
             }
         }
-        int y = bounds.y;
+        int       y      = bounds.y;
         Alignment vAlign = getVerticalAlignment();
         if (vAlign == Alignment.CENTER) {
             y += extra / 2;
@@ -103,7 +103,7 @@ public class FlexColumn extends FlexContainer {
     @Override
     protected Dimension getSizeSelf(Scale scale, LayoutSize type) {
         Dimension[] sizes = getChildSizes(scale, type);
-        Dimension size = new Dimension(0, scale.scale(getVerticalGap()) * (sizes.length > 0 ? sizes.length - 1 : 0));
+        Dimension   size  = new Dimension(0, scale.scale(getVerticalGap()) * (sizes.length > 0 ? sizes.length - 1 : 0));
         for (Dimension one : sizes) {
             size.height += one.height;
             if (one.width > size.width) {

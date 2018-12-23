@@ -14,7 +14,7 @@ package com.trollworks.toolkit.utility.units;
 /** Specifies the methods a type of unit must implement. */
 public interface Units {
     /**
-     * @param value The value to format.
+     * @param value    The value to format.
      * @param localize Whether or not the number should be localized.
      * @return The formatted value.
      */

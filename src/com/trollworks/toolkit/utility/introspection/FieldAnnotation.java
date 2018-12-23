@@ -19,7 +19,7 @@ public final class FieldAnnotation<T extends Annotation> {
     private T     mAnnotation;
 
     public FieldAnnotation(Field field, T annotation) {
-        mField = field;
+        mField      = field;
         mAnnotation = annotation;
     }
 

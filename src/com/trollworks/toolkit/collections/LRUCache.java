@@ -25,7 +25,7 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
      * Creates a new {@link LRUCache}.
      *
      * @param maxEntries The maximum number of entries to be in the cache. Older entries are removed
-     *            first.
+     *                   first.
      */
     public LRUCache(int maxEntries) {
         super(16, 0.75f, true);

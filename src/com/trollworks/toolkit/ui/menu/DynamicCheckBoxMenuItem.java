@@ -67,7 +67,7 @@ public class DynamicCheckBoxMenuItem extends JCheckBoxMenuItem {
     /**
      * Creates a new {@link DynamicCheckBoxMenuItem}.
      *
-     * @param text The text to use.
+     * @param text    The text to use.
      * @param checked The initial state to use.
      */
     public DynamicCheckBoxMenuItem(String text, boolean checked) {
@@ -77,8 +77,8 @@ public class DynamicCheckBoxMenuItem extends JCheckBoxMenuItem {
     /**
      * Creates a new {@link DynamicCheckBoxMenuItem}.
      *
-     * @param text The text to use.
-     * @param icon The icon to use.
+     * @param text    The text to use.
+     * @param icon    The icon to use.
      * @param checked The initial state to use.
      */
     public DynamicCheckBoxMenuItem(String text, Icon icon, boolean checked) {

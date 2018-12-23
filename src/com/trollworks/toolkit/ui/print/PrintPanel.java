@@ -75,7 +75,7 @@ public class PrintPanel extends PageSetupPanel {
      * Creates a new print panel.
      *
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
      */
     public PrintPanel(PrintService service, PrintRequestAttributeSet set) {
         super(service, set);
@@ -104,15 +104,15 @@ public class PrintPanel extends PageSetupPanel {
     private void createPageRangeFields(PrintRequestAttributeSet set) {
         PrintService service = getService();
         if (service.isAttributeCategorySupported(PageRanges.class)) {
-            ButtonGroup group = new ButtonGroup();
-            int start = 1;
-            int end = 9999;
-            PageRanges pageRanges = (PageRanges) set.get(PageRanges.class);
+            ButtonGroup group      = new ButtonGroup();
+            int         start      = 1;
+            int         end        = 9999;
+            PageRanges  pageRanges = (PageRanges) set.get(PageRanges.class);
             if (pageRanges != null) {
                 int[][] ranges = pageRanges.getMembers();
                 if (ranges.length > 0 && ranges[0].length > 1) {
                     start = ranges[0][0];
-                    end = ranges[0][1];
+                    end   = ranges[0][1];
                 } else {
                     pageRanges = null;
                 }
@@ -134,10 +134,10 @@ public class PrintPanel extends PageSetupPanel {
             mPageRangeAll.addActionListener(this);
             mPageRangeSome.addActionListener(this);
         } else {
-            mPageRangeAll = null;
-            mPageRangeSome = null;
+            mPageRangeAll   = null;
+            mPageRangeSome  = null;
             mPageRangeStart = null;
-            mPageRangeEnd = null;
+            mPageRangeEnd   = null;
         }
     }
 
@@ -165,11 +165,11 @@ public class PrintPanel extends PageSetupPanel {
                 PrintUtilities.setPageRanges(set, null);
             } else {
                 int start = ((Integer) mPageRangeStart.getValue()).intValue();
-                int end = ((Integer) mPageRangeEnd.getValue()).intValue();
+                int end   = ((Integer) mPageRangeEnd.getValue()).intValue();
                 if (start > end) {
                     int tmp = start;
                     start = end;
-                    end = tmp;
+                    end   = tmp;
                 }
                 PrintUtilities.setPageRanges(set, new PageRanges(start, end));
             }

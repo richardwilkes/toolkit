@@ -34,17 +34,17 @@ public class UniqueID {
      * Creates a unique ID.
      *
      * @param uniqueID An ID obtained by called {@link #toString()} on a previous instance of
-     *            {@link UniqueID}.
+     *                 {@link UniqueID}.
      */
     public UniqueID(String uniqueID) {
         long id;
         try {
             int colon = uniqueID.indexOf(':');
             mTimeStamp = Long.parseLong(uniqueID.substring(0, colon), Character.MAX_RADIX);
-            id = Long.parseLong(uniqueID.substring(colon + 1), Character.MAX_RADIX);
+            id         = Long.parseLong(uniqueID.substring(colon + 1), Character.MAX_RADIX);
         } catch (Exception exception) {
             mTimeStamp = System.currentTimeMillis();
-            id = RANDOM.nextLong();
+            id         = RANDOM.nextLong();
         }
         mSubID = id;
     }
@@ -53,13 +53,13 @@ public class UniqueID {
      * Creates a unique ID.
      *
      * @param timeStamp The time stamp for this unique ID. Typically, the result of a call to
-     *            {@link System#currentTimeMillis()}.
-     * @param subID The sub-ID for this unique ID. Typically, the result of a call to
-     *            {@link Random#nextLong()}.
+     *                  {@link System#currentTimeMillis()}.
+     * @param subID     The sub-ID for this unique ID. Typically, the result of a call to
+     *                  {@link Random#nextLong()}.
      */
     public UniqueID(long timeStamp, long subID) {
         mTimeStamp = timeStamp;
-        mSubID = subID;
+        mSubID     = subID;
     }
 
     @Override

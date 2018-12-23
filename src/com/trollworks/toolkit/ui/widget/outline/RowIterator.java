@@ -40,7 +40,7 @@ public class RowIterator<T extends Row> implements Iterator<T>, Iterable<T> {
      * Creates an iterator that will iterate over all rows (disclosed or not) in the specified
      * outline model.
      *
-     * @param model The model to iterator over.
+     * @param model  The model to iterator over.
      * @param filter The filter to use.
      */
     @SuppressWarnings("unchecked")
@@ -49,7 +49,7 @@ public class RowIterator<T extends Row> implements Iterator<T>, Iterable<T> {
     }
 
     private RowIterator(List<T> rows, Filter<T> filter) {
-        mList = rows;
+        mList   = rows;
         mFilter = filter;
     }
 

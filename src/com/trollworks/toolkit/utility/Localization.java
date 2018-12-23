@@ -47,7 +47,7 @@ public class Localization implements PrivilegedAction<Object> {
         if (override != null) {
             Locale.setDefault(override);
         }
-        String nl = Locale.getDefault().toString();
+        String            nl     = Locale.getDefault().toString();
         ArrayList<String> result = new ArrayList<>(4);
         while (true) {
             result.add(nl);
@@ -126,8 +126,8 @@ public class Localization implements PrivilegedAction<Object> {
     }
 
     private Localization(Class<?> theClass) {
-        mClass = theClass;
-        mBundleName = theClass.getName();
+        mClass        = theClass;
+        mBundleName   = theClass.getName();
         mIsAccessible = (mClass.getModifiers() & Modifier.PUBLIC) != 0;
     }
 

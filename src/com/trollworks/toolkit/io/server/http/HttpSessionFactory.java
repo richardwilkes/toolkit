@@ -39,7 +39,7 @@ public class HttpSessionFactory implements SessionFactory {
     }
 
     /**
-     * @param uri The URI to register a {@link HttpRequestHandler} for.
+     * @param uri     The URI to register a {@link HttpRequestHandler} for.
      * @param handler The {@link HttpRequestHandler} to use for the specified URI.
      * @return Any existing {@link HttpRequestHandler} for the specified URI, or <code>null</code>
      *         if there was none.
@@ -58,7 +58,7 @@ public class HttpSessionFactory implements SessionFactory {
     }
 
     /**
-     * @param uri The URI to register a {@link WebSocketFactory} for.
+     * @param uri     The URI to register a {@link WebSocketFactory} for.
      * @param handler The {@link WebSocketFactory} to use for the specified URI.
      * @return Any existing {@link WebSocketFactory} for the specified URI, or <code>null</code> if
      *         there was none.

@@ -109,7 +109,7 @@ public class Introspection {
     @SuppressWarnings("unchecked")
     public static <T extends Annotation> List<FieldAnnotation<T>> getDeepFieldAnnotations(Class<?> cls, Class<T> annotationCls) {
         synchronized (CLASS_FIELD_ANNOTATION_MAP) {
-            ClassAnnotation<T> ca = new ClassAnnotation<>(cls, annotationCls);
+            ClassAnnotation<T>       ca          = new ClassAnnotation<>(cls, annotationCls);
             List<FieldAnnotation<?>> annotations = CLASS_DEEP_FIELD_ANNOTATION_MAP.get(ca);
             if (annotations == null) {
                 annotations = new ArrayList<>();
@@ -129,7 +129,7 @@ public class Introspection {
     @SuppressWarnings("unchecked")
     public static <T extends Annotation> List<FieldAnnotation<T>> getFieldAnnotations(Class<?> cls, Class<T> annotationCls) {
         synchronized (CLASS_FIELD_ANNOTATION_MAP) {
-            ClassAnnotation<T> ca = new ClassAnnotation<>(cls, annotationCls);
+            ClassAnnotation<T>       ca          = new ClassAnnotation<>(cls, annotationCls);
             List<FieldAnnotation<?>> annotations = CLASS_FIELD_ANNOTATION_MAP.get(ca);
             if (annotations == null) {
                 annotations = new ArrayList<>();

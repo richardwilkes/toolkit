@@ -32,16 +32,16 @@ public class Selection {
      * @param owner The owner of this selection.
      */
     public Selection(SelectionOwner owner) {
-        mOwner = owner;
+        mOwner     = owner;
         mSelection = new BitSet();
-        mAnchor = -1;
+        mAnchor    = -1;
     }
 
     /**
      * Creates a new selection.
      *
      * @param owner The owner of this selection.
-     * @param size The initial size.
+     * @param size  The initial size.
      */
     public Selection(SelectionOwner owner, int size) {
         this(owner);
@@ -54,10 +54,10 @@ public class Selection {
      * @param other The selection to clone.
      */
     public Selection(Selection other) {
-        mOwner = other.mOwner;
+        mOwner     = other.mOwner;
         mSelection = (BitSet) other.mSelection.clone();
-        mSize = other.mSize;
-        mAnchor = other.mAnchor;
+        mSize      = other.mSize;
+        mAnchor    = other.mAnchor;
     }
 
     /** @return The anchor index (used when extending selections). */
@@ -137,11 +137,11 @@ public class Selection {
     /** @return An array of selected indexes. */
     public int[] getSelectedIndexes() {
         int[] array = new int[getCount()];
-        int i = 0;
-        int index = firstSelectedIndex();
+        int   i     = 0;
+        int   index = firstSelectedIndex();
         while (index != -1) {
             array[i++] = index;
-            index = nextSelectedIndex(index + 1);
+            index      = nextSelectedIndex(index + 1);
         }
         return array;
     }
@@ -166,8 +166,8 @@ public class Selection {
      * anchor is set to the <code>index</code>.
      *
      * @param index The index to select.
-     * @param add Pass in <code>true</code> to add the index to the current selection,
-     *            <code>false</code> to replace the current selection.
+     * @param add   Pass in <code>true</code> to add the index to the current selection,
+     *              <code>false</code> to replace the current selection.
      */
     public void select(int index, boolean add) {
         BitSet newSel = (BitSet) mSelection.clone();
@@ -191,9 +191,9 @@ public class Selection {
      * <code>fromIndex</code>.
      *
      * @param fromIndex The first index to select.
-     * @param toIndex The last index to select.
-     * @param add Pass in <code>true</code> to add the range to the current selection,
-     *            <code>false</code> to replace the current selection.
+     * @param toIndex   The last index to select.
+     * @param add       Pass in <code>true</code> to add the range to the current selection,
+     *                  <code>false</code> to replace the current selection.
      */
     public void select(int fromIndex, int toIndex, boolean add) {
         BitSet newSel = (BitSet) mSelection.clone();
@@ -208,7 +208,7 @@ public class Selection {
         if (fromIndex > toIndex) {
             int tmp = fromIndex;
             fromIndex = toIndex;
-            toIndex = tmp;
+            toIndex   = tmp;
         }
         if (fromIndex < mSize) {
             if (toIndex >= mSize) {
@@ -224,8 +224,8 @@ public class Selection {
      * the anchor is set to the first index, if any.
      *
      * @param indexes The indexes to select.
-     * @param add Pass in <code>true</code> to add the indexes to the current selection,
-     *            <code>false</code> to replace the current selection.
+     * @param add     Pass in <code>true</code> to add the indexes to the current selection,
+     *                <code>false</code> to replace the current selection.
      */
     public void select(int[] indexes, boolean add) {
         BitSet newSel = (BitSet) mSelection.clone();
@@ -236,7 +236,7 @@ public class Selection {
         index = index < mSize ? index : -1;
         if (index == -1) {
             if (indexes.length > 0) {
-                index = indexes[0];
+                index   = indexes[0];
                 mAnchor = index < 0 || index >= mSize ? -1 : index;
             } else {
                 mAnchor = -1;
@@ -370,9 +370,9 @@ public class Selection {
     /**
      * Helper method for selecting one or more indexes by mouse.
      *
-     * @param index The index that was clicked on.
+     * @param index  The index that was clicked on.
      * @param method The type of click, one of {@link #MOUSE_NONE}, {@link #MOUSE_EXTEND}, or
-     *            {@link #MOUSE_FLIP}.
+     *               {@link #MOUSE_FLIP}.
      * @return <code>-1</code> if no selection on mouse-up should occur, or the passed in index if
      *         selection on mouse-up is a possibility.
      */
@@ -430,14 +430,14 @@ public class Selection {
      * Deselects the range <code>fromIndex</code> (inclusive) to <code>toIndex</code> (inclusive).
      *
      * @param fromIndex The first index to deselect.
-     * @param toIndex The last index to deselect.
+     * @param toIndex   The last index to deselect.
      */
     public void deselect(int fromIndex, int toIndex) {
         BitSet newSel = (BitSet) mSelection.clone();
         if (fromIndex > toIndex) {
             int tmp = fromIndex;
             fromIndex = toIndex;
-            toIndex = tmp;
+            toIndex   = tmp;
         }
         newSel.clear(fromIndex, toIndex + 1);
         if (mAnchor >= fromIndex && mAnchor <= toIndex) {

@@ -122,8 +122,8 @@ public class AreaTree {
     /**
      * Adds all objects that intersect with the coordinates x &amp; y to the passed in list.
      *
-     * @param x The x coordinate to search with.
-     * @param y The y coordinate to search with.
+     * @param x      The x coordinate to search with.
+     * @param y      The y coordinate to search with.
      * @param result Filled in with the list of objects that match.
      * @return <code>false</code> if nothing was found.
      */
@@ -142,7 +142,7 @@ public class AreaTree {
     }
 
     /**
-     * @param location The location to search with.
+     * @param location    The location to search with.
      * @param targetClass The class of object for which we're looking
      * @return All objects that intersect with <code>location</code> and are instances of the target
      *         class.
@@ -157,7 +157,7 @@ public class AreaTree {
      * Adds all objects that intersect with the <code>location</code> to the passed in list.
      *
      * @param location The location to search with.
-     * @param result Filled in with the list of objects that match.
+     * @param result   Filled in with the list of objects that match.
      * @return <code>false</code> if nothing was found.
      */
     public boolean search(Point location, ArrayList<AreaObject> result) {
@@ -186,9 +186,9 @@ public class AreaTree {
     }
 
     /**
-     * @param bounds The bounds to search with.
+     * @param bounds     The bounds to search with.
      * @param exactMatch <code>true</code> to match coordinates exactly, <code>false</code> only
-     *            require an intersection.
+     *                   require an intersection.
      * @return All objects that intersect with <code>bounds</code>. If <code>exactMatch</code> is
      *         <code>true</code>, then only those objects that have the exact same coordinates as
      *         <code>bounds</code>.
@@ -200,7 +200,7 @@ public class AreaTree {
     }
 
     /**
-     * @param bounds The bounds to search with.
+     * @param bounds      The bounds to search with.
      * @param targetClass The class of object for which we're looking
      * @return All objects that intersect with <code>bounds</code> and are instances of the target
      *         class.
@@ -216,10 +216,10 @@ public class AreaTree {
      * coordinates as <code>bounds</code>, otherwise, adds all objects that intersect with
      * <code>bounds</code> to the passed in list.
      *
-     * @param bounds The bounds to search with.
+     * @param bounds     The bounds to search with.
      * @param exactMatch <code>true</code> to match coordinates exactly, <code>false</code> only
-     *            require an intersection.
-     * @param result Filled in with the list of objects that match.
+     *                   require an intersection.
+     * @param result     Filled in with the list of objects that match.
      * @return <code>false</code> if nothing was found.
      */
     public boolean search(Rectangle bounds, boolean exactMatch, ArrayList<AreaObject> result) {
@@ -255,9 +255,9 @@ public class AreaTree {
     }
 
     /**
-     * @param bounds The bounds to search with.
+     * @param bounds     The bounds to search with.
      * @param exactMatch <code>true</code> to match coordinates exactly, <code>false</code> only
-     *            require an intersection.
+     *                   require an intersection.
      * @return The count of objects that intersect with <code>bounds</code>. If
      *         <code>exactMatch</code> is <code>true</code>, then only those objects that have the
      *         exact same coordinates as <code>bounds</code> are counted.
@@ -268,7 +268,7 @@ public class AreaTree {
 
     /**
      * @param location The location to search with. <code>location</code> must not be
-     *            <code>null</code>.
+     *                 <code>null</code>.
      * @return <code>true</code> if there are any objects that intersect with <code>location</code>.
      */
     public boolean searchHit(Point location) {
@@ -284,7 +284,8 @@ public class AreaTree {
     }
 
     /**
-     * @param bounds The bounds to search with. <code>bounds</code> must not be <code>null</code>.
+     * @param bounds      The bounds to search with. <code>bounds</code> must not be
+     *                    <code>null</code>.
      * @param targetClass The class of object for which we're looking
      * @return <code>true</code> if there are any objects of the target class that intersect with
      *         <code>bounds</code>.

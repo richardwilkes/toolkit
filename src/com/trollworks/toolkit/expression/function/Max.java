@@ -34,10 +34,10 @@ public class Max implements ExpressionFunction {
     @Override
     public final Object execute(Evaluator evaluator, String arguments) throws EvaluationException {
         try {
-            Evaluator ev = new Evaluator(evaluator);
+            Evaluator         ev        = new Evaluator(evaluator);
             ArgumentTokenizer tokenizer = new ArgumentTokenizer(arguments);
-            double arg1 = ArgumentTokenizer.getDouble(ev.evaluate(tokenizer.nextToken()));
-            double arg2 = ArgumentTokenizer.getDouble(ev.evaluate(tokenizer.nextToken()));
+            double            arg1      = ArgumentTokenizer.getDouble(ev.evaluate(tokenizer.nextToken()));
+            double            arg2      = ArgumentTokenizer.getDouble(ev.evaluate(tokenizer.nextToken()));
             return Double.valueOf(Math.max(arg1, arg2));
         } catch (Exception exception) {
             throw new EvaluationException(INVALID_ARGUMENTS, exception);

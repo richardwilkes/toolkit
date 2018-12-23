@@ -19,14 +19,14 @@ public abstract class Operator {
     private boolean mUnary;
 
     protected Operator(String symbol, int precedence) {
-        mSymbol = symbol;
+        mSymbol     = symbol;
         mPrecedence = precedence;
     }
 
     protected Operator(String symbol, int precedence, boolean unary) {
-        mSymbol = symbol;
+        mSymbol     = symbol;
         mPrecedence = precedence;
-        mUnary = unary;
+        mUnary      = unary;
     }
 
     public abstract Object evaluate(Object left, Object right) throws EvaluationException;

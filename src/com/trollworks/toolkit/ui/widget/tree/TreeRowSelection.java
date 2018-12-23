@@ -28,11 +28,11 @@ public class TreeRowSelection implements Transferable {
     /**
      * Creates a new transferable row object.
      *
-     * @param rows The {@link TreeRow}s to transfer.
+     * @param rows     The {@link TreeRow}s to transfer.
      * @param openRows The {@link TreeContainerRow}s within rows which are 'open'.
      */
     public TreeRowSelection(Collection<TreeRow> rows, Collection<TreeContainerRow> openRows) {
-        mRows = new ArrayList<>(rows);
+        mRows     = new ArrayList<>(rows);
         mOpenRows = new HashSet<>(openRows);
     }
 

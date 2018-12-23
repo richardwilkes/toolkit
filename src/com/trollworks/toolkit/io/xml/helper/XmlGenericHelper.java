@@ -22,8 +22,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlGenericHelper implements XmlObjectHelper {
     public static final XmlGenericHelper SINGLETON = new XmlGenericHelper();
 
-    private XmlGenericHelper() {
-    }
+    private XmlGenericHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -34,8 +33,8 @@ public class XmlGenericHelper implements XmlObjectHelper {
     public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
         Object value = field.get(obj);
         if (value != null) {
-            String stringValue = value.toString();
-            XmlDefault def = field.getAnnotation(XmlDefault.class);
+            String     stringValue = value.toString();
+            XmlDefault def         = field.getAnnotation(XmlDefault.class);
             if (def != null) {
                 xml.addAttributeNot(name, stringValue, def.value());
             } else {
@@ -46,9 +45,9 @@ public class XmlGenericHelper implements XmlObjectHelper {
 
     @Override
     public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-        Object instance = null;
-        XmlDefault def = field.getAnnotation(XmlDefault.class);
-        String value = context.getParser().getAttribute(name, def != null ? def.value() : null);
+        Object     instance = null;
+        XmlDefault def      = field.getAnnotation(XmlDefault.class);
+        String     value    = context.getParser().getAttribute(name, def != null ? def.value() : null);
         if (value != null && !value.isEmpty()) {
             Class<?> type = field.getType();
             try {

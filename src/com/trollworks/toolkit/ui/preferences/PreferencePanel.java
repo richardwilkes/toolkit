@@ -74,7 +74,7 @@ public abstract class PreferencePanel extends JPanel {
     /**
      * Creates a right-aligned {@link JLabel} suitable for use within the preference panel.
      *
-     * @param title The title to use.
+     * @param title   The title to use.
      * @param tooltip The tooltip to use.
      * @return The newly created {@link JLabel}.
      */
@@ -85,8 +85,8 @@ public abstract class PreferencePanel extends JPanel {
     /**
      * Creates a {@link JLabel} suitable for use within the preference panel.
      *
-     * @param title The title to use.
-     * @param tooltip The tooltip to use.
+     * @param title     The title to use.
+     * @param tooltip   The tooltip to use.
      * @param alignment The alignment to use.
      * @return The newly created {@link JLabel}.
      */
@@ -97,9 +97,9 @@ public abstract class PreferencePanel extends JPanel {
     /**
      * Creates a right-aligned {@link JLabel} suitable for use within the preference panel.
      *
-     * @param title The title to use.
+     * @param title   The title to use.
      * @param tooltip The tooltip to use.
-     * @param icon The {@link Icon} to use.
+     * @param icon    The {@link Icon} to use.
      * @return The newly created {@link JLabel}.
      */
     protected JLabel createLabel(String title, String tooltip, Icon icon) {
@@ -109,9 +109,9 @@ public abstract class PreferencePanel extends JPanel {
     /**
      * Creates a {@link JLabel} suitable for use within the preference panel.
      *
-     * @param title The title to use.
-     * @param tooltip The tooltip to use.
-     * @param icon The {@link Icon} to use.
+     * @param title     The title to use.
+     * @param tooltip   The tooltip to use.
+     * @param icon      The {@link Icon} to use.
      * @param alignment The alignment to use.
      * @return The newly created {@link JLabel}.
      */
@@ -139,7 +139,7 @@ public abstract class PreferencePanel extends JPanel {
     /**
      * Creates a {@link JCheckBox} suitable for use within the preference panel.
      *
-     * @param title The title to use.
+     * @param title   The title to use.
      * @param tooltip The tooltip to use.
      * @param checked Whether the initial state should be checked.
      * @return The newly created {@link JCheckBox}.
@@ -158,7 +158,7 @@ public abstract class PreferencePanel extends JPanel {
     /**
      * Sets up a {@link JComboBox} suitable for use within the preference panel.
      *
-     * @param combo The {@link JComboBox} to prepare.
+     * @param combo   The {@link JComboBox} to prepare.
      * @param tooltip The tooltip to use.
      */
     protected void setupCombo(JComboBox<?> combo, String tooltip) {

@@ -154,8 +154,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     @Override
     public void mouseMoved(MouseEvent event) {
-        Point where = event.getPoint();
-        DirectScrollPanelArea area = checkAndConvertToArea(where);
+        Point                 where = event.getPoint();
+        DirectScrollPanelArea area  = checkAndConvertToArea(where);
         if (area != DirectScrollPanelArea.NONE) {
             setColumnDividerHighlight(where.x);
         }
@@ -163,7 +163,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     private boolean setColumnDividerHighlight(int x) {
         int oldDividerIndex = mMouseOverColumnDivider;
-        int dividerIndex = mAllowColumnResize ? overColumnDivider(x) : -1;
+        int dividerIndex    = mAllowColumnResize ? overColumnDivider(x) : -1;
         setCursor(dividerIndex == -1 ? Cursor.getDefaultCursor() : Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
         mMouseOverColumnDivider = dividerIndex;
         if (oldDividerIndex != dividerIndex) {
@@ -194,54 +194,54 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         requestFocusInWindow();
         Point where = event.getPoint();
         mRowToSelectOnMouseUp = null;
-        mViewArea = checkAndConvertToArea(where);
+        mViewArea             = checkAndConvertToArea(where);
         if (mViewArea != DirectScrollPanelArea.NONE) {
             mDragStart = new Point(where);
             if (setColumnDividerHighlight(mDragStart.x)) {
                 mDragColumnDivider = mMouseOverColumnDivider;
             } else {
                 switch (mViewArea) {
-                    case CONTENT:
-                        TreeContainerRow disclosureRow = overDisclosureControl(mDragStart.x, mDragStart.y);
-                        if (disclosureRow != null) {
-                            setOpen(!isOpen(disclosureRow), disclosureRow);
-                        } else {
-                            TreeRow row = overRow(mDragStart.y);
-                            if (row != null) {
-                                if (mAnchorRow != null && event.isShiftDown()) {
-                                    select(mAnchorRow, row, true);
-                                } else if ((event.getModifiersEx() & getToolkit().getMenuShortcutKeyMaskEx()) != 0 && !event.isPopupTrigger()) {
-                                    if (isSelected(row)) {
-                                        deselect(row);
-                                    } else {
-                                        select(row, true);
-                                    }
-                                } else if (!isSelected(row)) {
-                                    select(row, false);
-                                } else if (mSelectedRows.size() != 1) {
-                                    mRowToSelectOnMouseUp = row;
+                case CONTENT:
+                    TreeContainerRow disclosureRow = overDisclosureControl(mDragStart.x, mDragStart.y);
+                    if (disclosureRow != null) {
+                        setOpen(!isOpen(disclosureRow), disclosureRow);
+                    } else {
+                        TreeRow row = overRow(mDragStart.y);
+                        if (row != null) {
+                            if (mAnchorRow != null && event.isShiftDown()) {
+                                select(mAnchorRow, row, true);
+                            } else if ((event.getModifiersEx() & getToolkit().getMenuShortcutKeyMaskEx()) != 0 && !event.isPopupTrigger()) {
+                                if (isSelected(row)) {
+                                    deselect(row);
+                                } else {
+                                    select(row, true);
                                 }
-                            } else {
-                                deselect();
+                            } else if (!isSelected(row)) {
+                                select(row, false);
+                            } else if (mSelectedRows.size() != 1) {
+                                mRowToSelectOnMouseUp = row;
                             }
-                            if (event.isPopupTrigger()) {
-                                mRowToSelectOnMouseUp = null;
-                                showContextMenuForContent(where);
-                            }
+                        } else {
+                            deselect();
                         }
-                        break;
-                    case HEADER:
-                        TreeColumn column = overColumn(where.x);
                         if (event.isPopupTrigger()) {
-                            if (column != null && mAllowColumnContextMenu) {
-                                showContextMenuForColumn(where, column);
-                            }
-                        } else if (mUserSortable) {
-                            mSortColumn = column;
+                            mRowToSelectOnMouseUp = null;
+                            showContextMenuForContent(where);
                         }
-                        break;
-                    default:
-                        break;
+                    }
+                    break;
+                case HEADER:
+                    TreeColumn column = overColumn(where.x);
+                    if (event.isPopupTrigger()) {
+                        if (column != null && mAllowColumnContextMenu) {
+                            showContextMenuForColumn(where, column);
+                        }
+                    } else if (mUserSortable) {
+                        mSortColumn = column;
+                    }
+                    break;
+                default:
+                    break;
                 }
             }
         }
@@ -250,7 +250,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     /**
      * Called to display a context menu for a {@link TreeColumn}.
      *
-     * @param where The point that was clicked, in header area coordinates.
+     * @param where  The point that was clicked, in header area coordinates.
      * @param column The {@link TreeColumn} that was clicked on.
      */
     protected void showContextMenuForColumn(Point where, TreeColumn column) {
@@ -280,7 +280,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         Rectangle bounds = getBounds();
         bounds.x = 0;
         bounds.y = 0;
-        Point where = event.getPoint();
+        Point   where  = event.getPoint();
         boolean inside = bounds.contains(where);
         mViewArea.convertPoint(this, where);
         if (mDragColumnDivider != -1) {
@@ -337,8 +337,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     private void dragColumnDivider(int x) {
         TreeColumn column = mColumns.get(mDragColumnDivider);
-        int start = getColumnStart(mDragColumnDivider);
-        int min = start + column.getMinimumWidth(this);
+        int        start  = getColumnStart(mDragColumnDivider);
+        int        min    = start + column.getMinimumWidth(this);
         if (mShowDisclosureControls && mDragColumnDivider == 0) {
             min += INDENT;
         }
@@ -460,9 +460,9 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     /**
      * @param height The row height for each row. If this is <code>0</code>, then each row may have
-     *            a separate height, as calculated by asking each column to compute a height for
-     *            each row. <b>WARNING</b>: Using anything other than fixed row heights can cause
-     *            severe performance problems when large numbers of rows are visible.
+     *               a separate height, as calculated by asking each column to compute a height for
+     *               each row. <b>WARNING</b>: Using anything other than fixed row heights can cause
+     *               severe performance problems when large numbers of rows are visible.
      */
     public final void setRowHeight(int height) {
         if (mRowHeight != height) {
@@ -505,7 +505,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     }
 
     /**
-     * @param index The index to insert at.
+     * @param index  The index to insert at.
      * @param column The {@link TreeColumn} to add.
      */
     public void addColumn(int index, TreeColumn column) {
@@ -515,7 +515,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     }
 
     /**
-     * @param index The index to insert at.
+     * @param index   The index to insert at.
      * @param columns The {@link TreeColumn}s to add.
      */
     public void addColumn(int index, List<TreeColumn> columns) {
@@ -548,16 +548,16 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     @Override
     public Dimension getPreferredHeaderSize() {
-        int width = 0;
+        int width  = 0;
         int height = 0;
         if (mShowHeader) {
             for (TreeColumn column : mColumns) {
                 Dimension headerSize = column.calculatePreferredHeaderSize(this);
-                width += headerSize.width;
-                height = Math.max(headerSize.height, height);
+                width  += headerSize.width;
+                height  = Math.max(headerSize.height, height);
             }
             int columnDividerWidth = getColumnDividerWidth();
-            int size = mColumns.size() - 1;
+            int size               = mColumns.size() - 1;
             if (size > 0) {
                 width += size * columnDividerWidth;
             }
@@ -568,8 +568,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     @Override
     public Dimension getPreferredContentSize() {
-        int width = 0;
-        int height = 0;
+        int width         = 0;
+        int height        = 0;
         int dividerHeight = getRowDividerHeight();
         for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
             height += getRowHeight(row) + dividerHeight;
@@ -632,10 +632,10 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     private int calculateHeight(TreeRow row) {
         int height = 0;
-        int count = mColumns.size();
+        int count  = mColumns.size();
         for (int i = 0; i < count; i++) {
-            TreeColumn column = mColumns.get(i);
-            int colWidth = column.getWidth();
+            TreeColumn column   = mColumns.get(i);
+            int        colWidth = column.getWidth();
             if (mShowDisclosureControls && i == 0) {
                 colWidth -= INDENT * row.getDepth();
             }
@@ -668,13 +668,13 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     @Override
     public void drawHeader(Graphics2D gc) {
         super.drawHeader(gc);
-        boolean active = isFocusOwner();
-        Rectangle clipBounds = gc.getClipBounds();
-        int left = clipBounds.x;
-        int right = clipBounds.x + clipBounds.width;
-        Rectangle colBounds = getHeaderViewBounds();
-        int dividerWidth = getColumnDividerWidth();
-        colBounds.x = 0;
+        boolean   active       = isFocusOwner();
+        Rectangle clipBounds   = gc.getClipBounds();
+        int       left         = clipBounds.x;
+        int       right        = clipBounds.x + clipBounds.width;
+        Rectangle colBounds    = getHeaderViewBounds();
+        int       dividerWidth = getColumnDividerWidth();
+        colBounds.x       = 0;
         colBounds.height -= dividerWidth;
         int count = mColumns.size();
         for (int i = 0; i < count; i++) {
@@ -699,7 +699,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         }
         if (!isDrawingDragImage() && mDragState != null && mDragState.isHeaderFocus()) {
             Composite savedComposite = gc.getComposite();
-            Color savedColor = gc.getColor();
+            Color     savedColor     = gc.getColor();
             setHighlightColorAndComposite(gc);
             Rectangle bounds = getHeaderViewBounds();
             gc.fillRect(bounds.x + DRAG_FOCUS_WIDTH, bounds.y, bounds.width - DRAG_FOCUS_WIDTH * 2, DRAG_FOCUS_WIDTH);
@@ -716,18 +716,18 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     @Override
     public void drawContents(Graphics2D gc) {
         super.drawContents(gc);
-        boolean active = isFocusOwner();
+        boolean   active = isFocusOwner();
         Rectangle bounds = getContentViewBounds();
-        int min = bounds.y;
-        int max = min + bounds.height;
-        int y = 0;
+        int       min    = bounds.y;
+        int       max    = min + bounds.height;
+        int       y      = 0;
         if (mResizePending && mResizeRow != null) {
             y = min - getRowBounds(mResizeRow).y;
         }
-        int count = 0;
-        int dividerHeight = getRowDividerHeight();
-        Rectangle dragClip = getDragClip();
-        boolean drawingDragImage = isDrawingDragImage();
+        int       count            = 0;
+        int       dividerHeight    = getRowDividerHeight();
+        Rectangle dragClip         = getDragClip();
+        boolean   drawingDragImage = isDrawingDragImage();
         for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
             int height = getRowHeight(row) + dividerHeight;
             if (y + height > min) {
@@ -755,7 +755,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
             setDragClip(dragClip);
         } else if (mDragState != null) {
             Composite savedComposite = gc.getComposite();
-            Color savedColor = gc.getColor();
+            Color     savedColor     = gc.getColor();
             if (mDragState.isContentsFocus()) {
                 setHighlightColorAndComposite(gc);
                 if (!mDragState.isHeaderFocus()) {
@@ -766,7 +766,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
                 gc.fillRect(bounds.x + bounds.width - DRAG_FOCUS_WIDTH, bounds.y, DRAG_FOCUS_WIDTH, bounds.height);
             }
             if (mDragState instanceof TreeRowDragState) {
-                TreeRowDragState state = (TreeRowDragState) mDragState;
+                TreeRowDragState state  = (TreeRowDragState) mDragState;
                 TreeContainerRow parent = state.getParentRow();
                 if (parent != null) {
                     int index = state.getChildInsertIndex();
@@ -791,13 +791,13 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         if (mShowColumnDivider) {
             int count = mColumns.size() - 1;
             if (count > 0) {
-                Color savedColor = gc.getColor();
+                Color     savedColor = gc.getColor();
                 Rectangle clipBounds = gc.getClipBounds();
-                int left = clipBounds.x;
-                int right = left + clipBounds.width;
-                int top = clipBounds.y;
-                int bottom = top + clipBounds.height;
-                int x = 0;
+                int       left       = clipBounds.x;
+                int       right      = left + clipBounds.width;
+                int       top        = clipBounds.y;
+                int       bottom     = top + clipBounds.height;
+                int       x          = 0;
                 gc.setColor(mDividerColor);
                 for (int i = 0; i < count; i++) {
                     x += mColumns.get(i).getWidth();
@@ -839,24 +839,24 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     /**
      * Draws the specified {@link TreeRow}.
      *
-     * @param gc The {@link Graphics2D} context to use.
-     * @param row The {@link TreeRow} to draw.
+     * @param gc       The {@link Graphics2D} context to use.
+     * @param row      The {@link TreeRow} to draw.
      * @param position The {@link TreeRow}'s position in the linear view.
-     * @param top The y-coordinate for the top of the {@link TreeRow}.
-     * @param active Whether or not the active state should be displayed.
+     * @param top      The y-coordinate for the top of the {@link TreeRow}.
+     * @param active   Whether or not the active state should be displayed.
      */
     public void drawRow(Graphics2D gc, TreeRow row, int position, int top, boolean active) {
-        Shape clip = gc.getClip();
-        Color savedColor = gc.getColor();
-        int rowHeight = getRowHeight(row);
-        int height = rowHeight + getRowDividerHeight();
-        int x = 0;
-        Rectangle clipBounds = gc.getClipBounds();
-        int left = clipBounds.x;
-        int right = clipBounds.x + clipBounds.width;
-        int columnDividerWidth = getColumnDividerWidth();
-        int count = mColumns.size();
-        boolean selected = isSelected(row);
+        Shape     clip               = gc.getClip();
+        Color     savedColor         = gc.getColor();
+        int       rowHeight          = getRowHeight(row);
+        int       height             = rowHeight + getRowDividerHeight();
+        int       x                  = 0;
+        Rectangle clipBounds         = gc.getClipBounds();
+        int       left               = clipBounds.x;
+        int       right              = clipBounds.x + clipBounds.width;
+        int       columnDividerWidth = getColumnDividerWidth();
+        int       count              = mColumns.size();
+        boolean   selected           = isSelected(row);
         gc.setColor(getDefaultRowBackground(position, selected, active));
         gc.fillRect(left, top, clipBounds.width, height);
         if (mShowRowDivider) {
@@ -867,8 +867,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         Color fg = getDefaultRowForeground(position, selected, active);
         gc.setColor(fg);
         for (int i = 0; i < count; i++) {
-            TreeColumn column = mColumns.get(i);
-            int colWidth = column.getWidth();
+            TreeColumn column   = mColumns.get(i);
+            int        colWidth = column.getWidth();
             if (i == count - 1) {
                 colWidth = Math.max(colWidth, right - x);
             }
@@ -881,10 +881,10 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
                     gc.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, DRAG_OPACITY));
                 }
                 if (i == 0) {
-                    int depth = row.getDepth();
+                    int depth  = row.getDepth();
                     int indent = INDENT * depth;
                     colWidth -= indent;
-                    tmpX += indent;
+                    tmpX     += indent;
                     if ((mShowDisclosureControls || depth > 0) && mHierarchyLineColor != null) {
                         TreeRow firstRow = mRoot.getChild(0);
                         if (row != firstRow || mRoot.getChildCount() > 1 || firstRow instanceof TreeContainerRow) {
@@ -908,9 +908,9 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
                         }
                     }
                     if (mShowDisclosureControls && row instanceof TreeContainerRow) {
-                        StdImage img = isOpen((TreeContainerRow) row) ? StdImage.COLLAPSE : StdImage.EXPAND;
-                        int imgWidth = img.getWidth();
-                        int yt = rowHeight - img.getHeight();
+                        StdImage img      = isOpen((TreeContainerRow) row) ? StdImage.COLLAPSE : StdImage.EXPAND;
+                        int      imgWidth = img.getWidth();
+                        int      yt       = rowHeight - img.getHeight();
                         if ((yt & 1) == 1) {
                             yt++;
                         }
@@ -940,7 +940,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      */
     public int getColumnDividerPosition(int index) {
         int divider = getColumnDividerWidth();
-        int pos = 0;
+        int pos     = 0;
         for (int i = 0; i <= index; i++) {
             pos += mColumns.get(i).getWidth() + divider;
         }
@@ -953,8 +953,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      */
     public int overColumnDivider(int x) {
         int divider = getColumnDividerWidth();
-        int count = mColumns.size() - 1;
-        int pos = 0;
+        int count   = mColumns.size() - 1;
+        int pos     = 0;
         for (int i = 0; i < count; i++) {
             TreeColumn column = mColumns.get(i);
             pos += column.getWidth();
@@ -994,14 +994,14 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     /** @param rows The {@link TreeRow}s to repaint. */
     public void repaintRows(Collection<TreeRow> rows) {
-        HashSet<TreeRow> set = new HashSet<>(rows);
-        Rectangle bounds = getContentViewBounds();
-        int min = bounds.y;
-        int max = bounds.y + bounds.height;
-        int x = bounds.x;
-        int width = bounds.width;
-        int y = 0;
-        int dividerHeight = getRowDividerHeight();
+        HashSet<TreeRow> set           = new HashSet<>(rows);
+        Rectangle        bounds        = getContentViewBounds();
+        int              min           = bounds.y;
+        int              max           = bounds.y + bounds.height;
+        int              x             = bounds.x;
+        int              width         = bounds.width;
+        int              y             = 0;
+        int              dividerHeight = getRowDividerHeight();
         for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
             int height = getRowHeight(row) + dividerHeight;
             if (y + height > min) {
@@ -1026,7 +1026,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      *         viewable.
      */
     public Rectangle getRowBounds(TreeRow row) {
-        int y = 0;
+        int y             = 0;
         int dividerHeight = getRowDividerHeight();
         for (TreeRow one : new TreeRowViewIterator(this, mRoot.getChildren())) {
             int height = getRowHeight(one) + dividerHeight;
@@ -1047,8 +1047,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     public TreeColumn overColumn(int x) {
         if (x >= 0 && !mColumns.isEmpty()) {
             int divider = getColumnDividerWidth();
-            int count = mColumns.size() - 1;
-            int pos = 0;
+            int count   = mColumns.size() - 1;
+            int pos     = 0;
             for (int i = 0; i < count; i++) {
                 TreeColumn column = mColumns.get(i);
                 pos += column.getWidth() + divider;
@@ -1141,7 +1141,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     /**
      * @param color The {@link Color} to use for the hierarchy lines. If <code>null</code>, then no
-     *            hierarchy lines will be drawn.
+     *              hierarchy lines will be drawn.
      */
     public void setHierarchyLineColor(Color color) {
         mHierarchyLineColor = color;
@@ -1150,7 +1150,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     /**
      * @param position The {@link TreeRow}'s position in the linear view.
      * @param selected Whether or not the selected version of the color is needed.
-     * @param active Whether or not the active version of the color is needed.
+     * @param active   Whether or not the active version of the color is needed.
      * @return The foreground color.
      */
     @SuppressWarnings("static-method")
@@ -1161,7 +1161,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     /**
      * @param position The {@link TreeRow}'s position in the linear view.
      * @param selected Whether or not the selected version of the color is needed.
-     * @param active Whether or not the active version of the color is needed.
+     * @param active   Whether or not the active version of the color is needed.
      * @return The background color.
      */
     public Color getDefaultRowBackground(int position, boolean selected, boolean active) {
@@ -1213,7 +1213,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     /**
      * @param open Whether the specified {@link TreeContainerRow}s should be logically 'open', i.e.
-     *            showing their children.
+     *             showing their children.
      * @param rows The {@link TreeContainerRow}s to disclose.
      */
     public void setOpen(boolean open, TreeContainerRow... rows) {
@@ -1222,7 +1222,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     /**
      * @param open Whether the specified {@link TreeContainerRow}s should be logically 'open', i.e.
-     *            showing their children.
+     *             showing their children.
      * @param rows The {@link TreeContainerRow}s to disclose.
      */
     public void setOpen(boolean open, Collection<TreeContainerRow> rows) {
@@ -1236,7 +1236,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         }
         if (!modified.isEmpty()) {
             ArrayList<TreeRow> selectionRemoved = new ArrayList<>();
-            TreeContainerRow[] data = modified.toArray(new TreeContainerRow[modified.size()]);
+            TreeContainerRow[] data             = modified.toArray(new TreeContainerRow[modified.size()]);
             if (open) {
                 mOpenRows.addAll(modified);
             } else {
@@ -1333,7 +1333,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     @Override
     public void selectAll() {
         TreeRow[] oldSelection = mSelectedRows.toArray(new TreeRow[mSelectedRows.size()]);
-        boolean added = false;
+        boolean   added        = false;
         mAnchorRow = null;
         for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
             if (mAnchorRow == null) {
@@ -1376,7 +1376,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      */
     public void select(TreeRow row, boolean add) {
         TreeRow[] savedRows = mSelectedRows.toArray(new TreeRow[mSelectedRows.size()]);
-        boolean modified = false;
+        boolean   modified  = false;
         if (!add) {
             modified = !mSelectedRows.isEmpty();
             repaintRows(mSelectedRows);
@@ -1400,9 +1400,9 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * was no prior selection, the anchor is set to the first {@link TreeRow} passed in.
      *
      * @param fromRow The first {@link TreeRow} to select.
-     * @param toRow The last {@link TreeRow} to select.
-     * @param add Pass in <code>true</code> to add the range to the current selection,
-     *            <code>false</code> to replace the current selection.
+     * @param toRow   The last {@link TreeRow} to select.
+     * @param add     Pass in <code>true</code> to add the range to the current selection,
+     *                <code>false</code> to replace the current selection.
      */
     public void select(TreeRow fromRow, TreeRow toRow, boolean add) {
         if (fromRow == toRow) {
@@ -1608,7 +1608,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
             TreeContainerRow container = (TreeContainerRow) row;
             if (row instanceof TreeRoot || isOpen(container)) {
                 List<TreeRow> children = container.getChildren();
-                int count = children.size();
+                int           count    = children.size();
                 if (count > 0) {
                     return getLastChild(children.get(count - 1));
                 }
@@ -1718,35 +1718,35 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     @Override
     public void keyPressed(KeyEvent event) {
         switch (event.getKeyCode()) {
-            case KeyEvent.VK_LEFT:
-                setOpen(false, getTreeContainerRows(mSelectedRows, event.isAltDown()));
-                break;
-            case KeyEvent.VK_RIGHT:
-                setOpen(true, getTreeContainerRows(mSelectedRows, event.isAltDown()));
-                break;
-            case KeyEvent.VK_UP:
-                keyScroll(selectUp(event.isShiftDown()));
-                break;
-            case KeyEvent.VK_DOWN:
-                keyScroll(selectDown(event.isShiftDown()));
-                break;
-            case KeyEvent.VK_HOME:
-                keyScroll(selectToHome(event.isShiftDown()));
-                break;
-            case KeyEvent.VK_END:
-                keyScroll(selectToEnd(event.isShiftDown()));
-                break;
-            default:
-                return;
+        case KeyEvent.VK_LEFT:
+            setOpen(false, getTreeContainerRows(mSelectedRows, event.isAltDown()));
+            break;
+        case KeyEvent.VK_RIGHT:
+            setOpen(true, getTreeContainerRows(mSelectedRows, event.isAltDown()));
+            break;
+        case KeyEvent.VK_UP:
+            keyScroll(selectUp(event.isShiftDown()));
+            break;
+        case KeyEvent.VK_DOWN:
+            keyScroll(selectDown(event.isShiftDown()));
+            break;
+        case KeyEvent.VK_HOME:
+            keyScroll(selectToHome(event.isShiftDown()));
+            break;
+        case KeyEvent.VK_END:
+            keyScroll(selectToEnd(event.isShiftDown()));
+            break;
+        default:
+            return;
         }
         event.consume();
     }
 
     private void keyScroll(TreeRow row) {
         if (row != null) {
-            Rectangle bounds = getRowBounds(row);
+            Rectangle bounds     = getRowBounds(row);
             Rectangle viewBounds = getContentViewBounds();
-            bounds.x = viewBounds.x;
+            bounds.x     = viewBounds.x;
             bounds.width = 1;
             scrollContentIntoView(bounds);
         }
@@ -1865,9 +1865,9 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     /** @param column The {@link TreeColumn} to repaint. */
     public void repaintColumn(TreeColumn column) {
-        Point pt = fromHeaderView(new Point(getColumnStart(column), 0));
-        int width = column.getWidth();
-        int count = mColumns.size();
+        Point pt    = fromHeaderView(new Point(getColumnStart(column), 0));
+        int   width = column.getWidth();
+        int   count = mColumns.size();
         if (count > 0 && column == mColumns.get(count - 1)) {
             width = Math.max(width, getWidth() - pt.x);
         }
@@ -1876,14 +1876,14 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     }
 
     private StdImage createColumnDragImage(TreeColumn column) {
-        Graphics2D gc = null;
-        StdImage off2 = null;
-        StdImage off1 = createImage();
+        Graphics2D gc   = null;
+        StdImage   off2 = null;
+        StdImage   off1 = createImage();
         try {
-            int width = column.getWidth();
+            int width  = column.getWidth();
             int height = getHeight();
             off2 = StdImage.createTransparent(getGraphicsConfiguration(), width, height);
-            gc = off2.getGraphics();
+            gc   = off2.getGraphics();
             gc.setClip(new Rectangle(0, 0, width, height));
             gc.setBackground(new Color(0, true));
             gc.clearRect(0, 0, width, height);
@@ -1904,40 +1904,40 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     @Override
     public void dragGestureRecognized(DragGestureEvent event) {
         mDropReceived = false;
-        int dragAction = event.getDragAction();
-        Point where = new Point(event.getDragOrigin());
+        int   dragAction = event.getDragAction();
+        Point where      = new Point(event.getDragOrigin());
         switch (checkAndConvertToArea(where)) {
-            case CONTENT:
-                if (mDragColumnDivider == -1 && !mSelectedRows.isEmpty() && (dragAction & mAllowedRowDragTypes) != 0) {
-                    TreeRowSelection selection = new TreeRowSelection(getSelectedRows(), mOpenRows);
-                    if (DragSource.isDragImageSupported()) {
-                        StdImage dragImage = createDragImage(where);
-                        Point imageOffset;
-                        Rectangle dragClip = getDragClip();
-                        if (dragClip != null) {
-                            imageOffset = new Point(dragClip.x - where.x, dragClip.y - where.y);
-                        } else {
-                            imageOffset = new Point();
-                        }
-                        event.startDrag(null, dragImage, imageOffset, selection, this);
+        case CONTENT:
+            if (mDragColumnDivider == -1 && !mSelectedRows.isEmpty() && (dragAction & mAllowedRowDragTypes) != 0) {
+                TreeRowSelection selection = new TreeRowSelection(getSelectedRows(), mOpenRows);
+                if (DragSource.isDragImageSupported()) {
+                    StdImage  dragImage = createDragImage(where);
+                    Point     imageOffset;
+                    Rectangle dragClip  = getDragClip();
+                    if (dragClip != null) {
+                        imageOffset = new Point(dragClip.x - where.x, dragClip.y - where.y);
                     } else {
-                        event.startDrag(null, selection, this);
+                        imageOffset = new Point();
                     }
+                    event.startDrag(null, dragImage, imageOffset, selection, this);
+                } else {
+                    event.startDrag(null, selection, this);
                 }
-                break;
-            case HEADER:
-                if (mAllowColumnDrag && dragAction == DnDConstants.ACTION_MOVE && mSortColumn != null) {
-                    setSourceDragColumn(mSortColumn);
-                    if (DragSource.isDragImageSupported()) {
-                        event.startDrag(null, createColumnDragImage(mSortColumn), new Point(-(where.x - getColumnStart(mSortColumn)), -where.y), mSortColumn, this);
-                    } else {
-                        event.startDrag(null, mSortColumn, this);
-                    }
+            }
+            break;
+        case HEADER:
+            if (mAllowColumnDrag && dragAction == DnDConstants.ACTION_MOVE && mSortColumn != null) {
+                setSourceDragColumn(mSortColumn);
+                if (DragSource.isDragImageSupported()) {
+                    event.startDrag(null, createColumnDragImage(mSortColumn), new Point(-(where.x - getColumnStart(mSortColumn)), -where.y), mSortColumn, this);
+                } else {
+                    event.startDrag(null, mSortColumn, this);
                 }
-                mSortColumn = null;
-                break;
-            default:
-                break;
+            }
+            mSortColumn = null;
+            break;
+        default:
+            break;
         }
     }
 
@@ -1974,7 +1974,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     }
 
     /**
-     * @param event The {@link DropTargetDragEvent}.
+     * @param event  The {@link DropTargetDragEvent}.
      * @param column The {@link TreeColumn}.
      * @return Whether or not the {@link TreeColumn} can be dropped here.
      */
@@ -1986,7 +1986,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * Override to allow external sources of {@link TreeRow} drags.
      *
      * @param event The {@link DropTargetDragEvent}.
-     * @param rows The {@link TreeRow}s.
+     * @param rows  The {@link TreeRow}s.
      * @return Whether or not the {@link TreeRow}s can be dropped here.
      */
     protected boolean isRowDragAcceptable(DropTargetDragEvent event, ArrayList<TreeRow> rows) {
@@ -2059,7 +2059,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     private void clearDragState() {
         if (mDragState != null) {
-            boolean forHeader = mDragState.isHeaderFocus();
+            boolean forHeader   = mDragState.isHeaderFocus();
             boolean forContents = mDragState.isContentsFocus();
             mDragState = null;
             redrawDragHighlight(forHeader, forContents);
@@ -2115,10 +2115,10 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     private void redrawDragHighlight(boolean forHeader, boolean forContents) {
         if (forHeader) {
             Rectangle bounds = getHeaderViewBounds();
-            int x = bounds.x;
-            int y = bounds.y;
-            int w = bounds.width;
-            int h = bounds.height;
+            int       x      = bounds.x;
+            int       y      = bounds.y;
+            int       w      = bounds.width;
+            int       h      = bounds.height;
             paintHeaderViewImmediately(x, y, w, DRAG_FOCUS_WIDTH);
             paintHeaderViewImmediately(x, y + h - DRAG_FOCUS_WIDTH, w, DRAG_FOCUS_WIDTH);
             paintHeaderViewImmediately(x, y + DRAG_FOCUS_WIDTH, DRAG_FOCUS_WIDTH, h - DRAG_FOCUS_WIDTH * 2);
@@ -2126,10 +2126,10 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         }
         if (forContents) {
             Rectangle bounds = getContentViewBounds();
-            int x = bounds.x;
-            int y = bounds.y;
-            int w = bounds.width;
-            int h = bounds.height;
+            int       x      = bounds.x;
+            int       y      = bounds.y;
+            int       w      = bounds.width;
+            int       h      = bounds.height;
             paintContentViewImmediately(x, y, w, DRAG_FOCUS_WIDTH);
             paintContentViewImmediately(x, y + h - DRAG_FOCUS_WIDTH, w, DRAG_FOCUS_WIDTH);
             paintContentViewImmediately(x, y + DRAG_FOCUS_WIDTH, DRAG_FOCUS_WIDTH, h - DRAG_FOCUS_WIDTH * 2);
@@ -2139,13 +2139,13 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     /**
      * @param parentRow The parent {@link TreeContainerRow} to insert at.
-     * @param insertAt The child index within the parent to insert at.
+     * @param insertAt  The child index within the parent to insert at.
      */
     protected void adjustInsertionMarker(TreeContainerRow parentRow, int insertAt) {
         if (mDragState instanceof TreeRowDragState) {
-            TreeRowDragState state = (TreeRowDragState) mDragState;
-            TreeContainerRow originalParent = state.getParentRow();
-            int originalInsertAt = state.getChildInsertIndex();
+            TreeRowDragState state            = (TreeRowDragState) mDragState;
+            TreeContainerRow originalParent   = state.getParentRow();
+            int              originalInsertAt = state.getChildInsertIndex();
             if (originalParent != parentRow || originalInsertAt != insertAt) {
                 state.setParentRow(parentRow);
                 state.setChildInsertIndex(insertAt);
@@ -2163,7 +2163,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     }
 
     private int getInsertionMarkerPosition(TreeContainerRow parent, int insertAt) {
-        int y = 0;
+        int y             = 0;
         int dividerHeight = getRowDividerHeight();
         if (mRoot != parent) {
             for (TreeRow one : new TreeRowViewIterator(this, mRoot.getChildren())) {
@@ -2191,8 +2191,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * @return The preferred width.
      */
     public int getPreferredColumnWidth(TreeColumn column) {
-        Dimension size = column.calculatePreferredHeaderSize(this);
-        boolean isFirst = column == mColumns.get(0);
+        Dimension size    = column.calculatePreferredHeaderSize(this);
+        boolean   isFirst = column == mColumns.get(0);
         for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
             int width = column.calculatePreferredWidth(row);
             if (isFirst) {

@@ -42,8 +42,8 @@ public class TreeTester extends App {
     @Override
     public void noWindowsAreOpenAtStartup(boolean finalChance) {
         if (finalChance) {
-            Timing timing = new Timing();
-            TreeTestWindow win = new TreeTestWindow("Test 1 Drop Copy & Move", true); //$NON-NLS-1$
+            Timing         timing = new Timing();
+            TreeTestWindow win    = new TreeTestWindow("Test 1 Drop Copy & Move", true); //$NON-NLS-1$
             win.setBounds(50, 50, 500, 500);
             win.setVisible(true);
             System.out.println("Tree 1 took " + timing); //$NON-NLS-1$

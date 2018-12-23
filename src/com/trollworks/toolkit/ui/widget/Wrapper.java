@@ -41,7 +41,7 @@ public class Wrapper extends JPanel {
     }
 
     public void setOnlySize(int width, int height) {
-        mWidth = width;
+        mWidth  = width;
         mHeight = height;
     }
 
@@ -56,7 +56,7 @@ public class Wrapper extends JPanel {
     @Override
     public Dimension getPreferredSize() {
         if (mWidth != -1 && mHeight != -1) {
-            Scale scale = Scale.get(this);
+            Scale  scale  = Scale.get(this);
             Insets insets = getInsets();
             return new Dimension(insets.left + scale.scale(mWidth) + insets.right, insets.top + scale.scale(mHeight) + insets.bottom);
         }

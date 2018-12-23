@@ -23,7 +23,7 @@ public class OutlineSyncer implements Runnable {
 
     /**
      * @param outline The {@link Outline} to add to the set of outlines that need to be
-     *            synchronized.
+     *                synchronized.
      */
     public static final void add(Outline outline) {
         synchronized (OUTLINES) {
@@ -37,7 +37,7 @@ public class OutlineSyncer implements Runnable {
 
     /**
      * @param outline The {@link Outline} to remove from the set of outlines that need to be
-     *            synchronized.
+     *                synchronized.
      */
     public static final void remove(Outline outline) {
         synchronized (OUTLINES) {
@@ -49,7 +49,7 @@ public class OutlineSyncer implements Runnable {
     public void run() {
         Set<Outline> outlines;
         synchronized (OUTLINES) {
-            PENDING = false;
+            PENDING  = false;
             outlines = new HashSet<>(OUTLINES);
             OUTLINES.clear();
         }

@@ -47,8 +47,8 @@ public class WindowUtils {
 
     /**
      * @param comp The {@link Component} to use for determining the parent {@link Frame} or
-     *            {@link Dialog}.
-     * @param msg The message to display.
+     *             {@link Dialog}.
+     * @param msg  The message to display.
      */
     public static void showError(Component comp, String msg) {
         JOptionPane.showMessageDialog(comp, msg, ERROR, JOptionPane.ERROR_MESSAGE);
@@ -56,8 +56,8 @@ public class WindowUtils {
 
     /**
      * @param comp The {@link Component} to use for determining the parent {@link Frame} or
-     *            {@link Dialog}.
-     * @param msg The message to display.
+     *             {@link Dialog}.
+     * @param msg  The message to display.
      */
     public static void showError(Component comp, Component msg) {
         JOptionPane.showMessageDialog(comp, msg, ERROR, JOptionPane.ERROR_MESSAGE);
@@ -65,8 +65,8 @@ public class WindowUtils {
 
     /**
      * @param comp The {@link Component} to use for determining the parent {@link Frame} or
-     *            {@link Dialog}.
-     * @param msg The message to display.
+     *             {@link Dialog}.
+     * @param msg  The message to display.
      */
     public static void showWarning(Component comp, String msg) {
         JOptionPane.showMessageDialog(comp, msg, WARNING, JOptionPane.WARNING_MESSAGE);
@@ -74,8 +74,8 @@ public class WindowUtils {
 
     /**
      * @param comp The {@link Component} to use for determining the parent {@link Frame} or
-     *            {@link Dialog}.
-     * @param msg The message to display.
+     *             {@link Dialog}.
+     * @param msg  The message to display.
      */
     public static void showWarning(Component comp, Component msg) {
         JOptionPane.showMessageDialog(comp, msg, WARNING, JOptionPane.WARNING_MESSAGE);
@@ -84,11 +84,11 @@ public class WindowUtils {
     /**
      * Shows a confirmation dialog with custom options.
      *
-     * @param comp The {@link Component} to use. May be <code>null</code>.
-     * @param message The message.
-     * @param title The title to use.
-     * @param optionType The type of option dialog. Use the {@link JOptionPane} constants.
-     * @param options The options to display.
+     * @param comp         The {@link Component} to use. May be <code>null</code>.
+     * @param message      The message.
+     * @param title        The title to use.
+     * @param optionType   The type of option dialog. Use the {@link JOptionPane} constants.
+     * @param options      The options to display.
      * @param initialValue The initial option.
      * @return See the documentation for {@link JOptionPane}.
      */
@@ -100,14 +100,14 @@ public class WindowUtils {
      * Shows an option dialog.
      *
      * @param parentComponent The parent {@link Component} to use. May be <code>null</code>.
-     * @param message The message. May be a {@link Component}.
-     * @param title The title to use.
-     * @param resizable Whether to allow the dialog to be resized by the user.
-     * @param optionType The type of option dialog. Use the {@link JOptionPane} constants.
-     * @param messageType The type of message. Use the {@link JOptionPane} constants.
-     * @param icon The icon to use. May be <code>null</code>.
-     * @param options The options to display. May be <code>null</code>.
-     * @param initialValue The initial option.
+     * @param message         The message. May be a {@link Component}.
+     * @param title           The title to use.
+     * @param resizable       Whether to allow the dialog to be resized by the user.
+     * @param optionType      The type of option dialog. Use the {@link JOptionPane} constants.
+     * @param messageType     The type of message. Use the {@link JOptionPane} constants.
+     * @param icon            The icon to use. May be <code>null</code>.
+     * @param options         The options to display. May be <code>null</code>.
+     * @param initialValue    The initial option.
      * @return See the documentation for {@link JOptionPane}.
      */
     public static int showOptionDialog(Component parentComponent, Object message, String title, boolean resizable, int optionType, int messageType, Icon icon, Object[] options, Object initialValue) {

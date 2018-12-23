@@ -31,18 +31,18 @@ public class PerlinNoise2D implements Noise2D {
         int y1 = (int) Math.floor(y) & 255;
         x -= Math.floor(x);
         y -= Math.floor(y);
-        int a = mTable[x1] + y1;
-        int aa = mTable[a];
-        int ab = mTable[a + 1];
-        int b = mTable[x1 + 1] + y1;
-        int ba = mTable[b];
-        int bb = mTable[b + 1];
-        double u = fade(x);
+        int    a   = mTable[x1] + y1;
+        int    aa  = mTable[a];
+        int    ab  = mTable[a + 1];
+        int    b   = mTable[x1 + 1] + y1;
+        int    ba  = mTable[b];
+        int    bb  = mTable[b + 1];
+        double u   = fade(x);
         double laa = lerp(u, grad(mTable[aa], x, y, 0), grad(mTable[ba], x - 1, y, 0));
         double lab = lerp(u, grad(mTable[ab], x, y - 1, 0), grad(mTable[bb], x - 1, y - 1, 0));
         double lba = lerp(u, grad(mTable[aa + 1], x, y, -1), grad(mTable[ba + 1], x - 1, y, -1));
         double lbb = lerp(u, grad(mTable[ab + 1], x, y - 1, -1), grad(mTable[bb + 1], x - 1, y - 1, -1));
-        double v = fade(y);
+        double v   = fade(y);
         return lerp(0, lerp(v, laa, lab), lerp(v, lba, lbb));
     }
 

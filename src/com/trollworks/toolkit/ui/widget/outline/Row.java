@@ -42,13 +42,13 @@ public abstract class Row {
     }
 
     /**
-     * @param owner The owning model.
+     * @param owner    The owning model.
      * @param snapshot An undo snapshot.
      */
     void applyUndoSnapshot(OutlineModel owner, RowUndoSnapshot snapshot) {
-        mOwner = owner;
+        mOwner  = owner;
         mParent = snapshot.getParent();
-        mOpen = snapshot.isOpen();
+        mOpen   = snapshot.isOpen();
         if (canHaveChildren()) {
             mChildren.clear();
             for (Row child : snapshot.getChildren()) {
@@ -60,7 +60,7 @@ public abstract class Row {
 
     /** @param owner The owning model. */
     void resetOwner(OutlineModel owner) {
-        mOwner = owner;
+        mOwner  = owner;
         mParent = null;
     }
 
@@ -89,7 +89,7 @@ public abstract class Row {
      * Sets the data for the specified column.
      *
      * @param column The column.
-     * @param data The data to set.
+     * @param data   The data to set.
      */
     public abstract void setData(Column column, Object data);
 
@@ -219,7 +219,7 @@ public abstract class Row {
      * Adds a child row to this row.
      *
      * @param index The index to insert at.
-     * @param row The row to add as a child.
+     * @param row   The row to add as a child.
      * @return <code>true</code> if the row was added, <code>false</code> if it was not.
      */
     public boolean insertChild(int index, Row row) {
@@ -311,8 +311,8 @@ public abstract class Row {
 
     /** @return The path from this row to its top-most parent. */
     public Row[] getPath() {
-        ArrayList<Row> list = new ArrayList<>();
-        Row parent = mParent;
+        ArrayList<Row> list   = new ArrayList<>();
+        Row            parent = mParent;
 
         list.add(this);
         while (parent != null) {
@@ -325,7 +325,7 @@ public abstract class Row {
     /** @return The number of parents above this row. */
     public int getDepth() {
         Row parent = mParent;
-        int depth = 0;
+        int depth  = 0;
 
         while (parent != null) {
             depth++;

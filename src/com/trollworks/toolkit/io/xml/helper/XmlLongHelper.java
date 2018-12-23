@@ -22,8 +22,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlLongHelper implements XmlObjectHelper {
     public static final XmlLongHelper SINGLETON = new XmlLongHelper();
 
-    private XmlLongHelper() {
-    }
+    private XmlLongHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -34,8 +33,8 @@ public class XmlLongHelper implements XmlObjectHelper {
     public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
         Long value = (Long) field.get(obj);
         if (value != null) {
-            long primitive = value.longValue();
-            XmlDefaultLong def = field.getAnnotation(XmlDefaultLong.class);
+            long           primitive = value.longValue();
+            XmlDefaultLong def       = field.getAnnotation(XmlDefaultLong.class);
             if (def != null) {
                 xml.addAttributeNot(name, primitive, def.value());
             } else {

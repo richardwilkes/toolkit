@@ -181,7 +181,7 @@ public enum LengthUnits implements Units {
     private boolean mIsMetric;
 
     private LengthUnits(double factor, boolean isMetric) {
-        mFactor = factor;
+        mFactor   = factor;
         mIsMetric = isMetric;
     }
 

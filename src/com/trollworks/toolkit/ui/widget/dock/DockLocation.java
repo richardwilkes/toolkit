@@ -21,7 +21,7 @@ public enum DockLocation {
     private boolean            mHorizontal;
 
     private DockLocation(boolean primary, boolean horizontal) {
-        mPrimary = primary;
+        mPrimary    = primary;
         mHorizontal = horizontal;
     }
 

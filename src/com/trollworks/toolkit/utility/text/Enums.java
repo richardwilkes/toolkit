@@ -18,9 +18,9 @@ public class Enums {
     }
 
     /**
-     * @param <T> The type of {@link Enum}.
-     * @param buffer The buffer to load from.
-     * @param values The possible values.
+     * @param              <T> The type of {@link Enum}.
+     * @param buffer       The buffer to load from.
+     * @param values       The possible values.
      * @param defaultValue The default value to use in case of no match.
      * @return The {@link Enum} representing the buffer.
      */
@@ -30,7 +30,7 @@ public class Enums {
     }
 
     /**
-     * @param <T> The type of {@link Enum}.
+     * @param        <T> The type of {@link Enum}.
      * @param buffer The buffer to load from.
      * @param values The possible values.
      * @return The {@link Enum} representing the buffer, or <code>null</code> if a match could not

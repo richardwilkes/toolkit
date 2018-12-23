@@ -20,7 +20,7 @@ public class ReverseListIterator<T> implements Iterator<T>, Iterable<T> {
 
     public ReverseListIterator(List<T> list) {
         mList = list;
-        mPos = mList.size() - 1;
+        mPos  = mList.size() - 1;
     }
 
     @Override

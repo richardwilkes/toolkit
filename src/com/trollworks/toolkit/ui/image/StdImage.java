@@ -153,10 +153,10 @@ public class StdImage extends BufferedImage implements Icon {
     }
 
     /**
-     * @param name The name to search for.
+     * @param name  The name to search for.
      * @param cache Whether or not to cache the image. If <code>cache</code> is <code>false</code>,
-     *            then a new copy of the image will be generated, even if it was in the cache
-     *            already.
+     *              then a new copy of the image will be generated, even if it was in the cache
+     *              already.
      * @return The image for the specified name.
      */
     public static final synchronized StdImage get(String name, boolean cache) {
@@ -189,7 +189,7 @@ public class StdImage extends BufferedImage implements Icon {
      * Manually adds the specified image to the cache. If an image was already mapped to the
      * specified name, it will be replaced.
      *
-     * @param name The name to map the image to.
+     * @param name  The name to map the image to.
      * @param image The image itself.
      */
     public static final synchronized void add(String name, StdImage image) {
@@ -211,7 +211,7 @@ public class StdImage extends BufferedImage implements Icon {
     }
 
     /**
-     * @param image The image to scale.
+     * @param image      The image to scale.
      * @param scaledSize The height and width to scale the image to.
      * @return The new image scaled to the given size.
      */
@@ -220,23 +220,23 @@ public class StdImage extends BufferedImage implements Icon {
     }
 
     /**
-     * @param image The image to scale.
-     * @param scaledWidth The width to scale the image to.
+     * @param image        The image to scale.
+     * @param scaledWidth  The width to scale the image to.
      * @param scaledHeight The height to scale the image to.
      * @return The new image scaled to the given size.
      */
     public static final StdImage scale(Image image, int scaledWidth, int scaledHeight) {
-        StdImage img = getToolkitImage(image);
-        int currentWidth = img.getWidth();
-        int currentHeight = img.getHeight();
+        StdImage img           = getToolkitImage(image);
+        int      currentWidth  = img.getWidth();
+        int      currentHeight = img.getHeight();
         if (currentWidth < scaledWidth || currentHeight < scaledHeight) {
             return internalScale(img, scaledWidth, scaledHeight);
         }
         boolean needFlush = false;
         do {
-            int prevCurrentWidth = currentWidth;
+            int prevCurrentWidth  = currentWidth;
             int prevCurrentHeight = currentHeight;
-            currentWidth = reduce(currentWidth, scaledWidth);
+            currentWidth  = reduce(currentWidth, scaledWidth);
             currentHeight = reduce(currentHeight, scaledHeight);
             if (prevCurrentWidth == currentWidth && prevCurrentHeight == currentHeight) {
                 break;
@@ -245,7 +245,7 @@ public class StdImage extends BufferedImage implements Icon {
             if (needFlush) {
                 img.flush();
             }
-            img = intermediate;
+            img       = intermediate;
             needFlush = true;
         } while (currentWidth != scaledWidth || currentHeight != scaledHeight);
         return img;
@@ -262,8 +262,8 @@ public class StdImage extends BufferedImage implements Icon {
     }
 
     private static final StdImage internalScale(StdImage image, int scaledWidth, int scaledHeight) {
-        StdImage buffer = createTransparent(scaledWidth, scaledHeight);
-        Graphics2D gc = buffer.getGraphics();
+        StdImage   buffer = createTransparent(scaledWidth, scaledHeight);
+        Graphics2D gc     = buffer.getGraphics();
         GraphicsUtilities.setMaximumQualityForGraphics(gc);
         gc.drawImage(image, 0, 0, scaledWidth, scaledHeight, null);
         gc.dispose();
@@ -285,9 +285,9 @@ public class StdImage extends BufferedImage implements Icon {
      * If the image passed in is already a {@link StdImage}, it is returned. However, if it is not,
      * then a new {@link StdImage} is created with the contents of the image and returned.
      *
-     * @param image The image to work on.
+     * @param image               The image to work on.
      * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *            of creating a 1x1 pixel image.
+     *                            of creating a 1x1 pixel image.
      * @return A buffered image.
      */
     public static final StdImage getToolkitImage(Image image, boolean returnNullOnFailure) {
@@ -326,8 +326,8 @@ public class StdImage extends BufferedImage implements Icon {
             Log.error(new Exception(UNABLE_TO_LOAD_IMAGE));
             return create(1, 1);
         }
-        StdImage buffer = createTransparent(image.getWidth(null), image.getHeight(null));
-        Graphics2D gc = buffer.getGraphics();
+        StdImage   buffer = createTransparent(image.getWidth(null), image.getHeight(null));
+        Graphics2D gc     = buffer.getGraphics();
         gc.drawImage(image, 0, 0, null);
         gc.dispose();
         return buffer;
@@ -358,10 +358,10 @@ public class StdImage extends BufferedImage implements Icon {
     }
 
     private static final StdImage rotate(StdImage image, int angle) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        StdImage buffer = createTransparent(height, width);
-        Graphics2D gc = buffer.getGraphics();
+        int        width  = image.getWidth();
+        int        height = image.getHeight();
+        StdImage   buffer = createTransparent(height, width);
+        Graphics2D gc     = buffer.getGraphics();
         gc.rotate(Math.toRadians(angle));
         int x;
         int y;
@@ -388,7 +388,7 @@ public class StdImage extends BufferedImage implements Icon {
      * Creates a new image by superimposing the specified image centered on top of another.
      *
      * @param baseImage The base image.
-     * @param image The image to superimpose.
+     * @param image     The image to superimpose.
      * @return The new image.
      */
     public static final StdImage superimpose(StdImage baseImage, StdImage image) {
@@ -399,15 +399,15 @@ public class StdImage extends BufferedImage implements Icon {
      * Creates a new image by superimposing the specified image on top of another.
      *
      * @param baseImage The base image.
-     * @param image The image to superimpose.
-     * @param x The x-coordinate to draw the top image at.
-     * @param y The y-coordinate to draw the top image at.
+     * @param image     The image to superimpose.
+     * @param x         The x-coordinate to draw the top image at.
+     * @param y         The y-coordinate to draw the top image at.
      * @return The new image.
      */
     public static final StdImage superimpose(StdImage baseImage, StdImage image, int x, int y) {
-        int width = baseImage.getWidth();
-        int height = baseImage.getHeight();
-        int tWidth = image.getWidth();
+        int width   = baseImage.getWidth();
+        int height  = baseImage.getHeight();
+        int tWidth  = image.getWidth();
         int tHeight = image.getHeight();
         if (x + tWidth > width) {
             width = x + tWidth;
@@ -415,8 +415,8 @@ public class StdImage extends BufferedImage implements Icon {
         if (y + tHeight > height) {
             height = y + tHeight;
         }
-        StdImage buffer = createTransparent(width, height);
-        Graphics2D gc = buffer.getGraphics();
+        StdImage   buffer = createTransparent(width, height);
+        Graphics2D gc     = buffer.getGraphics();
         gc.drawImage(baseImage, 0, 0, null);
         gc.drawImage(image, x, y, null);
         gc.dispose();
@@ -428,8 +428,8 @@ public class StdImage extends BufferedImage implements Icon {
      * addition, the newly created image is added as a named image.
      *
      * @param baseImage The base image.
-     * @param image The image to superimpose.
-     * @param name The name to use.
+     * @param image     The image to superimpose.
+     * @param name      The name to use.
      * @return The new image.
      */
     public static final StdImage superimposeAndName(StdImage baseImage, StdImage image, String name) {
@@ -443,10 +443,10 @@ public class StdImage extends BufferedImage implements Icon {
      * newly created image is added as a named image.
      *
      * @param baseImage The base image.
-     * @param image The image to superimpose.
-     * @param x The x-coordinate to draw the top image at.
-     * @param y The y-coordinate to draw the top image at.
-     * @param name The name to use.
+     * @param image     The image to superimpose.
+     * @param x         The x-coordinate to draw the top image at.
+     * @param y         The y-coordinate to draw the top image at.
+     * @param name      The name to use.
      * @return The new image.
      */
     public static final StdImage superimposeAndName(StdImage baseImage, StdImage image, int x, int y, String name) {
@@ -463,11 +463,11 @@ public class StdImage extends BufferedImage implements Icon {
      * @return The colorized image.
      */
     public static final synchronized StdImage createColorizedImage(StdImage image, Color color) {
-        String name = REVERSE_MAP.get(image);
-        StdImage img = null;
+        String   name = REVERSE_MAP.get(image);
+        StdImage img  = null;
         if (name != null) {
             name = name + color + COLORIZED_POSTFIX;
-            img = get(name);
+            img  = get(name);
         }
         if (img == null) {
             img = ColorFilter.createColorizedImage(image, color);
@@ -482,17 +482,17 @@ public class StdImage extends BufferedImage implements Icon {
     /**
      * Creates a faded version of an image.
      *
-     * @param image The image to work on.
+     * @param image      The image to work on.
      * @param percentage The percentage of black or white to use.
-     * @param useWhite Whether to use black or white.
+     * @param useWhite   Whether to use black or white.
      * @return The faded image.
      */
     public static final synchronized StdImage createFadedImage(StdImage image, int percentage, boolean useWhite) {
-        String name = REVERSE_MAP.get(image);
-        StdImage img = null;
+        String   name = REVERSE_MAP.get(image);
+        StdImage img  = null;
         if (name != null) {
             name = name + percentage + useWhite + FADED_POSTFIX;
-            img = get(name);
+            img  = get(name);
         }
         if (img == null) {
             img = FadeFilter.createFadedImage(image, percentage, useWhite);
@@ -527,9 +527,9 @@ public class StdImage extends BufferedImage implements Icon {
     /**
      * Loads an optimized, buffered image from the specified file.
      *
-     * @param file The file to load from.
+     * @param file                The file to load from.
      * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *            of creating a 1x1 pixel image.
+     *                            of creating a 1x1 pixel image.
      * @return The image.
      */
     public static final StdImage loadImage(File file, boolean returnNullOnFailure) {
@@ -553,9 +553,9 @@ public class StdImage extends BufferedImage implements Icon {
     /**
      * Loads an optimized, buffered image from the specified URL.
      *
-     * @param url The URL to load from.
+     * @param url                 The URL to load from.
      * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *            of creating a 1x1 pixel image.
+     *                            of creating a 1x1 pixel image.
      * @return The image.
      */
     public static final StdImage loadImage(URL url, boolean returnNullOnFailure) {
@@ -570,7 +570,7 @@ public class StdImage extends BufferedImage implements Icon {
      * Loads an optimized, buffered image from the specified stream.
      *
      * @param module The module to load from.
-     * @param path The path within the module to load from.
+     * @param path   The path within the module to load from.
      * @return The image.
      */
     public static final StdImage loadImage(Module module, String path) {
@@ -580,10 +580,10 @@ public class StdImage extends BufferedImage implements Icon {
     /**
      * Loads an optimized, buffered image from the specified stream.
      *
-     * @param module The module to load from.
-     * @param path The path within the module to load from.
+     * @param module              The module to load from.
+     * @param path                The path within the module to load from.
      * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *            of creating a 1x1 pixel image.
+     *                            of creating a 1x1 pixel image.
      * @return The image.
      */
     public static final StdImage loadImage(Module module, String path, boolean returnNullOnFailure) {
@@ -607,9 +607,9 @@ public class StdImage extends BufferedImage implements Icon {
     /**
      * Loads an optimized, buffered image from the specified stream.
      *
-     * @param in The stream to load from.
+     * @param in                  The stream to load from.
      * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *            of creating a 1x1 pixel image.
+     *                            of creating a 1x1 pixel image.
      * @return The image.
      */
     public static final StdImage loadImage(InputStream in, boolean returnNullOnFailure) {
@@ -633,9 +633,9 @@ public class StdImage extends BufferedImage implements Icon {
     /**
      * Loads an optimized, buffered image from the specified byte array.
      *
-     * @param data The byte array to load from.
+     * @param data                The byte array to load from.
      * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *            of creating a 1x1 pixel image.
+     *                            of creating a 1x1 pixel image.
      * @return The image.
      */
     public static final StdImage loadImage(byte[] data, boolean returnNullOnFailure) {
@@ -649,9 +649,9 @@ public class StdImage extends BufferedImage implements Icon {
     /**
      * Writes a PNG to a file, using the specified DPI.
      *
-     * @param file The file to write to.
+     * @param file  The file to write to.
      * @param image The image to use.
-     * @param dpi The DPI to use.
+     * @param dpi   The DPI to use.
      * @return <code>true</code> on success.
      */
     public static final boolean writePNG(File file, Image image, int dpi) {
@@ -667,22 +667,22 @@ public class StdImage extends BufferedImage implements Icon {
     /**
      * Writes a PNG to a stream, using the specified DPI.
      *
-     * @param os The stream to write to.
+     * @param os    The stream to write to.
      * @param image The image to use.
-     * @param dpi The DPI to use.
+     * @param dpi   The DPI to use.
      * @return <code>true</code> on success.
      */
     public static final boolean writePNG(OutputStream os, Image image, int dpi) {
         ImageWriter writer = null;
         try (ImageOutputStream stream = ImageIO.createImageOutputStream(os)) {
-            StdImage img = getToolkitImage(image);
+            StdImage           img  = getToolkitImage(image);
             ImageTypeSpecifier type = ImageTypeSpecifier.createFromRenderedImage(img);
             writer = ImageIO.getImageWriters(type, FileType.PNG_EXTENSION).next();
             IIOMetadata metaData = writer.getDefaultImageMetadata(type, null);
             try {
-                Node root = metaData.getAsTree("javax_imageio_png_1.0"); //$NON-NLS-1$
+                Node            root      = metaData.getAsTree("javax_imageio_png_1.0"); //$NON-NLS-1$
                 IIOMetadataNode pHYs_node = new IIOMetadataNode("pHYs"); //$NON-NLS-1$
-                String ppu = Integer.toString((int) (dpi / 0.0254));
+                String          ppu       = Integer.toString((int) (dpi / 0.0254));
                 pHYs_node.setAttribute("pixelsPerUnitXAxis", ppu); //$NON-NLS-1$
                 pHYs_node.setAttribute("pixelsPerUnitYAxis", ppu); //$NON-NLS-1$
                 pHYs_node.setAttribute("unitSpecifier", "meter"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -705,21 +705,21 @@ public class StdImage extends BufferedImage implements Icon {
     }
 
     /**
-     * @param width The width to create.
+     * @param width  The width to create.
      * @param height The height to create.
      * @return A new {@link StdImage} of the given size.
      */
     public static StdImage create(int width, int height) {
-        Graphics2D g2d = GraphicsUtilities.getGraphics();
-        GraphicsConfiguration gc = g2d.getDeviceConfiguration();
-        StdImage img = create(gc, width, height);
+        Graphics2D            g2d = GraphicsUtilities.getGraphics();
+        GraphicsConfiguration gc  = g2d.getDeviceConfiguration();
+        StdImage              img = create(gc, width, height);
         g2d.dispose();
         return img;
     }
 
     /**
-     * @param gc The {@link GraphicsConfiguration} to make the image compatible with.
-     * @param width The width to create.
+     * @param gc     The {@link GraphicsConfiguration} to make the image compatible with.
+     * @param width  The width to create.
      * @param height The height to create.
      * @return A new {@link StdImage} of the given size.
      */
@@ -729,23 +729,23 @@ public class StdImage extends BufferedImage implements Icon {
     }
 
     /**
-     * @param width The width to create.
-     * @param height The height to create.
+     * @param width        The width to create.
+     * @param height       The height to create.
      * @param transparency A constant from {@link Transparency}.
      * @return A new {@link StdImage} of the given size.
      */
     public static StdImage create(int width, int height, int transparency) {
-        Graphics2D g2d = GraphicsUtilities.getGraphics();
-        GraphicsConfiguration gc = g2d.getDeviceConfiguration();
-        StdImage img = create(gc, width, height, transparency);
+        Graphics2D            g2d = GraphicsUtilities.getGraphics();
+        GraphicsConfiguration gc  = g2d.getDeviceConfiguration();
+        StdImage              img = create(gc, width, height, transparency);
         g2d.dispose();
         return img;
     }
 
     /**
-     * @param gc The {@link GraphicsConfiguration} to make the image compatible with.
-     * @param width The width to create.
-     * @param height The height to create.
+     * @param gc           The {@link GraphicsConfiguration} to make the image compatible with.
+     * @param width        The width to create.
+     * @param height       The height to create.
      * @param transparency A constant from {@link Transparency}.
      * @return A new {@link StdImage} of the given size.
      */
@@ -761,7 +761,7 @@ public class StdImage extends BufferedImage implements Icon {
     }
 
     /**
-     * @param width The width to create.
+     * @param width  The width to create.
      * @param height The height to create.
      * @return A new {@link StdImage} of the given size.
      */
@@ -770,8 +770,8 @@ public class StdImage extends BufferedImage implements Icon {
     }
 
     /**
-     * @param gc The {@link GraphicsConfiguration} to make the image compatible with.
-     * @param width The width to create.
+     * @param gc     The {@link GraphicsConfiguration} to make the image compatible with.
+     * @param width  The width to create.
      * @param height The height to create.
      * @return A new {@link StdImage} of the given size.
      */

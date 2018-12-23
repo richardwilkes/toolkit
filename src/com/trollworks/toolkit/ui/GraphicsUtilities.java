@@ -85,10 +85,10 @@ public class GraphicsUtilities {
      * @return The preferred screen device.
      */
     public static GraphicsDevice getPreferredScreenDevice(Rectangle bounds) {
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice best = ge.getDefaultScreenDevice();
-        Rectangle overlapBounds = Geometry.intersection(bounds, best.getDefaultConfiguration().getBounds());
-        int bestOverlap = overlapBounds.width * overlapBounds.height;
+        GraphicsEnvironment ge            = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice      best          = ge.getDefaultScreenDevice();
+        Rectangle           overlapBounds = Geometry.intersection(bounds, best.getDefaultConfiguration().getBounds());
+        int                 bestOverlap   = overlapBounds.width * overlapBounds.height;
 
         for (GraphicsDevice gd : ge.getScreenDevices()) {
             if (gd.getType() == GraphicsDevice.TYPE_RASTER_SCREEN) {
@@ -131,8 +131,8 @@ public class GraphicsUtilities {
      * size a window can be on that screen.
      *
      * @param panel The panel that contains the area.
-     * @param area The area within the panel to use when determining the maximum bounds for a
-     *            window.
+     * @param area  The area within the panel to use when determining the maximum bounds for a
+     *              window.
      * @return The maximum bounds that fits on a screen.
      */
     public static Rectangle getMaximumWindowBounds(Component panel, Rectangle area) {
@@ -150,7 +150,7 @@ public class GraphicsUtilities {
      */
     public static Rectangle getMaximumWindowBounds(Rectangle bounds) {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = getPreferredScreenDevice(bounds);
+        GraphicsDevice      gd = getPreferredScreenDevice(bounds);
 
         if (gd == ge.getDefaultScreenDevice()) {
             bounds = ge.getMaximumWindowBounds();
@@ -167,9 +167,9 @@ public class GraphicsUtilities {
                     insets.bottom = 48;
                 }
 
-                bounds.x += insets.left;
-                bounds.y += insets.top;
-                bounds.width -= insets.left + insets.right;
+                bounds.x      += insets.left;
+                bounds.y      += insets.top;
+                bounds.width  -= insets.left + insets.right;
                 bounds.height -= insets.top + insets.bottom;
             }
             return bounds;
@@ -180,14 +180,14 @@ public class GraphicsUtilities {
     public static void packAndCenterWindowOn(Window window, Component centeredOn) {
         window.pack();
         Dimension prefSize = window.getPreferredSize();
-        Dimension minSize = window.getMinimumSize();
-        int width = Math.max(prefSize.width, minSize.width);
-        int height = Math.max(prefSize.height, minSize.height);
-        int x;
-        int y;
+        Dimension minSize  = window.getMinimumSize();
+        int       width    = Math.max(prefSize.width, minSize.width);
+        int       height   = Math.max(prefSize.height, minSize.height);
+        int       x;
+        int       y;
         if (centeredOn != null) {
-            Point where = centeredOn.getLocationOnScreen();
-            Dimension size = centeredOn.getSize();
+            Point     where = centeredOn.getLocationOnScreen();
+            Dimension size  = centeredOn.getSize();
             x = where.x + (size.width - width) / 2;
             y = where.y + (size.height - height) / 2;
         } else {
@@ -206,9 +206,9 @@ public class GraphicsUtilities {
      */
     public static void forceOnScreen(Window window) {
         Rectangle maxBounds = getMaximumWindowBounds(window);
-        Rectangle bounds = window.getBounds();
-        Point location = new Point(bounds.x, bounds.y);
-        Dimension size = window.getMinimumSize();
+        Rectangle bounds    = window.getBounds();
+        Point     location  = new Point(bounds.x, bounds.y);
+        Dimension size      = window.getMinimumSize();
 
         if (bounds.width < size.width) {
             bounds.width = size.width;
@@ -226,7 +226,7 @@ public class GraphicsUtilities {
         if (bounds.x + bounds.width >= maxBounds.x + maxBounds.width) {
             bounds.x = maxBounds.x + maxBounds.width - bounds.width;
             if (bounds.x < maxBounds.x) {
-                bounds.x = maxBounds.x;
+                bounds.x     = maxBounds.x;
                 bounds.width = maxBounds.width;
             }
         }
@@ -240,7 +240,7 @@ public class GraphicsUtilities {
         if (bounds.y + bounds.height >= maxBounds.y + maxBounds.height) {
             bounds.y = maxBounds.y + maxBounds.height - bounds.height;
             if (bounds.y < maxBounds.y) {
-                bounds.y = maxBounds.y;
+                bounds.y      = maxBounds.y;
                 bounds.height = maxBounds.height;
             }
         }
@@ -296,8 +296,8 @@ public class GraphicsUtilities {
      *         graphics context.
      */
     public static Graphics2D getGraphics() {
-        Frame frame = AppWindow.getTopWindow();
-        Graphics2D g2d = frame == null ? null : (Graphics2D) frame.getGraphics();
+        Frame      frame = AppWindow.getTopWindow();
+        Graphics2D g2d   = frame == null ? null : (Graphics2D) frame.getGraphics();
 
         if (g2d == null) {
             Frame[] frames = Frame.getFrames();
@@ -369,8 +369,8 @@ public class GraphicsUtilities {
             HIDDEN_FRAME.setUndecorated(true);
             HIDDEN_FRAME.setBounds(0, 0, 0, 0);
         }
-        StdImageSet icons = AppWindow.getDefaultWindowIcons();
-        int sequence = icons != null ? icons.getSequence() : -1;
+        StdImageSet icons    = AppWindow.getDefaultWindowIcons();
+        int         sequence = icons != null ? icons.getSequence() : -1;
         if (HIDDEN_FRAME_ICONSET_SEQUENCE != sequence) {
             HIDDEN_FRAME_ICONSET_SEQUENCE = sequence;
             if (icons != null) {

@@ -23,8 +23,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlUUIDHelper implements XmlObjectHelper {
     public static final XmlUUIDHelper SINGLETON = new XmlUUIDHelper();
 
-    private XmlUUIDHelper() {
-    }
+    private XmlUUIDHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -46,8 +45,8 @@ public class XmlUUIDHelper implements XmlObjectHelper {
 
     @Override
     public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-        XmlDefault def = field.getAnnotation(XmlDefault.class);
-        String value = context.getParser().getAttribute(name, def != null ? def.value() : null);
+        XmlDefault def   = field.getAnnotation(XmlDefault.class);
+        String     value = context.getParser().getAttribute(name, def != null ? def.value() : null);
         field.set(obj, value != null && !value.isEmpty() ? UUID.fromString(value) : null);
     }
 

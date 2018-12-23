@@ -60,16 +60,16 @@ public class NumericComparator implements Comparator<String> {
         if (right == null) {
             right = ""; //$NON-NLS-1$
         }
-        char[] chars0 = left.toCharArray();
-        char[] chars1 = right.toCharArray();
-        int pos0 = 0;
-        int pos1 = 0;
-        int len0 = chars0.length;
-        int len1 = chars1.length;
-        int result = 0;
-        int secondaryResult = 0;
-        char c0;
-        char c1;
+        char[] chars0          = left.toCharArray();
+        char[] chars1          = right.toCharArray();
+        int    pos0            = 0;
+        int    pos1            = 0;
+        int    len0            = chars0.length;
+        int    len1            = chars1.length;
+        int    result          = 0;
+        int    secondaryResult = 0;
+        char   c0;
+        char   c1;
 
         while (result == 0 && pos0 < len0 && pos1 < len1) {
             boolean normalCompare = true;
@@ -118,8 +118,8 @@ public class NumericComparator implements Comparator<String> {
                 } catch (NumberFormatException nfex) {
                     pos0 -= count0;
                     pos1 -= count1;
-                    c0 = chars0[pos0++];
-                    c1 = chars1[pos1++];
+                    c0    = chars0[pos0++];
+                    c1    = chars1[pos1++];
                 }
             }
 

@@ -36,8 +36,8 @@ class Server extends Thread {
         setPriority(NORM_PRIORITY);
         setDaemon(true);
         mServerSocket = new ServerSocket(socketAddress.getPort(), 0, socketAddress.getAddress());
-        mClients = new ArrayList<>();
-        mSendLock = new Object();
+        mClients      = new ArrayList<>();
+        mSendLock     = new Object();
     }
 
     /** @return The next client counter. */

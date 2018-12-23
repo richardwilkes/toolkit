@@ -51,8 +51,8 @@ public class KeyStrokeDisplay extends JLabel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent event) {
-        KeyStroke ks = KeyStroke.getKeyStrokeForEvent(event);
-        int code = ks.getKeyCode();
+        KeyStroke ks   = KeyStroke.getKeyStrokeForEvent(event);
+        int       code = ks.getKeyCode();
         if (code != VK_SHIFT && code != VK_CONTROL && code != VK_META && code != VK_ALT && code != VK_CAPS_LOCK && code != VK_ESCAPE) {
             mKeyStroke = ks;
             setText(getKeyStrokeDisplay(mKeyStroke));

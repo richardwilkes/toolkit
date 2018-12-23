@@ -39,7 +39,7 @@ public class Conduit implements Runnable {
     /**
      * Creates a new conduit with the default port on the loopback address.
      *
-     * @param receiver The object that wants the messages from this conduit.
+     * @param receiver      The object that wants the messages from this conduit.
      * @param onEventThread Pass in <code>true</code> to receive the messages on the event thread.
      */
     public Conduit(ConduitReceiver receiver, boolean onEventThread) {
@@ -49,8 +49,8 @@ public class Conduit implements Runnable {
     /**
      * Creates a new conduit with the specified port on the loopback address.
      *
-     * @param port The port to communicate on.
-     * @param receiver The object that wants the messages from this conduit.
+     * @param port          The port to communicate on.
+     * @param receiver      The object that wants the messages from this conduit.
      * @param onEventThread Pass in <code>true</code> to receive the messages on the event thread.
      */
     public Conduit(int port, ConduitReceiver receiver, boolean onEventThread) {
@@ -60,9 +60,9 @@ public class Conduit implements Runnable {
     /**
      * Creates a new conduit with the specified port on the loopback address.
      *
-     * @param address The address to communicate on.
-     * @param port The port to communicate on.
-     * @param receiver The object that wants the messages from this conduit.
+     * @param address       The address to communicate on.
+     * @param port          The port to communicate on.
+     * @param receiver      The object that wants the messages from this conduit.
      * @param onEventThread Pass in <code>true</code> to receive the messages on the event thread.
      */
     public Conduit(InetAddress address, int port, ConduitReceiver receiver, boolean onEventThread) {
@@ -73,19 +73,19 @@ public class Conduit implements Runnable {
      * Creates a new conduit with the specified socket address.
      *
      * @param socketAddress The socket address to use.
-     * @param receiver The object that wants the messages from this conduit.
+     * @param receiver      The object that wants the messages from this conduit.
      * @param onEventThread Pass in <code>true</code> to receive the messages on the event thread.
      */
     public Conduit(InetSocketAddress socketAddress, ConduitReceiver receiver, boolean onEventThread) {
         if (socketAddress == null) {
             socketAddress = new InetSocketAddress(getLoopBackAddress(), DEFAULT_PORT);
         }
-        mSocketAddress = socketAddress;
-        mReceiver = receiver;
-        mOnEventThread = onEventThread;
+        mSocketAddress   = socketAddress;
+        mReceiver        = receiver;
+        mOnEventThread   = onEventThread;
         mReceptionThread = new Thread(this, Conduit.class.getSimpleName() + '@' + mSocketAddress);
-        mUserFilter = mReceiver.getConduitMessageUserFilter();
-        mIDFilter = mReceiver.getConduitMessageIDFilter();
+        mUserFilter      = mReceiver.getConduitMessageUserFilter();
+        mIDFilter        = mReceiver.getConduitMessageIDFilter();
         reconnect();
         mReceptionThread.setPriority(Thread.NORM_PRIORITY);
         mReceptionThread.setDaemon(true);
@@ -121,7 +121,7 @@ public class Conduit implements Runnable {
             mSocket = new Socket();
             try {
                 mSocket.connect(mSocketAddress);
-                mInput = new DataInputStream(mSocket.getInputStream());
+                mInput  = new DataInputStream(mSocket.getInputStream());
                 mOutput = new DataOutputStream(mSocket.getOutputStream());
                 return;
             } catch (Exception ex2) {
@@ -175,7 +175,7 @@ public class Conduit implements Runnable {
                 // Ignore.
             }
             mSocket = null;
-            mInput = null;
+            mInput  = null;
             mOutput = null;
         }
     }

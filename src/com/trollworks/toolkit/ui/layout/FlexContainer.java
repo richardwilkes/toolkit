@@ -51,11 +51,11 @@ public abstract class FlexContainer extends FlexCell {
 
     /**
      * @param scale The {@link Scale} to use.
-     * @param type The type of size to return.
+     * @param type  The type of size to return.
      * @return The sizes for each child.
      */
     protected Dimension[] getChildSizes(Scale scale, LayoutSize type) {
-        int count = getChildCount();
+        int         count = getChildCount();
         Dimension[] sizes = new Dimension[count];
         for (int i = 0; i < count; i++) {
             sizes[i] = mChildren.get(i).getSize(scale, type);
@@ -64,7 +64,7 @@ public abstract class FlexContainer extends FlexCell {
     }
 
     /**
-     * @param scale The {@link Scale} to use.
+     * @param scale  The {@link Scale} to use.
      * @param bounds The bounds to use for each child.
      */
     protected void layoutChildren(Scale scale, Rectangle[] bounds) {
@@ -96,7 +96,7 @@ public abstract class FlexContainer extends FlexCell {
     /** @param fill Whether all space will be taken up by expanding the gaps, if necessary. */
     public void setFill(boolean fill) {
         mFillHorizontal = fill;
-        mFillVertical = fill;
+        mFillVertical   = fill;
     }
 
     /**
@@ -108,7 +108,7 @@ public abstract class FlexContainer extends FlexCell {
 
     /**
      * @param fill Whether all horizontal space will be taken up by expanding the gaps, if
-     *            necessary.
+     *             necessary.
      */
     public void setFillHorizontal(boolean fill) {
         mFillHorizontal = fill;
@@ -129,7 +129,7 @@ public abstract class FlexContainer extends FlexCell {
     /**
      * Distribute an amount.
      *
-     * @param amt The amount to distribute.
+     * @param amt    The amount to distribute.
      * @param values The initial values. On return, these will have been adjusted.
      * @param limits The limits for the values.
      * @return Any leftover amount.
@@ -204,13 +204,13 @@ public abstract class FlexContainer extends FlexCell {
                         if (values[i] < upTo && values[i] < max[i]) {
                             if (values[i] + portion <= max[i]) {
                                 values[i] += portion;
-                                amt -= portion;
+                                amt       -= portion;
                                 if (values[i] != upTo) {
                                     count++;
                                 }
                             } else {
-                                amt -= max[i] - values[i];
-                                values[i] = max[i];
+                                amt       -= max[i] - values[i];
+                                values[i]  = max[i];
                             }
                         }
                     }

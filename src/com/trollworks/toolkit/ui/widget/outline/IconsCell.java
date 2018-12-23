@@ -53,16 +53,16 @@ public class IconsCell implements Cell {
     }
 
     /**
-     * @param row The row to use.
-     * @param column The column to use.
+     * @param row      The row to use.
+     * @param column   The column to use.
      * @param selected Whether the row is selected.
-     * @param active Whether the outline is active.
+     * @param active   Whether the outline is active.
      * @return The icon, if any.
      */
     @SuppressWarnings("static-method")
     protected List<RetinaIcon> getIcons(Row row, Column column, boolean selected, boolean active) {
         List<RetinaIcon> list = new ArrayList<>();
-        Object data = row.getData(column);
+        Object           data = row.getData(column);
         if (data instanceof RetinaIcon) {
             list.add((RetinaIcon) data);
         } else if (data instanceof List) {
@@ -81,8 +81,8 @@ public class IconsCell implements Cell {
             List<RetinaIcon> images = getIcons(row, column, selected, active);
             if (!images.isEmpty()) {
                 Scale scale = Scale.get(outline);
-                int x = bounds.x;
-                int y = bounds.y;
+                int   x     = bounds.x;
+                int   y     = bounds.y;
                 if (mHAlignment != SwingConstants.LEFT) {
                     int hDelta = bounds.width;
                     for (RetinaIcon img : images) {
@@ -118,7 +118,7 @@ public class IconsCell implements Cell {
     @Override
     public int getPreferredWidth(Outline outline, Row row, Column column) {
         Scale scale = Scale.get(outline);
-        int width = 0;
+        int   width = 0;
         for (RetinaIcon img : getIcons(row, column, false, true)) {
             width += scale.scale(img.getIconWidth());
         }
@@ -127,8 +127,8 @@ public class IconsCell implements Cell {
 
     @Override
     public int getPreferredHeight(Outline outline, Row row, Column column) {
-        Scale scale = Scale.get(outline);
-        int height = 0;
+        Scale scale  = Scale.get(outline);
+        int   height = 0;
         for (RetinaIcon img : getIcons(row, column, false, true)) {
             height += scale.scale(img.getIconHeight());
         }

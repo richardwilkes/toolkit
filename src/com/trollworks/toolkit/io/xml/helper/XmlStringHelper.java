@@ -22,8 +22,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlStringHelper implements XmlObjectHelper {
     public static final XmlStringHelper SINGLETON = new XmlStringHelper();
 
-    private XmlStringHelper() {
-    }
+    private XmlStringHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {

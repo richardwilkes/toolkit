@@ -35,7 +35,7 @@ public class ColorWell extends JPanel implements MouseListener {
     }
 
     public ColorWell(Color color, ColorChangedListener listener, String tooltip) {
-        mColor = color;
+        mColor    = color;
         mListener = listener;
         setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
         setBorder(new LineBorder());
@@ -59,8 +59,8 @@ public class ColorWell extends JPanel implements MouseListener {
         g.setColor(Color.WHITE);
         g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
         g.setColor(Color.LIGHT_GRAY);
-        int xs = bounds.width / 4;
-        int ys = bounds.height / 4;
+        int xs     = bounds.width / 4;
+        int ys     = bounds.height / 4;
         int offset = 0;
         for (int y = bounds.y; y < bounds.y + bounds.height; y += ys) {
             for (int x = bounds.x + offset; x < bounds.x + bounds.width; x += xs * 2) {

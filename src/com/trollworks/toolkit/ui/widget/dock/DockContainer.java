@@ -40,7 +40,7 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
     /**
      * Creates a new {@link DockContainer} for the specified {@link Dockable}.
      *
-     * @param dock The {@link Dock} that owns this {@link DockContainer}.
+     * @param dock     The {@link Dock} that owns this {@link DockContainer}.
      * @param dockable The {@link Dockable} to wrap.
      */
     public DockContainer(Dock dock, Dockable dockable) {
@@ -81,8 +81,8 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 
     /**
      * @param dockable The {@link Dockable} to stack into this {@link DockContainer}.
-     * @param index The position within this container to place it. Values out of range will result
-     *            in the {@link Dockable} being placed at the end.
+     * @param index    The position within this container to place it. Values out of range will
+     *                 result in the {@link Dockable} being placed at the end.
      */
     public void stack(Dockable dockable, int index) {
         DockContainer dc = dockable.getDockContainer();
@@ -108,7 +108,7 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
     /** Transfers focus to this container if it doesn't already have the focus. */
     public void acquireFocus() {
         Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner();
-        Component content = getCurrentDockable();
+        Component content    = getCurrentDockable();
         while (focusOwner != null && focusOwner != content) {
             focusOwner = focusOwner.getParent();
         }
@@ -288,9 +288,9 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 
     @Override
     public Dimension preferredLayoutSize(Container parent) {
-        Dimension size = mHeader.getPreferredSize();
-        int width = size.width;
-        int height = size.height;
+        Dimension size   = mHeader.getPreferredSize();
+        int       width  = size.width;
+        int       height = size.height;
         if (!mDockables.isEmpty()) {
             size = getCurrentDockable().getPreferredSize();
             if (width < size.width) {
@@ -304,10 +304,10 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
 
     @Override
     public Dimension minimumLayoutSize(Container parent) {
-        Dimension size = mHeader.getMinimumSize();
-        int width = size.width;
-        int height = size.height;
-        Dockable current = getCurrentDockable();
+        Dimension size    = mHeader.getMinimumSize();
+        int       width   = size.width;
+        int       height  = size.height;
+        Dockable  current = getCurrentDockable();
         if (current != null) {
             size = current.getMinimumSize();
             if (width < size.width) {
@@ -322,8 +322,8 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
     @Override
     public void layoutContainer(Container parent) {
         Insets insets = parent.getInsets();
-        int height = mHeader.getPreferredSize().height;
-        int width = parent.getWidth() - (insets.left + insets.right);
+        int    height = mHeader.getPreferredSize().height;
+        int    width  = parent.getWidth() - (insets.left + insets.right);
         mHeader.setBounds(insets.left, insets.top, width, height);
         Dockable current = getCurrentDockable();
         if (current != null) {

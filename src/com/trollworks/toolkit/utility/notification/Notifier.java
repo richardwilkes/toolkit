@@ -50,9 +50,10 @@ public class Notifier implements Comparator<NotifierTarget> {
      * Registers a {@link NotifierTarget} with this {@link Notifier}.
      *
      * @param target The {@link NotifierTarget} to register.
-     * @param names The names consumed. Names are hierarchical (separated by {@link #SEPARATOR}), so
-     *            specifying a name of "foo.bar" will consume not only a produced name of "foo.bar",
-     *            but also sub-names, such as "foo.bar.a", but not "foo.bart" or "foo.bart.a".
+     * @param names  The names consumed. Names are hierarchical (separated by {@link #SEPARATOR}),
+     *               so specifying a name of "foo.bar" will consume not only a produced name of
+     *               "foo.bar", but also sub-names, such as "foo.bar.a", but not "foo.bart" or
+     *               "foo.bart.a".
      */
     public synchronized void add(NotifierTarget target, String... names) {
         Set<String> normalizedNames = mNameMap.get(target);
@@ -82,7 +83,7 @@ public class Notifier implements Comparator<NotifierTarget> {
 
     private static String normalizeName(String name) {
         StringTokenizer tokenizer = new StringTokenizer(name, SEPARATOR);
-        StringBuilder builder = new StringBuilder();
+        StringBuilder   builder   = new StringBuilder();
         while (tokenizer.hasMoreTokens()) {
             if (builder.length() > 0) {
                 builder.append(SEPARATOR);
@@ -127,7 +128,7 @@ public class Notifier implements Comparator<NotifierTarget> {
 
     /**
      * @param enabled Whether or not this {@link Notifier} is currently enabled (and can therefore
-     *            be used to notify {@link NotifierTarget}s).
+     *                be used to notify {@link NotifierTarget}s).
      */
     public synchronized void setEnabled(boolean enabled) {
         mEnabled = enabled;
@@ -137,7 +138,7 @@ public class Notifier implements Comparator<NotifierTarget> {
      * Sends a notification to all interested {@link NotifierTarget}s.
      *
      * @param producer The producer issuing the notification.
-     * @param name The notification name.
+     * @param name     The notification name.
      */
     public void notify(Object producer, String name) {
         notify(producer, name, null);
@@ -147,13 +148,13 @@ public class Notifier implements Comparator<NotifierTarget> {
      * Sends a notification to all interested {@link NotifierTarget}s.
      *
      * @param producer The producer issuing the notification.
-     * @param name The notification name.
-     * @param data Extra data specific to this notification.
+     * @param name     The notification name.
+     * @param data     Extra data specific to this notification.
      */
     public void notify(Object producer, String name, Object data) {
         if (isEnabled()) {
             StringTokenizer tokenizer = new StringTokenizer(name, SEPARATOR);
-            StringBuilder builder = new StringBuilder();
+            StringBuilder   builder   = new StringBuilder();
             while (tokenizer.hasMoreTokens()) {
                 builder.append(tokenizer.nextToken());
                 String value = builder.toString();

@@ -158,7 +158,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * Creates a new outline.
      *
      * @param showIndent Pass in <code>true</code> if the outline should show hierarchy and controls
-     *            for it.
+     *                   for it.
      */
     public Outline(boolean showIndent) {
         this(new OutlineModel(), showIndent);
@@ -167,27 +167,27 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     /**
      * Creates a new outline.
      *
-     * @param model The model to use.
+     * @param model      The model to use.
      * @param showIndent Pass in <code>true</code> if the outline should show hierarchy and controls
-     *            for it.
+     *                   for it.
      */
     public Outline(OutlineModel model, boolean showIndent) {
         super();
-        mModel = model;
-        mProxies = new HashSet<>();
-        mUserSortable = true;
-        mAllowColumnContextMenu = true;
-        mAllowColumnResize = true;
-        mAllowColumnDrag = true;
-        mAllowRowDrag = true;
-        mDrawRowDividers = true;
-        mDrawColumnDividers = true;
-        mUseBanding = true;
-        mDividerColor = Color.LIGHT_GRAY;
-        mSelectionChangedCommand = CMD_SELECTION_CHANGED;
+        mModel                             = model;
+        mProxies                           = new HashSet<>();
+        mUserSortable                      = true;
+        mAllowColumnContextMenu            = true;
+        mAllowColumnResize                 = true;
+        mAllowColumnDrag                   = true;
+        mAllowRowDrag                      = true;
+        mDrawRowDividers                   = true;
+        mDrawColumnDividers                = true;
+        mUseBanding                        = true;
+        mDividerColor                      = Color.LIGHT_GRAY;
+        mSelectionChangedCommand           = CMD_SELECTION_CHANGED;
         mPotentialContentSizeChangeCommand = CMD_POTENTIAL_CONTENT_SIZE_CHANGE;
-        mDragChildInsertIndex = -1;
-        mLastRow = -1;
+        mDragChildInsertIndex              = -1;
+        mLastRow                           = -1;
         mModel.setShowIndent(showIndent);
         mModel.setIndentWidth(Icons.getDisclosure(true, true).getIconWidth());
 
@@ -292,12 +292,12 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     @Override
     public Dimension getPreferredSize() {
-        Scale scale = Scale.get(this);
-        int one = scale.scale(1);
-        Insets insets = getInsets();
-        Dimension size = new Dimension(insets.left + insets.right, insets.top + insets.bottom);
-        List<Column> columns = mModel.getColumns();
-        boolean needRevalidate = false;
+        Scale        scale          = Scale.get(this);
+        int          one            = scale.scale(1);
+        Insets       insets         = getInsets();
+        Dimension    size           = new Dimension(insets.left + insets.right, insets.top + insets.bottom);
+        List<Column> columns        = mModel.getColumns();
+        boolean      needRevalidate = false;
 
         for (Column col : columns) {
             int width = col.getWidth();
@@ -327,8 +327,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                     height = row.getPreferredHeight(this, columns);
                     row.setHeight(height);
                 }
-                size.height += height + (mDrawRowDividers ? one : 0);
-                needHeightAdjust = true;
+                size.height      += height + (mDrawRowDividers ? one : 0);
+                needHeightAdjust  = true;
             }
         }
         if (mDrawRowDividers && needHeightAdjust) {
@@ -348,8 +348,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     }
 
     private void drawDragRowInsertionMarker(Graphics gc, Row parent, int insertAtIndex) {
-        Scale scale = Scale.get(this);
-        int one = scale.scale(1);
+        Scale     scale  = Scale.get(this);
+        int       one    = scale.scale(1);
         Rectangle bounds = getDragRowInsertionMarkerBounds(parent, insertAtIndex);
         gc.setColor(Color.red);
         int three = scale.scale(3);
@@ -362,31 +362,31 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     }
 
     private Rectangle getDragRowInsertionMarkerBounds(Row parent, int insertAtIndex) {
-        Scale scale = Scale.get(this);
-        int one = scale.scale(1);
-        int rowCount = mModel.getRowCount();
+        Scale     scale    = Scale.get(this);
+        int       one      = scale.scale(1);
+        int       rowCount = mModel.getRowCount();
         Rectangle bounds;
 
         if (insertAtIndex < 0 || rowCount == 0) {
             bounds = new Rectangle();
         } else {
             int insertAt = getAbsoluteInsertionIndex(parent, insertAtIndex);
-            int indent = parent != null ? scale.scale(mModel.getIndentWidth(parent, mModel.getHierarchyColumn())) + scale.scale(mModel.getIndentWidth()) : 0;
+            int indent   = parent != null ? scale.scale(mModel.getIndentWidth(parent, mModel.getHierarchyColumn())) + scale.scale(mModel.getIndentWidth()) : 0;
             if (insertAt < rowCount) {
                 bounds = getRowBounds(mModel.getRowAtIndex(insertAt));
                 if (mDrawRowDividers && insertAt != 0) {
                     bounds.y -= one;
                 }
             } else {
-                bounds = getRowBounds(mModel.getRowAtIndex(rowCount - 1));
+                bounds    = getRowBounds(mModel.getRowAtIndex(rowCount - 1));
                 bounds.y += bounds.height;
             }
-            bounds.x += indent;
+            bounds.x     += indent;
             bounds.width -= indent;
         }
         int three = scale.scale(3);
-        bounds.y -= three;
-        bounds.height = three + one + three;
+        bounds.y      -= three;
+        bounds.height  = three + one + three;
         return bounds;
     }
 
@@ -408,7 +408,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     /**
      * @param index The last row to display. If set to a negative value, then the last row index in
-     *            the outline will be returned from {@link #getLastRowToDisplay()}.
+     *              the outline will be returned from {@link #getLastRowToDisplay()}.
      */
     public void setLastRowToDisplay(int index) {
         mLastRow = index;
@@ -417,20 +417,20 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     @Override
     protected void paintComponent(Graphics gc) {
         Scale scale = Scale.get(this);
-        int one = scale.scale(1);
+        int   one   = scale.scale(1);
 
         super.paintComponent(GraphicsUtilities.prepare(gc));
         drawBackground(gc);
 
-        Shape origClip = gc.getClip();
-        Rectangle clip = gc.getClipBounds();
-        Insets insets = getInsets();
-        Rectangle bounds = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), getHeight() - (insets.top + insets.bottom));
-        boolean active = isFocusOwner();
-        int first = getFirstRowToDisplay();
-        int last = getLastRowToDisplay();
-        boolean isPrinting = PrintUtilities.isPrinting(this);
-        boolean showIndent = showIndent();
+        Shape     origClip   = gc.getClip();
+        Rectangle clip       = gc.getClipBounds();
+        Insets    insets     = getInsets();
+        Rectangle bounds     = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), getHeight() - (insets.top + insets.bottom));
+        boolean   active     = isFocusOwner();
+        int       first      = getFirstRowToDisplay();
+        int       last       = getLastRowToDisplay();
+        boolean   isPrinting = PrintUtilities.isPrinting(this);
+        boolean   showIndent = showIndent();
 
         for (int rowIndex = first; rowIndex <= last; rowIndex++) {
             Row row = mModel.getRowAtIndex(rowIndex);
@@ -443,9 +443,9 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
                     boolean rowSelected = !isPrinting && mModel.isRowSelected(row);
                     if (!mDrawingDragImage || mDrawingDragImage && rowSelected) {
-                        Rectangle colBounds = new Rectangle(bounds);
+                        Rectangle colBounds      = new Rectangle(bounds);
                         Composite savedComposite = null;
-                        int shift = 0;
+                        int       shift          = 0;
 
                         for (Column col : mModel.getColumns()) {
                             if (col.isVisible()) {
@@ -459,8 +459,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                                     }
                                     boolean isHierCol = mModel.isHierarchyColumn(col);
                                     if (showIndent && isHierCol) {
-                                        shift = scale.scale(mModel.getIndentWidth(row, col));
-                                        colBounds.x += shift;
+                                        shift            = scale.scale(mModel.getIndentWidth(row, col));
+                                        colBounds.x     += shift;
                                         colBounds.width -= shift;
                                         if (row.canHaveChildren()) {
                                             RetinaIcon disclosure = getDisclosureControl(row);
@@ -469,7 +469,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                                     }
                                     col.drawRowCell(this, gc, colBounds, row, rowSelected, active);
                                     if (showIndent && isHierCol) {
-                                        colBounds.x -= shift;
+                                        colBounds.x     -= shift;
                                         colBounds.width += shift;
                                     }
                                     if (dragging) {
@@ -501,19 +501,19 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     private void drawBackground(Graphics gc) {
         Scale scale = Scale.get(this);
-        int one = scale.scale(1);
+        int   one   = scale.scale(1);
 
         super.paintComponent(gc);
 
-        Rectangle clip = gc.getClipBounds();
-        Insets insets = getInsets();
-        int top = insets.top;
-        int bottom = getHeight() - (top + insets.bottom);
-        Rectangle bounds = new Rectangle(insets.left, top, getWidth() - (insets.left + insets.right), bottom);
-        boolean active = isFocusOwner();
-        int first = getFirstRowToDisplay();
-        int last = getLastRowToDisplay();
-        boolean isPrinting = PrintUtilities.isPrinting(this);
+        Rectangle clip       = gc.getClipBounds();
+        Insets    insets     = getInsets();
+        int       top        = insets.top;
+        int       bottom     = getHeight() - (top + insets.bottom);
+        Rectangle bounds     = new Rectangle(insets.left, top, getWidth() - (insets.left + insets.right), bottom);
+        boolean   active     = isFocusOwner();
+        int       first      = getFirstRowToDisplay();
+        int       last       = getLastRowToDisplay();
+        boolean   isPrinting = PrintUtilities.isPrinting(this);
 
         for (int rowIndex = first; rowIndex <= last; rowIndex++) {
             Row row = mModel.getRowAtIndex(rowIndex);
@@ -541,7 +541,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
             int x = insets.left;
             gc.setColor(mDividerColor);
             List<Column> columns = mModel.getColumns();
-            int count = columns.size() - 1;
+            int          count   = columns.size() - 1;
             while (count > 0 && !columns.get(count).isVisible()) {
                 count--;
             }
@@ -650,12 +650,12 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The bounding rectangle of the repainted selection.
      */
     protected Rectangle repaintSelectionInternal() {
-        Scale scale = Scale.get(this);
-        int one = scale.scale(1);
-        Rectangle area = new Rectangle();
-        Insets insets = getInsets();
-        Rectangle bounds = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), getHeight() - (insets.top + insets.bottom));
-        int last = getLastRowToDisplay();
+        Scale        scale   = Scale.get(this);
+        int          one     = scale.scale(1);
+        Rectangle    area    = new Rectangle();
+        Insets       insets  = getInsets();
+        Rectangle    bounds  = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), getHeight() - (insets.top + insets.bottom));
+        int          last    = getLastRowToDisplay();
         List<Column> columns = mModel.getColumns();
         for (int i = getFirstRowToDisplay(); i <= last; i++) {
             Row row = mModel.getRowAtIndex(i);
@@ -682,7 +682,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     /**
      * @param rowIndex The index of the row.
      * @param selected Whether the row should be considered "selected".
-     * @param active Whether the outline should be considered "active".
+     * @param active   Whether the outline should be considered "active".
      * @return The background color for the specified row index.
      */
     public Color getBackground(int rowIndex, boolean selected, boolean active) {
@@ -707,9 +707,9 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
         Scale scale = Scale.get(this);
         if (orientation == SwingConstants.VERTICAL) {
             Insets insets = getInsets();
-            int y = visibleRect.y - insets.top;
-            int rowIndex;
-            int rowTop;
+            int    y      = visibleRect.y - insets.top;
+            int    rowIndex;
+            int    rowTop;
 
             if (direction < 0) {
                 rowIndex = overRowIndex(y);
@@ -722,8 +722,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                     }
                 }
             } else {
-                y += visibleRect.height;
-                rowIndex = overRowIndex(y);
+                y        += visibleRect.height;
+                rowIndex  = overRowIndex(y);
                 if (rowIndex > -1) {
                     int one = scale.scale(1);
                     rowTop = getRowIndexStart(rowIndex);
@@ -757,10 +757,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      */
     public Column overColumnDivider(int x) {
         Scale scale = Scale.get(this);
-        int slop = scale.scale(DIVIDER_HIT_SLOP);
-        int one = scale.scale(1);
-        int pos = getInsets().left;
-        int count = mModel.getColumnCount();
+        int   slop  = scale.scale(DIVIDER_HIT_SLOP);
+        int   one   = scale.scale(1);
+        int   pos   = getInsets().left;
+        int   count = mModel.getColumnCount();
         for (int i = 0; i < count; i++) {
             Column col = mModel.getColumnAtIndex(i);
             if (col.isVisible()) {
@@ -781,10 +781,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      */
     public int overColumnDividerIndex(int x) {
         Scale scale = Scale.get(this);
-        int slop = scale.scale(DIVIDER_HIT_SLOP);
-        int one = scale.scale(1);
-        int pos = getInsets().left;
-        int count = mModel.getColumnCount();
+        int   slop  = scale.scale(DIVIDER_HIT_SLOP);
+        int   one   = scale.scale(1);
+        int   pos   = getInsets().left;
+        int   count = mModel.getColumnCount();
         for (int i = 0; i < count; i++) {
             Column col = mModel.getColumnAtIndex(i);
             if (col.isVisible()) {
@@ -804,8 +804,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The column, or <code>null</code> if none is found.
      */
     public Column overColumn(int x) {
-        int one = Scale.get(this).scale(1);
-        int pos = getInsets().left;
+        int one   = Scale.get(this).scale(1);
+        int pos   = getInsets().left;
         int count = mModel.getColumnCount();
         for (int i = 0; i < count; i++) {
             Column col = mModel.getColumnAtIndex(i);
@@ -826,8 +826,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The column index, or <code>-1</code> if none is found.
      */
     public int overColumnIndex(int x) {
-        int one = Scale.get(this).scale(1);
-        int pos = getInsets().left;
+        int one   = Scale.get(this).scale(1);
+        int pos   = getInsets().left;
         int count = mModel.getColumnCount();
         for (int i = 0; i < count; i++) {
             Column col = mModel.getColumnAtIndex(i);
@@ -846,16 +846,16 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     }
 
     /**
-     * @param x The x-coordinate.
-     * @param y The y-coordinate.
+     * @param x      The x-coordinate.
+     * @param y      The y-coordinate.
      * @param column The column the coordinates are currently over.
-     * @param row The row the coordinates are currently over.
+     * @param row    The row the coordinates are currently over.
      * @return <code>true</code> if the coordinates are over a disclosure triangle.
      */
     public boolean overDisclosureControl(int x, int y, Column column, Row row) {
         if (showIndent() && column != null && row != null && row.canHaveChildren() && mModel.isHierarchyColumn(column)) {
             Scale scale = Scale.get(this);
-            int right = getColumnStart(column) + scale.scale(mModel.getIndentWidth(row, column));
+            int   right = getColumnStart(column) + scale.scale(mModel.getIndentWidth(row, column));
             return x <= right && x >= right - scale.scale(getDisclosureControl(row).getIconWidth());
         }
         return false;
@@ -882,8 +882,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The starting x-coordinate for the specified column.
      */
     public int getColumnStart(Column column) {
-        int one = Scale.get(this).scale(1);
-        int pos = getInsets().left;
+        int one   = Scale.get(this).scale(1);
+        int pos   = getInsets().left;
         int count = mModel.getColumnCount();
         for (int i = 0; i < count; i++) {
             Column col = mModel.getColumnAtIndex(i);
@@ -904,14 +904,14 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     public StdImage getColumnDragImage(Column column) {
         StdImage offscreen = null;
         synchronized (getTreeLock()) {
-            Scale scale = Scale.get(this);
-            int one = scale.scale(1);
-            int twoOnes = one + one;
-            Graphics2D gc = null;
+            Scale      scale   = Scale.get(this);
+            int        one     = scale.scale(1);
+            int        twoOnes = one + one;
+            Graphics2D gc      = null;
             try {
                 Rectangle bounds = new Rectangle(0, 0, column.getWidth() + (mDrawColumnDividers ? twoOnes : 0), getVisibleRect().height + (mHeaderPanel != null ? mHeaderPanel.getHeight() + one : 0));
                 offscreen = StdImage.createTransparent(getGraphicsConfiguration(), bounds.width, bounds.height);
-                gc = GraphicsUtilities.prepare(offscreen.getGraphics());
+                gc        = GraphicsUtilities.prepare(offscreen.getGraphics());
                 gc.setClip(bounds);
                 gc.setBackground(new Color(0, true));
                 gc.clearRect(0, 0, bounds.width, bounds.height);
@@ -922,13 +922,13 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                 if (mDrawRowDividers) {
                     gc.fillRect(bounds.x, bounds.y, bounds.width, one);
                     gc.fillRect(bounds.x, bounds.y + bounds.height - one, bounds.width, one);
-                    bounds.y += one;
+                    bounds.y      += one;
                     bounds.height -= twoOnes;
                 }
                 if (mDrawColumnDividers) {
                     gc.fillRect(bounds.x, bounds.y, one, bounds.height);
                     gc.fillRect(bounds.x + bounds.width - one, bounds.y, one, bounds.height);
-                    bounds.x += one;
+                    bounds.x     += one;
                     bounds.width -= twoOnes;
                 }
                 drawOneColumn(gc, column, bounds);
@@ -944,13 +944,13 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     }
 
     private void drawOneColumn(Graphics2D g2d, Column column, Rectangle bounds) {
-        Scale scale = Scale.get(this);
-        int one = scale.scale(1);
-        Shape oldClip = g2d.getClip();
+        Scale scale    = Scale.get(this);
+        int   one      = scale.scale(1);
+        Shape oldClip  = g2d.getClip();
         Color divColor = getDividerColor();
-        int last = getLastRowToDisplay();
-        int y = bounds.y;
-        int maxY = bounds.y + bounds.height;
+        int   last     = getLastRowToDisplay();
+        int   y        = bounds.y;
+        int   maxY     = bounds.y + bounds.height;
 
         if (mHeaderPanel != null) {
             bounds.height = mHeaderPanel.getHeight();
@@ -993,10 +993,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The row, or <code>null</code> if none is found.
      */
     public Row overRow(int y) {
-        int one = Scale.get(this).scale(1);
+        int       one  = Scale.get(this).scale(1);
         List<Row> rows = mModel.getRows();
-        int pos = getInsets().top;
-        int last = getLastRowToDisplay();
+        int       pos  = getInsets().top;
+        int       last = getLastRowToDisplay();
         for (int i = getFirstRowToDisplay(); i <= last; i++) {
             Row row = rows.get(i);
             if (!mModel.isRowFiltered(row)) {
@@ -1016,10 +1016,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The row index, or <code>-1</code> if none is found.
      */
     public int overRowIndex(int y) {
-        int one = Scale.get(this).scale(1);
+        int       one  = Scale.get(this).scale(1);
         List<Row> rows = mModel.getRows();
-        int pos = getInsets().top;
-        int last = getLastRowToDisplay();
+        int       pos  = getInsets().top;
+        int       last = getLastRowToDisplay();
         for (int i = getFirstRowToDisplay(); i <= last; i++) {
             Row row = rows.get(i);
             if (!mModel.isRowFiltered(row)) {
@@ -1038,15 +1038,15 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      *         .
      */
     public int getRowInsertionIndex(int y) {
-        int one = Scale.get(this).scale(1);
+        int       one  = Scale.get(this).scale(1);
         List<Row> rows = mModel.getRows();
-        int pos = getInsets().top;
-        int last = getLastRowToDisplay();
+        int       pos  = getInsets().top;
+        int       last = getLastRowToDisplay();
         for (int i = getFirstRowToDisplay(); i <= last; i++) {
             Row row = rows.get(i);
             if (!mModel.isRowFiltered(row)) {
                 int height = row.getHeight();
-                int tmp = pos + height / 2;
+                int tmp    = pos + height / 2;
                 if (y <= tmp) {
                     return i;
                 }
@@ -1061,9 +1061,9 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The starting y-coordinate for the specified row index.
      */
     public int getRowIndexStart(int index) {
-        int one = Scale.get(this).scale(1);
+        int       one  = Scale.get(this).scale(1);
         List<Row> rows = mModel.getRows();
-        int pos = getInsets().top;
+        int       pos  = getInsets().top;
         for (int i = getFirstRowToDisplay(); i < index; i++) {
             Row row = rows.get(i);
             if (!mModel.isRowFiltered(row)) {
@@ -1078,10 +1078,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The starting y-coordinate for the specified row.
      */
     public int getRowStart(Row row) {
-        int one = Scale.get(this).scale(1);
+        int       one  = Scale.get(this).scale(1);
         List<Row> rows = mModel.getRows();
-        int pos = getInsets().top;
-        int last = getLastRowToDisplay();
+        int       pos  = getInsets().top;
+        int       last = getLastRowToDisplay();
         for (int i = getFirstRowToDisplay(); i <= last; i++) {
             Row oneRow = rows.get(i);
             if (row == oneRow) {
@@ -1099,9 +1099,9 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The bounds of the row at the specified index.
      */
     public Rectangle getRowIndexBounds(int rowIndex) {
-        Insets insets = getInsets();
+        Insets    insets = getInsets();
         Rectangle bounds = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), getHeight() - (insets.top + insets.bottom));
-        bounds.y = getRowIndexStart(rowIndex);
+        bounds.y      = getRowIndexStart(rowIndex);
         bounds.height = mModel.getRowAtIndex(rowIndex).getHeight();
         return bounds;
     }
@@ -1111,36 +1111,36 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The bounds of the specified row.
      */
     public Rectangle getRowBounds(Row row) {
-        Insets insets = getInsets();
+        Insets    insets = getInsets();
         Rectangle bounds = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), getHeight() - (insets.top + insets.bottom));
-        bounds.y = getRowStart(row);
+        bounds.y      = getRowStart(row);
         bounds.height = row.getHeight();
         return bounds;
     }
 
     /**
-     * @param row The row to use.
+     * @param row    The row to use.
      * @param column The column to use.
      * @return The bounds of the specified cell.
      */
     public Rectangle getCellBounds(Row row, Column column) {
         Rectangle bounds = getRowBounds(row);
-        bounds.x = getColumnStart(column);
+        bounds.x     = getColumnStart(column);
         bounds.width = column.getWidth();
         return bounds;
     }
 
     /**
-     * @param row The row to use.
+     * @param row    The row to use.
      * @param column The column to use.
      * @return The bounds of the specified cell, adjusted for any necessary indent.
      */
     public Rectangle getAdjustedCellBounds(Row row, Column column) {
         Rectangle bounds = getCellBounds(row, column);
         if (mModel.isHierarchyColumn(column)) {
-            Scale scale = Scale.get(this);
-            int indent = scale.scale(mModel.getIndentWidth(row, column));
-            bounds.x += indent;
+            Scale scale  = Scale.get(this);
+            int   indent = scale.scale(mModel.getIndentWidth(row, column));
+            bounds.x     += indent;
             bounds.width -= indent;
             int one = scale.scale(1);
             if (bounds.width < one) {
@@ -1243,7 +1243,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      */
     public void setColumnOrder(List<Column> columns) {
         ArrayList<Column> list = new ArrayList<>(columns);
-        List<Column> cols = mModel.getColumns();
+        List<Column>      cols = mModel.getColumns();
         cols.removeAll(columns);
         list.addAll(cols);
         cols.clear();
@@ -1302,12 +1302,12 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
         requestFocus();
         Row rollRow = null;
         try {
-            boolean local = event.getSource() == this;
-            int x = event.getX();
-            int y = event.getY();
-            Row rowHit;
-            Column column;
-            int clickCount = event.getClickCount();
+            boolean local      = event.getSource() == this;
+            int     x          = event.getX();
+            int     y          = event.getY();
+            Row     rowHit;
+            Column  column;
+            int     clickCount = event.getClickCount();
 
             rollRow = mRollRow;
             if (clickCount == 1) {
@@ -1349,16 +1349,16 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     private void repaintChangedRollRow(Row rollRow) {
         if (rollRow != mRollRow) {
-            Scale scale = Scale.get(this);
-            Column column = mModel.getHierarchyColumn();
+            Scale     scale  = Scale.get(this);
+            Column    column = mModel.getHierarchyColumn();
             Rectangle bounds;
             if (mRollRow != null) {
-                bounds = getCellBounds(mRollRow, column);
+                bounds       = getCellBounds(mRollRow, column);
                 bounds.width = scale.scale(mModel.getIndentWidth(mRollRow, column));
                 repaint(bounds);
             }
             if (rollRow != null) {
-                bounds = getCellBounds(rollRow, column);
+                bounds       = getCellBounds(rollRow, column);
                 bounds.width = scale.scale(mModel.getIndentWidth(rollRow, column));
                 repaint(bounds);
             }
@@ -1382,14 +1382,14 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
             Row rollRow = null;
             try {
                 boolean local = event.getSource() == this;
-                int x = event.getX();
-                int y = event.getY();
-                Row rowHit;
-                int rowIndexHit;
-                Column column;
+                int     x     = event.getX();
+                int     y     = event.getY();
+                Row     rowHit;
+                int     rowIndexHit;
+                Column  column;
                 requestFocus();
                 mSelectOnMouseUp = -1;
-                mDividerDrag = overColumnDivider(x);
+                mDividerDrag     = overColumnDivider(x);
                 if (mDividerDrag != null) {
                     if (allowColumnResize()) {
                         mColumnStart = getColumnStart(mDividerDrag);
@@ -1401,7 +1401,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                         if (overDisclosureControl(x, y, column, rowHit)) {
                             Rectangle bounds = getCellBounds(rowHit, column);
                             bounds.width = Scale.get(this).scale(mModel.getIndentWidth(rowHit, column));
-                            rollRow = mRollRow;
+                            rollRow      = mRollRow;
                             repaint(bounds);
                             rowHit.setOpen(!rowHit.isOpen());
                             return;
@@ -1480,13 +1480,13 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
         if (isEnabled()) {
             Row rollRow = null;
             try {
-                boolean local = event.getSource() == this;
-                int x = event.getX();
-                int y = event.getY();
-                Row rowHit;
-                Column column;
+                boolean local  = event.getSource() == this;
+                int     x      = event.getX();
+                int     y      = event.getY();
+                Row     rowHit;
+                Column  column;
 
-                Cursor cursor = Cursor.getDefaultCursor();
+                Cursor  cursor = Cursor.getDefaultCursor();
 
                 if (overColumnDivider(x) != null) {
                     if (allowColumnResize()) {
@@ -1516,37 +1516,37 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     @Override
     public void keyPressed(KeyEvent event) {
         Selection selection = mModel.getSelection();
-        boolean shiftDown = event.isShiftDown();
-        int index;
+        boolean   shiftDown = event.isShiftDown();
+        int       index;
         switch (event.getKeyCode()) {
-            case KeyEvent.VK_LEFT:
-                index = selection.firstSelectedIndex();
-                while (index >= 0) {
-                    mModel.getRowAtIndex(index).setOpen(false);
-                    index = selection.nextSelectedIndex(index + 1);
-                }
-                break;
-            case KeyEvent.VK_RIGHT:
-                index = selection.firstSelectedIndex();
-                while (index >= 0) {
-                    mModel.getRowAtIndex(index).setOpen(true);
-                    index = selection.nextSelectedIndex(index + 1);
-                }
-                break;
-            case KeyEvent.VK_UP:
-                keyScroll(selection.selectUp(shiftDown));
-                break;
-            case KeyEvent.VK_DOWN:
-                keyScroll(selection.selectDown(shiftDown));
-                break;
-            case KeyEvent.VK_HOME:
-                keyScroll(selection.selectToHome(shiftDown));
-                break;
-            case KeyEvent.VK_END:
-                keyScroll(selection.selectToEnd(shiftDown));
-                break;
-            default:
-                return;
+        case KeyEvent.VK_LEFT:
+            index = selection.firstSelectedIndex();
+            while (index >= 0) {
+                mModel.getRowAtIndex(index).setOpen(false);
+                index = selection.nextSelectedIndex(index + 1);
+            }
+            break;
+        case KeyEvent.VK_RIGHT:
+            index = selection.firstSelectedIndex();
+            while (index >= 0) {
+                mModel.getRowAtIndex(index).setOpen(true);
+                index = selection.nextSelectedIndex(index + 1);
+            }
+            break;
+        case KeyEvent.VK_UP:
+            keyScroll(selection.selectUp(shiftDown));
+            break;
+        case KeyEvent.VK_DOWN:
+            keyScroll(selection.selectDown(shiftDown));
+            break;
+        case KeyEvent.VK_HOME:
+            keyScroll(selection.selectToHome(shiftDown));
+            break;
+        case KeyEvent.VK_END:
+            keyScroll(selection.selectToEnd(shiftDown));
+            break;
+        default:
+            return;
         }
         event.consume();
     }
@@ -1598,8 +1598,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     private void dragColumnDivider(int x) {
         Scale scale = Scale.get(this);
-        int slop = scale.scale(DIVIDER_HIT_SLOP);
-        int old = mDividerDrag.getWidth();
+        int   slop  = scale.scale(DIVIDER_HIT_SLOP);
+        int   old   = mDividerDrag.getWidth();
         if (x <= mColumnStart + slop * 2) {
             x = mColumnStart + slop * 2 + scale.scale(1);
         }
@@ -1611,7 +1611,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     /**
      * @param column The column to adjust.
-     * @param width The new column width.
+     * @param width  The new column width.
      */
     public void adjustColumnWidth(Column column, int width) {
         ArrayList<Column> columns = new ArrayList<>(1);
@@ -1631,13 +1631,13 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The drag image for this table when dragging rows.
      */
     protected StdImage getDragImage(int x, int y) {
-        Graphics2D gc = null;
-        StdImage off1 = null;
-        StdImage off2 = null;
+        Graphics2D gc   = null;
+        StdImage   off1 = null;
+        StdImage   off2 = null;
 
         mDrawingDragImage = true;
-        mDragClip = null;
-        off1 = getImage();
+        mDragClip         = null;
+        off1              = getImage();
         mDrawingDragImage = false;
 
         if (mDragClip == null) {
@@ -1646,7 +1646,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
         try {
             off2 = StdImage.createTransparent(getGraphicsConfiguration(), mDragClip.width, mDragClip.height);
-            gc = off2.getGraphics();
+            gc   = off2.getGraphics();
             gc.setClip(new Rectangle(0, 0, mDragClip.width, mDragClip.height));
             gc.setBackground(new Color(0, true));
             gc.clearRect(0, 0, mDragClip.width, mDragClip.height);
@@ -1656,7 +1656,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
             gc.drawImage(off1, 0, 0, this);
         } catch (Exception paintException) {
             Log.error(paintException);
-            off2 = null;
+            off2      = null;
             mDragClip = new Rectangle(x, y, 1, 1);
         } finally {
             if (gc != null) {
@@ -1678,7 +1678,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
             try {
                 Rectangle bounds = getVisibleRect();
                 offscreen = StdImage.createTransparent(getGraphicsConfiguration(), bounds.width, bounds.height);
-                gc = offscreen.getGraphics();
+                gc        = offscreen.getGraphics();
                 Color saved = gc.getBackground();
                 gc.setBackground(new Color(0, true));
                 gc.clearRect(0, 0, bounds.width, bounds.height);
@@ -1776,15 +1776,15 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     /**
      * Sort on a column.
      *
-     * @param column The column to sort on.
+     * @param column    The column to sort on.
      * @param ascending Pass in <code>true</code> for an ascending sort.
-     * @param add Pass in <code>true</code> to add this column to the end of the sort order, or
-     *            <code>false</code> to make this column the primary and only sort column.
+     * @param add       Pass in <code>true</code> to add this column to the end of the sort order,
+     *                  or <code>false</code> to make this column the primary and only sort column.
      */
     public void setSort(Column column, boolean ascending, boolean add) {
-        StateEdit edit = new StateEdit(mModel, SORT_UNDO_TITLE);
-        int count = mModel.getColumnCount();
-        int i;
+        StateEdit edit  = new StateEdit(mModel, SORT_UNDO_TITLE);
+        int       count = mModel.getColumnCount();
+        int       i;
 
         if (!add) {
             for (i = 0; i < count; i++) {
@@ -1827,8 +1827,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     }
 
     private void repaintFocus() {
-        Scale scale = Scale.get(this);
-        int one = scale.scale(1);
+        Scale     scale  = Scale.get(this);
+        int       one    = scale.scale(1);
         Rectangle bounds = getVisibleRect();
         paintImmediately(bounds.x, bounds.y, bounds.width, one);
         paintImmediately(bounds.x, bounds.y + bounds.height - one, bounds.width, one);
@@ -1855,7 +1855,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     @Override
     public Point getToolTipLocation(MouseEvent event) {
-        int x = event.getX();
+        int    x      = event.getX();
         Column column = overColumn(x);
         if (column != null) {
             Row row = overRow(event.getY());
@@ -1903,8 +1903,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * Creates a configuration that can be applied to an outline.
      *
      * @param configSpec The column configuration spec for each column.
-     * @param hSplit The position of the horizontal splitter.
-     * @param vSplit The position of the vertical splitter.
+     * @param hSplit     The position of the horizontal splitter.
+     * @param vSplit     The position of the vertical splitter.
      * @return The configuration.
      */
     public static String createConfig(ColumnConfig[] configSpec, int hSplit, int vSplit) {
@@ -1937,7 +1937,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      */
     public String getConfig() {
         StringBuilder buffer = new StringBuilder();
-        int count = mModel.getColumnCount();
+        int           count  = mModel.getColumnCount();
         buffer.append(OutlineModel.CONFIG_VERSION);
         buffer.append('\t');
         buffer.append(count);
@@ -1974,11 +1974,11 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
         try {
             StringTokenizer tokenizer = new StringTokenizer(config, "\t"); //$NON-NLS-1$
             if (getInteger(tokenizer, 0) == OutlineModel.CONFIG_VERSION) {
-                int count = getInteger(tokenizer, 0);
-                List<Column> columns = mModel.getColumns();
-                boolean needSort = false;
-                Column column;
-                int i;
+                int          count    = getInteger(tokenizer, 0);
+                List<Column> columns  = mModel.getColumns();
+                boolean      needSort = false;
+                Column       column;
+                int          i;
 
                 mModel.clearSort();
 
@@ -2024,11 +2024,11 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     @Override
     public void dragGestureRecognized(DragGestureEvent dge) {
         if (mDividerDrag == null && mModel.hasSelection() && allowRowDrag()) {
-            Point pt = dge.getDragOrigin();
+            Point        pt        = dge.getDragOrigin();
             RowSelection selection = new RowSelection(mModel, mModel.getSelectionAsList(true).toArray(new Row[0]));
             if (DragSource.isDragImageSupported()) {
-                StdImage dragImage = getDragImage(pt.x, pt.y);
-                Point imageOffset = new Point(mDragClip.x - pt.x, mDragClip.y - pt.y);
+                StdImage dragImage   = getDragImage(pt.x, pt.y);
+                Point    imageOffset = new Point(mDragClip.x - pt.x, mDragClip.y - pt.y);
                 dge.startDrag(null, dragImage, imageOffset, selection, null);
             } else {
                 dge.startDrag(null, selection);
@@ -2076,7 +2076,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     }
 
     /**
-     * @param dtde The drop target drag event.
+     * @param dtde   The drop target drag event.
      * @param column The column.
      * @return <code>true</code> if the contents of the drag can be dropped into this outline.
      */
@@ -2139,7 +2139,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     /**
      * Called when a row drag is entered over a proxy to this outline.
      *
-     * @param dtde The drag event.
+     * @param dtde  The drag event.
      * @param proxy The proxy.
      */
     @SuppressWarnings("static-method")
@@ -2174,9 +2174,9 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The value to return via {@link DropTargetDragEvent#acceptDrag(int)}.
      */
     protected int dragOverColumn(DropTargetDragEvent dtde) {
-        int x = dtde.getLocation().x;
+        int x    = dtde.getLocation().x;
         int over = overColumnIndex(x);
-        int cur = mModel.getIndexOfColumn(mModel.getDragColumn());
+        int cur  = mModel.getIndexOfColumn(mModel.getDragColumn());
         if (over != cur && over != -1) {
             int midway = getColumnIndexStart(over) + mModel.getColumnAtIndex(over).getWidth() / 2;
             if (over < cur && x < midway || over > cur && x > midway) {
@@ -2207,21 +2207,21 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The value to return via {@link DropTargetDragEvent#acceptDrag(int)}.
      */
     protected int dragOverRow(DropTargetDragEvent dtde) {
-        Scale scale = Scale.get(this);
-        int one = scale.scale(1);
-        Row savedParentRow = mDragParentRow;
-        int savedChildInsertIndex = mDragChildInsertIndex;
-        Row parentRow = null;
-        int childInsertIndex = -1;
-        Point pt = dtde.getLocation();
-        int y = getInsets().top;
-        int last = getLastRowToDisplay();
-        Row[] dragRows = mModel.getDragRows();
-        boolean isFromSelf = dragRows != null && dragRows.length > 0 && mModel.getRows().contains(dragRows[0]);
-        int indentWidth = scale.scale(mModel.getIndentWidth());
+        Scale     scale                 = Scale.get(this);
+        int       one                   = scale.scale(1);
+        Row       savedParentRow        = mDragParentRow;
+        int       savedChildInsertIndex = mDragChildInsertIndex;
+        Row       parentRow             = null;
+        int       childInsertIndex      = -1;
+        Point     pt                    = dtde.getLocation();
+        int       y                     = getInsets().top;
+        int       last                  = getLastRowToDisplay();
+        Row[]     dragRows              = mModel.getDragRows();
+        boolean   isFromSelf            = dragRows != null && dragRows.length > 0 && mModel.getRows().contains(dragRows[0]);
+        int       indentWidth           = scale.scale(mModel.getIndentWidth());
         Rectangle bounds;
-        int indent;
-        Row row;
+        int       indent;
+        Row       row;
 
         for (int i = getFirstRowToDisplay(); i <= last; i++) {
             row = mModel.getRowAtIndex(i);
@@ -2242,7 +2242,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                         bounds = getRowBounds(row);
                         indent = indentWidth + scale.scale(mModel.getIndentWidth(row, mModel.getHierarchyColumn()));
                         if (pt.x >= bounds.x + indent && (!isFromSelf || !mModel.isExtendedRowSelected(row))) {
-                            parentRow = row;
+                            parentRow        = row;
                             childInsertIndex = 0;
                             break;
                         }
@@ -2270,7 +2270,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                     bounds = getRowBounds(row);
                     indent = indentWidth + scale.scale(mModel.getIndentWidth(row, mModel.getHierarchyColumn()));
                     if (pt.x >= bounds.x + indent && (!isFromSelf || !mModel.isExtendedRowSelected(row))) {
-                        parentRow = row;
+                        parentRow        = row;
                         childInsertIndex = 0;
                     }
                 }
@@ -2279,18 +2279,18 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                     if (parentRow != null && (!isFromSelf || !mModel.isExtendedRowSelected(parentRow))) {
                         childInsertIndex = parentRow.getIndexOfChild(row) + 1;
                     } else {
-                        parentRow = null;
+                        parentRow        = null;
                         childInsertIndex = last + 1;
                     }
                 }
             } else {
-                parentRow = null;
+                parentRow        = null;
                 childInsertIndex = 0;
             }
         }
 
         if (!isDragToRowAcceptable(parentRow)) {
-            mDragParentRow = null;
+            mDragParentRow        = null;
             mDragChildInsertIndex = 0;
             if (mDragParentRow != savedParentRow || mDragChildInsertIndex != savedChildInsertIndex) {
                 repaint(getDragRowInsertionMarkerBounds(savedParentRow, savedChildInsertIndex));
@@ -2300,7 +2300,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
         if (mDragParentRow != parentRow || mDragChildInsertIndex != childInsertIndex) {
             Graphics gc = getGraphics();
-            mDragParentRow = parentRow;
+            mDragParentRow        = parentRow;
             mDragChildInsertIndex = childInsertIndex;
             drawDragRowInsertionMarker(gc, mDragParentRow, mDragChildInsertIndex);
             gc.dispose();
@@ -2408,7 +2408,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     protected void dragExitRow(DropTargetEvent dte) {
         repaint(getDragRowInsertionMarkerBounds(mDragParentRow, mDragChildInsertIndex));
         removeDragHighlight(this);
-        mDragParentRow = null;
+        mDragParentRow        = null;
         mDragChildInsertIndex = -1;
         mModel.setDragRows(null);
     }
@@ -2416,7 +2416,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     /**
      * Called when a row drag leaves a proxy of this outline.
      *
-     * @param dte The drop target event.
+     * @param dte   The drop target event.
      * @param proxy The proxy.
      */
     @SuppressWarnings("static-method")
@@ -2479,17 +2479,17 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     protected void dropRow(DropTargetDropEvent dtde) {
         removeDragHighlight(this);
         if (mDragChildInsertIndex != -1) {
-            StateEdit edit = new StateEdit(mModel, ROW_DROP_UNDO_TITLE);
-            Row[] dragRows = mModel.getDragRows();
-            boolean isFromSelf = dragRows != null && dragRows.length > 0 && mModel.getRows().contains(dragRows[0]);
-            int count = mModel.getRowCount();
-            ArrayList<Row> rows = new ArrayList<>(count);
-            ArrayList<Row> selection = new ArrayList<>(count);
+            StateEdit      edit         = new StateEdit(mModel, ROW_DROP_UNDO_TITLE);
+            Row[]          dragRows     = mModel.getDragRows();
+            boolean        isFromSelf   = dragRows != null && dragRows.length > 0 && mModel.getRows().contains(dragRows[0]);
+            int            count        = mModel.getRowCount();
+            ArrayList<Row> rows         = new ArrayList<>(count);
+            ArrayList<Row> selection    = new ArrayList<>(count);
             ArrayList<Row> needSelected = new ArrayList<>(count);
-            List<Row> modelRows;
-            int i;
-            int insertAt;
-            Row row;
+            List<Row>      modelRows;
+            int            i;
+            int            insertAt;
+            Row            row;
 
             // Collect up the selected rows
             if (!isFromSelf) {
@@ -2528,7 +2528,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
             for (i = count; i >= 0; i--) {
                 Row parent;
 
-                row = selection.get(i);
+                row    = selection.get(i);
                 parent = row.getParent();
                 if (insertAt == -1) {
                     row.setOwner(null);
@@ -2550,9 +2550,9 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
             mModel.deselect();
             mModel.clearSort();
-            mDragParentRow = null;
+            mDragParentRow        = null;
             mDragChildInsertIndex = -1;
-            modelRows = mModel.getRows();
+            modelRows             = mModel.getRows();
             modelRows.clear();
             modelRows.addAll(rows);
             mModel.getSelection().setSize(modelRows.size());
@@ -2570,7 +2570,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     /**
      * Called when a row drop occurs in a proxy of this outline.
      *
-     * @param dtde The drop target drop event.
+     * @param dtde  The drop target drop event.
      * @param proxy The proxy.
      */
     @SuppressWarnings("static-method")
@@ -2598,7 +2598,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
         int count;
 
         if (parent == null) {
-            count = mModel.getRowCount();
+            count    = mModel.getRowCount();
             insertAt = childInsertIndex;
             while (insertAt < count && mModel.getRowAtIndex(insertAt).getParent() != null) {
                 insertAt++;
@@ -2613,7 +2613,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
             } else {
                 Row row = parent.getChild(i - 1);
 
-                count = mModel.getRowCount();
+                count    = mModel.getRowCount();
                 insertAt = mModel.getIndexOfRow(row) + 1;
                 while (insertAt < count && mModel.getRowAtIndex(insertAt).isDescendantOf(row)) {
                     insertAt++;
@@ -2657,10 +2657,10 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @param rows The rows to update.
      */
     public void updateRowHeights(Collection<? extends Row> rows) {
-        List<Column> columns = mModel.getColumns();
-        boolean needRevalidate = false;
+        List<Column> columns        = mModel.getColumns();
+        boolean      needRevalidate = false;
         for (Row row : rows) {
-            int height = row.getHeight();
+            int height     = row.getHeight();
             int prefHeight = row.getPreferredHeight(this, columns);
             if (height != prefHeight) {
                 row.setHeight(prefHeight);
@@ -2675,7 +2675,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     @Override
     public Insets getAutoscrollInsets() {
-        int margin = Scale.get(this).scale(AUTO_SCROLL_MARGIN);
+        int         margin     = Scale.get(this).scale(AUTO_SCROLL_MARGIN);
         JScrollPane scrollPane = UIUtilities.getAncestorOfType(this, JScrollPane.class);
         if (scrollPane != null) {
             Rectangle bounds = scrollPane.getViewport().getViewRect();
@@ -2686,9 +2686,9 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     @Override
     public void autoscroll(Point pt) {
-        int margin = Scale.get(this).scale(AUTO_SCROLL_MARGIN);
-        Insets insets = getAutoscrollInsets();
-        Dimension size = getSize();
+        int       margin = Scale.get(this).scale(AUTO_SCROLL_MARGIN);
+        Insets    insets = getAutoscrollInsets();
+        Dimension size   = getSize();
         if (pt.x < insets.left) {
             pt.x -= margin;
         } else if (pt.x > size.width - insets.right) {
@@ -2768,17 +2768,17 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     private void scrollSelectionIntoViewInternal() {
         Selection selection = mModel.getSelection();
-        int first = selection.nextSelectedIndex(getFirstRowToDisplay());
-        int max = getLastRowToDisplay();
+        int       first     = selection.nextSelectedIndex(getFirstRowToDisplay());
+        int       max       = getLastRowToDisplay();
 
         if (first != -1 && first <= max) {
             Rectangle bounds = getRowIndexBounds(first);
-            int tmp = first;
-            int last;
+            int       tmp    = first;
+            int       last;
 
             do {
                 last = tmp;
-                tmp = selection.nextSelectedIndex(last + 1);
+                tmp  = selection.nextSelectedIndex(last + 1);
             } while (tmp != -1 && tmp <= max);
 
             if (first != last) {

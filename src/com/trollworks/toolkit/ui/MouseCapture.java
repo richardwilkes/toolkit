@@ -38,13 +38,13 @@ public class MouseCapture implements MouseListener, MouseMotionListener, Hierarc
      * Starts redirecting all mouse events to the specified component or one of its children.
      *
      * @param component The target.
-     * @param cursor The cursor to use while the mouse is captured.
+     * @param cursor    The cursor to use while the mouse is captured.
      */
     public static void start(Component component, Cursor cursor) {
         JRootPane rootPane = SwingUtilities.getRootPane(component);
         if (rootPane != null) {
-            Component glassPane = rootPane.getGlassPane();
-            MouseCapture capture = new MouseCapture(glassPane, component);
+            Component    glassPane = rootPane.getGlassPane();
+            MouseCapture capture   = new MouseCapture(glassPane, component);
             glassPane.addMouseListener(capture);
             glassPane.addMouseMotionListener(capture);
             glassPane.addHierarchyListener(capture);
@@ -73,7 +73,7 @@ public class MouseCapture implements MouseListener, MouseMotionListener, Hierarc
     }
 
     private MouseCapture(Component glassPane, Component capture) {
-        mGlassPane = glassPane;
+        mGlassPane        = glassPane;
         mCaptureComponent = capture;
     }
 
@@ -120,9 +120,9 @@ public class MouseCapture implements MouseListener, MouseMotionListener, Hierarc
     }
 
     private void redispatchMouseEvent(MouseEvent event) {
-        Point glassPanePoint = event.getPoint();
-        Point containerPoint = SwingUtilities.convertPoint(mGlassPane, glassPanePoint, mCaptureComponent);
-        Component component = SwingUtilities.getDeepestComponentAt(mCaptureComponent, containerPoint.x, containerPoint.y);
+        Point     glassPanePoint = event.getPoint();
+        Point     containerPoint = SwingUtilities.convertPoint(mGlassPane, glassPanePoint, mCaptureComponent);
+        Component component      = SwingUtilities.getDeepestComponentAt(mCaptureComponent, containerPoint.x, containerPoint.y);
         if (component != null) {
             Point componentPoint = SwingUtilities.convertPoint(mGlassPane, glassPanePoint, component);
             component.dispatchEvent(new MouseEvent(component, event.getID(), event.getWhen(), event.getModifiersEx(), componentPoint.x, componentPoint.y, event.getClickCount(), event.isPopupTrigger()));

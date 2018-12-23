@@ -18,7 +18,7 @@ public final class ClassAnnotation<T extends Annotation> {
     private Class<T> mAnnotationClass;
 
     public ClassAnnotation(Class<?> cls, Class<T> annotationCls) {
-        mClass = cls;
+        mClass           = cls;
         mAnnotationClass = annotationCls;
     }
 

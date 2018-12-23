@@ -77,9 +77,9 @@ public class DateTime {
             if (matcher.find()) {
                 Calendar cal = Calendar.getInstance();
                 cal.clear();
-                int year = Numbers.extractInteger(matcher.group(1), 0, false);
+                int year  = Numbers.extractInteger(matcher.group(1), 0, false);
                 int month = Numbers.extractInteger(matcher.group(2), 1, false) - 1;
-                int day = Numbers.extractInteger(matcher.group(3), 0, false);
+                int day   = Numbers.extractInteger(matcher.group(3), 0, false);
                 cal.set(year, month, day);
                 return cal.getTimeInMillis();
             }
@@ -108,10 +108,10 @@ public class DateTime {
             if (matcher.find()) {
                 Calendar cal = Calendar.getInstance();
                 cal.clear();
-                int year = Numbers.extractInteger(matcher.group(1), 0, false);
-                int month = Numbers.extractInteger(matcher.group(2), 1, false) - 1;
-                int day = Numbers.extractInteger(matcher.group(3), 0, false);
-                int hour = Numbers.extractInteger(matcher.group(4), 0, false);
+                int year   = Numbers.extractInteger(matcher.group(1), 0, false);
+                int month  = Numbers.extractInteger(matcher.group(2), 1, false) - 1;
+                int day    = Numbers.extractInteger(matcher.group(3), 0, false);
+                int hour   = Numbers.extractInteger(matcher.group(4), 0, false);
                 int minute = Numbers.extractInteger(matcher.group(5), 0, false);
                 int second = Numbers.extractInteger(matcher.group(6), 0, false);
                 cal.set(year, month, day, hour, minute, second);

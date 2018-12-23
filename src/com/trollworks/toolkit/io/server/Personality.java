@@ -37,15 +37,15 @@ public abstract class Personality {
      * Called by the associated {@link Session} to process any data it has received.
      *
      * @param buffer The data to process. It is not required that all the data within the passed in
-     *            buffer be consumed in a single call, however, the {@link Session} will continue to
-     *            call {@link #processInput(ByteBuffer)} with the same buffer until the entire
-     *            buffer has been consumed.
+     *               buffer be consumed in a single call, however, the {@link Session} will continue
+     *               to call {@link #processInput(ByteBuffer)} with the same buffer until the entire
+     *               buffer has been consumed.
      */
     public abstract void processInput(ByteBuffer buffer) throws IOException;
 
     /**
      * @param buffer The data to send. A copy of the data is not made, so do not modify it once
-     *            passed to this method.
+     *               passed to this method.
      */
     public final void send(ByteBuffer buffer) {
         mSession.send(buffer);

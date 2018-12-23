@@ -44,7 +44,7 @@ public class LineBorder implements Border {
     /**
      * Creates a border with the specified color and thickness on all sides.
      *
-     * @param color The color to use for all sides.
+     * @param color     The color to use for all sides.
      * @param thickness The thickness to use for all sides.
      */
     public LineBorder(Color color, int thickness) {
@@ -57,11 +57,11 @@ public class LineBorder implements Border {
      * Creates a border with the specified color on all sides and the specified thicknesses on each
      * side.
      *
-     * @param color The color to use for all sides.
-     * @param top The thickness to use for the top side.
-     * @param left The thickness to use for the left side.
+     * @param color  The color to use for all sides.
+     * @param top    The thickness to use for the top side.
+     * @param left   The thickness to use for the left side.
      * @param bottom The thickness to use for the bottom side.
-     * @param right The thickness to use for the right side.
+     * @param right  The thickness to use for the right side.
      */
     public LineBorder(Color color, int top, int left, int bottom, int right) {
         setColorAndThickness(Edge.TOP, color, top);
@@ -73,14 +73,14 @@ public class LineBorder implements Border {
     /**
      * Creates a border.
      *
-     * @param topColor The color to use for the top side.
-     * @param top The thickness to use for the top side.
-     * @param leftColor The color to use for the left side.
-     * @param left The thickness to use for the left side.
+     * @param topColor    The color to use for the top side.
+     * @param top         The thickness to use for the top side.
+     * @param leftColor   The color to use for the left side.
+     * @param left        The thickness to use for the left side.
      * @param bottomColor The color to use for the bottom side.
-     * @param bottom The thickness to use for the bottom side.
-     * @param rightColor The color to use for the right side.
-     * @param right The thickness to use for the right side.
+     * @param bottom      The thickness to use for the bottom side.
+     * @param rightColor  The color to use for the right side.
+     * @param right       The thickness to use for the right side.
      */
     public LineBorder(Color topColor, int top, Color leftColor, int left, Color bottomColor, int bottom, Color rightColor, int right) {
         setColorAndThickness(Edge.TOP, topColor, top);
@@ -98,7 +98,7 @@ public class LineBorder implements Border {
     }
 
     /**
-     * @param edge The edge to set.
+     * @param edge  The edge to set.
      * @param color The color to use for the specified edge.
      */
     public void setColor(Edge edge, Color color) {
@@ -114,7 +114,7 @@ public class LineBorder implements Border {
     }
 
     /**
-     * @param edge The edge to set.
+     * @param edge      The edge to set.
      * @param thickness The thickness to use for the specified edge.
      */
     public void setThickness(Edge edge, int thickness) {
@@ -122,39 +122,39 @@ public class LineBorder implements Border {
     }
 
     /**
-     * @param edge The edge to set.
-     * @param color The color to use for the specified edge.
+     * @param edge      The edge to set.
+     * @param color     The color to use for the specified edge.
      * @param thickness The thickness to use for the specified edge.
      */
     public void setColorAndThickness(Edge edge, Color color, int thickness) {
         int i = edge.ordinal();
-        mColor[i] = color;
+        mColor[i]     = color;
         mThickness[i] = thickness;
     }
 
     @Override
     public void paintBorder(Component component, Graphics gc, int x, int y, int width, int height) {
-        Scale scale = Scale.get(component);
+        Scale scale      = Scale.get(component);
         Color savedColor = gc.getColor();
-        int i = Edge.LEFT.ordinal();
-        int thickness = scale.scale(mThickness[i]);
+        int   i          = Edge.LEFT.ordinal();
+        int   thickness  = scale.scale(mThickness[i]);
         if (thickness > 0) {
             gc.setColor(mColor[i]);
             gc.fillRect(x, y, thickness, height);
         }
-        i = Edge.RIGHT.ordinal();
+        i         = Edge.RIGHT.ordinal();
         thickness = scale.scale(mThickness[i]);
         if (thickness > 0) {
             gc.setColor(mColor[i]);
             gc.fillRect(x + width - thickness, y, thickness, height);
         }
-        i = Edge.TOP.ordinal();
+        i         = Edge.TOP.ordinal();
         thickness = scale.scale(mThickness[i]);
         if (thickness > 0) {
             gc.setColor(mColor[i]);
             gc.fillRect(x, y, width, thickness);
         }
-        i = Edge.BOTTOM.ordinal();
+        i         = Edge.BOTTOM.ordinal();
         thickness = scale.scale(mThickness[i]);
         if (thickness > 0) {
             gc.setColor(mColor[i]);

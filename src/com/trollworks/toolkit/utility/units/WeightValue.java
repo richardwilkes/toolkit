@@ -17,7 +17,7 @@ import com.trollworks.toolkit.utility.text.Numbers;
 /** Holds a value and {@link WeightUnits} pair. */
 public class WeightValue extends UnitsValue<WeightUnits> {
     /**
-     * @param buffer The buffer to extract a {@link WeightValue} from.
+     * @param buffer    The buffer to extract a {@link WeightValue} from.
      * @param localized <code>true</code> if the string might have localized notation within it.
      * @return The result.
      */
@@ -28,7 +28,7 @@ public class WeightValue extends UnitsValue<WeightUnits> {
             for (WeightUnits lu : WeightUnits.values()) {
                 String text = Enums.toId(lu);
                 if (buffer.endsWith(text)) {
-                    units = lu;
+                    units  = lu;
                     buffer = buffer.substring(0, buffer.length() - text.length());
                     break;
                 }

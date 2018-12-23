@@ -23,7 +23,7 @@ public class BufferedImageLRUCache<K> extends LRUCache<K, BufferedImage> {
      * Creates a new {@link BufferedImageLRUCache}.
      *
      * @param maxEntries The maximum number of entries to be in the cache. Older entries are removed
-     *            first.
+     *                   first.
      */
     public BufferedImageLRUCache(int maxEntries) {
         super(maxEntries);

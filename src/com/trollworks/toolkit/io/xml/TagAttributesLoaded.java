@@ -26,9 +26,9 @@ public interface TagAttributesLoaded {
      * Called after the XML tag attributes have been fully loaded into the object, just prior to
      * loading any sub-tags that may be present.
      *
-     * @param context The {@link XmlParserContext} for this object.
+     * @param context             The {@link XmlParserContext} for this object.
      * @param unmatchedAttributes A {@link Set} of attribute names found in the XML that had no
-     *            matching {@link XmlAttr}-marked fields.
+     *                            matching {@link XmlAttr}-marked fields.
      */
     void xmlAttributesLoaded(XmlParserContext context, Set<String> unmatchedAttributes) throws XMLStreamException;
 }

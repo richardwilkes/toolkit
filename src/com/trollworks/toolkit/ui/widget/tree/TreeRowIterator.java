@@ -61,7 +61,7 @@ public class TreeRowIterator implements Iterator<TreeRow>, Iterable<TreeRow> {
         boolean hasNext = mIterator != null && mIterator.hasNext();
         if (!hasNext) {
             mIterator = null;
-            hasNext = mIndex < mRows.size();
+            hasNext   = mIndex < mRows.size();
         }
         return hasNext;
     }

@@ -35,10 +35,10 @@ public class EditorField extends JFormattedTextField implements ActionListener, 
      * Creates a new {@link EditorField}.
      *
      * @param formatter The formatter to use.
-     * @param listener The listener to use.
+     * @param listener  The listener to use.
      * @param alignment The alignment to use.
-     * @param value The initial value.
-     * @param tooltip The tooltip to use.
+     * @param value     The initial value.
+     * @param tooltip   The tooltip to use.
      */
     public EditorField(AbstractFormatterFactory formatter, PropertyChangeListener listener, int alignment, Object value, String tooltip) {
         this(formatter, listener, alignment, value, null, tooltip);
@@ -47,12 +47,12 @@ public class EditorField extends JFormattedTextField implements ActionListener, 
     /**
      * Creates a new {@link EditorField}.
      *
-     * @param formatter The formatter to use.
-     * @param listener The listener to use.
-     * @param alignment The alignment to use.
-     * @param value The initial value.
+     * @param formatter  The formatter to use.
+     * @param listener   The listener to use.
+     * @param alignment  The alignment to use.
+     * @param value      The initial value.
      * @param protoValue The prototype value to use to set the preferred size.
-     * @param tooltip The tooltip to use.
+     * @param tooltip    The tooltip to use.
      */
     public EditorField(AbstractFormatterFactory formatter, PropertyChangeListener listener, int alignment, Object value, Object protoValue, String tooltip) {
         super(formatter, protoValue != null ? protoValue : value);

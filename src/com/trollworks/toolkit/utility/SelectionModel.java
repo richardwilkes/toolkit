@@ -37,8 +37,8 @@ public interface SelectionModel {
 
     /**
      * @param objs The objects to select.
-     * @param add <code>true</code> if these should be added to an existing selection.
-     *            <code>false</code> if these should replace the existing selection.
+     * @param add  <code>true</code> if these should be added to an existing selection.
+     *             <code>false</code> if these should replace the existing selection.
      */
     void select(Collection<?> objs, boolean add);
 

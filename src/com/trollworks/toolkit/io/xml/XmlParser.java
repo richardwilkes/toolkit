@@ -68,33 +68,33 @@ public class XmlParser implements AutoCloseable {
      * Advances to the next position.
      *
      * @param marker If this is not <code>null</code>, when an end tag matches this marker return
-     *            <code>null</code>.
+     *               <code>null</code>.
      * @return The next tag's name, or <code>null</code>.
      */
     public String nextTag(String marker) throws XMLStreamException {
         while (mReader.hasNext()) {
             switch (mReader.next()) {
-                case XMLStreamConstants.START_ELEMENT:
-                    String name = mReader.getLocalName();
-                    mMarker = mDepth++ + SEPARATOR + name;
-                    return name;
-                case XMLStreamConstants.END_ELEMENT:
-                    mMarker = --mDepth + SEPARATOR + mReader.getLocalName();
-                    if (marker != null && marker.equals(mMarker)) {
-                        return null;
-                    }
-                    break;
-                case XMLStreamConstants.START_DOCUMENT:
-                    mMarker = null;
-                    if (marker != null) {
-                        return null;
-                    }
-                    break;
-                case XMLStreamConstants.END_DOCUMENT:
-                    mMarker = null;
+            case XMLStreamConstants.START_ELEMENT:
+                String name = mReader.getLocalName();
+                mMarker = mDepth++ + SEPARATOR + name;
+                return name;
+            case XMLStreamConstants.END_ELEMENT:
+                mMarker = --mDepth + SEPARATOR + mReader.getLocalName();
+                if (marker != null && marker.equals(mMarker)) {
                     return null;
-                default:
-                    break;
+                }
+                break;
+            case XMLStreamConstants.START_DOCUMENT:
+                mMarker = null;
+                if (marker != null) {
+                    return null;
+                }
+                break;
+            case XMLStreamConstants.END_DOCUMENT:
+                mMarker = null;
+                return null;
+            default:
+                break;
             }
         }
         return null;
@@ -130,7 +130,7 @@ public class XmlParser implements AutoCloseable {
 
     /**
      * @param name The name of the attribute to retrieve.
-     * @param def The default value to use if the attribute value isn't present.
+     * @param def  The default value to use if the attribute value isn't present.
      * @return The value of the attribute.
      */
     public String getAttribute(String name, String def) {
@@ -148,8 +148,8 @@ public class XmlParser implements AutoCloseable {
 
     /**
      * @param name The name of the attribute to retrieve.
-     * @param def The default value to use if the attribute value isn't present or cannot be
-     *            converted.
+     * @param def  The default value to use if the attribute value isn't present or cannot be
+     *             converted.
      * @return Whether or not the attribute is present and set to a 'true' value.
      */
     public boolean isAttributeSet(String name, boolean def) {
@@ -166,8 +166,8 @@ public class XmlParser implements AutoCloseable {
 
     /**
      * @param name The name of the attribute to retrieve.
-     * @param def The default value to use if the attribute value isn't present or cannot be
-     *            converted.
+     * @param def  The default value to use if the attribute value isn't present or cannot be
+     *             converted.
      * @return The value of the attribute.
      */
     public int getIntegerAttribute(String name, int def) {
@@ -176,10 +176,10 @@ public class XmlParser implements AutoCloseable {
 
     /**
      * @param name The name of the attribute to retrieve.
-     * @param def The default value to use if the attribute value isn't present or cannot be
-     *            converted.
-     * @param min The minimum value to return.
-     * @param max The maximum value to return.
+     * @param def  The default value to use if the attribute value isn't present or cannot be
+     *             converted.
+     * @param min  The minimum value to return.
+     * @param max  The maximum value to return.
      * @return The value of the attribute.
      */
     public int getIntegerAttribute(String name, int def, int min, int max) {
@@ -196,8 +196,8 @@ public class XmlParser implements AutoCloseable {
 
     /**
      * @param name The name of the attribute to retrieve.
-     * @param def The default value to use if the attribute value isn't present or cannot be
-     *            converted.
+     * @param def  The default value to use if the attribute value isn't present or cannot be
+     *             converted.
      * @return The value of the attribute.
      */
     public long getLongAttribute(String name, long def) {
@@ -206,10 +206,10 @@ public class XmlParser implements AutoCloseable {
 
     /**
      * @param name The name of the attribute to retrieve.
-     * @param def The default value to use if the attribute value isn't present or cannot be
-     *            converted.
-     * @param min The minimum value to return.
-     * @param max The maximum value to return.
+     * @param def  The default value to use if the attribute value isn't present or cannot be
+     *             converted.
+     * @param min  The minimum value to return.
+     * @param max  The maximum value to return.
      * @return The value of the attribute.
      */
     public long getLongAttribute(String name, long def, long min, long max) {
@@ -226,8 +226,8 @@ public class XmlParser implements AutoCloseable {
 
     /**
      * @param name The name of the attribute to retrieve.
-     * @param def The default value to use if the attribute value isn't present or cannot be
-     *            converted.
+     * @param def  The default value to use if the attribute value isn't present or cannot be
+     *             converted.
      * @return The value of the attribute.
      */
     public double getDoubleAttribute(String name, double def) {
@@ -236,10 +236,10 @@ public class XmlParser implements AutoCloseable {
 
     /**
      * @param name The name of the attribute to retrieve.
-     * @param def The default value to use if the attribute value isn't present or cannot be
-     *            converted.
-     * @param min The minimum value to return.
-     * @param max The maximum value to return.
+     * @param def  The default value to use if the attribute value isn't present or cannot be
+     *             converted.
+     * @param min  The minimum value to return.
+     * @param max  The maximum value to return.
      * @return The value of the attribute.
      */
     public double getDoubleAttribute(String name, double def, double min, double max) {

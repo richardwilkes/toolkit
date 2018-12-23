@@ -156,7 +156,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttribute(String name, boolean value) {
@@ -166,7 +166,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttribute(String name, int value) {
@@ -176,7 +176,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttribute(String name, long value) {
@@ -186,7 +186,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttribute(String name, float value) {
@@ -196,7 +196,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttribute(String name, double value) {
@@ -206,7 +206,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttribute(String name, String value) {
@@ -220,7 +220,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute if its value is not zero.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttributeNotZero(String name, int value) {
@@ -232,7 +232,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute if its value is not zero.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttributeNotZero(String name, long value) {
@@ -244,7 +244,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttributeNotZero(String name, float value) {
@@ -256,7 +256,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttributeNotZero(String name, double value) {
@@ -268,7 +268,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttributeNotOne(String name, float value) {
@@ -280,7 +280,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Writes an XML attribute.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void writeAttributeNotOne(String name, double value) {
@@ -292,9 +292,9 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out an XML tag with a single attribute and no children, with a trailing line feed.
      *
-     * @param name The name of the tag.
-     * @param value The data to place between the tags.
-     * @param attribute The name of the attribute.
+     * @param name           The name of the tag.
+     * @param value          The data to place between the tags.
+     * @param attribute      The name of the attribute.
      * @param attributeValue The value of the attribute.
      */
     public void simpleTagWithAttribute(String name, String value, String attribute, String attributeValue) {
@@ -308,9 +308,9 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out an XML tag with a single attribute and no children, with a trailing line feed.
      *
-     * @param name The name of the tag.
-     * @param value The data to place between the tags.
-     * @param attribute The name of the attribute.
+     * @param name           The name of the tag.
+     * @param value          The data to place between the tags.
+     * @param attribute      The name of the attribute.
      * @param attributeValue The value of the attribute.
      */
     public void simpleTagWithAttribute(String name, String value, String attribute, boolean attributeValue) {
@@ -324,9 +324,9 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out an XML tag with a single attribute and no children, with a trailing line feed.
      *
-     * @param name The name of the tag.
-     * @param value The data to place between the tags.
-     * @param attribute The name of the attribute.
+     * @param name           The name of the tag.
+     * @param value          The data to place between the tags.
+     * @param attribute      The name of the attribute.
      * @param attributeValue The value of the attribute.
      */
     public void simpleTagWithAttribute(String name, int value, String attribute, boolean attributeValue) {
@@ -340,9 +340,9 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out an XML tag with a single attribute and no children, with a trailing line feed.
      *
-     * @param name The name of the tag.
-     * @param value The data to place between the tags.
-     * @param attribute The name of the attribute.
+     * @param name           The name of the tag.
+     * @param value          The data to place between the tags.
+     * @param attribute      The name of the attribute.
      * @param attributeValue The value of the attribute.
      */
     public void simpleTagWithAttribute(String name, long value, String attribute, boolean attributeValue) {
@@ -356,9 +356,9 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out an XML tag with a single attribute and no children, with a trailing line feed.
      *
-     * @param name The name of the tag.
-     * @param value The data to place between the tags.
-     * @param attribute The name of the attribute.
+     * @param name           The name of the tag.
+     * @param value          The data to place between the tags.
+     * @param attribute      The name of the attribute.
      * @param attributeValue The value of the attribute.
      */
     public void simpleTagWithAttribute(String name, double value, String attribute, boolean attributeValue) {
@@ -372,9 +372,9 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out an XML tag with a single attribute and no children, with a trailing line feed.
      *
-     * @param name The name of the tag.
-     * @param value The data to place between the tags.
-     * @param attribute The name of the attribute.
+     * @param name           The name of the tag.
+     * @param value          The data to place between the tags.
+     * @param attribute      The name of the attribute.
      * @param attributeValue The value of the attribute.
      */
     public void simpleTagWithAttribute(String name, String value, String attribute, int attributeValue) {
@@ -388,9 +388,9 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out an XML tag with a single attribute and no children, with a trailing line feed.
      *
-     * @param name The name of the tag.
-     * @param value The data to place between the tags.
-     * @param attribute The name of the attribute.
+     * @param name           The name of the tag.
+     * @param value          The data to place between the tags.
+     * @param attribute      The name of the attribute.
      * @param attributeValue The value of the attribute.
      */
     public void simpleTagWithAttribute(String name, String value, String attribute, long attributeValue) {
@@ -404,9 +404,9 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out an XML tag with a single attribute and no children, with a trailing line feed.
      *
-     * @param name The name of the tag.
-     * @param value The data to place between the tags.
-     * @param attribute The name of the attribute.
+     * @param name           The name of the tag.
+     * @param value          The data to place between the tags.
+     * @param attribute      The name of the attribute.
      * @param attributeValue The value of the attribute.
      */
     public void simpleTagWithAttribute(String name, double value, String attribute, String attributeValue) {
@@ -428,9 +428,9 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out an XML tag with a single attribute and no children, with a trailing line feed.
      *
-     * @param name The name of the tag.
-     * @param value The data to place between the tags.
-     * @param attribute The name of the attribute.
+     * @param name           The name of the tag.
+     * @param value          The data to place between the tags.
+     * @param attribute      The name of the attribute.
      * @param attributeValue The value of the attribute.
      */
     public void simpleTagWithAttribute(String name, int value, String attribute, String attributeValue) {
@@ -444,9 +444,9 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out an XML tag with a single attribute and no children, with a trailing line feed.
      *
-     * @param name The name of the tag.
-     * @param value The data to place between the tags.
-     * @param attribute The name of the attribute.
+     * @param name           The name of the tag.
+     * @param value          The data to place between the tags.
+     * @param attribute      The name of the attribute.
      * @param attributeValue The value of the attribute.
      */
     public void simpleTagWithAttribute(String name, long value, String attribute, String attributeValue) {
@@ -460,7 +460,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a simple XML tag (i.e. no children or attributes).
      *
-     * @param name The name of the tag.
+     * @param name  The name of the tag.
      * @param value The data to place between the tags.
      */
     public void simpleTag(String name, boolean value) {
@@ -470,7 +470,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a simple XML tag (i.e. no children or attributes).
      *
-     * @param name The name of the tag.
+     * @param name  The name of the tag.
      * @param value The data to place between the tags.
      */
     public void simpleTag(String name, int value) {
@@ -480,7 +480,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a simple XML tag (i.e. no children or attributes).
      *
-     * @param name The name of the tag.
+     * @param name  The name of the tag.
      * @param value The data to place between the tags.
      */
     public void simpleTagNotZero(String name, int value) {
@@ -492,7 +492,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a simple XML tag (i.e. no children or attributes).
      *
-     * @param name The name of the tag.
+     * @param name  The name of the tag.
      * @param value The data to place between the tags.
      */
     public void simpleTag(String name, long value) {
@@ -502,7 +502,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a simple XML tag (i.e. no children or attributes).
      *
-     * @param name The name of the tag.
+     * @param name  The name of the tag.
      * @param value The data to place between the tags.
      */
     public void simpleTagNotZero(String name, long value) {
@@ -514,7 +514,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a simple XML tag (i.e. no children or attributes).
      *
-     * @param name The name of the tag.
+     * @param name  The name of the tag.
      * @param value The data to place between the tags.
      */
     public void simpleTag(String name, double value) {
@@ -524,7 +524,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a simple XML tag (i.e. no children or attributes).
      *
-     * @param name The name of the tag.
+     * @param name  The name of the tag.
      * @param value The data to place between the tags.
      */
     public void simpleTag(String name, String value) {
@@ -536,7 +536,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a simple XML tag (i.e. no children or attributes).
      *
-     * @param name The name of the tag.
+     * @param name  The name of the tag.
      * @param value The data to place between the tags.
      */
     public void simpleTagNotEmpty(String name, String value) {
@@ -550,7 +550,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a simple XML tag (i.e. no children or attributes).
      *
-     * @param name The name of the tag.
+     * @param name  The name of the tag.
      * @param value The data to place between the tags.
      */
     public void simpleTag(String name, Object value) {
@@ -594,7 +594,7 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a simple XML end tag.
      *
-     * @param name The name of the tag.
+     * @param name   The name of the tag.
      * @param indent Whether to indent before writing the end tag.
      */
     public void endTagEOL(String name, boolean indent) {
@@ -649,12 +649,12 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a date and time XML tag.
      *
-     * @param name The name of the tag.
-     * @param dateInMillis The date to output.
-     * @param includeDate Whether to output the date fields.
-     * @param includeTime Whether to output the time fields.
+     * @param name           The name of the tag.
+     * @param dateInMillis   The date to output.
+     * @param includeDate    Whether to output the date fields.
+     * @param includeTime    Whether to output the time fields.
      * @param includeSeconds Whether to output the seconds field. Only relevant if
-     *            <code>includeTime</code> was <code>true</code>.
+     *                       <code>includeTime</code> was <code>true</code>.
      */
     public void writeDateTimeTag(String name, long dateInMillis, boolean includeDate, boolean includeTime, boolean includeSeconds) {
         Calendar calendar = Calendar.getInstance();
@@ -666,12 +666,12 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a date and time XML tag.
      *
-     * @param name The name of the tag.
-     * @param date The date to output.
-     * @param includeDate Whether to output the date fields.
-     * @param includeTime Whether to output the time fields.
+     * @param name           The name of the tag.
+     * @param date           The date to output.
+     * @param includeDate    Whether to output the date fields.
+     * @param includeTime    Whether to output the time fields.
      * @param includeSeconds Whether to output the seconds field. Only relevant if
-     *            <code>includeTime</code> was <code>true</code>.
+     *                       <code>includeTime</code> was <code>true</code>.
      */
     public void writeDateTimeTag(String name, Date date, boolean includeDate, boolean includeTime, boolean includeSeconds) {
         Calendar calendar = Calendar.getInstance();
@@ -683,12 +683,12 @@ public class XMLWriter extends PrintWriter {
     /**
      * Write out a date and time XML tag.
      *
-     * @param name The name of the tag.
-     * @param calendar The calendar to output.
-     * @param includeDate Whether to output the date fields.
-     * @param includeTime Whether to output the time fields.
+     * @param name           The name of the tag.
+     * @param calendar       The calendar to output.
+     * @param includeDate    Whether to output the date fields.
+     * @param includeTime    Whether to output the time fields.
      * @param includeSeconds Whether to output the seconds field. Only relevant if
-     *            <code>includeTime</code> was <code>true</code>.
+     *                       <code>includeTime</code> was <code>true</code>.
      */
     public void writeDateTimeTag(String name, Calendar calendar, boolean includeDate, boolean includeTime, boolean includeSeconds) {
         startTag(name);
@@ -716,7 +716,7 @@ public class XMLWriter extends PrintWriter {
      */
     public static String encodeData(String data) {
         StringBuilder buffer = new StringBuilder();
-        int length = data.length();
+        int           length = data.length();
 
         for (int i = 0; i < length; i++) {
             char ch = data.charAt(i);

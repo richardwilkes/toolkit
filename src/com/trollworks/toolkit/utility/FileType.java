@@ -72,15 +72,16 @@ public class FileType {
     /**
      * Registers a new {@link FileType}, replacing any existing entry for the specified extension.
      *
-     * @param extension The extension of the file.
-     * @param iconset The {@link StdImageSet} to use for the file.
-     * @param description A short description of the file type.
-     * @param referenceURL A URL that contains a description of this file type..
-     * @param fileProxyCreator The {@link FileProxyCreator} responsible for creating a
-     *            {@link FileProxy} with this file's contents.
-     * @param allowOpen Whether this {@link FileType} is allowed to be opened via the menu command.
+     * @param extension                   The extension of the file.
+     * @param iconset                     The {@link StdImageSet} to use for the file.
+     * @param description                 A short description of the file type.
+     * @param referenceURL                A URL that contains a description of this file type..
+     * @param fileProxyCreator            The {@link FileProxyCreator} responsible for creating a
+     *                                    {@link FileProxy} with this file's contents.
+     * @param allowOpen                   Whether this {@link FileType} is allowed to be opened via
+     *                                    the menu command.
      * @param shouldRegisterAppForOpening Whether this {@link FileType} should be registered as a
-     *            document type that the application can open.
+     *                                    document type that the application can open.
      */
     public static final void register(String extension, StdImageSet iconset, String description, String referenceURL, FileProxyCreator fileProxyCreator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
         extension = normalizeExtension(extension);
@@ -179,7 +180,7 @@ public class FileType {
 
     /**
      * @param nameForAggregate The name for a {@link FileNameExtensionFilter} that will open them
-     *            all, or <code>null</code>.
+     *                         all, or <code>null</code>.
      * @return {@link FileNameExtensionFilter}s for all of the registered {@link FileType}s that can
      *         be opened.
      */
@@ -200,7 +201,7 @@ public class FileType {
 
     /**
      * @param nameForAggregate The name for a {@link FileNameExtensionFilter} that includes all
-     *            types, or <code>null</code>.
+     *                         types, or <code>null</code>.
      * @return {@link FileNameExtensionFilter}s for all of the specified {@link FileType}s.
      */
     public static final FileNameExtensionFilter[] getFileFilters(String nameForAggregate, FileType... fileType) {
@@ -255,12 +256,12 @@ public class FileType {
     }
 
     private FileType(String extension, StdImageSet iconset, String description, String referenceURL, FileProxyCreator fileProxyCreator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
-        mExtension = extension;
-        mIconSet = iconset;
-        mDescription = description;
-        mReferenceURL = referenceURL;
-        mFileProxyCreator = fileProxyCreator;
-        mAllowOpen = allowOpen;
+        mExtension             = extension;
+        mIconSet               = iconset;
+        mDescription           = description;
+        mReferenceURL          = referenceURL;
+        mFileProxyCreator      = fileProxyCreator;
+        mAllowOpen             = allowOpen;
         mRegisterAppForOpening = shouldRegisterAppForOpening;
     }
 

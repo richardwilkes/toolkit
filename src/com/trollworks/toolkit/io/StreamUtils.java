@@ -22,12 +22,12 @@ public class StreamUtils {
     /**
      * Copy the contents of <code>in</code> into <code>out</code>.
      *
-     * @param in The {@link InputStream} to read from.
+     * @param in  The {@link InputStream} to read from.
      * @param out The {@link OutputStream} to write to.
      */
     public static final void copy(InputStream in, OutputStream out) throws IOException {
         byte[] data = new byte[8192];
-        int amt;
+        int    amt;
         while ((amt = in.read(data)) != -1) {
             out.write(data, 0, amt);
         }
@@ -37,7 +37,7 @@ public class StreamUtils {
      * Fills the specified buffer with bytes from the stream. Will not return until the buffer is
      * full or an {@link IOException} occurs.
      *
-     * @param in The stream to read from.
+     * @param in     The stream to read from.
      * @param buffer The buffer to place the bytes into.
      */
     public static final void readFully(InputStream in, byte buffer[]) throws IOException {
@@ -48,7 +48,7 @@ public class StreamUtils {
      * Fills the specified buffer with bytes from the stream. Will not return until the requested
      * number of bytes have been read or an {@link IOException} occurs.
      *
-     * @param in The stream to read from.
+     * @param in     The stream to read from.
      * @param buffer The buffer to place the bytes into.
      * @param offset The position within the buffer to start placing bytes.
      * @param length The number of bytes to read.
@@ -68,11 +68,11 @@ public class StreamUtils {
      * Skips the specified number of bytes within the stream. Will not return until the requested
      * number of bytes have been skipped or an {@link IOException} occurs.
      *
-     * @param in The stream to skip bytes within.
+     * @param in     The stream to skip bytes within.
      * @param length The number of bytes to skip.
      */
     public static final void skipFully(InputStream in, long length) throws IOException {
-        long total = 0;
+        long total   = 0;
         long skipped = 0;
         while (total < length && (skipped = in.skip(length - total)) > 0) {
             total += skipped;

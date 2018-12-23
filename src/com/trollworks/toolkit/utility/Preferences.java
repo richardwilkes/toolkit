@@ -87,8 +87,8 @@ public class Preferences {
      * this is done.
      *
      * @param packageName The package name to use, if this preference is part of a set of
-     *            preferences.
-     * @param leafName The leaf file name to use, such as "app.prf".
+     *                    preferences.
+     * @param leafName    The leaf file name to use, such as "app.prf".
      */
     public static synchronized void setPreferenceFile(String packageName, String leafName) {
         setPreferenceFile(getDefaultPreferenceFile(packageName, leafName));
@@ -104,8 +104,8 @@ public class Preferences {
 
     /**
      * @param packageDir The package name to use, if this preference is part of a set of
-     *            preferences.
-     * @param leafName The leaf file name to use, such as "appname.prf".
+     *                   preferences.
+     * @param leafName   The leaf file name to use, such as "appname.prf".
      * @return The default preference file for this platform.
      */
     public static File getDefaultPreferenceFile(String packageDir, String leafName) {
@@ -138,7 +138,7 @@ public class Preferences {
 
     /**
      * @param module The module to use.
-     * @param key The key to use.
+     * @param key    The key to use.
      * @return The key as it is used within the properties file.
      */
     public static String getModuleKey(String module, String key) {
@@ -151,8 +151,8 @@ public class Preferences {
      * @param prefsFile The file containing preferences.
      */
     public Preferences(File prefsFile) {
-        mFile = prefsFile;
-        mPrefs = new Properties();
+        mFile     = prefsFile;
+        mPrefs    = new Properties();
         mNotifier = new Notifier();
         if (mFile.exists()) {
             try (InputStream in = new FileInputStream(mFile)) {
@@ -196,15 +196,15 @@ public class Preferences {
         // Can't really dispose of the global preferences,
         // so only do the remaining cleanup for non-global preferences.
         if (INSTANCE != this) {
-            mPrefs = null;
-            mFile = null;
+            mPrefs    = null;
+            mFile     = null;
             mNotifier = null;
         }
     }
 
     /**
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param key    The key this preference is tied to.
      * @return The specified preference as a boolean. <code>false</code> will be returned if the key
      *         cannot be extracted.
      */
@@ -213,8 +213,8 @@ public class Preferences {
     }
 
     /**
-     * @param module The tag representing the module this preference is associated with.
-     * @param key The key this preference is tied to.
+     * @param module       The tag representing the module this preference is associated with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
      * @return The specified preference as a boolean.
      */
@@ -232,7 +232,7 @@ public class Preferences {
 
     /**
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param key    The key this preference is tied to.
      * @return The specified preference as a {@link Dimension}. <code>null</code> will be returned
      *         if the key cannot be extracted.
      */
@@ -241,8 +241,8 @@ public class Preferences {
     }
 
     /**
-     * @param module The tag representing the module this preference is associated with.
-     * @param key The key this preference is tied to.
+     * @param module       The tag representing the module this preference is associated with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
      * @return The specified preference as a {@link Dimension}.
      */
@@ -253,8 +253,8 @@ public class Preferences {
     }
 
     /**
-     * @param module The tag representing the module this preference is associated with.
-     * @param key The key this preference is tied to.
+     * @param module       The tag representing the module this preference is associated with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
      * @return The specified preference as a double.
      */
@@ -263,16 +263,16 @@ public class Preferences {
     }
 
     /**
-     * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param module       The module to work with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
-     * @param minimum The minimum value to return.
-     * @param maximum The maximum value to return.
+     * @param minimum      The minimum value to return.
+     * @param maximum      The maximum value to return.
      * @return The specified preference as a double.
      */
     public double getDoubleValue(String module, String key, double defaultValue, double minimum, double maximum) {
         String buffer = getStringValue(module, key);
-        double value = defaultValue;
+        double value  = defaultValue;
 
         if (buffer != null) {
             try {
@@ -293,8 +293,8 @@ public class Preferences {
     }
 
     /**
-     * @param module The tag representing the module this preference is associated with.
-     * @param key The key this preference is tied to.
+     * @param module       The tag representing the module this preference is associated with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
      * @return The specified preference as a float.
      */
@@ -303,16 +303,16 @@ public class Preferences {
     }
 
     /**
-     * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param module       The module to work with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
-     * @param minimum The minimum value to return.
-     * @param maximum The maximum value to return.
+     * @param minimum      The minimum value to return.
+     * @param maximum      The maximum value to return.
      * @return The specified preference as a float.
      */
     public float getFloatValue(String module, String key, float defaultValue, float minimum, float maximum) {
         String buffer = getStringValue(module, key);
-        float value = defaultValue;
+        float  value  = defaultValue;
 
         if (buffer != null) {
             try {
@@ -334,7 +334,7 @@ public class Preferences {
 
     /**
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param key    The key this preference is tied to.
      * @return The specified preference as a {@link Font}. <code>null</code> will be returned if the
      *         key cannot be extracted.
      */
@@ -345,8 +345,8 @@ public class Preferences {
     }
 
     /**
-     * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param module       The module to work with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
      * @return The specified preference as a {@link Font}.
      */
@@ -355,8 +355,8 @@ public class Preferences {
     }
 
     /**
-     * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param module       The module to work with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
      * @return The specified preference as an integer.
      */
@@ -365,16 +365,16 @@ public class Preferences {
     }
 
     /**
-     * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param module       The module to work with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
-     * @param minimum The minimum value to return.
-     * @param maximum The maximum value to return.
+     * @param minimum      The minimum value to return.
+     * @param maximum      The maximum value to return.
      * @return The specified preference as an integer.
      */
     public int getIntValue(String module, String key, int defaultValue, int minimum, int maximum) {
         String buffer = getStringValue(module, key);
-        int value = defaultValue;
+        int    value  = defaultValue;
 
         if (buffer != null) {
             try {
@@ -395,8 +395,8 @@ public class Preferences {
     }
 
     /**
-     * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param module       The module to work with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
      * @return The specified preference as a long.
      */
@@ -405,16 +405,16 @@ public class Preferences {
     }
 
     /**
-     * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param module       The module to work with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
-     * @param minimum The minimum value to return.
-     * @param maximum The maximum value to return.
+     * @param minimum      The minimum value to return.
+     * @param maximum      The maximum value to return.
      * @return The specified preference as a long.
      */
     public long getLongValue(String module, String key, long defaultValue, long minimum, long maximum) {
         String buffer = getStringValue(module, key);
-        long value = defaultValue;
+        long   value  = defaultValue;
 
         if (buffer != null) {
             try {
@@ -439,7 +439,7 @@ public class Preferences {
      * @return All of the keys for the specified module.
      */
     public List<String> getModuleKeys(String module) {
-        ArrayList<String> keys = new ArrayList<>();
+        ArrayList<String>   keys    = new ArrayList<>();
         Enumeration<Object> keyEnum = mPrefs.keys();
 
         while (keyEnum.hasMoreElements()) {
@@ -458,7 +458,7 @@ public class Preferences {
 
     /**
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param key    The key this preference is tied to.
      * @return The specified preference as a {@link Point}.<code>null</code> will be returned if the
      *         key cannot be extracted.
      */
@@ -467,8 +467,8 @@ public class Preferences {
     }
 
     /**
-     * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param module       The module to work with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
      * @return The specified preference as a {@link Point}.
      */
@@ -480,7 +480,7 @@ public class Preferences {
 
     /**
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param key    The key this preference is tied to.
      * @return The specified general preference as a {@link String}. <code>null</code> may be
      *         returned.
      */
@@ -489,8 +489,8 @@ public class Preferences {
     }
 
     /**
-     * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param module       The module to work with.
+     * @param key          The key this preference is tied to.
      * @param defaultValue The default value to return if the key cannot be extracted.
      * @return The specified preference as a {@link String}.
      */
@@ -502,7 +502,7 @@ public class Preferences {
 
     /**
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param key    The key this preference is tied to.
      * @return The specified preference as a {@link String}. If a <code>null</code> value would
      *         normally be returned, returns an empty string instead.
      */
@@ -539,7 +539,7 @@ public class Preferences {
      * Removes the specified preference.
      *
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
+     * @param key    The key this preference is tied to.
      */
     public void removePreference(String module, String key) {
         setValue(module, key, (String) null);
@@ -551,9 +551,9 @@ public class Preferences {
      * @param module The module to remove preferences from.
      */
     public void removePreferences(String module) {
-        String prefix = module + '.';
-        ArrayList<String> list = new ArrayList<>();
-        int length = prefix.length();
+        String            prefix = module + '.';
+        ArrayList<String> list   = new ArrayList<>();
+        int               length = prefix.length();
 
         for (Enumeration<Object> keys = mPrefs.keys(); keys.hasMoreElements();) {
             String key = (String) keys.nextElement();
@@ -577,7 +577,7 @@ public class Preferences {
      * Removes the preferences for the specified module if the version passed in does not match
      * those in preferences.
      *
-     * @param module The module to check.
+     * @param module  The module to check.
      * @param version The current version.
      */
     public void resetIfVersionMisMatch(String module, int version) {
@@ -622,8 +622,8 @@ public class Preferences {
      * Sets the specified preference as a boolean.
      *
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
-     * @param value The value to set the key to.
+     * @param key    The key this preference is tied to.
+     * @param value  The value to set the key to.
      */
     public void setValue(String module, String key, boolean value) {
         setValue(module, key, Boolean.valueOf(value).toString());
@@ -633,8 +633,8 @@ public class Preferences {
      * Sets the specified preference.
      *
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
-     * @param value The value to set the key to. Pass <code>null</code> to remove the key.
+     * @param key    The key this preference is tied to.
+     * @param value  The value to set the key to. Pass <code>null</code> to remove the key.
      */
     public void setValue(String module, String key, String value) {
         key = getModuleKey(module, key);
@@ -655,8 +655,8 @@ public class Preferences {
      * Sets the specified preference as a <code>Dimension</code>.
      *
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
-     * @param value The value to set the key to.
+     * @param key    The key this preference is tied to.
+     * @param value  The value to set the key to.
      */
     public void setValue(String module, String key, Dimension value) {
         setValue(module, key, value != null ? Conversion.createString(value) : null);
@@ -666,8 +666,8 @@ public class Preferences {
      * Sets the specified preference as a <code>Font</code>.
      *
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
-     * @param value The value to set the key to.
+     * @param key    The key this preference is tied to.
+     * @param value  The value to set the key to.
      */
     public void setValue(String module, String key, Font value) {
         setValue(module, key, value != null ? Fonts.getStringValue(value) : null);
@@ -677,8 +677,8 @@ public class Preferences {
      * Sets the specified preference as an integer.
      *
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
-     * @param value The value to set the key to.
+     * @param key    The key this preference is tied to.
+     * @param value  The value to set the key to.
      */
     public void setValue(String module, String key, int value) {
         setValue(module, key, Integer.toString(value));
@@ -688,8 +688,8 @@ public class Preferences {
      * Sets the specified preference as a long.
      *
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
-     * @param value The value to set the key to.
+     * @param key    The key this preference is tied to.
+     * @param value  The value to set the key to.
      */
     public void setValue(String module, String key, long value) {
         setValue(module, key, Long.toString(value));
@@ -699,8 +699,8 @@ public class Preferences {
      * Sets the specified preference as a double.
      *
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
-     * @param value The value to set the key to.
+     * @param key    The key this preference is tied to.
+     * @param value  The value to set the key to.
      */
     public void setValue(String module, String key, double value) {
         setValue(module, key, Double.toString(value));
@@ -710,8 +710,8 @@ public class Preferences {
      * Sets the specified preference as a float.
      *
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
-     * @param value The value to set the key to.
+     * @param key    The key this preference is tied to.
+     * @param value  The value to set the key to.
      */
     public void setValue(String module, String key, float value) {
         setValue(module, key, Float.toString(value));
@@ -721,8 +721,8 @@ public class Preferences {
      * Sets the specified preference as a <code>Point</code>.
      *
      * @param module The module to work with.
-     * @param key The key this preference is tied to.
-     * @param value The value to set the key to.
+     * @param key    The key this preference is tied to.
+     * @param value  The value to set the key to.
      */
     public void setValue(String module, String key, Point value) {
         setValue(module, key, value != null ? Conversion.createString(value) : null);
@@ -731,7 +731,7 @@ public class Preferences {
     /**
      * Sets the version of the specified module.
      *
-     * @param module The module to work with.
+     * @param module  The module to work with.
      * @param version The value to set the version to.
      */
     public void setVersion(String module, int version) {

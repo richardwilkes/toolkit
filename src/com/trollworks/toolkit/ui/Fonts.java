@@ -38,7 +38,7 @@ public class Fonts {
     /**
      * Registers a default for a specific font key.
      *
-     * @param key The key the font maps to.
+     * @param key         The key the font maps to.
      * @param description A human-readable label for the font.
      * @param defaultFont The default font.
      */
@@ -101,8 +101,8 @@ public class Fonts {
      * @return The font metrics for the specified font.
      */
     public static FontMetrics getFontMetrics(Font font) {
-        Graphics2D g2d = GraphicsUtilities.getGraphics();
-        FontMetrics fm = g2d.getFontMetrics(font);
+        Graphics2D  g2d = GraphicsUtilities.getGraphics();
+        FontMetrics fm  = g2d.getFontMetrics(font);
         g2d.dispose();
         return fm;
     }
@@ -116,7 +116,7 @@ public class Fonts {
     }
 
     /**
-     * @param buffer The string to create the font from.
+     * @param buffer       The string to create the font from.
      * @param defaultValue The value to use if the string is invalid.
      * @return A font created from the specified string.
      */
@@ -124,9 +124,9 @@ public class Fonts {
         if (defaultValue == null) {
             defaultValue = getDefaultFont();
         }
-        String name = defaultValue.getName();
-        int style = defaultValue.getStyle();
-        int size = defaultValue.getSize();
+        String name  = defaultValue.getName();
+        int    style = defaultValue.getStyle();
+        int    size  = defaultValue.getSize();
         if (buffer != null && buffer.length() > 0) {
             StringTokenizer tokenizer = new StringTokenizer(buffer, COMMA);
             if (tokenizer.hasMoreTokens()) {

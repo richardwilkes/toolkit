@@ -41,18 +41,18 @@ public class Session implements Runnable, Log.Context {
     private boolean                    mNoFurtherWrites;
 
     /**
-     * @param server The {@link NioServer} that will be providing the connection.
-     * @param channel The {@link SocketChannel} that was connected.
-     * @param sslContext The {@link SSLContext} to use. May be <code>null</code> if SSL is not
-     *            required.
+     * @param server      The {@link NioServer} that will be providing the connection.
+     * @param channel     The {@link SocketChannel} that was connected.
+     * @param sslContext  The {@link SSLContext} to use. May be <code>null</code> if SSL is not
+     *                    required.
      * @param personality The {@link Personality} to use for processing the incoming data.
      */
     public Session(NioServer server, SocketChannel channel, SSLContext sslContext, Personality personality) throws SSLException {
-        mServer = server;
-        mChannel = channel;
-        mAddress = channel.socket().getInetAddress();
+        mServer   = server;
+        mChannel  = channel;
+        mAddress  = channel.socket().getInetAddress();
         mRequests = new LinkedList<>();
-        mId = NEXT_ID.incrementAndGet();
+        mId       = NEXT_ID.incrementAndGet();
         if (sslContext != null) {
             mSSLSupport = new SSLSupport(this, sslContext);
         }
@@ -81,7 +81,7 @@ public class Session implements Runnable, Log.Context {
      * Request that the specified input data be processed.
      *
      * @param buffer The data to process. The buffer contents are copied to an internal buffer, so
-     *            the passed in buffer may be modified after this call.
+     *               the passed in buffer may be modified after this call.
      */
     final void requestHandleInput(ByteBuffer buffer) {
         addRequest(new Request(buffer));
@@ -118,7 +118,7 @@ public class Session implements Runnable, Log.Context {
                         getPersonality().processInput(buffer);
                     }
                 } else {
-                    mHasClosed = true;
+                    mHasClosed       = true;
                     mNoFurtherWrites = request.isCloseRequestDueToError();
                     try {
                         getPersonality().closing();
@@ -144,7 +144,7 @@ public class Session implements Runnable, Log.Context {
 
     /**
      * @param buffer The data to send. A copy of the data is not made, so do not modify it once
-     *            passed to this method.
+     *               passed to this method.
      */
     final void send(ByteBuffer buffer) {
         mLastActivity = System.currentTimeMillis();
@@ -176,7 +176,7 @@ public class Session implements Runnable, Log.Context {
 
     /**
      * @param personality The {@link Personality} to set, replacing any existing {@link Personality}
-     *            attached to this {@link Session}.
+     *                    attached to this {@link Session}.
      */
     public final synchronized void setPersonality(Personality personality) {
         mPersonality = personality;

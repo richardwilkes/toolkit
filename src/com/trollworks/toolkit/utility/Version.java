@@ -121,7 +121,7 @@ public class Version {
         buffer.append(getMajor(version));
         buffer.append('.');
         buffer.append(getMinor(version));
-        int bugFix = getBugFix(version);
+        int  bugFix    = getBugFix(version);
         long qualifier = getQualifier(version);
         if (bugFix != 0 || includeQualifier && qualifier != 0) {
             buffer.append('.');
@@ -169,84 +169,84 @@ public class Version {
     public static long extract(String version) throws NumberFormatException {
         String[] parts = version.split("[\\._-]", 9); //$NON-NLS-1$
         switch (parts.length) {
-            case 2:
-                long c2p1 = Long.parseLong(parts[0]);
-                long c2p2 = Long.parseLong(parts[1]);
-                if (c2p1 > (1L << MAJOR_BITS) - 1) {
-                    // Assume it is a qualifier in the form of YYYYMMDD-HHMMSS or YYYYMMDD-HHMM
-                    // since the first value is too large to fit into the major portion
-                    int year = (int) (c2p1 / 10000);
-                    int month = (int) ((c2p1 - year * 10000) / 100);
-                    int day = (int) (c2p1 - (year * 10000 + month * 100));
-                    int hour;
-                    int minute;
-                    int second;
-                    if (parts[1].length() > 4) {
-                        hour = (int) (c2p2 / 10000);
-                        minute = (int) ((c2p2 - hour * 10000) / 100);
-                        second = (int) (c2p2 - (hour * 10000 + minute * 100));
-                    } else {
-                        hour = (int) (c2p2 / 100);
-                        minute = (int) (c2p2 - hour * 100);
-                        second = 0;
-                    }
-                    return toVersion(1, 0, 0, check(year, QUALIFIER_YEAR_BITS), check(month, QUALIFIER_MONTH_BITS), check(day, QUALIFIER_DAY_BITS), check(hour, QUALIFIER_HOUR_BITS), check(minute, QUALIFIER_MINUTE_BITS), check(second, QUALIFIER_SECOND_BITS));
-                }
-                // Otherwise we assume it is MAJOR.MINOR
-                return toVersion(check((int) c2p1, MAJOR_BITS), check((int) c2p2, MINOR_BITS), 0);
-            case 3:
-                return toVersion(check(Integer.parseInt(parts[0]), MAJOR_BITS), check(Integer.parseInt(parts[1]), MINOR_BITS), check(Integer.parseInt(parts[2]), BUGFIX_BITS));
-            case 4:
-                long c4p1 = Long.parseLong(parts[0]);
-                long c4p2 = Long.parseLong(parts[1]);
-                long c4p3 = Long.parseLong(parts[2]);
-                long c4p4 = Long.parseLong(parts[3]);
+        case 2:
+            long c2p1 = Long.parseLong(parts[0]);
+            long c2p2 = Long.parseLong(parts[1]);
+            if (c2p1 > (1L << MAJOR_BITS) - 1) {
+                // Assume it is a qualifier in the form of YYYYMMDD-HHMMSS or YYYYMMDD-HHMM
+                // since the first value is too large to fit into the major portion
+                int year  = (int) (c2p1 / 10000);
+                int month = (int) ((c2p1 - year * 10000) / 100);
+                int day   = (int) (c2p1 - (year * 10000 + month * 100));
                 int hour;
                 int minute;
                 int second;
-                if (c4p1 > (1L << MAJOR_BITS) - 1) {
-                    // Assume it is a qualifier in the form of YYYY-MM-DD-HHMMSS, or YYYY-MM-DD-HHMM
-                    // since the first value is too large to fit into the major portion
-                    if (parts[3].length() > 4) {
-                        hour = (int) (c4p4 / 10000);
-                        minute = (int) ((c4p4 - hour * 10000) / 100);
-                        second = (int) (c4p4 - (hour * 10000 + minute * 100));
-                    } else {
-                        hour = (int) (c4p4 / 100);
-                        minute = (int) (c4p4 - hour * 100);
-                        second = 0;
-                    }
-                    return toVersion(1, 0, 0, check((int) c4p1, QUALIFIER_YEAR_BITS), check((int) c4p2, QUALIFIER_MONTH_BITS), check((int) c4p3, QUALIFIER_DAY_BITS), check(hour, QUALIFIER_HOUR_BITS), check(minute, QUALIFIER_MINUTE_BITS), check(second, QUALIFIER_SECOND_BITS));
-                }
-                // Otherwise we assume it is MAJOR.MINOR.BUGFIX.QUALIFIER
-                int year;
-                int month;
-                int day;
-                if (parts[3].length() > 12) {
-                    year = (int) (c4p4 / 10000000000L);
-                    c4p4 -= year * 10000000000L;
-                    month = (int) (c4p4 / 100000000L);
-                    second = (int) (c4p4 - month * 100000000L);
-                    day = second / 1000000;
-                    second -= day * 1000000;
-                    hour = second / 10000;
-                    second -= hour * 10000;
-                    minute = second / 100;
-                    second -= minute * 100;
+                if (parts[1].length() > 4) {
+                    hour   = (int) (c2p2 / 10000);
+                    minute = (int) ((c2p2 - hour * 10000) / 100);
+                    second = (int) (c2p2 - (hour * 10000 + minute * 100));
                 } else {
-                    year = (int) (c4p4 / 100000000L);
-                    c4p4 -= year * 100000000L;
-                    month = (int) (c4p4 / 1000000L);
-                    minute = (int) (c4p4 - month * 1000000L);
-                    day = minute / 10000;
-                    minute -= day * 10000;
-                    hour = minute / 100;
-                    minute -= hour * 100;
+                    hour   = (int) (c2p2 / 100);
+                    minute = (int) (c2p2 - hour * 100);
                     second = 0;
                 }
-                return toVersion(check((int) c4p1, MAJOR_BITS), check((int) c4p2, MINOR_BITS), check((int) c4p3, BUGFIX_BITS), check(year, QUALIFIER_YEAR_BITS), check(month, QUALIFIER_MONTH_BITS), check(day, QUALIFIER_DAY_BITS), check(hour, QUALIFIER_HOUR_BITS), check(minute, QUALIFIER_MINUTE_BITS), check(second, QUALIFIER_SECOND_BITS));
-            default:
-                throw new NumberFormatException(INVALID_VERSION_FORMAT);
+                return toVersion(1, 0, 0, check(year, QUALIFIER_YEAR_BITS), check(month, QUALIFIER_MONTH_BITS), check(day, QUALIFIER_DAY_BITS), check(hour, QUALIFIER_HOUR_BITS), check(minute, QUALIFIER_MINUTE_BITS), check(second, QUALIFIER_SECOND_BITS));
+            }
+            // Otherwise we assume it is MAJOR.MINOR
+            return toVersion(check((int) c2p1, MAJOR_BITS), check((int) c2p2, MINOR_BITS), 0);
+        case 3:
+            return toVersion(check(Integer.parseInt(parts[0]), MAJOR_BITS), check(Integer.parseInt(parts[1]), MINOR_BITS), check(Integer.parseInt(parts[2]), BUGFIX_BITS));
+        case 4:
+            long c4p1 = Long.parseLong(parts[0]);
+            long c4p2 = Long.parseLong(parts[1]);
+            long c4p3 = Long.parseLong(parts[2]);
+            long c4p4 = Long.parseLong(parts[3]);
+            int hour;
+            int minute;
+            int second;
+            if (c4p1 > (1L << MAJOR_BITS) - 1) {
+                // Assume it is a qualifier in the form of YYYY-MM-DD-HHMMSS, or YYYY-MM-DD-HHMM
+                // since the first value is too large to fit into the major portion
+                if (parts[3].length() > 4) {
+                    hour   = (int) (c4p4 / 10000);
+                    minute = (int) ((c4p4 - hour * 10000) / 100);
+                    second = (int) (c4p4 - (hour * 10000 + minute * 100));
+                } else {
+                    hour   = (int) (c4p4 / 100);
+                    minute = (int) (c4p4 - hour * 100);
+                    second = 0;
+                }
+                return toVersion(1, 0, 0, check((int) c4p1, QUALIFIER_YEAR_BITS), check((int) c4p2, QUALIFIER_MONTH_BITS), check((int) c4p3, QUALIFIER_DAY_BITS), check(hour, QUALIFIER_HOUR_BITS), check(minute, QUALIFIER_MINUTE_BITS), check(second, QUALIFIER_SECOND_BITS));
+            }
+            // Otherwise we assume it is MAJOR.MINOR.BUGFIX.QUALIFIER
+            int year;
+            int month;
+            int day;
+            if (parts[3].length() > 12) {
+                year    = (int) (c4p4 / 10000000000L);
+                c4p4   -= year * 10000000000L;
+                month   = (int) (c4p4 / 100000000L);
+                second  = (int) (c4p4 - month * 100000000L);
+                day     = second / 1000000;
+                second -= day * 1000000;
+                hour    = second / 10000;
+                second -= hour * 10000;
+                minute  = second / 100;
+                second -= minute * 100;
+            } else {
+                year    = (int) (c4p4 / 100000000L);
+                c4p4   -= year * 100000000L;
+                month   = (int) (c4p4 / 1000000L);
+                minute  = (int) (c4p4 - month * 1000000L);
+                day     = minute / 10000;
+                minute -= day * 10000;
+                hour    = minute / 100;
+                minute -= hour * 100;
+                second  = 0;
+            }
+            return toVersion(check((int) c4p1, MAJOR_BITS), check((int) c4p2, MINOR_BITS), check((int) c4p3, BUGFIX_BITS), check(year, QUALIFIER_YEAR_BITS), check(month, QUALIFIER_MONTH_BITS), check(day, QUALIFIER_DAY_BITS), check(hour, QUALIFIER_HOUR_BITS), check(minute, QUALIFIER_MINUTE_BITS), check(second, QUALIFIER_SECOND_BITS));
+        default:
+            throw new NumberFormatException(INVALID_VERSION_FORMAT);
         }
     }
 

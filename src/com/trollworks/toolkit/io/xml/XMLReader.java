@@ -62,7 +62,7 @@ public class XMLReader implements AutoCloseable {
     /**
      * Creates a new {@link XMLReader}.
      *
-     * @param stream The underlying {@link InputStream} to use.
+     * @param stream  The underlying {@link InputStream} to use.
      * @param charset The {@link Charset} to use.
      */
     public XMLReader(InputStream stream, Charset charset) throws IOException {
@@ -72,7 +72,7 @@ public class XMLReader implements AutoCloseable {
     /**
      * Creates a new {@link XMLReader}.
      *
-     * @param stream The underlying {@link InputStream} to use.
+     * @param stream  The underlying {@link InputStream} to use.
      * @param decoder The {@link CharsetDecoder} to use.
      */
     public XMLReader(InputStream stream, CharsetDecoder decoder) throws IOException {
@@ -82,7 +82,7 @@ public class XMLReader implements AutoCloseable {
     /**
      * Creates a new {@link XMLReader}.
      *
-     * @param stream The underlying {@link InputStream} to use.
+     * @param stream      The underlying {@link InputStream} to use.
      * @param charsetName The name of the {@link Charset} to use.
      */
     public XMLReader(InputStream stream, String charsetName) throws IOException {
@@ -93,13 +93,13 @@ public class XMLReader implements AutoCloseable {
      * Creates a new {@link XMLReader}.
      *
      * @param reader The underlying {@link Reader} to use. It is assumed that the reader has been
-     *            created with a {@link Charset} appropriate for the data being read.
+     *               created with a {@link Charset} appropriate for the data being read.
      */
     public XMLReader(Reader reader) throws IOException {
         mReader = reader;
-        mPeek0 = reader.read();
-        mPeek1 = reader.read();
-        mEOF = mPeek0 == -1;
+        mPeek0  = reader.read();
+        mPeek1  = reader.read();
+        mEOF    = mPeek0 == -1;
         defineCharacterEntity("amp", "&"); //$NON-NLS-1$ //$NON-NLS-2$
         defineCharacterEntity("apos", "'"); //$NON-NLS-1$ //$NON-NLS-2$
         defineCharacterEntity("gt", ">"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -116,12 +116,12 @@ public class XMLReader implements AutoCloseable {
     /** @return A marker for determining if you've come to the end of a specific tag. */
     public String getMarker() {
         switch (mType) {
-            case START_TAG:
-                return getDepth() - 1 + COLON + getName();
-            case END_TAG:
-                return getDepth() + COLON + getName();
-            default:
-                return getDepth() + COLON + mStack.get(mStack.size() - 1);
+        case START_TAG:
+            return getDepth() - 1 + COLON + getName();
+        case END_TAG:
+            return getDepth() + COLON + getName();
+        default:
+            return getDepth() + COLON + mStack.get(mStack.size() - 1);
         }
     }
 
@@ -198,7 +198,7 @@ public class XMLReader implements AutoCloseable {
      */
     public String readText() throws IOException {
         StringBuilder builder = new StringBuilder();
-        String marker = getMarker();
+        String        marker  = getMarker();
 
         if (mType == XMLNodeType.START_TAG) {
             next();
@@ -320,7 +320,7 @@ public class XMLReader implements AutoCloseable {
 
     private final String readName() throws IOException {
         int pos = mTextPos;
-        int ch = mPeek0;
+        int ch  = mPeek0;
 
         if ((ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z') && ch != '_' && ch != ':') {
             fail("name expected"); //$NON-NLS-1$
@@ -336,8 +336,8 @@ public class XMLReader implements AutoCloseable {
 
     private final void parseLegacy(boolean push) throws IOException {
         String req = ""; //$NON-NLS-1$
-        int term;
-        int ch;
+        int    term;
+        int    ch;
 
         read(); // <
         ch = read();
@@ -345,17 +345,17 @@ public class XMLReader implements AutoCloseable {
             term = '?';
         } else if (ch == '!') {
             if (mPeek0 == '-') {
-                req = "--"; //$NON-NLS-1$
+                req  = "--"; //$NON-NLS-1$
                 term = '-';
             } else {
-                req = "DOCTYPE"; //$NON-NLS-1$
+                req  = "DOCTYPE"; //$NON-NLS-1$
                 term = -1;
             }
         } else {
             if (ch != '[') {
                 fail("can't reach: " + ch); //$NON-NLS-1$
             }
-            req = "CDATA["; //$NON-NLS-1$
+            req  = "CDATA["; //$NON-NLS-1$
             term = ']';
         }
 
@@ -394,19 +394,19 @@ public class XMLReader implements AutoCloseable {
 
         while (true) {
             switch (read()) {
-                case -1:
-                    fail(UNEXPECTED_EOF);
-                    break;
-                case '<':
-                    nesting++;
-                    break;
-                case '>':
-                    if (--nesting == 0) {
-                        return;
-                    }
-                    break;
-                default:
-                    break;
+            case -1:
+                fail(UNEXPECTED_EOF);
+                break;
+            case '<':
+                nesting++;
+                break;
+            case '>':
+                if (--nesting == 0) {
+                    return;
+                }
+                break;
+            default:
+                break;
             }
         }
     }
@@ -417,7 +417,7 @@ public class XMLReader implements AutoCloseable {
         read(); // '<'
         read(); // '/'
         mName = readName();
-        pos = mStack.size() - 1;
+        pos   = mStack.size() - 1;
         if (pos < 0) {
             fail("element stack empty"); //$NON-NLS-1$
         }
@@ -432,24 +432,24 @@ public class XMLReader implements AutoCloseable {
 
     private final XMLNodeType peekType() {
         switch (mPeek0) {
-            case -1:
-                return XMLNodeType.END_DOCUMENT;
-            case '&':
-                return XMLNodeType.ENTITY_REF;
-            case '<':
-                switch (mPeek1) {
-                    case '/':
-                        return XMLNodeType.END_TAG;
-                    case '[':
-                        return XMLNodeType.DATA;
-                    case '?':
-                    case '!':
-                        return XMLNodeType.OTHER;
-                    default:
-                        return XMLNodeType.START_TAG;
-                }
+        case -1:
+            return XMLNodeType.END_DOCUMENT;
+        case '&':
+            return XMLNodeType.ENTITY_REF;
+        case '<':
+            switch (mPeek1) {
+            case '/':
+                return XMLNodeType.END_TAG;
+            case '[':
+                return XMLNodeType.DATA;
+            case '?':
+            case '!':
+                return XMLNodeType.OTHER;
             default:
-                return XMLNodeType.TEXT;
+                return XMLNodeType.START_TAG;
+            }
+        default:
+            return XMLNodeType.TEXT;
         }
     }
 
@@ -460,8 +460,8 @@ public class XMLReader implements AutoCloseable {
 
         while (true) {
             String attrName;
-            int ch;
-            int pos;
+            int    ch;
+            int    pos;
 
             skip();
             ch = mPeek0;
@@ -504,9 +504,9 @@ public class XMLReader implements AutoCloseable {
 
     private final boolean pushEntity() throws IOException {
         boolean whitespace = true;
-        int pos;
-        String code;
-        String result;
+        int     pos;
+        String  code;
+        String  result;
 
         read(); // &
         pos = mTextPos;
@@ -541,7 +541,7 @@ public class XMLReader implements AutoCloseable {
 
     private final boolean pushText(int delimiter) throws IOException {
         boolean whitespace = true;
-        int next = mPeek0;
+        int     next       = mPeek0;
 
         while (!mEOF && next != delimiter) { // covers EOF, '<', '"'
             if (delimiter == ' ') {
@@ -568,7 +568,7 @@ public class XMLReader implements AutoCloseable {
      * Define a character entity mapping.
      *
      * @param entity The XML entity.
-     * @param value The value to substitute.
+     * @param value  The value to substitute.
      */
     public void defineCharacterEntity(String entity, String value) {
         mEntityMap.put(entity, value);
@@ -642,7 +642,7 @@ public class XMLReader implements AutoCloseable {
     }
 
     /**
-     * @param name The name of the attribute to use.
+     * @param name     The name of the attribute to use.
      * @param defValue The default value to use if the attribute value isn't present.
      * @return The value of the attribute.
      */
@@ -668,9 +668,9 @@ public class XMLReader implements AutoCloseable {
     }
 
     /**
-     * @param name The attribute name.
+     * @param name     The attribute name.
      * @param defValue The default value to use if the attribute value can't be converted to an
-     *            integer.
+     *                 integer.
      * @return The value of the tag.
      */
     public int getAttributeAsInteger(String name, int defValue) {
@@ -678,7 +678,7 @@ public class XMLReader implements AutoCloseable {
     }
 
     /**
-     * @param name The attribute name.
+     * @param name     The attribute name.
      * @param defValue The default value to use if the attribute value can't be converted to a long.
      * @return The value of the tag.
      */
@@ -687,9 +687,9 @@ public class XMLReader implements AutoCloseable {
     }
 
     /**
-     * @param name The attribute name.
+     * @param name     The attribute name.
      * @param defValue The default value to use if the attribute value can't be converted to a
-     *            double.
+     *                 double.
      * @return The value of the tag.
      */
     public double getAttributeAsDouble(String name, double defValue) {
@@ -713,13 +713,13 @@ public class XMLReader implements AutoCloseable {
      */
     public XMLNodeType next() throws IOException {
         if (mIsEmptyElementTag) {
-            mType = XMLNodeType.END_TAG;
+            mType              = XMLNodeType.END_TAG;
             mIsEmptyElementTag = false;
             mStack.remove(mStack.size() - 1);
         } else {
             int textOrdinal = XMLNodeType.TEXT.ordinal();
 
-            mTextPos = 0;
+            mTextPos      = 0;
             mIsWhitespace = true;
             do {
                 mAttributeMap.clear();
@@ -727,29 +727,29 @@ public class XMLReader implements AutoCloseable {
                 mText = null;
                 mType = peekType();
                 switch (mType) {
-                    case ENTITY_REF:
-                        mIsWhitespace &= pushEntity();
-                        mType = XMLNodeType.TEXT;
-                        break;
-                    case START_TAG:
-                        parseStartTag();
-                        break;
-                    case END_TAG:
-                        parseEndTag();
-                        break;
-                    case END_DOCUMENT:
-                        break;
-                    case TEXT:
-                        mIsWhitespace &= pushText('<');
-                        break;
-                    case DATA:
-                        parseLegacy(true);
-                        mIsWhitespace = false;
-                        mType = XMLNodeType.TEXT;
-                        break;
-                    default:
-                        parseLegacy(false);
-                        break;
+                case ENTITY_REF:
+                    mIsWhitespace &= pushEntity();
+                    mType = XMLNodeType.TEXT;
+                    break;
+                case START_TAG:
+                    parseStartTag();
+                    break;
+                case END_TAG:
+                    parseEndTag();
+                    break;
+                case END_DOCUMENT:
+                    break;
+                case TEXT:
+                    mIsWhitespace &= pushText('<');
+                    break;
+                case DATA:
+                    parseLegacy(true);
+                    mIsWhitespace = false;
+                    mType = XMLNodeType.TEXT;
+                    break;
+                default:
+                    parseLegacy(false);
+                    break;
                 }
             } while (mType.ordinal() > textOrdinal || mType == XMLNodeType.TEXT && peekType().ordinal() >= textOrdinal);
 

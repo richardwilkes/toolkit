@@ -22,8 +22,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlPrimitiveIntHelper implements XmlObjectHelper {
     public static final XmlPrimitiveIntHelper SINGLETON = new XmlPrimitiveIntHelper();
 
-    private XmlPrimitiveIntHelper() {
-    }
+    private XmlPrimitiveIntHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -32,8 +31,8 @@ public class XmlPrimitiveIntHelper implements XmlObjectHelper {
 
     @Override
     public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-        int value = field.getInt(obj);
-        XmlDefaultInteger def = field.getAnnotation(XmlDefaultInteger.class);
+        int               value = field.getInt(obj);
+        XmlDefaultInteger def   = field.getAnnotation(XmlDefaultInteger.class);
         if (def != null) {
             xml.addAttributeNot(name, value, def.value());
         } else {

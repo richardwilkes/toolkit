@@ -37,11 +37,11 @@ class CmdLineData {
     /**
      * Creates a new {@link CmdLineData}.
      *
-     * @param option The option.
+     * @param option   The option.
      * @param argument The option's argument.
      */
     CmdLineData(CmdLineOption option, String argument) {
-        mOption = option;
+        mOption   = option;
         mArgument = argument;
     }
 

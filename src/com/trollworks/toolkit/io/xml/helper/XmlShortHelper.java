@@ -22,8 +22,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlShortHelper implements XmlObjectHelper {
     public static final XmlShortHelper SINGLETON = new XmlShortHelper();
 
-    private XmlShortHelper() {
-    }
+    private XmlShortHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -34,8 +33,8 @@ public class XmlShortHelper implements XmlObjectHelper {
     public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
         Short value = (Short) field.get(obj);
         if (value != null) {
-            short primitive = value.shortValue();
-            XmlDefaultShort def = field.getAnnotation(XmlDefaultShort.class);
+            short           primitive = value.shortValue();
+            XmlDefaultShort def       = field.getAnnotation(XmlDefaultShort.class);
             if (def != null) {
                 xml.addAttributeNot(name, primitive, def.value());
             } else {

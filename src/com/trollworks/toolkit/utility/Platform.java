@@ -30,11 +30,11 @@ public enum Platform {
     private String mScriptExtension;
 
     private Platform(String dirName, String extension, String dynamicLibraryPrefix, String dynamicLibraryExtension, String scriptExtension) {
-        mDirName = dirName;
-        mExtension = extension;
-        mDynamicLibraryPrefix = dynamicLibraryPrefix;
+        mDirName                 = dirName;
+        mExtension               = extension;
+        mDynamicLibraryPrefix    = dynamicLibraryPrefix;
         mDynamicLibraryExtension = dynamicLibraryExtension;
-        mScriptExtension = scriptExtension;
+        mScriptExtension         = scriptExtension;
     }
 
     public final String getDynamicLibraryPath(String libName) {

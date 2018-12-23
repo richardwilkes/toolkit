@@ -23,7 +23,7 @@ public class WeightFormatter extends JFormattedTextField.AbstractFormatter {
 
     /**
      * @param blankOnZero When <code>true</code>, a value of zero resolves to the empty string when
-     *            calling {@link #valueToString(Object)}.
+     *                    calling {@link #valueToString(Object)}.
      */
     public WeightFormatter(boolean blankOnZero) {
         mBlankOnZero = blankOnZero;

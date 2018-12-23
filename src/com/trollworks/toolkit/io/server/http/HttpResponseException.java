@@ -18,7 +18,7 @@ public class HttpResponseException extends IOException {
     private final HttpStatusCode mStatus;
 
     /**
-     * @param status The {@link HttpStatusCode} to use.
+     * @param status  The {@link HttpStatusCode} to use.
      * @param message The message to use.
      */
     public HttpResponseException(HttpStatusCode status, String message) {
@@ -27,8 +27,8 @@ public class HttpResponseException extends IOException {
     }
 
     /**
-     * @param status The {@link HttpStatusCode} to use.
-     * @param message The message to use.
+     * @param status    The {@link HttpStatusCode} to use.
+     * @param message   The message to use.
      * @param exception The exception to wrap.
      */
     public HttpResponseException(HttpStatusCode status, String message, Exception exception) {

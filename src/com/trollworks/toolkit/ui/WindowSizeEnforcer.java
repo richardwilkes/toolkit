@@ -49,10 +49,10 @@ public class WindowSizeEnforcer implements ComponentListener {
 
     /** @param window The window to enforce min/max size on. */
     public static void enforce(Window window) {
-        Dimension origSize = window.getSize();
+        Dimension origSize  = window.getSize();
         Dimension otherSize = window.getMinimumSize();
-        int width = origSize.width;
-        int height = origSize.height;
+        int       width     = origSize.width;
+        int       height    = origSize.height;
 
         if (width < otherSize.width) {
             width = otherSize.width;

@@ -82,8 +82,8 @@ public class UpdateChecker implements Runnable {
      * Initiates a check for updates.
      *
      * @param productKey The product key to check for.
-     * @param checkURL The URL to use for checking whether a new version is available.
-     * @param updateURL The URL to use when going to the update site.
+     * @param checkURL   The URL to use for checking whether a new version is available.
+     * @param updateURL  The URL to use when going to the update site.
      */
     public static void check(String productKey, String checkURL, String updateURL) {
         Thread thread = new Thread(new UpdateChecker(productKey, checkURL), UpdateChecker.class.getSimpleName());
@@ -116,7 +116,7 @@ public class UpdateChecker implements Runnable {
 
     private UpdateChecker(String productKey, String checkURL) {
         mProductKey = productKey;
-        mCheckURL = checkURL;
+        mCheckURL   = checkURL;
     }
 
     @Override
@@ -125,7 +125,7 @@ public class UpdateChecker implements Runnable {
             long currentVersion = BundleInfo.getDefault().getVersion();
             if (currentVersion == 0) {
                 // Development version. Bail.
-                mMode = 2;
+                mMode  = 2;
                 RESULT = UP_TO_DATE;
                 return;
             }
@@ -151,16 +151,16 @@ public class UpdateChecker implements Runnable {
                 } catch (Exception exception) {
                     // Ignore. Means the code below is likely to fail, too.
                 }
-                URL url = new URL(buffer.toString());
-                BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-                String line = in.readLine();
+                URL            url  = new URL(buffer.toString());
+                BufferedReader in   = new BufferedReader(new InputStreamReader(url.openStream()));
+                String         line = in.readLine();
                 while (line != null) {
                     StringTokenizer tokenizer = new StringTokenizer(line, "\t"); //$NON-NLS-1$
                     if (tokenizer.hasMoreTokens()) {
                         try {
                             if (tokenizer.nextToken().equalsIgnoreCase(mProductKey)) {
-                                String token = tokenizer.nextToken();
-                                long version = Version.extract(token, 0);
+                                String token   = tokenizer.nextToken();
+                                long   version = Version.extract(token, 0);
                                 if (version > versionAvailable) {
                                     versionAvailable = version;
                                 }
@@ -177,7 +177,7 @@ public class UpdateChecker implements Runnable {
             if (versionAvailable > currentVersion) {
                 Preferences prefs = Preferences.getInstance();
                 NEW_VERSION_AVAILABLE = true;
-                RESULT = OUT_OF_DATE;
+                RESULT                = OUT_OF_DATE;
                 if (versionAvailable > prefs.getLongValue(MODULE, LAST_VERSION_KEY, BundleInfo.getDefault().getVersion())) {
                     prefs.setValue(MODULE, LAST_VERSION_KEY, versionAvailable);
                     prefs.save();

@@ -22,8 +22,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlByteHelper implements XmlObjectHelper {
     public static final XmlByteHelper SINGLETON = new XmlByteHelper();
 
-    private XmlByteHelper() {
-    }
+    private XmlByteHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -34,8 +33,8 @@ public class XmlByteHelper implements XmlObjectHelper {
     public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
         Byte value = (Byte) field.get(obj);
         if (value != null) {
-            byte primitive = value.byteValue();
-            XmlDefaultByte def = field.getAnnotation(XmlDefaultByte.class);
+            byte           primitive = value.byteValue();
+            XmlDefaultByte def       = field.getAnnotation(XmlDefaultByte.class);
             if (def != null) {
                 xml.addAttributeNot(name, primitive, def.value());
             } else {

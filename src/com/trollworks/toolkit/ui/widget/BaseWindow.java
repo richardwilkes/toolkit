@@ -61,13 +61,13 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
     }
 
     /**
-     * @param <T> The window type.
+     * @param      <T> The window type.
      * @param type The window type to return.
      * @return A list of all windows of the specified type.
      */
     public static <T extends BaseWindow> ArrayList<T> getWindows(Class<T> type) {
         ArrayList<T> windows = new ArrayList<>();
-        Frame[] frames = Frame.getFrames();
+        Frame[]      frames  = Frame.getFrames();
         for (Frame element : frames) {
             if (type.isInstance(element)) {
                 T window = type.cast(element);
@@ -82,16 +82,16 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
     /**
      * Creates a new, untitled window title.
      *
-     * @param <T> The window type.
+     * @param             <T> The window type.
      * @param windowClass The window class to use for name comparisons.
-     * @param baseTitle The base untitled name.
-     * @param exclude A window to exclude from naming decisions. May be <code>null</code>.
+     * @param baseTitle   The base untitled name.
+     * @param exclude     A window to exclude from naming decisions. May be <code>null</code>.
      * @return The new window title.
      */
     public static <T extends BaseWindow> String getNextUntitledWindowName(Class<T> windowClass, String baseTitle, BaseWindow exclude) {
         List<T> windows = getWindows(windowClass);
-        int value = 0;
-        String title;
+        int     value   = 0;
+        String  title;
         boolean again;
 
         do {
@@ -114,7 +114,7 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
      * Creates a new {@link BaseWindow}.
      *
      * @param title The title of the window.
-     * @param gc The {@link GraphicsConfiguration} to use.
+     * @param gc    The {@link GraphicsConfiguration} to use.
      */
     public BaseWindow(String title, GraphicsConfiguration gc) {
         super(title, gc);
@@ -193,7 +193,7 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
     private void collectSaveables(Component component, List<Saveable> saveables) {
         if (component instanceof Container) {
             Container container = (Container) component;
-            int count = container.getComponentCount();
+            int       count     = container.getComponentCount();
             for (int i = 0; i < count; i++) {
                 collectSaveables(container.getComponent(i), saveables);
             }
@@ -260,8 +260,8 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
     public void saveBounds() {
         String keyPrefix = getWindowPrefsPrefix();
         if (keyPrefix != null) {
-            Preferences prefs = getWindowPreferences();
-            boolean wasMaximized = (getExtendedState() & MAXIMIZED_BOTH) != 0;
+            Preferences prefs        = getWindowPreferences();
+            boolean     wasMaximized = (getExtendedState() & MAXIMIZED_BOTH) != 0;
             if (wasMaximized || getExtendedState() == ICONIFIED) {
                 setExtendedState(NORMAL);
             }
@@ -278,8 +278,8 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
         Preferences prefs = getWindowPreferences();
         prefs.resetIfVersionMisMatch(WINDOW_PREFERENCES, WINDOW_PREFERENCES_VERSION);
         pruneOldWindowPreferences(prefs);
-        boolean needPack = true;
-        String keyPrefix = getWindowPrefsPrefix();
+        boolean needPack  = true;
+        String  keyPrefix = getWindowPrefsPrefix();
         if (keyPrefix != null) {
             Point location = prefs.getPointValue(WINDOW_PREFERENCES, keyPrefix + KEY_LOCATION);
             if (location != null) {
@@ -299,9 +299,9 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 
     private static void pruneOldWindowPreferences(Preferences prefs) {
         // 45 days ago, in milliseconds
-        long cutoff = System.currentTimeMillis() - 1000L * 60L * 60L * 24L * 45L;
-        List<String> keys = prefs.getModuleKeys(WINDOW_PREFERENCES);
-        ArrayList<String> list = new ArrayList<>();
+        long              cutoff = System.currentTimeMillis() - 1000L * 60L * 60L * 24L * 45L;
+        List<String>      keys   = prefs.getModuleKeys(WINDOW_PREFERENCES);
+        ArrayList<String> list   = new ArrayList<>();
         for (String key : keys) {
             if (key.endsWith(KEY_LAST_UPDATED)) {
                 if (prefs.getLongValue(WINDOW_PREFERENCES, key, 0) < cutoff) {

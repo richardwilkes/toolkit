@@ -94,7 +94,7 @@ public class XmlGenerator implements AutoCloseable {
     /**
      * Adds an attribute to the currently open tag.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void addAttribute(String name, String value) throws XMLStreamException {
@@ -104,7 +104,7 @@ public class XmlGenerator implements AutoCloseable {
     /**
      * Adds an attribute to the currently open tag.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void addAttribute(String name, boolean value) throws XMLStreamException {
@@ -114,7 +114,7 @@ public class XmlGenerator implements AutoCloseable {
     /**
      * Adds an attribute to the currently open tag.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void addAttribute(String name, int value) throws XMLStreamException {
@@ -124,7 +124,7 @@ public class XmlGenerator implements AutoCloseable {
     /**
      * Adds an attribute to the currently open tag.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void addAttribute(String name, long value) throws XMLStreamException {
@@ -134,7 +134,7 @@ public class XmlGenerator implements AutoCloseable {
     /**
      * Adds an attribute to the currently open tag.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void addAttribute(String name, double value) throws XMLStreamException {
@@ -144,7 +144,7 @@ public class XmlGenerator implements AutoCloseable {
     /**
      * Adds an attribute to the currently open tag, but only if it isn't empty.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
      */
     public void addAttributeNotEmpty(String name, String value) throws XMLStreamException {
@@ -156,9 +156,9 @@ public class XmlGenerator implements AutoCloseable {
     /**
      * Adds an attribute to the currently open tag.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
-     * @param not Only add the attribute if it is not equal to this value.
+     * @param not   Only add the attribute if it is not equal to this value.
      */
     public void addAttributeNot(String name, String value, String not) throws XMLStreamException {
         if (not != null ? !not.equals(value) : value != null) {
@@ -169,9 +169,9 @@ public class XmlGenerator implements AutoCloseable {
     /**
      * Adds an attribute to the currently open tag.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
-     * @param not Only add the attribute if it is not equal to this value.
+     * @param not   Only add the attribute if it is not equal to this value.
      */
     public void addAttributeNot(String name, boolean value, boolean not) throws XMLStreamException {
         if (value != not) {
@@ -182,9 +182,9 @@ public class XmlGenerator implements AutoCloseable {
     /**
      * Adds an attribute to the currently open tag.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
-     * @param not Only add the attribute if it is not equal to this value.
+     * @param not   Only add the attribute if it is not equal to this value.
      */
     public void addAttributeNot(String name, int value, int not) throws XMLStreamException {
         if (value != not) {
@@ -195,9 +195,9 @@ public class XmlGenerator implements AutoCloseable {
     /**
      * Adds an attribute to the currently open tag.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
-     * @param not Only add the attribute if it is not equal to this value.
+     * @param not   Only add the attribute if it is not equal to this value.
      */
     public void addAttributeNot(String name, long value, long not) throws XMLStreamException {
         if (value != not) {
@@ -208,9 +208,9 @@ public class XmlGenerator implements AutoCloseable {
     /**
      * Adds an attribute to the currently open tag.
      *
-     * @param name The name of the attribute.
+     * @param name  The name of the attribute.
      * @param value The value of the attribute.
-     * @param not Only add the attribute if it is not equal to this value.
+     * @param not   Only add the attribute if it is not equal to this value.
      */
     public void addAttributeNot(String name, double value, double not) throws XMLStreamException {
         if (value != not) {

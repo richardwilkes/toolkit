@@ -71,16 +71,16 @@ public class Http extends Personality {
     }
 
     private void reset() {
-        mState = 0;
-        mContentSize = 0;
-        mBuffer = new ByteArrayOutputStream(MAXIMUM_HEADER_SIZE);
-        mBody = null;
-        mUri = null;
-        mMethod = null;
+        mState        = 0;
+        mContentSize  = 0;
+        mBuffer       = new ByteArrayOutputStream(MAXIMUM_HEADER_SIZE);
+        mBody         = null;
+        mUri          = null;
+        mMethod       = null;
         mVersionMajor = 0;
         mVersionMinor = 0;
-        mParameters = new HashMap<>();
-        mHeaders = new HashMap<>();
+        mParameters   = new HashMap<>();
+        mHeaders      = new HashMap<>();
     }
 
     @Override
@@ -96,7 +96,7 @@ public class Http extends Personality {
     private void processRequest() throws IOException {
         try {
             Path rootPath = mFactory.getRootPath();
-            Path path = rootPath.resolve("./" + mUri).toAbsolutePath().normalize();
+            Path path     = rootPath.resolve("./" + mUri).toAbsolutePath().normalize();
             if (!path.startsWith(rootPath)) {
                 throw new HttpResponseException(HttpStatusCode.FORBIDDEN, "FORBIDDEN: Outside of web scope");
             }
@@ -138,12 +138,12 @@ public class Http extends Personality {
 
                 try {
                     String name = path.getFileName().toString();
-                    int dot = name.lastIndexOf('.');
+                    int    dot  = name.lastIndexOf('.');
                     if (dot != -1 && dot + 1 < name.length()) {
                         name = name.substring(dot + 1);
                     }
-                    String mime = MimeTypes.lookup(name);
-                    long size = Files.size(path);
+                    String       mime     = MimeTypes.lookup(name);
+                    long         size     = Files.size(path);
                     HttpResponse response = new HttpResponse(HttpStatusCode.OK, mime, path);
                     response.addHeader("Content-Length", Long.toString(size));
                     response.setRequestMethod(mMethod);
@@ -215,37 +215,37 @@ public class Http extends Personality {
     private boolean parse(byte b) throws IOException {
         mBuffer.write(b & 0xFF);
         switch (mState) {
-            case 0:
-                if (b == '\r') {
-                    mState = 1;
-                }
-                break;
-            case 1:
-                if (b == '\n') {
-                    mState = 2;
-                } else if (b != '\r') {
-                    mState = 0;
-                }
-                break;
-            case 2:
-                mState = b == '\r' ? 3 : 0;
-                break;
-            case 3:
-                if (b == '\n') {
-                    mState = 4;
-                    parseHeaders();
-                    return mContentSize == 0;
-                }
-                mState = b == '\r' ? 1 : 0;
-                break;
-            case 4:
-                if (mContentSize != -1 && mBuffer.size() == mContentSize) {
-                    parseBody();
-                    return true;
-                }
-                return false;
-            default:
-                throw new EOFException("Read past end of request");
+        case 0:
+            if (b == '\r') {
+                mState = 1;
+            }
+            break;
+        case 1:
+            if (b == '\n') {
+                mState = 2;
+            } else if (b != '\r') {
+                mState = 0;
+            }
+            break;
+        case 2:
+            mState = b == '\r' ? 3 : 0;
+            break;
+        case 3:
+            if (b == '\n') {
+                mState = 4;
+                parseHeaders();
+                return mContentSize == 0;
+            }
+            mState = b == '\r' ? 1 : 0;
+            break;
+        case 4:
+            if (mContentSize != -1 && mBuffer.size() == mContentSize) {
+                parseBody();
+                return true;
+            }
+            return false;
+        default:
+            throw new EOFException("Read past end of request");
         }
         if (mBuffer.size() > MAXIMUM_HEADER_SIZE) {
             throw new HttpResponseException(HttpStatusCode.BAD_REQUEST, "BAD REQUEST: Header too large");
@@ -254,8 +254,8 @@ public class Http extends Personality {
     }
 
     private void parseHeaders() throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(mBuffer.toByteArray())));
-        String line = in.readLine();
+        BufferedReader in   = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(mBuffer.toByteArray())));
+        String         line = in.readLine();
         if (line == null) {
             throw new SocketTimeoutException();
         }
@@ -270,7 +270,7 @@ public class Http extends Personality {
             throw new HttpResponseException(HttpStatusCode.BAD_REQUEST, "BAD REQUEST");
         }
 
-        mUri = matcher.group(2);
+        mUri          = matcher.group(2);
         mVersionMajor = Integer.parseInt(matcher.group(3));
         mVersionMinor = Integer.parseInt(matcher.group(4));
 
@@ -291,7 +291,7 @@ public class Http extends Personality {
             }
             index = line.indexOf(':');
             if (index != -1) {
-                String name = line.substring(0, index).trim().toLowerCase();
+                String       name = line.substring(0, index).trim().toLowerCase();
                 List<String> list = mHeaders.get(name);
                 if (list == null) {
                     list = new ArrayList<>();
@@ -324,13 +324,13 @@ public class Http extends Personality {
     }
 
     private void parseBody() throws IOException {
-        mState = 5;
-        mBody = mBuffer.toByteArray();
+        mState  = 5;
+        mBody   = mBuffer.toByteArray();
         mBuffer = null;
         if (HttpMethod.POST.equals(mMethod)) {
             if ("application/x-www-form-urlencoded".equals(getFirstHeader("content-type"))) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(mBody)));
-                String line = in.readLine();
+                BufferedReader in   = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(mBody)));
+                String         line = in.readLine();
                 while (line != null) {
                     decodeParameters(line);
                     line = in.readLine();
@@ -351,10 +351,10 @@ public class Http extends Personality {
     private void decodeParameters(String parameters) {
         StringTokenizer tokenizer = new StringTokenizer(parameters, "&");
         while (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken();
-            int index = token.indexOf('=');
-            String name = decodePercent(index == -1 ? token : token.substring(0, index)).trim();
-            List<String> list = mParameters.get(name);
+            String       token = tokenizer.nextToken();
+            int          index = token.indexOf('=');
+            String       name  = decodePercent(index == -1 ? token : token.substring(0, index)).trim();
+            List<String> list  = mParameters.get(name);
             if (list == null) {
                 list = new ArrayList<>();
                 mParameters.put(name, list);

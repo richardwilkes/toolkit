@@ -39,7 +39,7 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
     /**
      * Creates a new {@link Command}.
      *
-     * @param title The title to use.
+     * @param title   The title to use.
      * @param command The command to use.
      */
     public Command(String title, String command) {
@@ -50,9 +50,9 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
     /**
      * Creates a new {@link Command}.
      *
-     * @param title The title to use.
+     * @param title   The title to use.
      * @param command The command to use.
-     * @param icon The icon to use.
+     * @param icon    The icon to use.
      */
     public Command(String title, String command, Icon icon) {
         super(title, icon);
@@ -62,10 +62,10 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
     /**
      * Creates a new {@link Command}.
      *
-     * @param title The title to use.
+     * @param title   The title to use.
      * @param command The command to use.
      * @param keyCode The key code to use. The platform's standard menu shortcut key will be
-     *            specified as a modifier.
+     *                specified as a modifier.
      */
     public Command(String title, String command, int keyCode) {
         super(title);
@@ -77,9 +77,9 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
     /**
      * Creates a new {@link Command}.
      *
-     * @param title The title to use.
-     * @param command The command to use.
-     * @param keyCode The key code to use.
+     * @param title     The title to use.
+     * @param command   The command to use.
+     * @param keyCode   The key code to use.
      * @param modifiers The modifiers to use.
      */
     public Command(String title, String command, int keyCode, int modifiers) {
@@ -92,11 +92,11 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
     /**
      * Creates a new {@link Command}.
      *
-     * @param title The title to use.
+     * @param title   The title to use.
      * @param command The command to use.
-     * @param icon The icon to use.
+     * @param icon    The icon to use.
      * @param keyCode The key code to use. The platform's standard menu shortcut key will be
-     *            specified as a modifier.
+     *                specified as a modifier.
      */
     public Command(String title, String command, Icon icon, int keyCode) {
         super(title, icon);
@@ -108,10 +108,10 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
     /**
      * Creates a new {@link Command}.
      *
-     * @param title The title to use.
-     * @param command The command to use.
-     * @param icon The icon to use.
-     * @param keyCode The key code to use.
+     * @param title     The title to use.
+     * @param command   The command to use.
+     * @param icon      The icon to use.
+     * @param keyCode   The key code to use.
      * @param modifiers The modifiers to use.
      */
     public Command(String title, String command, Icon icon, int keyCode, int modifiers) {
@@ -124,8 +124,8 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
     /**
      * Creates a new {@link Command}.
      *
-     * @param title The title to use.
-     * @param command The command to use.
+     * @param title     The title to use.
+     * @param command   The command to use.
      * @param keystroke The {@link KeyStroke} to use.
      */
     public Command(String title, String command, KeyStroke keystroke) {
@@ -138,9 +138,9 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
     /**
      * Creates a new {@link Command}.
      *
-     * @param title The title to use.
-     * @param command The command to use.
-     * @param icon The icon to use.
+     * @param title     The title to use.
+     * @param command   The command to use.
+     * @param icon      The icon to use.
      * @param keystroke The {@link KeyStroke} to use.
      */
     public Command(String title, String command, Icon icon, KeyStroke keystroke) {
@@ -208,7 +208,7 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
     /**
      * Sets the keyboard accelerator for this {@link Command}.
      *
-     * @param keyCode The key code to use.
+     * @param keyCode   The key code to use.
      * @param modifiers The modifiers to use.
      */
     public final void setAccelerator(int keyCode, int modifiers) {
@@ -246,7 +246,7 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
     public int compareTo(Command other) {
         int result = getTitle().compareTo(other.getTitle());
         if (result == 0) {
-            int hc = hashCode();
+            int hc  = hashCode();
             int ohc = other.hashCode();
             if (hc > ohc) {
                 return 1;
@@ -265,8 +265,8 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
 
     /** @return The current target. */
     public static final <T> T getTarget(Class<T> type) {
-        Component focus = getFocusOwner();
-        T target = UIUtilities.getSelfOrAncestorOfType(focus, type);
+        Component focus  = getFocusOwner();
+        T         target = UIUtilities.getSelfOrAncestorOfType(focus, type);
         if (target == null) {
             RetargetableFocus retargeter = UIUtilities.getSelfOrAncestorOfType(focus, RetargetableFocus.class);
             if (retargeter != null) {
@@ -291,8 +291,8 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
             if (component instanceof JMenu) {
                 adjustMenuTree((JMenu) component);
             } else if (component instanceof JMenuItem) {
-                JMenuItem item = (JMenuItem) component;
-                Action action = item.getAction();
+                JMenuItem item   = (JMenuItem) component;
+                Action    action = item.getAction();
                 if (action instanceof Command) {
                     ((Command) action).adjust();
                 }
@@ -305,8 +305,8 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
             if (component instanceof JMenu) {
                 adjustMenuTree((JMenu) component);
             } else if (component instanceof JMenuItem) {
-                JMenuItem item = (JMenuItem) component;
-                Action action = item.getAction();
+                JMenuItem item   = (JMenuItem) component;
+                Action    action = item.getAction();
                 if (action instanceof Command) {
                     ((Command) action).adjust();
                 }

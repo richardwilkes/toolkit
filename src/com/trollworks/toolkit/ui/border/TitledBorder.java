@@ -30,17 +30,16 @@ public class TitledBorder extends LineBorder {
     private Font   mFont;
 
     /** Creates a new border without a title. */
-    public TitledBorder() {
-    }
+    public TitledBorder() {}
 
     /**
      * Creates a new border without a title.
      *
-     * @param font The font to use.
+     * @param font  The font to use.
      * @param title The title to use.
      */
     public TitledBorder(Font font, String title) {
-        mFont = font;
+        mFont  = font;
         mTitle = title;
     }
 
@@ -88,9 +87,9 @@ public class TitledBorder extends LineBorder {
     public void paintBorder(Component component, Graphics graphics, int x, int y, int width, int height) {
         super.paintBorder(component, graphics, x, y, width, height);
         if (mTitle != null && mFont != null) {
-            Scale scale = Scale.get(component);
-            Font savedFont = graphics.getFont();
-            Font font = scale.scale(mFont);
+            Scale scale     = Scale.get(component);
+            Font  savedFont = graphics.getFont();
+            Font  font      = scale.scale(mFont);
             graphics.setFont(font);
             int one = scale.scale(1);
             graphics.setColor(mTextColor);

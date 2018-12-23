@@ -17,7 +17,7 @@ import java.nio.channels.SocketChannel;
 /** Used to create a {@link Session} for in-bound connections. */
 public interface SessionFactory {
     /**
-     * @param server The {@link NioServer} that will be providing the connection.
+     * @param server  The {@link NioServer} that will be providing the connection.
      * @param channel The {@link SocketChannel} that was connected.
      * @return The newly created {@link Session}.
      */

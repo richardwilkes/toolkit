@@ -73,7 +73,7 @@ public class Conversion {
     public static int[] extractIntegers(String buffer) {
         if (buffer != null && buffer.length() > 0) {
             String[] buffers = buffer.split(COMMA);
-            int[] values = new int[buffers.length];
+            int[]    values  = new int[buffers.length];
 
             for (int i = 0; i < buffers.length; i++) {
                 try {

@@ -37,10 +37,10 @@ public class EmptyBorder implements Border {
     /**
      * Creates a new border.
      *
-     * @param top The thickness to use for the top side.
-     * @param left The thickness to use for the left side.
+     * @param top    The thickness to use for the top side.
+     * @param left   The thickness to use for the left side.
      * @param bottom The thickness to use for the bottom side.
-     * @param right The thickness to use for the right side.
+     * @param right  The thickness to use for the right side.
      */
     public EmptyBorder(int top, int left, int bottom, int right) {
         setThickness(Edge.TOP, top);
@@ -58,7 +58,7 @@ public class EmptyBorder implements Border {
     }
 
     /**
-     * @param edge The edge to set.
+     * @param edge      The edge to set.
      * @param thickness The thickness to use for the specified edge.
      */
     public void setThickness(Edge edge, int thickness) {

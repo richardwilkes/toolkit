@@ -101,7 +101,7 @@ public class JsonArray extends JsonCollection {
     }
 
     /**
-     * @param index The index to retrieve.
+     * @param index     The index to retrieve.
      * @param allowNull <code>false</code> to return an empty string if no such index exists.
      * @return The value associated with the index.
      */
@@ -110,9 +110,9 @@ public class JsonArray extends JsonCollection {
     }
 
     /**
-     * @param index The index to retrieve.
+     * @param index     The index to retrieve.
      * @param allowNull <code>false</code> to return an empty array if no such index exists or the
-     *            value cannot be converted to a {@link JsonArray}.
+     *                  value cannot be converted to a {@link JsonArray}.
      * @return The value associated with the index.
      */
     public JsonArray getArray(int index, boolean allowNull) {
@@ -120,9 +120,9 @@ public class JsonArray extends JsonCollection {
     }
 
     /**
-     * @param index The index to retrieve.
+     * @param index     The index to retrieve.
      * @param allowNull <code>false</code> to return an empty map if no such index exists or the
-     *            value cannot be converted to a {@link JsonMap}.
+     *                  value cannot be converted to a {@link JsonMap}.
      * @return The value associated with the index.
      */
     public JsonMap getMap(int index, boolean allowNull) {
@@ -130,9 +130,9 @@ public class JsonArray extends JsonCollection {
     }
 
     /**
-     * @param index The index to retrieve.
+     * @param index     The index to retrieve.
      * @param allowNull <code>false</code> to return an empty point if no such index exists or the
-     *            value cannot be converted to a {@link Point}.
+     *                  value cannot be converted to a {@link Point}.
      * @return The value associated with the index.
      */
     public Point getPoint(int index, boolean allowNull) {
@@ -140,9 +140,9 @@ public class JsonArray extends JsonCollection {
     }
 
     /**
-     * @param index The index to retrieve.
+     * @param index     The index to retrieve.
      * @param allowNull <code>false</code> to return an empty rectangle if no such index exists or
-     *            the value cannot be converted to a {@link Rectangle}.
+     *                  the value cannot be converted to a {@link Rectangle}.
      * @return The value associated with the index.
      */
     public Rectangle getRectangle(int index, boolean allowNull) {
@@ -239,8 +239,8 @@ public class JsonArray extends JsonCollection {
      * Adds a value to the array.
      *
      * @param index The index to insert the value at. Must be greater than or equal to zero. If the
-     *            index is past the end of the current set of values, <code>null</code>'s will be
-     *            inserted as padding.
+     *              index is past the end of the current set of values, <code>null</code>'s will be
+     *              inserted as padding.
      * @param value The value to store.
      */
     public void put(int index, Object value) {
@@ -261,8 +261,8 @@ public class JsonArray extends JsonCollection {
      * Adds a value to the array.
      *
      * @param index The index to insert the value at. Must be greater than or equal to zero. If the
-     *            index is past the end of the current set of values, <code>null</code>'s will be
-     *            inserted as padding.
+     *              index is past the end of the current set of values, <code>null</code>'s will be
+     *              inserted as padding.
      * @param value The value to store.
      */
     public void put(int index, boolean value) {
@@ -273,8 +273,8 @@ public class JsonArray extends JsonCollection {
      * Adds a value to the array.
      *
      * @param index The index to insert the value at. Must be greater than or equal to zero. If the
-     *            index is past the end of the current set of values, <code>null</code>'s will be
-     *            inserted as padding.
+     *              index is past the end of the current set of values, <code>null</code>'s will be
+     *              inserted as padding.
      * @param value The value to store.
      */
     public void put(int index, byte value) {
@@ -285,8 +285,8 @@ public class JsonArray extends JsonCollection {
      * Adds a value to the array.
      *
      * @param index The index to insert the value at. Must be greater than or equal to zero. If the
-     *            index is past the end of the current set of values, <code>null</code>'s will be
-     *            inserted as padding.
+     *              index is past the end of the current set of values, <code>null</code>'s will be
+     *              inserted as padding.
      * @param value The value to store.
      */
     public void put(int index, char value) {
@@ -297,8 +297,8 @@ public class JsonArray extends JsonCollection {
      * Adds a value to the array.
      *
      * @param index The index to insert the value at. Must be greater than or equal to zero. If the
-     *            index is past the end of the current set of values, <code>null</code>'s will be
-     *            inserted as padding.
+     *              index is past the end of the current set of values, <code>null</code>'s will be
+     *              inserted as padding.
      * @param value The value to store.
      */
     public void put(int index, short value) {
@@ -309,8 +309,8 @@ public class JsonArray extends JsonCollection {
      * Adds a value to the array.
      *
      * @param index The index to insert the value at. Must be greater than or equal to zero. If the
-     *            index is past the end of the current set of values, <code>null</code>'s will be
-     *            inserted as padding.
+     *              index is past the end of the current set of values, <code>null</code>'s will be
+     *              inserted as padding.
      * @param value The value to store.
      */
     public void put(int index, int value) {
@@ -321,8 +321,8 @@ public class JsonArray extends JsonCollection {
      * Adds a value to the array.
      *
      * @param index The index to insert the value at. Must be greater than or equal to zero. If the
-     *            index is past the end of the current set of values, <code>null</code>'s will be
-     *            inserted as padding.
+     *              index is past the end of the current set of values, <code>null</code>'s will be
+     *              inserted as padding.
      * @param value The value to store.
      */
     public void put(int index, long value) {
@@ -333,8 +333,8 @@ public class JsonArray extends JsonCollection {
      * Adds a value to the array.
      *
      * @param index The index to insert the value at. Must be greater than or equal to zero. If the
-     *            index is past the end of the current set of values, <code>null</code>'s will be
-     *            inserted as padding.
+     *              index is past the end of the current set of values, <code>null</code>'s will be
+     *              inserted as padding.
      * @param value The value to store.
      */
     public void put(int index, float value) {
@@ -345,8 +345,8 @@ public class JsonArray extends JsonCollection {
      * Adds a value to the array.
      *
      * @param index The index to insert the value at. Must be greater than or equal to zero. If the
-     *            index is past the end of the current set of values, <code>null</code>'s will be
-     *            inserted as padding.
+     *              index is past the end of the current set of values, <code>null</code>'s will be
+     *              inserted as padding.
      * @param value The value to store.
      */
     public void put(int index, double value) {

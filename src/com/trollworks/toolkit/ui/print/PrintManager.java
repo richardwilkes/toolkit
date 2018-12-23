@@ -108,7 +108,7 @@ public class PrintManager {
      * Creates a new {@link PrintManager} object.
      *
      * @param margins The page margins.
-     * @param units The type of units being used for the margins.
+     * @param units   The type of units being used for the margins.
      */
     public PrintManager(double margins, LengthUnits units) {
         this();
@@ -119,7 +119,7 @@ public class PrintManager {
      * Creates a new {@link PrintManager} object.
      *
      * @param margins The page margins.
-     * @param units The type of units being used for the margins.
+     * @param units   The type of units being used for the margins.
      */
     public PrintManager(double[] margins, LengthUnits units) {
         this();
@@ -130,8 +130,8 @@ public class PrintManager {
      * Creates a new {@link PrintManager} object.
      *
      * @param orientation The page orientation.
-     * @param margins The page margins.
-     * @param units The type of units being used for the margins.
+     * @param margins     The page margins.
+     * @param units       The type of units being used for the margins.
      */
     public PrintManager(PageOrientation orientation, double margins, LengthUnits units) {
         this();
@@ -143,8 +143,8 @@ public class PrintManager {
      * Creates a new {@link PrintManager} object.
      *
      * @param orientation The page orientation.
-     * @param margins The page margins.
-     * @param units The type of units being used for the margins.
+     * @param margins     The page margins.
+     * @param units       The type of units being used for the margins.
      */
     public PrintManager(PageOrientation orientation, double[] margins, LengthUnits units) {
         this();
@@ -166,11 +166,11 @@ public class PrintManager {
      * @param reader The XML reader to load from.
      */
     public void load(XMLReader reader) throws IOException {
-        String marker = reader.getMarker();
-        LengthUnits units = Enums.extract(reader.getAttribute(ATTRIBUTE_UNITS), LengthUnits.values(), LengthUnits.IN);
-        String printer = reader.getAttribute(ATTRIBUTE_PRINTER);
-        double[] size = new double[] { 8.5, 11.0 };
-        double[] margins = new double[] { 0, 0, 0, 0 };
+        String      marker  = reader.getMarker();
+        LengthUnits units   = Enums.extract(reader.getAttribute(ATTRIBUTE_UNITS), LengthUnits.values(), LengthUnits.IN);
+        String      printer = reader.getAttribute(ATTRIBUTE_PRINTER);
+        double[]    size    = new double[] { 8.5, 11.0 };
+        double[]    margins = new double[] { 0, 0, 0, 0 };
 
         if (printer != null && printer.length() > 0) {
             try {
@@ -314,11 +314,11 @@ public class PrintManager {
 
     /** @return A newly created {@link PageFormat} with the current settings. */
     public PageFormat createPageFormat() {
-        PageFormat format = new PageFormat();
+        PageFormat      format      = new PageFormat();
         PageOrientation orientation = getPageOrientation();
-        double[] size = getPaperSize(LengthUnits.PT);
-        double[] margins = getPaperMargins(LengthUnits.PT);
-        Paper paper = new Paper();
+        double[]        size        = getPaperSize(LengthUnits.PT);
+        double[]        margins     = getPaperMargins(LengthUnits.PT);
+        Paper           paper       = new Paper();
 
         if (orientation == PageOrientation.PORTRAIT) {
             format.setOrientation(PageFormat.PORTRAIT);
@@ -347,12 +347,12 @@ public class PrintManager {
     /**
      * Writes this object to an XML stream.
      *
-     * @param out The XML writer to use.
+     * @param out   The XML writer to use.
      * @param units The type of units to write the data out with.
      */
     public void save(XMLWriter out, LengthUnits units) {
-        double[] size = getPaperSize(units);
-        double[] margins = getPaperMargins(units);
+        double[]     size    = getPaperSize(units);
+        double[]     margins = getPaperMargins(units);
         PrintService service = getPrintService();
 
         out.startTag(TAG_ROOT);
@@ -410,8 +410,8 @@ public class PrintManager {
     private static String createResolutionString(PrinterResolution res) {
         if (res != null) {
             StringBuilder buffer = new StringBuilder();
-            int x = res.getCrossFeedResolution(1);
-            int y = res.getFeedResolution(1);
+            int           x      = res.getCrossFeedResolution(1);
+            int           y      = res.getFeedResolution(1);
             buffer.append(Integer.toString(x));
             if (x != y) {
                 buffer.append("x"); //$NON-NLS-1$
@@ -442,7 +442,7 @@ public class PrintManager {
 
     /**
      * @param margins The margins of the paper (top, left, bottom, right).
-     * @param units The type of units used.
+     * @param units   The type of units used.
      */
     public void setPaperMargins(double[] margins, LengthUnits units) {
         PrintUtilities.setPaperMargins(getPrintService(), mSet, margins, units);
@@ -458,7 +458,7 @@ public class PrintManager {
 
     /**
      * @param margins The margins of the page (top, left, bottom, right).
-     * @param units The type of units used.
+     * @param units   The type of units used.
      */
     public void setPageMargins(double[] margins, LengthUnits units) {
         PrintUtilities.setPageMargins(getPrintService(), mSet, margins, units);
@@ -473,7 +473,7 @@ public class PrintManager {
     }
 
     /**
-     * @param size The width and height of the paper.
+     * @param size  The width and height of the paper.
      * @param units The type of units used.
      */
     public void setPaperSize(double[] size, LengthUnits units) {
@@ -489,7 +489,7 @@ public class PrintManager {
     }
 
     /**
-     * @param size The width and height of the page.
+     * @param size  The width and height of the page.
      * @param units The type of units used.
      */
     public void setPageSize(double[] size, LengthUnits units) {
@@ -508,7 +508,7 @@ public class PrintManager {
 
     /**
      * @param tryDefaultIfNull Whether to ask for the default if no value is present in the
-     *            settings.
+     *                         settings.
      * @return The chromaticity.
      */
     public InkChromaticity getChromaticity(boolean tryDefaultIfNull) {
@@ -556,7 +556,7 @@ public class PrintManager {
 
     /**
      * @param tryDefaultIfNull Whether to ask for the default if no value is present in the
-     *            settings.
+     *                         settings.
      * @return The print quality.
      */
     public Quality getPrintQuality(boolean tryDefaultIfNull) {
@@ -590,7 +590,7 @@ public class PrintManager {
 
     /**
      * @param tryDefaultIfNull Whether to ask for the default if no value is present in the
-     *            settings.
+     *                         settings.
      * @return The print resolution.
      */
     public PrinterResolution getResolution(boolean tryDefaultIfNull) {

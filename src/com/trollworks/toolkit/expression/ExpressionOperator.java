@@ -18,7 +18,7 @@ class ExpressionOperator {
     Operator mUnaryOperator;
 
     ExpressionOperator(Operator operator, Operator unaryOperator) {
-        mOperator = operator;
+        mOperator      = operator;
         mUnaryOperator = unaryOperator;
     }
 }

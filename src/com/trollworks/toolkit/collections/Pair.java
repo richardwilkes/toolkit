@@ -21,11 +21,11 @@ public class Pair<F, S> implements Comparable<Pair<F, S>> {
     /**
      * Creates a new {@link Pair}.
      *
-     * @param first The first value of the pair.
+     * @param first  The first value of the pair.
      * @param second The second value of the pair.
      */
     public Pair(F first, S second) {
-        mFirst = first;
+        mFirst  = first;
         mSecond = second;
     }
 

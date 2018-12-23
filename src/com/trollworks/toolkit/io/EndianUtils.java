@@ -69,34 +69,34 @@ public class EndianUtils {
     }
 
     /**
-     * @param value The value to write.
+     * @param value  The value to write.
      * @param buffer The buffer to write to.
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeBEShort(int value, byte[] buffer, int offset) {
-        buffer[offset] = (byte) (value >>> 8 & 0xFF);
+        buffer[offset]     = (byte) (value >>> 8 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 0 & 0xFF);
     }
 
     /**
-     * @param value The value to write.
+     * @param value  The value to write.
      * @param buffer The buffer to write to.
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeBEInt(int value, byte[] buffer, int offset) {
-        buffer[offset] = (byte) (value >>> 24 & 0xFF);
+        buffer[offset]     = (byte) (value >>> 24 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 16 & 0xFF);
         buffer[offset + 2] = (byte) (value >>> 8 & 0xFF);
         buffer[offset + 3] = (byte) (value >>> 0 & 0xFF);
     }
 
     /**
-     * @param value The value to write.
+     * @param value  The value to write.
      * @param buffer The buffer to write to.
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeBELong(long value, byte[] buffer, int offset) {
-        buffer[offset] = (byte) (value >>> 56 & 0xFF);
+        buffer[offset]     = (byte) (value >>> 56 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 48 & 0xFF);
         buffer[offset + 2] = (byte) (value >>> 40 & 0xFF);
         buffer[offset + 3] = (byte) (value >>> 32 & 0xFF);
@@ -107,7 +107,7 @@ public class EndianUtils {
     }
 
     /**
-     * @param value The value to write.
+     * @param value  The value to write.
      * @param buffer The buffer to write to.
      * @param offset The offset within the buffer to start writing to.
      */
@@ -116,7 +116,7 @@ public class EndianUtils {
     }
 
     /**
-     * @param value The value to write.
+     * @param value  The value to write.
      * @param buffer The buffer to write to.
      * @param offset The offset within the buffer to start writing to.
      */
@@ -180,34 +180,34 @@ public class EndianUtils {
     }
 
     /**
-     * @param value The value to write.
+     * @param value  The value to write.
      * @param buffer The buffer to write to.
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeLEShort(int value, byte[] buffer, int offset) {
-        buffer[offset] = (byte) (value >>> 0 & 0xFF);
+        buffer[offset]     = (byte) (value >>> 0 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 8 & 0xFF);
     }
 
     /**
-     * @param value The value to write.
+     * @param value  The value to write.
      * @param buffer The buffer to write to.
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeLEInt(int value, byte[] buffer, int offset) {
-        buffer[offset] = (byte) (value >>> 0 & 0xFF);
+        buffer[offset]     = (byte) (value >>> 0 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 8 & 0xFF);
         buffer[offset + 2] = (byte) (value >>> 16 & 0xFF);
         buffer[offset + 3] = (byte) (value >>> 24 & 0xFF);
     }
 
     /**
-     * @param value The value to write.
+     * @param value  The value to write.
      * @param buffer The buffer to write to.
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeLELong(long value, byte[] buffer, int offset) {
-        buffer[offset] = (byte) (value >>> 0 & 0xFF);
+        buffer[offset]     = (byte) (value >>> 0 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 8 & 0xFF);
         buffer[offset + 2] = (byte) (value >>> 16 & 0xFF);
         buffer[offset + 3] = (byte) (value >>> 24 & 0xFF);
@@ -218,7 +218,7 @@ public class EndianUtils {
     }
 
     /**
-     * @param value The value to write.
+     * @param value  The value to write.
      * @param buffer The buffer to write to.
      * @param offset The offset within the buffer to start writing to.
      */
@@ -227,7 +227,7 @@ public class EndianUtils {
     }
 
     /**
-     * @param value The value to write.
+     * @param value  The value to write.
      * @param buffer The buffer to write to.
      * @param offset The offset within the buffer to start writing to.
      */

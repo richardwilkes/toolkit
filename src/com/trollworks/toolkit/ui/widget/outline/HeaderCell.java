@@ -32,9 +32,9 @@ public class HeaderCell extends TextCell {
     /** Create a new header cell. */
     public HeaderCell() {
         super(SwingConstants.CENTER);
-        mSortSequence = -1;
+        mSortSequence  = -1;
         mSortAscending = true;
-        mAllowSort = true;
+        mAllowSort     = true;
     }
 
     /** @return Whether sorting is allowed and displayed. */
@@ -62,12 +62,12 @@ public class HeaderCell extends TextCell {
     /**
      * Sets the sort criteria for this column.
      *
-     * @param sequence The column's sort sequence. Use <code>-1</code> if it has none.
+     * @param sequence  The column's sort sequence. Use <code>-1</code> if it has none.
      * @param ascending Pass in <code>true</code> for an ascending sort.
      */
     public void setSortCriteria(int sequence, boolean ascending) {
         if (mAllowSort) {
-            mSortSequence = sequence;
+            mSortSequence  = sequence;
             mSortAscending = ascending;
         }
     }
@@ -80,13 +80,13 @@ public class HeaderCell extends TextCell {
     /**
      * Draws the cell.
      *
-     * @param outline The {@link Outline} being drawn.
-     * @param gc The graphics context to use.
-     * @param bounds The bounds of the cell.
-     * @param row The row to draw.
-     * @param column The column to draw.
+     * @param outline  The {@link Outline} being drawn.
+     * @param gc       The graphics context to use.
+     * @param bounds   The bounds of the cell.
+     * @param row      The row to draw.
+     * @param column   The column to draw.
      * @param selected Pass in <code>true</code> if the cell should be drawn in its selected state.
-     * @param active Pass in <code>true</code> if the cell should be drawn in its active state.
+     * @param active   Pass in <code>true</code> if the cell should be drawn in its active state.
      */
     protected void drawCellSuper(Outline outline, Graphics gc, Rectangle bounds, Row row, Column column, boolean selected, boolean active) {
         super.drawCell(outline, gc, bounds, row, column, selected, active);
@@ -95,10 +95,10 @@ public class HeaderCell extends TextCell {
     @Override
     public void drawCell(Outline outline, Graphics gc, Rectangle bounds, Row row, Column column, boolean selected, boolean active) {
         if (mAllowSort) {
-            Scale scale = Scale.get(outline);
-            int sorterWidth = scale.scale(SORTER_WIDTH);
-            int two = scale.scale(2);
-            bounds.x += two;
+            Scale scale       = Scale.get(outline);
+            int   sorterWidth = scale.scale(SORTER_WIDTH);
+            int   two         = scale.scale(2);
+            bounds.x     += two;
             bounds.width -= two + two;
 
             if (mSortSequence != -1) {
@@ -114,8 +114,8 @@ public class HeaderCell extends TextCell {
                 int i;
 
                 bounds.width += sorterWidth;
-                x = bounds.x + bounds.width - (three + three);
-                y = bounds.y + bounds.height / 2 - 1;
+                x             = bounds.x + bounds.width - (three + three);
+                y             = bounds.y + bounds.height / 2 - 1;
 
                 gc.setColor(getSorterColor());
                 int count = 0;
@@ -140,7 +140,7 @@ public class HeaderCell extends TextCell {
                 }
             }
 
-            bounds.x -= two;
+            bounds.x     -= two;
             bounds.width += two + two;
         } else {
             drawCellSuper(outline, gc, bounds, row, column, selected, active);
@@ -151,8 +151,8 @@ public class HeaderCell extends TextCell {
     public int getPreferredWidth(Outline outline, Row row, Column column) {
         int width = super.getPreferredWidth(outline, row, column);
         if (mAllowSort) {
-            Scale scale = Scale.get(outline);
-            int margin = scale.scale(2);
+            Scale scale  = Scale.get(outline);
+            int   margin = scale.scale(2);
             width += margin + scale.scale(SORTER_WIDTH) + margin;
         }
         return width;

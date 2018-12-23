@@ -79,9 +79,9 @@ public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, 
 
     @Override
     public Dimension getPreferredSize() {
-        Insets insets = getInsets();
-        Dimension size = TextDrawing.getPreferredSize(getFont(), getText());
-        size.width += insets.left + insets.right;
+        Insets    insets = getInsets();
+        Dimension size   = TextDrawing.getPreferredSize(getFont(), getText());
+        size.width  += insets.left + insets.right;
         size.height += insets.top + insets.bottom;
         return size;
     }
@@ -108,7 +108,7 @@ public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, 
     private void refresh() {
         MemoryUsage heapMemoryUsage = mMemoryMXBean.getHeapMemoryUsage();
         mUsed = heapMemoryUsage.getUsed();
-        mMax = heapMemoryUsage.getMax();
+        mMax  = heapMemoryUsage.getMax();
         repaint();
     }
 

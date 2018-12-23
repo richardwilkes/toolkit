@@ -139,10 +139,11 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
      * Docks a {@link DockContainer} within this {@link DockLayout}. If the {@link DockContainer}
      * already exists in this {@link DockLayout}, it will be moved to the new location.
      *
-     * @param dc The {@link DockContainer} to install into this {@link DockLayout}.
-     * @param target The target {@link DockLayoutNode}.
+     * @param dc                       The {@link DockContainer} to install into this
+     *                                 {@link DockLayout}.
+     * @param target                   The target {@link DockLayoutNode}.
      * @param locationRelativeToTarget The location relative to the target to install the
-     *            {@link DockContainer}.
+     *                                 {@link DockContainer}.
      */
     void dock(DockContainer dc, DockLayoutNode target, DockLocation locationRelativeToTarget) {
         // Does the container already exist in our hierarchy?
@@ -174,38 +175,38 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
         if (target instanceof DockLayout) {
             ((DockLayout) target).dock(dc, locationRelativeToTarget);
         } else if (target instanceof DockContainer) {
-            DockContainer tdc = (DockContainer) target;
-            DockLayout layout = findLayout(tdc);
+            DockContainer tdc    = (DockContainer) target;
+            DockLayout    layout = findLayout(tdc);
             layout.dockWithContainer(dc, tdc, locationRelativeToTarget);
         }
     }
 
     private void dockWithContainer(DockContainer dc, DockLayoutNode target, DockLocation locationRelativeToTarget) {
         boolean horizontal = locationRelativeToTarget.isHorizontal();
-        int[] order = locationRelativeToTarget.getOrder();
+        int[]   order      = locationRelativeToTarget.getOrder();
         if (mChildren[order[0]] != null) {
             if (mChildren[order[1]] == null) {
                 mChildren[order[1]] = mChildren[order[0]];
                 mChildren[order[0]] = dc;
-                mHorizontal = horizontal;
+                mHorizontal         = horizontal;
             } else {
                 DockLayout layout = new DockLayout();
-                layout.mParent = this;
+                layout.mParent             = this;
                 layout.mChildren[order[0]] = dc;
-                layout.mHorizontal = horizontal;
+                layout.mHorizontal         = horizontal;
                 int which = target == mChildren[order[0]] ? 0 : 1;
                 layout.mChildren[order[1]] = mChildren[order[which]];
-                mChildren[order[which]] = layout;
+                mChildren[order[which]]    = layout;
                 if (order[which] == 0) {
                     layout.mDividerPosition = mDividerPosition;
-                    mDividerPosition = -1;
+                    mDividerPosition        = -1;
                 } else {
                     layout.mDividerPosition = -1;
                 }
             }
         } else {
             mChildren[order[0]] = dc;
-            mHorizontal = horizontal;
+            mHorizontal         = horizontal;
         }
     }
 
@@ -216,11 +217,11 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
                 mChildren[order[1]] = mChildren[order[0]];
             } else {
                 mChildren[order[1]] = pushDown();
-                mDividerPosition = -1;
+                mDividerPosition    = -1;
             }
         }
         mChildren[order[0]] = dc;
-        mHorizontal = locationRelativeToTarget.isHorizontal();
+        mHorizontal         = locationRelativeToTarget.isHorizontal();
     }
 
     private DockLayout pushDown() {
@@ -232,7 +233,7 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
             }
             layout.mChildren[i] = mChildren[i];
         }
-        layout.mHorizontal = mHorizontal;
+        layout.mHorizontal      = mHorizontal;
         layout.mDividerPosition = mDividerPosition;
         return layout;
     }
@@ -303,11 +304,11 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 
     @Override
     public Dimension getPreferredSize() {
-        int width = 0;
+        int width  = 0;
         int height = 0;
         if (mChildren[0] != null) {
             Dimension size = mChildren[0].getPreferredSize();
-            width = size.width;
+            width  = size.width;
             height = size.height;
         }
         if (mChildren[1] != null) {
@@ -391,7 +392,8 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 
     /**
      * @param position The new divider position to set. Use a value less than 0 to reset the divider
-     *            to its default mode, which splits the available space evenly between the children.
+     *                 to its default mode, which splits the available space evenly between the
+     *                 children.
      */
     public void setDividerPosition(int position) {
         int old = mDividerPosition;
@@ -414,11 +416,11 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 
     @Override
     public void setBounds(int x, int y, int width, int height) {
-        mX = x;
-        mY = y;
-        mWidth = width;
+        mX      = x;
+        mY      = y;
+        mWidth  = width;
         mHeight = height;
-        Dock dock = getDock();
+        Dock          dock               = getDock();
         DockContainer maximizedContainer = dock != null ? dock.getMaximizedContainer() : null;
         if (maximizedContainer != null) {
             forEachDockContainer((dc) -> {

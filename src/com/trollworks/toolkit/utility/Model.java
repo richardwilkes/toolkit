@@ -35,16 +35,24 @@ public abstract class Model implements Cloneable {
     @Localize(locale = "es", value = "Se esperaba la etiqueta \"{0}\", pero se encontró \"{1}\".")
     private static String INVALID_ROOT_TAG;
     @Localize("The tag \"{0}\" is from an older version and cannot be loaded.")
-    @Localize(locale = "pt-BR", value = "A tag \"{0}\" é de uma versão antiga e não pode ser carregada")
-    @Localize(locale = "ru", value = "Тег \"{0}\" относится к более старой версии и не может быть загружен.")
-    @Localize(locale = "de", value = "Das Tag \"{0}\" ist von einer älteren Version und kann nicht geladen werden.")
-    @Localize(locale = "es", value = "La etiqueta \"{0}\" proviene de una versión anterior y no puede abrirse")
+    @Localize(locale = "pt-BR",
+              value = "A tag \"{0}\" é de uma versão antiga e não pode ser carregada")
+    @Localize(locale = "ru",
+              value = "Тег \"{0}\" относится к более старой версии и не может быть загружен.")
+    @Localize(locale = "de",
+              value = "Das Tag \"{0}\" ist von einer älteren Version und kann nicht geladen werden.")
+    @Localize(locale = "es",
+              value = "La etiqueta \"{0}\" proviene de una versión anterior y no puede abrirse")
     private static String TOO_OLD;
     @Localize("The tag \"{0}\" is from a newer version and cannot be loaded.")
-    @Localize(locale = "pt-BR", value = "A tag \"{0}\" é de uma versão mais recente e não pode ser carregada")
-    @Localize(locale = "ru", value = "Тег \"{0}\" относится к более новой версии и не может быть загружен.")
-    @Localize(locale = "de", value = "Das Tag \"{0}\" ist von einer neueren Version und kann nicht geladen werden.")
-    @Localize(locale = "es", value = "La etiqueta \"{0}\" proviene de una versión posterior y no puede abrirse")
+    @Localize(locale = "pt-BR",
+              value = "A tag \"{0}\" é de uma versão mais recente e não pode ser carregada")
+    @Localize(locale = "ru",
+              value = "Тег \"{0}\" относится к более новой версии и не может быть загружен.")
+    @Localize(locale = "de",
+              value = "Das Tag \"{0}\" ist von einer neueren Version und kann nicht geladen werden.")
+    @Localize(locale = "es",
+              value = "La etiqueta \"{0}\" proviene de una versión posterior y no puede abrirse")
     private static String TOO_NEW;
 
     static {
@@ -77,7 +85,7 @@ public abstract class Model implements Cloneable {
     /**
      * Load the model's content from the specified {@link File}.
      *
-     * @param file The {@link File} to load from.
+     * @param file    The {@link File} to load from.
      * @param context The {@link ModelContext} to use.
      */
     public final void load(File file, ModelContext context) throws XMLStreamException {
@@ -91,7 +99,7 @@ public abstract class Model implements Cloneable {
     /**
      * Load the model's content from the specified {@link InputStream}.
      *
-     * @param stream The {@link InputStream} to load from.
+     * @param stream  The {@link InputStream} to load from.
      * @param context The {@link ModelContext} to use.
      */
     public final void load(InputStream stream, ModelContext context) throws XMLStreamException {
@@ -110,15 +118,15 @@ public abstract class Model implements Cloneable {
     /**
      * Load the model's content from the specified {@link XmlParser}.
      *
-     * @param parser The {@link XmlParser} to load from.
+     * @param parser  The {@link XmlParser} to load from.
      * @param context The {@link ModelContext} to use.
      */
     public final void load(XmlParser parser, ModelContext context) throws XMLStreamException {
         String tag = parser.getCurrentTag();
         if (getRootTag().equals(tag)) {
             modelWillLoad(context);
-            String marker = parser.getMarker();
-            int version = parser.getIntegerAttribute(ATTR_VERSION);
+            String marker  = parser.getMarker();
+            int    version = parser.getIntegerAttribute(ATTR_VERSION);
             if (version < getMinimumVersion()) {
                 throw new XMLStreamException(MessageFormat.format(TOO_OLD, parser.getCurrentTag()), parser.getLocation());
             }
@@ -143,7 +151,7 @@ public abstract class Model implements Cloneable {
     /**
      * Called to allow the loading of the text contents of the tag, rather than sub-tags.
      *
-     * @param parser The {@link XmlParser} to load from.
+     * @param parser  The {@link XmlParser} to load from.
      * @param context The {@link ModelContext} to use.
      * @return <code>true</code> if a call was made to {@link XmlParser#getText()}.
      */
@@ -175,7 +183,7 @@ public abstract class Model implements Cloneable {
     /**
      * Called to load attributes from the root tag. The default implementation does nothing.
      *
-     * @param parser The {@link XmlParser}.
+     * @param parser  The {@link XmlParser}.
      * @param context The {@link ModelContext}.
      */
     @SuppressWarnings("unused")
@@ -186,8 +194,8 @@ public abstract class Model implements Cloneable {
     /**
      * Called for each top-level child tag in the model. The default implementation skips all tags.
      *
-     * @param tag The current tag to load.
-     * @param parser The {@link XmlParser}.
+     * @param tag     The current tag to load.
+     * @param parser  The {@link XmlParser}.
      * @param context The {@link ModelContext}.
      */
     @SuppressWarnings("static-method")
@@ -198,7 +206,7 @@ public abstract class Model implements Cloneable {
     /**
      * Saves the model's content to the specified {@link File}.
      *
-     * @param file The {@link File} to save to.
+     * @param file    The {@link File} to save to.
      * @param context The {@link ModelContext} to use.
      */
     public final void save(File file, ModelContext context) throws XMLStreamException {
@@ -212,7 +220,7 @@ public abstract class Model implements Cloneable {
     /**
      * Saves the model's content to the specified {@link OutputStream}.
      *
-     * @param stream The {@link OutputStream} to save to.
+     * @param stream  The {@link OutputStream} to save to.
      * @param context The {@link ModelContext} to use.
      */
     public final void save(OutputStream stream, ModelContext context) throws XMLStreamException {
@@ -227,11 +235,11 @@ public abstract class Model implements Cloneable {
      * Save the model's content to the specified {@link XmlGenerator}.
      *
      * @param generator The {@link XmlGenerator} to load from.
-     * @param context The {@link ModelContext} to use.
+     * @param context   The {@link ModelContext} to use.
      */
     public final void save(XmlGenerator generator, ModelContext context) throws XMLStreamException {
         modelWillSave(context);
-        String tag = getRootTag();
+        String  tag     = getRootTag();
         boolean isEmpty = isEmptyTag();
         if (isEmpty) {
             generator.startEmptyTag(tag);
@@ -275,7 +283,7 @@ public abstract class Model implements Cloneable {
      * Called to save the root tag attributes. The default implementation does nothing.
      *
      * @param generator The {@link XmlGenerator} to load from.
-     * @param context The {@link ModelContext} to use.
+     * @param context   The {@link ModelContext} to use.
      */
     @SuppressWarnings("unused")
     protected void saveAttributes(XmlGenerator generator, ModelContext context) throws XMLStreamException {
@@ -286,7 +294,7 @@ public abstract class Model implements Cloneable {
      * Called to save the top-level tags in the model. The default implementation does nothing.
      *
      * @param generator The {@link XmlGenerator}.
-     * @param context The {@link ModelContext}.
+     * @param context   The {@link ModelContext}.
      */
     @SuppressWarnings("unused")
     protected void saveChildTags(XmlGenerator generator, ModelContext context) throws XMLStreamException {

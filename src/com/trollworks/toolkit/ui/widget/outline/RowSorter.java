@@ -22,16 +22,16 @@ public class RowSorter implements Comparator<Row> {
     private Column[] mSortingOrder;
 
     private RowSorter(ArrayList<Column> columns) {
-        int count = columns.size();
-        Column[] orig = new Column[count];
-        int pos = -1;
-        int i;
+        int      count = columns.size();
+        Column[] orig  = new Column[count];
+        int      pos   = -1;
+        int      i;
 
         mSortingOrder = new Column[count];
 
         for (i = 0; i < count; i++) {
             Column column = columns.get(i);
-            int order = column.getSortSequence();
+            int    order  = column.getSortSequence();
 
             if (order >= 0 && order < count) {
                 mSortingOrder[order] = column;
@@ -62,7 +62,7 @@ public class RowSorter implements Comparator<Row> {
      * Used to sort an outline.
      *
      * @param columns The columns in the {@link Outline}.
-     * @param rows The rows in the {@link Outline}.
+     * @param rows    The rows in the {@link Outline}.
      */
     public static void sort(ArrayList<Column> columns, ArrayList<Row> rows) {
         sort(columns, rows, false);
@@ -71,10 +71,10 @@ public class RowSorter implements Comparator<Row> {
     /**
      * Used to sort an outline.
      *
-     * @param columns The columns in the {@link Outline}.
-     * @param rows The rows in the {@link Outline}.
+     * @param columns  The columns in the {@link Outline}.
+     * @param rows     The rows in the {@link Outline}.
      * @param internal Pass in <code>true</code> if the actual row child storage should also be
-     *            sorted.
+     *                 sorted.
      */
     public static void sort(ArrayList<Column> columns, ArrayList<Row> rows, boolean internal) {
         for (Column column : columns) {
@@ -97,7 +97,7 @@ public class RowSorter implements Comparator<Row> {
     /**
      * Collects all container rows from the passed in rows and their children.
      *
-     * @param rows The rows to collect container rows from.
+     * @param rows       The rows to collect container rows from.
      * @param containers The set to add the container rows to.
      * @return The passed in set.
      */
@@ -138,8 +138,8 @@ public class RowSorter implements Comparator<Row> {
             // Find common parents and compare them...
             Row[] oneParents = rowOne.getPath();
             Row[] twoParents = rowTwo.getPath();
-            int max = Math.min(oneParents.length, twoParents.length);
-            int i = 0;
+            int   max        = Math.min(oneParents.length, twoParents.length);
+            int   i          = 0;
 
             for (i = 0; i < max; i++) {
                 if (oneParents[i] != twoParents[i]) {

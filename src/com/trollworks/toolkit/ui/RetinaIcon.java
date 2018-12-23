@@ -58,10 +58,10 @@ public class RetinaIcon implements Icon {
 
     @Override
     public void paintIcon(Component component, Graphics g, int x, int y) {
-        Graphics2D gc = (Graphics2D) g;
+        Graphics2D     gc    = (Graphics2D) g;
         RenderingHints saved = GraphicsUtilities.setMaximumQualityForGraphics(gc);
-        Scale scale = Scale.get(component);
-        StdImage img = mRetina != null && (scale.getScale() > 1 || GraphicsUtilities.isRetinaDisplay(g)) ? mRetina : mNormal;
+        Scale          scale = Scale.get(component);
+        StdImage       img   = mRetina != null && (scale.getScale() > 1 || GraphicsUtilities.isRetinaDisplay(g)) ? mRetina : mNormal;
         gc.drawImage(img, x, y, scale.scale(getIconWidth()), scale.scale(getIconHeight()), component);
         gc.setRenderingHints(saved);
         if (mOverlay != null) {

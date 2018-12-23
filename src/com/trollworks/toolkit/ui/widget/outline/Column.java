@@ -37,7 +37,7 @@ public class Column implements Transferable {
     /**
      * Create a new outline column.
      *
-     * @param id The user-supplied ID.
+     * @param id   The user-supplied ID.
      * @param name The name of the column.
      */
     public Column(int id, String name) {
@@ -47,8 +47,8 @@ public class Column implements Transferable {
     /**
      * Create a new outline column.
      *
-     * @param id The user-supplied ID.
-     * @param name The name of the column.
+     * @param id      The user-supplied ID.
+     * @param name    The name of the column.
      * @param rowCell The cell to use for rows.
      */
     public Column(int id, String name, Cell rowCell) {
@@ -58,7 +58,7 @@ public class Column implements Transferable {
     /**
      * Create a new outline column.
      *
-     * @param id The user-supplied ID.
+     * @param id   The user-supplied ID.
      * @param name The name of the column.
      * @param icon The icon to use in the header of the column, if any.
      */
@@ -69,8 +69,8 @@ public class Column implements Transferable {
     /**
      * Create a new outline column.
      *
-     * @param id The user-supplied ID.
-     * @param name The name of the column.
+     * @param id          The user-supplied ID.
+     * @param name        The name of the column.
      * @param toolTipText The tooltip text to use for this column.
      */
     public Column(int id, String name, String toolTipText) {
@@ -80,9 +80,9 @@ public class Column implements Transferable {
     /**
      * Create a new outline column.
      *
-     * @param id The user-supplied ID.
-     * @param name The name of the column.
-     * @param icon The icon to use in the header of the column, if any.
+     * @param id          The user-supplied ID.
+     * @param name        The name of the column.
+     * @param icon        The icon to use in the header of the column, if any.
      * @param toolTipText The tooltip text to use for this column.
      */
     public Column(int id, String name, RetinaIcon icon, String toolTipText) {
@@ -92,10 +92,10 @@ public class Column implements Transferable {
     /**
      * Create a new outline column.
      *
-     * @param id The user-supplied ID.
-     * @param name The name of the column.
+     * @param id          The user-supplied ID.
+     * @param name        The name of the column.
      * @param toolTipText The tooltip text to use for this column.
-     * @param rowCell The cell to use for rows.
+     * @param rowCell     The cell to use for rows.
      */
     public Column(int id, String name, String toolTipText, Cell rowCell) {
         this(id, name, null, toolTipText, rowCell);
@@ -104,21 +104,21 @@ public class Column implements Transferable {
     /**
      * Create a new outline column.
      *
-     * @param id The user-supplied ID.
-     * @param name The name of the column.
-     * @param icon The icon to use in the header of the column, if any.
+     * @param id          The user-supplied ID.
+     * @param name        The name of the column.
+     * @param icon        The icon to use in the header of the column, if any.
      * @param toolTipText The tooltip text to use for this column.
-     * @param rowCell The cell to use for rows.
+     * @param rowCell     The cell to use for rows.
      */
     public Column(int id, String name, RetinaIcon icon, String toolTipText, Cell rowCell) {
-        mName = name == null || name.length() == 0 ? " " : name; //$NON-NLS-1$
-        mIcon = icon;
+        mName        = name == null || name.length() == 0 ? " " : name; //$NON-NLS-1$
+        mIcon        = icon;
         mToolTipText = toolTipText;
-        mHeaderCell = new HeaderCell();
-        mRowCell = rowCell;
-        mVisible = true;
-        mWidth = -1;
-        mID = id;
+        mHeaderCell  = new HeaderCell();
+        mRowCell     = rowCell;
+        mVisible     = true;
+        mWidth       = -1;
+        mID          = id;
     }
 
     /** @return The user-supplied ID. */
@@ -141,7 +141,7 @@ public class Column implements Transferable {
     /**
      * Sets the sort criteria for this column.
      *
-     * @param sequence The column's sort sequence. Use <code>-1</code> if it has none.
+     * @param sequence  The column's sort sequence. Use <code>-1</code> if it has none.
      * @param ascending Pass in <code>true</code> for an ascending sort.
      */
     public void setSortCriteria(int sequence, boolean ascending) {
@@ -157,8 +157,8 @@ public class Column implements Transferable {
      * Draws the header cell.
      *
      * @param outline The {@link Outline} being drawn.
-     * @param gc The graphics context to use.
-     * @param bounds The bounds of the cell.
+     * @param gc      The graphics context to use.
+     * @param bounds  The bounds of the cell.
      */
     public void drawHeaderCell(Outline outline, Graphics gc, Rectangle bounds) {
         getHeaderCell().drawCell(outline, gc, bounds, null, this, false, true);
@@ -167,12 +167,12 @@ public class Column implements Transferable {
     /**
      * Draws a row cell.
      *
-     * @param outline The {@link Outline} being drawn.
-     * @param gc The graphics context to use.
-     * @param bounds The bounds of the cell.
-     * @param row The row the cell data is to come from.
+     * @param outline  The {@link Outline} being drawn.
+     * @param gc       The graphics context to use.
+     * @param bounds   The bounds of the cell.
+     * @param row      The row the cell data is to come from.
      * @param selected Pass in <code>true</code> if the cell should be drawn in its selected state.
-     * @param active Pass in <code>true</code> if the cell should be drawn in its active state.
+     * @param active   Pass in <code>true</code> if the cell should be drawn in its active state.
      */
     public void drawRowCell(Outline outline, Graphics gc, Rectangle bounds, Row row, boolean selected, boolean active) {
         getRowCell(row).drawCell(outline, gc, bounds, row, this, selected, active);
@@ -219,7 +219,7 @@ public class Column implements Transferable {
 
     /**
      * @param outline The outline using this column.
-     * @param width The width of this column.
+     * @param width   The width of this column.
      */
     public void setWidth(Outline outline, int width) {
         int minWidth = getPreferredHeaderWidth(outline);
@@ -250,9 +250,9 @@ public class Column implements Transferable {
      * @return The preferred width of this column.
      */
     public int getPreferredWidth(Outline outline) {
-        Scale scale = Scale.get(outline);
-        int preferredWidth = getPreferredHeaderWidth(outline);
-        OutlineModel model = outline.getModel();
+        Scale        scale          = Scale.get(outline);
+        int          preferredWidth = getPreferredHeaderWidth(outline);
+        OutlineModel model          = outline.getModel();
         for (Row row : model.getRows()) {
             int width = getRowCell(row).getPreferredWidth(outline, row, this) + scale.scale(model.getIndentWidth(row, this));
             if (width > preferredWidth) {
@@ -295,7 +295,7 @@ public class Column implements Transferable {
     }
 
     /**
-     * @param event The event that triggered the tooltip.
+     * @param event  The event that triggered the tooltip.
      * @param bounds The bounds of the header cell.
      * @return The tooltip text for this column, typically associated with the header.
      */

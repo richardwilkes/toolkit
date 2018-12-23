@@ -39,7 +39,7 @@ public class UIUtilities {
     /**
      * Selects the tab with the specified title.
      *
-     * @param pane The {@link JTabbedPane} to use.
+     * @param pane  The {@link JTabbedPane} to use.
      * @param title The title to select.
      */
     public static void selectTab(JTabbedPane pane, String title) {
@@ -60,7 +60,7 @@ public class UIUtilities {
     public static void disableControls(Component comp) {
         if (comp instanceof Container) {
             Container container = (Container) comp;
-            int count = container.getComponentCount();
+            int       count     = container.getComponentCount();
 
             for (int i = 0; i < count; i++) {
                 disableControls(container.getComponent(i));
@@ -104,9 +104,9 @@ public class UIUtilities {
     /**
      * Converts a {@link Point} from one component's coordinate system to another's.
      *
-     * @param pt The point to convert.
+     * @param pt   The point to convert.
      * @param from The component the point originated in.
-     * @param to The component the point should be translated to.
+     * @param to   The component the point should be translated to.
      */
     public static void convertPoint(Point pt, Component from, Component to) {
         convertPointToScreen(pt, from);
@@ -116,7 +116,7 @@ public class UIUtilities {
     /**
      * Converts a {@link Point} from on the screen to a position within the component.
      *
-     * @param pt The point to convert.
+     * @param pt        The point to convert.
      * @param component The component the point should be translated to.
      */
     public static void convertPointFromScreen(Point pt, Component component) {
@@ -133,7 +133,7 @@ public class UIUtilities {
     /**
      * Converts a {@link Point} in a component to its position on the screen.
      *
-     * @param pt The point to convert.
+     * @param pt        The point to convert.
      * @param component The component the point originated in.
      */
     public static void convertPointToScreen(Point pt, Component component) {
@@ -151,8 +151,8 @@ public class UIUtilities {
      * Converts a {@link Rectangle} from one component's coordinate system to another's.
      *
      * @param bounds The rectangle to convert.
-     * @param from The component the rectangle originated in.
-     * @param to The component the rectangle should be translated to.
+     * @param from   The component the rectangle originated in.
+     * @param to     The component the rectangle should be translated to.
      */
     public static void convertRectangle(Rectangle bounds, Component from, Component to) {
         convertRectangleToScreen(bounds, from);
@@ -162,7 +162,7 @@ public class UIUtilities {
     /**
      * Converts a {@link Rectangle} from on the screen to a position within the component.
      *
-     * @param bounds The rectangle to convert.
+     * @param bounds    The rectangle to convert.
      * @param component The component the rectangle should be translated to.
      */
     public static void convertRectangleFromScreen(Rectangle bounds, Component component) {
@@ -179,7 +179,7 @@ public class UIUtilities {
     /**
      * Converts a {@link Rectangle} in a component to its position on the screen.
      *
-     * @param bounds The rectangle to convert.
+     * @param bounds    The rectangle to convert.
      * @param component The component the rectangle originated in.
      */
     public static void convertRectangleToScreen(Rectangle bounds, Component component) {
@@ -195,7 +195,7 @@ public class UIUtilities {
 
     /**
      * @param parent The parent {@link Container}.
-     * @param child The child {@link Component}.
+     * @param child  The child {@link Component}.
      * @return The index of the specified {@link Component}. -1 will be returned if the
      *         {@link Component} isn't a direct child.
      */
@@ -228,7 +228,7 @@ public class UIUtilities {
     /**
      * Clones a {@link MouseEvent}.
      *
-     * @param event The event to clone.
+     * @param event       The event to clone.
      * @param refreshTime Pass in <code>true</code> to generate a new time stamp.
      * @return The new {@link MouseEvent}.
      */
@@ -243,9 +243,9 @@ public class UIUtilities {
     /**
      * Clones a {@link MouseEvent}.
      *
-     * @param event The event to clone.
-     * @param source Pass in a new source.
-     * @param where Pass in a new location.
+     * @param event       The event to clone.
+     * @param source      Pass in a new source.
+     * @param where       Pass in a new location.
      * @param refreshTime Pass in <code>true</code> to generate a new time stamp.
      * @return The new {@link MouseEvent}.
      */
@@ -261,8 +261,8 @@ public class UIUtilities {
      * Forwards a {@link MouseEvent} from one component to another.
      *
      * @param event The event to forward.
-     * @param from The component that originally received the event.
-     * @param to The component the event should be forwarded to.
+     * @param from  The component that originally received the event.
+     * @param to    The component the event should be forwarded to.
      */
     static public void forwardMouseEvent(MouseEvent event, Component from, Component to) {
         translateMouseEvent(event, from, to);
@@ -273,12 +273,12 @@ public class UIUtilities {
      * Translates a {@link MouseEvent} from one component to another.
      *
      * @param event The event that will be forwarded.
-     * @param from The component that originally received the event.
-     * @param to The component the event should be forwarded to.
+     * @param from  The component that originally received the event.
+     * @param to    The component the event should be forwarded to.
      */
     static public void translateMouseEvent(MouseEvent event, Component from, Component to) {
         Point evtPt = event.getPoint();
-        Point pt = new Point(evtPt);
+        Point pt    = new Point(evtPt);
         UIUtilities.convertPoint(pt, from, to);
         event.setSource(to);
         event.translatePoint(pt.x - evtPt.x, pt.y - evtPt.y);
@@ -292,7 +292,7 @@ public class UIUtilities {
         Container parent = comp.getParent();
         if (parent instanceof JViewport) {
             Dimension available = parent.getSize();
-            Dimension prefSize = comp.getPreferredSize();
+            Dimension prefSize  = comp.getPreferredSize();
             return prefSize.width < available.width;
         }
         return false;
@@ -306,7 +306,7 @@ public class UIUtilities {
         Container parent = comp.getParent();
         if (parent instanceof JViewport) {
             Dimension available = parent.getSize();
-            Dimension prefSize = comp.getPreferredSize();
+            Dimension prefSize  = comp.getPreferredSize();
             return prefSize.height < available.height;
         }
         return false;
@@ -323,7 +323,7 @@ public class UIUtilities {
 
     /**
      * @param component The component to be looked at.
-     * @param type The type of component being looked for.
+     * @param type      The type of component being looked for.
      * @return The first object that matches, starting with the component itself and working up
      *         through its parents, or <code>null</code>.
      */
@@ -340,7 +340,7 @@ public class UIUtilities {
 
     /**
      * @param component The component whose ancestor chain is to be looked at.
-     * @param type The type of ancestor being looked for.
+     * @param type      The type of ancestor being looked for.
      * @return The ancestor, or <code>null</code>.
      */
     @SuppressWarnings("unchecked")
@@ -375,7 +375,7 @@ public class UIUtilities {
             try {
                 Rectangle bounds = component.getVisibleRect();
                 offscreen = StdImage.createTransparent(component.getGraphicsConfiguration(), bounds.width, bounds.height);
-                gc = offscreen.getGraphics();
+                gc        = offscreen.getGraphics();
                 gc.translate(-bounds.x, -bounds.y);
                 component.paint(gc);
             } catch (Exception exception) {

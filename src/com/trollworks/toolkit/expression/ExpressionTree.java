@@ -31,15 +31,15 @@ class ExpressionTree {
     private Operator  mUnaryOperator;
 
     ExpressionTree(Evaluator evaluator, Object leftOperand, Object rightOperand, Operator operator, Operator unaryOperator) {
-        mEvaluator = evaluator;
-        mLeftOperand = leftOperand;
-        mRightOperand = rightOperand;
-        mOperator = operator;
+        mEvaluator     = evaluator;
+        mLeftOperand   = leftOperand;
+        mRightOperand  = rightOperand;
+        mOperator      = operator;
         mUnaryOperator = unaryOperator;
     }
 
     final Object evaluate() throws EvaluationException {
-        Object left = mEvaluator.evaluateOperand(mLeftOperand);
+        Object left  = mEvaluator.evaluateOperand(mLeftOperand);
         Object right = mEvaluator.evaluateOperand(mRightOperand);
         if (mLeftOperand != null && mRightOperand != null) {
             Object result = mOperator.evaluate(left, right);

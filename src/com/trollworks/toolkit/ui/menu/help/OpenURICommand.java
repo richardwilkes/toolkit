@@ -28,7 +28,7 @@ public class OpenURICommand extends Command {
      * Creates a new {@link OpenURICommand}.
      *
      * @param title The title to use.
-     * @param uri The URI to open.
+     * @param uri   The URI to open.
      */
     public OpenURICommand(String title, URI uri) {
         super(title, "OpenURL[" + uri + "]"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -39,7 +39,7 @@ public class OpenURICommand extends Command {
      * Creates a new {@link OpenURICommand}.
      *
      * @param title The title to use.
-     * @param uri The URI to open.
+     * @param uri   The URI to open.
      */
     public OpenURICommand(String title, String uri) {
         super(title, "OpenURL[" + uri + "]"); //$NON-NLS-1$ //$NON-NLS-2$

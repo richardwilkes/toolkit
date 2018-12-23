@@ -30,7 +30,7 @@ public class FileScanner implements FileVisitor<Path> {
      * Walks a file tree, calling the specified {@link Handler} for each file found. Hidden files
      * and directories (those whose names start with a period) are skipped.
      *
-     * @param path The starting point.
+     * @param path    The starting point.
      * @param handler The {@link Handler} to call for each file.
      */
     public static final void walk(Path path, Handler handler) {
@@ -41,10 +41,10 @@ public class FileScanner implements FileVisitor<Path> {
      * Walks a file tree, calling the specified {@link Handler} for each file found. Hidden files
      * and directories (those that start with a period) are skipped.
      *
-     * @param path The starting point.
-     * @param handler The {@link Handler} to call for each file.
+     * @param path       The starting point.
+     * @param handler    The {@link Handler} to call for each file.
      * @param skipHidden Pass in <code>true</code> if files and directories whose names start with a
-     *            period should be skipped.
+     *                   period should be skipped.
      */
     public static final void walk(Path path, Handler handler, boolean skipHidden) {
         try {
@@ -55,8 +55,8 @@ public class FileScanner implements FileVisitor<Path> {
     }
 
     private FileScanner(Path path, Handler handler, boolean skipHidden) {
-        mPath = path;
-        mHandler = handler;
+        mPath       = path;
+        mHandler    = handler;
         mSkipHidden = skipHidden;
     }
 

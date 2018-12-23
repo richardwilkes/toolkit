@@ -27,10 +27,10 @@ public class Tasks {
      * Execute a {@link Runnable} on a background thread.
      *
      * @param runnable The {@link Runnable} to execute.
-     * @param delay The number of units to delay before execution begins.
-     * @param units The units the delay parameter has been specified in.
-     * @param key If this is not <code>null</code>, then the task will only be scheduled to run if
-     *            there isn't one with the same key already scheduled.
+     * @param delay    The number of units to delay before execution begins.
+     * @param units    The units the delay parameter has been specified in.
+     * @param key      If this is not <code>null</code>, then the task will only be scheduled to run
+     *                 if there isn't one with the same key already scheduled.
      * @return The {@link Task}.
      */
     public static Task scheduleOnBackgroundThread(Runnable runnable, long delay, TimeUnit units, Object key) {
@@ -43,10 +43,10 @@ public class Tasks {
      * Repeatedly execute a {@link Runnable} on the UI thread.
      *
      * @param runnable The {@link Runnable} to execute.
-     * @param period The number of units between executions.
-     * @param units The units the delay parameter has been specified in.
-     * @param key If this is not <code>null</code>, then the task will only be scheduled to run if
-     *            there isn't one with the same key already scheduled.
+     * @param period   The number of units between executions.
+     * @param units    The units the delay parameter has been specified in.
+     * @param key      If this is not <code>null</code>, then the task will only be scheduled to run
+     *                 if there isn't one with the same key already scheduled.
      * @return The {@link Task}.
      */
     public static final Task scheduleRepeatedlyOnBackgroundThread(Runnable runnable, long period, TimeUnit units, Object key) {
@@ -59,10 +59,10 @@ public class Tasks {
      * Execute a {@link Runnable} on the UI thread.
      *
      * @param runnable The {@link Runnable} to execute.
-     * @param delay The number of units to delay before execution begins.
-     * @param units The units the delay parameter has been specified in.
-     * @param key If this is not <code>null</code>, then the task will only be scheduled to run if
-     *            there isn't one with the same key already scheduled.
+     * @param delay    The number of units to delay before execution begins.
+     * @param units    The units the delay parameter has been specified in.
+     * @param key      If this is not <code>null</code>, then the task will only be scheduled to run
+     *                 if there isn't one with the same key already scheduled.
      * @return The {@link Task}.
      */
     public static final Task scheduleOnUIThread(Runnable runnable, long delay, TimeUnit units, Object key) {
@@ -75,10 +75,10 @@ public class Tasks {
      * Repeatedly execute a {@link Runnable} on the UI thread.
      *
      * @param runnable The {@link Runnable} to execute.
-     * @param period The number of units between executions.
-     * @param units The units the delay parameter has been specified in.
-     * @param key If this is not <code>null</code>, then the task will only be scheduled to run if
-     *            there isn't one with the same key already scheduled.
+     * @param period   The number of units between executions.
+     * @param units    The units the delay parameter has been specified in.
+     * @param key      If this is not <code>null</code>, then the task will only be scheduled to run
+     *                 if there isn't one with the same key already scheduled.
      * @return The {@link Task}.
      */
     public static final Task scheduleRepeatedlyOnUIThread(Runnable runnable, long period, TimeUnit units, Object key) {

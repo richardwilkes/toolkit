@@ -33,10 +33,10 @@ public interface XmlObjectHelper {
      * Called to emit an xml attribute for an object whose class {@link #canHandleClass(Class)}
      * returned <code>true</code> for.
      *
-     * @param xml The {@link XmlGenerator} to use.
-     * @param obj The object to emit the attribute for.
+     * @param xml   The {@link XmlGenerator} to use.
+     * @param obj   The object to emit the attribute for.
      * @param field The {@link Field} to access within the object.
-     * @param name The attribute name to use for the object.
+     * @param name  The attribute name to use for the object.
      */
     void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException;
 

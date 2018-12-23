@@ -26,21 +26,21 @@ public class FlexSpacer extends FlexCell {
     /**
      * Creates a new {@link FlexSpacer}.
      *
-     * @param width The width of the spacer.
-     * @param height The height of the spacer.
-     * @param growWidth Whether the width of the spacer can grow.
+     * @param width      The width of the spacer.
+     * @param height     The height of the spacer.
+     * @param growWidth  Whether the width of the spacer can grow.
      * @param growHeight Whether the height of the spacer can grow.
      */
     public FlexSpacer(int width, int height, boolean growWidth, boolean growHeight) {
-        mWidth = width;
-        mHeight = height;
-        mGrowWidth = growWidth;
+        mWidth      = width;
+        mHeight     = height;
+        mGrowWidth  = growWidth;
         mGrowHeight = growHeight;
     }
 
     @Override
     protected Dimension getSizeSelf(Scale scale, LayoutSize type) {
-        int width = scale.scale(mWidth);
+        int width  = scale.scale(mWidth);
         int height = scale.scale(mHeight);
         if (type == LayoutSize.MAXIMUM) {
             if (mGrowWidth) {

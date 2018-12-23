@@ -42,7 +42,7 @@ public class OpenItemCommand extends Command {
 
     @Override
     public void adjust() {
-        boolean enable = false;
+        boolean  enable   = false;
         Openable openable = getTarget(Openable.class);
         if (openable != null) {
             enable = openable.canOpenSelection();

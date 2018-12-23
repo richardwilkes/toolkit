@@ -32,8 +32,8 @@ public class OutlineTestWindow extends AppWindow implements SignificantFrame {
     }
 
     private static Outline createTestPanel(boolean wrapped) {
-        Outline outline = new Outline();
-        OutlineModel model = outline.getModel();
+        Outline      outline = new Outline();
+        OutlineModel model   = outline.getModel();
         outline.setDynamicRowHeight(wrapped);
         Column column = new Column(0, "Testy Goop", new TextCell(SwingConstants.LEFT, wrapped)); //$NON-NLS-1$
         model.addColumn(column);
@@ -57,7 +57,7 @@ public class OutlineTestWindow extends AppWindow implements SignificantFrame {
         model.addRow(new OutlineTestRow("Third, but with a\nreally long piece\nof pre-wrapped text.")); //$NON-NLS-1$
         model.addRow(new OutlineTestRow("Bob")); //$NON-NLS-1$
         int rowCount = 4;
-        Row row = new OutlineTestRow("Marley"); //$NON-NLS-1$
+        Row row      = new OutlineTestRow("Marley"); //$NON-NLS-1$
         row.setCanHaveChildren(true);
         for (int i = 0; i < 10; i++) {
             row.addChild(new OutlineTestRow(Integer.toString(i)));

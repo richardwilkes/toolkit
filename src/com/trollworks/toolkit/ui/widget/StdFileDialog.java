@@ -54,10 +54,10 @@ public class StdFileDialog {
     /**
      * Creates a new {@link StdFileDialog}.
      *
-     * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
-     * @param title The title to use. May be <code>null</code>.
+     * @param comp    The parent {@link Component} of the dialog. May be <code>null</code>.
+     * @param title   The title to use. May be <code>null</code>.
      * @param filters The file filters to make available. If there are none, then the
-     *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
+     *                <code>showAllFilter</code> flag will be forced to <code>true</code>.
      * @return The chosen {@link File} or <code>null</code>.
      */
     public static File showOpenDialog(Component comp, String title, List<FileNameExtensionFilter> filters) {
@@ -67,10 +67,10 @@ public class StdFileDialog {
     /**
      * Creates a new {@link StdFileDialog}.
      *
-     * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
-     * @param title The title to use. May be <code>null</code>.
+     * @param comp    The parent {@link Component} of the dialog. May be <code>null</code>.
+     * @param title   The title to use. May be <code>null</code>.
      * @param filters The file filters to make available. If there are none, then the
-     *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
+     *                <code>showAllFilter</code> flag will be forced to <code>true</code>.
      * @return The chosen {@link File} or <code>null</code>.
      */
     public static File showOpenDialog(Component comp, String title, FileNameExtensionFilter... filters) {
@@ -80,16 +80,16 @@ public class StdFileDialog {
     /**
      * Creates a new {@link StdFileDialog}.
      *
-     * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
-     * @param title The title to use. May be <code>null</code>.
+     * @param comp           The parent {@link Component} of the dialog. May be <code>null</code>.
+     * @param title          The title to use. May be <code>null</code>.
      * @param accessoryPanel An extra panel to show. May be <code>null</code>.
-     * @param filters The file filters to make available. If there are none, then the
-     *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
+     * @param filters        The file filters to make available. If there are none, then the
+     *                       <code>showAllFilter</code> flag will be forced to <code>true</code>.
      * @return The chosen {@link File} or <code>null</code>.
      */
     public static File showOpenDialog(Component comp, String title, JComponent accessoryPanel, FileNameExtensionFilter... filters) {
         Preferences prefs = Preferences.getInstance();
-        String last = prefs.getStringValue(MODULE, LAST_DIR);
+        String      last  = prefs.getStringValue(MODULE, LAST_DIR);
         if (last != null) {
             if (!new File(last).isDirectory()) {
                 last = null;
@@ -126,11 +126,11 @@ public class StdFileDialog {
     /**
      * Creates a new {@link StdFileDialog}.
      *
-     * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
-     * @param title The title to use. May be <code>null</code>.
+     * @param comp          The parent {@link Component} of the dialog. May be <code>null</code>.
+     * @param title         The title to use. May be <code>null</code>.
      * @param suggestedFile The suggested file to save as. May be <code>null</code>.
-     * @param filters The file filters to make available. If there are none, then the
-     *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
+     * @param filters       The file filters to make available. If there are none, then the
+     *                      <code>showAllFilter</code> flag will be forced to <code>true</code>.
      * @return The chosen {@link File} or <code>null</code>.
      */
     public static File showSaveDialog(Component comp, String title, File suggestedFile, List<FileNameExtensionFilter> filters) {
@@ -140,11 +140,11 @@ public class StdFileDialog {
     /**
      * Creates a new {@link StdFileDialog}.
      *
-     * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
-     * @param title The title to use. May be <code>null</code>.
+     * @param comp          The parent {@link Component} of the dialog. May be <code>null</code>.
+     * @param title         The title to use. May be <code>null</code>.
      * @param suggestedFile The suggested file to save as. May be <code>null</code>.
-     * @param filters The file filters to make available. If there are none, then the
-     *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
+     * @param filters       The file filters to make available. If there are none, then the
+     *                      <code>showAllFilter</code> flag will be forced to <code>true</code>.
      * @return The chosen {@link File} or <code>null</code>.
      */
     public static File showSaveDialog(Component comp, String title, File suggestedFile, FileNameExtensionFilter... filters) {
@@ -154,17 +154,17 @@ public class StdFileDialog {
     /**
      * Creates a new {@link StdFileDialog}.
      *
-     * @param comp The parent {@link Component} of the dialog. May be <code>null</code>.
-     * @param title The title to use. May be <code>null</code>.
-     * @param suggestedFile The suggested file to save as. May be <code>null</code>.
+     * @param comp           The parent {@link Component} of the dialog. May be <code>null</code>.
+     * @param title          The title to use. May be <code>null</code>.
+     * @param suggestedFile  The suggested file to save as. May be <code>null</code>.
      * @param accessoryPanel An extra panel to show. May be <code>null</code>.
-     * @param filters The file filters to make available. If there are none, then the
-     *            <code>showAllFilter</code> flag will be forced to <code>true</code>.
+     * @param filters        The file filters to make available. If there are none, then the
+     *                       <code>showAllFilter</code> flag will be forced to <code>true</code>.
      * @return The chosen {@link File} or <code>null</code>.
      */
     public static File showSaveDialog(Component comp, String title, File suggestedFile, JComponent accessoryPanel, FileNameExtensionFilter... filters) {
         Preferences prefs = Preferences.getInstance();
-        String last = suggestedFile != null ? suggestedFile.getParent() : prefs.getStringValue(MODULE, LAST_DIR);
+        String      last  = suggestedFile != null ? suggestedFile.getParent() : prefs.getStringValue(MODULE, LAST_DIR);
         if (last != null) {
             if (!new File(last).isDirectory()) {
                 last = null;
@@ -210,9 +210,9 @@ public class StdFileDialog {
     }
 
     /**
-     * @param comp The {@link Component} to use for determining the parent {@link Frame} or
-     *            {@link Dialog}.
-     * @param name The name of the file that cannot be opened.
+     * @param comp      The {@link Component} to use for determining the parent {@link Frame} or
+     *                  {@link Dialog}.
+     * @param name      The name of the file that cannot be opened.
      * @param throwable The {@link Throwable}, if any, that caused the failure.
      */
     public static void showCannotOpenMsg(Component comp, String name, Throwable throwable) {

@@ -44,8 +44,8 @@ public class SSLSupport {
      */
     public static final SSLContext createContext(URL keyStore, String password) throws GeneralSecurityException, IOException {
         try (InputStream keyStoreIn = keyStore.openStream()) {
-            KeyStore keystore = KeyStore.getInstance("JKS");
-            char[] passwordArray = password.toCharArray();
+            KeyStore keystore      = KeyStore.getInstance("JKS");
+            char[]   passwordArray = password.toCharArray();
             keystore.load(keyStoreIn, passwordArray);
             KeyManagerFactory keyMgrFactory = KeyManagerFactory.getInstance("SunX509");
             keyMgrFactory.init(keystore, passwordArray);
@@ -56,18 +56,18 @@ public class SSLSupport {
     }
 
     /**
-     * @param session The {@link Session} to use when sending data.
+     * @param session    The {@link Session} to use when sending data.
      * @param sslContext The {@link SSLContext} to use.
      */
     public SSLSupport(Session session, SSLContext sslContext) throws SSLException {
         mSession = session;
-        mEngine = sslContext.createSSLEngine();
+        mEngine  = sslContext.createSSLEngine();
         mEngine.setUseClientMode(false);
         mEngine.setNeedClientAuth(false);
         mSSLSession = mEngine.getSession();
         int applicationBufferSize = mSSLSession.getApplicationBufferSize();
-        int packetBufferSize = mSSLSession.getPacketBufferSize();
-        mAppData = ByteBuffer.allocate(applicationBufferSize);
+        int packetBufferSize      = mSSLSession.getPacketBufferSize();
+        mAppData      = ByteBuffer.allocate(applicationBufferSize);
         mOutboundData = ByteBuffer.allocate(packetBufferSize);
         mEngine.beginHandshake();
     }
@@ -82,36 +82,36 @@ public class SSLSupport {
     private boolean canProceed() throws SSLException {
         while (true) {
             switch (mEngine.getHandshakeStatus()) {
-                case NEED_TASK:
-                    runSSLTasks();
+            case NEED_TASK:
+                runSSLTasks();
+                break;
+            case NEED_UNWRAP:
+                switch (mEngine.unwrap(mInboundData, mAppData).getStatus()) {
+                case BUFFER_OVERFLOW:
+                    resizeAppDataBuffer();
                     break;
-                case NEED_UNWRAP:
-                    switch (mEngine.unwrap(mInboundData, mAppData).getStatus()) {
-                        case BUFFER_OVERFLOW:
-                            resizeAppDataBuffer();
-                            break;
-                        case BUFFER_UNDERFLOW:
-                            return false;
-                        case CLOSED:
-                            throw new SSLException("Connection closed (unwrap)");
-                        default:
-                            break;
-                    }
-                    break;
-                case NEED_WRAP:
-                    switch (mEngine.wrap(EMPTY_BUFFER, mOutboundData).getStatus()) {
-                        case BUFFER_UNDERFLOW:
-                            // Should not be possible
-                            throw new SSLException("Buffer underflow during handshake wrap");
-                        case CLOSED:
-                            throw new SSLException("Connection closed (wrap)");
-                        default:
-                            break;
-                    }
-                    sendOutboundData();
-                    break;
+                case BUFFER_UNDERFLOW:
+                    return false;
+                case CLOSED:
+                    throw new SSLException("Connection closed (unwrap)");
                 default:
-                    return true;
+                    break;
+                }
+                break;
+            case NEED_WRAP:
+                switch (mEngine.wrap(EMPTY_BUFFER, mOutboundData).getStatus()) {
+                case BUFFER_UNDERFLOW:
+                    // Should not be possible
+                    throw new SSLException("Buffer underflow during handshake wrap");
+                case CLOSED:
+                    throw new SSLException("Connection closed (wrap)");
+                default:
+                    break;
+                }
+                sendOutboundData();
+                break;
+            default:
+                return true;
             }
         }
     }
@@ -144,14 +144,14 @@ public class SSLSupport {
         while (mInboundData.hasRemaining() && canProceed()) {
             SSLEngineResult result = mEngine.unwrap(mInboundData, mAppData);
             switch (result.getStatus()) {
-                case BUFFER_OVERFLOW:
-                    resizeAppDataBuffer();
-                    break;
-                case BUFFER_UNDERFLOW:
-                case CLOSED:
-                    break loop;
-                default:
-                    break;
+            case BUFFER_OVERFLOW:
+                resizeAppDataBuffer();
+                break;
+            case BUFFER_UNDERFLOW:
+            case CLOSED:
+                break loop;
+            default:
+                break;
             }
         }
         preserveRemainingInboundData();
@@ -165,7 +165,7 @@ public class SSLSupport {
             newBuffer.put(mUnderflowData);
             newBuffer.put(mInboundData);
             newBuffer.flip();
-            mInboundData = newBuffer;
+            mInboundData   = newBuffer;
             mUnderflowData = null;
         }
     }
@@ -180,30 +180,30 @@ public class SSLSupport {
             do {
                 SSLEngineResult result = mEngine.wrap(buffer, mOutboundData);
                 switch (result.getHandshakeStatus()) {
-                    case NEED_TASK:
-                        runSSLTasks();
-                        break;
-                    case NEED_UNWRAP:
-                        // Should not be possible
-                        throw new SSLException("Need unwrap during output");
-                    case NEED_WRAP:
-                        // Should not be possible
-                        throw new SSLException("Need wrap during output");
-                    default:
-                        break;
+                case NEED_TASK:
+                    runSSLTasks();
+                    break;
+                case NEED_UNWRAP:
+                    // Should not be possible
+                    throw new SSLException("Need unwrap during output");
+                case NEED_WRAP:
+                    // Should not be possible
+                    throw new SSLException("Need wrap during output");
+                default:
+                    break;
                 }
                 switch (result.getStatus()) {
-                    case BUFFER_OVERFLOW:
-                        sendOutboundData();
-                        break;
-                    case BUFFER_UNDERFLOW:
-                        // Should not be possible
-                        throw new SSLException("Buffer underflow during output");
-                    case CLOSED:
-                        mOutboundData.clear();
-                        return;
-                    default:
-                        break;
+                case BUFFER_OVERFLOW:
+                    sendOutboundData();
+                    break;
+                case BUFFER_UNDERFLOW:
+                    // Should not be possible
+                    throw new SSLException("Buffer underflow during output");
+                case CLOSED:
+                    mOutboundData.clear();
+                    return;
+                default:
+                    break;
                 }
             } while (buffer.hasRemaining());
             sendOutboundData();

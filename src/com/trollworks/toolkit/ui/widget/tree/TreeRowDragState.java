@@ -29,7 +29,7 @@ public class TreeRowDragState extends TreeDragState {
     /**
      * Creates a new {@link TreeRowDragState}.
      *
-     * @param panel The {@link TreePanel} to work with.
+     * @param panel        The {@link TreePanel} to work with.
      * @param rowSelection The {@link TreeRowSelection} from the drag.
      */
     public TreeRowDragState(TreePanel panel, TreeRowSelection rowSelection) {
@@ -80,13 +80,13 @@ public class TreeRowDragState extends TreeDragState {
 
     @Override
     public void dragOver(DropTargetDragEvent event) {
-        TreePanel panel = getPanel();
-        TreeContainerRow parentRow = null;
-        int insertIndex = -1;
+        TreePanel        panel       = getPanel();
+        TreeContainerRow parentRow   = null;
+        int              insertIndex = -1;
         if (acceptDrag(event)) {
-            Point pt = panel.toContentView(new Point(event.getLocation()));
-            TreeRoot root = panel.getRoot();
-            TreeRow overRow = panel.overRow(pt.y);
+            Point    pt      = panel.toContentView(new Point(event.getLocation()));
+            TreeRoot root    = panel.getRoot();
+            TreeRow  overRow = panel.overRow(pt.y);
             if (overRow != null) {
                 if (mRowSelection.getRows().get(0).getTreeRoot() != root || !panel.isRowOrAncestorSelected(overRow)) {
                     int indent = TreePanel.INDENT * overRow.getDepth();
@@ -94,10 +94,10 @@ public class TreeRowDragState extends TreeDragState {
                         indent += TreePanel.INDENT;
                     }
                     if (overRow instanceof TreeContainerRow && pt.x > indent) {
-                        parentRow = (TreeContainerRow) overRow;
+                        parentRow   = (TreeContainerRow) overRow;
                         insertIndex = 0;
                     } else {
-                        parentRow = overRow.getParent();
+                        parentRow   = overRow.getParent();
                         insertIndex = overRow.getIndex();
                         Rectangle bounds = panel.getRowBounds(overRow);
                         if (pt.y > bounds.y + bounds.height / 2) {
@@ -106,7 +106,7 @@ public class TreeRowDragState extends TreeDragState {
                     }
                 }
             } else {
-                parentRow = root;
+                parentRow   = root;
                 insertIndex = root.getChildCount();
             }
         }
@@ -127,27 +127,27 @@ public class TreeRowDragState extends TreeDragState {
     public boolean drop(DropTargetDropEvent event) {
         TreeContainerRow parentRow = mParentRow;
         if (parentRow != null) {
-            int childInsertIndex = mChildInsertIndex;
-            TreePanel panel = getPanel();
-            TreeRow indexRow = null;
+            int       childInsertIndex = mChildInsertIndex;
+            TreePanel panel            = getPanel();
+            TreeRow   indexRow         = null;
             if (childInsertIndex < parentRow.getChildCount()) {
                 indexRow = parentRow.getChild(childInsertIndex);
             }
             panel.adjustInsertionMarker(null, -1);
-            ArrayList<TreeRow> rows = mRowSelection.getRows();
-            HashSet<TreeContainerRow> openRows = mRowSelection.getOpenRows();
-            boolean fromSelf = rows.get(0).getTreeRoot() == panel.getRoot();
-            int dropAction = event.getDropAction() & panel.getAllowedRowDropTypes();
+            ArrayList<TreeRow>        rows       = mRowSelection.getRows();
+            HashSet<TreeContainerRow> openRows   = mRowSelection.getOpenRows();
+            boolean                   fromSelf   = rows.get(0).getTreeRoot() == panel.getRoot();
+            int                       dropAction = event.getDropAction() & panel.getAllowedRowDropTypes();
             if (dropAction == DnDConstants.ACTION_COPY || !fromSelf && dropAction == DnDConstants.ACTION_MOVE) {
                 ArrayList<TreeRow> copiedRows = new ArrayList<>(rows.size());
                 for (TreeRow row : rows) {
                     copiedRows.add(row.clone());
                 }
                 ArrayList<TreeContainerRow> originalContainers = getContainers(rows);
-                ArrayList<TreeContainerRow> copiedContainers = getContainers(copiedRows);
+                ArrayList<TreeContainerRow> copiedContainers   = getContainers(copiedRows);
                 rows = copiedRows;
-                HashSet<TreeContainerRow> open = new HashSet<>();
-                int count = originalContainers.size();
+                HashSet<TreeContainerRow> open  = new HashSet<>();
+                int                       count = originalContainers.size();
                 for (int i = 0; i < count; i++) {
                     if (openRows.contains(originalContainers.get(i))) {
                         open.add(copiedContainers.get(i));

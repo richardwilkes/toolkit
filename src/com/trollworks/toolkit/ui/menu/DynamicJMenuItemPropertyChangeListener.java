@@ -29,14 +29,14 @@ class DynamicJMenuItemPropertyChangeListener implements PropertyChangeListener {
     DynamicJMenuItemPropertyChangeListener(JMenuItem menuItem, Action action, PropertyChangeListener chainedListener) {
         OwnedWeakReference ref;
         while ((ref = (OwnedWeakReference) QUEUE.poll()) != null) {
-            DynamicJMenuItemPropertyChangeListener old = (DynamicJMenuItemPropertyChangeListener) ref.getOwner();
-            Action oldAction = old.mAction;
+            DynamicJMenuItemPropertyChangeListener old       = (DynamicJMenuItemPropertyChangeListener) ref.getOwner();
+            Action                                 oldAction = old.mAction;
             if (oldAction != null) {
                 oldAction.removePropertyChangeListener(old);
             }
         }
-        mTarget = new OwnedWeakReference(menuItem, QUEUE, this);
-        mAction = action;
+        mTarget          = new OwnedWeakReference(menuItem, QUEUE, this);
+        mAction          = action;
         mChainedListener = chainedListener;
     }
 

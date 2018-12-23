@@ -125,7 +125,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
      * Creates a new page setup panel.
      *
      * @param service The {@link PrintService} to use.
-     * @param set The {@link PrintRequestAttributeSet} to use.
+     * @param set     The {@link PrintRequestAttributeSet} to use.
      */
     public PageSetupPanel(PrintService service, PrintRequestAttributeSet set) {
         super(new PrecisionLayout().setColumns(2));
@@ -176,7 +176,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             services = new PrintService[] { new DummyPrintService() };
         }
         WrappedPrintService[] serviceWrappers = new WrappedPrintService[services.length];
-        int selection = 0;
+        int                   selection       = 0;
         for (int i = 0; i < services.length; i++) {
             serviceWrappers[i] = new WrappedPrintService(services[i].getName(), services[i]);
             if (services[i] == mService) {
@@ -208,9 +208,9 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             if (current == null) {
                 current = MediaSizeName.NA_LETTER;
             }
-            ArrayList<WrappedMediaSizeName> types = new ArrayList<>();
-            int selection = 0;
-            int index = 0;
+            ArrayList<WrappedMediaSizeName> types     = new ArrayList<>();
+            int                             selection = 0;
+            int                             index     = 0;
             for (Media one : possible) {
                 if (one instanceof MediaSizeName) {
                     MediaSizeName name = (MediaSizeName) one;
@@ -233,7 +233,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
     }
 
     private static String cleanUpMediaSizeName(MediaSizeName msn) {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder   builder   = new StringBuilder();
         StringTokenizer tokenizer = new StringTokenizer(msn.toString(), "- ", true); //$NON-NLS-1$
 
         while (tokenizer.hasMoreTokens()) {
@@ -317,9 +317,9 @@ public class PageSetupPanel extends JPanel implements ActionListener {
     private void createNumberUpCombo(PrintRequestAttributeSet set) {
         NumberUp[] numUp = (NumberUp[]) mService.getSupportedAttributeValues(NumberUp.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
         if (numUp != null && numUp.length > 0) {
-            NumberUp current = PrintUtilities.getNumberUp(mService, set);
-            WrappedNumberUp[] wrappers = new WrappedNumberUp[numUp.length];
-            int selection = 0;
+            NumberUp          current   = PrintUtilities.getNumberUp(mService, set);
+            WrappedNumberUp[] wrappers  = new WrappedNumberUp[numUp.length];
+            int               selection = 0;
             for (int i = 0; i < numUp.length; i++) {
                 wrappers[i] = new WrappedNumberUp(numUp[i].toString(), numUp[i]);
                 if (numUp[i] == current) {
@@ -396,9 +396,9 @@ public class PageSetupPanel extends JPanel implements ActionListener {
     private void createResolutionCombo(PrintRequestAttributeSet set) {
         PrinterResolution[] resolutions = (PrinterResolution[]) mService.getSupportedAttributeValues(PrinterResolution.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
         if (resolutions != null && resolutions.length > 0) {
-            PrinterResolution current = PrintUtilities.getResolution(mService, set, true);
-            WrappedPrinterResolution[] wrappers = new WrappedPrinterResolution[resolutions.length];
-            int selection = 0;
+            PrinterResolution          current   = PrintUtilities.getResolution(mService, set, true);
+            WrappedPrinterResolution[] wrappers  = new WrappedPrinterResolution[resolutions.length];
+            int                        selection = 0;
             for (int i = 0; i < resolutions.length; i++) {
                 wrappers[i] = new WrappedPrinterResolution(generateResolutionTitle(resolutions[i]), resolutions[i]);
                 if (resolutions[i] == current) {
@@ -418,8 +418,8 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 
     private static String generateResolutionTitle(PrinterResolution res) {
         StringBuilder buffer = new StringBuilder();
-        int x = res.getCrossFeedResolution(ResolutionSyntax.DPI);
-        int y = res.getFeedResolution(ResolutionSyntax.DPI);
+        int           x      = res.getCrossFeedResolution(ResolutionSyntax.DPI);
+        int           y      = res.getFeedResolution(ResolutionSyntax.DPI);
 
         buffer.append(Integer.toString(x));
         if (x != y) {
@@ -433,7 +433,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
     private void createMarginFields(PrintRequestAttributeSet set) {
         JLabel label = new JLabel(MARGINS, SwingConstants.RIGHT);
         add(label, new PrecisionLayoutData().setEndHorizontalAlignment().setMiddleVerticalAlignment());
-        JPanel wrapper = new JPanel(new PrecisionLayout().setEqualColumns(true).setColumns(3));
+        JPanel   wrapper = new JPanel(new PrecisionLayout().setEqualColumns(true).setColumns(3));
         double[] margins = PrintUtilities.getPageMargins(mService, set, LengthUnits.IN);
         wrapper.add(new JPanel());
         mTopMargin = createMarginField(margins[0], wrapper);

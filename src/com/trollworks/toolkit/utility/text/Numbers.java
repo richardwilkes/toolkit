@@ -148,8 +148,8 @@ public class Numbers {
      * <li>'t', 'T', 'k' or 'K' &mdash; multiplies the value by one thousand</li>
      * </ul>
      *
-     * @param buffer The text to process.
-     * @param def The default value to return, if the buffer cannot be parsed.
+     * @param buffer    The text to process.
+     * @param def       The default value to return, if the buffer cannot be parsed.
      * @param localized <code>true</code> if the text was localized.
      * @return The value.
      */
@@ -161,13 +161,13 @@ public class Numbers {
         int multiplier = 1;
         if (hasBillionsSuffix(buffer)) {
             multiplier = 1000000000;
-            buffer = removeSuffix(buffer);
+            buffer     = removeSuffix(buffer);
         } else if (hasMillionsSuffix(buffer)) {
             multiplier = 1000000;
-            buffer = removeSuffix(buffer);
+            buffer     = removeSuffix(buffer);
         } else if (hasThousandsSuffix(buffer)) {
             multiplier = 1000;
-            buffer = removeSuffix(buffer);
+            buffer     = removeSuffix(buffer);
         }
         int max = Integer.MAX_VALUE / multiplier;
         int min = Integer.MIN_VALUE / multiplier;
@@ -193,10 +193,10 @@ public class Numbers {
      * <li>'t', 'T', 'k' or 'K' &mdash; multiplies the value by one thousand</li>
      * </ul>
      *
-     * @param buffer The text to process.
-     * @param def The default value to return, if the buffer cannot be parsed.
-     * @param min The minimum value to return.
-     * @param max The maximum value to return.
+     * @param buffer    The text to process.
+     * @param def       The default value to return, if the buffer cannot be parsed.
+     * @param min       The minimum value to return.
+     * @param max       The maximum value to return.
      * @param localized <code>true</code> if the text was localized.
      * @return The value.
      */
@@ -213,8 +213,8 @@ public class Numbers {
      * <li>'t', 'T', 'k' or 'K' &mdash; multiplies the value by one thousand</li>
      * </ul>
      *
-     * @param buffer The text to process.
-     * @param def The default value to return, if the buffer cannot be parsed.
+     * @param buffer    The text to process.
+     * @param def       The default value to return, if the buffer cannot be parsed.
      * @param localized <code>true</code> if the text was localized.
      * @return The value.
      */
@@ -226,13 +226,13 @@ public class Numbers {
         long multiplier = 1;
         if (hasBillionsSuffix(buffer)) {
             multiplier = 1000000000;
-            buffer = removeSuffix(buffer);
+            buffer     = removeSuffix(buffer);
         } else if (hasMillionsSuffix(buffer)) {
             multiplier = 1000000;
-            buffer = removeSuffix(buffer);
+            buffer     = removeSuffix(buffer);
         } else if (hasThousandsSuffix(buffer)) {
             multiplier = 1000;
-            buffer = removeSuffix(buffer);
+            buffer     = removeSuffix(buffer);
         }
         long max = Long.MAX_VALUE / multiplier;
         long min = Long.MIN_VALUE / multiplier;
@@ -258,10 +258,10 @@ public class Numbers {
      * <li>'t', 'T', 'k' or 'K' &mdash; multiplies the value by one thousand</li>
      * </ul>
      *
-     * @param buffer The text to process.
-     * @param def The default value to return, if the buffer cannot be parsed.
-     * @param min The minimum value to return.
-     * @param max The maximum value to return.
+     * @param buffer    The text to process.
+     * @param def       The default value to return, if the buffer cannot be parsed.
+     * @param min       The minimum value to return.
+     * @param max       The maximum value to return.
      * @param localized <code>true</code> if the text was localized.
      * @return The value.
      */
@@ -278,8 +278,8 @@ public class Numbers {
      * <li>'t', 'T', 'k' or 'K' &mdash; multiplies the value by one thousand</li>
      * </ul>
      *
-     * @param buffer The text to process.
-     * @param def The default value to return, if the buffer cannot be parsed.
+     * @param buffer    The text to process.
+     * @param def       The default value to return, if the buffer cannot be parsed.
      * @param localized <code>true</code> if the text was localized.
      * @return The value.
      */
@@ -288,13 +288,13 @@ public class Numbers {
         double multiplier = 1;
         if (hasBillionsSuffix(buffer)) {
             multiplier = 1000000000;
-            buffer = removeSuffix(buffer);
+            buffer     = removeSuffix(buffer);
         } else if (hasMillionsSuffix(buffer)) {
             multiplier = 1000000;
-            buffer = removeSuffix(buffer);
+            buffer     = removeSuffix(buffer);
         } else if (hasThousandsSuffix(buffer)) {
             multiplier = 1000;
-            buffer = removeSuffix(buffer);
+            buffer     = removeSuffix(buffer);
         }
         double max = Double.MAX_VALUE / multiplier;
         // NOTE: Do not use Double.MIN_VALUE here, as it isn't actually the minimum value... it is
@@ -328,10 +328,10 @@ public class Numbers {
      * <li>'t', 'T', 'k' or 'K' &mdash; multiplies the value by one thousand</li>
      * </ul>
      *
-     * @param buffer The text to process.
-     * @param def The default value to return, if the buffer cannot be parsed.
-     * @param min The minimum value to return.
-     * @param max The maximum value to return.
+     * @param buffer    The text to process.
+     * @param def       The default value to return, if the buffer cannot be parsed.
+     * @param min       The minimum value to return.
+     * @param max       The maximum value to return.
      * @param localized <code>true</code> if the text was localized.
      * @return The value.
      */
@@ -378,7 +378,7 @@ public class Numbers {
     }
 
     /**
-     * @param text The text to process.
+     * @param text      The text to process.
      * @param localized <code>true</code> if the text was localized.
      * @return The input, minus any trailing '0' characters. If at least one '0' was removed and the
      *         result would end with a '.' (or the localized equivalent, if <code>localized</code>
@@ -412,28 +412,28 @@ public class Numbers {
      */
     public static final String toPlace(int place) {
         switch (place) {
-            case 1:
-                return FIRST;
-            case 2:
-                return SECOND;
-            case 3:
-                return THIRD;
-            case 4:
-                return FOURTH;
-            case 5:
-                return FIFTH;
-            case 6:
-                return SIXTH;
-            case 7:
-                return SEVENTH;
-            case 8:
-                return EIGHTH;
-            case 9:
-                return NINTH;
-            case 10:
-                return TENTH;
-            default:
-                return ""; //$NON-NLS-1$
+        case 1:
+            return FIRST;
+        case 2:
+            return SECOND;
+        case 3:
+            return THIRD;
+        case 4:
+            return FOURTH;
+        case 5:
+            return FIFTH;
+        case 6:
+            return SIXTH;
+        case 7:
+            return SEVENTH;
+        case 8:
+            return EIGHTH;
+        case 9:
+            return NINTH;
+        case 10:
+            return TENTH;
+        default:
+            return ""; //$NON-NLS-1$
         }
     }
 
@@ -441,12 +441,12 @@ public class Numbers {
         if (number < 1) {
             throw new IllegalArgumentException("Number must be greater than 0"); //$NON-NLS-1$
         }
-        String text = "I"; //$NON-NLS-1$
-        int closest = 1;
+        String text    = "I"; //$NON-NLS-1$
+        int    closest = 1;
         for (int i = 0; i < ROMAN_VALUES.length; i++) {
             if (number >= ROMAN_VALUES[i]) {
                 closest = ROMAN_VALUES[i];
-                text = ROMAN_TEXT[i];
+                text    = ROMAN_TEXT[i];
                 break;
             }
         }

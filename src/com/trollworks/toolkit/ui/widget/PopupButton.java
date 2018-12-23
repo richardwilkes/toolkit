@@ -33,7 +33,7 @@ public class PopupButton<T> extends JComboBox<T> {
 
     public PopupButton(T[] items) {
         super(items);
-        mModel = (MutableComboBoxModel<T>) getModel();
+        mModel    = (MutableComboBoxModel<T>) getModel();
         mRenderer = getRenderer();
         setModel(new MutableComboBoxModel<T>() {
             @Override

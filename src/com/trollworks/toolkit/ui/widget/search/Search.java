@@ -45,9 +45,12 @@ public class Search extends JPanel implements DocumentListener, KeyListener, Foc
     @Localize(locale = "es", value = "Número de coincidencias encontradas")
     private static String  MSG_HIT_TOOLTIP;
     @Localize("Enter text here and press RETURN to select all matching items")
-    @Localize(locale = "de", value = "Suchtext hier eingeben und ENTER drücken, um alle Suchergebnisse auszuwählen.")
-    @Localize(locale = "ru", value = "Введите здесь текст и нажмите ВВОД, чтобы выбрать все подходящие элементы")
-    @Localize(locale = "es", value = "Introduce aquí el texto y pulsa INTRO para selecionar todos elementos que coincidentes")
+    @Localize(locale = "de",
+              value = "Suchtext hier eingeben und ENTER drücken, um alle Suchergebnisse auszuwählen.")
+    @Localize(locale = "ru",
+              value = "Введите здесь текст и нажмите ВВОД, чтобы выбрать все подходящие элементы")
+    @Localize(locale = "es",
+              value = "Introduce aquí el texto y pulsa INTRO para selecionar todos elementos que coincidentes")
     private static String  MSG_SEARCH_FIELD_TOOLTIP;
     private SearchTarget   mTarget;
     private JLabel         mHits;
@@ -65,7 +68,7 @@ public class Search extends JPanel implements DocumentListener, KeyListener, Foc
      * @param target The search target.
      */
     public Search(SearchTarget target) {
-        mTarget = target;
+        mTarget      = target;
 
         mFilterField = new JTextField(10);
         mFilterField.getDocument().addDocumentListener(this);
@@ -205,8 +208,8 @@ public class Search extends JPanel implements DocumentListener, KeyListener, Foc
     private void removeFloater() {
         if (mFloater != null) {
             JRootPane rootPane = getRootPane();
-            Container parent = mFloater.getParent();
-            Rectangle bounds = mFloater.getBounds();
+            Container parent   = mFloater.getParent();
+            Rectangle bounds   = mFloater.getBounds();
             UIUtilities.convertRectangle(bounds, parent, rootPane);
             if (parent != null) {
                 parent.remove(mFloater);

@@ -18,7 +18,7 @@ class ExpressionOperand {
     Operator mUnaryOperator;
 
     public ExpressionOperand(String value, Operator unaryOperator) {
-        mValue = value;
+        mValue         = value;
         mUnaryOperator = unaryOperator;
     }
 }

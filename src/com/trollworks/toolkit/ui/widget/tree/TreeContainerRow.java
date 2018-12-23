@@ -26,7 +26,7 @@ public class TreeContainerRow extends TreeRow {
 
     @Override
     protected TreeContainerRow clone() {
-        TreeContainerRow other = (TreeContainerRow) super.clone();
+        TreeContainerRow   other    = (TreeContainerRow) super.clone();
         ArrayList<TreeRow> children = new ArrayList<>(mChildren.size());
         for (TreeRow row : mChildren) {
             row = row.clone();
@@ -98,7 +98,7 @@ public class TreeContainerRow extends TreeRow {
      * will be moved into that position.
      *
      * @param index The index to insert at.
-     * @param row The {@link TreeRow} to add as a child.
+     * @param row   The {@link TreeRow} to add as a child.
      */
     public void addRow(int index, TreeRow row) {
         ArrayList<TreeRow> rows = new ArrayList<>(1);
@@ -113,13 +113,13 @@ public class TreeContainerRow extends TreeRow {
      * position, it will be moved into that position.
      *
      * @param index The index to insert at.
-     * @param rows The {@link TreeRow}s to add as children.
+     * @param rows  The {@link TreeRow}s to add as children.
      */
     public void addRow(int index, List<TreeRow> rows) {
         if (!rows.isEmpty()) {
-            HashMap<TreeContainerRow, HashSet<TreeRow>> map = new HashMap<>();
-            HashSet<TreeRow> exists = new HashSet<>();
-            ArrayList<TreeRow> list = new ArrayList<>();
+            HashMap<TreeContainerRow, HashSet<TreeRow>> map    = new HashMap<>();
+            HashSet<TreeRow>                            exists = new HashSet<>();
+            ArrayList<TreeRow>                          list   = new ArrayList<>();
             for (TreeRow row : rows) {
                 if (row.mParent != null) {
                     HashSet<TreeRow> set = map.get(row.mParent);

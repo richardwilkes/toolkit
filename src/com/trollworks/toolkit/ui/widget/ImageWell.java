@@ -69,15 +69,15 @@ public class ImageWell extends JPanel implements DropTargetListener, MouseListen
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Rectangle bounds = GraphicsUtilities.getLocalInsetBounds(this);
-        StdImage img = mGetter.getWellImage();
+        StdImage  img    = mGetter.getWellImage();
         if (img != null) {
             g.drawImage(img, bounds.x, bounds.y, bounds.width, bounds.height, this);
         } else {
             g.setColor(Color.WHITE);
             g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
             g.setColor(Color.LIGHT_GRAY);
-            int xs = bounds.width / 4;
-            int ys = bounds.height / 4;
+            int xs     = bounds.width / 4;
+            int ys     = bounds.height / 4;
             int offset = 0;
             for (int y = bounds.y; y < bounds.y + bounds.height; y += ys) {
                 for (int x = bounds.x + offset; x < bounds.x + bounds.width; x += xs * 2) {
@@ -152,7 +152,7 @@ public class ImageWell extends JPanel implements DropTargetListener, MouseListen
 
     @Override
     public void mouseClicked(MouseEvent event) {
-        JPanel panel = new JPanel(new FlowLayout());
+        JPanel  panel  = new JPanel(new FlowLayout());
         JButton button = new JButton(CLEAR);
         button.addActionListener(action -> {
             mSetter.setWellImage(null);

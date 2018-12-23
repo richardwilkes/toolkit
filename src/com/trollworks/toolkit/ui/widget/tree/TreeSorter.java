@@ -58,9 +58,9 @@ public class TreeSorter implements Comparator<TreeRow> {
     }
 
     /**
-     * @param column The {@link TreeColumn} to sort on.
+     * @param column    The {@link TreeColumn} to sort on.
      * @param ascending Whether the sort should be ascending or descending.
-     * @param replace Whether to replace the current sort or not.
+     * @param replace   Whether to replace the current sort or not.
      */
     public void setSort(TreeColumn column, boolean ascending, boolean replace) {
         if (replace) {
@@ -71,7 +71,7 @@ public class TreeSorter implements Comparator<TreeRow> {
             for (SortData data : mSortData) {
                 if (data.mColumn == column) {
                     data.mAscending = ascending;
-                    found = true;
+                    found           = true;
                     break;
                 }
             }
@@ -85,16 +85,16 @@ public class TreeSorter implements Comparator<TreeRow> {
      * Sets the sort criteria. If the {@link TreeColumn} is already being sorted, its sort direction
      * will be inverted, otherwise it will be set to ascending.
      *
-     * @param column The {@link TreeColumn} to sort on.
+     * @param column  The {@link TreeColumn} to sort on.
      * @param replace Whether to replace the current sort or not.
      */
     public void setSort(TreeColumn column, boolean replace) {
-        SortData found = null;
-        boolean ascending = true;
+        SortData found     = null;
+        boolean  ascending = true;
         for (SortData data : mSortData) {
             if (data.mColumn == column) {
                 ascending = !data.mAscending;
-                found = data;
+                found     = data;
                 break;
             }
         }
@@ -131,7 +131,7 @@ public class TreeSorter implements Comparator<TreeRow> {
         boolean    mAscending;
 
         SortData(TreeColumn column, boolean ascending) {
-            mColumn = column;
+            mColumn    = column;
             mAscending = ascending;
         }
     }

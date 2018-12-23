@@ -22,14 +22,14 @@ public class CmdLineOption {
     /**
      * Creates a new {@link CmdLineOption}.
      *
-     * @param description The description of this option.
+     * @param description   The description of this option.
      * @param argumentLabel The name of this option's argument, if it has one. Use <code>null</code>
-     *            if it doesn't.
-     * @param names One or more names that can be used to invoke this option.
+     *                      if it doesn't.
+     * @param names         One or more names that can be used to invoke this option.
      */
     public CmdLineOption(String description, String argumentLabel, String... names) {
-        mNames = new String[names.length];
-        mDescription = description;
+        mNames         = new String[names.length];
+        mDescription   = description;
         mArgumentLabel = argumentLabel;
         for (int i = 0; i < names.length; i++) {
             mNames[i] = names[i].trim().toLowerCase();

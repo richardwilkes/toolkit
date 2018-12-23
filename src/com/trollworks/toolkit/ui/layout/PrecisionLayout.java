@@ -47,7 +47,8 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param columns The number of cell columns in the layout. If this has a value less than 1, the
-     *            layout will not set the size and position of any children. The default value is 1.
+     *                layout will not set the size and position of any children. The default value
+     *                is 1.
      * @return This layout.
      */
     public PrecisionLayout setColumns(int columns) {
@@ -64,7 +65,7 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param equal <code>true</code> if all columns in the layout will be forced to have the same
-     *            width. The default value is <code>false</code>.
+     *              width. The default value is <code>false</code>.
      * @return This layout.
      */
     public PrecisionLayout setEqualColumns(boolean equal) {
@@ -100,7 +101,7 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param left The number of pixels of horizontal margin that will be placed along the left edge
-     *            of the layout. The default value is 4.
+     *             of the layout. The default value is 4.
      * @return This layout.
      */
     public PrecisionLayout setLeftMargin(int left) {
@@ -118,7 +119,7 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param bottom The number of pixels of vertical margin that will be placed along the bottom
-     *            edge of the layout. The default value is 4.
+     *               edge of the layout. The default value is 4.
      * @return This layout.
      */
     public PrecisionLayout setBottomMargin(int bottom) {
@@ -136,7 +137,7 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param right The number of pixels of horizontal margin that will be placed along the right
-     *            edge of the layout. The default value is 4.
+     *              edge of the layout. The default value is 4.
      * @return This layout.
      */
     public PrecisionLayout setRightMargin(int right) {
@@ -146,33 +147,33 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param margins The number of pixels of margin that will be placed along each edge of the
-     *            layout. The default value is 4.
+     *                layout. The default value is 4.
      * @return This layout.
      */
     public PrecisionLayout setMargins(int margins) {
-        mMarginTop = margins;
-        mMarginLeft = margins;
+        mMarginTop    = margins;
+        mMarginLeft   = margins;
         mMarginBottom = margins;
-        mMarginRight = margins;
+        mMarginRight  = margins;
         return this;
     }
 
     /**
-     * @param top The number of pixels of vertical margin that will be placed along the top edge of
-     *            the layout. The default value is 4.
-     * @param left The number of pixels of horizontal margin that will be placed along the left edge
-     *            of the layout. The default value is 4.
+     * @param top    The number of pixels of vertical margin that will be placed along the top edge
+     *               of the layout. The default value is 4.
+     * @param left   The number of pixels of horizontal margin that will be placed along the left
+     *               edge of the layout. The default value is 4.
      * @param bottom The number of pixels of vertical margin that will be placed along the bottom
-     *            edge of the layout. The default value is 4.
-     * @param right The number of pixels of horizontal margin that will be placed along the right
-     *            edge of the layout. The default value is 4.
+     *               edge of the layout. The default value is 4.
+     * @param right  The number of pixels of horizontal margin that will be placed along the right
+     *               edge of the layout. The default value is 4.
      * @return This layout.
      */
     public PrecisionLayout setMargins(int top, int left, int bottom, int right) {
-        mMarginTop = top;
-        mMarginLeft = left;
+        mMarginTop    = top;
+        mMarginLeft   = left;
         mMarginBottom = bottom;
-        mMarginRight = right;
+        mMarginRight  = right;
         return this;
     }
 
@@ -186,7 +187,7 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param spacing The number of pixels between the right edge of one cell and the left edge of
-     *            its neighboring cell to the right. The default value is 4.
+     *                its neighboring cell to the right. The default value is 4.
      * @return This layout.
      */
     public PrecisionLayout setHorizontalSpacing(int spacing) {
@@ -204,7 +205,7 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param spacing The number of pixels between the bottom edge of one cell and the top edge of
-     *            its neighboring cell underneath. The default value is 2.
+     *                its neighboring cell underneath. The default value is 2.
      * @return This layout.
      */
     public PrecisionLayout setVerticalSpacing(int spacing) {
@@ -214,9 +215,9 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param horizontal The number of pixels between the right edge of one cell and the left edge
-     *            of its neighboring cell to the right. The default value is 4.
-     * @param vertical The number of pixels between the bottom edge of one cell and the top edge of
-     *            its neighboring cell underneath. The default value is 2.
+     *                   of its neighboring cell to the right. The default value is 4.
+     * @param vertical   The number of pixels between the bottom edge of one cell and the top edge
+     *                   of its neighboring cell underneath. The default value is 2.
      * @return This layout.
      */
     public PrecisionLayout setSpacing(int horizontal, int vertical) {
@@ -262,7 +263,7 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param alignment Specifies how components will be positioned horizontally within the
-     *            container. The default value is {@link #BEGINNING}.
+     *                  container. The default value is {@link #BEGINNING}.
      * @return This layout.
      */
     public PrecisionLayout setHorizontalAlignment(PrecisionLayoutAlignment alignment) {
@@ -307,7 +308,7 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param alignment Specifies how components will be positioned vertically within the container.
-     *            The default value is {@link #BEGINNING}.
+     *                  The default value is {@link #BEGINNING}.
      * @return This layout.
      */
     public PrecisionLayout setVerticalAlignment(PrecisionLayoutAlignment alignment) {
@@ -317,9 +318,9 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     /**
      * @param horizontal Specifies how components will be positioned horizontally within the
-     *            container. The default value is {@link #BEGINNING}.
-     * @param vertical Specifies how components will be positioned vertically within the container.
-     *            The default value is {@link #BEGINNING}.
+     *                   container. The default value is {@link #BEGINNING}.
+     * @param vertical   Specifies how components will be positioned vertically within the
+     *                   container. The default value is {@link #BEGINNING}.
      * @return This layout.
      */
     public PrecisionLayout setAlignment(PrecisionLayoutAlignment horizontal, PrecisionLayoutAlignment vertical) {
@@ -373,18 +374,18 @@ public final class PrecisionLayout implements LayoutManager2 {
 
     @Override
     public Dimension minimumLayoutSize(Container target) {
-        Insets insets = target.getInsets();
-        Dimension size = layout(target, false, 0, 0, DEFAULT, DEFAULT, true);
-        size.width += insets.left + insets.right;
+        Insets    insets = target.getInsets();
+        Dimension size   = layout(target, false, 0, 0, DEFAULT, DEFAULT, true);
+        size.width  += insets.left + insets.right;
         size.height += insets.top + insets.bottom;
         return size;
     }
 
     @Override
     public Dimension preferredLayoutSize(Container target) {
-        Insets insets = target.getInsets();
-        Dimension size = layout(target, false, 0, 0, DEFAULT, DEFAULT, false);
-        size.width += insets.left + insets.right;
+        Insets    insets = target.getInsets();
+        Dimension size   = layout(target, false, 0, 0, DEFAULT, DEFAULT, false);
+        size.width  += insets.left + insets.right;
         size.height += insets.top + insets.bottom;
         return size;
     }
@@ -403,17 +404,17 @@ public final class PrecisionLayout implements LayoutManager2 {
     }
 
     private Dimension layout(Container target, boolean move, int x, int y, int width, int height, boolean useMinimumSize) {
-        Scale scale = Scale.get(target);
-        int totalWidth = scale.scale(mMarginLeft) + scale.scale(mMarginRight);
-        int totalHeight = scale.scale(mMarginTop) + scale.scale(mMarginBottom);
+        Scale scale       = Scale.get(target);
+        int   totalWidth  = scale.scale(mMarginLeft) + scale.scale(mMarginRight);
+        int   totalHeight = scale.scale(mMarginTop) + scale.scale(mMarginBottom);
         if (mColumns > 0) {
             Component[] children = getChildren(target, useMinimumSize);
             if (children.length > 0) {
-                Component[][] grid = buildGrid(children);
-                int[] widths = adjustColumnWidths(scale, width, grid);
+                Component[][] grid   = buildGrid(children);
+                int[]         widths = adjustColumnWidths(scale, width, grid);
                 wrap(scale, width, grid, widths, useMinimumSize);
                 int[] heights = adjustRowHeights(scale, height, grid);
-                totalWidth += scale.scale(mHSpacing) * (mColumns - 1);
+                totalWidth  += scale.scale(mHSpacing) * (mColumns - 1);
                 totalHeight += scale.scale(mVSpacing) * (mRowCount - 1);
                 for (int i = 0; i < mColumns; i++) {
                     totalWidth += widths[i];
@@ -444,17 +445,17 @@ public final class PrecisionLayout implements LayoutManager2 {
     }
 
     private void positionChildren(Scale scale, int x, int y, Component[][] grid, int[] widths, int[] heights) {
-        int hSpacing = scale.scale(mHSpacing);
-        int vSpacing = scale.scale(mVSpacing);
+        int hSpacing  = scale.scale(mHSpacing);
+        int vSpacing  = scale.scale(mVSpacing);
         int letMargin = scale.scale(mMarginLeft);
-        int gridY = y + scale.scale(mMarginTop);
+        int gridY     = y + scale.scale(mMarginTop);
         for (int i = 0; i < mRowCount; i++) {
             int gridX = x + letMargin;
             for (int j = 0; j < mColumns; j++) {
                 PrecisionLayoutData data = getData(grid, i, j, mRowCount, true);
                 if (data != null) {
-                    int hSpan = Math.max(1, Math.min(data.getHorizontalSpan(), mColumns));
-                    int vSpan = Math.max(1, data.getVerticalSpan());
+                    int hSpan     = Math.max(1, Math.min(data.getHorizontalSpan(), mColumns));
+                    int vSpan     = Math.max(1, data.getVerticalSpan());
                     int cellWidth = 0, cellHeight = 0;
                     for (int k = 0; k < hSpan; k++) {
                         cellWidth += widths[j + k];
@@ -463,40 +464,40 @@ public final class PrecisionLayout implements LayoutManager2 {
                         cellHeight += heights[i + k];
                     }
                     cellWidth += hSpacing * (hSpan - 1);
-                    int dataLeftMargin = scale.scale(data.getLeftMargin());
+                    int dataLeftMargin  = scale.scale(data.getLeftMargin());
                     int dataRightMargin = scale.scale(data.getRightMargin());
-                    int childX = gridX + dataLeftMargin;
-                    int childWidth = Math.min(data.getCachedWidth(), cellWidth);
+                    int childX          = gridX + dataLeftMargin;
+                    int childWidth      = Math.min(data.getCachedWidth(), cellWidth);
                     switch (data.getHorizontalAlignment()) {
-                        case MIDDLE:
-                            childX += Math.max(0, (cellWidth - (dataLeftMargin + dataRightMargin) - childWidth) / 2);
-                            break;
-                        case END:
-                            childX += Math.max(0, cellWidth - (dataLeftMargin + dataRightMargin) - childWidth);
-                            break;
-                        case FILL:
-                            childWidth = cellWidth - (dataLeftMargin + dataRightMargin);
-                            break;
-                        default:
-                            break;
+                    case MIDDLE:
+                        childX += Math.max(0, (cellWidth - (dataLeftMargin + dataRightMargin) - childWidth) / 2);
+                        break;
+                    case END:
+                        childX += Math.max(0, cellWidth - (dataLeftMargin + dataRightMargin) - childWidth);
+                        break;
+                    case FILL:
+                        childWidth = cellWidth - (dataLeftMargin + dataRightMargin);
+                        break;
+                    default:
+                        break;
                     }
                     cellHeight += vSpacing * (vSpan - 1);
-                    int dataTopMargin = scale.scale(data.getTopMargin());
+                    int dataTopMargin    = scale.scale(data.getTopMargin());
                     int dataBottomMargin = scale.scale(data.getBottomMargin());
-                    int childY = gridY + dataTopMargin;
-                    int childHeight = Math.min(data.getCachedHeight(), cellHeight);
+                    int childY           = gridY + dataTopMargin;
+                    int childHeight      = Math.min(data.getCachedHeight(), cellHeight);
                     switch (data.getVerticalAlignment()) {
-                        case MIDDLE:
-                            childY += Math.max(0, (cellHeight - (dataTopMargin + dataBottomMargin) - childHeight) / 2);
-                            break;
-                        case END:
-                            childY += Math.max(0, cellHeight - (dataTopMargin + dataBottomMargin) - childHeight);
-                            break;
-                        case FILL:
-                            childHeight = cellHeight - (dataTopMargin + dataBottomMargin);
-                            break;
-                        default:
-                            break;
+                    case MIDDLE:
+                        childY += Math.max(0, (cellHeight - (dataTopMargin + dataBottomMargin) - childHeight) / 2);
+                        break;
+                    case END:
+                        childY += Math.max(0, cellHeight - (dataTopMargin + dataBottomMargin) - childHeight);
+                        break;
+                    case FILL:
+                        childHeight = cellHeight - (dataTopMargin + dataBottomMargin);
+                        break;
+                    default:
+                        break;
                     }
                     Component child = grid[i][j];
                     if (child != null) {
@@ -510,7 +511,7 @@ public final class PrecisionLayout implements LayoutManager2 {
     }
 
     private Component[] getChildren(Container target, boolean useMinimumSize) {
-        Scale scale = Scale.get(target);
+        Scale                scale    = Scale.get(target);
         ArrayList<Component> children = new ArrayList<>();
         for (Component child : target.getComponents()) {
             PrecisionLayoutData data = mConstraints.get(child);
@@ -523,14 +524,14 @@ public final class PrecisionLayout implements LayoutManager2 {
     }
 
     private Component[][] buildGrid(Component[] children) {
-        Component[][] grid = new Component[4][mColumns];
-        int row = 0;
-        int column = 0;
+        Component[][] grid   = new Component[4][mColumns];
+        int           row    = 0;
+        int           column = 0;
         mRowCount = 0;
         for (Component child : children) {
-            PrecisionLayoutData data = mConstraints.get(child);
-            int hSpan = Math.max(1, Math.min(data.getHorizontalSpan(), mColumns));
-            int vSpan = Math.max(1, data.getVerticalSpan());
+            PrecisionLayoutData data  = mConstraints.get(child);
+            int                 hSpan = Math.max(1, Math.min(data.getHorizontalSpan(), mColumns));
+            int                 vSpan = Math.max(1, data.getVerticalSpan());
             while (true) {
                 int lastRow = row + vSpan;
                 if (lastRow >= grid.length) {
@@ -569,8 +570,8 @@ public final class PrecisionLayout implements LayoutManager2 {
                     grid[pos][column + k] = child;
                 }
             }
-            mRowCount = Math.max(mRowCount, row + vSpan);
-            column += hSpan;
+            mRowCount  = Math.max(mRowCount, row + vSpan);
+            column    += hSpan;
         }
         return grid;
     }
@@ -578,11 +579,11 @@ public final class PrecisionLayout implements LayoutManager2 {
     private PrecisionLayoutData getData(Component[][] grid, int row, int column, int rowCount, boolean first) {
         Component component = grid[row][column];
         if (component != null) {
-            PrecisionLayoutData data = mConstraints.get(component);
-            int hSpan = Math.max(1, Math.min(data.getHorizontalSpan(), mColumns));
-            int vSpan = Math.max(1, data.getVerticalSpan());
-            int i = first ? row + vSpan - 1 : row - vSpan + 1;
-            int j = first ? column + hSpan - 1 : column - hSpan + 1;
+            PrecisionLayoutData data  = mConstraints.get(component);
+            int                 hSpan = Math.max(1, Math.min(data.getHorizontalSpan(), mColumns));
+            int                 vSpan = Math.max(1, data.getVerticalSpan());
+            int                 i     = first ? row + vSpan - 1 : row - vSpan + 1;
+            int                 j     = first ? column + hSpan - 1 : column - hSpan + 1;
             if (0 <= i && i < rowCount) {
                 if (0 <= j && j < mColumns) {
                     if (component == grid[i][j]) {
@@ -595,21 +596,21 @@ public final class PrecisionLayout implements LayoutManager2 {
     }
 
     private int[] adjustColumnWidths(Scale scale, int width, Component[][] grid) {
-        int hSpacing = scale.scale(mHSpacing);
-        int availableWidth = width - hSpacing * (mColumns - 1) - (scale.scale(mMarginLeft) + scale.scale(mMarginRight));
-        int expandCount = 0;
-        int[] widths = new int[mColumns];
-        int[] minWidths = new int[mColumns];
-        boolean[] expandColumn = new boolean[mColumns];
+        int       hSpacing       = scale.scale(mHSpacing);
+        int       availableWidth = width - hSpacing * (mColumns - 1) - (scale.scale(mMarginLeft) + scale.scale(mMarginRight));
+        int       expandCount    = 0;
+        int[]     widths         = new int[mColumns];
+        int[]     minWidths      = new int[mColumns];
+        boolean[] expandColumn   = new boolean[mColumns];
         for (int j = 0; j < mColumns; j++) {
             for (int i = 0; i < mRowCount; i++) {
                 PrecisionLayoutData data = getData(grid, i, j, mRowCount, true);
                 if (data != null) {
                     int hSpan = Math.max(1, Math.min(data.getHorizontalSpan(), mColumns));
                     if (hSpan == 1) {
-                        int dataLeftMargin = scale.scale(data.getLeftMargin());
+                        int dataLeftMargin  = scale.scale(data.getLeftMargin());
                         int dataRightMargin = scale.scale(data.getLeftMargin());
-                        int w = data.getCachedWidth() + dataLeftMargin + dataRightMargin;
+                        int w               = data.getCachedWidth() + dataLeftMargin + dataRightMargin;
                         if (widths[j] < w) {
                             widths[j] = w;
                         }
@@ -621,9 +622,9 @@ public final class PrecisionLayout implements LayoutManager2 {
                         }
                         int minimumWidth = data.getCachedMinimumWidth();
                         if (!data.shouldGrabHorizontalSpace() || minimumWidth != 0) {
-                            w = !data.shouldGrabHorizontalSpace() || minimumWidth == DEFAULT ? data.getCachedWidth() : minimumWidth;
-                            w += dataLeftMargin + dataRightMargin;
-                            minWidths[j] = Math.max(minWidths[j], w);
+                            w             = !data.shouldGrabHorizontalSpace() || minimumWidth == DEFAULT ? data.getCachedWidth() : minimumWidth;
+                            w            += dataLeftMargin + dataRightMargin;
+                            minWidths[j]  = Math.max(minWidths[j], w);
                         }
                     }
                 }
@@ -633,11 +634,11 @@ public final class PrecisionLayout implements LayoutManager2 {
                 if (data != null) {
                     int hSpan = Math.max(1, Math.min(data.getHorizontalSpan(), mColumns));
                     if (hSpan > 1) {
-                        int spanWidth = 0;
-                        int spanMinWidth = 0;
+                        int spanWidth       = 0;
+                        int spanMinWidth    = 0;
                         int spanExpandCount = 0;
                         for (int k = 0; k < hSpan; k++) {
-                            spanWidth += widths[j - k];
+                            spanWidth    += widths[j - k];
                             spanMinWidth += minWidths[j - k];
                             if (expandColumn[j - k]) {
                                 spanExpandCount++;
@@ -647,16 +648,16 @@ public final class PrecisionLayout implements LayoutManager2 {
                             expandCount++;
                             expandColumn[j] = true;
                         }
-                        int dataLeftMargin = scale.scale(data.getLeftMargin());
+                        int dataLeftMargin  = scale.scale(data.getLeftMargin());
                         int dataRightMargin = scale.scale(data.getLeftMargin());
-                        int w = data.getCachedWidth() + dataLeftMargin + dataRightMargin - spanWidth - (hSpan - 1) * hSpacing;
+                        int w               = data.getCachedWidth() + dataLeftMargin + dataRightMargin - spanWidth - (hSpan - 1) * hSpacing;
                         if (w > 0) {
                             if (mEqualColumns) {
                                 int equalWidth = (w + spanWidth) / hSpan;
-                                int remainder = (w + spanWidth) % hSpan;
-                                int last = -1;
+                                int remainder  = (w + spanWidth) % hSpan;
+                                int last       = -1;
                                 for (int k = 0; k < hSpan; k++) {
-                                    last = j - k;
+                                    last         = j - k;
                                     widths[last] = Math.max(equalWidth, widths[last]);
                                 }
                                 if (last > -1) {
@@ -666,12 +667,12 @@ public final class PrecisionLayout implements LayoutManager2 {
                                 if (spanExpandCount == 0) {
                                     widths[j] += w;
                                 } else {
-                                    int delta = w / spanExpandCount;
+                                    int delta     = w / spanExpandCount;
                                     int remainder = w % spanExpandCount;
-                                    int last = -1;
+                                    int last      = -1;
                                     for (int k = 0; k < hSpan; k++) {
                                         if (expandColumn[j - k]) {
-                                            last = j - k;
+                                            last          = j - k;
                                             widths[last] += delta;
                                         }
                                     }
@@ -683,18 +684,18 @@ public final class PrecisionLayout implements LayoutManager2 {
                         }
                         int minimumWidth = data.getCachedMinimumWidth();
                         if (!data.shouldGrabHorizontalSpace() || minimumWidth != 0) {
-                            w = !data.shouldGrabHorizontalSpace() || minimumWidth == DEFAULT ? data.getCachedWidth() : minimumWidth;
+                            w  = !data.shouldGrabHorizontalSpace() || minimumWidth == DEFAULT ? data.getCachedWidth() : minimumWidth;
                             w += dataLeftMargin + dataRightMargin - spanMinWidth - (hSpan - 1) * hSpacing;
                             if (w > 0) {
                                 if (spanExpandCount == 0) {
                                     minWidths[j] += w;
                                 } else {
-                                    int delta = w / spanExpandCount;
+                                    int delta     = w / spanExpandCount;
                                     int remainder = w % spanExpandCount;
-                                    int last = -1;
+                                    int last      = -1;
                                     for (int k = 0; k < hSpan; k++) {
                                         if (expandColumn[j - k]) {
-                                            last = j - k;
+                                            last             = j - k;
                                             minWidths[last] += delta;
                                         }
                                     }
@@ -710,15 +711,15 @@ public final class PrecisionLayout implements LayoutManager2 {
         }
         if (mEqualColumns) {
             int minColumnWidth = 0;
-            int columnWidth = 0;
+            int columnWidth    = 0;
             for (int i = 0; i < mColumns; i++) {
                 minColumnWidth = Math.max(minColumnWidth, minWidths[i]);
-                columnWidth = Math.max(columnWidth, widths[i]);
+                columnWidth    = Math.max(columnWidth, widths[i]);
             }
             columnWidth = width == DEFAULT || expandCount == 0 ? columnWidth : Math.max(minColumnWidth, availableWidth / mColumns);
             for (int i = 0; i < mColumns; i++) {
                 expandColumn[i] = expandCount > 0;
-                widths[i] = columnWidth;
+                widths[i]       = columnWidth;
             }
         } else {
             if (width != DEFAULT && expandCount > 0) {
@@ -726,19 +727,19 @@ public final class PrecisionLayout implements LayoutManager2 {
                 for (int i = 0; i < mColumns; i++) {
                     totalWidth += widths[i];
                 }
-                int c = expandCount;
+                int c         = expandCount;
                 int remainder = availableWidth - totalWidth;
-                int delta = remainder / c;
+                int delta     = remainder / c;
                 remainder %= c;
                 int last = -1;
                 while (totalWidth != availableWidth) {
                     for (int j = 0; j < mColumns; j++) {
                         if (expandColumn[j]) {
                             if (widths[j] + delta > minWidths[j]) {
-                                last = j;
+                                last         = j;
                                 widths[last] = widths[j] + delta;
                             } else {
-                                widths[j] = minWidths[j];
+                                widths[j]       = minWidths[j];
                                 expandColumn[j] = false;
                                 c--;
                             }
@@ -769,7 +770,7 @@ public final class PrecisionLayout implements LayoutManager2 {
                                             if (spanExpandCount == 0) {
                                                 widths[j] += w;
                                             } else {
-                                                int delta2 = w / spanExpandCount;
+                                                int delta2     = w / spanExpandCount;
                                                 int remainder2 = w % spanExpandCount, last2 = -1;
                                                 for (int k = 0; k < hSpan; k++) {
                                                     if (expandColumn[j - k]) {
@@ -793,9 +794,9 @@ public final class PrecisionLayout implements LayoutManager2 {
                     for (int i = 0; i < mColumns; i++) {
                         totalWidth += widths[i];
                     }
-                    delta = (availableWidth - totalWidth) / c;
+                    delta     = (availableWidth - totalWidth) / c;
                     remainder = (availableWidth - totalWidth) % c;
-                    last = -1;
+                    last      = -1;
                 }
             }
         }
@@ -810,7 +811,7 @@ public final class PrecisionLayout implements LayoutManager2 {
                     PrecisionLayoutData data = getData(grid, i, j, mRowCount, false);
                     if (data != null) {
                         if (data.getHeightHint() == DEFAULT) {
-                            int hSpan = Math.max(1, Math.min(data.getHorizontalSpan(), mColumns));
+                            int hSpan        = Math.max(1, Math.min(data.getHorizontalSpan(), mColumns));
                             int currentWidth = 0;
                             for (int k = 0; k < hSpan; k++) {
                                 currentWidth += widths[j - k];
@@ -831,21 +832,21 @@ public final class PrecisionLayout implements LayoutManager2 {
     }
 
     private int[] adjustRowHeights(Scale scale, int height, Component[][] grid) {
-        int vSpacing = scale.scale(mVSpacing);
-        int availableHeight = height - vSpacing * (mRowCount - 1) - (scale.scale(mMarginTop) + scale.scale(mMarginBottom));
-        int expandCount = 0;
-        int[] heights = new int[mRowCount];
-        int[] minHeights = new int[mRowCount];
-        boolean[] expandRow = new boolean[mRowCount];
+        int       vSpacing        = scale.scale(mVSpacing);
+        int       availableHeight = height - vSpacing * (mRowCount - 1) - (scale.scale(mMarginTop) + scale.scale(mMarginBottom));
+        int       expandCount     = 0;
+        int[]     heights         = new int[mRowCount];
+        int[]     minHeights      = new int[mRowCount];
+        boolean[] expandRow       = new boolean[mRowCount];
         for (int i = 0; i < mRowCount; i++) {
             for (int j = 0; j < mColumns; j++) {
                 PrecisionLayoutData data = getData(grid, i, j, mRowCount, true);
                 if (data != null) {
                     int vSpan = Math.max(1, Math.min(data.getVerticalSpan(), mRowCount));
                     if (vSpan == 1) {
-                        int dataTopMargin = scale.scale(data.getTopMargin());
+                        int dataTopMargin    = scale.scale(data.getTopMargin());
                         int dataBottomMargin = scale.scale(data.getBottomMargin());
-                        int h = data.getCachedHeight() + dataTopMargin + dataBottomMargin;
+                        int h                = data.getCachedHeight() + dataTopMargin + dataBottomMargin;
                         heights[i] = Math.max(heights[i], h);
                         if (data.shouldGrabVerticalSpace()) {
                             if (!expandRow[i]) {
@@ -855,9 +856,9 @@ public final class PrecisionLayout implements LayoutManager2 {
                         }
                         int minimumHeight = scale.scale(data.getMinimumHeight());
                         if (!data.shouldGrabVerticalSpace() || minimumHeight != 0) {
-                            h = !data.shouldGrabVerticalSpace() || minimumHeight == DEFAULT ? data.getCachedHeight() : minimumHeight;
-                            h += dataTopMargin + dataBottomMargin;
-                            minHeights[i] = Math.max(minHeights[i], h);
+                            h              = !data.shouldGrabVerticalSpace() || minimumHeight == DEFAULT ? data.getCachedHeight() : minimumHeight;
+                            h             += dataTopMargin + dataBottomMargin;
+                            minHeights[i]  = Math.max(minHeights[i], h);
                         }
                     }
                 }
@@ -869,7 +870,7 @@ public final class PrecisionLayout implements LayoutManager2 {
                     if (vSpan > 1) {
                         int spanHeight = 0, spanMinHeight = 0, spanExpandCount = 0;
                         for (int k = 0; k < vSpan; k++) {
-                            spanHeight += heights[i - k];
+                            spanHeight    += heights[i - k];
                             spanMinHeight += minHeights[i - k];
                             if (expandRow[i - k]) {
                                 spanExpandCount++;
@@ -879,14 +880,14 @@ public final class PrecisionLayout implements LayoutManager2 {
                             expandCount++;
                             expandRow[i] = true;
                         }
-                        int dataTopMargin = scale.scale(data.getTopMargin());
+                        int dataTopMargin    = scale.scale(data.getTopMargin());
                         int dataBottomMargin = scale.scale(data.getBottomMargin());
-                        int h = data.getCachedHeight() + dataTopMargin + dataBottomMargin - spanHeight - (vSpan - 1) * vSpacing;
+                        int h                = data.getCachedHeight() + dataTopMargin + dataBottomMargin - spanHeight - (vSpan - 1) * vSpacing;
                         if (h > 0) {
                             if (spanExpandCount == 0) {
                                 heights[i] += h;
                             } else {
-                                int delta = h / spanExpandCount;
+                                int delta     = h / spanExpandCount;
                                 int remainder = h % spanExpandCount, last = -1;
                                 for (int k = 0; k < vSpan; k++) {
                                     if (expandRow[i - k]) {
@@ -900,13 +901,13 @@ public final class PrecisionLayout implements LayoutManager2 {
                         }
                         int minimumHeight = scale.scale(data.getMinimumHeight());
                         if (!data.shouldGrabVerticalSpace() || minimumHeight != 0) {
-                            h = !data.shouldGrabVerticalSpace() || minimumHeight == DEFAULT ? data.getCachedHeight() : minimumHeight;
+                            h  = !data.shouldGrabVerticalSpace() || minimumHeight == DEFAULT ? data.getCachedHeight() : minimumHeight;
                             h += dataTopMargin + dataBottomMargin - spanMinHeight - (vSpan - 1) * vSpacing;
                             if (h > 0) {
                                 if (spanExpandCount == 0) {
                                     minHeights[i] += h;
                                 } else {
-                                    int delta = h / spanExpandCount;
+                                    int delta     = h / spanExpandCount;
                                     int remainder = h % spanExpandCount, last = -1;
                                     for (int k = 0; k < vSpan; k++) {
                                         if (expandRow[i - k]) {
@@ -928,17 +929,17 @@ public final class PrecisionLayout implements LayoutManager2 {
             for (int i = 0; i < mRowCount; i++) {
                 totalHeight += heights[i];
             }
-            int c = expandCount;
-            int delta = (availableHeight - totalHeight) / c;
+            int c         = expandCount;
+            int delta     = (availableHeight - totalHeight) / c;
             int remainder = (availableHeight - totalHeight) % c;
-            int last = -1;
+            int last      = -1;
             while (totalHeight != availableHeight) {
                 for (int i = 0; i < mRowCount; i++) {
                     if (expandRow[i]) {
                         if (heights[i] + delta > minHeights[i]) {
                             heights[last = i] = heights[i] + delta;
                         } else {
-                            heights[i] = minHeights[i];
+                            heights[i]   = minHeights[i];
                             expandRow[i] = false;
                             c--;
                         }
@@ -969,7 +970,7 @@ public final class PrecisionLayout implements LayoutManager2 {
                                         if (spanExpandCount == 0) {
                                             heights[i] += h;
                                         } else {
-                                            int delta2 = h / spanExpandCount;
+                                            int delta2     = h / spanExpandCount;
                                             int remainder2 = h % spanExpandCount, last2 = -1;
                                             for (int k = 0; k < vSpan; k++) {
                                                 if (expandRow[i - k]) {
@@ -993,9 +994,9 @@ public final class PrecisionLayout implements LayoutManager2 {
                 for (int i = 0; i < mRowCount; i++) {
                     totalHeight += heights[i];
                 }
-                delta = (availableHeight - totalHeight) / c;
+                delta     = (availableHeight - totalHeight) / c;
                 remainder = (availableHeight - totalHeight) % c;
-                last = -1;
+                last      = -1;
             }
         }
         return heights;

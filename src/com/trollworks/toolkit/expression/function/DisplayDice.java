@@ -38,28 +38,28 @@ public class DisplayDice implements ExpressionFunction {
     @Override
     public Object execute(Evaluator evaluator, String arguments) throws EvaluationException {
         try {
-            Evaluator ev = new Evaluator(evaluator);
+            Evaluator         ev        = new Evaluator(evaluator);
             ArgumentTokenizer tokenizer = new ArgumentTokenizer(arguments);
-            List<Integer> args = new ArrayList<>();
+            List<Integer>     args      = new ArrayList<>();
             while (tokenizer.hasMoreTokens()) {
                 args.add(Integer.valueOf((int) ArgumentTokenizer.getDouble(ev.evaluate(tokenizer.nextToken()))));
             }
             Dice dice;
             switch (args.size()) {
-                case 1: // sides
-                    dice = new Dice(1, args.get(0).intValue(), 0, 1);
-                    break;
-                case 2: // count, sides
-                    dice = new Dice(args.get(0).intValue(), args.get(1).intValue(), 0, 1);
-                    break;
-                case 3: // count, sides, modifier
-                    dice = new Dice(args.get(0).intValue(), args.get(1).intValue(), args.get(2).intValue(), 1);
-                    break;
-                case 4: // count, sides, modifier, multiplier
-                    dice = new Dice(args.get(0).intValue(), args.get(1).intValue(), args.get(2).intValue(), args.get(3).intValue());
-                    break;
-                default:
-                    throw new Exception();
+            case 1: // sides
+                dice = new Dice(1, args.get(0).intValue(), 0, 1);
+                break;
+            case 2: // count, sides
+                dice = new Dice(args.get(0).intValue(), args.get(1).intValue(), 0, 1);
+                break;
+            case 3: // count, sides, modifier
+                dice = new Dice(args.get(0).intValue(), args.get(1).intValue(), args.get(2).intValue(), 1);
+                break;
+            case 4: // count, sides, modifier, multiplier
+                dice = new Dice(args.get(0).intValue(), args.get(1).intValue(), args.get(2).intValue(), args.get(3).intValue());
+                break;
+            default:
+                throw new Exception();
             }
             return dice.toString();
         } catch (EvaluationException exception) {

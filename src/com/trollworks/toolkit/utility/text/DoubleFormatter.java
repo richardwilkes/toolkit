@@ -24,13 +24,13 @@ public class DoubleFormatter extends JFormattedTextField.AbstractFormatter {
     /**
      * Creates a new {@link DoubleFormatter}.
      *
-     * @param minValue The minimum value allowed.
-     * @param maxValue The maximum value allowed.
+     * @param minValue  The minimum value allowed.
+     * @param maxValue  The maximum value allowed.
      * @param forceSign Whether or not a plus sign should be forced for positive numbers.
      */
     public DoubleFormatter(double minValue, double maxValue, boolean forceSign) {
-        mMinValue = minValue;
-        mMaxValue = maxValue;
+        mMinValue  = minValue;
+        mMaxValue  = maxValue;
         mForceSign = forceSign;
     }
 

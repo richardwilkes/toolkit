@@ -90,7 +90,7 @@ public class Text {
     }
 
     /**
-     * @param data The data to create a hex string for.
+     * @param data   The data to create a hex string for.
      * @param offset The starting index.
      * @param length The number of bytes to use.
      * @return A string of two character hexadecimal values for each byte.
@@ -114,8 +114,8 @@ public class Text {
         if (text == null) {
             return "";
         }
-        int count = 0;
-        StringBuilder buffer = new StringBuilder();
+        int             count     = 0;
+        StringBuilder   buffer    = new StringBuilder();
         StringTokenizer tokenizer = new StringTokenizer(text.replaceAll("[\\x00-\\x08]", "").replaceAll("[\\x0b\\x0c]", "").replaceAll("[\\x0e-\\x1f]", "").replaceAll("[\\x7f-\\x9f]", "").replaceAll("\r\n", "\n").replace('\r', '\n').replaceAll("[ \t\f]+", " ").trim(), "\n", true);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
@@ -138,10 +138,10 @@ public class Text {
      * If the text doesn't fit in the specified character count, it will be shortened and an ellipse
      * ("...") will be added.
      *
-     * @param text The text to work on.
-     * @param count The maximum character count.
+     * @param text             The text to work on.
+     * @param count            The maximum character count.
      * @param truncationPolicy One of {@link SwingConstants#LEFT}, {@link SwingConstants#CENTER}, or
-     *            {@link SwingConstants#RIGHT}.
+     *                         {@link SwingConstants#RIGHT}.
      * @return The adjusted text.
      */
     public static final String truncateIfNecessary(String text, int count, int truncationPolicy) {
@@ -154,10 +154,10 @@ public class Text {
                 return ELLIPSIS + text.substring(count);
             }
             if (truncationPolicy == SwingConstants.CENTER) {
-                int remaining = tCount - count;
-                int left = remaining / 2;
-                int right = remaining - left;
-                StringBuilder buffer = new StringBuilder(remaining + 1);
+                int           remaining = tCount - count;
+                int           left      = remaining / 2;
+                int           right     = remaining - left;
+                StringBuilder buffer    = new StringBuilder(remaining + 1);
 
                 if (left > 0) {
                     buffer.append(text.substring(0, left));
@@ -186,14 +186,14 @@ public class Text {
     /**
      * Convert text from other line ending formats into a specific format.
      *
-     * @param data The text to convert.
+     * @param data       The text to convert.
      * @param lineEnding The desired line ending.
      * @return The converted text.
      */
     public static final String standardizeLineEndings(String data, String lineEnding) {
-        int length = data.length();
-        StringBuilder buffer = new StringBuilder(length);
-        char ignoreCh = 0;
+        int           length   = data.length();
+        StringBuilder buffer   = new StringBuilder(length);
+        char          ignoreCh = 0;
 
         for (int i = 0; i < length; i++) {
             char ch = data.charAt(i);
@@ -218,17 +218,17 @@ public class Text {
     /**
      * Extracts lines of text from the specified data.
      *
-     * @param data The text to extract lines from.
+     * @param data     The text to extract lines from.
      * @param tabWidth The width (in spaces) of a tab character. Pass in <code>0</code> or less to
-     *            leave tab characters in place.
+     *                 leave tab characters in place.
      * @return The lines of text.
      */
     public static final ArrayList<String> extractLines(String data, int tabWidth) {
-        int length = data.length();
-        StringBuilder buffer = new StringBuilder(length);
-        char ignoreCh = 0;
-        ArrayList<String> lines = new ArrayList<>();
-        int column = 0;
+        int               length   = data.length();
+        StringBuilder     buffer   = new StringBuilder(length);
+        char              ignoreCh = 0;
+        ArrayList<String> lines    = new ArrayList<>();
+        int               column   = 0;
 
         for (int i = 0; i < length; i++) {
             char ch = data.charAt(i);
@@ -237,12 +237,12 @@ public class Text {
                 ignoreCh = 0;
             } else if (ch == '\r') {
                 ignoreCh = '\n';
-                column = 0;
+                column   = 0;
                 lines.add(buffer.toString());
                 buffer.setLength(0);
             } else if (ch == '\n') {
                 ignoreCh = '\r';
-                column = 0;
+                column   = 0;
                 lines.add(buffer.toString());
                 buffer.setLength(0);
             } else if (ch == '\t' && tabWidth > 0) {
@@ -267,7 +267,7 @@ public class Text {
     }
 
     /**
-     * @param amt The size of the string to create.
+     * @param amt    The size of the string to create.
      * @param filler The character to fill it with.
      * @return A string filled with a specific character.
      */
@@ -285,12 +285,12 @@ public class Text {
      * which is prepended to the first line.
      *
      * @param marker The prefix to use on the first line.
-     * @param note The text of the note.
+     * @param note   The text of the note.
      * @return The formatted note.
      */
     public static String makeNote(String marker, String note) {
-        StringBuilder buffer = new StringBuilder(note.length() * 2);
-        String indent = makeFiller(marker.length() + 1, ' ');
+        StringBuilder   buffer    = new StringBuilder(note.length() * 2);
+        String          indent    = makeFiller(marker.length() + 1, ' ');
         StringTokenizer tokenizer = new StringTokenizer(note, NEWLINE);
 
         if (tokenizer.hasMoreTokens()) {
@@ -310,14 +310,14 @@ public class Text {
     }
 
     /**
-     * @param text The text to wrap.
+     * @param text      The text to wrap.
      * @param charCount The maximum character width to allow.
      * @return A new, wrapped version of the text.
      */
     public static String wrapToCharacterCount(String text, int charCount) {
-        StringBuilder buffer = new StringBuilder(text.length() * 2);
-        StringBuilder lineBuffer = new StringBuilder(charCount + 1);
-        StringTokenizer tokenizer = new StringTokenizer(text + NEWLINE, NEWLINE, true);
+        StringBuilder   buffer     = new StringBuilder(text.length() * 2);
+        StringBuilder   lineBuffer = new StringBuilder(charCount + 1);
+        StringTokenizer tokenizer  = new StringTokenizer(text + NEWLINE, NEWLINE, true);
 
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
@@ -326,12 +326,12 @@ public class Text {
                 buffer.append(token);
             } else {
                 StringTokenizer tokenizer2 = new StringTokenizer(token, " \t", true); //$NON-NLS-1$
-                int length = 0;
+                int             length     = 0;
 
                 lineBuffer.setLength(0);
                 while (tokenizer2.hasMoreTokens()) {
-                    String token2 = tokenizer2.nextToken();
-                    int tokenLength = token2.length();
+                    String token2      = tokenizer2.nextToken();
+                    int    tokenLength = token2.length();
 
                     if (length == 0 && token2.equals(SPACE)) {
                         continue;
@@ -383,26 +383,26 @@ public class Text {
         for (int i = 0; i < length; i++) {
             char ch = str.charAt(i);
             switch (ch) {
-                case '&':
-                    buffer.append("&amp;"); //$NON-NLS-1$
-                    break;
-                case '<':
-                    buffer.append("&lt;"); //$NON-NLS-1$
-                    break;
-                case '>':
-                    buffer.append("&gt;"); //$NON-NLS-1$
-                    break;
-                case '"':
-                    buffer.append("&quot;"); //$NON-NLS-1$
-                    break;
-                case '\'':
-                    buffer.append("&#39;"); //$NON-NLS-1$
-                    break;
-                case '/':
-                    buffer.append("&#47;"); //$NON-NLS-1$
-                    break;
-                default:
-                    buffer.append(ch);
+            case '&':
+                buffer.append("&amp;"); //$NON-NLS-1$
+                break;
+            case '<':
+                buffer.append("&lt;"); //$NON-NLS-1$
+                break;
+            case '>':
+                buffer.append("&gt;"); //$NON-NLS-1$
+                break;
+            case '"':
+                buffer.append("&quot;"); //$NON-NLS-1$
+                break;
+            case '\'':
+                buffer.append("&#39;"); //$NON-NLS-1$
+                break;
+            case '/':
+                buffer.append("&#47;"); //$NON-NLS-1$
+                break;
+            default:
+                buffer.append(ch);
             }
         }
         return buffer.toString();

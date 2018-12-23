@@ -24,7 +24,7 @@ public class TreeRow implements Cloneable {
         try {
             TreeRow other = (TreeRow) super.clone();
             other.mParent = null;
-            other.mIndex = 0;
+            other.mIndex  = 0;
             return other;
         } catch (CloneNotSupportedException exception) {
             return null; // Not possible
@@ -67,7 +67,7 @@ public class TreeRow implements Cloneable {
     /** @return The number of {@link TreeContainerRow}s above this {@link TreeRow}. */
     public int getDepth() {
         TreeContainerRow parent = mParent;
-        int depth = 0;
+        int              depth  = 0;
         while (parent != null) {
             depth++;
             parent = parent.mParent;

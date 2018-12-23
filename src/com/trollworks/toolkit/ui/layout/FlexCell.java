@@ -43,7 +43,7 @@ public abstract class FlexCell {
     /**
      * Draws the borders of this cell. Useful for debugging.
      *
-     * @param gc The {@link Graphics} context to use.
+     * @param gc    The {@link Graphics} context to use.
      * @param color The {@link Color} to use.
      */
     public void draw(Graphics gc, Color color) {
@@ -54,46 +54,46 @@ public abstract class FlexCell {
     /**
      * Layout the cell and its children.
      *
-     * @param scale The {@link Scale} to use.
+     * @param scale  The {@link Scale} to use.
      * @param bounds The bounds to use for the cell.
      */
     public final void layout(Scale scale, Rectangle bounds) {
         Insets insets = scale.scale(mInsets);
-        bounds.x += insets.left;
-        bounds.y += insets.top;
-        bounds.width -= insets.left + insets.right;
+        bounds.x      += insets.left;
+        bounds.y      += insets.top;
+        bounds.width  -= insets.left + insets.right;
         bounds.height -= insets.top + insets.bottom;
-        mX = bounds.x;
-        mY = bounds.y;
-        mWidth = bounds.width;
-        mHeight = bounds.height;
+        mX             = bounds.x;
+        mY             = bounds.y;
+        mWidth         = bounds.width;
+        mHeight        = bounds.height;
         layoutSelf(scale, bounds);
     }
 
     /**
      * Called to layout the cell and its children.
      *
-     * @param scale The {@link Scale} to use.
+     * @param scale  The {@link Scale} to use.
      * @param bounds The bounds to use for the cell. Insets have already been applied.
      */
     protected abstract void layoutSelf(Scale scale, Rectangle bounds);
 
     /**
      * @param scale The {@link Scale} to use.
-     * @param type The type of size to determine.
+     * @param type  The type of size to determine.
      * @return The size for this cell.
      */
     public final Dimension getSize(Scale scale, LayoutSize type) {
-        Insets insets = scale.scale(mInsets);
-        Dimension size = getSizeSelf(scale, type);
-        size.width += insets.left + insets.right;
+        Insets    insets = scale.scale(mInsets);
+        Dimension size   = getSizeSelf(scale, type);
+        size.width  += insets.left + insets.right;
         size.height += insets.top + insets.bottom;
         return LayoutSize.sanitizeSize(size);
     }
 
     /**
      * @param scale The {@link Scale} to use.
-     * @param type The type of size to determine.
+     * @param type  The type of size to determine.
      * @return The size for this cell. Do not include the insets from the cell.
      */
     protected abstract Dimension getSizeSelf(Scale scale, LayoutSize type);

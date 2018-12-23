@@ -22,10 +22,10 @@ public enum BoundaryArea {
     LEFT {
         @Override
         public void adjust(int dx, int dy, Rectangle adjustee, Rectangle original) {
-            adjustee.x = original.x + dx;
+            adjustee.x     = original.x + dx;
             adjustee.width = original.width - dx;
             if (adjustee.width < 1) {
-                adjustee.x = original.x + original.width - 1;
+                adjustee.x     = original.x + original.width - 1;
                 adjustee.width = 1;
             }
         }
@@ -54,10 +54,10 @@ public enum BoundaryArea {
     TOP {
         @Override
         public void adjust(int dx, int dy, Rectangle adjustee, Rectangle original) {
-            adjustee.y = original.y + dy;
+            adjustee.y      = original.y + dy;
             adjustee.height = original.height - dy;
             if (adjustee.height < 1) {
-                adjustee.y = original.y + original.height - 1;
+                adjustee.y      = original.y + original.height - 1;
                 adjustee.height = 1;
             }
         }
@@ -163,9 +163,9 @@ public enum BoundaryArea {
     /**
      * Adjusts a {@link Rectangle}.
      *
-     * @param dx The delta from the original x-coordinate.
-     * @param dy The delta from the original y-coordinate.
-     * @param bounds The {@link Rectangle} to be adjusted.
+     * @param dx       The delta from the original x-coordinate.
+     * @param dy       The delta from the original y-coordinate.
+     * @param bounds   The {@link Rectangle} to be adjusted.
      * @param original The original {@link Rectangle}.
      */
     public abstract void adjust(int dx, int dy, Rectangle bounds, Rectangle original);
@@ -177,7 +177,7 @@ public enum BoundaryArea {
     private static final int TWICE_SLOP = SLOP * 2;
 
     /**
-     * @param where The coordinates to check.
+     * @param where  The coordinates to check.
      * @param bounds The {@link Rectangle} being adjusted.
      * @return The {@link BoundaryArea} corresponding to the coordinates.
      */
@@ -186,15 +186,15 @@ public enum BoundaryArea {
     }
 
     /**
-     * @param x The x-coordinate to check.
-     * @param y The y-coordinate to check.
+     * @param x      The x-coordinate to check.
+     * @param y      The y-coordinate to check.
      * @param bounds The {@link Rectangle} being adjusted.
      * @return The {@link BoundaryArea} corresponding to the coordinates.
      */
     public static final BoundaryArea over(int x, int y, Rectangle bounds) {
         Rectangle expansion = new Rectangle(bounds.x - SLOP, bounds.y - SLOP, bounds.width + TWICE_SLOP, bounds.height + TWICE_SLOP);
         if (expansion.contains(x, y)) {
-            boolean overTop = over(y, bounds.y);
+            boolean overTop    = over(y, bounds.y);
             boolean overBottom = over(y, bounds.y + bounds.height);
             if (over(x, bounds.x)) {
                 if (overTop) {
@@ -233,7 +233,7 @@ public enum BoundaryArea {
     /**
      * Draws the boundary handles.
      *
-     * @param gc The {@link Graphics} to use.
+     * @param gc     The {@link Graphics} to use.
      * @param bounds The {@link Rectangle} to draw handles on.
      */
     public static final void drawHandles(Graphics gc, Rectangle bounds) {

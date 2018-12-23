@@ -53,13 +53,13 @@ public class NioServer extends Thread {
 
     /**
      * @param sslContext The {@link SSLContext} to use. Typically created by calling
-     *            {@link SSLSupport#createContext(URL, String)}.
+     *                   {@link SSLSupport#createContext(URL, String)}.
      */
     public NioServer(SSLContext sslContext) throws IOException {
         setName(getClass().getSimpleName());
         setDaemon(true);
         mSSLContext = sslContext;
-        mSelector = SelectorProvider.provider().openSelector();
+        mSelector   = SelectorProvider.provider().openSelector();
         int count = Runtime.getRuntime().availableProcessors() + 1;
         for (int i = 0; i < count; i++) {
             NioWorker worker = new NioWorker(mQueue);
@@ -104,9 +104,9 @@ public class NioServer extends Thread {
     }
 
     /**
-     * @param hostAddress The address to listen on. Pass in <code>null</code> to indicate all
-     *            addresses.
-     * @param port The port to listen on.
+     * @param hostAddress    The address to listen on. Pass in <code>null</code> to indicate all
+     *                       addresses.
+     * @param port           The port to listen on.
      * @param sessionFactory The {@link SessionFactory} to use for new connections.
      */
     public final void listen(InetAddress hostAddress, int port, SessionFactory sessionFactory) throws IOException {
@@ -182,8 +182,8 @@ public class NioServer extends Thread {
      * Puts the data into the send queue.
      *
      * @param socket The socket to send data through.
-     * @param data The data to send. A copy of the data is not made, so do not modify it once passed
-     *            to this method.
+     * @param data   The data to send. A copy of the data is not made, so do not modify it once
+     *               passed to this method.
      */
     final void send(SocketChannel socket, ByteBuffer data) {
         synchronized (mPendingWriteData) {
@@ -215,7 +215,7 @@ public class NioServer extends Thread {
         @SuppressWarnings("resource")
         ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
         @SuppressWarnings("resource")
-        SocketChannel socketChannel = serverSocketChannel.accept();
+        SocketChannel       socketChannel       = serverSocketChannel.accept();
         socketChannel.configureBlocking(false);
         Session session = ((SessionFactory) key.attachment()).createSession(this, socketChannel);
         synchronized (mSessions) {
@@ -227,7 +227,7 @@ public class NioServer extends Thread {
     private final void read(SelectionKey key) {
         @SuppressWarnings("resource")
         SocketChannel socketChannel = (SocketChannel) key.channel();
-        Session session = (Session) key.attachment();
+        Session       session       = (Session) key.attachment();
         mReadBuffer.clear();
         int amount;
         try {
@@ -282,7 +282,7 @@ public class NioServer extends Thread {
         final int           mOperation;
 
         ChangeRequest(SocketChannel socket, int operation) {
-            mSocket = socket;
+            mSocket    = socket;
             mOperation = operation;
         }
     }

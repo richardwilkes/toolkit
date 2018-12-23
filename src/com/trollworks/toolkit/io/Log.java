@@ -46,9 +46,9 @@ public class Log {
 
     /**
      * @param stream The {@link PrintStream} to write the log data to. By default, logging is sent
-     *            to {@link System#out}. Note that when {@link Debug#DEV_MODE} is <code>true</code>,
-     *            calling this method has no effect and logging is always performed to
-     *            {@link System#out}.
+     *               to {@link System#out}. Note that when {@link Debug#DEV_MODE} is
+     *               <code>true</code>, calling this method has no effect and logging is always
+     *               performed to {@link System#out}.
      */
     public static final void setPrintStream(PrintStream stream) {
         if (!Debug.DEV_MODE) {
@@ -83,7 +83,7 @@ public class Log {
     /**
      * Logs an error.
      *
-     * @param msg The message to log.
+     * @param msg       The message to log.
      * @param throwable The {@link Throwable} to log.
      */
     public static final void error(String msg, Throwable throwable) {
@@ -94,7 +94,7 @@ public class Log {
      * Logs an error.
      *
      * @param context The {@link Context} this error occurred within.
-     * @param msg The message to log.
+     * @param msg     The message to log.
      */
     public static final void error(Context context, String msg) {
         error(context, msg, null);
@@ -103,7 +103,7 @@ public class Log {
     /**
      * Logs an error.
      *
-     * @param context The {@link Context} this error occurred within.
+     * @param context   The {@link Context} this error occurred within.
      * @param throwable The {@link Throwable} to log.
      */
     public static final void error(Context context, Throwable throwable) {
@@ -113,8 +113,8 @@ public class Log {
     /**
      * Logs an error.
      *
-     * @param context The {@link Context} this error occurred within.
-     * @param msg The message to log.
+     * @param context   The {@link Context} this error occurred within.
+     * @param msg       The message to log.
      * @param throwable The {@link Throwable} to log.
      */
     public static final void error(Context context, String msg, Throwable throwable) {
@@ -133,7 +133,7 @@ public class Log {
     /**
      * Logs a warning.
      *
-     * @param msg The message to log.
+     * @param msg       The message to log.
      * @param throwable The {@link Throwable} to log.
      */
     public static final void warn(String msg, Throwable throwable) {
@@ -153,7 +153,7 @@ public class Log {
      * Logs a warning.
      *
      * @param context The {@link Context} this warning occurred within.
-     * @param msg The message to log.
+     * @param msg     The message to log.
      */
     public static final void warn(Context context, String msg) {
         warn(context, msg, null);
@@ -162,7 +162,7 @@ public class Log {
     /**
      * Logs a warning.
      *
-     * @param context The {@link Context} this warning occurred within.
+     * @param context   The {@link Context} this warning occurred within.
      * @param throwable The {@link Throwable} to log.
      */
     public static final void warn(Context context, Throwable throwable) {
@@ -172,8 +172,8 @@ public class Log {
     /**
      * Logs a warning.
      *
-     * @param context The {@link Context} this warning occurred within.
-     * @param msg The message to log.
+     * @param context   The {@link Context} this warning occurred within.
+     * @param msg       The message to log.
      * @param throwable The {@link Throwable} to log.
      */
     public static final void warn(Context context, String msg, Throwable throwable) {
@@ -192,7 +192,7 @@ public class Log {
     /**
      * Logs an informational message.
      *
-     * @param msg The message to log.
+     * @param msg       The message to log.
      * @param throwable The {@link Throwable} to log.
      */
     public static final void info(String msg, Throwable throwable) {
@@ -212,7 +212,7 @@ public class Log {
      * Logs an informational message.
      *
      * @param context The {@link Context} this info occurred within.
-     * @param msg The message to log.
+     * @param msg     The message to log.
      */
     public static final void info(Context context, String msg) {
         info(context, msg, null);
@@ -221,7 +221,7 @@ public class Log {
     /**
      * Logs an informational message.
      *
-     * @param context The {@link Context} this info occurred within.
+     * @param context   The {@link Context} this info occurred within.
      * @param throwable The {@link Throwable} to log.
      */
     public static final void info(Context context, Throwable throwable) {
@@ -231,8 +231,8 @@ public class Log {
     /**
      * Logs an informational message.
      *
-     * @param context The {@link Context} this info occurred within.
-     * @param msg The message to log.
+     * @param context   The {@link Context} this info occurred within.
+     * @param msg       The message to log.
      * @param throwable The {@link Throwable} to log.
      */
     public static final void info(Context context, String msg, Throwable throwable) {

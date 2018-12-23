@@ -26,12 +26,12 @@ public class TreeColumnDragState extends TreeDragState {
     /**
      * Creates a new {@link TreeColumnDragState}.
      *
-     * @param panel The {@link TreePanel} to work with.
+     * @param panel  The {@link TreePanel} to work with.
      * @param column The {@link TreeColumn} from the drag.
      */
     public TreeColumnDragState(TreePanel panel, TreeColumn column) {
         super(panel);
-        mColumn = column;
+        mColumn   = column;
         mOriginal = new ArrayList<>(panel.getColumns());
         setHeaderFocus(true);
         setContentsFocus(true);
@@ -54,14 +54,14 @@ public class TreeColumnDragState extends TreeDragState {
 
     @Override
     public void dragOver(DropTargetDragEvent event) {
-        TreePanel panel = getPanel();
-        int x = panel.toHeaderView(new Point(event.getLocation())).x;
+        TreePanel  panel      = getPanel();
+        int        x          = panel.toHeaderView(new Point(event.getLocation())).x;
         TreeColumn overColumn = panel.overColumn(x);
         if (overColumn != null && overColumn != mColumn) {
             ArrayList<TreeColumn> columns = new ArrayList<>(panel.getColumns());
-            int over = columns.indexOf(overColumn);
-            int cur = columns.indexOf(mColumn);
-            int midway = panel.getColumnStart(over) + overColumn.getWidth() / 2;
+            int                   over    = columns.indexOf(overColumn);
+            int                   cur     = columns.indexOf(mColumn);
+            int                   midway  = panel.getColumnStart(over) + overColumn.getWidth() / 2;
             if (over < cur && x < midway || over > cur && x > midway) {
                 if (cur < over) {
                     for (int i = cur; i < over; i++) {

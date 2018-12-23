@@ -99,8 +99,8 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
             mPanel.add(label);
         }
         mPanel.setSize(mPanel.getPreferredSize());
-        JScrollPane scroller = new JScrollPane(mPanel);
-        Dimension preferredSize = scroller.getPreferredSize();
+        JScrollPane scroller      = new JScrollPane(mPanel);
+        Dimension   preferredSize = scroller.getPreferredSize();
         if (preferredSize.height > 200) {
             preferredSize.height = 200;
         }
@@ -110,22 +110,22 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        JButton button = (JButton) event.getSource();
-        Command command = mMap.get(button);
-        KeyStrokeDisplay ksd = new KeyStrokeDisplay(command.getAccelerator());
+        JButton          button  = (JButton) event.getSource();
+        Command          command = mMap.get(button);
+        KeyStrokeDisplay ksd     = new KeyStrokeDisplay(command.getAccelerator());
         switch (WindowUtils.showOptionDialog(this, ksd, TYPE_KEYSTROKE, false, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] { ACCEPT, CLEAR, RESET }, null)) {
-            case JOptionPane.CLOSED_OPTION:
-            default:
-                break;
-            case JOptionPane.YES_OPTION: // Accept
-                setAccelerator(button, ksd.getKeyStroke());
-                break;
-            case JOptionPane.NO_OPTION: // Clear
-                setAccelerator(button, null);
-                break;
-            case JOptionPane.CANCEL_OPTION: // Reset
-                setAccelerator(button, command.getOriginalAccelerator());
-                break;
+        case JOptionPane.CLOSED_OPTION:
+        default:
+            break;
+        case JOptionPane.YES_OPTION: // Accept
+            setAccelerator(button, ksd.getKeyStroke());
+            break;
+        case JOptionPane.NO_OPTION: // Clear
+            setAccelerator(button, null);
+            break;
+        case JOptionPane.CANCEL_OPTION: // Reset
+            setAccelerator(button, command.getOriginalAccelerator());
+            break;
         }
         mPanel.setSize(mPanel.getPreferredSize());
         adjustResetButton();
@@ -160,7 +160,7 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
         button.setText(getAcceleratorText(cmd));
         button.invalidate();
         Preferences prefs = Preferences.getInstance();
-        String key = cmd.getCommand();
+        String      key   = cmd.getCommand();
         if (cmd.hasOriginalAccelerator()) {
             prefs.removePreference(MODULE, key);
         } else {

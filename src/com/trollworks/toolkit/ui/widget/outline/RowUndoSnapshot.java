@@ -25,8 +25,8 @@ public class RowUndoSnapshot {
      * @param row The row to create a snapshot for.
      */
     public RowUndoSnapshot(Row row) {
-        mParent = row.getParent();
-        mOpen = row.isOpen();
+        mParent   = row.getParent();
+        mOpen     = row.isOpen();
         mChildren = row.canHaveChildren() ? new ArrayList<>(row.getChildren()) : null;
     }
 

@@ -76,12 +76,12 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 
     @Override
     protected void paintComponent(Graphics gc) {
-        Insets insets = getInsets();
-        int x = insets.left;
-        int y = insets.top;
-        int width = getWidth() - (insets.left + insets.right);
-        int height = getHeight() - (insets.top + insets.bottom);
-        RetinaIcon icon = mIcon;
+        Insets     insets = getInsets();
+        int        x      = insets.left;
+        int        y      = insets.top;
+        int        width  = getWidth() - (insets.left + insets.right);
+        int        height = getHeight() - (insets.top + insets.bottom);
+        RetinaIcon icon   = mIcon;
         if (isEnabled()) {
             if (mInMouseDown && mPressed) {
                 gc.setColor(Colors.adjustBrightness(getBackground(), -0.2f));
@@ -116,7 +116,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
     public void mousePressed(MouseEvent event) {
         if (isEnabled() && !event.isPopupTrigger() && event.getButton() == 1) {
             mInMouseDown = true;
-            mPressed = true;
+            mPressed     = true;
             repaint();
             MouseCapture.start(this, Cursor.getDefaultCursor());
         }
@@ -137,7 +137,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
     public void mouseReleased(MouseEvent event) {
         if (isEnabled()) {
             mouseDragged(event);
-            mShowBorder = mPressed;
+            mShowBorder  = mPressed;
             mInMouseDown = false;
             MouseCapture.stop(this);
             if (mPressed) {
@@ -161,7 +161,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
 
     private void updateRollOver() {
         boolean wasBorderShown = mShowBorder;
-        Point location = MouseInfo.getPointerInfo().getLocation();
+        Point   location       = MouseInfo.getPointerInfo().getLocation();
         UIUtilities.convertPointFromScreen(location, this);
         mShowBorder = isOver(location.x, location.y);
         if (wasBorderShown != mShowBorder) {

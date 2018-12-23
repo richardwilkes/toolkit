@@ -63,8 +63,8 @@ public class WebSocket extends Personality {
 
     /** @param handler The {@link WebSocketHandler} to delegate to. */
     public WebSocket(WebSocketHandler handler) {
-        mHandler = handler;
-        mBuffer = new ByteArrayOutputStream();
+        mHandler    = handler;
+        mBuffer     = new ByteArrayOutputStream();
         mLastOpcode = Opcode.UNDEFINED;
     }
 
@@ -80,12 +80,12 @@ public class WebSocket extends Personality {
 
     private void reset() {
         mFinalFragment = false;
-        mOpcode = Opcode.UNDEFINED;
-        mData = null;
-        mState = 0;
-        mLength = 0;
-        mCount = 0;
-        mMask = null;
+        mOpcode        = Opcode.UNDEFINED;
+        mData          = null;
+        mState         = 0;
+        mLength        = 0;
+        mCount         = 0;
+        mMask          = null;
     }
 
     @Override
@@ -93,52 +93,52 @@ public class WebSocket extends Personality {
         while (buffer.hasRemaining()) {
             if (parse(buffer.get())) {
                 switch (mOpcode) {
-                    case CONTINUATION:
+                case CONTINUATION:
+                    mBuffer.write(mData);
+                    if (mFinalFragment) {
+                        if (mLastOpcode == Opcode.TEXT) {
+                            mHandler.webSocketTextData(this, mBuffer.toString(StandardCharsets.UTF_8.name()));
+                        } else {
+                            mHandler.webSocketBinaryData(this, mBuffer.toByteArray());
+                        }
+                        mBuffer.reset();
+                    }
+                    break;
+                case TEXT:
+                    if (mFinalFragment) {
+                        mHandler.webSocketTextData(this, new String(mData, StandardCharsets.UTF_8));
+                        mBuffer.reset();
+                    } else {
+                        mLastOpcode = mOpcode;
                         mBuffer.write(mData);
-                        if (mFinalFragment) {
-                            if (mLastOpcode == Opcode.TEXT) {
-                                mHandler.webSocketTextData(this, mBuffer.toString(StandardCharsets.UTF_8.name()));
-                            } else {
-                                mHandler.webSocketBinaryData(this, mBuffer.toByteArray());
-                            }
-                            mBuffer.reset();
-                        }
-                        break;
-                    case TEXT:
-                        if (mFinalFragment) {
-                            mHandler.webSocketTextData(this, new String(mData, StandardCharsets.UTF_8));
-                            mBuffer.reset();
-                        } else {
-                            mLastOpcode = mOpcode;
-                            mBuffer.write(mData);
-                        }
-                        break;
-                    case BINARY:
-                        if (mFinalFragment) {
-                            mHandler.webSocketBinaryData(this, mData);
-                            mBuffer.reset();
-                        } else {
-                            mLastOpcode = mOpcode;
-                            mBuffer.write(mData);
-                        }
-                        break;
-                    case PING:
-                        int length = mData != null ? mData.length : 0;
-                        byte[] response = new byte[length];
-                        if (length > 0) {
-                            System.arraycopy(mData, 0, response, 0, length);
-                        }
-                        send(Opcode.PONG, response);
-                        break;
-                    case PONG:
-                        // Ignore
-                        break;
-                    case CLOSE:
-                        requestClose(false);
-                        return;
-                    default:
-                        Log.warn(getSession(), "Ignoring unknown WebSocket opcode: " + mOpcode.getOpcode());
-                        break;
+                    }
+                    break;
+                case BINARY:
+                    if (mFinalFragment) {
+                        mHandler.webSocketBinaryData(this, mData);
+                        mBuffer.reset();
+                    } else {
+                        mLastOpcode = mOpcode;
+                        mBuffer.write(mData);
+                    }
+                    break;
+                case PING:
+                    int length = mData != null ? mData.length : 0;
+                    byte[] response = new byte[length];
+                    if (length > 0) {
+                        System.arraycopy(mData, 0, response, 0, length);
+                    }
+                    send(Opcode.PONG, response);
+                    break;
+                case PONG:
+                    // Ignore
+                    break;
+                case CLOSE:
+                    requestClose(false);
+                    return;
+                default:
+                    Log.warn(getSession(), "Ignoring unknown WebSocket opcode: " + mOpcode.getOpcode());
+                    break;
                 }
                 reset();
             }
@@ -147,78 +147,78 @@ public class WebSocket extends Personality {
 
     private boolean parse(byte b) throws IOException {
         switch (mState) {
-            case 0:
-                if ((b & 0x70) != 0) {
-                    throw new IOException("Invalid reserved bits");
-                }
-                mFinalFragment = (b & 0x80) != 0;
-                mOpcode = Opcode.lookup((byte) (b & 0x0F));
-                if (mOpcode == Opcode.UNDEFINED) {
-                    throw new IOException("Unknown opcode: " + (b & 0x0F));
-                }
-                if (mOpcode.isControl() && !mFinalFragment) {
-                    throw new IOException("Fragmented control frame");
-                }
-                mState = 1;
-                return false;
-            case 1:
-                if ((b & 0x80) != 0) {
-                    mMask = new byte[4];
-                }
-                mLength = b & 0x7F;
-                if (mLength == 127) {
-                    mLength = 0;
-                    mState = 2;
-                } else if (mLength == 126) {
-                    mLength = 0;
-                    mState = 3;
+        case 0:
+            if ((b & 0x70) != 0) {
+                throw new IOException("Invalid reserved bits");
+            }
+            mFinalFragment = (b & 0x80) != 0;
+            mOpcode = Opcode.lookup((byte) (b & 0x0F));
+            if (mOpcode == Opcode.UNDEFINED) {
+                throw new IOException("Unknown opcode: " + (b & 0x0F));
+            }
+            if (mOpcode.isControl() && !mFinalFragment) {
+                throw new IOException("Fragmented control frame");
+            }
+            mState = 1;
+            return false;
+        case 1:
+            if ((b & 0x80) != 0) {
+                mMask = new byte[4];
+            }
+            mLength = b & 0x7F;
+            if (mLength == 127) {
+                mLength = 0;
+                mState  = 2;
+            } else if (mLength == 126) {
+                mLength = 0;
+                mState  = 3;
+            } else {
+                mData  = new byte[(int) mLength];
+                mState = mMask != null ? 4 : 5;
+            }
+            return false;
+        case 2:
+            mLength |= (b & 0xFF) << (7 - mCount) * 8;
+            if (mLength > MAX_PAYLOAD_LENGTH) {
+                throw new IOException("Payload length too large");
+            }
+            if (++mCount == 8) {
+                mCount = 0;
+                mData  = new byte[(int) mLength];
+                mState = mMask != null ? 4 : 5;
+            }
+            return false;
+        case 3:
+            mLength |= (b & 0xFF) << (1 - mCount) * 8;
+            if (++mCount == 2) {
+                mCount = 0;
+                mData  = new byte[(int) mLength];
+                mState = mMask != null ? 4 : 5;
+            }
+            return false;
+        case 4:
+            mMask[mCount] = b;
+            if (++mCount == mMask.length) {
+                mCount = 0;
+                mState = 5;
+            }
+            return false;
+        case 5:
+            if (mCount < mData.length) {
+                if (mMask != null) {
+                    mData[mCount] = (byte) ((b ^ mMask[mCount % mMask.length]) & 0xFF);
                 } else {
-                    mData = new byte[(int) mLength];
-                    mState = mMask != null ? 4 : 5;
+                    mData[mCount] = b;
                 }
-                return false;
-            case 2:
-                mLength |= (b & 0xFF) << (7 - mCount) * 8;
-                if (mLength > MAX_PAYLOAD_LENGTH) {
-                    throw new IOException("Payload length too large");
-                }
-                if (++mCount == 8) {
-                    mCount = 0;
-                    mData = new byte[(int) mLength];
-                    mState = mMask != null ? 4 : 5;
-                }
-                return false;
-            case 3:
-                mLength |= (b & 0xFF) << (1 - mCount) * 8;
-                if (++mCount == 2) {
-                    mCount = 0;
-                    mData = new byte[(int) mLength];
-                    mState = mMask != null ? 4 : 5;
-                }
-                return false;
-            case 4:
-                mMask[mCount] = b;
-                if (++mCount == mMask.length) {
-                    mCount = 0;
-                    mState = 5;
-                }
-                return false;
-            case 5:
-                if (mCount < mData.length) {
-                    if (mMask != null) {
-                        mData[mCount] = (byte) ((b ^ mMask[mCount % mMask.length]) & 0xFF);
-                    } else {
-                        mData[mCount] = b;
-                    }
-                    ++mCount;
-                }
-                if (mCount == mData.length) {
-                    mState = 6;
-                    return true;
-                }
-                return false;
-            default:
-                throw new IOException("Read past end of frame");
+                ++mCount;
+            }
+            if (mCount == mData.length) {
+                mState = 6;
+                return true;
+            }
+            return false;
+        default:
+            throw new IOException("Read past end of frame");
         }
     }
 
@@ -254,12 +254,12 @@ public class WebSocket extends Personality {
     }
 
     private final void send(Opcode opcode, byte[] data) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(10 + Math.min(data.length, MAX_PAYLOAD_LENGTH));
-        int position = 0;
-        int remaining = data.length;
+        ByteArrayOutputStream baos      = new ByteArrayOutputStream(10 + Math.min(data.length, MAX_PAYLOAD_LENGTH));
+        int                   position  = 0;
+        int                   remaining = data.length;
         while (true) {
             boolean finalFragment = remaining <= MAX_PAYLOAD_LENGTH;
-            int length = finalFragment ? remaining : MAX_PAYLOAD_LENGTH;
+            int     length        = finalFragment ? remaining : MAX_PAYLOAD_LENGTH;
             baos.write((byte) (((finalFragment ? 0x80 : 0) | opcode.getOpcode()) & 0xFF));
             if (length < 126) {
                 baos.write(length & 0xFF);
@@ -275,8 +275,8 @@ public class WebSocket extends Personality {
             }
             if (length > 0) {
                 baos.write(data, position, length);
-                opcode = Opcode.CONTINUATION;
-                position += length;
+                opcode     = Opcode.CONTINUATION;
+                position  += length;
                 remaining -= length;
             }
             if (remaining <= 0) {
@@ -299,7 +299,7 @@ public class WebSocket extends Personality {
         private boolean mIsControl;
 
         private Opcode(byte opcode, boolean isControl) {
-            mOpcode = opcode;
+            mOpcode    = opcode;
             mIsControl = isControl;
         }
 

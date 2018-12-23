@@ -67,7 +67,7 @@ public class DynamicMenuItem extends JMenuItem {
     /**
      * Creates a new {@link DynamicMenuItem}.
      *
-     * @param text The text to use.
+     * @param text     The text to use.
      * @param mnemonic The mnemonic to use.
      */
     public DynamicMenuItem(String text, int mnemonic) {

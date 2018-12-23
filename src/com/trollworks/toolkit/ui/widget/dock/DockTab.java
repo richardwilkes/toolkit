@@ -128,9 +128,9 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
 
     @Override
     protected void paintComponent(Graphics g) {
-        Insets insets = getInsets();
-        Path2D.Double path = new Path2D.Double();
-        int bottom = getHeight();
+        Insets        insets = getInsets();
+        Path2D.Double path   = new Path2D.Double();
+        int           bottom = getHeight();
         path.moveTo(0, bottom);
         path.lineTo(0, 6);
         path.curveTo(0, 6, 0, 1, 6, 1);
@@ -138,8 +138,8 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
         path.lineTo(width - 7, 1);
         path.curveTo(width - 7, 1, width - 1, 1, width - 1, 7);
         path.lineTo(width - 1, bottom);
-        DockContainer dc = getDockContainer();
-        Color base = DockColors.BACKGROUND;
+        DockContainer dc   = getDockContainer();
+        Color         base = DockColors.BACKGROUND;
         if (dc != null) {
             if (dc.getCurrentDockable() == mDockable) {
                 base = dc.isActive() ? DockColors.ACTIVE_TAB_BACKGROUND : DockColors.CURRENT_TAB_BACKGROUND;

@@ -60,8 +60,8 @@ public class FlexGrid extends FlexContainer {
     }
 
     /**
-     * @param comp The {@link Component} to add as a child.
-     * @param row The row index within the grid to set the upper-left corner of the cell to.
+     * @param comp   The {@link Component} to add as a child.
+     * @param row    The row index within the grid to set the upper-left corner of the cell to.
      * @param column The column index within the grid to set the upper-left corner of the cell to.
      */
     public void add(Component comp, int row, int column) {
@@ -69,10 +69,11 @@ public class FlexGrid extends FlexContainer {
     }
 
     /**
-     * @param comp The {@link Component} to add as a child.
-     * @param row The row index within the grid to set the upper-left corner of the cell to.
-     * @param column The column index within the grid to set the upper-left corner of the cell to.
-     * @param rowSpan The number of rows the child should span.
+     * @param comp       The {@link Component} to add as a child.
+     * @param row        The row index within the grid to set the upper-left corner of the cell to.
+     * @param column     The column index within the grid to set the upper-left corner of the cell
+     *                   to.
+     * @param rowSpan    The number of rows the child should span.
      * @param columnSpan The number of columns the child should span.
      */
     public void add(Component comp, int row, int column, int rowSpan, int columnSpan) {
@@ -80,8 +81,8 @@ public class FlexGrid extends FlexContainer {
     }
 
     /**
-     * @param cell The {@link FlexCell} to add as a child.
-     * @param row The row index within the grid to set the upper-left corner of the cell to.
+     * @param cell   The {@link FlexCell} to add as a child.
+     * @param row    The row index within the grid to set the upper-left corner of the cell to.
      * @param column The column index within the grid to set the upper-left corner of the cell to.
      */
     public void add(FlexCell cell, int row, int column) {
@@ -89,10 +90,11 @@ public class FlexGrid extends FlexContainer {
     }
 
     /**
-     * @param cell The {@link FlexCell} to add as a child.
-     * @param row The row index within the grid to set the upper-left corner of the cell to.
-     * @param column The column index within the grid to set the upper-left corner of the cell to.
-     * @param rowSpan The number of rows the child should span.
+     * @param cell       The {@link FlexCell} to add as a child.
+     * @param row        The row index within the grid to set the upper-left corner of the cell to.
+     * @param column     The column index within the grid to set the upper-left corner of the cell
+     *                   to.
+     * @param rowSpan    The number of rows the child should span.
      * @param columnSpan The number of columns the child should span.
      */
     public void add(FlexCell cell, int row, int column, int rowSpan, int columnSpan) {
@@ -112,16 +114,16 @@ public class FlexGrid extends FlexContainer {
     private static int updateStarts(int base, int[] values, int[] starts) {
         int start = base;
         for (int i = 0; i < values.length; i++) {
-            starts[i] = start;
-            start += values[i];
+            starts[i]  = start;
+            start     += values[i];
         }
         return start - base;
     }
 
     private void grow(int extra, int[] values, int[] max, boolean fill) {
-        int count = 1 + (values.length - 1) / 2;
-        int[] tv = new int[count];
-        int[] tm = new int[count];
+        int   count = 1 + (values.length - 1) / 2;
+        int[] tv    = new int[count];
+        int[] tm    = new int[count];
         for (int i = 0; i < count; i++) {
             tv[i] = values[i * 2];
             tm[i] = max[i * 2];
@@ -141,17 +143,17 @@ public class FlexGrid extends FlexContainer {
                 }
                 for (int i = 0; i <= values.length && extra > 0; i += 2) {
                     values[i] += amt;
-                    max[i] += amt;
-                    extra -= amt;
+                    max[i]    += amt;
+                    extra     -= amt;
                 }
             }
         }
     }
 
     private void shrink(int extra, int[] values, int[] min) {
-        int count = 1 + (values.length - 1) / 2;
-        int[] tv = new int[count];
-        int[] tm = new int[count];
+        int   count = 1 + (values.length - 1) / 2;
+        int[] tv    = new int[count];
+        int[] tm    = new int[count];
         for (int i = 0; i < count; i++) {
             tv[i] = values[i * 2];
             tm[i] = min[i * 2];
@@ -173,8 +175,8 @@ public class FlexGrid extends FlexContainer {
                 for (int i = 0; i <= values.length && extra < 0; i += 2) {
                     if (values[i] > 0) {
                         values[i] += amt;
-                        min[i] += amt;
-                        extra += amt;
+                        min[i]    += amt;
+                        extra     += amt;
                         count++;
                     }
                 }
@@ -187,9 +189,9 @@ public class FlexGrid extends FlexContainer {
         createGrid(scale, LayoutSize.PREFERRED);
 
         // Size widths appropriately
-        int[] x = new int[mColumns];
-        int width = updateStarts(bounds.x, mColumnWidths, x);
-        int extra = bounds.width - width;
+        int[] x     = new int[mColumns];
+        int   width = updateStarts(bounds.x, mColumnWidths, x);
+        int   extra = bounds.width - width;
         if (extra != 0) {
             if (extra > 0) {
                 grow(extra, mColumnWidths, mMaxColumnWidths, getFillHorizontal());
@@ -200,8 +202,8 @@ public class FlexGrid extends FlexContainer {
         }
 
         // Size heights appropriately
-        int[] y = new int[mRows];
-        int height = updateStarts(bounds.y, mRowHeights, y);
+        int[] y      = new int[mRows];
+        int   height = updateStarts(bounds.y, mRowHeights, y);
         extra = bounds.height - height;
         if (extra != 0) {
             if (extra > 0) {
@@ -216,7 +218,7 @@ public class FlexGrid extends FlexContainer {
         ArrayList<Rectangle> cellBounds = new ArrayList<>(getChildCount());
         for (FlexCell cell : getChildren()) {
             FlexGridData data = mData.get(cell);
-            Rectangle rect = new Rectangle();
+            Rectangle    rect = new Rectangle();
             rect.x = x[data.mColumn];
             rect.y = y[data.mRow];
             int last = data.getLastColumn();
@@ -225,8 +227,8 @@ public class FlexGrid extends FlexContainer {
                 width += mColumnWidths[column];
             }
             rect.width = width;
-            last = data.getLastRow();
-            height = 0;
+            last       = data.getLastRow();
+            height     = 0;
             for (int row = data.mRow; row <= last; row++) {
                 height += mRowHeights[row];
             }
@@ -253,27 +255,27 @@ public class FlexGrid extends FlexContainer {
     }
 
     private void flush() {
-        mGrid = null;
-        mColumnWidths = null;
+        mGrid            = null;
+        mColumnWidths    = null;
         mMinColumnWidths = null;
         mMaxColumnWidths = null;
-        mRowHeights = null;
-        mMinRowHeights = null;
-        mMaxRowHeights = null;
-        mRowSpanMap = null;
-        mColumnSpanMap = null;
+        mRowHeights      = null;
+        mMinRowHeights   = null;
+        mMaxRowHeights   = null;
+        mRowSpanMap      = null;
+        mColumnSpanMap   = null;
     }
 
     private void createGrid(Scale scale, LayoutSize type) {
-        mGrid = new FlexGridData[mRows][mColumns];
-        mColumnWidths = new int[mColumns];
+        mGrid            = new FlexGridData[mRows][mColumns];
+        mColumnWidths    = new int[mColumns];
         mMinColumnWidths = new int[mColumns];
         mMaxColumnWidths = new int[mColumns];
-        mRowHeights = new int[mRows];
-        mMinRowHeights = new int[mRows];
-        mMaxRowHeights = new int[mRows];
-        mRowSpanMap = new TreeMap<>();
-        mColumnSpanMap = new TreeMap<>();
+        mRowHeights      = new int[mRows];
+        mMinRowHeights   = new int[mRows];
+        mMaxRowHeights   = new int[mRows];
+        mRowSpanMap      = new TreeMap<>();
+        mColumnSpanMap   = new TreeMap<>();
 
         for (int i = 0; i < mColumns; i++) {
             mMaxColumnWidths[i] = LayoutSize.MAXIMUM_SIZE;
@@ -284,7 +286,7 @@ public class FlexGrid extends FlexContainer {
 
         // Fill in actual cells
         for (Map.Entry<FlexCell, FlexGridData> entry : mData.entrySet()) {
-            FlexCell cell = entry.getKey();
+            FlexCell     cell = entry.getKey();
             FlexGridData data = entry.getValue();
             for (int row = 0; row < data.mRowSpan; row++) {
                 for (int column = 0; column < data.mColumnSpan; column++) {
@@ -296,7 +298,7 @@ public class FlexGrid extends FlexContainer {
                     mGrid[rp][cp] = data;
                 }
             }
-            data.mSize = cell.getSize(scale, type);
+            data.mSize    = cell.getSize(scale, type);
             data.mMinSize = cell.getSize(scale, LayoutSize.MINIMUM);
             data.mMaxSize = cell.getSize(scale, LayoutSize.MAXIMUM);
             updateRowColumnSizes(data);
@@ -306,7 +308,7 @@ public class FlexGrid extends FlexContainer {
 
         // Fill in gaps
         int scaledHorizontalGap = scale.scale(getHorizontalGap());
-        int scaledVerticalGap = scale.scale(getVerticalGap());
+        int scaledVerticalGap   = scale.scale(getVerticalGap());
         for (int row = 0; row < mRows; row++) {
             for (int column = 0; column < mColumns; column++) {
                 if (mGrid[row][column] == null) {
@@ -323,7 +325,7 @@ public class FlexGrid extends FlexContainer {
     private void processRowSpanMap() {
         for (ArrayList<FlexGridData> set : mRowSpanMap.values()) {
             for (FlexGridData data : set) {
-                int last = data.getLastRow();
+                int last   = data.getLastRow();
                 int height = 0;
                 for (int row = data.mRow; row <= last; row++) {
                     height += mRowHeights[row];
@@ -338,13 +340,13 @@ public class FlexGrid extends FlexContainer {
                         }
                         count = 0;
                         for (int row = data.mRow; row <= last && height > 0; row += 2) {
-                            int rHeight = mRowHeights[row];
+                            int rHeight   = mRowHeights[row];
                             int maxHeight = mMaxRowHeights[row];
                             if (rHeight < maxHeight) {
                                 maxHeight -= rHeight;
                                 int amt = extra <= maxHeight ? extra : maxHeight;
                                 mRowHeights[row] += amt;
-                                height -= amt;
+                                height           -= amt;
                                 if (amt != maxHeight) {
                                     count++;
                                 }
@@ -360,9 +362,9 @@ public class FlexGrid extends FlexContainer {
                             extra = 1;
                         }
                         for (int row = data.mRow; row <= last && height > 0; row += 2) {
-                            mRowHeights[row] += extra;
+                            mRowHeights[row]    += extra;
                             mMaxRowHeights[row] += extra;
-                            height -= extra;
+                            height              -= extra;
                         }
                     }
                 }
@@ -373,7 +375,7 @@ public class FlexGrid extends FlexContainer {
     private void processColumnSpanMap() {
         for (ArrayList<FlexGridData> set : mColumnSpanMap.values()) {
             for (FlexGridData data : set) {
-                int last = data.getLastColumn();
+                int last  = data.getLastColumn();
                 int width = 0;
                 for (int column = data.mColumn; column <= last; column++) {
                     width += mColumnWidths[column];
@@ -388,13 +390,13 @@ public class FlexGrid extends FlexContainer {
                         }
                         count = 0;
                         for (int column = data.mColumn; column <= last && width > 0; column += 2) {
-                            int cWidth = mColumnWidths[column];
+                            int cWidth   = mColumnWidths[column];
                             int maxWidth = mMaxColumnWidths[column];
                             if (cWidth < maxWidth) {
                                 maxWidth -= cWidth;
                                 int amt = extra <= maxWidth ? extra : maxWidth;
                                 mColumnWidths[column] += amt;
-                                width -= amt;
+                                width                 -= amt;
                                 if (amt != maxWidth) {
                                     count++;
                                 }
@@ -410,9 +412,9 @@ public class FlexGrid extends FlexContainer {
                             extra = 1;
                         }
                         for (int column = data.mColumn; column <= last && width > 0; column += 2) {
-                            mColumnWidths[column] += extra;
+                            mColumnWidths[column]    += extra;
                             mMaxColumnWidths[column] += extra;
-                            width -= extra;
+                            width                    -= extra;
                         }
                     }
                 }
@@ -422,7 +424,7 @@ public class FlexGrid extends FlexContainer {
 
     private static void addToSpanMap(int span, TreeMap<Integer, ArrayList<FlexGridData>> map, FlexGridData data) {
         if (span > 1) {
-            Integer key = Integer.valueOf(span);
+            Integer                 key = Integer.valueOf(span);
             ArrayList<FlexGridData> set = map.get(key);
             if (set == null) {
                 set = new ArrayList<>();

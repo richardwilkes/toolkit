@@ -54,11 +54,11 @@ public class TextCell implements Cell {
      * Create a new text cell.
      *
      * @param hAlignment The horizontal text alignment to use.
-     * @param wrapped Pass in <code>true</code> to enable wrapping.
+     * @param wrapped    Pass in <code>true</code> to enable wrapping.
      */
     public TextCell(int hAlignment, boolean wrapped) {
         mHAlignment = hAlignment;
-        mWrapped = wrapped;
+        mWrapped    = wrapped;
     }
 
     @SuppressWarnings("unchecked")
@@ -74,9 +74,9 @@ public class TextCell implements Cell {
 
     /**
      * @param selected Whether or not the selected version of the color is needed.
-     * @param active Whether or not the active version of the color is needed.
-     * @param row The row.
-     * @param column The column.
+     * @param active   Whether or not the active version of the color is needed.
+     * @param row      The row.
+     * @param column   The column.
      * @return The foreground color.
      */
     @SuppressWarnings("static-method")
@@ -86,10 +86,10 @@ public class TextCell implements Cell {
 
     @Override
     public int getPreferredWidth(Outline outline, Row row, Column column) {
-        Scale scale = Scale.get(outline);
-        int scaledHMargin = scale.scale(H_MARGIN);
-        int width = TextDrawing.getPreferredSize(scale.scale(getFont(row, column)), getPresentationText(outline, row, column)).width;
-        RetinaIcon icon = getIcon(row, column);
+        Scale      scale         = Scale.get(outline);
+        int        scaledHMargin = scale.scale(H_MARGIN);
+        int        width         = TextDrawing.getPreferredSize(scale.scale(getFont(row, column)), getPresentationText(outline, row, column)).width;
+        RetinaIcon icon          = getIcon(row, column);
         if (icon != null) {
             width += scale.scale(icon.getIconWidth()) + scaledHMargin;
         }
@@ -98,10 +98,10 @@ public class TextCell implements Cell {
 
     @Override
     public int getPreferredHeight(Outline outline, Row row, Column column) {
-        Scale scale = Scale.get(outline);
-        Font font = scale.scale(getFont(row, column));
-        int minHeight = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
-        int height = TextDrawing.getPreferredSize(font, getPresentationText(outline, row, column)).height;
+        Scale scale     = Scale.get(outline);
+        Font  font      = scale.scale(getFont(row, column));
+        int   minHeight = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
+        int   height    = TextDrawing.getPreferredSize(font, getPresentationText(outline, row, column)).height;
         if (row == null) {
             height = adjustHeight(scale, column.getIcon(), height);
         } else {
@@ -128,19 +128,19 @@ public class TextCell implements Cell {
 
     @Override
     public void drawCell(Outline outline, Graphics gc, Rectangle bounds, Row row, Column column, boolean selected, boolean active) {
-        Scale scale = Scale.get(outline);
-        Font font = scale.scale(getFont(row, column));
-        int ascent = gc.getFontMetrics(font).getAscent();
-        StringTokenizer tokenizer = new StringTokenizer(getPresentationText(outline, row, column), "\n", true); //$NON-NLS-1$
-        int totalHeight = getPreferredHeight(outline, row, column);
-        int lineHeight = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
-        int lineCount = 0;
-        RetinaIcon icon = getIcon(row, column);
-        int scaledHMargin = scale.scale(H_MARGIN);
-        int left = icon == null ? 0 : scale.scale(icon.getIconWidth()) + scaledHMargin;
-        int cellWidth = bounds.width - (scaledHMargin + left + scaledHMargin);
-        int vAlignment = getVAlignment();
-        int hAlignment = getHAlignment();
+        Scale           scale         = Scale.get(outline);
+        Font            font          = scale.scale(getFont(row, column));
+        int             ascent        = gc.getFontMetrics(font).getAscent();
+        StringTokenizer tokenizer     = new StringTokenizer(getPresentationText(outline, row, column), "\n", true); //$NON-NLS-1$
+        int             totalHeight   = getPreferredHeight(outline, row, column);
+        int             lineHeight    = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
+        int             lineCount     = 0;
+        RetinaIcon      icon          = getIcon(row, column);
+        int             scaledHMargin = scale.scale(H_MARGIN);
+        int             left          = icon == null ? 0 : scale.scale(icon.getIconWidth()) + scaledHMargin;
+        int             cellWidth     = bounds.width - (scaledHMargin + left + scaledHMargin);
+        int             vAlignment    = getVAlignment();
+        int             hAlignment    = getHAlignment();
 
         left += bounds.x + scaledHMargin;
 
@@ -163,8 +163,8 @@ public class TextCell implements Cell {
                 lineCount++;
             } else {
                 String text = TextDrawing.truncateIfNecessary(font, token, cellWidth, getTruncationPolicy());
-                int x = left;
-                int y = bounds.y + ascent + lineHeight * lineCount;
+                int    x    = left;
+                int    y    = bounds.y + ascent + lineHeight * lineCount;
                 if (hAlignment != SwingConstants.LEFT) {
                     int hDelta = cellWidth - TextDrawing.getWidth(font, text);
                     if (hAlignment == SwingConstants.CENTER) {
@@ -187,8 +187,8 @@ public class TextCell implements Cell {
 
     /**
      * @param outline The outline being used.
-     * @param row The row.
-     * @param column The column.
+     * @param row     The row.
+     * @param column  The column.
      * @return The data of this cell as a string that is prepared for display.
      */
     protected String getPresentationText(Outline outline, Row row, Column column) {
@@ -200,8 +200,8 @@ public class TextCell implements Cell {
         if (width == -1) {
             return text;
         }
-        Scale scale = Scale.get(outline);
-        int scaledHMargin = scale.scale(H_MARGIN);
+        Scale scale         = Scale.get(outline);
+        int   scaledHMargin = scale.scale(H_MARGIN);
         return TextDrawing.wrapToPixelWidth(scale.scale(getFont(row, column)), text, width - (scaledHMargin + scale.scale(row.getOwner().getIndentWidth(row, column)) + scaledHMargin));
     }
 
@@ -217,7 +217,7 @@ public class TextCell implements Cell {
     }
 
     /**
-     * @param row The row.
+     * @param row    The row.
      * @param column The column.
      * @param nullOK <code>true</code> if <code>null</code> may be returned.
      * @return The data of this cell as a string.
@@ -232,7 +232,7 @@ public class TextCell implements Cell {
     }
 
     /**
-     * @param row The row.
+     * @param row    The row.
      * @param column The column.
      * @return The font.
      */

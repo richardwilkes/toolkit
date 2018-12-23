@@ -22,7 +22,7 @@ public interface TagObjectCreator {
      * Called to create an object for an XML tag.
      *
      * @param context The {@link XmlParserContext} for this object.
-     * @param tag The tag to return an object for.
+     * @param tag     The tag to return an object for.
      * @return The newly created object, or <code>null</code> if a new instance of the field's data
      *         type should be created (i.e. when there is no need to use a sub-class and the default
      *         no-args constructor can be used).

@@ -77,7 +77,7 @@ public final class Debug {
      * formatted such that Eclipse's console will make each node into a hyperlink.
      *
      * @param throwable The {@link Throwable} to process.
-     * @param buffer The buffer to store the result in.
+     * @param buffer    The buffer to store the result in.
      * @return The {@link StringBuilder} that was passed in.
      */
     public static final StringBuilder stackTrace(Throwable throwable, StringBuilder buffer) {
@@ -89,8 +89,8 @@ public final class Debug {
      * formatted such that Eclipse's console will make each node into a hyperlink.
      *
      * @param throwable The {@link Throwable} to process.
-     * @param startAt The point in the stack to start processing.
-     * @param buffer The buffer to store the result in.
+     * @param startAt   The point in the stack to start processing.
+     * @param buffer    The buffer to store the result in.
      * @return The {@link StringBuilder} that was passed in.
      */
     public static final StringBuilder stackTrace(Throwable throwable, int startAt, StringBuilder buffer) {

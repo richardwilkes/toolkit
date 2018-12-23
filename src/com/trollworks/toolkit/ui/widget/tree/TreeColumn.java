@@ -57,9 +57,9 @@ public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
     public abstract int calculatePreferredWidth(TreeRow row);
 
     /**
-     * @param row The {@link TreeRow} to be displayed.
+     * @param row   The {@link TreeRow} to be displayed.
      * @param width The adjusted width of the column. This may be less than {@link #getWidth()} due
-     *            to display of disclosure controls.
+     *              to display of disclosure controls.
      * @return The preferred height of this {@link TreeColumn}.
      */
     public abstract int calculatePreferredHeight(TreeRow row, int width);
@@ -69,8 +69,8 @@ public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
      * @return The preferred height of this {@link TreeColumn}'s header.
      */
     public Dimension calculatePreferredHeaderSize(TreePanel panel) {
-        Font font = getHeaderFont();
-        int width = getWidth();
+        Font font  = getHeaderFont();
+        int  width = getWidth();
         if (panel.isUserSortable()) {
             width -= SORTER_WIDTH;
         }
@@ -106,21 +106,21 @@ public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
     /**
      * Draws the header for this {@link TreeColumn}.
      *
-     * @param gc The {@link Graphics2D} context to use.
-     * @param panel The owning {@link TreePanel}.
+     * @param gc     The {@link Graphics2D} context to use.
+     * @param panel  The owning {@link TreePanel}.
      * @param bounds The bounds the {@link TreeColumn} header.
      * @param active Whether or not the active state should be displayed.
      */
     public void drawHeader(Graphics2D gc, TreePanel panel, Rectangle bounds, boolean active) {
-        Font savedFont = gc.getFont();
+        Font  savedFont  = gc.getFont();
         Color savedColor = gc.getColor();
         gc.setColor(UIManager.getColor("Panel.background")); //$NON-NLS-1$
         gc.fill(bounds);
         gc.setColor(UIManager.getColor("Panel.foreground")); //$NON-NLS-1$
         Font font = getHeaderFont();
         gc.setFont(font);
-        int sortSequence = -1;
-        TreeSorter treeSorter = panel.getTreeSorter();
+        int        sortSequence = -1;
+        TreeSorter treeSorter   = panel.getTreeSorter();
         if (panel.isUserSortable()) {
             sortSequence = treeSorter.getSortSequence(this);
         }
@@ -142,65 +142,65 @@ public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
                 int xc = xl + 1;
                 int xr = xl + 2;
                 switch (sortSequence + 1) {
-                    case 1:
-                        gc.drawLine(xc, yt, xc, yb);
-                        break;
-                    case 2:
-                        gc.drawLine(xl, yt, xr, yt);
-                        gc.drawLine(xr, yt, xr, yc);
-                        gc.drawLine(xl, yc, xr, yc);
-                        gc.drawLine(xl, yc, xl, yb);
-                        gc.drawLine(xl, yb, xr, yb);
-                        break;
-                    case 3:
-                        gc.drawLine(xl, yt, xr, yt);
-                        gc.drawLine(xr, yt, xr, yb);
-                        gc.drawLine(xc, yc, xr, yc);
-                        gc.drawLine(xl, yb, xr, yb);
-                        break;
-                    case 4:
-                        gc.drawLine(xl, yt, xl, yc);
-                        gc.drawLine(xl, yc, xr, yc);
-                        gc.drawLine(xr, yt, xr, yb);
-                        break;
-                    case 5:
-                        gc.drawLine(xl, yt, xr, yt);
-                        gc.drawLine(xl, yt, xl, yc);
-                        gc.drawLine(xl, yc, xr, yc);
-                        gc.drawLine(xr, yc, xr, yb);
-                        gc.drawLine(xl, yb, xr, yb);
-                        break;
-                    case 6:
-                        gc.drawLine(xl, yt, xr, yt);
-                        gc.drawLine(xl, yt, xl, yb);
-                        gc.drawLine(xl, yc, xr, yc);
-                        gc.drawLine(xr, yc, xr, yb);
-                        gc.drawLine(xl, yb, xr, yb);
-                        break;
-                    case 7:
-                        gc.drawLine(xl, yt, xr, yt);
-                        gc.drawLine(xr, yt, xr, yb);
-                        break;
-                    case 8:
-                        gc.drawLine(xl, yt, xr, yt);
-                        gc.drawLine(xl, yt, xl, yb);
-                        gc.drawLine(xl, yc, xr, yc);
-                        gc.drawLine(xl, yb, xr, yb);
-                        gc.drawLine(xr, yt, xr, yb);
-                        break;
-                    case 9:
-                        gc.drawLine(xl, yt, xr, yt);
-                        gc.drawLine(xl, yt, xl, yc);
-                        gc.drawLine(xl, yc, xr, yc);
-                        gc.drawLine(xr, yt, xr, yb);
-                        gc.drawLine(xl, yb, xr, yb);
-                        break;
-                    default:
-                        gc.drawLine(xl, yt, xr, yt);
-                        gc.drawLine(xr, yt, xr, yc);
-                        gc.drawLine(xc, yc, xr, yc);
-                        gc.drawLine(xc, yb, xc, yb);
-                        break;
+                case 1:
+                    gc.drawLine(xc, yt, xc, yb);
+                    break;
+                case 2:
+                    gc.drawLine(xl, yt, xr, yt);
+                    gc.drawLine(xr, yt, xr, yc);
+                    gc.drawLine(xl, yc, xr, yc);
+                    gc.drawLine(xl, yc, xl, yb);
+                    gc.drawLine(xl, yb, xr, yb);
+                    break;
+                case 3:
+                    gc.drawLine(xl, yt, xr, yt);
+                    gc.drawLine(xr, yt, xr, yb);
+                    gc.drawLine(xc, yc, xr, yc);
+                    gc.drawLine(xl, yb, xr, yb);
+                    break;
+                case 4:
+                    gc.drawLine(xl, yt, xl, yc);
+                    gc.drawLine(xl, yc, xr, yc);
+                    gc.drawLine(xr, yt, xr, yb);
+                    break;
+                case 5:
+                    gc.drawLine(xl, yt, xr, yt);
+                    gc.drawLine(xl, yt, xl, yc);
+                    gc.drawLine(xl, yc, xr, yc);
+                    gc.drawLine(xr, yc, xr, yb);
+                    gc.drawLine(xl, yb, xr, yb);
+                    break;
+                case 6:
+                    gc.drawLine(xl, yt, xr, yt);
+                    gc.drawLine(xl, yt, xl, yb);
+                    gc.drawLine(xl, yc, xr, yc);
+                    gc.drawLine(xr, yc, xr, yb);
+                    gc.drawLine(xl, yb, xr, yb);
+                    break;
+                case 7:
+                    gc.drawLine(xl, yt, xr, yt);
+                    gc.drawLine(xr, yt, xr, yb);
+                    break;
+                case 8:
+                    gc.drawLine(xl, yt, xr, yt);
+                    gc.drawLine(xl, yt, xl, yb);
+                    gc.drawLine(xl, yc, xr, yc);
+                    gc.drawLine(xl, yb, xr, yb);
+                    gc.drawLine(xr, yt, xr, yb);
+                    break;
+                case 9:
+                    gc.drawLine(xl, yt, xr, yt);
+                    gc.drawLine(xl, yt, xl, yc);
+                    gc.drawLine(xl, yc, xr, yc);
+                    gc.drawLine(xr, yt, xr, yb);
+                    gc.drawLine(xl, yb, xr, yb);
+                    break;
+                default:
+                    gc.drawLine(xl, yt, xr, yt);
+                    gc.drawLine(xr, yt, xr, yc);
+                    gc.drawLine(xc, yc, xr, yc);
+                    gc.drawLine(xc, yb, xc, yb);
+                    break;
                 }
             }
             boolean ascending = treeSorter.isSortAscending(this);
@@ -225,16 +225,16 @@ public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
      * Draws the portion of the specified {@link TreeRow} this {@link TreeColumn} is responsible
      * for.
      *
-     * @param gc The {@link Graphics2D} context to use.
-     * @param panel The owning {@link TreePanel}.
-     * @param row The {@link TreeRow} to draw.
+     * @param gc       The {@link Graphics2D} context to use.
+     * @param panel    The owning {@link TreePanel}.
+     * @param row      The {@link TreeRow} to draw.
      * @param position The {@link TreeRow}'s position in the linear view.
-     * @param top The y-coordinate for the top of the {@link TreeRow}.
-     * @param left The x-coordinate for the left of the {@link TreeColumn}.
-     * @param width The adjusted width of the column. This may be less than {@link #getWidth()} due
-     *            to display of disclosure controls.
+     * @param top      The y-coordinate for the top of the {@link TreeRow}.
+     * @param left     The x-coordinate for the left of the {@link TreeColumn}.
+     * @param width    The adjusted width of the column. This may be less than {@link #getWidth()}
+     *                 due to display of disclosure controls.
      * @param selected Whether or not the {@link TreeRow} is currently selected.
-     * @param active Whether or not the active state should be displayed.
+     * @param active   Whether or not the active state should be displayed.
      */
     public abstract void draw(Graphics2D gc, TreePanel panel, TreeRow row, int position, int top, int left, int width, boolean selected, boolean active);
 

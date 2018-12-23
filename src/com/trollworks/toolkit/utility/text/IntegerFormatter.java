@@ -34,8 +34,8 @@ public class IntegerFormatter extends JFormattedTextField.AbstractFormatter {
     /**
      * Creates a new {@link IntegerFormatter}.
      *
-     * @param minValue The minimum value allowed.
-     * @param maxValue The maximum value allowed.
+     * @param minValue  The minimum value allowed.
+     * @param maxValue  The maximum value allowed.
      * @param forceSign Whether or not a plus sign should be forced for positive numbers.
      */
     public IntegerFormatter(int minValue, int maxValue, boolean forceSign) {
@@ -45,16 +45,16 @@ public class IntegerFormatter extends JFormattedTextField.AbstractFormatter {
     /**
      * Creates a new {@link IntegerFormatter}.
      *
-     * @param minValue The minimum value allowed.
-     * @param maxValue The maximum value allowed.
-     * @param forceSign Whether or not a plus sign should be forced for positive numbers.
+     * @param minValue    The minimum value allowed.
+     * @param maxValue    The maximum value allowed.
+     * @param forceSign   Whether or not a plus sign should be forced for positive numbers.
      * @param blankOnZero When <code>true</code>, a value of zero resolves to the empty string when
-     *            calling {@link #valueToString(Object)}.
+     *                    calling {@link #valueToString(Object)}.
      */
     public IntegerFormatter(int minValue, int maxValue, boolean forceSign, boolean blankOnZero) {
-        mMinValue = minValue;
-        mMaxValue = maxValue;
-        mForceSign = forceSign;
+        mMinValue    = minValue;
+        mMaxValue    = maxValue;
+        mForceSign   = forceSign;
         mBlankOnZero = blankOnZero;
     }
 

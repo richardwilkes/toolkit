@@ -37,8 +37,8 @@ public class SizeAwareBasicOptionPaneUI extends BasicOptionPaneUI {
     @Override
     public Dimension getMinimumSize(JComponent c) {
         if ((JOptionPane) c == optionPane) {
-            Dimension ourMin = getMinimumOptionPaneSize();
-            LayoutManager lm = c.getLayout();
+            Dimension     ourMin = getMinimumOptionPaneSize();
+            LayoutManager lm     = c.getLayout();
             if (lm != null) {
                 Dimension lmSize = lm.minimumLayoutSize(c);
                 if (ourMin != null) {

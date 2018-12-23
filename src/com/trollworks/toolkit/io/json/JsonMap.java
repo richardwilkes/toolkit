@@ -111,7 +111,7 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to retrieve.
+     * @param key       The key to retrieve.
      * @param allowNull <code>false</code> to return an empty string if no key matches.
      * @return The value associated with the key.
      */
@@ -120,9 +120,9 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to retrieve.
+     * @param key       The key to retrieve.
      * @param allowNull <code>false</code> to return an empty array if no key matches or the value
-     *            cannot be converted to a {@link JsonArray}.
+     *                  cannot be converted to a {@link JsonArray}.
      * @return The value associated with the key.
      */
     public JsonArray getArray(String key, boolean allowNull) {
@@ -130,9 +130,9 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to retrieve.
+     * @param key       The key to retrieve.
      * @param allowNull <code>false</code> to return an empty map if no key matches or the value
-     *            cannot be converted to a {@link JsonMap}.
+     *                  cannot be converted to a {@link JsonMap}.
      * @return The value associated with the key.
      */
     public JsonMap getMap(String key, boolean allowNull) {
@@ -140,9 +140,9 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to retrieve.
+     * @param key       The key to retrieve.
      * @param allowNull <code>false</code> to return an empty point if no such key exists or the
-     *            value cannot be converted to a {@link Point}.
+     *                  value cannot be converted to a {@link Point}.
      * @return The value associated with the key.
      */
     public Point getPoint(String key, boolean allowNull) {
@@ -150,9 +150,9 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to retrieve.
+     * @param key       The key to retrieve.
      * @param allowNull <code>false</code> to return an empty rectangle if no such key exists or the
-     *            value cannot be converted to a {@link Rectangle}.
+     *                  value cannot be converted to a {@link Rectangle}.
      * @return The value associated with the key.
      */
     public Rectangle getRectangle(String key, boolean allowNull) {
@@ -160,7 +160,7 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to store the value with.
+     * @param key   The key to store the value with.
      * @param value The value to store.
      */
     public void put(String key, Object value) {
@@ -170,7 +170,7 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to store the value with.
+     * @param key   The key to store the value with.
      * @param value The value to store.
      */
     public void put(String key, boolean value) {
@@ -178,7 +178,7 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to store the value with.
+     * @param key   The key to store the value with.
      * @param value The value to store.
      */
     public void put(String key, byte value) {
@@ -186,7 +186,7 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to store the value with.
+     * @param key   The key to store the value with.
      * @param value The value to store.
      */
     public void put(String key, char value) {
@@ -194,7 +194,7 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to store the value with.
+     * @param key   The key to store the value with.
      * @param value The value to store.
      */
     public void put(String key, short value) {
@@ -202,7 +202,7 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to store the value with.
+     * @param key   The key to store the value with.
      * @param value The value to store.
      */
     public void put(String key, int value) {
@@ -210,7 +210,7 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to store the value with.
+     * @param key   The key to store the value with.
      * @param value The value to store.
      */
     public void put(String key, long value) {
@@ -218,7 +218,7 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to store the value with.
+     * @param key   The key to store the value with.
      * @param value The value to store.
      */
     public void put(String key, float value) {
@@ -226,7 +226,7 @@ public class JsonMap extends JsonCollection {
     }
 
     /**
-     * @param key The key to store the value with.
+     * @param key   The key to store the value with.
      * @param value The value to store.
      */
     public void put(String key, double value) {

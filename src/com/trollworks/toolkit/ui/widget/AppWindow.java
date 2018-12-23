@@ -68,7 +68,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
     /**
      * Creates a new {@link AppWindow}.
      *
-     * @param title The window title. May be <code>null</code>.
+     * @param title   The window title. May be <code>null</code>.
      * @param iconset The window {@link StdImageSet}.
      */
     public AppWindow(String title, StdImageSet iconset) {
@@ -78,9 +78,9 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
     /**
      * Creates a new {@link AppWindow}.
      *
-     * @param title The title of the window.
-     * @param iconset The window {@link StdImageSet}.
-     * @param gc The graphics configuration to use.
+     * @param title       The title of the window.
+     * @param iconset     The window {@link StdImageSet}.
+     * @param gc          The graphics configuration to use.
      * @param undecorated Whether to create an undecorated window, without menus.
      */
     public AppWindow(String title, StdImageSet iconset, GraphicsConfiguration gc, boolean undecorated) {
@@ -119,7 +119,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
      * Called to create the toolbar contents for this window.
      *
      * @param toolbar The {@link JToolBar} to add items to.
-     * @param row The {@link FlexRow} layout to add items to.
+     * @param row     The {@link FlexRow} layout to add items to.
      */
     protected void createToolBarContents(JToolBar toolbar, FlexRow row) {
         // Does nothing by default.
@@ -200,7 +200,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 
     /**
      * @param windowClass The window class to return.
-     * @param <T> The window type.
+     * @param             <T> The window type.
      * @return The current visible windows, in order from top to bottom.
      */
     public static <T extends AppWindow> ArrayList<T> getActiveWindows(Class<T> windowClass) {
@@ -240,7 +240,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
         for (AppWindow window : AppWindow.getAllWindows()) {
             if (window instanceof FileProxy) {
                 FileProxy proxy = (FileProxy) window;
-                File wFile = proxy.getBackingFile();
+                File      wFile = proxy.getBackingFile();
                 if (wFile != null) {
                     if (PathUtils.getFullPath(wFile).equals(fullPath)) {
                         return proxy;
@@ -269,7 +269,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
     @Override
     public int compareTo(AppWindow other) {
         if (this != other) {
-            String title = getTitleForWindowMenu();
+            String title      = getTitleForWindowMenu();
             String otherTitle = other.getTitleForWindowMenu();
             if (title != null) {
                 if (otherTitle == null) {

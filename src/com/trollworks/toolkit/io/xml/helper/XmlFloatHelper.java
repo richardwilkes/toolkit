@@ -22,8 +22,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlFloatHelper implements XmlObjectHelper {
     public static final XmlFloatHelper SINGLETON = new XmlFloatHelper();
 
-    private XmlFloatHelper() {
-    }
+    private XmlFloatHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -34,8 +33,8 @@ public class XmlFloatHelper implements XmlObjectHelper {
     public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
         Float value = (Float) field.get(obj);
         if (value != null) {
-            float primitive = value.floatValue();
-            XmlDefaultFloat def = field.getAnnotation(XmlDefaultFloat.class);
+            float           primitive = value.floatValue();
+            XmlDefaultFloat def       = field.getAnnotation(XmlDefaultFloat.class);
             if (def != null) {
                 xml.addAttributeNot(name, primitive, def.value());
             } else {

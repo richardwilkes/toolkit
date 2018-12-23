@@ -22,13 +22,13 @@ public class CmdLineParser {
      * @return The command-line, separated into separate arguments.
      */
     public static ArrayList<String> parseIntoList(String line) {
-        ArrayList<String> args = new ArrayList<>();
-        StringBuilder buffer = new StringBuilder();
-        int size = line.length();
-        boolean inEscape = false;
-        boolean inDoubleQuote = false;
-        boolean inSingleQuote = false;
-        boolean canEscape = !Platform.isWindows();
+        ArrayList<String> args          = new ArrayList<>();
+        StringBuilder     buffer        = new StringBuilder();
+        int               size          = line.length();
+        boolean           inEscape      = false;
+        boolean           inDoubleQuote = false;
+        boolean           inSingleQuote = false;
+        boolean           canEscape     = !Platform.isWindows();
 
         for (int i = 0; i < size; i++) {
             char ch = line.charAt(i);

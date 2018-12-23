@@ -21,7 +21,7 @@ public class Geometry {
      * {@link Rectangle#intersection(Rectangle)} method, the resulting {@link Rectangle}'s width &
      * height will not be set to less than zero when there is no overlap.
      *
-     * @param first The first {@link Rectangle}.
+     * @param first  The first {@link Rectangle}.
      * @param second The second {@link Rectangle}.
      * @return The intersection of the two {@link Rectangle}s.
      */
@@ -44,12 +44,12 @@ public class Geometry {
      * {@link Rectangle#union(Rectangle)} method, an empty {@link Rectangle} will not cause the
      * {@link Rectangle}'s boundary to extend to the 0,0 point.
      *
-     * @param first The first {@link Rectangle}.
+     * @param first  The first {@link Rectangle}.
      * @param second The second {@link Rectangle}.
      * @return The resulting {@link Rectangle}.
      */
     public static Rectangle union(Rectangle first, Rectangle second) {
-        boolean firstEmpty = first.width < 1 || first.height < 1;
+        boolean firstEmpty  = first.width < 1 || first.height < 1;
         boolean secondEmpty = second.width < 1 || second.height < 1;
         if (firstEmpty && secondEmpty) {
             return new Rectangle();
@@ -122,9 +122,9 @@ public class Geometry {
      * @return The {@link Rectangle} that was passed in.
      */
     public static final Rectangle inset(int amount, Rectangle bounds) {
-        bounds.x += amount;
-        bounds.y += amount;
-        bounds.width -= amount * 2;
+        bounds.x      += amount;
+        bounds.y      += amount;
+        bounds.width  -= amount * 2;
         bounds.height -= amount * 2;
         if (bounds.width < 0) {
             bounds.width = 0;

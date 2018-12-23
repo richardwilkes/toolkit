@@ -81,8 +81,8 @@ public class DynamicMenuEnabler implements KeyEventDispatcher, MenuListener {
         JMenu menu = (JMenu) event.getSource();
         for (Component component : menu.getMenuComponents()) {
             if (component instanceof JMenuItem) {
-                JMenuItem item = (JMenuItem) component;
-                Action action = item.getAction();
+                JMenuItem item   = (JMenuItem) component;
+                Action    action = item.getAction();
                 if (action instanceof Command) {
                     ((Command) action).adjust();
                 }

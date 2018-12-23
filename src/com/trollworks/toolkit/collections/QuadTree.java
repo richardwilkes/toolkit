@@ -35,7 +35,7 @@ public class QuadTree<T extends Bounds> {
      * Creates a new, empty {@link QuadTree} with the specified threshold.
      *
      * @param threshold The number of objects that may be contained within a single node before a
-     *            split occurs.
+     *                  split occurs.
      */
     public QuadTree(int threshold) {
         mThreshold = threshold;
@@ -68,9 +68,9 @@ public class QuadTree<T extends Bounds> {
     /** Forces the {@link QuadTree} to reorganize itself to optimally fit its contents. */
     public final void reorganize() {
         // Determine the union of all contained bounds
-        int x = 0;
-        int y = 0;
-        int width = 0;
+        int x      = 0;
+        int y      = 0;
+        int width  = 0;
         int height = 0;
         for (T one : mAll) {
             int otherWidth = one.getWidth();
@@ -80,17 +80,17 @@ public class QuadTree<T extends Bounds> {
                     int otherX = one.getX();
                     int otherY = one.getY();
                     if (width <= 0 || height <= 0) {
-                        x = otherX;
-                        y = otherY;
-                        width = otherWidth;
+                        x      = otherX;
+                        y      = otherY;
+                        width  = otherWidth;
                         height = otherHeight;
                     } else {
                         int x1 = Math.min(x, otherX);
                         int y1 = Math.min(y, otherY);
-                        width = Math.max(x + width, otherX + otherWidth) - x1;
+                        width  = Math.max(x + width, otherX + otherWidth) - x1;
                         height = Math.max(y + height, otherY + otherHeight) - y1;
-                        x = x1;
-                        y = y1;
+                        x      = x1;
+                        y      = y1;
                     }
                 }
             }
@@ -113,9 +113,9 @@ public class QuadTree<T extends Bounds> {
 
     /** Removes all objects from the {@link QuadTree}. */
     public final void clear() {
-        mRoot = new Node<>(0, 0, 0, 0, mThreshold);
+        mRoot    = new Node<>(0, 0, 0, 0, mThreshold);
         mOutside = new HashSet<>();
-        mAll = new HashSet<>();
+        mAll     = new HashSet<>();
     }
 
     /**
@@ -137,8 +137,8 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param x The horizontal coordinate to check.
-     * @param y The vertical coordinate to check.
+     * @param x       The horizontal coordinate to check.
+     * @param y       The vertical coordinate to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return <code>true</code> if this {@link QuadTree} has at least one object that contains the
      *         specified coordinates and passes the {@link Matcher}'s test.
@@ -174,9 +174,9 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param x The horizontal coordinate to check.
-     * @param y The vertical coordinate to check.
-     * @param width The width of the space to check.
+     * @param x      The horizontal coordinate to check.
+     * @param y      The vertical coordinate to check.
+     * @param width  The width of the space to check.
      * @param height The height of the space to check.
      * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
      *         with the specified bounds.
@@ -194,7 +194,7 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param bounds The bounds to check.
+     * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
      *         with the specified bounds and passes the {@link Matcher}'s test.
@@ -204,7 +204,7 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param bounds The bounds to check.
+     * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
      *         with the specified bounds and passes the {@link Matcher}'s test.
@@ -214,10 +214,10 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param x The horizontal coordinate to check.
-     * @param y The vertical coordinate to check.
-     * @param width The width of the space to check.
-     * @param height The height of the space to check.
+     * @param x       The horizontal coordinate to check.
+     * @param y       The vertical coordinate to check.
+     * @param width   The width of the space to check.
+     * @param height  The height of the space to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
      *         with the specified bounds and passes the {@link Matcher}'s test.
@@ -253,9 +253,9 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param x The horizontal coordinate to check.
-     * @param y The vertical coordinate to check.
-     * @param width The width of the space to check.
+     * @param x      The horizontal coordinate to check.
+     * @param y      The vertical coordinate to check.
+     * @param width  The width of the space to check.
      * @param height The height of the space to check.
      * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
      *         contained by the specified bounds.
@@ -273,7 +273,7 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param bounds The bounds to check.
+     * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
      *         contained by the specified bounds and passes the {@link Matcher}'s test.
@@ -283,7 +283,7 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param bounds The bounds to check.
+     * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
      *         contained by the specified bounds and passes the {@link Matcher}'s test.
@@ -293,10 +293,10 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param x The horizontal coordinate to check.
-     * @param y The vertical coordinate to check.
-     * @param width The width of the space to check.
-     * @param height The height of the space to check.
+     * @param x       The horizontal coordinate to check.
+     * @param y       The vertical coordinate to check.
+     * @param width   The width of the space to check.
+     * @param height  The height of the space to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
      *         contained by the specified bounds and passes the {@link Matcher}'s test.
@@ -355,8 +355,8 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param x The horizontal coordinate to check.
-     * @param y The vertical coordinate to check.
+     * @param x       The horizontal coordinate to check.
+     * @param y       The vertical coordinate to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return All objects in this {@link QuadTree} that contain the specified coordinates and pass
      *         the {@link Matcher}'s test.
@@ -389,9 +389,9 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param x The horizontal coordinate to check.
-     * @param y The vertical coordinate to check.
-     * @param width The width of the space to check.
+     * @param x      The horizontal coordinate to check.
+     * @param y      The vertical coordinate to check.
+     * @param width  The width of the space to check.
      * @param height The height of the space to check.
      * @return All objects in this {@link QuadTree} that intersect with the specified bounds.
      */
@@ -407,7 +407,7 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param bounds The bounds to check.
+     * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return All objects in this {@link QuadTree} that intersect with the specified bounds and
      *         pass the {@link Matcher}'s test.
@@ -417,7 +417,7 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param bounds The bounds to check.
+     * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return All objects in this {@link QuadTree} that intersect with the specified bounds and
      *         pass the {@link Matcher}'s test.
@@ -427,10 +427,10 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param x The horizontal coordinate to check.
-     * @param y The vertical coordinate to check.
-     * @param width The width of the space to check.
-     * @param height The height of the space to check.
+     * @param x       The horizontal coordinate to check.
+     * @param y       The vertical coordinate to check.
+     * @param width   The width of the space to check.
+     * @param height  The height of the space to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return All objects in this {@link QuadTree} that intersect with the specified bounds and
      *         pass the {@link Matcher}'s test.
@@ -463,9 +463,9 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param x The horizontal coordinate to check.
-     * @param y The vertical coordinate to check.
-     * @param width The width of the space to check.
+     * @param x      The horizontal coordinate to check.
+     * @param y      The vertical coordinate to check.
+     * @param width  The width of the space to check.
      * @param height The height of the space to check.
      * @return All objects in this {@link QuadTree} that would be contained by the specified bounds.
      */
@@ -481,7 +481,7 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param bounds The bounds to check.
+     * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return All objects in this {@link QuadTree} that would be contained by the specified bounds
      *         and pass the {@link Matcher}'s test.
@@ -491,7 +491,7 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param bounds The bounds to check.
+     * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return All objects in this {@link QuadTree} that would be contained by the specified bounds
      *         and pass the {@link Matcher}'s test.
@@ -501,10 +501,10 @@ public class QuadTree<T extends Bounds> {
     }
 
     /**
-     * @param x The horizontal coordinate to check.
-     * @param y The vertical coordinate to check.
-     * @param width The width of the space to check.
-     * @param height The height of the space to check.
+     * @param x       The horizontal coordinate to check.
+     * @param y       The vertical coordinate to check.
+     * @param width   The width of the space to check.
+     * @param height  The height of the space to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
      * @return All objects in this {@link QuadTree} that would be contained by the specified bounds
      *         and pass the {@link Matcher}'s test.
@@ -523,9 +523,11 @@ public class QuadTree<T extends Bounds> {
     static class Node<T extends Bounds> implements Bounds {
         @Localize("Objects must have a width and height greater than zero.")
         @Localize(locale = "ru", value = "Объекты должны иметь ширину и высоту больше нуля.")
-        @Localize(locale = "de", value = "Objekte müssen eine Höhe und Breite größer als Null haben.")
+        @Localize(locale = "de",
+                  value = "Objekte müssen eine Höhe und Breite größer als Null haben.")
         @Localize(locale = "es", value = "El objeto debe tener anchura y altura mayor que cero.")
-        @Localize(locale = "pt-BR", value = "Objetos precisam ter a largura e altura maiores que zero.")
+        @Localize(locale = "pt-BR",
+                  value = "Objetos precisam ter a largura e altura maiores que zero.")
         private static String MUST_HAVE_SIZE_GREATER_THAN_ZERO;
         private int           mX;
         private int           mY;
@@ -543,18 +545,18 @@ public class QuadTree<T extends Bounds> {
         }
 
         Node(int x, int y, int width, int height, int maxCapacity) {
-            mX = x;
-            mY = y;
-            mWidth = width;
-            mHeight = height;
+            mX           = x;
+            mY           = y;
+            mWidth       = width;
+            mHeight      = height;
             mMaxCapacity = maxCapacity;
-            mContents = new HashSet<>();
+            mContents    = new HashSet<>();
         }
 
         final void zeroBounds() {
-            mX = 0;
-            mY = 0;
-            mWidth = 0;
+            mX      = 0;
+            mY      = 0;
+            mWidth  = 0;
             mHeight = 0;
         }
 

@@ -27,7 +27,7 @@ public class OpenLocalFileCommand extends Command {
      * Creates a new {@link OpenLocalFileCommand}.
      *
      * @param title The title to use.
-     * @param file The file to open.
+     * @param file  The file to open.
      */
     public OpenLocalFileCommand(String title, File file) {
         super(title, "OpenLocalFile[" + file.getName() + "]"); //$NON-NLS-1$ //$NON-NLS-2$

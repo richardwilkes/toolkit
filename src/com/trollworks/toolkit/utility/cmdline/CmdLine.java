@@ -113,7 +113,7 @@ public class CmdLine {
      */
     public void processArguments(String[] args) {
         List<String> msgs = new ArrayList<>();
-        mData = new ArrayList<>();
+        mData        = new ArrayList<>();
         mUsedOptions = new HashSet<>();
 
         for (int i = 0; i < args.length; i++) {
@@ -124,14 +124,14 @@ public class CmdLine {
             }
 
             if (hasOptionPrefix(one)) {
-                String part = one.substring(one.startsWith("--") ? 2 : 1); //$NON-NLS-1$
-                String name = part.toLowerCase();
-                int index = name.indexOf('=');
-                String arg;
+                String        part  = one.substring(one.startsWith("--") ? 2 : 1); //$NON-NLS-1$
+                String        name  = part.toLowerCase();
+                int           index = name.indexOf('=');
+                String        arg;
                 CmdLineOption option;
 
                 if (index != -1) {
-                    arg = part.substring(index + 1);
+                    arg  = part.substring(index + 1);
                     name = name.substring(0, index);
                 } else {
                     arg = null;
@@ -196,8 +196,8 @@ public class CmdLine {
 
     /** Shows the help, then calls {@link System#exit(int)}. */
     public void showHelpAndExit() {
-        List<String> names = new ArrayList<>(mOptions.keySet());
-        int cmdWidth = 0;
+        List<String> names    = new ArrayList<>(mOptions.keySet());
+        int          cmdWidth = 0;
 
         Collections.sort(names);
 
@@ -213,7 +213,7 @@ public class CmdLine {
 
         for (String name : names) {
             CmdLineOption option = mOptions.get(name);
-            int width = 5 + name.length();
+            int           width  = 5 + name.length();
 
             if (option.takesArgument()) {
                 width += 1 + option.getArgumentLabel().length();
@@ -224,12 +224,12 @@ public class CmdLine {
         }
 
         for (String name : names) {
-            CmdLineOption option = mOptions.get(name);
+            CmdLineOption option   = mOptions.get(name);
 
-            StringBuilder builder = new StringBuilder();
-            String[] allNames = option.getNames();
-            String prefix = Platform.isWindows() ? "/" : "-"; //$NON-NLS-1$ //$NON-NLS-2$
-            String description;
+            StringBuilder builder  = new StringBuilder();
+            String[]      allNames = option.getNames();
+            String        prefix   = Platform.isWindows() ? "/" : "-"; //$NON-NLS-1$ //$NON-NLS-2$
+            String        description;
 
             if (allNames[allNames.length - 1].equals(name)) {
                 description = option.getDescription();

@@ -49,11 +49,11 @@ public class BandedPanel extends ActionPanel implements Scrollable {
         Rectangle bounds = getBounds();
         bounds.x = 0;
         bounds.y = 0;
-        int step = getStep();
+        int step  = getStep();
         int count = getComponentCount();
         for (int i = 0; i < count; i += step) {
             Rectangle compBounds = getComponent(i).getBounds();
-            bounds.y = compBounds.y;
+            bounds.y      = compBounds.y;
             bounds.height = compBounds.height;
             int logical = i / step;
             gc.setColor(Colors.getBanding(logical % 2 == 0));
@@ -85,7 +85,7 @@ public class BandedPanel extends ActionPanel implements Scrollable {
     @Override
     public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
         int height = 10;
-        int count = getComponentCount();
+        int count  = getComponentCount();
         if (count > 0) {
             count = Math.min(getStep(), count);
             for (int i = 0; i < count; i++) {

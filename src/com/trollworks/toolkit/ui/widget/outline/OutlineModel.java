@@ -49,10 +49,10 @@ public class OutlineModel implements SelectionOwner, StateEditable {
 
     /** Creates a new model. */
     public OutlineModel() {
-        mListeners = new ArrayList<>();
-        mColumns = new ArrayList<>();
-        mRows = new ArrayList<>();
-        mSelection = new Selection(this);
+        mListeners          = new ArrayList<>();
+        mColumns            = new ArrayList<>();
+        mRows               = new ArrayList<>();
+        mSelection          = new Selection(this);
         mNotifyOfSelections = true;
     }
 
@@ -123,7 +123,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
     }
 
     /**
-     * @param row The {@link Row} that was modified.
+     * @param row    The {@link Row} that was modified.
      * @param column The {@link Column} that was modified.
      */
     public void notifyOfRowModification(Row row, Column column) {
@@ -246,7 +246,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
     /**
      * Adds the specified row.
      *
-     * @param row The row to add.
+     * @param row             The row to add.
      * @param includeChildren Whether children of open rows are added as well.
      */
     public void addRow(Row row, boolean includeChildren) {
@@ -257,7 +257,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
      * Adds the specified row.
      *
      * @param index The index to add the row at.
-     * @param row The row to add.
+     * @param row   The row to add.
      */
     public void addRow(int index, Row row) {
         addRow(index, row, false);
@@ -266,8 +266,8 @@ public class OutlineModel implements SelectionOwner, StateEditable {
     /**
      * Adds the specified row.
      *
-     * @param index The index to add the row at.
-     * @param row The row to add.
+     * @param index           The index to add the row at.
+     * @param row             The row to add.
      * @param includeChildren Whether children of open rows are added as well.
      */
     public void addRow(int index, Row row, boolean includeChildren) {
@@ -299,8 +299,8 @@ public class OutlineModel implements SelectionOwner, StateEditable {
      * Adds the specified row to the passed in list, along with its children if the row is open.
      * Each row added to the list also has its owner set to this outline model.
      *
-     * @param list The list to add it to.
-     * @param row The row to add.
+     * @param list         The list to add it to.
+     * @param row          The row to add.
      * @param childrenOnly <code>false</code> to include the passed in row as well as its children.
      * @return The passed in list.
      */
@@ -342,7 +342,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
      */
     public void removeRows(Row[] rows) {
         HashSet<Row> set = new HashSet<>();
-        int i;
+        int          i;
 
         for (i = 0; i < rows.length; i++) {
             int index = getIndexOfRow(rows[i]);
@@ -366,8 +366,8 @@ public class OutlineModel implements SelectionOwner, StateEditable {
      */
     public void removeRows(int[] indexes) {
         HashSet<Row> set = new HashSet<>();
-        int max = mRows.size();
-        int i;
+        int          max = mRows.size();
+        int          i;
 
         for (i = 0; i < indexes.length; i++) {
             int index = indexes[i];
@@ -406,7 +406,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
 
     private void removeRowsInternal(int[] indexes) {
         Row[] rows = new Row[indexes.length];
-        int i;
+        int   i;
 
         Arrays.sort(indexes);
         for (i = 0; i < indexes.length; i++) {
@@ -516,7 +516,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
     }
 
     private boolean clearSortInternal() {
-        int count = getColumnCount();
+        int     count  = getColumnCount();
         boolean notify = false;
 
         for (int i = 0; i < count; i++) {
@@ -552,17 +552,17 @@ public class OutlineModel implements SelectionOwner, StateEditable {
      *         Returns <code>null</code> if there was no current sort applied.
      */
     public String getSortConfig() {
-        StringBuilder buffer = new StringBuilder();
-        int count = mColumns.size();
-        boolean hasSort = false;
+        StringBuilder buffer  = new StringBuilder();
+        int           count   = mColumns.size();
+        boolean       hasSort = false;
 
         buffer.append('S');
         buffer.append(CONFIG_VERSION);
         buffer.append('\t');
         buffer.append(count);
         for (int i = 0; i < count; i++) {
-            Column column = getColumnAtIndex(i);
-            int sequence = column.getSortSequence();
+            Column column   = getColumnAtIndex(i);
+            int    sequence = column.getSortSequence();
 
             buffer.append('\t');
             buffer.append(column.getID());
@@ -626,13 +626,13 @@ public class OutlineModel implements SelectionOwner, StateEditable {
      */
     public void toggleRowOpenState() {
         boolean first = true;
-        boolean open = true;
+        boolean open  = true;
 
         for (int i = 0; i < mRows.size(); i++) {
             Row row = getRowAtIndex(i);
             if (row.canHaveChildren()) {
                 if (first) {
-                    open = !row.isOpen();
+                    open  = !row.isOpen();
                     first = false;
                 }
                 row.setOpen(open);
@@ -643,7 +643,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
     /**
      * Called when a row's open state changes.
      *
-     * @param row The row being changed.
+     * @param row  The row being changed.
      * @param open The new open state.
      */
     public void rowOpenStateChanged(Row row, boolean open) {
@@ -738,15 +738,15 @@ public class OutlineModel implements SelectionOwner, StateEditable {
 
     /**
      * @param minimal Pass in <code>true</code> to prevent children of selected nodes from being
-     *            included.
+     *                included.
      * @return The current selection.
      */
     public List<Row> getSelectionAsList(boolean minimal) {
-        ArrayList<Row> list = new ArrayList<>(mSelection.getCount());
-        int index = mSelection.firstSelectedIndex();
+        ArrayList<Row> list  = new ArrayList<>(mSelection.getCount());
+        int            index = mSelection.firstSelectedIndex();
 
         while (index != -1) {
-            Row row = getRowAtIndex(index);
+            Row     row = getRowAtIndex(index);
             boolean add = true;
 
             if (minimal) {
@@ -783,8 +783,8 @@ public class OutlineModel implements SelectionOwner, StateEditable {
      * Selects the specified row.
      *
      * @param rowIndex The row to select.
-     * @param add Pass in <code>true</code> to add to the current selection or <code>false</code> to
-     *            replace the current selection.
+     * @param add      Pass in <code>true</code> to add to the current selection or
+     *                 <code>false</code> to replace the current selection.
      */
     public void select(int rowIndex, boolean add) {
         mSelection.select(rowIndex, add);
@@ -807,13 +807,13 @@ public class OutlineModel implements SelectionOwner, StateEditable {
      * Selects the specified rows.
      *
      * @param rows The rows to select.
-     * @param add Pass in <code>true</code> to add to the current selection or <code>false</code> to
-     *            replace the current selection.
+     * @param add  Pass in <code>true</code> to add to the current selection or <code>false</code>
+     *             to replace the current selection.
      */
     public void select(Collection<? extends Row> rows, boolean add) {
-        HashSet<Row> set = new HashSet<>(rows);
-        int[] indexes = new int[set.size()];
-        int i = 0;
+        HashSet<Row> set     = new HashSet<>(rows);
+        int[]        indexes = new int[set.size()];
+        int          i       = 0;
 
         for (Row row : set) {
             indexes[i++] = getIndexOfRow(row);
@@ -826,9 +826,9 @@ public class OutlineModel implements SelectionOwner, StateEditable {
      * Selects the specified rows.
      *
      * @param from The first row in the range to select.
-     * @param to The last row in the range to select.
-     * @param add Pass in <code>true</code> to add to the current selection or <code>false</code> to
-     *            replace the current selection.
+     * @param to   The last row in the range to select.
+     * @param add  Pass in <code>true</code> to add to the current selection or <code>false</code>
+     *             to replace the current selection.
      */
     public void select(int from, int to, boolean add) {
         mSelection.select(from, to, add);
@@ -864,9 +864,9 @@ public class OutlineModel implements SelectionOwner, StateEditable {
      * @param rows The rows to deselect.
      */
     public void deselect(List<Row> rows) {
-        HashSet<Row> set = new HashSet<>(rows);
-        int[] indexes = new int[set.size()];
-        int i = 0;
+        HashSet<Row> set     = new HashSet<>(rows);
+        int[]        indexes = new int[set.size()];
+        int          i       = 0;
 
         for (Row row : set) {
             indexes[i++] = getIndexOfRow(row);
@@ -878,7 +878,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
      * Deselects the specified rows.
      *
      * @param from The first row in the range to deselect.
-     * @param to The last row in the range to deselect.
+     * @param to   The last row in the range to deselect.
      */
     public void deselect(int from, int to) {
         mSelection.deselect(from, to);
@@ -887,8 +887,8 @@ public class OutlineModel implements SelectionOwner, StateEditable {
     private void preserveSelection() {
         int anchor = mSelection.getAnchor();
 
-        mSavedAnchorRow = anchor != -1 ? getRowAtIndex(anchor) : null;
-        mSavedSelection = getSelectionAsList();
+        mSavedAnchorRow     = anchor != -1 ? getRowAtIndex(anchor) : null;
+        mSavedSelection     = getSelectionAsList();
         mNotifyOfSelections = false;
         deselect();
     }
@@ -898,8 +898,8 @@ public class OutlineModel implements SelectionOwner, StateEditable {
         if (mSavedAnchorRow != null) {
             mSelection.setAnchor(getIndexOfRow(mSavedAnchorRow));
         }
-        mSavedAnchorRow = null;
-        mSavedSelection = null;
+        mSavedAnchorRow     = null;
+        mSavedSelection     = null;
         mNotifyOfSelections = true;
     }
 
@@ -1002,7 +1002,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
     }
 
     /**
-     * @param row The row.
+     * @param row    The row.
      * @param column The column.
      * @return The amount the column for this row is indented.
      */
@@ -1031,11 +1031,11 @@ public class OutlineModel implements SelectionOwner, StateEditable {
     public void restoreState(Hashtable<?, ?> state) {
         notifyOfUndoWillHappen();
 
-        String origSortConfig = getSortConfig();
-        boolean sortCleared = clearSortInternal();
+        String         origSortConfig = getSortConfig();
+        boolean        sortCleared    = clearSortInternal();
 
         @SuppressWarnings("unchecked")
-        ArrayList<Row> rows = (ArrayList<Row>) state.get(UNDO_KEY_ROWS);
+        ArrayList<Row> rows           = (ArrayList<Row>) state.get(UNDO_KEY_ROWS);
         if (rows != null) {
             mRows = new ArrayList<>(rows);
         }
@@ -1095,8 +1095,8 @@ public class OutlineModel implements SelectionOwner, StateEditable {
     /** Causes the {@link RowFilter} to be re-applied to the selection. */
     public void reapplyRowFilter() {
         if (mRowFilter != null) {
-            ArrayList<Row> list = new ArrayList<>(mSelection.getCount());
-            int index = mSelection.firstSelectedIndex();
+            ArrayList<Row> list  = new ArrayList<>(mSelection.getCount());
+            int            index = mSelection.firstSelectedIndex();
             while (index != -1) {
                 Row row = getRowAtIndex(index);
                 if (mRowFilter.isRowFiltered(row)) {

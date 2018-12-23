@@ -57,8 +57,8 @@ public class Dice implements Cloneable {
      * By default, this is set to <code>false</code>.
      *
      * @param convert <code>true</code> if modifiers greater than or equal to the average result of
-     *            the base die should be converted to extra dice. For example, <code>1d6+8</code>
-     *            will become <code>3d6+1</code>.
+     *                the base die should be converted to extra dice. For example,
+     *                <code>1d6+8</code> will become <code>3d6+1</code>.
      */
     public static final void setConvertModifiersToExtraDice(boolean convert) {
         EXTRA_DICE_FROM_MODIFIERS = convert;
@@ -112,7 +112,7 @@ public class Dice implements Cloneable {
         }
         if (mCount != 0 && mSides == 0 && mModifier == 0) {
             mModifier = mCount;
-            mCount = 0;
+            mCount    = 0;
         }
     }
 
@@ -125,51 +125,51 @@ public class Dice implements Cloneable {
      */
     public static final int[] extractDicePosition(String text) {
         int start = -1;
-        int max = text.length();
+        int max   = text.length();
         int state = 0;
         for (int i = 0; i < max; i++) {
             char ch = text.charAt(i);
             switch (state) {
-                case 0:
-                    if (ch >= '0' && ch <= '9') {
-                        if (start == -1) {
-                            start = i;
-                        }
-                    } else if (ch != ' ') {
-                        if (ch == 'd') {
-                            state = 1;
-                        } else if (ch == '+' || ch == '-') {
-                            state = 2;
-                        }
+            case 0:
+                if (ch >= '0' && ch <= '9') {
+                    if (start == -1) {
+                        start = i;
                     }
-                    break;
-                case 1:
-                    if (ch != ' ' && (ch < '0' || ch > '9')) {
-                        if (ch == '+' || ch == '-') {
-                            state = 2;
-                        } else if (ch == 'x') {
-                            state = 3;
-                        } else {
-                            state = 4;
-                        }
+                } else if (ch != ' ') {
+                    if (ch == 'd') {
+                        state = 1;
+                    } else if (ch == '+' || ch == '-') {
+                        state = 2;
                     }
-                    break;
-                case 2:
-                    if ((ch < '0' || ch > '9') && ch != ' ') {
-                        if (ch == 'x') {
-                            state = 3;
-                        } else {
-                            state = 4;
-                        }
-                    }
-                    break;
-                case 3:
-                    if ((ch < '0' || ch > '9') && ch != ' ') {
+                }
+                break;
+            case 1:
+                if (ch != ' ' && (ch < '0' || ch > '9')) {
+                    if (ch == '+' || ch == '-') {
+                        state = 2;
+                    } else if (ch == 'x') {
+                        state = 3;
+                    } else {
                         state = 4;
                     }
-                    break;
-                default:
-                    break;
+                }
+                break;
+            case 2:
+                if ((ch < '0' || ch > '9') && ch != ' ') {
+                    if (ch == 'x') {
+                        state = 3;
+                    } else {
+                        state = 4;
+                    }
+                }
+                break;
+            case 3:
+                if ((ch < '0' || ch > '9') && ch != ' ') {
+                    state = 4;
+                }
+                break;
+            default:
+                break;
             }
             if (state == 4) {
                 max = i;
@@ -222,7 +222,7 @@ public class Dice implements Cloneable {
     /**
      * Creates a new d6 dice object.
      *
-     * @param count The number of dice.
+     * @param count    The number of dice.
      * @param modifier The bonus or penalty to the roll.
      */
     public Dice(int count, int modifier) {
@@ -232,8 +232,8 @@ public class Dice implements Cloneable {
     /**
      * Creates a new d6 dice object.
      *
-     * @param count The number of dice.
-     * @param modifier The bonus or penalty to the roll.
+     * @param count      The number of dice.
+     * @param modifier   The bonus or penalty to the roll.
      * @param multiplier A multiplier for the roll.
      */
     public Dice(int count, int modifier, int multiplier) {
@@ -243,15 +243,15 @@ public class Dice implements Cloneable {
     /**
      * Creates a new dice object.
      *
-     * @param count The number of dice.
-     * @param sides The number of sides on each die.
-     * @param modifier The bonus or penalty to the roll.
+     * @param count      The number of dice.
+     * @param sides      The number of sides on each die.
+     * @param modifier   The bonus or penalty to the roll.
      * @param multiplier A multiplier for the roll.
      */
     public Dice(int count, int sides, int modifier, int multiplier) {
-        mCount = Math.max(count, 0);
-        mSides = Math.max(sides, 0);
-        mModifier = modifier;
+        mCount      = Math.max(count, 0);
+        mSides      = Math.max(sides, 0);
+        mModifier   = modifier;
         mMultiplier = multiplier;
     }
 
@@ -279,7 +279,7 @@ public class Dice implements Cloneable {
      * @param multiply The amount to multiply each die component.
      */
     public void multiply(int multiply) {
-        mCount *= multiply;
+        mCount    *= multiply;
         mModifier *= multiply;
         if (mMultiplier != 1) {
             mMultiplier *= multiply;
@@ -341,20 +341,20 @@ public class Dice implements Cloneable {
     }
 
     private void updateAlt() {
-        mAltCount = mCount;
+        mAltCount    = mCount;
         mAltModifier = mModifier;
         if (EXTRA_DICE_FROM_MODIFIERS) {
             int average = (mSides + 1) / 2;
             if ((mSides & 1) == 1) {
                 // Odd number of sides, so average is a whole number
-                mAltCount += mAltModifier / average;
+                mAltCount    += mAltModifier / average;
                 mAltModifier %= average;
             } else {
                 // Even number of sides, so average has an extra half, which means we alternate
                 while (mAltModifier > average) {
                     if (mAltModifier > 2 * average) {
                         mAltModifier -= 2 * average + 1;
-                        mAltCount += 2;
+                        mAltCount    += 2;
                     } else {
                         mAltModifier -= average + 1;
                         mAltCount++;
@@ -383,8 +383,8 @@ public class Dice implements Cloneable {
     }
 
     /**
-     * @param count The number of dice.
-     * @param sides The number of sides per die.
+     * @param count  The number of dice.
+     * @param sides  The number of sides per die.
      * @param target The minimum value on one die to be considered a success.
      * @return The probability that at least one die will be equal to or greater than the target
      *         value.

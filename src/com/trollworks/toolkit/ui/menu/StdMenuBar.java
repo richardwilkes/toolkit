@@ -43,9 +43,9 @@ public class StdMenuBar extends JMenuBar {
     }
 
     /**
-     * @param bar The {@link JMenuBar} to search.
+     * @param bar  The {@link JMenuBar} to search.
      * @param name The name (as returned by {@link JMenu#getName()} to look for as a top-level
-     *            {@link JMenu}.
+     *             {@link JMenu}.
      * @return The found {@link JMenu}, or <code>null</code>.
      */
     public static JMenu findMenuByName(JMenuBar bar, String name) {

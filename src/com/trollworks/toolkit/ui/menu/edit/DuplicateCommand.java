@@ -41,7 +41,7 @@ public class DuplicateCommand extends Command {
 
     @Override
     public void adjust() {
-        boolean enable = false;
+        boolean      enable       = false;
         Duplicatable duplicatable = getTarget(Duplicatable.class);
         if (duplicatable != null) {
             enable = duplicatable.canDuplicateSelection();

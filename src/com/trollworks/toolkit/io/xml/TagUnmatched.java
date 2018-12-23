@@ -26,7 +26,7 @@ public interface TagUnmatched {
      * sub-tags.
      *
      * @param context The {@link XmlParserContext} for this object.
-     * @param tag The tag name that will be processed.
+     * @param tag     The tag name that will be processed.
      */
     void xmlUnmatchedTag(XmlParserContext context, String tag) throws XMLStreamException;
 }

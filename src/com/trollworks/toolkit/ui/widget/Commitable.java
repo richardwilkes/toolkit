@@ -19,7 +19,7 @@ public interface Commitable {
 
     public static void sendCommitToFocusOwner() {
         KeyboardFocusManager focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-        Component focus = focusManager.getPermanentFocusOwner();
+        Component            focus        = focusManager.getPermanentFocusOwner();
         if (focus == null) {
             focus = focusManager.getFocusOwner();
         }

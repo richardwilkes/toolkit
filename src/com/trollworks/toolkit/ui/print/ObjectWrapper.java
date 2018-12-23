@@ -16,7 +16,7 @@ class ObjectWrapper<T> {
     private T      mObject;
 
     ObjectWrapper(String title, T object) {
-        mTitle = title;
+        mTitle  = title;
         mObject = object;
     }
 

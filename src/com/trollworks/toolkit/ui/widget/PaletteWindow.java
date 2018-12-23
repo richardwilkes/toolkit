@@ -30,7 +30,7 @@ public abstract class PaletteWindow extends BaseWindow {
      * Creates a new {@link PaletteWindow}.
      *
      * @param title The title of the window.
-     * @param gc The {@link GraphicsConfiguration} to use.
+     * @param gc    The {@link GraphicsConfiguration} to use.
      */
     public PaletteWindow(String title, GraphicsConfiguration gc) {
         super(title, gc);

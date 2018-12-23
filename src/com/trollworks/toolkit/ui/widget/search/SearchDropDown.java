@@ -40,17 +40,17 @@ class SearchDropDown extends JPanel implements MouseListener {
     /**
      * Creates a new drop-down panel for use with {@link Search}.
      *
-     * @param renderer The item renderer to use in the list.
+     * @param renderer    The item renderer to use in the list.
      * @param filterField The text field the drop-down will appear to be attached to.
-     * @param target The search target.
+     * @param target      The search target.
      */
     SearchDropDown(ListCellRenderer<Object> renderer, JTextField filterField, SearchTarget target) {
         super(new BorderLayout());
         setOpaque(true);
         mFilterField = filterField;
-        mTarget = target;
-        mModel = new DefaultListModel<>();
-        mList = new JList<>(mModel);
+        mTarget      = target;
+        mModel       = new DefaultListModel<>();
+        mList        = new JList<>(mModel);
         mList.setFocusable(false);
         mList.addMouseListener(this);
         mList.setCellRenderer(renderer);
@@ -72,9 +72,9 @@ class SearchDropDown extends JPanel implements MouseListener {
         for (Object one : hits) {
             mModel.addElement(one);
         }
-        Point where = new Point(0, mFilterField.getHeight());
-        int count = mModel.getSize();
-        int height = 0;
+        Point where  = new Point(0, mFilterField.getHeight());
+        int   count  = mModel.getSize();
+        int   height = 0;
         if (count > 0) {
             Component renderer = mList.getCellRenderer().getListCellRendererComponent(mList, mList.getModel().getElementAt(0), 0, true, true);
             renderer.invalidate();

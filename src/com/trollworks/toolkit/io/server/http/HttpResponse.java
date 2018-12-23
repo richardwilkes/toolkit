@@ -75,21 +75,21 @@ public class HttpResponse {
     /**
      * Creates a new {@link HttpResponse}.
      *
-     * @param status The {@link HttpStatusCode} to use.
+     * @param status   The {@link HttpStatusCode} to use.
      * @param mimeType The mime type to use.
-     * @param data The data for the body content. May be <code>null</code>.
+     * @param data     The data for the body content. May be <code>null</code>.
      */
     public HttpResponse(HttpStatusCode status, String mimeType, Object data) {
-        mStatus = status;
+        mStatus   = status;
         mMimeType = mimeType;
-        mData = data;
+        mData     = data;
     }
 
     /**
      * Adds a header with the specified name and value, replacing any existing header with that
      * name.
      *
-     * @param name The name of the header.
+     * @param name  The name of the header.
      * @param value The value of the header.
      */
     public final void addHeader(String name, String value) {
@@ -137,7 +137,7 @@ public class HttpResponse {
         }
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(16 * 1024);
-            PrintWriter pw = new PrintWriter(baos);
+            PrintWriter           pw   = new PrintWriter(baos);
             pw.print("HTTP/1.1 ");
             pw.print(mStatus.getDescription());
             pw.print(LINE_ENDING);
@@ -176,8 +176,8 @@ public class HttpResponse {
             if (mRequestMethod != HttpMethod.HEAD && mData != null) {
                 if (mData instanceof Path) {
                     try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream((Path) mData, StandardOpenOption.READ))) {
-                        byte[] buffer = new byte[16 * 1024];
-                        long pending = Files.size((Path) mData);
+                        byte[] buffer  = new byte[16 * 1024];
+                        long   pending = Files.size((Path) mData);
                         while (pending > 0) {
                             int read = in.read(buffer, 0, pending > buffer.length ? buffer.length : (int) pending);
                             if (read <= 0) {

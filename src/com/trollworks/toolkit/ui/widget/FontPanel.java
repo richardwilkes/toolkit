@@ -93,9 +93,9 @@ public class FontPanel extends ActionPanel implements ActionListener {
         for (int i = 0; i < 7; i++) {
             sizes[i] = Integer.valueOf(6 + i);
         }
-        sizes[7] = Integer.valueOf(14);
-        sizes[8] = Integer.valueOf(16);
-        sizes[9] = Integer.valueOf(18);
+        sizes[7]      = Integer.valueOf(14);
+        sizes[8]      = Integer.valueOf(16);
+        sizes[9]      = Integer.valueOf(18);
         mFontSizeMenu = new JComboBox<>(sizes);
         mFontSizeMenu.setOpaque(false);
         mFontSizeMenu.setToolTipText(Text.wrapPlainTextForToolTip(SIZE_TOOLTIP));

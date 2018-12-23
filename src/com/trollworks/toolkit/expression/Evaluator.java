@@ -52,7 +52,8 @@ import java.util.Map;
 /** A simple expression evaluator. */
 public class Evaluator {
     @Localize("Consecutive unary operators are not allowed (index=%d)")
-    @Localize(locale = "pt-BR", value = "Operadores unários consecutivos não são permitidos (índice=%d)")
+    @Localize(locale = "pt-BR",
+              value = "Operadores unários consecutivos não são permitidos (índice=%d)")
     private static String CONSECUTIVE_UNARY_OPS;
     @Localize("Function not closed")
     @Localize(locale = "pt-BR", value = "Função não fechada")
@@ -228,34 +229,34 @@ public class Evaluator {
 
     private final void processTree(Stack<Object> operandStack, Stack<ExpressionOperator> operatorStack) {
         Object rightOperand = operandStack.size() > 0 ? operandStack.pop() : null;
-        Object leftOperand = operandStack.size() > 0 ? operandStack.pop() : null;
+        Object leftOperand  = operandStack.size() > 0 ? operandStack.pop() : null;
         operandStack.push(new ExpressionTree(this, leftOperand, rightOperand, operatorStack.pop().mOperator, null));
     }
 
     private final void parse(String expression) throws EvaluationException {
         try {
-            mOperandStack = new Stack<>();
+            mOperandStack  = new Stack<>();
             mOperatorStack = new Stack<>();
-            boolean haveOperand = false;
-            boolean haveOperator = false;
+            boolean  haveOperand   = false;
+            boolean  haveOperator  = false;
             Operator unaryOperator = null;
-            int max = expression.length();
-            int i = 0;
+            int      max           = expression.length();
+            int      i             = 0;
             while (i < max) {
                 if (Character.isWhitespace(expression.charAt(i))) {
                     i++;
                 } else {
-                    Operator operator = null;
-                    int opIndex = -1;
+                    Operator     operator     = null;
+                    int          opIndex      = -1;
                     NextOperator nextOperator = nextOperator(expression, i, null);
                     if (nextOperator != null) {
                         operator = nextOperator.mOperator;
-                        opIndex = nextOperator.mIndex;
+                        opIndex  = nextOperator.mIndex;
                     }
                     if (opIndex > i || opIndex == -1) {
-                        i = processOperand(expression, i, opIndex, mOperandStack, unaryOperator);
-                        haveOperand = true;
-                        haveOperator = false;
+                        i             = processOperand(expression, i, opIndex, mOperandStack, unaryOperator);
+                        haveOperand   = true;
+                        haveOperator  = false;
                         unaryOperator = null;
                     }
                     if (opIndex == i) {
@@ -267,11 +268,11 @@ public class Evaluator {
                                 throw new EvaluationException(String.format(CONSECUTIVE_UNARY_OPS, Integer.valueOf(i)));
                             }
                         } else {
-                            i = processOperator(expression, opIndex, operator, mOperatorStack, mOperandStack, haveOperand, unaryOperator);
+                            i             = processOperator(expression, opIndex, operator, mOperatorStack, mOperandStack, haveOperand, unaryOperator);
                             unaryOperator = null;
                         }
                         if (!(nextOperator != null && nextOperator.mOperator instanceof CloseParen)) {
-                            haveOperand = false;
+                            haveOperand  = false;
                             haveOperator = true;
                         }
                     }
@@ -286,12 +287,12 @@ public class Evaluator {
 
     private static final int processOperand(String expression, int start, int operatorIndex, Stack<Object> operandStack, Operator unaryOperator) throws EvaluationException {
         String text;
-        int result;
+        int    result;
         if (operatorIndex == -1) {
-            text = expression.substring(start).trim();
+            text   = expression.substring(start).trim();
             result = expression.length();
         } else {
-            text = expression.substring(start, operatorIndex).trim();
+            text   = expression.substring(start, operatorIndex).trim();
             result = operatorIndex;
         }
         if (text.length() == 0) {
@@ -304,14 +305,14 @@ public class Evaluator {
     private final int processOperator(String expression, int index, Operator operator, Stack<ExpressionOperator> operatorStack, Stack<Object> operandStack, boolean haveOperand, Operator unaryOperator) throws EvaluationException {
         if (haveOperand && operator instanceof OpenParen) {
             NextOperator nextOperator = processFunction(expression, index, operandStack);
-            operator = nextOperator.mOperator;
-            index = nextOperator.mIndex + operator.getLength();
+            operator     = nextOperator.mOperator;
+            index        = nextOperator.mIndex + operator.getLength();
             nextOperator = nextOperator(expression, index, null);
             if (nextOperator == null) {
                 return index;
             }
             operator = nextOperator.mOperator;
-            index = nextOperator.mIndex;
+            index    = nextOperator.mIndex;
         }
         if (operator instanceof OpenParen) {
             operatorStack.push(new ExpressionOperator(operator, unaryOperator));
@@ -345,9 +346,9 @@ public class Evaluator {
     }
 
     private final NextOperator processFunction(String expression, int operatorIndex, Stack<Object> operandStack) throws EvaluationException {
-        int parens = 1;
+        int          parens       = 1;
         NextOperator nextOperator = null;
-        int next = operatorIndex;
+        int          next         = operatorIndex;
         while (parens > 0) {
             nextOperator = nextOperator(expression, next + 1, null);
             if (nextOperator == null) {
@@ -359,7 +360,7 @@ public class Evaluator {
             }
             next = nextOperator.mIndex;
         }
-        ExpressionOperand operand = (ExpressionOperand) operandStack.pop();
+        ExpressionOperand  operand  = (ExpressionOperand) operandStack.pop();
         ExpressionFunction function = mFunctions.get(operand.mValue);
         if (function == null) {
             throw new EvaluationException(String.format(FUNCTION_NOT_DEFINED, operand.mValue));
@@ -390,7 +391,7 @@ public class Evaluator {
     }
 
     private static final NextOperator nextOperator(String expression, int start, int max, Operator operator) {
-        int length = operator.getLength();
+        int    length = operator.getLength();
         String symbol = operator.getSymbol();
         if (length == 1) {
             char symbolChar = symbol.charAt(0);
@@ -415,13 +416,13 @@ public class Evaluator {
         if (operand instanceof ExpressionTree) {
             return ((ExpressionTree) operand).evaluate();
         } else if (operand instanceof ExpressionOperand) {
-            ExpressionOperand exop = (ExpressionOperand) operand;
-            Object value = replaceVariables(exop.mValue);
-            Operator unary = exop.mUnaryOperator;
+            ExpressionOperand exop  = (ExpressionOperand) operand;
+            Object            value = replaceVariables(exop.mValue);
+            Operator          unary = exop.mUnaryOperator;
             return unary != null ? unary.evaluate(value) : value;
         } else if (operand instanceof ParsedFunction) {
             ParsedFunction function = (ParsedFunction) operand;
-            Object value = function.mFunction.execute(this, replaceVariables(function.mArguments));
+            Object         value    = function.mFunction.execute(this, replaceVariables(function.mArguments));
             if (function.mUnaryOperator != null) {
                 value = function.mUnaryOperator.evaluate(value);
             }
@@ -436,7 +437,7 @@ public class Evaluator {
         int dollar = expression.indexOf('$');
         while (dollar >= 0) {
             int last = dollar;
-            int max = expression.length();
+            int max  = expression.length();
             for (int i = dollar + 1; i < max; i++) {
                 char ch = expression.charAt(i);
                 if (ch == '_' || ch == '.' || ch == '#' || ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || i != dollar + 1 && ch >= '0' && ch <= '9') {
@@ -446,7 +447,7 @@ public class Evaluator {
                 }
             }
             if (dollar != last) {
-                String name = expression.substring(dollar + 1, last + 1);
+                String name  = expression.substring(dollar + 1, last + 1);
                 String value = null;
                 if (mVariableResolver != null) {
                     value = mVariableResolver.resolveVariable(name);

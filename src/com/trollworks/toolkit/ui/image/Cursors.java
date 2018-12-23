@@ -44,7 +44,7 @@ public class Cursors {
      * Creates a new cursor by loading an image with the specified name. If the image cannot be
      * loaded, then the default cursor is returned instead.
      *
-     * @param name The name of the image to load.
+     * @param name     The name of the image to load.
      * @param hotSpotX The horizontal hot spot for the cursor.
      * @param hotSpotY The vertical hot spot for the cursor.
      */

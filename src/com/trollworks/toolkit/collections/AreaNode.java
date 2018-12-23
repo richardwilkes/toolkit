@@ -32,15 +32,15 @@ class AreaNode implements AreaObject {
     /**
      * Creates a node with a default bounds of (0,0,0,0).
      *
-     * @param parent The parent of this node.
+     * @param parent   The parent of this node.
      * @param leafNode <code>true</code> if this should be a leaf node, <code>false</code> if not.
      */
     protected AreaNode(AreaNode parent, boolean leafNode) {
-        mParent = parent;
-        mLeafNode = leafNode;
-        mBounds = new Rectangle(0, 0, 0, 0);
+        mParent       = parent;
+        mLeafNode     = leafNode;
+        mBounds       = new Rectangle(0, 0, 0, 0);
         mStorageCount = 0;
-        mStorage = new AreaObject[MAX_PER_NODE + 1];
+        mStorage      = new AreaObject[MAX_PER_NODE + 1];
     }
 
     private void addLeavesToList(ArrayList<AreaObject> list) {
@@ -53,23 +53,23 @@ class AreaNode implements AreaObject {
             mStorage[i] = null;
         }
         mStorageCount = 0;
-        mLeafNode = true;
+        mLeafNode     = true;
     }
 
     private void adjustBounds() {
         if (mStorageCount > 0) {
             Rectangle bounds = mStorage[0].getBounds();
-            mBounds.x = bounds.x;
-            mBounds.y = bounds.y;
-            mBounds.width = bounds.width;
+            mBounds.x      = bounds.x;
+            mBounds.y      = bounds.y;
+            mBounds.width  = bounds.width;
             mBounds.height = bounds.height;
             for (int i = 1; i < mStorageCount; i++) {
                 mBounds.add(mStorage[i].getBounds());
             }
         } else {
-            mBounds.x = 0;
-            mBounds.y = 0;
-            mBounds.width = 0;
+            mBounds.x      = 0;
+            mBounds.y      = 0;
+            mBounds.width  = 0;
             mBounds.height = 0;
         }
     }
@@ -112,32 +112,32 @@ class AreaNode implements AreaObject {
      * @return The root node for where the change occurred.
      */
     protected AreaNode insert(AreaObject obj) {
-        AreaNode leaf = this;
-        AreaNode split = null;
-        AreaNode root = this;
+        AreaNode  leaf   = this;
+        AreaNode  split  = null;
+        AreaNode  root   = this;
         Rectangle bounds = obj.getBounds();
 
         // Choose the correct leaf node
         while (true) {
-            long growth;
+            long     growth;
             AreaNode oldNode;
 
             if (leaf.mLeafNode) {
                 break;
             }
 
-            growth = Long.MAX_VALUE;
+            growth  = Long.MAX_VALUE;
             oldNode = leaf;
 
             for (int i = 0; i < oldNode.mStorageCount; i++) {
-                AreaNode tmpNode = (AreaNode) oldNode.mStorage[i];
+                AreaNode  tmpNode    = (AreaNode) oldNode.mStorage[i];
                 Rectangle rectToGrow = tmpNode.getBounds();
-                Rectangle union = rectToGrow.union(bounds);
-                long growthAmt = (long) union.height * (long) union.width - (long) rectToGrow.height * (long) rectToGrow.width;
+                Rectangle union      = rectToGrow.union(bounds);
+                long      growthAmt  = (long) union.height * (long) union.width - (long) rectToGrow.height * (long) rectToGrow.width;
 
                 if (growthAmt <= growth) {
                     growth = growthAmt;
-                    leaf = tmpNode;
+                    leaf   = tmpNode;
                 }
             }
         }
@@ -156,7 +156,7 @@ class AreaNode implements AreaObject {
                 split.adjustBounds();
                 if (leaf != null) {
                     leaf.mStorage[leaf.mStorageCount++] = split;
-                    split.mParent = leaf;
+                    split.mParent                       = leaf;
                     if (leaf.mStorageCount > MAX_PER_NODE) {
                         split = splitNode(leaf);
                     } else {
@@ -167,9 +167,9 @@ class AreaNode implements AreaObject {
         }
 
         if (split != null) {
-            root = new AreaNode(null, false);
-            mParent = root;
-            split.mParent = root;
+            root                                = new AreaNode(null, false);
+            mParent                             = root;
+            split.mParent                       = root;
             root.mStorage[root.mStorageCount++] = this;
             root.mStorage[root.mStorageCount++] = split;
             root.adjustBounds();
@@ -187,11 +187,11 @@ class AreaNode implements AreaObject {
      */
     protected AreaNode remove(AreaObject obj) {
         AreaNode leafNode = findLeaf(obj);
-        AreaNode root = this;
+        AreaNode root     = this;
 
         if (leafNode != null) {
             ArrayList<AreaObject> savedLeaves = new ArrayList<>();
-            int size;
+            int                   size;
 
             leafNode.mStorageCount = removeFromArray(leafNode.mStorageCount, leafNode.mStorage, obj);
 
@@ -217,7 +217,7 @@ class AreaNode implements AreaObject {
             }
 
             if (!root.mLeafNode && root.mStorageCount == 1) {
-                root = (AreaNode) root.mStorage[0];
+                root         = (AreaNode) root.mStorage[0];
                 root.mParent = null;
             }
         }
@@ -233,9 +233,9 @@ class AreaNode implements AreaObject {
      * @return The root node for where the change occurred.
      */
     protected AreaNode remove(ArrayList<AreaObject> list) {
-        AreaNode root = this;
-        HashSet<AreaNode> leavesVisited = new HashSet<>();
-        ArrayList<AreaObject> savedLeaves = new ArrayList<>();
+        AreaNode              root          = this;
+        HashSet<AreaNode>     leavesVisited = new HashSet<>();
+        ArrayList<AreaObject> savedLeaves   = new ArrayList<>();
 
         // Remove all the objects in the list from the tree, making a note
         // of which leaf nodes are affected by this.
@@ -274,7 +274,7 @@ class AreaNode implements AreaObject {
         }
 
         if (!root.mLeafNode && root.mStorageCount == 1) {
-            root = (AreaNode) root.mStorage[0];
+            root         = (AreaNode) root.mStorage[0];
             root.mParent = null;
         }
 
@@ -299,10 +299,10 @@ class AreaNode implements AreaObject {
      * exact same coordinates as <code>bounds</code> to <code>result</code>, otherwise, appends all
      * objects that intersect with <code>bounds</code>.
      *
-     * @param bounds The bounds to search with.
-     * @param result The list to add matches to. May not be <code>null</code>.
+     * @param bounds     The bounds to search with.
+     * @param result     The list to add matches to. May not be <code>null</code>.
      * @param exactMatch <code>true</code> to match coordinates exactly, <code>false</code> to only
-     *            require an intersection.
+     *                   require an intersection.
      */
     protected void search(Rectangle bounds, ArrayList<AreaObject> result, boolean exactMatch) {
         for (int i = 0; i < mStorageCount; i++) {
@@ -321,8 +321,8 @@ class AreaNode implements AreaObject {
      * Appends all objects that intersect with <code>bounds</code> and are instances of the target
      * class.
      *
-     * @param bounds The bounds to search with.
-     * @param result The list to add matches to. May not be <code>null</code>.
+     * @param bounds      The bounds to search with.
+     * @param result      The list to add matches to. May not be <code>null</code>.
      * @param targetClass The class of object for which we're looking
      */
     protected void search(Rectangle bounds, ArrayList<AreaObject> result, Class<? extends AreaObject> targetClass) {
@@ -342,7 +342,7 @@ class AreaNode implements AreaObject {
      * Appends all objects that intersect with the <code>location</code> to <code>result</code>.
      *
      * @param location The location to search with. May not be <code>null</code>.
-     * @param result The list to add matches to. May not be <code>null</code>.
+     * @param result   The list to add matches to. May not be <code>null</code>.
      */
     protected void search(Point location, ArrayList<AreaObject> result) {
         for (int i = 0; i < mStorageCount; i++) {
@@ -360,8 +360,8 @@ class AreaNode implements AreaObject {
      * Appends all objects that intersect with the <code>location</code> and are instances of the
      * target class to <code>result</code>.
      *
-     * @param location The location to search with. May not be <code>null</code>.
-     * @param result The list to add matches to. May not be <code>null</code>.
+     * @param location    The location to search with. May not be <code>null</code>.
+     * @param result      The list to add matches to. May not be <code>null</code>.
      * @param targetClass The class of object for which we're looking
      */
     protected void search(Point location, ArrayList<AreaObject> result, Class<? extends AreaObject> targetClass) {
@@ -407,7 +407,7 @@ class AreaNode implements AreaObject {
     }
 
     /**
-     * @param bounds The bounds to search with.
+     * @param bounds      The bounds to search with.
      * @param targetClass The class of object for which we're looking
      * @return <code>true</code> if there are any objects of the target class that intersect with
      *         <code>bounds</code>.
@@ -428,9 +428,9 @@ class AreaNode implements AreaObject {
     }
 
     /**
-     * @param bounds The bounds to search with.
+     * @param bounds     The bounds to search with.
      * @param exactMatch <code>true</code> to match coordinates exactly, <code>false</code> to only
-     *            require an intersection.
+     *                   require an intersection.
      * @return The number of objects that intersect with <code>bounds</code>. If
      *         <code>exactMatch</code> is <code>true</code>, then only those objects that have the
      *         exact same coordinates as <code>bounds</code> are counted.
@@ -471,15 +471,15 @@ class AreaNode implements AreaObject {
 
     @SuppressWarnings("null")
     private static AreaNode splitNode(AreaNode node) {
-        AreaObject oldStorage[] = new AreaObject[MAX_PER_NODE + 1];
-        int oldStorageCount = node.mStorageCount;
-        int largestWasted = -1;
-        AreaObject firstShape = null;
-        AreaObject secondShape = null;
-        boolean addToFirst = true;
-        AreaNode split;
-        int i;
-        Rectangle bounds;
+        AreaObject oldStorage[]    = new AreaObject[MAX_PER_NODE + 1];
+        int        oldStorageCount = node.mStorageCount;
+        int        largestWasted   = -1;
+        AreaObject firstShape      = null;
+        AreaObject secondShape     = null;
+        boolean    addToFirst      = true;
+        AreaNode   split;
+        int        i;
+        Rectangle  bounds;
 
         if (oldStorageCount > 0) {
             System.arraycopy(node.mStorage, 0, oldStorage, 0, node.mStorageCount);
@@ -493,8 +493,8 @@ class AreaNode implements AreaObject {
                 int wasted = areaWasted(oldStorage[i].getBounds(), oldStorage[j].getBounds());
                 if (wasted >= largestWasted) {
                     largestWasted = wasted;
-                    firstShape = oldStorage[i];
-                    secondShape = oldStorage[j];
+                    firstShape    = oldStorage[i];
+                    secondShape   = oldStorage[j];
                 }
             }
         }
@@ -503,13 +503,13 @@ class AreaNode implements AreaObject {
             node.mStorage[--node.mStorageCount] = null;
         }
         node.mStorage[node.mStorageCount++] = firstShape;
-        bounds = firstShape.getBounds();
-        node.mBounds.x = bounds.x;
-        node.mBounds.y = bounds.y;
-        node.mBounds.width = bounds.width;
-        node.mBounds.height = bounds.height;
+        bounds                              = firstShape.getBounds();
+        node.mBounds.x                      = bounds.x;
+        node.mBounds.y                      = bounds.y;
+        node.mBounds.width                  = bounds.width;
+        node.mBounds.height                 = bounds.height;
 
-        oldStorageCount = removeFromArray(oldStorageCount, oldStorage, firstShape);
+        oldStorageCount                     = removeFromArray(oldStorageCount, oldStorage, firstShape);
 
         if (!node.mLeafNode) {
             ((AreaNode) firstShape).mParent = node;
@@ -517,12 +517,12 @@ class AreaNode implements AreaObject {
 
         split.mStorage[split.mStorageCount++] = secondShape;
 
-        oldStorageCount = removeFromArray(oldStorageCount, oldStorage, secondShape);
-        bounds = secondShape.getBounds();
-        split.mBounds.x = bounds.x;
-        split.mBounds.y = bounds.y;
-        split.mBounds.width = bounds.width;
-        split.mBounds.height = bounds.height;
+        oldStorageCount                       = removeFromArray(oldStorageCount, oldStorage, secondShape);
+        bounds                                = secondShape.getBounds();
+        split.mBounds.x                       = bounds.x;
+        split.mBounds.y                       = bounds.y;
+        split.mBounds.width                   = bounds.width;
+        split.mBounds.height                  = bounds.height;
         if (!split.mLeafNode) {
             ((AreaNode) secondShape).mParent = split;
         }
@@ -530,10 +530,10 @@ class AreaNode implements AreaObject {
         while (oldStorageCount > 0) {
             if (addToFirst) {
                 oldStorageCount = node.transferFromLargestOverlap(oldStorageCount, oldStorage);
-                addToFirst = false;
+                addToFirst      = false;
             } else {
                 oldStorageCount = split.transferFromLargestOverlap(oldStorageCount, oldStorage);
-                addToFirst = true;
+                addToFirst      = true;
             }
         }
 
@@ -542,13 +542,13 @@ class AreaNode implements AreaObject {
 
     private int transferFromLargestOverlap(int count, AreaObject[] array) {
         int smallestWasted = Integer.MAX_VALUE;
-        int bestPick = -1;
+        int bestPick       = -1;
 
         for (int i = 0; i < count; i++) {
             int wasted = areaWasted(mBounds, array[i].getBounds());
             if (wasted <= smallestWasted) {
                 smallestWasted = wasted;
-                bestPick = i;
+                bestPick       = i;
             }
         }
 
@@ -569,17 +569,17 @@ class AreaNode implements AreaObject {
      * Returns a value measuring the area that would be wasted if the two bounds were merged into
      * one.
      *
-     * @param first The first bounds.
+     * @param first  The first bounds.
      * @param second The second bounds.
      * @return A value representing the percentage area wasted.
      */
     private static int areaWasted(Rectangle first, Rectangle second) {
         if (first.width > 0 && first.height > 0 && second.width > 0 && second.height > 0) {
-            long combinedArea = (long) first.width * (long) first.height + (long) second.width * (long) second.height;
-            Rectangle union = first.union(second);
-            long unionArea = (long) union.height * (long) union.width;
-            Rectangle overlap = first.intersection(second);
-            long overlapArea = (long) overlap.height * (long) overlap.width;
+            long      combinedArea = (long) first.width * (long) first.height + (long) second.width * (long) second.height;
+            Rectangle union        = first.union(second);
+            long      unionArea    = (long) union.height * (long) union.width;
+            Rectangle overlap      = first.intersection(second);
+            long      overlapArea  = (long) overlap.height * (long) overlap.width;
             return (int) ((unionArea - (combinedArea - overlapArea)) * 100L / combinedArea);
         }
         return Integer.MAX_VALUE / 2;

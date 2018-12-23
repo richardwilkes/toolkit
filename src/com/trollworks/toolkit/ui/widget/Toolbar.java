@@ -104,9 +104,9 @@ public class Toolbar extends JPanel implements LayoutManager2 {
 
     private Dimension getLayoutSize(LayoutSizeRetriever retriever) {
         Insets insets = getInsets();
-        int count = getComponentCount();
-        int width = count > 0 ? (count - 1) * GAP : 0;
-        int height = 0;
+        int    count  = getComponentCount();
+        int    width  = count > 0 ? (count - 1) * GAP : 0;
+        int    height = 0;
         for (int i = 0; i < count; i++) {
             Dimension size = retriever.getLayoutSize(i);
             width += size.width;
@@ -119,28 +119,28 @@ public class Toolbar extends JPanel implements LayoutManager2 {
 
     @Override
     public void layoutContainer(Container parent) {
-        int extra = getWidth() - preferredLayoutSize(parent).width;
-        Insets insets = getInsets();
-        int count = getComponentCount();
-        Component[] comps = getComponents();
-        int[] widths = new int[count];
-        int[] minWidths = new int[count];
-        int[] heights = new int[count];
-        int[] extraBefore = new int[count];
-        boolean[] isFill = new boolean[count];
-        boolean[] isExtra = new boolean[count];
+        int         extra       = getWidth() - preferredLayoutSize(parent).width;
+        Insets      insets      = getInsets();
+        int         count       = getComponentCount();
+        Component[] comps       = getComponents();
+        int[]       widths      = new int[count];
+        int[]       minWidths   = new int[count];
+        int[]       heights     = new int[count];
+        int[]       extraBefore = new int[count];
+        boolean[]   isFill      = new boolean[count];
+        boolean[]   isExtra     = new boolean[count];
         for (int i = 0; i < count; i++) {
             Dimension size = comps[i].getPreferredSize();
-            widths[i] = size.width;
-            heights[i] = size.height;
+            widths[i]    = size.width;
+            heights[i]   = size.height;
             minWidths[i] = comps[i].getMinimumSize().width;
             String constraint = mConstraints.get(comps[i]);
-            isFill[i] = LAYOUT_FILL.equals(constraint);
+            isFill[i]  = LAYOUT_FILL.equals(constraint);
             isExtra[i] = LAYOUT_EXTRA_BEFORE.equals(constraint);
         }
         if (extra < 0) {
-            int remaining = -extra;
-            boolean found = true;
+            int     remaining = -extra;
+            boolean found     = true;
             while (found && remaining > 0) {
                 int avail = 0;
                 found = false;
@@ -153,20 +153,20 @@ public class Toolbar extends JPanel implements LayoutManager2 {
                     int perComp = Math.max(remaining / avail, 1);
                     for (int i = 0; i < count && remaining > 0; i++) {
                         if (widths[i] > minWidths[i]) {
-                            found = true;
+                            found      = true;
                             remaining -= perComp;
                             widths[i] -= perComp;
                             if (widths[i] <= minWidths[i]) {
                                 remaining += minWidths[i] - widths[i];
-                                widths[i] = minWidths[i];
+                                widths[i]  = minWidths[i];
                             }
                         }
                     }
                 }
             }
         } else if (extra > 0) {
-            int remaining = extra;
-            boolean found = true;
+            int     remaining = extra;
+            boolean found     = true;
             while (found && remaining > 0) {
                 int avail = 0;
                 found = false;
@@ -179,7 +179,7 @@ public class Toolbar extends JPanel implements LayoutManager2 {
                     int perComp = Math.max(remaining / avail, 1);
                     for (int i = 0; i < count && remaining > 0; i++) {
                         if (isFill[i]) {
-                            found = true;
+                            found      = true;
                             remaining -= perComp;
                             widths[i] += perComp;
                         }
@@ -194,8 +194,8 @@ public class Toolbar extends JPanel implements LayoutManager2 {
                         int perComp = Math.max(remaining / avail, 1);
                         for (int i = 0; i < count && remaining > 0; i++) {
                             if (isExtra[i]) {
-                                found = true;
-                                remaining -= perComp;
+                                found           = true;
+                                remaining      -= perComp;
                                 extraBefore[i] += perComp;
                             }
                         }
@@ -203,7 +203,7 @@ public class Toolbar extends JPanel implements LayoutManager2 {
                 }
             }
         }
-        int x = insets.left;
+        int x      = insets.left;
         int height = getHeight();
         for (int i = 0; i < count; i++) {
             x += extraBefore[i];

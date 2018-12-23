@@ -27,12 +27,12 @@ public class ConduitMessage implements Runnable {
     /**
      * Creates a new conduit message.
      *
-     * @param id An ID that clients will use to filter reception of messages.
+     * @param id      An ID that clients will use to filter reception of messages.
      * @param message The message.
      */
     public ConduitMessage(String id, String message) {
-        mUser = System.getProperty("user.name"); //$NON-NLS-1$
-        mID = id;
+        mUser    = System.getProperty("user.name"); //$NON-NLS-1$
+        mID      = id;
         mMessage = message;
     }
 
@@ -54,8 +54,8 @@ public class ConduitMessage implements Runnable {
                 i = 0;
             }
         }
-        mUser = stream.readUTF();
-        mID = stream.readUTF();
+        mUser    = stream.readUTF();
+        mID      = stream.readUTF();
         mMessage = stream.readUTF();
     }
 

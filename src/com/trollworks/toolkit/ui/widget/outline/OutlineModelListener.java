@@ -17,7 +17,7 @@ public interface OutlineModelListener {
      * Called after rows are added.
      *
      * @param model The model that was altered.
-     * @param rows The rows being added.
+     * @param rows  The rows being added.
      */
     void rowsAdded(OutlineModel model, Row[] rows);
 
@@ -25,7 +25,7 @@ public interface OutlineModelListener {
      * Called prior to rows being removed.
      *
      * @param model The affected model.
-     * @param rows The rows being removed.
+     * @param rows  The rows being removed.
      */
     void rowsWillBeRemoved(OutlineModel model, Row[] rows);
 
@@ -33,15 +33,15 @@ public interface OutlineModelListener {
      * Called after rows are removed.
      *
      * @param model The affected model.
-     * @param rows The rows that were removed.
+     * @param rows  The rows that were removed.
      */
     void rowsWereRemoved(OutlineModel model, Row[] rows);
 
     /**
      * Called after a row is modified by a call to {@link Row#setData(Column, Object)}.
      *
-     * @param model The affected model.
-     * @param row The affected row.
+     * @param model  The affected model.
+     * @param row    The affected row.
      * @param column The affected column.
      */
     void rowWasModified(OutlineModel model, Row row, Column column);
@@ -56,9 +56,9 @@ public interface OutlineModelListener {
     /**
      * Called whenever the model is sorted.
      *
-     * @param model The model that was sorted.
+     * @param model     The model that was sorted.
      * @param restoring <code>true</code> when the sort is being restored (usually due to row
-     *            disclosure).
+     *                  disclosure).
      */
     void sorted(OutlineModel model, boolean restoring);
 

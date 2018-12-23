@@ -78,17 +78,24 @@ public class Xml {
     @Localize("Unable to create object for collection tag '%s'.")
     @Localize(locale = "ru", value = "Невозможно создать объект для получения тэга '%s'.")
     @Localize(locale = "de", value = "Kann Objekt für Sammlungs-Tag '%s' nicht erstellen.")
-    @Localize(locale = "es", value = "Imposible crear el objeto para la colección de etiquetas '%s'.")
+    @Localize(locale = "es",
+              value = "Imposible crear el objeto para la colección de etiquetas '%s'.")
     private static String UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION;
     @Localize("The tag '%s' is from an older version and cannot be loaded.")
-    @Localize(locale = "ru", value = "Тег '%s' относится к более старой версии и не может быть загружен.")
-    @Localize(locale = "de", value = "Das Tag '%s' ist von einer älteren Version und kann nicht geladen werden.")
-    @Localize(locale = "es", value = "La etiqueta '%s' es de una versión anterior y no puede cargarse.")
+    @Localize(locale = "ru",
+              value = "Тег '%s' относится к более старой версии и не может быть загружен.")
+    @Localize(locale = "de",
+              value = "Das Tag '%s' ist von einer älteren Version und kann nicht geladen werden.")
+    @Localize(locale = "es",
+              value = "La etiqueta '%s' es de una versión anterior y no puede cargarse.")
     private static String TOO_OLD;
     @Localize("The tag '%s' is from a newer version and cannot be loaded.")
-    @Localize(locale = "ru", value = "Тег '%s' относится к более новой версии и не может быть загружен.")
-    @Localize(locale = "de", value = "Das Tag '%s' ist von einer neueren Version und kann nicht geladen werden.")
-    @Localize(locale = "es", value = "La etiqueta '%s' es de una versión demasiado nueva y no puede cargarse.")
+    @Localize(locale = "ru",
+              value = "Тег '%s' относится к более новой версии и не может быть загружен.")
+    @Localize(locale = "de",
+              value = "Das Tag '%s' ist von einer neueren Version und kann nicht geladen werden.")
+    @Localize(locale = "es",
+              value = "La etiqueta '%s' es de una versión demasiado nueva y no puede cargarse.")
     private static String TOO_NEW;
 
     static {
@@ -160,7 +167,7 @@ public class Xml {
      * Loads the contents of an xml file into the specified object.
      *
      * @param file The file to load from.
-     * @param obj The object to load the xml data into.
+     * @param obj  The object to load the xml data into.
      * @return The object that was passed in.
      */
     public static final <T> T load(File file, T obj) throws XMLStreamException {
@@ -170,8 +177,8 @@ public class Xml {
     /**
      * Loads the contents of an xml file into the specified object.
      *
-     * @param file The file to load from.
-     * @param obj The object to load the xml data into.
+     * @param file    The file to load from.
+     * @param obj     The object to load the xml data into.
      * @param context Optional context for recording state while loading.
      * @return The object that was passed in.
      */
@@ -183,7 +190,7 @@ public class Xml {
      * Loads the contents of an xml file into the specified object.
      *
      * @param path The {@link Path} to load from.
-     * @param obj The object to load the xml data into.
+     * @param obj  The object to load the xml data into.
      * @return The object that was passed in.
      */
     public static final <T> T load(Path path, T obj) throws XMLStreamException {
@@ -193,8 +200,8 @@ public class Xml {
     /**
      * Loads the contents of an xml file into the specified object.
      *
-     * @param path The {@link Path} to load from.
-     * @param obj The object to load the xml data into.
+     * @param path    The {@link Path} to load from.
+     * @param obj     The object to load the xml data into.
      * @param context Optional context for recording state while loading.
      * @return The object that was passed in.
      */
@@ -216,8 +223,8 @@ public class Xml {
     /**
      * Loads the contents of an xml file into the specified object.
      *
-     * @param uri The URI to load from.
-     * @param obj The object to load the xml data into.
+     * @param uri     The URI to load from.
+     * @param obj     The object to load the xml data into.
      * @param context Optional context for recording state while loading.
      * @return The object that was passed in.
      */
@@ -251,7 +258,7 @@ public class Xml {
                 ((TagWillLoad) obj).xmlWillLoad(context);
             }
             Class<?> tagClass = obj.getClass();
-            int version = xml.getIntegerAttribute(ATTR_VERSION, 0);
+            int      version  = xml.getIntegerAttribute(ATTR_VERSION, 0);
             if (version > getVersionOfTag(tagClass)) {
                 throw new XMLStreamException(String.format(TOO_NEW, xml.getCurrentTag()), xml.getLocation());
             }
@@ -295,8 +302,8 @@ public class Xml {
                         } else {
                             throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), xml.getLocation());
                         }
-                        Object fieldObj = null;
-                        Class<?> cls = Class.forName(genericType.getTypeName());
+                        Object   fieldObj = null;
+                        Class<?> cls      = Class.forName(genericType.getTypeName());
                         if (cls == String.class) {
                             fieldObj = xml.getText();
                         } else {
@@ -338,7 +345,7 @@ public class Xml {
      * Saves the contents of an object into an xml file.
      *
      * @param file The file to save to.
-     * @param obj The object to save the xml data from.
+     * @param obj  The object to save the xml data from.
      */
     public static final void save(File file, Object obj) throws XMLStreamException {
         try (FileOutputStream out = new FileOutputStream(file)) {
@@ -354,7 +361,7 @@ public class Xml {
      * Saves the contents of an object into an xml file.
      *
      * @param path The {@link Path} to save to.
-     * @param obj The object to save the xml data from.
+     * @param obj  The object to save the xml data from.
      */
     public static final void save(Path path, Object obj) throws XMLStreamException {
         try {
@@ -398,7 +405,7 @@ public class Xml {
      */
     public static final void add(XmlGenerator xml, Object obj) throws XMLStreamException {
         Class<?> objClass = obj.getClass();
-        XmlTag tag = objClass.getAnnotation(XmlTag.class);
+        XmlTag   tag      = objClass.getAnnotation(XmlTag.class);
         if (tag != null) {
             add(xml, tag.value(), obj);
         } else {
@@ -490,8 +497,8 @@ public class Xml {
                 Introspection.makeFieldAccessible(field);
                 Object content = field.get(obj);
                 if (content != null && (!(content instanceof String) || !((String) content).isEmpty())) {
-                    XmlTag subTag = fa.getAnnotation();
-                    Class<?> type = field.getType();
+                    XmlTag   subTag = fa.getAnnotation();
+                    Class<?> type   = field.getType();
                     if (Collection.class.isAssignableFrom(type)) {
                         Collection<?> collection = (Collection<?>) content;
                         if (!collection.isEmpty()) {

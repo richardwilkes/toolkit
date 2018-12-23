@@ -140,7 +140,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
     @Override
     public void mouseMoved(MouseEvent event) {
         Cursor cursor = Cursor.getDefaultCursor();
-        int x = event.getX();
+        int    x      = event.getX();
         if (mOwner.overColumnDivider(x) != null) {
             if (mOwner.allowColumnResize()) {
                 cursor = Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR);
@@ -158,12 +158,12 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 
     @Override
     public Dimension getPreferredSize() {
-        int one = Scale.get(this).scale(1);
-        List<Column> columns = mOwner.getModel().getColumns();
-        boolean drawDividers = mOwner.shouldDrawColumnDividers();
-        Insets insets = getInsets();
-        Dimension size = new Dimension(insets.left + insets.right, 0);
-        ArrayList<Column> changed = new ArrayList<>();
+        int               one          = Scale.get(this).scale(1);
+        List<Column>      columns      = mOwner.getModel().getColumns();
+        boolean           drawDividers = mOwner.shouldDrawColumnDividers();
+        Insets            insets       = getInsets();
+        Dimension         size         = new Dimension(insets.left + insets.right, 0);
+        ArrayList<Column> changed      = new ArrayList<>();
         for (Column col : columns) {
             if (col.isVisible()) {
                 int tmp = col.getWidth();
@@ -173,7 +173,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
                     changed.add(col);
                 }
                 size.width += tmp + (drawDividers ? one : 0);
-                tmp = col.getPreferredHeaderHeight(mOwner) + one;
+                tmp         = col.getPreferredHeaderHeight(mOwner) + one;
                 if (tmp > size.height) {
                     size.height = tmp;
                 }
@@ -191,17 +191,17 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
     protected void paintComponent(Graphics gc) {
         int one = Scale.get(this).scale(1);
         super.paintComponent(GraphicsUtilities.prepare(gc));
-        Rectangle clip = gc.getClipBounds();
-        Insets insets = getInsets();
-        int height = getHeight();
-        Rectangle bounds = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), height - (insets.top + insets.bottom));
-        boolean drawDividers = mOwner.shouldDrawColumnDividers();
+        Rectangle clip         = gc.getClipBounds();
+        Insets    insets       = getInsets();
+        int       height       = getHeight();
+        Rectangle bounds       = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), height - (insets.top + insets.bottom));
+        boolean   drawDividers = mOwner.shouldDrawColumnDividers();
         gc.setColor(getTopDividerColor());
         gc.fillRect(clip.x, height - one, clip.width, one);
-        Color dividerColor = mOwner.getDividerColor();
-        List<Column> columns = mOwner.getModel().getColumns();
-        int count = columns.size();
-        int maxDivider = count - 1;
+        Color        dividerColor = mOwner.getDividerColor();
+        List<Column> columns      = mOwner.getModel().getColumns();
+        int          count        = columns.size();
+        int          maxDivider   = count - 1;
         while (maxDivider > 0 && !columns.get(maxDivider).isVisible()) {
             maxDivider--;
         }
@@ -210,7 +210,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
             if (col.isVisible()) {
                 bounds.width = col.getWidth();
                 if (clip.intersects(bounds)) {
-                    boolean dragging = mOwner.getSourceDragColumn() == col;
+                    boolean   dragging       = mOwner.getSourceDragColumn() == col;
                     Composite savedComposite = null;
                     if (dragging) {
                         savedComposite = ((Graphics2D) gc).getComposite();
@@ -252,9 +252,9 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
      * @return The bounds of the specified header column.
      */
     public Rectangle getColumnBounds(Column column) {
-        Insets insets = getInsets();
+        Insets    insets = getInsets();
         Rectangle bounds = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), getHeight() - (insets.top + insets.bottom));
-        bounds.x = mOwner.getColumnStart(column);
+        bounds.x     = mOwner.getColumnStart(column);
         bounds.width = column.getWidth();
         return bounds;
     }

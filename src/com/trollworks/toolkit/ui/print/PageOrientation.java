@@ -116,13 +116,13 @@ public enum PageOrientation {
      */
     public static final PageOrientation get(PageFormat format) {
         switch (format.getOrientation()) {
-            case PageFormat.LANDSCAPE:
-                return PageOrientation.LANDSCAPE;
-            case PageFormat.REVERSE_LANDSCAPE:
-                return PageOrientation.REVERSE_LANDSCAPE;
-            case PageFormat.PORTRAIT:
-            default:
-                return PageOrientation.PORTRAIT;
+        case PageFormat.LANDSCAPE:
+            return PageOrientation.LANDSCAPE;
+        case PageFormat.REVERSE_LANDSCAPE:
+            return PageOrientation.REVERSE_LANDSCAPE;
+        case PageFormat.PORTRAIT:
+        default:
+            return PageOrientation.PORTRAIT;
         }
     }
 }

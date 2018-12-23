@@ -24,8 +24,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlColorHelper implements XmlObjectHelper {
     public static final XmlColorHelper SINGLETON = new XmlColorHelper();
 
-    private XmlColorHelper() {
-    }
+    private XmlColorHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -36,8 +35,8 @@ public class XmlColorHelper implements XmlObjectHelper {
     public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
         Color color = (Color) field.get(obj);
         if (color != null) {
-            String value = Colors.encode(color);
-            XmlDefault def = field.getAnnotation(XmlDefault.class);
+            String     value = Colors.encode(color);
+            XmlDefault def   = field.getAnnotation(XmlDefault.class);
             if (def != null) {
                 xml.addAttributeNot(name, value, def.value());
             } else {
@@ -48,8 +47,8 @@ public class XmlColorHelper implements XmlObjectHelper {
 
     @Override
     public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-        XmlDefault def = field.getAnnotation(XmlDefault.class);
-        String value = context.getParser().getAttribute(name, def != null ? def.value() : null);
+        XmlDefault def   = field.getAnnotation(XmlDefault.class);
+        String     value = context.getParser().getAttribute(name, def != null ? def.value() : null);
         field.set(obj, value != null && !value.isEmpty() ? Colors.decode(value) : null);
     }
 

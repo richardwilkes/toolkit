@@ -21,14 +21,13 @@ public class Circle extends Ellipse2D {
     private double mRadius;
 
     /** Creates a new {@link Circle} with a center point of 0,0 and a radius of 0. */
-    public Circle() {
-    }
+    public Circle() {}
 
     /**
      * Creates a new {@link Circle}.
      *
-     * @param x The horizontal center.
-     * @param y The vertical center.
+     * @param x      The horizontal center.
+     * @param y      The vertical center.
      * @param radius The radius to use. Will be forced to a minimum of 0.
      */
     public Circle(double x, double y, double radius) {
@@ -77,20 +76,20 @@ public class Circle extends Ellipse2D {
     }
 
     /**
-     * @param x The horizontal center.
-     * @param y The vertical center.
+     * @param x      The horizontal center.
+     * @param y      The vertical center.
      * @param radius The radius to use. Will be forced to a minimum of 0.
      */
     public void set(double x, double y, double radius) {
-        mX = x;
-        mY = y;
+        mX      = x;
+        mY      = y;
         mRadius = Math.max(radius, 0);
     }
 
     /** @param other Another circle to copy the state from. */
     public void set(Circle other) {
-        mX = other.mX;
-        mY = other.mY;
+        mX      = other.mX;
+        mY      = other.mY;
         mRadius = other.mRadius;
     }
 
@@ -122,8 +121,8 @@ public class Circle extends Ellipse2D {
      * @return <code>true</code> if the passed-in {@link Circle} overlaps the {@link Circle}.
      */
     public boolean intersects(Circle circle) {
-        double x = mX - circle.mX;
-        double y = mY - circle.mY;
+        double x      = mX - circle.mX;
+        double y      = mY - circle.mY;
         double radius = mRadius + circle.mRadius;
         return radius * radius >= x * x + y * y;
     }
@@ -158,12 +157,12 @@ public class Circle extends Ellipse2D {
         }
         if (width != height) {
             mRadius = Math.min(width, height) / 2;
-            mX = x + mRadius + (width / 2 - mRadius);
-            mY = y + mRadius + (height / 2 - mRadius);
+            mX      = x + mRadius + (width / 2 - mRadius);
+            mY      = y + mRadius + (height / 2 - mRadius);
         } else {
             mRadius = width / 2;
-            mX = x + mRadius;
-            mY = y + mRadius;
+            mX      = x + mRadius;
+            mY      = y + mRadius;
         }
     }
 
@@ -177,13 +176,13 @@ public class Circle extends Ellipse2D {
     public void add(Circle other) {
         if (mRadius == other.mRadius) {
             // Faster way, but only works when radius is the same
-            double x1 = (mX + other.mX) / 2;
-            double y1 = (mY + other.mY) / 2;
-            double x = mX - other.mX;
-            double y = mY - other.mY;
+            double x1              = (mX + other.mX) / 2;
+            double y1              = (mY + other.mY) / 2;
+            double x               = mX - other.mX;
+            double y               = mY - other.mY;
             double distanceSquared = x * x + y * y;
-            double radiusSquared1 = mRadius * mRadius;
-            double radiusSquared2 = other.mRadius * other.mRadius;
+            double radiusSquared1  = mRadius * mRadius;
+            double radiusSquared2  = other.mRadius * other.mRadius;
             if (radiusSquared1 < distanceSquared + radiusSquared2) {
                 if (radiusSquared2 >= distanceSquared + radiusSquared1) {
                     set(other);
@@ -193,13 +192,13 @@ public class Circle extends Ellipse2D {
             }
         } else {
             double angle = Math.atan2(other.mY - mY, other.mX - mX);
-            double x1 = other.mX + Math.cos(angle) * other.mRadius;
-            double y1 = other.mY + Math.sin(angle) * other.mRadius;
+            double x1    = other.mX + Math.cos(angle) * other.mRadius;
+            double y1    = other.mY + Math.sin(angle) * other.mRadius;
             angle += Math.PI;
-            double x2 = mX + Math.cos(angle) * mRadius;
-            double y2 = mY + Math.sin(angle) * mRadius;
-            double x = x1 - x2;
-            double y = y1 - y2;
+            double x2     = mX + Math.cos(angle) * mRadius;
+            double y2     = mY + Math.sin(angle) * mRadius;
+            double x      = x1 - x2;
+            double y      = y1 - y2;
             double radius = Math.sqrt(x * x + y * y) / 2;
             if (mRadius < radius) {
                 if (other.mRadius >= radius) {

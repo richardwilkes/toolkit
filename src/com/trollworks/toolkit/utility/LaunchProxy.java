@@ -54,7 +54,7 @@ public class LaunchProxy implements ConduitReceiver {
      * than once.
      *
      * @param files The files, if any, that should be passed on to another instance of the app that
-     *            may already be running.
+     *              may already be running.
      */
     public synchronized static void configure(List<File> files) {
         if (INSTANCE == null) {
@@ -72,7 +72,7 @@ public class LaunchProxy implements ConduitReceiver {
 
     private LaunchProxy(List<File> files) {
         StringBuilder buffer = new StringBuilder();
-        mFiles = new ArrayList<>();
+        mFiles     = new ArrayList<>();
         mTimeStamp = System.currentTimeMillis();
         buffer.append(LAUNCH_ID);
         buffer.append(' ');

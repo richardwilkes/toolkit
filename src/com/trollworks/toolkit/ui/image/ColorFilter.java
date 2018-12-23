@@ -40,15 +40,15 @@ public class ColorFilter extends RGBImageFilter {
      * Constructs an image filter that colorizes an image by blending its pixels with the specified
      * color.
      *
-     * @param color The color to blend with.
+     * @param color        The color to blend with.
      * @param includeAlpha Whether or not to include pixels with an alpha channel in the
-     *            colorization.
+     *                     colorization.
      */
     public ColorFilter(Color color, boolean includeAlpha) {
-        mRed = color.getRed();
-        mGreen = color.getGreen();
-        mBlue = color.getBlue();
-        mIncludeAlpha = includeAlpha;
+        mRed                     = color.getRed();
+        mGreen                   = color.getGreen();
+        mBlue                    = color.getBlue();
+        mIncludeAlpha            = includeAlpha;
         canFilterIndexColorModel = true;
     }
 
@@ -66,14 +66,14 @@ public class ColorFilter extends RGBImageFilter {
     /**
      * Creates a colorized image.
      *
-     * @param image The image to colorize.
-     * @param color The color to apply.
+     * @param image        The image to colorize.
+     * @param color        The color to apply.
      * @param includeAlpha Whether or not to include pixels with an alpha channel in the
-     *            colorization.
+     *                     colorization.
      * @return The colorized image.
      */
     public static StdImage createColorizedImage(Image image, Color color, boolean includeAlpha) {
-        ColorFilter filter = new ColorFilter(color, includeAlpha);
+        ColorFilter   filter   = new ColorFilter(color, includeAlpha);
         ImageProducer producer = new FilteredImageSource(image.getSource(), filter);
         return StdImage.getToolkitImage(Toolkit.getDefaultToolkit().createImage(producer));
     }

@@ -45,8 +45,8 @@ public class SelectAllCommand extends Command {
 
     @Override
     public void adjust() {
-        boolean enable = false;
-        Component comp = getFocusOwner();
+        boolean   enable = false;
+        Component comp   = getFocusOwner();
         if (comp instanceof JTextComponent && comp.isEnabled()) {
             JTextComponent textComp = (JTextComponent) comp;
             enable = textComp.getSelectionEnd() - textComp.getSelectionStart() != textComp.getDocument().getLength();

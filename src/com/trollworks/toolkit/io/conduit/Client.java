@@ -35,9 +35,9 @@ class Client extends Thread {
         super(Conduit.class.getSimpleName() + '$' + Client.class.getSimpleName() + '#' + server.getNextClientCounter() + '@' + server.getServerSocket().getLocalSocketAddress());
         setPriority(NORM_PRIORITY);
         setDaemon(true);
-        mServer = server;
+        mServer       = server;
         mClientSocket = socket;
-        mClientInput = new DataInputStream(socket.getInputStream());
+        mClientInput  = new DataInputStream(socket.getInputStream());
         mClientOutput = new DataOutputStream(socket.getOutputStream());
     }
 

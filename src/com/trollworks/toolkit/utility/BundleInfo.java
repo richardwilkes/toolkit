@@ -157,7 +157,7 @@ public class BundleInfo {
      * </tr>
      * </table>
      *
-     * @param attributes The {@link Attributes} to load the information from.
+     * @param attributes  The {@link Attributes} to load the information from.
      * @param defaultName The default name to use, if the 'bundle-name' attribute isn't found.
      */
     public BundleInfo(Attributes attributes, String defaultName) {
@@ -166,15 +166,15 @@ public class BundleInfo {
     }
 
     private void load(Attributes attributes) {
-        mName = attributes.getValue(BUNDLE_NAME);
-        mVersion = Version.extract(attributes.getValue(BUNDLE_VERSION), 0);
+        mName           = attributes.getValue(BUNDLE_NAME);
+        mVersion        = Version.extract(attributes.getValue(BUNDLE_VERSION), 0);
         mCopyrightOwner = attributes.getValue(BUNDLE_COPYRIGHT_OWNER);
         mCopyrightYears = attributes.getValue(BUNDLE_COPYRIGHT_YEARS);
-        mLicense = attributes.getValue(BUNDLE_LICENSE);
+        mLicense        = attributes.getValue(BUNDLE_LICENSE);
         mExecutableName = attributes.getValue(BUNDLE_EXECUTABLE);
-        mId = attributes.getValue(BUNDLE_ID);
-        mSignature = attributes.getValue(BUNDLE_SIGNATURE);
-        mCategory = attributes.getValue(BUNDLE_CATEGORY);
+        mId             = attributes.getValue(BUNDLE_ID);
+        mSignature      = attributes.getValue(BUNDLE_SIGNATURE);
+        mCategory       = attributes.getValue(BUNDLE_CATEGORY);
     }
 
     private void validate(String defaultName) {
@@ -279,7 +279,7 @@ public class BundleInfo {
     @SuppressWarnings("nls")
     public void write(File file) {
         try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)))) {
-            mOut = out;
+            mOut   = out;
             mDepth = 0;
             mOut.println("<?xml version=\"1.0\" ?>");
             mOut.println("<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">");

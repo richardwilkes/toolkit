@@ -34,7 +34,7 @@ public class TreeTestWindow extends AppWindow implements SignificantFrame {
     }
 
     private static TreePanel createTestPanel(boolean wrapped, boolean allowDropRowCopy) {
-        TreeRoot root = new TreeRoot(new Notifier());
+        TreeRoot  root  = new TreeRoot(new Notifier());
         TreePanel panel = new TreePanel(root);
         panel.setAllowedRowDropTypes(allowDropRowCopy ? DnDConstants.ACTION_COPY_OR_MOVE : DnDConstants.ACTION_MOVE);
         panel.setAllowRowDropFromExternal(true);

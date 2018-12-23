@@ -60,7 +60,7 @@ public class SafeFileUpdater {
     /** Creates a new transaction. */
     public SafeFileUpdater() {
         mStarted = 0;
-        mFiles = new HashMap<>();
+        mFiles   = new HashMap<>();
     }
 
     /**
@@ -85,7 +85,7 @@ public class SafeFileUpdater {
      * will be removed as well.
      *
      * @throws IOException if a failure occurs. In this case, no files will be altered, as if
-     *             <code>abort()</code> had been called instead.
+     *                     <code>abort()</code> had been called instead.
      */
     public void commit() throws IOException {
         if (mStarted == 0) {
@@ -94,14 +94,14 @@ public class SafeFileUpdater {
 
         if (--mStarted == 0) {
             HashMap<File, File> renameMap = new HashMap<>();
-            File destFile;
-            File tmpFile;
+            File                destFile;
+            File                tmpFile;
 
             // Attempt to swap all the necessary files
             try {
                 for (Map.Entry<File, File> entry1 : mFiles.entrySet()) {
                     destFile = entry1.getKey();
-                    tmpFile = entry1.getValue();
+                    tmpFile  = entry1.getValue();
 
                     if (destFile.exists()) {
                         File tmpRenameFile = File.createTempFile("ren", null, destFile.getParentFile()); //$NON-NLS-1$
@@ -120,7 +120,7 @@ public class SafeFileUpdater {
             } catch (IOException ioe) {
                 for (Map.Entry<File, File> entry2 : renameMap.entrySet()) {
                     destFile = entry2.getKey();
-                    tmpFile = entry2.getValue();
+                    tmpFile  = entry2.getValue();
 
                     destFile.delete();
                     tmpFile.renameTo(destFile);

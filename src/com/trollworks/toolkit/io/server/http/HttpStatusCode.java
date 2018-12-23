@@ -35,7 +35,7 @@ public enum HttpStatusCode {
 
     private HttpStatusCode(int requestStatus, String description) {
         mRequestStatus = requestStatus;
-        mDescription = description;
+        mDescription   = description;
     }
 
     /** @return The integer value of the status code. */

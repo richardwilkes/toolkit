@@ -22,7 +22,7 @@ public class FilteredList<T> extends ArrayList<T> {
     /**
      * Creates a new {@link FilteredList}. Will not include <code>null</code> values.
      *
-     * @param iterable The {@link Iterable} to filter by type.
+     * @param iterable     The {@link Iterable} to filter by type.
      * @param contentClass The class of objects to extract from the collection.
      */
     public FilteredList(Iterable<?> iterable, Class<T> contentClass) {
@@ -32,9 +32,9 @@ public class FilteredList<T> extends ArrayList<T> {
     /**
      * Creates a new {@link FilteredList}.
      *
-     * @param iterable The {@link Iterable} to filter by type.
+     * @param iterable     The {@link Iterable} to filter by type.
      * @param contentClass The class of objects to extract from the collection.
-     * @param omitNulls Whether to omit <code>null</code> values or not.
+     * @param omitNulls    Whether to omit <code>null</code> values or not.
      */
     public FilteredList(Iterable<?> iterable, Class<T> contentClass, boolean omitNulls) {
         super();

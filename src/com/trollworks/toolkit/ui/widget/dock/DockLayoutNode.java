@@ -33,9 +33,9 @@ public interface DockLayoutNode {
     /**
      * Sets the position and size of this node, which may alter any contained sub-nodes.
      *
-     * @param x The horizontal starting coordinate.
-     * @param y The vertical starting coordinate.
-     * @param width The width;
+     * @param x      The horizontal starting coordinate.
+     * @param y      The vertical starting coordinate.
+     * @param width  The width;
      * @param height The height;
      */
     void setBounds(int x, int y, int width, int height);

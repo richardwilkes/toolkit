@@ -65,7 +65,7 @@ public class OpenDataFileCommand extends Command implements Runnable {
      * Creates a new {@link OpenDataFileCommand}.
      *
      * @param title The title to use.
-     * @param file The file to open.
+     * @param file  The file to open.
      */
     public OpenDataFileCommand(String title, File file) {
         super(title, CMD_PREFIX + file.getName() + CMD_POSTFIX, FileType.getIconsForFile(file).getImage(16));
@@ -80,7 +80,7 @@ public class OpenDataFileCommand extends Command implements Runnable {
      */
     public OpenDataFileCommand(File file) {
         super(file.getName(), CMD_PREFIX + file.getName() + CMD_POSTFIX);
-        mFile = file;
+        mFile   = file;
         mVerify = true;
     }
 

@@ -25,7 +25,7 @@ public class DateFormatter extends JFormattedTextField.AbstractFormatter {
      * Creates a new {@link DateFormatter}.
      *
      * @param type The type of date format to use, one of {@link DateFormat#SHORT},
-     *            {@link DateFormat#MEDIUM}, {@link DateFormat#LONG}, or {@link DateFormat#FULL}.
+     *             {@link DateFormat#MEDIUM}, {@link DateFormat#LONG}, or {@link DateFormat#FULL}.
      */
     public DateFormatter(int type) {
         mType = type;

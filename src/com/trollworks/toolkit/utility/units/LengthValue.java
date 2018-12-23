@@ -17,7 +17,7 @@ import com.trollworks.toolkit.utility.text.Numbers;
 /** Holds a value and {@link LengthUnits} pair. */
 public class LengthValue extends UnitsValue<LengthUnits> {
     /**
-     * @param buffer The buffer to extract a {@link LengthValue} from.
+     * @param buffer    The buffer to extract a {@link LengthValue} from.
      * @param localized <code>true</code> if the string might have localized notation within it.
      * @return The result.
      */
@@ -26,17 +26,17 @@ public class LengthValue extends UnitsValue<LengthUnits> {
         if (buffer != null) {
             buffer = buffer.trim();
             // Check for the special case of FEET_AND_INCHES first
-            int feetMark = buffer.indexOf('\'');
+            int feetMark   = buffer.indexOf('\'');
             int inchesMark = buffer.indexOf('"');
             if (feetMark != -1 || inchesMark != -1) {
                 if (feetMark == -1) {
                     String part = buffer.substring(0, inchesMark);
                     return new LengthValue(localized ? Numbers.extractDouble(part, 0, true) : Numbers.extractDouble(part, 0, false), LengthUnits.FT_IN);
                 }
-                String part = buffer.substring(inchesMark != -1 && feetMark > inchesMark ? inchesMark + 1 : 0, feetMark);
+                String part   = buffer.substring(inchesMark != -1 && feetMark > inchesMark ? inchesMark + 1 : 0, feetMark);
                 double inches = (localized ? Numbers.extractDouble(part, 0, true) : Numbers.extractDouble(part, 0, false)) * 12;
                 if (inchesMark != -1) {
-                    part = buffer.substring(feetMark < inchesMark ? feetMark + 1 : 0, inchesMark);
+                    part    = buffer.substring(feetMark < inchesMark ? feetMark + 1 : 0, inchesMark);
                     inches += localized ? Numbers.extractDouble(part, 0, true) : Numbers.extractDouble(part, 0, false);
                 }
                 return new LengthValue(inches, LengthUnits.FT_IN);
@@ -44,7 +44,7 @@ public class LengthValue extends UnitsValue<LengthUnits> {
             for (LengthUnits lu : LengthUnits.values()) {
                 String text = Enums.toId(lu);
                 if (buffer.endsWith(text)) {
-                    units = lu;
+                    units  = lu;
                     buffer = buffer.substring(0, buffer.length() - text.length());
                     break;
                 }

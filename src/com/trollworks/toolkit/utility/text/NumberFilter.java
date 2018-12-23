@@ -33,7 +33,7 @@ public class NumberFilter implements KeyListener {
 
     static {
         DecimalFormatSymbols symbols = ((DecimalFormat) NumberFormat.getNumberInstance()).getDecimalFormatSymbols();
-        GROUP_CHAR = symbols.getGroupingSeparator();
+        GROUP_CHAR   = symbols.getGroupingSeparator();
         DECIMAL_CHAR = symbols.getDecimalSeparator();
     }
 
@@ -50,9 +50,9 @@ public class NumberFilter implements KeyListener {
     /**
      * Creates a new numeric key entry filter.
      *
-     * @param field The {@link JTextField} to filter.
+     * @param field        The {@link JTextField} to filter.
      * @param allowDecimal Pass in <code>true</code> to allow floating point.
-     * @param allowSign Pass in <code>true</code> to allow sign characters.
+     * @param allowSign    Pass in <code>true</code> to allow sign characters.
      */
     public NumberFilter(JTextField field, boolean allowDecimal, boolean allowSign) {
         this(field, allowDecimal, allowSign, true, Integer.MAX_VALUE);
@@ -61,10 +61,10 @@ public class NumberFilter implements KeyListener {
     /**
      * Creates a new numeric key entry filter.
      *
-     * @param field The {@link JTextField} to filter.
+     * @param field        The {@link JTextField} to filter.
      * @param allowDecimal Pass in <code>true</code> to allow floating point.
-     * @param allowSign Pass in <code>true</code> to allow sign characters.
-     * @param allowGroup Pass in <code>true</code> to allow group characters.
+     * @param allowSign    Pass in <code>true</code> to allow sign characters.
+     * @param allowGroup   Pass in <code>true</code> to allow group characters.
      */
     public NumberFilter(JTextField field, boolean allowDecimal, boolean allowSign, boolean allowGroup) {
         this(field, allowDecimal, allowSign, allowGroup, Integer.MAX_VALUE);
@@ -73,11 +73,11 @@ public class NumberFilter implements KeyListener {
     /**
      * Creates a new numeric key entry filter.
      *
-     * @param field The {@link JTextField} to filter.
+     * @param field        The {@link JTextField} to filter.
      * @param allowDecimal Pass in <code>true</code> to allow floating point.
-     * @param allowSign Pass in <code>true</code> to allow sign characters.
-     * @param maxDigits The maximum number of digits (not necessarily characters) the field can
-     *            have.
+     * @param allowSign    Pass in <code>true</code> to allow sign characters.
+     * @param maxDigits    The maximum number of digits (not necessarily characters) the field can
+     *                     have.
      */
     public NumberFilter(JTextField field, boolean allowDecimal, boolean allowSign, int maxDigits) {
         this(field, allowDecimal, allowSign, true, maxDigits);
@@ -86,19 +86,19 @@ public class NumberFilter implements KeyListener {
     /**
      * Creates a new numeric key entry filter.
      *
-     * @param field The {@link JTextField} to filter.
+     * @param field        The {@link JTextField} to filter.
      * @param allowDecimal Pass in <code>true</code> to allow floating point.
-     * @param allowSign Pass in <code>true</code> to allow sign characters.
-     * @param allowGroup Pass in <code>true</code> to allow group characters.
-     * @param maxDigits The maximum number of digits (not necessarily characters) the field can
-     *            have.
+     * @param allowSign    Pass in <code>true</code> to allow sign characters.
+     * @param allowGroup   Pass in <code>true</code> to allow group characters.
+     * @param maxDigits    The maximum number of digits (not necessarily characters) the field can
+     *                     have.
      */
     public NumberFilter(JTextField field, boolean allowDecimal, boolean allowSign, boolean allowGroup, int maxDigits) {
-        mField = field;
+        mField        = field;
         mAllowDecimal = allowDecimal;
-        mAllowSign = allowSign;
-        mAllowGroup = allowGroup;
-        mMaxDigits = maxDigits;
+        mAllowSign    = allowSign;
+        mAllowGroup   = allowGroup;
+        mMaxDigits    = maxDigits;
         for (KeyListener listener : mField.getKeyListeners()) {
             if (listener instanceof NumberFilter) {
                 mField.removeKeyListener(listener);
@@ -123,8 +123,8 @@ public class NumberFilter implements KeyListener {
         if (ch != '\n' && ch != '\r' && ch != '\t' && ch != '\b' && ch != KeyEvent.VK_DELETE) {
             if (mAllowGroup && ch == GROUP_CHAR || ch >= '0' && ch <= '9' || mAllowSign && (ch == '-' || ch == '+') || mAllowDecimal && ch == DECIMAL_CHAR || mIsHeightFilter && (ch == '\'' || ch == '"' || ch == ' ')) {
                 StringBuilder buffer = new StringBuilder(mField.getText());
-                int start = mField.getSelectionStart();
-                int end = mField.getSelectionEnd();
+                int           start  = mField.getSelectionStart();
+                int           end    = mField.getSelectionEnd();
 
                 if (start != end) {
                     buffer.delete(start, end);
@@ -132,7 +132,7 @@ public class NumberFilter implements KeyListener {
 
                 if (ch >= '0' && ch <= '9') {
                     int length = buffer.length();
-                    int count = 0;
+                    int count  = 0;
 
                     for (int i = 0; i < length; i++) {
                         char one = buffer.charAt(i);

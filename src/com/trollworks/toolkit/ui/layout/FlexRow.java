@@ -21,16 +21,16 @@ import java.util.ArrayList;
 public class FlexRow extends FlexContainer {
     @Override
     protected void layoutSelf(Scale scale, Rectangle bounds) {
-        int count = getChildCount();
-        int hGap = scale.scale(getHorizontalGap());
-        int[] gaps = new int[count > 0 ? count - 1 : 0];
+        int   count = getChildCount();
+        int   hGap  = scale.scale(getHorizontalGap());
+        int[] gaps  = new int[count > 0 ? count - 1 : 0];
         for (int i = 0; i < gaps.length; i++) {
             gaps[i] = hGap;
         }
-        int width = hGap * (count > 0 ? count - 1 : 0);
-        Dimension[] minSizes = getChildSizes(scale, LayoutSize.MINIMUM);
+        int         width     = hGap * (count > 0 ? count - 1 : 0);
+        Dimension[] minSizes  = getChildSizes(scale, LayoutSize.MINIMUM);
         Dimension[] prefSizes = getChildSizes(scale, LayoutSize.PREFERRED);
-        Dimension[] maxSizes = getChildSizes(scale, LayoutSize.MAXIMUM);
+        Dimension[] maxSizes  = getChildSizes(scale, LayoutSize.MAXIMUM);
         for (int i = 0; i < count; i++) {
             width += prefSizes[i].width;
         }
@@ -58,27 +58,27 @@ public class FlexRow extends FlexContainer {
                 extra = 0;
             }
         }
-        ArrayList<FlexCell> children = getChildren();
-        Rectangle[] childBounds = new Rectangle[count];
+        ArrayList<FlexCell> children    = getChildren();
+        Rectangle[]         childBounds = new Rectangle[count];
         for (int i = 0; i < count; i++) {
             childBounds[i] = new Rectangle(prefSizes[i]);
             if (getFillVertical()) {
                 childBounds[i].height = Math.min(maxSizes[i].height, bounds.height);
             }
             switch (children.get(i).getVerticalAlignment()) {
-                case LEFT_TOP:
-                default:
-                    childBounds[i].y = bounds.y;
-                    break;
-                case CENTER:
-                    childBounds[i].y = bounds.y + (bounds.height - childBounds[i].height) / 2;
-                    break;
-                case RIGHT_BOTTOM:
-                    childBounds[i].y = bounds.y + bounds.height - childBounds[i].height;
-                    break;
+            case LEFT_TOP:
+            default:
+                childBounds[i].y = bounds.y;
+                break;
+            case CENTER:
+                childBounds[i].y = bounds.y + (bounds.height - childBounds[i].height) / 2;
+                break;
+            case RIGHT_BOTTOM:
+                childBounds[i].y = bounds.y + bounds.height - childBounds[i].height;
+                break;
             }
         }
-        int x = bounds.x;
+        int       x      = bounds.x;
         Alignment hAlign = getHorizontalAlignment();
         if (hAlign == Alignment.CENTER) {
             x += extra / 2;
@@ -98,7 +98,7 @@ public class FlexRow extends FlexContainer {
     @Override
     protected Dimension getSizeSelf(Scale scale, LayoutSize type) {
         Dimension[] sizes = getChildSizes(scale, type);
-        Dimension size = new Dimension(scale.scale(getHorizontalGap()) * (sizes.length > 0 ? sizes.length - 1 : 0), 0);
+        Dimension   size  = new Dimension(scale.scale(getHorizontalGap()) * (sizes.length > 0 ? sizes.length - 1 : 0), 0);
         for (Dimension one : sizes) {
             size.width += one.width;
             if (one.height > size.height) {

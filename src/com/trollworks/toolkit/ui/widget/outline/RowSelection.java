@@ -27,11 +27,11 @@ public class RowSelection implements Transferable {
      * Creates a new transferable row object.
      *
      * @param model The owning outline model.
-     * @param rows The rows to transfer.
+     * @param rows  The rows to transfer.
      */
     public RowSelection(OutlineModel model, Row[] rows) {
         mModel = model;
-        mRows = new Row[rows.length];
+        mRows  = new Row[rows.length];
         System.arraycopy(rows, 0, mRows, 0, rows.length);
     }
 

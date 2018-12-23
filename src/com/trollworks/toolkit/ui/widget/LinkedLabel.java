@@ -65,7 +65,7 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
     /**
      * Creates a label with the specified text and alignment.
      *
-     * @param text The text to be displayed.
+     * @param text      The text to be displayed.
      * @param alignment The horizontal alignment to use.
      */
     public LinkedLabel(String text, int alignment) {
@@ -89,8 +89,8 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
      * Creates a label with the specified text. The label is right-aligned and centered vertically
      * in its display area.
      *
-     * @param text The text to be displayed.
-     * @param font The dynamic font to use.
+     * @param text      The text to be displayed.
+     * @param font      The dynamic font to use.
      * @param alignment The horizontal alignment to use.
      */
     public LinkedLabel(String text, String font, int alignment) {
@@ -127,9 +127,9 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
      * Creates a label with the specified text. The label is right-aligned and centered vertically
      * in its display area.
      *
-     * @param text The text to be displayed.
-     * @param font The dynamic font to use.
-     * @param link The {@link JComponent} to pair with.
+     * @param text      The text to be displayed.
+     * @param font      The dynamic font to use.
+     * @param link      The {@link JComponent} to pair with.
      * @param alignment The horizontal alignment to use.
      */
     public LinkedLabel(String text, String font, JComponent link, int alignment) {
@@ -160,19 +160,19 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
 
     private void adjustToLink() {
         String tooltip;
-        Color color;
+        Color  color;
 
         if (mLink != null) {
             tooltip = (String) mLink.getClientProperty(ERROR_MESSAGE_KEY);
             if (tooltip == null) {
                 tooltip = mLink.getToolTipText();
-                color = mColor;
+                color   = mColor;
             } else {
                 color = Color.RED;
             }
         } else {
             tooltip = null;
-            color = mColor;
+            color   = mColor;
         }
         setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
         super.setForeground(color);
@@ -195,7 +195,7 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
      * Sets/clears the error message that a {@link LinkedLabel} will respond to.
      *
      * @param comp The {@link JComponent} to set the message on.
-     * @param msg The error message or <code>null</code>.
+     * @param msg  The error message or <code>null</code>.
      */
     public static void setErrorMessage(JComponent comp, String msg) {
         Object old = comp.getClientProperty(ERROR_MESSAGE_KEY);

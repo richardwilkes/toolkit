@@ -23,8 +23,7 @@ import javax.xml.stream.XMLStreamException;
 public class XmlEnumHelper implements XmlObjectHelper {
     public static final XmlEnumHelper SINGLETON = new XmlEnumHelper();
 
-    private XmlEnumHelper() {
-    }
+    private XmlEnumHelper() {}
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -35,8 +34,8 @@ public class XmlEnumHelper implements XmlObjectHelper {
     public void emitAsAttribute(XmlGenerator xml, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
         Enum<?> value = (Enum<?>) field.get(obj);
         if (value != null) {
-            String xmlName = getEnumXmlName(value);
-            XmlDefault def = field.getAnnotation(XmlDefault.class);
+            String     xmlName = getEnumXmlName(value);
+            XmlDefault def     = field.getAnnotation(XmlDefault.class);
             if (def != null) {
                 xml.addAttributeNot(name, xmlName, def.value());
             } else {
@@ -47,7 +46,7 @@ public class XmlEnumHelper implements XmlObjectHelper {
 
     @Override
     public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-        String tag = context.getParser().getAttribute(name);
+        String    tag           = context.getParser().getAttribute(name);
         Enum<?>[] enumConstants = (Enum<?>[]) field.getType().getEnumConstants();
         for (Enum<?> one : enumConstants) {
             String xmlName = getEnumXmlName(one);

@@ -36,11 +36,11 @@ public class StdTreeDeleter implements Deletable {
 
     @Override
     public void deleteSelection() {
-        HashMap<TreeContainerRow, ArrayList<TreeRow>> map = new HashMap<>();
-        ArrayList<TreeRow> rows = mPanel.getSelectedRows();
+        HashMap<TreeContainerRow, ArrayList<TreeRow>> map  = new HashMap<>();
+        ArrayList<TreeRow>                            rows = mPanel.getSelectedRows();
         for (TreeRow row : rows) {
-            TreeContainerRow parent = row.getParent();
-            ArrayList<TreeRow> list = map.get(parent);
+            TreeContainerRow   parent = row.getParent();
+            ArrayList<TreeRow> list   = map.get(parent);
             if (list == null) {
                 list = new ArrayList<>();
                 map.put(parent, list);
