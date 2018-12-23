@@ -20,10 +20,9 @@ import javax.swing.UIManager;
 /** Provides standardized color access. */
 @SuppressWarnings("nls")
 public class Colors {
-    private static final Color               DISABLED_BACKGROUND = new Color(220, 220, 220);
-    private static final Color               SECONDARY_BANDING   = new Color(232, 255, 232);
-    private static final Map<String, String> NAME_TO_RGB         = new HashMap<>();
-    private static final Map<String, String> RGB_TO_NAME         = new HashMap<>();
+    private static final Color               SECONDARY_BANDING = new Color(232, 255, 232);
+    private static final Map<String, String> NAME_TO_RGB       = new HashMap<>();
+    private static final Map<String, String> RGB_TO_NAME       = new HashMap<>();
 
     static {
         // The HTML / CSS color list
@@ -193,15 +192,15 @@ public class Colors {
             buffer.append(',');
             buffer.append(alpha);
         }
-        String result = buffer.toString();
+        String result     = buffer.toString();
         String substitute = RGB_TO_NAME.get(result);
         return substitute != null ? substitute : result;
     }
 
     public static final Color decode(String buffer) {
-        int red = 0;
+        int red   = 0;
         int green = 0;
-        int blue = 0;
+        int blue  = 0;
         int alpha = 0;
         if (buffer != null) {
             buffer = buffer.trim().toLowerCase();
@@ -211,9 +210,9 @@ public class Colors {
             }
             String[] color = buffer.split(",");
             if (color.length == 3 || color.length == 4) {
-                red = parseColorComponent(color[0]);
+                red   = parseColorComponent(color[0]);
                 green = parseColorComponent(color[1]);
-                blue = parseColorComponent(color[2]);
+                blue  = parseColorComponent(color[2]);
                 if (color.length == 4) {
                     alpha = parseColorComponent(color[3]);
                 } else {
@@ -241,9 +240,9 @@ public class Colors {
                     single |= 0xFF000000;
                 }
                 alpha = single >> 24 & 0xFF;
-                red = single >> 16 & 0xFF;
+                red   = single >> 16 & 0xFF;
                 green = single >> 8 & 0xFF;
-                blue = single & 0xFF;
+                blue  = single & 0xFF;
             }
         }
         return new Color(red, green, blue, alpha);
@@ -305,15 +304,15 @@ public class Colors {
         double red = color.getRed() / 255.0;
         if (!isMonochrome(color)) {
             double green = color.getGreen() / 255.0;
-            double blue = color.getBlue() / 255.0;
+            double blue  = color.getBlue() / 255.0;
             return Math.sqrt(red * red * 0.241 + green * green * 0.691 + blue * blue * 0.068);
         }
         return red;
     }
 
     /**
-     * @param color1 The first color.
-     * @param color2 The second color.
+     * @param color1     The first color.
+     * @param color2     The second color.
      * @param percentage How much of the second color to use.
      * @return A color that is a blended version of the two passed in.
      */
@@ -323,7 +322,7 @@ public class Colors {
     }
 
     /**
-     * @param color The color to base the new color on.
+     * @param color  The color to base the new color on.
      * @param amount The amount to adjust the saturation by, in the range -1 to 1.
      * @return The adjusted color.
      */
@@ -333,7 +332,7 @@ public class Colors {
     }
 
     /**
-     * @param color The color to base the new color on.
+     * @param color  The color to base the new color on.
      * @param amount The amount to adjust the brightness by, in the range -1 to 1.
      * @return The adjusted color.
      */
@@ -343,7 +342,7 @@ public class Colors {
     }
 
     /**
-     * @param color The color to base the new color on.
+     * @param color  The color to base the new color on.
      * @param amount The amount to adjust the hue by, in the range -1 to 1.
      * @return The adjusted color.
      */
@@ -363,24 +362,32 @@ public class Colors {
 
     /**
      * @param selected Whether or not the selected version of the color is needed.
-     * @param active Whether or not the active version of the color is needed.
+     * @param active   Whether or not the active version of the color is needed.
      * @return The background color.
      */
     public static Color getListBackground(boolean selected, boolean active) {
         if (selected) {
-            return active ? UIManager.getColor("List.selectionBackground") : DISABLED_BACKGROUND;
+            Color color = UIManager.getColor("List.selectionBackground");
+            if (!active) {
+                Color previous = color;
+                color = Colors.adjustSaturation(color, -0.5f);
+                if (previous.getRGB() == color.getRGB()) {
+                    color = Colors.adjustBrightness(color, 0.2f);
+                }
+            }
+            return color;
         }
         return UIManager.getColor("List.background");
     }
 
     /**
      * @param selected Whether or not the selected version of the color is needed.
-     * @param active Whether or not the active version of the color is needed.
+     * @param active   Whether or not the active version of the color is needed.
      * @return The foreground color.
      */
     public static Color getListForeground(boolean selected, boolean active) {
         if (selected) {
-            return active ? UIManager.getColor("List.selectionForeground") : Color.BLACK;
+            return UIManager.getColor("List.selectionForeground");
         }
         return UIManager.getColor("List.foreground");
     }
