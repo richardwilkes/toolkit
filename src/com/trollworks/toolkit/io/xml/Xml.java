@@ -45,6 +45,7 @@ import com.trollworks.toolkit.workarounds.PathToUri;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -229,11 +230,40 @@ public class Xml {
      * @return The object that was passed in.
      */
     public static final <T> T load(URI uri, T obj, XmlParserContext context) throws XMLStreamException {
+        try {
+            return load(uri.toURL().openStream(), obj, context);
+        } catch (XMLStreamException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new XMLStreamException(exception);
+        }
+    }
+
+    /**
+     * Loads the contents of an xml stream into the specified object.
+     *
+     * @param in  The stream to load from.
+     * @param obj The object to load the xml data into.
+     * @return The object that was passed in.
+     */
+    public static final <T> T load(InputStream in, T obj) throws XMLStreamException {
+        return load(in, obj, null);
+    }
+
+    /**
+     * Loads the contents of an xml stream into the specified object.
+     *
+     * @param in      The stream to load from.
+     * @param obj     The object to load the xml data into.
+     * @param context Optional context for recording state while loading.
+     * @return The object that was passed in.
+     */
+    public static final <T> T load(InputStream in, T obj, XmlParserContext context) throws XMLStreamException {
         XmlTag xmlTag = obj.getClass().getAnnotation(XmlTag.class);
         if (xmlTag == null) {
             throw new XMLStreamException(ROOT_NOT_TAGGED);
         }
-        try (XmlParser xml = new XmlParser(uri.toURL().openStream())) {
+        try (XmlParser xml = new XmlParser(in)) {
             String tag = xml.nextTag();
             if (tag != null && tag.equals(xmlTag.value())) {
                 load(xml, obj, context);
