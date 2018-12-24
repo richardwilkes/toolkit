@@ -116,6 +116,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     private boolean                    mShowHeader               = true;
     private boolean                    mDropReceived;
     private boolean                    mResizePending;
+    private boolean                    mIgnoreNextDragGesture;
 
     /**
      * Creates a new {@link TreePanel}.
@@ -193,38 +194,50 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     public void mousePressed(MouseEvent event) {
         requestFocusInWindow();
         Point where = event.getPoint();
-        mRowToSelectOnMouseUp = null;
-        mViewArea             = checkAndConvertToArea(where);
+        mIgnoreNextDragGesture = false;
+        mRowToSelectOnMouseUp  = null;
+        mViewArea              = checkAndConvertToArea(where);
         if (mViewArea != DirectScrollPanelArea.NONE) {
             mDragStart = new Point(where);
             if (setColumnDividerHighlight(mDragStart.x)) {
                 mDragColumnDivider = mMouseOverColumnDivider;
             } else {
+                boolean isPopupTrigger = event.isPopupTrigger();
                 switch (mViewArea) {
                 case CONTENT:
                     TreeContainerRow disclosureRow = overDisclosureControl(mDragStart.x, mDragStart.y);
                     if (disclosureRow != null) {
                         setOpen(!isOpen(disclosureRow), disclosureRow);
                     } else {
-                        TreeRow row = overRow(mDragStart.y);
+                        boolean handled = false;
+                        TreeRow row     = overRow(mDragStart.y);
                         if (row != null) {
-                            if (mAnchorRow != null && event.isShiftDown()) {
-                                select(mAnchorRow, row, true);
-                            } else if ((event.getModifiersEx() & getToolkit().getMenuShortcutKeyMaskEx()) != 0 && !event.isPopupTrigger()) {
-                                if (isSelected(row)) {
-                                    deselect(row);
-                                } else {
-                                    select(row, true);
+                            TreeColumn column = overColumn(mDragStart.x);
+                            if (column != null) {
+                                handled = column.mousePress(row, new Point(mDragStart));
+                                if (handled) {
+                                    mIgnoreNextDragGesture = true;
                                 }
-                            } else if (!isSelected(row)) {
-                                select(row, false);
-                            } else if (mSelectedRows.size() != 1) {
-                                mRowToSelectOnMouseUp = row;
+                            }
+                            if (!handled) {
+                                if (mAnchorRow != null && event.isShiftDown()) {
+                                    select(mAnchorRow, row, true);
+                                } else if ((event.getModifiersEx() & getToolkit().getMenuShortcutKeyMaskEx()) != 0 && !isPopupTrigger) {
+                                    if (isSelected(row)) {
+                                        deselect(row);
+                                    } else {
+                                        select(row, true);
+                                    }
+                                } else if (!isSelected(row)) {
+                                    select(row, false);
+                                } else if (mSelectedRows.size() != 1) {
+                                    mRowToSelectOnMouseUp = row;
+                                }
                             }
                         } else {
                             deselect();
                         }
-                        if (event.isPopupTrigger()) {
+                        if (!handled && isPopupTrigger) {
                             mRowToSelectOnMouseUp = null;
                             showContextMenuForContent(where);
                         }
@@ -232,7 +245,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
                     break;
                 case HEADER:
                     TreeColumn column = overColumn(where.x);
-                    if (event.isPopupTrigger()) {
+                    if (isPopupTrigger) {
                         if (column != null && mAllowColumnContextMenu) {
                             showContextMenuForColumn(where, column);
                         }
@@ -1908,7 +1921,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         Point where      = new Point(event.getDragOrigin());
         switch (checkAndConvertToArea(where)) {
         case CONTENT:
-            if (mDragColumnDivider == -1 && !mSelectedRows.isEmpty() && (dragAction & mAllowedRowDragTypes) != 0) {
+            if (!mIgnoreNextDragGesture && mDragColumnDivider == -1 && !mSelectedRows.isEmpty() && (dragAction & mAllowedRowDragTypes) != 0) {
                 TreeRowSelection selection = new TreeRowSelection(getSelectedRows(), mOpenRows);
                 if (DragSource.isDragImageSupported()) {
                     StdImage  dragImage = createDragImage(where);

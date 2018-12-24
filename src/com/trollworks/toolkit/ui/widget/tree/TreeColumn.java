@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -237,6 +238,18 @@ public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
      * @param active   Whether or not the active state should be displayed.
      */
     public abstract void draw(Graphics2D gc, TreePanel panel, TreeRow row, int position, int top, int left, int width, boolean selected, boolean active);
+
+    /**
+     * Called when a mouse press occurs within the column. By default, does nothing.
+     *
+     * @param row   The {@link TreeRow} at the mouse press location.
+     * @param where The mouse press location.
+     * @return <code>true</code> if the mouse press has been handled.
+     */
+    @SuppressWarnings("static-method")
+    public boolean mousePress(TreeRow row, Point where) {
+        return false;
+    }
 
     /** @return The {@link Font} to use for the header. */
     @SuppressWarnings("static-method")
