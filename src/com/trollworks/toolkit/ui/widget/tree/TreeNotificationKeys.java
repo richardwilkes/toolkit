@@ -69,6 +69,11 @@ public class TreeNotificationKeys {
      */
     public static final String ROW_CLOSED     = ROW_PREFIX + "closed"; //$NON-NLS-1$
     /**
+     * The notification emitted when one or more rows are dropped into the tree, either via
+     * rearrangement of existing nodes or new external nodes being added.
+     */
+    public static final String ROW_DROP       = ROW_PREFIX + "drop"; //$NON-NLS-1$
+    /**
      * The notification emitted when one or more {@link TreeColumn}s are added. Producer: The
      * {@link TreePanel} that was modified. Data: The array of {@link TreeColumn}s that were added.
      */

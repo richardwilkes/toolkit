@@ -1836,7 +1836,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         }
     }
 
-    private void notify(String key, Object extra) {
+    protected void notify(String key, Object extra) {
         mRoot.getNotifier().notify(this, key, extra);
     }
 
