@@ -10,7 +10,7 @@
  */
 package com.trollworks.toolkit.ui.widget.tree;
 
-import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.ui.RetinaIcon;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -25,7 +25,7 @@ public class IconTreeColumn extends TreeColumn {
         mIconInteractor = iconInteractor;
     }
 
-    protected StdImage getIcon(TreeRow row) {
+    protected RetinaIcon getIcon(TreeRow row) {
         return mIconInteractor != null ? mIconInteractor.getIcon(row) : null;
     }
 
@@ -36,21 +36,21 @@ public class IconTreeColumn extends TreeColumn {
 
     @Override
     public int calculatePreferredWidth(TreeRow row) {
-        StdImage icon = getIcon(row);
-        return HMARGIN + (icon != null ? icon.getWidth() : 0) + HMARGIN;
+        RetinaIcon icon = getIcon(row);
+        return HMARGIN + (icon != null ? icon.getIconWidth() : 0) + HMARGIN;
     }
 
     @Override
     public int calculatePreferredHeight(TreeRow row, int width) {
-        StdImage icon = getIcon(row);
-        return VMARGIN + (icon != null ? icon.getHeight() : 0) + VMARGIN;
+        RetinaIcon icon = getIcon(row);
+        return VMARGIN + (icon != null ? icon.getIconHeight() : 0) + VMARGIN;
     }
 
     @Override
     public void draw(Graphics2D gc, TreePanel panel, TreeRow row, int position, int top, int left, int width, boolean selected, boolean active) {
-        StdImage icon = getIcon(row);
+        RetinaIcon icon = getIcon(row);
         if (icon != null) {
-            gc.drawImage(icon, left + (width - icon.getWidth()) / 2, top + (panel.getRowHeight(row) - icon.getHeight()) / 2, null);
+            icon.paintIcon(panel, gc, left + (width - icon.getIconWidth()) / 2, top + (panel.getRowHeight(row) - icon.getIconHeight()) / 2);
         }
     }
 

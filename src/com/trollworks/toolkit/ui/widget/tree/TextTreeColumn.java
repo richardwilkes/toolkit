@@ -12,8 +12,8 @@
 package com.trollworks.toolkit.ui.widget.tree;
 
 import com.trollworks.toolkit.ui.Fonts;
+import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.TextDrawing;
-import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.utility.text.NumericComparator;
 
 import java.awt.Color;
@@ -113,13 +113,13 @@ public class TextTreeColumn extends TreeColumn {
 
     @Override
     public int calculatePreferredHeight(TreeRow row, int width) {
-        Font     font = getFont(row);
-        StdImage icon = getIcon(row);
-        int      height;
+        Font       font = getFont(row);
+        RetinaIcon icon = getIcon(row);
+        int        height;
         if (mWrappingMode == WrappingMode.SINGLE_LINE) {
             height = TextDrawing.getFontHeight(font);
             if (icon != null) {
-                int iconHeight = icon.getHeight();
+                int iconHeight = icon.getIconHeight();
                 if (iconHeight > height) {
                     height = iconHeight;
                 }
@@ -127,20 +127,20 @@ public class TextTreeColumn extends TreeColumn {
         } else {
             width -= HMARGIN + HMARGIN;
             if (icon != null) {
-                width -= icon.getWidth() + ICON_GAP;
+                width -= icon.getIconWidth() + ICON_GAP;
             }
             height = calculatePreferredHeight(font, getPresentationText(row, font, width, true), icon);
         }
         return VMARGIN + height + VMARGIN;
     }
 
-    private static int calculatePreferredHeight(Font font, String text, StdImage icon) {
+    private static int calculatePreferredHeight(Font font, String text, RetinaIcon icon) {
         int height = TextDrawing.getPreferredHeight(font, text);
         if (height == 0) {
             height = TextDrawing.getFontHeight(font);
         }
         if (icon != null) {
-            int iconHeight = icon.getHeight();
+            int iconHeight = icon.getIconHeight();
             if (iconHeight > height) {
                 height = iconHeight;
             }
@@ -150,10 +150,10 @@ public class TextTreeColumn extends TreeColumn {
 
     @Override
     public int calculatePreferredWidth(TreeRow row) {
-        int      width = TextDrawing.getPreferredSize(getFont(row), getText(row)).width;
-        StdImage icon  = getIcon(row);
+        int        width = TextDrawing.getPreferredSize(getFont(row), getText(row)).width;
+        RetinaIcon icon  = getIcon(row);
         if (icon != null) {
-            width += icon.getWidth() + ICON_GAP;
+            width += icon.getIconWidth() + ICON_GAP;
         }
         return HMARGIN + width + HMARGIN;
     }
@@ -162,10 +162,10 @@ public class TextTreeColumn extends TreeColumn {
     public void draw(Graphics2D gc, TreePanel panel, TreeRow row, int position, int top, int left, int width, boolean selected, boolean active) {
         left  += HMARGIN;
         width -= HMARGIN + HMARGIN;
-        StdImage icon = getIcon(row);
+        RetinaIcon icon = getIcon(row);
         if (icon != null) {
-            gc.drawImage(icon, left, top + VMARGIN, null);
-            int iconSize = icon.getWidth() + ICON_GAP;
+            icon.paintIcon(panel, gc, left, top + VMARGIN);
+            int iconSize = icon.getIconWidth() + ICON_GAP;
             left  += iconSize;
             width -= iconSize;
         }
@@ -212,7 +212,7 @@ public class TextTreeColumn extends TreeColumn {
      * @param row The {@link TreeRow} to extract information from.
      * @return The text to display.
      */
-    protected StdImage getIcon(TreeRow row) {
+    protected RetinaIcon getIcon(TreeRow row) {
         return mIconAccessor != null ? mIconAccessor.getIcon(row) : null;
     }
 

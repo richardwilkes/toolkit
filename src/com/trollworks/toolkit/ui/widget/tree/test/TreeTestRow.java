@@ -11,6 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget.tree.test;
 
+import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.widget.tree.TreeRow;
 
@@ -32,8 +33,8 @@ public class TreeTestRow extends TreeRow implements TreeRowWithName, TreeRowWith
     }
 
     @Override
-    public StdImage getIcon() {
-        return StdImage.MINI_WARNING;
+    public RetinaIcon getIcon() {
+        return new RetinaIcon(StdImage.MINI_WARNING);
     }
 
     public static String getName(TreeRow row) {
@@ -50,7 +51,7 @@ public class TreeTestRow extends TreeRow implements TreeRowWithName, TreeRowWith
         return null;
     }
 
-    public static StdImage getIcon(TreeRow row) {
+    public static RetinaIcon getIcon(TreeRow row) {
         if (row instanceof TreeRowWithIcon) {
             return ((TreeRowWithIcon) row).getIcon();
         }

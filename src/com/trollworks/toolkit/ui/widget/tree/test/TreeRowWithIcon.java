@@ -11,8 +11,8 @@
 
 package com.trollworks.toolkit.ui.widget.tree.test;
 
-import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.ui.RetinaIcon;
 
 public interface TreeRowWithIcon {
-    StdImage getIcon();
+    RetinaIcon getIcon();
 }

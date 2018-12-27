@@ -11,6 +11,7 @@
 
 package com.trollworks.toolkit.ui.widget.tree;
 
+import com.trollworks.toolkit.ui.RetinaIcon;
 import com.trollworks.toolkit.ui.image.StdImage;
 
 public interface IconAccessor {
@@ -18,5 +19,5 @@ public interface IconAccessor {
      * @param row The {@link TreeRow} to operate on.
      * @return The {@link StdImage} for the field, or <code>null</code>.
      */
-    StdImage getIcon(TreeRow row);
+    RetinaIcon getIcon(TreeRow row);
 }
