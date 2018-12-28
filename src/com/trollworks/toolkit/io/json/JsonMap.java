@@ -56,6 +56,11 @@ public class JsonMap extends JsonCollection {
         return Json.asBoolean(get(key));
     }
 
+    public boolean getBooleanWithDefault(String key, boolean def) {
+        Object value = get(key);
+        return value != null ? Json.asBoolean(value) : def;
+    }
+
     /**
      * @param key The key to retrieve.
      * @return The value associated with the key or zero if no key matches or the value cannot be
@@ -63,6 +68,11 @@ public class JsonMap extends JsonCollection {
      */
     public byte getByte(String key) {
         return Json.asByte(get(key));
+    }
+
+    public byte getByteWithDefault(String key, byte def) {
+        Object value = get(key);
+        return value != null ? Json.asByte(value) : def;
     }
 
     /**
@@ -74,6 +84,11 @@ public class JsonMap extends JsonCollection {
         return Json.asChar(get(key));
     }
 
+    public char getCharWithDefault(String key, char def) {
+        Object value = get(key);
+        return value != null ? Json.asChar(value) : def;
+    }
+
     /**
      * @param key The key to retrieve.
      * @return The value associated with the key or zero if no key matches or the value cannot be
@@ -81,6 +96,11 @@ public class JsonMap extends JsonCollection {
      */
     public int getInt(String key) {
         return Json.asInt(get(key));
+    }
+
+    public int getIntWithDefault(String key, int def) {
+        Object value = get(key);
+        return value != null ? Json.asInt(value) : def;
     }
 
     /**
@@ -92,6 +112,11 @@ public class JsonMap extends JsonCollection {
         return Json.asLong(get(key));
     }
 
+    public long getLongWithDefault(String key, long def) {
+        Object value = get(key);
+        return value != null ? Json.asLong(value) : def;
+    }
+
     /**
      * @param key The key to retrieve.
      * @return The value associated with the key or zero if no key matches or the value cannot be
@@ -99,6 +124,11 @@ public class JsonMap extends JsonCollection {
      */
     public float getFloat(String key) {
         return Json.asFloat(get(key));
+    }
+
+    public float getFloatWithDefault(String key, float def) {
+        Object value = get(key);
+        return value != null ? Json.asFloat(value) : def;
     }
 
     /**
@@ -110,6 +140,11 @@ public class JsonMap extends JsonCollection {
         return Json.asDouble(get(key));
     }
 
+    public double getDoubleWithDefault(String key, double def) {
+        Object value = get(key);
+        return value != null ? Json.asDouble(value) : def;
+    }
+
     /**
      * @param key       The key to retrieve.
      * @param allowNull <code>false</code> to return an empty string if no key matches.
@@ -117,6 +152,11 @@ public class JsonMap extends JsonCollection {
      */
     public String getString(String key, boolean allowNull) {
         return Json.asString(get(key), allowNull);
+    }
+
+    public String getStringWithDefault(String key, String def) {
+        Object value = get(key);
+        return value != null ? Json.asString(value, true) : def;
     }
 
     /**
