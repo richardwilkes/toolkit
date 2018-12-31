@@ -51,6 +51,22 @@ public class StdFileDialog {
     private static final String MODULE   = "StdFileDialog"; //$NON-NLS-1$
     private static final String LAST_DIR = "LastDir"; //$NON-NLS-1$
 
+    /** @return The last directory used by the StdFileDialog. May return <code>null</code>. */
+    public static final String getLastDir() {
+        String last = Preferences.getInstance().getStringValue(MODULE, LAST_DIR);
+        if (last != null) {
+            if (!new File(last).isDirectory()) {
+                last = null;
+            }
+        }
+        return last;
+    }
+
+    /** @param path The path to use as the last directory. */
+    public static final void setLastDir(String path) {
+        Preferences.getInstance().setValue(MODULE, LAST_DIR, path);
+    }
+
     /**
      * Creates a new {@link StdFileDialog}.
      *
@@ -88,14 +104,7 @@ public class StdFileDialog {
      * @return The chosen {@link File} or <code>null</code>.
      */
     public static File showOpenDialog(Component comp, String title, JComponent accessoryPanel, FileNameExtensionFilter... filters) {
-        Preferences prefs = Preferences.getInstance();
-        String      last  = prefs.getStringValue(MODULE, LAST_DIR);
-        if (last != null) {
-            if (!new File(last).isDirectory()) {
-                last = null;
-            }
-        }
-        JFileChooser dialog = new JFileChooser(last);
+        JFileChooser dialog = new JFileChooser(getLastDir());
         dialog.setDialogTitle(title);
         if (filters != null && filters.length > 0) {
             dialog.setAcceptAllFileFilterUsed(false);
@@ -112,7 +121,7 @@ public class StdFileDialog {
         if (result != JFileChooser.ERROR_OPTION) {
             File current = dialog.getCurrentDirectory();
             if (current != null) {
-                prefs.setValue(MODULE, LAST_DIR, current.getAbsolutePath());
+                setLastDir(current.getAbsolutePath());
             }
         }
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -163,14 +172,7 @@ public class StdFileDialog {
      * @return The chosen {@link File} or <code>null</code>.
      */
     public static File showSaveDialog(Component comp, String title, File suggestedFile, JComponent accessoryPanel, FileNameExtensionFilter... filters) {
-        Preferences prefs = Preferences.getInstance();
-        String      last  = suggestedFile != null ? suggestedFile.getParent() : prefs.getStringValue(MODULE, LAST_DIR);
-        if (last != null) {
-            if (!new File(last).isDirectory()) {
-                last = null;
-            }
-        }
-        JFileChooser dialog = new JFileChooser(last);
+        JFileChooser dialog = new JFileChooser(suggestedFile != null ? suggestedFile.getParent() : getLastDir());
         dialog.setDialogTitle(title);
         if (filters != null && filters.length > 0) {
             dialog.setAcceptAllFileFilterUsed(false);
@@ -180,6 +182,9 @@ public class StdFileDialog {
         } else {
             dialog.setAcceptAllFileFilterUsed(true);
         }
+        if (suggestedFile != null) {
+            dialog.setSelectedFile(suggestedFile);
+        }
         if (accessoryPanel != null) {
             dialog.setAccessory(accessoryPanel);
         }
@@ -187,7 +192,7 @@ public class StdFileDialog {
         if (result != JFileChooser.ERROR_OPTION) {
             File current = dialog.getCurrentDirectory();
             if (current != null) {
-                prefs.setValue(MODULE, LAST_DIR, current.getAbsolutePath());
+                setLastDir(current.getAbsolutePath());
             }
         }
         if (result == JFileChooser.APPROVE_OPTION) {
