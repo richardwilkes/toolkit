@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2018 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -14,7 +14,6 @@ package com.trollworks.toolkit.ui.image;
 import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
-import com.trollworks.toolkit.utility.FileType;
 import com.trollworks.toolkit.utility.Localization;
 
 import java.awt.Color;
@@ -31,7 +30,6 @@ import java.awt.image.ImageObserver;
 import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -39,16 +37,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 
-import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageTypeSpecifier;
-import javax.imageio.ImageWriter;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.metadata.IIOMetadataNode;
-import javax.imageio.stream.ImageOutputStream;
 import javax.swing.Icon;
-
-import org.w3c.dom.Node;
 
 /**
  * Provides a {@link BufferedImage} that implements Swing's {@link Icon} interface for convenience.
@@ -651,17 +641,12 @@ public class StdImage extends BufferedImage implements Icon {
      *
      * @param file  The file to write to.
      * @param image The image to use.
-     * @param dpi   The DPI to use.
+     * @param dpi   The DPI to use. Values less than 1 are ignored.
      * @return <code>true</code> on success.
      */
+    @Deprecated
     public static final boolean writePNG(File file, Image image, int dpi) {
-        boolean result;
-        try (FileOutputStream os = new FileOutputStream(file)) {
-            result = writePNG(os, image, dpi);
-        } catch (Exception exception) {
-            result = false;
-        }
-        return result;
+        return AnnotatedImage.writePNG(file, image, dpi, null);
     }
 
     /**
@@ -669,39 +654,12 @@ public class StdImage extends BufferedImage implements Icon {
      *
      * @param os    The stream to write to.
      * @param image The image to use.
-     * @param dpi   The DPI to use.
+     * @param dpi   The DPI to use. Values less than 1 are ignored.
      * @return <code>true</code> on success.
      */
+    @Deprecated
     public static final boolean writePNG(OutputStream os, Image image, int dpi) {
-        ImageWriter writer = null;
-        try (ImageOutputStream stream = ImageIO.createImageOutputStream(os)) {
-            StdImage           img  = getToolkitImage(image);
-            ImageTypeSpecifier type = ImageTypeSpecifier.createFromRenderedImage(img);
-            writer = ImageIO.getImageWriters(type, FileType.PNG_EXTENSION).next();
-            IIOMetadata metaData = writer.getDefaultImageMetadata(type, null);
-            try {
-                Node            root      = metaData.getAsTree("javax_imageio_png_1.0"); //$NON-NLS-1$
-                IIOMetadataNode pHYs_node = new IIOMetadataNode("pHYs"); //$NON-NLS-1$
-                String          ppu       = Integer.toString((int) (dpi / 0.0254));
-                pHYs_node.setAttribute("pixelsPerUnitXAxis", ppu); //$NON-NLS-1$
-                pHYs_node.setAttribute("pixelsPerUnitYAxis", ppu); //$NON-NLS-1$
-                pHYs_node.setAttribute("unitSpecifier", "meter"); //$NON-NLS-1$ //$NON-NLS-2$
-                root.appendChild(pHYs_node);
-                metaData.setFromTree("javax_imageio_png_1.0", root); //$NON-NLS-1$
-            } catch (Exception exception) {
-                Log.error(exception);
-            }
-            writer.setOutput(stream);
-            writer.write(new IIOImage(img, null, metaData));
-            stream.flush();
-            writer.dispose();
-            return true;
-        } catch (Exception exception) {
-            if (writer != null) {
-                writer.dispose();
-            }
-            return false;
-        }
+        return AnnotatedImage.writePNG(os, image, dpi, null);
     }
 
     /**

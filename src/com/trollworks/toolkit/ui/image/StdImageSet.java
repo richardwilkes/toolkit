@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2018 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -529,7 +529,7 @@ public class StdImageSet implements Comparator<StdImage> {
 
     private static int createPNG(StdImage image, List<byte[]> imageData, List<Integer> imageType, int type, int dpi) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if (!StdImage.writePNG(baos, image, dpi)) {
+        if (!AnnotatedImage.writePNG(baos, image, dpi, null)) {
             throw new IOException(UNABLE_TO_CREATE_PNG);
         }
         byte[] bytes = baos.toByteArray();
@@ -596,7 +596,7 @@ public class StdImageSet implements Comparator<StdImage> {
                 EndianUtils.writeLEShort(1, buffer, 4);
                 EndianUtils.writeLEShort(32, buffer, 6);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                if (!StdImage.writePNG(baos, getImage(size), 72)) {
+                if (!AnnotatedImage.writePNG(baos, getImage(size), 72, null)) {
                     throw new IOException(UNABLE_TO_CREATE_PNG);
                 }
                 byte[] bytes = baos.toByteArray();
