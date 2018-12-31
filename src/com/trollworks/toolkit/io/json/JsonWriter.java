@@ -11,81 +11,80 @@
 
 package com.trollworks.toolkit.io.json;
 
+import java.io.FilterWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
+import java.io.Writer;
 
-public class JsonStreamWriter extends OutputStreamWriter {
+public class JsonWriter extends FilterWriter {
     private boolean mNeedComma;
 
-    public JsonStreamWriter(OutputStream out) {
-        super(out, StandardCharsets.UTF_8);
+    public JsonWriter(Writer writer) {
+        super(writer);
     }
 
     public void key(String key) throws IOException {
         if (mNeedComma) {
-            append(',');
+            write(',');
             mNeedComma = false;
         }
-        append(Json.quote(key));
-        append(':');
+        write(Json.quote(key));
+        write(':');
     }
 
     public void startObject() throws IOException {
         if (mNeedComma) {
-            append(',');
+            write(',');
             mNeedComma = false;
         }
-        append('{');
+        write('{');
     }
 
     public void endObject() throws IOException {
-        append('}');
+        write('}');
         mNeedComma = true;
     }
 
     public void startArray() throws IOException {
         if (mNeedComma) {
-            append(',');
+            write(',');
             mNeedComma = false;
         }
-        append('[');
+        write('[');
     }
 
     public void endArray() throws IOException {
-        append(']');
+        write(']');
         mNeedComma = true;
     }
 
     public void value(String value) throws IOException {
         commaIfNeeded();
-        append(Json.quote(value));
+        write(Json.quote(value));
     }
 
     public void value(Number value) throws IOException {
         commaIfNeeded();
-        append(Json.toString(value));
+        write(Json.toString(value));
     }
 
     public void value(boolean value) throws IOException {
         commaIfNeeded();
-        append(value ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$
+        write(value ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public void value(short value) throws IOException {
         commaIfNeeded();
-        append(Short.toString(value));
+        write(Short.toString(value));
     }
 
     public void value(int value) throws IOException {
         commaIfNeeded();
-        append(Integer.toString(value));
+        write(Integer.toString(value));
     }
 
     public void value(long value) throws IOException {
         commaIfNeeded();
-        append(Long.toString(value));
+        write(Long.toString(value));
     }
 
     public void value(float value) throws IOException {
@@ -98,84 +97,84 @@ public class JsonStreamWriter extends OutputStreamWriter {
 
     public void keyValue(String key, String value) throws IOException {
         key(key);
-        append(Json.quote(value));
+        write(Json.quote(value));
         mNeedComma = true;
     }
 
     public void keyValueNot(String key, String value, String not) throws IOException {
         if (value == null ? not != null : !value.equals(not)) {
             key(key);
-            append(Json.quote(value));
+            write(Json.quote(value));
             mNeedComma = true;
         }
     }
 
     public void keyValue(String key, Number value) throws IOException {
         key(key);
-        append(Json.toString(value));
+        write(Json.toString(value));
         mNeedComma = true;
     }
 
     public void keyValueNot(String key, Number value, Number not) throws IOException {
         if (value == null ? not != null : !value.equals(not)) {
             key(key);
-            append(Json.toString(value));
+            write(Json.toString(value));
             mNeedComma = true;
         }
     }
 
     public void keyValue(String key, boolean value) throws IOException {
         key(key);
-        append(value ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$
+        write(value ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$
         mNeedComma = true;
     }
 
     public void keyValueNot(String key, boolean value, boolean not) throws IOException {
         if (value != not) {
             key(key);
-            append(value ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$
+            write(value ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$
             mNeedComma = true;
         }
     }
 
     public void keyValue(String key, short value) throws IOException {
         key(key);
-        append(Short.toString(value));
+        write(Short.toString(value));
         mNeedComma = true;
     }
 
     public void keyValueNot(String key, short value, short not) throws IOException {
         if (value != not) {
             key(key);
-            append(Short.toString(value));
+            write(Short.toString(value));
             mNeedComma = true;
         }
     }
 
     public void keyValue(String key, int value) throws IOException {
         key(key);
-        append(Integer.toString(value));
+        write(Integer.toString(value));
         mNeedComma = true;
     }
 
     public void keyValueNot(String key, int value, int not) throws IOException {
         if (value != not) {
             key(key);
-            append(Integer.toString(value));
+            write(Integer.toString(value));
             mNeedComma = true;
         }
     }
 
     public void keyValue(String key, long value) throws IOException {
         key(key);
-        append(Long.toString(value));
+        write(Long.toString(value));
         mNeedComma = true;
     }
 
     public void keyValueNot(String key, long value, long not) throws IOException {
         if (value != not) {
             key(key);
-            append(Long.toString(value));
+            write(Long.toString(value));
             mNeedComma = true;
         }
     }
@@ -202,7 +201,7 @@ public class JsonStreamWriter extends OutputStreamWriter {
 
     private void commaIfNeeded() throws IOException {
         if (mNeedComma) {
-            append(',');
+            write(',');
         } else {
             mNeedComma = true;
         }
