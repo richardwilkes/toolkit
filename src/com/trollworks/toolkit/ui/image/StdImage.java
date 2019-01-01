@@ -31,7 +31,6 @@ import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -634,32 +633,6 @@ public class StdImage extends BufferedImage implements Icon {
         } catch (Exception exception) {
             return null;
         }
-    }
-
-    /**
-     * Writes a PNG to a file, using the specified DPI.
-     *
-     * @param file  The file to write to.
-     * @param image The image to use.
-     * @param dpi   The DPI to use. Values less than 1 are ignored.
-     * @return <code>true</code> on success.
-     */
-    @Deprecated
-    public static final boolean writePNG(File file, Image image, int dpi) {
-        return AnnotatedImage.writePNG(file, image, dpi, null);
-    }
-
-    /**
-     * Writes a PNG to a stream, using the specified DPI.
-     *
-     * @param os    The stream to write to.
-     * @param image The image to use.
-     * @param dpi   The DPI to use. Values less than 1 are ignored.
-     * @return <code>true</code> on success.
-     */
-    @Deprecated
-    public static final boolean writePNG(OutputStream os, Image image, int dpi) {
-        return AnnotatedImage.writePNG(os, image, dpi, null);
     }
 
     /**

@@ -11,177 +11,210 @@
 
 package com.trollworks.toolkit.ui.image;
 
+import com.trollworks.toolkit.io.EndianUtils;
 import com.trollworks.toolkit.io.Log;
-import com.trollworks.toolkit.utility.FileType;
 
 import java.awt.Image;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.CRC32;
+import java.util.zip.DeflaterOutputStream;
 
-import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
-import javax.imageio.ImageTypeSpecifier;
-import javax.imageio.ImageWriter;
-import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageInputStream;
-import javax.imageio.stream.ImageOutputStream;
 
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /** Read and write annotated image data. */
 public class AnnotatedImage {
-    private static final String PNG_METADATA_FORMAT_NAME    = "javax_imageio_png_1.0"; //$NON-NLS-1$
-    private static final String PHYS_TAG                    = "pHYs"; //$NON-NLS-1$
-    private static final String PIXELS_PER_UNIT_X_AXIS_ATTR = "pixelsPerUnitXAxis"; //$NON-NLS-1$
-    private static final String PIXELS_PER_UNIT_Y_AXIS_ATTR = "pixelsPerUnitYAxis"; //$NON-NLS-1$
-    private static final String UNIT_SPECIFIER_ATTR         = "unitSpecifier"; //$NON-NLS-1$
-    private static final String METER                       = "meter"; //$NON-NLS-1$
-    private static final String TEXT_TAG                    = "tEXt"; //$NON-NLS-1$
-    private static final String TEXT_ENTRY_TAG              = "tEXtEntry"; //$NON-NLS-1$
-    private static final String KEYWORD_ATTR                = "keyword"; //$NON-NLS-1$
-    private static final String VALUE_ATTR                  = "value"; //$NON-NLS-1$
+    private static final String TROLLWORKS_TEXT_KEY = "twtk"; //$NON-NLS-1$
     public StdImage             mImage;
+    public String               mText;
     public int                  mDPI;
-    public Map<String, String>  mExtraMetadata;
 
     /**
      * Reads a PNG image from the file and any metadata written by
-     * {@link #writePNG(OutputStream, Image, int, Map)}.
+     * {@link #writePNG(OutputStream, Image, int, String)}.
      *
      * @param file The file to read from.
      * @return The annotated image data.
      */
-    public static final AnnotatedImage readPNG(File file) {
+    public static final AnnotatedImage readPNG(File file) throws IOException {
         try (FileInputStream in = new FileInputStream(file)) {
             return readPNG(in);
-        } catch (Exception exception) {
-            return null;
         }
     }
 
     /**
      * Reads a PNG image from the stream and any metadata written by
-     * {@link #writePNG(OutputStream, Image, int, Map)}.
+     * {@link #writePNG(OutputStream, Image, int, String)}.
      *
      * @param in The stream to read from.
      * @return The annotated image data.
      */
-    public static final AnnotatedImage readPNG(InputStream in) {
+    public static final AnnotatedImage readPNG(InputStream in) throws IOException {
         ImageReader reader = null;
         try (ImageInputStream stream = ImageIO.createImageInputStream(in)) {
             AnnotatedImage result = new AnnotatedImage();
-            result.mExtraMetadata = new HashMap<>();
-            reader                = ImageIO.getImageReaders(stream).next();
+            reader = ImageIO.getImageReaders(stream).next();
             reader.setInput(stream);
             try {
-                IIOMetadataNode root    = (IIOMetadataNode) reader.getImageMetadata(0).getAsTree(PNG_METADATA_FORMAT_NAME);
-                NodeList        entries = root.getElementsByTagName(TEXT_ENTRY_TAG);
+                IIOMetadataNode root    = (IIOMetadataNode) reader.getImageMetadata(0).getAsTree("javax_imageio_png_1.0"); //$NON-NLS-1$
+                NodeList        entries = root.getElementsByTagName("iTXtEntry"); //$NON-NLS-1$
                 int             length  = entries.getLength();
                 for (int i = 0; i < length; i++) {
                     IIOMetadataNode node = (IIOMetadataNode) entries.item(i);
-                    result.mExtraMetadata.put(node.getAttribute(KEYWORD_ATTR), node.getAttribute(VALUE_ATTR));
+                    if (TROLLWORKS_TEXT_KEY.equals(node.getAttribute("keyword"))) { //$NON-NLS-1$
+                        result.mText = node.getAttribute("text"); //$NON-NLS-1$
+                        break;
+                    }
                 }
-                entries = root.getElementsByTagName(PHYS_TAG);
+                entries = root.getElementsByTagName("pHYs"); //$NON-NLS-1$
                 if (entries.getLength() > 0) {
                     IIOMetadataNode node = (IIOMetadataNode) entries.item(0);
-                    if (node.getAttribute(UNIT_SPECIFIER_ATTR) == METER) {
-                        result.mDPI = (int) (Integer.parseInt(node.getAttribute(PIXELS_PER_UNIT_X_AXIS_ATTR)) * 0.0254f + 0.5f);
+                    if (node.getAttribute("unitSpecifier") == "meter") { //$NON-NLS-1$ //$NON-NLS-2$
+                        result.mDPI = (int) (Integer.parseInt(node.getAttribute("pixelsPerUnitXAxis")) * 0.0254f + 0.5f); //$NON-NLS-1$
                     }
                 }
             } catch (Exception exception) {
                 Log.error(exception);
             }
             result.mImage = StdImage.getToolkitImage(reader.read(0));
+            reader.dispose();
             return result;
-        } catch (Exception exception) {
+        } catch (IOException exception) {
             if (reader != null) {
                 reader.dispose();
             }
-            return null;
+            throw exception;
         }
     }
 
     /**
      * Writes a PNG image to a file.
      *
-     * @param file          The file to write to.
-     * @param image         The image to use.
-     * @param dpi           The DPI to use. Values less than 1 are ignored.
-     * @param extraMetadata Additional metadata to store. May pass in <code>null</code>.
-     * @return <code>true</code> on success.
+     * @param file  The file to write to.
+     * @param image The image to use.
+     * @param dpi   The DPI to use. Values less than 1 are ignored.
+     * @param text  Additional text to store. May pass in <code>null</code>.
      */
-    public static final boolean writePNG(File file, Image image, int dpi, Map<String, String> extraMetadata) {
-        boolean result;
+    public static final void writePNG(File file, Image image, int dpi, String text) throws IOException {
         try (FileOutputStream os = new FileOutputStream(file)) {
-            result = writePNG(os, image, dpi, extraMetadata);
-        } catch (Exception exception) {
-            result = false;
+            writePNG(os, image, dpi, text);
         }
-        return result;
     }
 
     /**
      * Writes a PNG image to a stream.
+     * <p>
+     * ImageIO provides similar capabilities, but I found that its best compression was
+     * significantly worse than other tools (Photoshop, GIMP) produce. This implementation comes
+     * close to what I was originally expecting, although it is hard-wired to only produce color
+     * 32-bit pixels with an alpha channel, which is perfect for my needs.
      *
-     * @param os            The stream to write to.
-     * @param image         The image to use.
-     * @param dpi           The DPI to use. Values less than 1 are ignored.
-     * @param extraMetadata Additional metadata to store. May pass in <code>null</code>.
-     * @return <code>true</code> on success.
+     * @param os    The stream to write to.
+     * @param image The image to use.
+     * @param dpi   The DPI to use. Values less than 1 are ignored.
+     * @param text  Additional text to store. May pass in <code>null</code>.
      */
-    public static final boolean writePNG(OutputStream os, Image image, int dpi, Map<String, String> extraMetadata) {
-        ImageWriter writer = null;
-        try (ImageOutputStream stream = ImageIO.createImageOutputStream(os)) {
-            IIOMetadata        metaData = null;
-            StdImage           img      = StdImage.getToolkitImage(image);
-            ImageTypeSpecifier type     = ImageTypeSpecifier.createFromRenderedImage(img);
-            writer = ImageIO.getImageWriters(type, FileType.PNG_EXTENSION).next();
-            if (dpi > 0 || extraMetadata != null && !extraMetadata.isEmpty()) {
-                metaData = writer.getDefaultImageMetadata(type, null);
-                try {
-                    Node root = metaData.getAsTree(PNG_METADATA_FORMAT_NAME);
-                    if (dpi > 0) {
-                        String          ppu      = Integer.toString((int) (dpi / 0.0254));
-                        IIOMetadataNode physNode = new IIOMetadataNode(PHYS_TAG);
-                        physNode.setAttribute(PIXELS_PER_UNIT_X_AXIS_ATTR, ppu);
-                        physNode.setAttribute(PIXELS_PER_UNIT_Y_AXIS_ATTR, ppu);
-                        physNode.setAttribute(UNIT_SPECIFIER_ATTR, METER);
-                        root.appendChild(physNode);
+    public static final void writePNG(OutputStream os, Image image, int dpi, String text) throws IOException {
+        StdImage img  = StdImage.getToolkitImage(image);
+        int      cols = img.getWidth();
+        int      rows = img.getHeight();
+
+        // Write PNG signature
+        os.write(new byte[] { -119, 80, 78, 71, 13, 10, 26, 10 });
+
+        // Write IHDR
+        byte[] data   = new byte[13];
+        int    offset = 0;
+        EndianUtils.writeBEInt(cols, data, offset);
+        offset += 4;
+        EndianUtils.writeBEInt(rows, data, offset);
+        offset         += 4;
+        data[offset++]  = 8;
+        data[offset++]  = 6;
+        data[offset++]  = 0;
+        data[offset++]  = 0;
+        data[offset++]  = 0;
+        AnnotatedImage.writeChunk(os, "IHDR", data); //$NON-NLS-1$
+
+        // Add DPI, if provided
+        if (dpi > 0) {
+            int ppu = (int) (dpi / 0.0254 + 0.5);
+            data = new byte[9];
+            EndianUtils.writeBEInt(ppu, data, 0);
+            EndianUtils.writeBEInt(ppu, data, 4);
+            data[8] = 1;
+            AnnotatedImage.writeChunk(os, "pHYs", data); //$NON-NLS-1$
+        }
+
+        // Write text, if provided
+        if (text != null) {
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ba.write(AnnotatedImage.TROLLWORKS_TEXT_KEY.getBytes(StandardCharsets.ISO_8859_1));
+            ba.write(new byte[] { 0, 1, 0, 0, 0 });
+            try (OutputStream deflater = new DeflaterOutputStream(ba)) {
+                try (ByteArrayInputStream in = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8))) {
+                    byte[] buffer = new byte[4096];
+                    int    amt;
+                    while ((amt = in.read(buffer)) > 0) {
+                        deflater.write(buffer, 0, amt);
                     }
-                    if (extraMetadata != null && !extraMetadata.isEmpty()) {
-                        IIOMetadataNode textNode = new IIOMetadataNode(TEXT_TAG);
-                        for (Entry<String, String> entry : extraMetadata.entrySet()) {
-                            IIOMetadataNode textEntryNode = new IIOMetadataNode(TEXT_ENTRY_TAG);
-                            textEntryNode.setAttribute(KEYWORD_ATTR, entry.getKey());
-                            textEntryNode.setAttribute(VALUE_ATTR, entry.getValue());
-                            textNode.appendChild(textEntryNode);
-                        }
-                        root.appendChild(textNode);
-                    }
-                    metaData.setFromTree(PNG_METADATA_FORMAT_NAME, root);
-                } catch (Exception exception) {
-                    Log.error(exception);
                 }
             }
-            writer.setOutput(stream);
-            writer.write(new IIOImage(img, null, metaData));
-            stream.flush();
-            writer.dispose();
-            return true;
-        } catch (Exception exception) {
-            if (writer != null) {
-                writer.dispose();
-            }
-            return false;
+            AnnotatedImage.writeChunk(os, "iTXt", ba.toByteArray()); //$NON-NLS-1$
         }
+
+        // Write pixel data
+        PNGPixelsWriter pw       = new PNGPixelsWriter(os, cols, rows);
+        int[]           pixels   = new int[cols];
+        byte[]          scanline = new byte[cols * 4];
+        for (int i = 0; i < rows; i++) {
+            img.getRGB(0, i, cols, 1, pixels, 0, cols);
+            for (int i1 = 0, j = 0; i1 < cols; i1++) {
+                int pixel = pixels[i1];
+                scanline[j++] = (byte) (pixel >> 16 & 0xFF);
+                scanline[j++] = (byte) (pixel >> 8 & 0xFF);
+                scanline[j++] = (byte) (pixel & 0xFF);
+                scanline[j++] = (byte) (pixel >> 24 & 0xFF);
+            }
+            pw.writeRow(scanline);
+        }
+
+        // Write IEND
+        try {
+            pw.close();
+            AnnotatedImage.writeChunk(os, "IEND", null); //$NON-NLS-1$
+        } finally {
+            os.close();
+        }
+    }
+
+    static void writeChunk(OutputStream os, String id, byte[] data) throws IOException {
+        CRC32  crcengine = new CRC32();
+        byte[] temp      = new byte[4];
+        int    len       = data != null ? data.length : 0;
+        EndianUtils.writeBEInt(len, temp, 0);
+        os.write(temp);
+        byte[] idBytes = id.getBytes(StandardCharsets.ISO_8859_1);
+        os.write(idBytes);
+        crcengine.update(idBytes, 0, 4);
+        if (len > 0) {
+            os.write(data, 0, len);
+            crcengine.update(data, 0, len);
+        }
+        byte[] crcval = new byte[4];
+        EndianUtils.writeBEInt((int) crcengine.getValue(), crcval, 0);
+        os.write(crcval, 0, 4);
     }
 }

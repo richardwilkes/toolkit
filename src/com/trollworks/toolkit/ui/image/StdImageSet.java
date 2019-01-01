@@ -42,11 +42,6 @@ public class StdImageSet implements Comparator<StdImage> {
     @Localize(locale = "de", value = "Fehlerhafte ICO-Datei")
     @Localize(locale = "es", value = "fichero ICO no es válido")
     private static String INVALID_ICO;
-    @Localize("Unable to create PNG")
-    @Localize(locale = "ru", value = "Невозможно создать PNG")
-    @Localize(locale = "de", value = "Kann PNG-Datei nicht erstellen")
-    @Localize(locale = "es", value = "Imposible crear fichero PNG")
-    private static String UNABLE_TO_CREATE_PNG;
 
     static {
         Localization.initialize();
@@ -529,9 +524,7 @@ public class StdImageSet implements Comparator<StdImage> {
 
     private static int createPNG(StdImage image, List<byte[]> imageData, List<Integer> imageType, int type, int dpi) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if (!AnnotatedImage.writePNG(baos, image, dpi, null)) {
-            throw new IOException(UNABLE_TO_CREATE_PNG);
-        }
+        AnnotatedImage.writePNG(baos, image, dpi, null);
         byte[] bytes = baos.toByteArray();
         imageData.add(bytes);
         imageType.add(Integer.valueOf(type));
@@ -596,9 +589,7 @@ public class StdImageSet implements Comparator<StdImage> {
                 EndianUtils.writeLEShort(1, buffer, 4);
                 EndianUtils.writeLEShort(32, buffer, 6);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                if (!AnnotatedImage.writePNG(baos, getImage(size), 72, null)) {
-                    throw new IOException(UNABLE_TO_CREATE_PNG);
-                }
+                AnnotatedImage.writePNG(baos, getImage(size), 72, null);
                 byte[] bytes = baos.toByteArray();
                 images.add(bytes);
                 EndianUtils.writeLEInt(bytes.length, buffer, 8);
