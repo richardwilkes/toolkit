@@ -13,9 +13,13 @@ package com.trollworks.toolkit.utility;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 
 /** Provides geometry-related utilities. */
 public class Geometry {
+    private static final Point2D[] NO_LINE_INTERSECTION = new Point2D[0];
+
     /**
      * Intersects two {@link Rectangle}s, producing a third. Unlike the
      * {@link Rectangle#intersection(Rectangle)} method, the resulting {@link Rectangle}'s width &
@@ -133,5 +137,165 @@ public class Geometry {
             bounds.height = 0;
         }
         return bounds;
+    }
+
+    /**
+     * Tests if the line segment from {@code (x1,y1)} to {@code (x2,y2)} intersects the line segment
+     * from {@code (x3,y3)} to {@code (x4,y4)}.
+     * <p>
+     * Note: This was copied from java.awt.geom.Line2D and modified to use int rather than double.
+     *
+     * @param x1 the X coordinate of the start point of the first specified line segment
+     * @param y1 the Y coordinate of the start point of the first specified line segment
+     * @param x2 the X coordinate of the end point of the first specified line segment
+     * @param y2 the Y coordinate of the end point of the first specified line segment
+     * @param x3 the X coordinate of the start point of the second specified line segment
+     * @param y3 the Y coordinate of the start point of the second specified line segment
+     * @param x4 the X coordinate of the end point of the second specified line segment
+     * @param y4 the Y coordinate of the end point of the second specified line segment
+     * @return {@code true} if the first specified line segment and the second specified line
+     *         segment intersect each other; {@code false} otherwise.
+     */
+    public static final boolean linesIntersect(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
+        return relativeCCW(x1, y1, x2, y2, x3, y3) * relativeCCW(x1, y1, x2, y2, x4, y4) <= 0 && relativeCCW(x3, y3, x4, y4, x1, y1) * relativeCCW(x3, y3, x4, y4, x2, y2) <= 0;
+    }
+
+    /**
+     * Returns an indicator of where the specified point {@code (px,py)} lies with respect to the
+     * line segment from {@code (x1,y1)} to {@code (x2,y2)}. The return value can be either 1, -1,
+     * or 0 and indicates in which direction the specified line must pivot around its first end
+     * point, {@code (x1,y1)}, in order to point at the specified point {@code (px,py)}.
+     * <p>
+     * A return value of 1 indicates that the line segment must turn in the direction that takes the
+     * positive X axis towards the negative Y axis. In the default coordinate system used by Java
+     * 2D, this direction is counterclockwise.
+     * <p>
+     * A return value of -1 indicates that the line segment must turn in the direction that takes
+     * the positive X axis towards the positive Y axis. In the default coordinate system, this
+     * direction is clockwise.
+     * <p>
+     * A return value of 0 indicates that the point lies exactly on the line segment. Note that an
+     * indicator value of 0 is rare and not useful for determining colinearity because of rounding
+     * issues.
+     * <p>
+     * If the point is colinear with the line segment, but not between the end points, then the
+     * value will be -1 if the point lies "beyond {@code (x1,y1)}" or 1 if the point lies "beyond
+     * {@code (x2,y2)}".
+     * <p>
+     * Note: This was copied from java.awt.geom.Line2D and modified to use int rather than double.
+     *
+     * @param x1 the X coordinate of the start point of the specified line segment
+     * @param y1 the Y coordinate of the start point of the specified line segment
+     * @param x2 the X coordinate of the end point of the specified line segment
+     * @param y2 the Y coordinate of the end point of the specified line segment
+     * @param px the X coordinate of the specified point to be compared with the specified line
+     *           segment
+     * @param py the Y coordinate of the specified point to be compared with the specified line
+     *           segment
+     * @return an integer that indicates the position of the third specified coordinates with
+     *         respect to the line segment formed by the first two specified coordinates.
+     */
+    public static final int relativeCCW(int x1, int y1, int x2, int y2, int px, int py) {
+        x2 -= x1;
+        y2 -= y1;
+        px -= x1;
+        py -= y1;
+        long ccw = px * (long) y2 - py * (long) x2;
+        if (ccw == 0) {
+            ccw = px * (long) x2 + py * (long) y2;
+            if (ccw > 0) {
+                px  -= x2;
+                py  -= y2;
+                ccw  = px * (long) x2 + py * (long) y2;
+                if (ccw < 0) {
+                    ccw = 0;
+                }
+            }
+        }
+        return ccw < 0 ? -1 : ccw > 0 ? 1 : 0;
+    }
+
+    /**
+     * @param a1 the start of the first line segment.
+     * @param a2 the end of the first line segment.
+     * @param b1 the start of the second line segment.
+     * @param b2 the end of the second line segment.
+     * @return the intersection of the two lines, if any. No elements indicates no intersection. One
+     *         element indicates intersection at a single point. Two elements indicates an
+     *         overlapping segment.
+     */
+    public static Point2D[] intersection(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
+        return intersection(a1.getX(), a1.getY(), a2.getX(), a2.getY(), b1.getX(), b1.getY(), b2.getX(), b2.getY());
+    }
+
+    /**
+     * @param a1x the x start of the first line segment.
+     * @param a1y the y start of the first line segment.
+     * @param a2x the x end of the first line segment.
+     * @param a2y the y end of the first line segment.
+     * @param b1x the x start of the second line segment.
+     * @param b1y the y start of the second line segment.
+     * @param b2x the x end of the second line segment.
+     * @param b2y the y end of the second line segment.
+     * @return the intersection of the two lines, if any. No elements indicates no intersection. One
+     *         element indicates intersection at a single point. Two elements indicates an
+     *         overlapping segment.
+     */
+    public static Point2D[] intersection(double a1x, double a1y, double a2x, double a2y, double b1x, double b1y, double b2x, double b2y) {
+        boolean aIsPt = a1x == a2x && a1y == a2y;
+        boolean bIsPt = b1x == b2x && b1y == b2y;
+        if (aIsPt && bIsPt) {
+            if (a1x == b1x && a1y == b1y) {
+                return new Point2D[] { new Point2D.Double(a1x, a1y) };
+            }
+        } else if (aIsPt) {
+            if (Line2D.ptSegDist(b1x, b1y, b2x, b2y, a1x, a1y) == 0) {
+                return new Point2D[] { new Point2D.Double(a1x, a1y) };
+            }
+        } else if (bIsPt) {
+            if (Line2D.ptSegDist(a1x, a1y, a2x, a2y, b1x, b1y) == 0) {
+                return new Point2D[] { new Point2D.Double(b1x, b1y) };
+            }
+        } else {
+            double abdx = a1x - b1x;
+            double abdy = a1y - b1y;
+            double bdx  = b2x - b1x;
+            double bdy  = b2y - b1y;
+            double uat  = bdx * abdy - bdy * abdx;
+            double adx  = a2x - a1x;
+            double ady  = a2y - a1y;
+            double ubt  = adx * abdy - ady * abdx;
+            double ub   = bdy * adx - bdx * ady;
+            if (ub != 0) {
+                // Not parallel, so find intersection point
+                double a = uat / ub;
+                if (a >= 0 && a <= 1) {
+                    double b = ubt / ub;
+                    if (b >= 0 && b <= 1) {
+                        return new Point2D[] { new Point2D.Double(a1x + a * adx, a1y + a * ady) };
+                    }
+                }
+            } else {
+                // Parallel, so check for overlap
+                if (uat == 0 || ubt == 0) {
+                    double ub1, ub2;
+                    if (Math.abs(adx) > Math.abs(ady)) {
+                        ub1 = (b1x - a1x) / adx;
+                        ub2 = (b2x - a1x) / adx;
+                    } else {
+                        ub1 = (b1y - a1y) / ady;
+                        ub2 = (b2y - a1y) / ady;
+                    }
+                    double left  = Math.max(0, Math.min(ub1, ub2));
+                    double right = Math.min(1, Math.max(ub1, ub2));
+                    if (left < right) {
+                        return new Point2D[] { new Point2D.Double(a2x * left + a1x * (1.0f - left), a2y * left + a1y * (1.0f - left)), new Point2D.Double(a2x * right + a1x * (1.0f - right), a2y * right + a1y * (1.0f - right)) };
+                    } else if (left == right) {
+                        return new Point2D[] { new Point2D.Double(a2x * left + a1x * (1.0f - left), a2y * left + a1y * (1.0f - left)) };
+                    }
+                }
+            }
+        }
+        return NO_LINE_INTERSECTION;
     }
 }
