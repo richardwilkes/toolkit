@@ -330,7 +330,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     @Override
     public void mouseClicked(MouseEvent event) {
         requestFocus();
-        if (event.getClickCount() == 2) {
+        if (!mIgnoreNextDragGesture && event.getClickCount() == 2) {
             Point where = event.getPoint();
             mViewArea = checkAndConvertToArea(where);
             if (mViewArea != DirectScrollPanelArea.NONE) {
