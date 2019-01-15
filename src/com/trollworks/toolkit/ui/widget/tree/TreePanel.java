@@ -143,6 +143,15 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         return mRoot;
     }
 
+    public void setRoot(TreeRoot root) {
+        if (root != mRoot) {
+            mRoot.getNotifier().remove(this);
+            mRoot = root;
+            mRoot.getNotifier().add(this, TreeNotificationKeys.ROW_REMOVED);
+            repaint();
+        }
+    }
+
     @Override
     public void mouseEntered(MouseEvent event) {
         // Unused
