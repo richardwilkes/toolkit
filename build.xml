@@ -2,12 +2,16 @@
 <project name="com.trollworks.toolkit" default="build">
 	<target name="build">
 		<property name="module.name" value="com.trollworks.toolkit"/>
-		<property name="module.version" value="4.12.0"/>
+		<property name="module.version" value="4.12.1"/>
 		<property name="target.version" value="11"/>
 		<property name="build.dir" value="antbuild"/>
 		<property name="modules.dir" value="../java_modules"/>
 
-	    <delete dir="${build.dir}"/>
+        <delete>
+            <fileset dir="." includes="**/.DS_Store" defaultexcludes="false"/>
+        </delete>
+
+        <delete dir="${build.dir}"/>
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${modules.dir}"/>
 		<delete>
