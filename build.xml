@@ -3,7 +3,7 @@
 	<target name="build">
 		<property name="module.name" value="com.trollworks.toolkit"/>
 		<property name="module.version" value="4.12.1"/>
-		<property name="target.version" value="11"/>
+		<property name="target.version" value="12"/>
 		<property name="build.dir" value="antbuild"/>
 		<property name="modules.dir" value="../java_modules"/>
 
