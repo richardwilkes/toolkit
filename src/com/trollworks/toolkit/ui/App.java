@@ -71,6 +71,9 @@ public class App implements KeyEventDispatcher, Runnable {
             } else if (path.endsWith("runtime")) { //$NON-NLS-1$
                 // Running inside a linux package
                 path = path.getParent();
+            } else if (path.endsWith("support")) { //$NON-NLS-1$
+                // Running inside module-ized package
+                path = path.getParent();
             } else {
                 URI uri = theClass.getProtectionDomain().getCodeSource().getLocation().toURI();
                 path = Paths.get(uri).normalize().getParent().toAbsolutePath();
