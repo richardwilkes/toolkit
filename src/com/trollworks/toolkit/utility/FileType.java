@@ -44,6 +44,9 @@ public class FileType {
     @Localize("Image Files")
     @Localize(locale = "pt-BR", value = "Arquivos de imagens")
     private static String IMAGE_FILES;
+    @Localize("XML Files")
+    @Localize(locale = "pt-BR", value = "Arquivos XML")
+    private static String XML_FILES;
 
     static {
         Localization.initialize();
@@ -59,6 +62,8 @@ public class FileType {
     public static final String           PDF_EXTENSION  = "pdf"; //$NON-NLS-1$
     /** The HTML extension. */
     public static final String           HTML_EXTENSION = "html"; //$NON-NLS-1$
+    /** The XML extension. */
+    public static final String           XML_EXTENSION  = "xml"; //$NON-NLS-1$
     private static final List<FileType>  TYPES          = new ArrayList<>();
     private static Map<String, FileType> EXTENSION_MAP  = new HashMap<>();
     private String                       mExtension;
@@ -104,6 +109,10 @@ public class FileType {
         register(HTML_EXTENSION, iconset, HTML_FILES, "http://www.w3.org/TR/html", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
     }
 
+    public static void registerXml(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
+        register(XML_EXTENSION, iconset, XML_FILES, "https://www.w3.org/XML/", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
+    }
+
     public static void registerPng(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
         register(PNG_EXTENSION, iconset, PNG_FILES, "http://www.libpng.org/pub/png/pngdocs.html", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
     }
@@ -122,6 +131,10 @@ public class FileType {
 
     public static FileNameExtensionFilter getHtmlFilter() {
         return new FileNameExtensionFilter(HTML_FILES, HTML_EXTENSION, "htm"); //$NON-NLS-1$
+    }
+
+    public static FileNameExtensionFilter getXmlFilter() {
+        return new FileNameExtensionFilter(XML_FILES, XML_EXTENSION);
     }
 
     public static FileNameExtensionFilter getPngFilter() {
