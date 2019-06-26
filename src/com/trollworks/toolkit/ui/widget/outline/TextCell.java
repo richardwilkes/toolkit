@@ -231,6 +231,15 @@ public class TextCell implements Cell {
         return column.toString();
     }
 
+    @SuppressWarnings("static-method")
+    protected String getToolTip(Row row, Column column, boolean nullOK) {
+        if (row != null) {
+            String text = row.getToolTip(column);
+            return text == null ? nullOK ? null : "" : text; //$NON-NLS-1$
+        }
+        return column.toString();
+    }
+
     /**
      * @param row    The row.
      * @param column The column.
@@ -260,8 +269,8 @@ public class TextCell implements Cell {
     @Override
     public String getToolTipText(Outline outline, MouseEvent event, Rectangle bounds, Row row, Column column) {
         Scale scale = Scale.get(outline);
-        if (getPreferredWidth(outline, row, column) - scale.scale(H_MARGIN) > column.getWidth() - scale.scale(row.getOwner().getIndentWidth(row, column))) {
-            return getData(row, column, true);
+        if (row.alwaysShowToolTip(column) || getPreferredWidth(outline, row, column) - scale.scale(H_MARGIN) > column.getWidth() - scale.scale(row.getOwner().getIndentWidth(row, column))) {
+            return getToolTip(row, column, true);
         }
         return null;
     }

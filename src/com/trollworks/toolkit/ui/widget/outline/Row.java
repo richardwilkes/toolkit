@@ -85,6 +85,10 @@ public abstract class Row {
      */
     public abstract String getDataAsText(Column column);
 
+    public String getToolTip(Column column) {
+        return getDataAsText(column);
+    }
+
     /**
      * Sets the data for the specified column.
      *
@@ -304,6 +308,10 @@ public abstract class Row {
         }
     }
 
+    public boolean alwaysShowToolTip(Column column) {
+        return false;
+    }
+
     /** @return This row's parent row, if any. */
     public Row getParent() {
         return mParent;
@@ -333,4 +341,5 @@ public abstract class Row {
         }
         return depth;
     }
+
 }
