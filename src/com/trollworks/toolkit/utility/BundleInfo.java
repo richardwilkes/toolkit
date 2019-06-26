@@ -274,10 +274,11 @@ public class BundleInfo {
      * Creates an Info.plist file based on this {@link BundleInfo}. Before calling this method, make
      * sure your {@link FileType}s are registered.
      *
-     * @param file The Info.plist file to create.
+     * @param file    The Info.plist file to create.
+     * @param appIcon The name of the application icon, i.e. something like "app.icns".
      */
     @SuppressWarnings("nls")
-    public void write(File file) {
+    public void write(File file, String appIcon) {
         try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)))) {
             mOut   = out;
             mDepth = 0;
@@ -290,7 +291,7 @@ public class BundleInfo {
             emitKeyValue("CFBundleDevelopmentRegion", "English");
             emitKeyValue("CFBundleAllowMixedLocalizations", true);
             emitKeyValue("CFBundleExecutable", mExecutableName);
-            emitKeyValue("CFBundleIconFile", "app.icns");
+            emitKeyValue("CFBundleIconFile", appIcon);
             emitKeyValue("CFBundleIdentifier", mId);
             emitKeyValue("CFBundleInfoDictionaryVersion", "6.0");
             emitKeyValue("CFBundleName", mName);
