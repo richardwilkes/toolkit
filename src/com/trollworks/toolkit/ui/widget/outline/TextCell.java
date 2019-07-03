@@ -226,7 +226,10 @@ public class TextCell implements Cell {
     protected String getData(Row row, Column column, boolean nullOK) {
         if (row != null) {
             String text = row.getDataAsText(column);
-            return text == null ? nullOK ? null : "" : text; //$NON-NLS-1$
+            if (text == null) {
+                return nullOK ? null : ""; //$NON-NLS-1$
+            }
+            return text;
         }
         return column.toString();
     }
@@ -286,7 +289,10 @@ public class TextCell implements Cell {
     protected String getToolTip(Row row, Column column, boolean nullOK) {
         if (row != null) {
             String text = row.getToolTip(column);
-            return text == null ? nullOK ? null : "" : text; //$NON-NLS-1$
+            if (text == null) {
+                return nullOK ? null : ""; //$NON-NLS-1$
+            }
+            return text;
         }
         return column.toString();
     }
