@@ -333,4 +333,21 @@ public abstract class Row {
         }
         return depth;
     }
+
+    /**
+     * return Should this row show a tooltip? Subclasses will override to be able to force tooltips
+     * to appear
+     */
+    public boolean alwaysShowToolTip(Column column) {
+        return false;
+    }
+
+    /**
+     * return String to display as tooltip. Default to the column's data. Subclasses may override to
+     * provide specialized tooltips.
+     */
+    public String getToolTip(Column column) {
+        return getDataAsText(column);
+    }
+
 }
