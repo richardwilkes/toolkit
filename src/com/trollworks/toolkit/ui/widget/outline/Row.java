@@ -335,17 +335,16 @@ public abstract class Row {
     }
 
     /**
-     * return Should this row show a tooltip? Subclasses will override to be able to force tooltips
-     * to appear
+     * @column The column to provide a tooltip for.
+     * @return Whether a tooltip should be shown even for those columns whose text isn't being
+     *         truncated.
      */
-    public boolean alwaysShowToolTip(Column column) {
+    @SuppressWarnings("static-method")
+    public boolean alwaysShowToolTip(@SuppressWarnings("unused") Column column) {
         return false;
     }
 
-    /**
-     * return String to display as tooltip. Default to the column's data. Subclasses may override to
-     * provide specialized tooltips.
-     */
+    /** @return The string to display as tooltip. Defaults to the column's data. */
     public String getToolTip(Column column) {
         return getDataAsText(column);
     }
