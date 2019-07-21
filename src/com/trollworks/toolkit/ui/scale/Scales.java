@@ -14,6 +14,7 @@ package com.trollworks.toolkit.ui.scale;
 /** Some standard scales. */
 public enum Scales {
     ACTUAL_SIZE(1, "100%"), //$NON-NLS-1$
+    QUARTER_AGAIN_SIZE(1.25, "125%"), //$NON-NLS-1$
     HALF_AGAIN_SIZE(1.5, "150%"), //$NON-NLS-1$
     DOUBLE_SIZE(2, "200%"); //$NON-NLS-1$
 
