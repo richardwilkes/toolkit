@@ -139,6 +139,8 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     private boolean               mUserSortable;
     private Deletable             mDeletableProxy;
     private Dock                  mAlternateDragDestination;
+    private String                mLastTooltipText;
+    private int                   mLastTooltipX;
 
     /** Creates a new outline. */
     public Outline() {
@@ -1861,7 +1863,12 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
             Row row = overRow(event.getY());
             if (row != null) {
                 Rectangle bounds = getCellBounds(row, column);
-                return new Point(x, bounds.y + bounds.height);
+                String    text   = getToolTipText(event);
+                if (mLastTooltipText == null || !mLastTooltipText.equals(text)) {
+                    mLastTooltipText = text;
+                    mLastTooltipX    = x;
+                }
+                return new Point(mLastTooltipX, bounds.y + bounds.height);
             }
         }
         return null;
