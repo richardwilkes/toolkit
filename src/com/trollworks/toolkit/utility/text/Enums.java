@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -18,7 +18,7 @@ public class Enums {
     }
 
     /**
-     * @param              <T> The type of {@link Enum}.
+     * @param <T>          The type of {@link Enum}.
      * @param buffer       The buffer to load from.
      * @param values       The possible values.
      * @param defaultValue The default value to use in case of no match.
@@ -30,7 +30,7 @@ public class Enums {
     }
 
     /**
-     * @param        <T> The type of {@link Enum}.
+     * @param <T>    The type of {@link Enum}.
      * @param buffer The buffer to load from.
      * @param values The possible values.
      * @return The {@link Enum} representing the buffer, or <code>null</code> if a match could not
@@ -41,7 +41,7 @@ public class Enums {
             // Check for the standard forms first
             for (T type : values) {
                 String name = type.name();
-                if (name.equalsIgnoreCase(buffer) || name.replace('_', ' ').equalsIgnoreCase(buffer) || name.replace('_', ',').equalsIgnoreCase(buffer) || name.replace('_', '-').equalsIgnoreCase(buffer) || name.replaceAll("_", "").equalsIgnoreCase(buffer)) { //$NON-NLS-1$ //$NON-NLS-2$
+                if (name.equalsIgnoreCase(buffer) || name.replace('_', ' ').equalsIgnoreCase(buffer) || name.replace('_', ',').equalsIgnoreCase(buffer) || name.replace('_', '-').equalsIgnoreCase(buffer) || name.replaceAll("_", "").equalsIgnoreCase(buffer)) {
                     return type;
                 }
             }

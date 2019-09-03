@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.utility;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.image.StdImageSet;
 
@@ -26,44 +25,18 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /** Describes a file. */
 public class FileType {
-    @Localize("HTML Files")
-    @Localize(locale = "pt-BR", value = "Arquivos HTML")
-    private static String HTML_FILES;
-    @Localize("PDF Files")
-    @Localize(locale = "pt-BR", value = "Arquivos PDF")
-    private static String PDF_FILES;
-    @Localize("PNG Files")
-    @Localize(locale = "pt-BR", value = "Arquivos PNG")
-    private static String PNG_FILES;
-    @Localize("GIF Files")
-    @Localize(locale = "pt-BR", value = "Arquivos GIF")
-    private static String GIF_FILES;
-    @Localize("JPEG Files")
-    @Localize(locale = "pt-BR", value = "Arquivos JPEG")
-    private static String JPEG_FILES;
-    @Localize("Image Files")
-    @Localize(locale = "pt-BR", value = "Arquivos de imagens")
-    private static String IMAGE_FILES;
-    @Localize("XML Files")
-    @Localize(locale = "pt-BR", value = "Arquivos XML")
-    private static String XML_FILES;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The PNG extension. */
-    public static final String           PNG_EXTENSION  = "png"; //$NON-NLS-1$
+    public static final String           PNG_EXTENSION  = "png";
     /** The GIF extension. */
-    public static final String           GIF_EXTENSION  = "gif"; //$NON-NLS-1$
+    public static final String           GIF_EXTENSION  = "gif";
     /** The JPEG extension. */
-    public static final String           JPEG_EXTENSION = "jpg"; //$NON-NLS-1$
+    public static final String           JPEG_EXTENSION = "jpg";
     /** The PDF extension. */
-    public static final String           PDF_EXTENSION  = "pdf"; //$NON-NLS-1$
+    public static final String           PDF_EXTENSION  = "pdf";
     /** The HTML extension. */
-    public static final String           HTML_EXTENSION = "html"; //$NON-NLS-1$
+    public static final String           HTML_EXTENSION = "html";
     /** The XML extension. */
-    public static final String           XML_EXTENSION  = "xml"; //$NON-NLS-1$
+    public static final String           XML_EXTENSION  = "xml";
     private static final List<FileType>  TYPES          = new ArrayList<>();
     private static Map<String, FileType> EXTENSION_MAP  = new HashMap<>();
     private String                       mExtension;
@@ -102,51 +75,51 @@ public class FileType {
     }
 
     public static void registerPdf(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
-        register(PDF_EXTENSION, iconset, PDF_FILES, "https://www.adobe.com/devnet/pdf/pdf_reference_archive.html", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
+        register(PDF_EXTENSION, iconset, I18n.Text("PDF Files"), "https://www.adobe.com/devnet/pdf/pdf_reference_archive.html", creator, allowOpen, shouldRegisterAppForOpening);
     }
 
     public static void registerHtml(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
-        register(HTML_EXTENSION, iconset, HTML_FILES, "http://www.w3.org/TR/html", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
+        register(HTML_EXTENSION, iconset, I18n.Text("HTML Files"), "http://www.w3.org/TR/html", creator, allowOpen, shouldRegisterAppForOpening);
     }
 
     public static void registerXml(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
-        register(XML_EXTENSION, iconset, XML_FILES, "https://www.w3.org/XML/", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
+        register(XML_EXTENSION, iconset, I18n.Text("XML Files"), "https://www.w3.org/XML/", creator, allowOpen, shouldRegisterAppForOpening);
     }
 
     public static void registerPng(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
-        register(PNG_EXTENSION, iconset, PNG_FILES, "http://www.libpng.org/pub/png/pngdocs.html", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
+        register(PNG_EXTENSION, iconset, I18n.Text("PNG Files"), "http://www.libpng.org/pub/png/pngdocs.html", creator, allowOpen, shouldRegisterAppForOpening);
     }
 
     public static void registerGif(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
-        register(GIF_EXTENSION, iconset, GIF_FILES, "http://www.w3.org/Graphics/GIF/spec-gif89a.txt", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
+        register(GIF_EXTENSION, iconset, I18n.Text("GIF Files"), "http://www.w3.org/Graphics/GIF/spec-gif89a.txt", creator, allowOpen, shouldRegisterAppForOpening);
     }
 
     public static void registerJpeg(StdImageSet iconset, FileProxyCreator creator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
-        register(JPEG_EXTENSION, iconset, JPEG_FILES, "http://www.w3.org/Graphics/JPEG/jfif3.pdf", creator, allowOpen, shouldRegisterAppForOpening); //$NON-NLS-1$
+        register(JPEG_EXTENSION, iconset, I18n.Text("JPEG Files"), "http://www.w3.org/Graphics/JPEG/jfif3.pdf", creator, allowOpen, shouldRegisterAppForOpening);
     }
 
     public static FileNameExtensionFilter getPdfFilter() {
-        return new FileNameExtensionFilter(PDF_FILES, PDF_EXTENSION);
+        return new FileNameExtensionFilter(I18n.Text("PDF Files"), PDF_EXTENSION);
     }
 
     public static FileNameExtensionFilter getHtmlFilter() {
-        return new FileNameExtensionFilter(HTML_FILES, HTML_EXTENSION, "htm"); //$NON-NLS-1$
+        return new FileNameExtensionFilter(I18n.Text("HTML Files"), HTML_EXTENSION, "htm");
     }
 
     public static FileNameExtensionFilter getXmlFilter() {
-        return new FileNameExtensionFilter(XML_FILES, XML_EXTENSION);
+        return new FileNameExtensionFilter(I18n.Text("XML Files"), XML_EXTENSION);
     }
 
     public static FileNameExtensionFilter getPngFilter() {
-        return new FileNameExtensionFilter(PNG_FILES, PNG_EXTENSION);
+        return new FileNameExtensionFilter(I18n.Text("PNG Files"), PNG_EXTENSION);
     }
 
     public static FileNameExtensionFilter getGifFilter() {
-        return new FileNameExtensionFilter(GIF_FILES, GIF_EXTENSION);
+        return new FileNameExtensionFilter(I18n.Text("GIF Files"), GIF_EXTENSION);
     }
 
     public static FileNameExtensionFilter getJpegFilter() {
-        return new FileNameExtensionFilter(JPEG_FILES, JPEG_EXTENSION, "jpeg"); //$NON-NLS-1$
+        return new FileNameExtensionFilter(I18n.Text("JPEG Files"), JPEG_EXTENSION, "jpeg");
     }
 
     public static FileNameExtensionFilter getImageFilter() {
@@ -154,7 +127,7 @@ public class FileType {
         extensions.addAll(Arrays.asList(getPngFilter().getExtensions()));
         extensions.addAll(Arrays.asList(getJpegFilter().getExtensions()));
         extensions.addAll(Arrays.asList(getGifFilter().getExtensions()));
-        return new FileNameExtensionFilter(IMAGE_FILES, extensions.toArray(new String[extensions.size()]));
+        return new FileNameExtensionFilter(I18n.Text("Image Files"), extensions.toArray(new String[extensions.size()]));
     }
 
     public static final FileType getByExtension(String extension) {
@@ -167,9 +140,9 @@ public class FileType {
      */
     public static String normalizeExtension(String extension) {
         if (extension == null) {
-            return ""; //$NON-NLS-1$
+            return "";
         }
-        if (extension.startsWith(".")) { //$NON-NLS-1$
+        if (extension.startsWith(".")) {
             extension = extension.substring(1);
         }
         return extension;

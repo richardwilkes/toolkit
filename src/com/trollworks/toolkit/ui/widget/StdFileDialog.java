@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,10 +11,9 @@
 
 package com.trollworks.toolkit.ui.widget;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.menu.file.RecentFilesMenu;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.NewerDataFileVersionException;
 import com.trollworks.toolkit.utility.PathUtils;
 import com.trollworks.toolkit.utility.Preferences;
@@ -33,23 +32,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /** Provides standard file dialog handling. */
 public class StdFileDialog {
-    @Localize("Unable to open \"{0}\".")
-    @Localize(locale = "ru", value = "Невозможно открыть \"{0}\".")
-    @Localize(locale = "de", value = "Kann Datei \"{0}\" nicht öffnen.")
-    @Localize(locale = "es", value = "Imposible abrir \"{0}\".")
-    private static String UNABLE_TO_OPEN;
-    @Localize("Unable to open \"{0}\"\n{1}")
-    @Localize(locale = "ru", value = "Невозможно открыть \"{0}\"\n{1}")
-    @Localize(locale = "de", value = "Kann Datei \"{0}\" nicht öffnen.\n{1}")
-    @Localize(locale = "es", value = "Imposible abrir \"{0}\".")
-    private static String UNABLE_TO_OPEN_WITH_EXCEPTION;
-
-    static {
-        Localization.initialize();
-    }
-
-    private static final String MODULE   = "StdFileDialog"; //$NON-NLS-1$
-    private static final String LAST_DIR = "LastDir"; //$NON-NLS-1$
+    private static final String MODULE   = "StdFileDialog";
+    private static final String LAST_DIR = "LastDir";
 
     /** @return The last directory used by the StdFileDialog. May return <code>null</code>. */
     public static final String getLastDir() {
@@ -222,12 +206,12 @@ public class StdFileDialog {
      */
     public static void showCannotOpenMsg(Component comp, String name, Throwable throwable) {
         if (throwable instanceof NewerDataFileVersionException) {
-            WindowUtils.showError(comp, MessageFormat.format(UNABLE_TO_OPEN_WITH_EXCEPTION, name, throwable.getMessage()));
+            WindowUtils.showError(comp, MessageFormat.format(I18n.Text("Unable to open \"{0}\"\n{1}"), name, throwable.getMessage()));
         } else {
             if (throwable != null) {
                 Log.error(throwable);
             }
-            WindowUtils.showError(comp, MessageFormat.format(UNABLE_TO_OPEN, name));
+            WindowUtils.showError(comp, MessageFormat.format(I18n.Text("Unable to open \"{0}\"."), name));
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,9 +11,8 @@
 
 package com.trollworks.toolkit.ui.widget;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.WindowSizeEnforcer;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -30,28 +29,13 @@ import javax.swing.text.JTextComponent;
 
 /** Utilities for use with windows. */
 public class WindowUtils {
-    @Localize("Error")
-    @Localize(locale = "ru", value = "Ошибка")
-    @Localize(locale = "de", value = "Fehler")
-    @Localize(locale = "es", value = "Error")
-    public static String ERROR;
-    @Localize("Warning")
-    @Localize(locale = "ru", value = "Внимание")
-    @Localize(locale = "de", value = "Warnung")
-    @Localize(locale = "es", value = "Aviso")
-    public static String WARNING;
-
-    static {
-        Localization.initialize();
-    }
-
     /**
      * @param comp The {@link Component} to use for determining the parent {@link Frame} or
      *             {@link Dialog}.
      * @param msg  The message to display.
      */
     public static void showError(Component comp, String msg) {
-        JOptionPane.showMessageDialog(comp, msg, ERROR, JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(comp, msg, I18n.Text("Error"), JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -60,7 +44,7 @@ public class WindowUtils {
      * @param msg  The message to display.
      */
     public static void showError(Component comp, Component msg) {
-        JOptionPane.showMessageDialog(comp, msg, ERROR, JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(comp, msg, I18n.Text("Error"), JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -69,7 +53,7 @@ public class WindowUtils {
      * @param msg  The message to display.
      */
     public static void showWarning(Component comp, String msg) {
-        JOptionPane.showMessageDialog(comp, msg, WARNING, JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(comp, msg, I18n.Text("Warning"), JOptionPane.WARNING_MESSAGE);
     }
 
     /**
@@ -78,7 +62,7 @@ public class WindowUtils {
      * @param msg  The message to display.
      */
     public static void showWarning(Component comp, Component msg) {
-        JOptionPane.showMessageDialog(comp, msg, WARNING, JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(comp, msg, I18n.Text("Warning"), JOptionPane.WARNING_MESSAGE);
     }
 
     /**

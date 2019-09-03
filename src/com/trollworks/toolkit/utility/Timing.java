@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -58,27 +58,27 @@ public final class Timing {
     }
 
     public final String toStringWithNanoResolution() {
-        return String.format("%,.9fs", Double.valueOf(elapsedSeconds())); //$NON-NLS-1$
+        return String.format("%,.9fs", Double.valueOf(elapsedSeconds()));
     }
 
     public final String toStringWithNanoResolutionThenReset() {
-        return String.format("%,.9fs", Double.valueOf(elapsedSecondsThenReset())); //$NON-NLS-1$
+        return String.format("%,.9fs", Double.valueOf(elapsedSecondsThenReset()));
     }
 
     public final String toStringWithMicroResolution() {
-        return String.format("%,.6fs", Double.valueOf(elapsedSeconds())); //$NON-NLS-1$
+        return String.format("%,.6fs", Double.valueOf(elapsedSeconds()));
     }
 
     public final String toStringWithMicroResolutionThenReset() {
-        return String.format("%,.6fs", Double.valueOf(elapsedSecondsThenReset())); //$NON-NLS-1$
+        return String.format("%,.6fs", Double.valueOf(elapsedSecondsThenReset()));
     }
 
     public final String toStringWithMilliResolution() {
-        return String.format("%,.3fs", Double.valueOf(elapsedSeconds())); //$NON-NLS-1$
+        return String.format("%,.3fs", Double.valueOf(elapsedSeconds()));
     }
 
     public final String toStringWithMilliResolutionThenReset() {
-        return String.format("%,.3fs", Double.valueOf(elapsedSecondsThenReset())); //$NON-NLS-1$
+        return String.format("%,.3fs", Double.valueOf(elapsedSecondsThenReset()));
     }
 
     @Override

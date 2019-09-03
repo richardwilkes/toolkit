@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,13 +11,12 @@
 
 package com.trollworks.toolkit.ui.preferences;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.menu.file.CloseHandler;
 import com.trollworks.toolkit.ui.widget.AppWindow;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -36,22 +35,7 @@ import javax.swing.event.ChangeListener;
 
 /** A window for editing application preferences. */
 public class PreferencesWindow extends AppWindow implements ActionListener, ChangeListener, CloseHandler {
-    @Localize("Preferences")
-    @Localize(locale = "ru", value = "Настройки")
-    @Localize(locale = "de", value = "Einstellungen")
-    @Localize(locale = "es", value = "Preferencias")
-    private static String PREFERENCES;
-    @Localize("Reset to Factory Defaults")
-    @Localize(locale = "ru", value = "Сброс в настройки по умолчанию")
-    @Localize(locale = "de", value = "Standardeinstellungen wiederherstellen")
-    @Localize(locale = "es", value = "Reiniciar las preferencias")
-    private static String RESET;
-
-    static {
-        Localization.initialize();
-    }
-
-    private static final String                           PREFIX     = "PreferencesWindow."; //$NON-NLS-1$
+    private static final String                           PREFIX     = "PreferencesWindow.";
     private static PreferencesWindow                      INSTANCE   = null;
     private static final List<PreferenceCategoryProvider> CATEGORIES = new ArrayList<>();
     private JTabbedPane                                   mTabPanel;
@@ -77,14 +61,14 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
     }
 
     private PreferencesWindow() {
-        super(PREFERENCES, StdImage.PREFERENCES);
+        super(I18n.Text("Preferences"), StdImage.PREFERENCES);
         Container content = getContentPane();
         mTabPanel = new JTabbedPane();
         for (PreferenceCategoryProvider category : CATEGORIES) {
             try {
                 addTab(category.create(this));
             } catch (Exception exception) {
-                Log.error("Trying to load " + category, exception); //$NON-NLS-1$
+                Log.error("Trying to load " + category, exception);
             }
         }
         mTabPanel.addChangeListener(this);
@@ -106,7 +90,7 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
 
     private JPanel createResetPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        mResetButton = new JButton(RESET);
+        mResetButton = new JButton(I18n.Text("Reset to Factory Defaults"));
         mResetButton.addActionListener(this);
         panel.add(mResetButton);
         return panel;

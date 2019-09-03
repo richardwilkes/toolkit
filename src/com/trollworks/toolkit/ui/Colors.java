@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -18,7 +18,6 @@ import java.util.Map;
 import javax.swing.UIManager;
 
 /** Provides standardized color access. */
-@SuppressWarnings("nls")
 public class Colors {
     private static final Color               SECONDARY_BANDING = new Color(232, 255, 232);
     private static final Map<String, String> NAME_TO_RGB       = new HashMap<>();

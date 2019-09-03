@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2018 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * version 2.0. If a copy of the MPL was not distributed with this file, You
@@ -17,10 +17,10 @@ public class ModuleImageLoader implements ImageLoader {
 
     public ModuleImageLoader(Module module, String path) {
         mModule = module;
-        while (path.endsWith("/")) { //$NON-NLS-1$
+        while (path.endsWith("/")) {
             path = path.substring(0, path.length() - 1);
         }
-        mPath = path + "/"; //$NON-NLS-1$
+        mPath = path + "/";
     }
 
     @Override

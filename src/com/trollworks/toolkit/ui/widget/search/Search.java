@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,10 +11,9 @@
 
 package com.trollworks.toolkit.ui.widget.search;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.layout.FlexRow;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.text.Numbers;
 import com.trollworks.toolkit.utility.text.Text;
 
@@ -39,28 +38,11 @@ import javax.swing.event.DocumentListener;
 
 /** A standard search control. */
 public class Search extends JPanel implements DocumentListener, KeyListener, FocusListener {
-    @Localize("The number of matches found")
-    @Localize(locale = "de", value = "Die Anzahl der Suchergebnisse.")
-    @Localize(locale = "ru", value = "Количество найденных соответствий")
-    @Localize(locale = "es", value = "Número de coincidencias encontradas")
-    private static String  MSG_HIT_TOOLTIP;
-    @Localize("Enter text here and press RETURN to select all matching items")
-    @Localize(locale = "de",
-              value = "Suchtext hier eingeben und ENTER drücken, um alle Suchergebnisse auszuwählen.")
-    @Localize(locale = "ru",
-              value = "Введите здесь текст и нажмите ВВОД, чтобы выбрать все подходящие элементы")
-    @Localize(locale = "es",
-              value = "Introduce aquí el texto y pulsa INTRO para selecionar todos elementos que coincidentes")
-    private static String  MSG_SEARCH_FIELD_TOOLTIP;
     private SearchTarget   mTarget;
     private JLabel         mHits;
     private JTextField     mFilterField;
     private SearchDropDown mFloater;
     private String         mFilter;
-
-    static {
-        Localization.initialize();
-    }
 
     /**
      * Creates the search panel.
@@ -74,14 +56,14 @@ public class Search extends JPanel implements DocumentListener, KeyListener, Foc
         mFilterField.getDocument().addDocumentListener(this);
         mFilterField.addKeyListener(this);
         mFilterField.addFocusListener(this);
-        mFilterField.setToolTipText(Text.wrapPlainTextForToolTip(MSG_SEARCH_FIELD_TOOLTIP));
+        mFilterField.setToolTipText(Text.wrapPlainTextForToolTip(I18n.Text("Enter text here and press RETURN to select all matching items")));
         // This client property is specific to Mac OS X
-        mFilterField.putClientProperty("JTextField.variant", "search"); //$NON-NLS-1$ //$NON-NLS-2$
+        mFilterField.putClientProperty("JTextField.variant", "search");
         mFilterField.setMinimumSize(new Dimension(60, mFilterField.getPreferredSize().height));
         add(mFilterField);
 
         mHits = new JLabel();
-        mHits.setToolTipText(Text.wrapPlainTextForToolTip(MSG_HIT_TOOLTIP));
+        mHits.setToolTipText(Text.wrapPlainTextForToolTip(I18n.Text("The number of matches found")));
         adjustHits();
         add(mHits);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -29,8 +29,8 @@ import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 
 public class Toolbar extends JPanel implements LayoutManager2 {
-    public static final String     LAYOUT_FILL         = "fill"; //$NON-NLS-1$
-    public static final String     LAYOUT_EXTRA_BEFORE = "extra_before"; //$NON-NLS-1$
+    public static final String     LAYOUT_FILL         = "fill";
+    public static final String     LAYOUT_EXTRA_BEFORE = "extra_before";
     private static final int       GAP                 = 2;
     private Map<Component, String> mConstraints        = new HashMap<>();
 
@@ -52,7 +52,7 @@ public class Toolbar extends JPanel implements LayoutManager2 {
         if (LAYOUT_FILL.equals(constraints) || LAYOUT_EXTRA_BEFORE.equals(constraints)) {
             mConstraints.put(comp, (String) constraints);
         } else if (constraints != null) {
-            Log.error("Invalid toolbar constraints"); //$NON-NLS-1$
+            Log.error("Invalid toolbar constraints");
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -85,12 +85,12 @@ public class KeyStrokeDisplay extends JLabel implements KeyListener {
             if (modifiers > 0) {
                 String modifierText = InputEvent.getModifiersExText(modifiers);
                 if (Platform.isMacintosh()) {
-                    buffer.append(modifierText.replaceAll("\\+", "")); //$NON-NLS-1$ //$NON-NLS-2$
+                    buffer.append(modifierText.replaceAll("\\+", ""));
                 } else {
                     buffer.append(modifierText);
-                    String delimiter = UIManager.getString("MenuItem.acceleratorDelimiter"); //$NON-NLS-1$
+                    String delimiter = UIManager.getString("MenuItem.acceleratorDelimiter");
                     if (delimiter == null) {
-                        delimiter = "+"; //$NON-NLS-1$
+                        delimiter = "+";
                     }
                     buffer.append(delimiter);
                 }

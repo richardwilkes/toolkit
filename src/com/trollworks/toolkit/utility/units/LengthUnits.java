@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.utility.units;
 
-import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.text.MessageFormat;
@@ -23,33 +22,33 @@ public enum LengthUnits implements Units {
     PT(1.0 / 72.0, false) {
         @Override
         public String getLocalizedName() {
-            return POINTS_DESCRIPTION;
+            return I18n.Text("Points");
         }
     },
     /** Inches. */
     IN(1.0, false) {
         @Override
         public String getLocalizedName() {
-            return INCHES_DESCRIPTION;
+            return I18n.Text("Inches");
         }
     },
     /** Feet. */
     FT(12.0, false) {
         @Override
         public String getLocalizedName() {
-            return FEET_DESCRIPTION;
+            return I18n.Text("Feet");
         }
     },
     /** Feet and Inches */
     FT_IN(1.0, false) {
         @Override
         public String getLocalizedName() {
-            return FEET_AND_INCHES_NAME;
+            return I18n.Text("Feet & Inches");
         }
 
         @Override
         public String getDescription() {
-            return FEET_AND_INCHES_DESCRIPTION;
+            return I18n.Text("Feet (') & Inches (\")");
         }
 
         @Override
@@ -74,108 +73,44 @@ public enum LengthUnits implements Units {
     YD(36.0, false) {
         @Override
         public String getLocalizedName() {
-            return YARDS_DESCRIPTION;
+            return I18n.Text("Yards");
         }
     },
     /** Miles. */
     MI(5280.0 * 12.0, false) {
         @Override
         public String getLocalizedName() {
-            return MILES_DESCRIPTION;
+            return I18n.Text("Miles");
         }
     },
     /** Millimeters. */
     MM(0.1 / 2.54, true) {
         @Override
         public String getLocalizedName() {
-            return MILLIMETERS_DESCRIPTION;
+            return I18n.Text("Millimeters");
         }
     },
     /** Centimeters. */
     CM(1.0 / 2.54, true) {
         @Override
         public String getLocalizedName() {
-            return CENTIMETERS_DESCRIPTION;
+            return I18n.Text("Centimeters");
         }
     },
     /** Kilometers. */
     KM(100000.0 / 2.54, true) {
         @Override
         public String getLocalizedName() {
-            return KILOMETERS_DESCRIPTION;
+            return I18n.Text("Kilometers");
         }
     },
     /** Meters. Must be after all the other 'meter' types. */
     M(100.0 / 2.54, true) {
         @Override
         public String getLocalizedName() {
-            return METERS_DESCRIPTION;
+            return I18n.Text("Meters");
         }
     };
-
-    @Localize("Points")
-    @Localize(locale = "ru", value = "Очки")
-    @Localize(locale = "de", value = "Punkte")
-    @Localize(locale = "es", value = "Puntos")
-    static String POINTS_DESCRIPTION;
-    @Localize("Inches")
-    @Localize(locale = "ru", value = "Дюймы")
-    @Localize(locale = "de", value = "Zoll")
-    @Localize(locale = "es", value = "Pulgadas")
-    static String INCHES_DESCRIPTION;
-    @Localize("Feet")
-    @Localize(locale = "ru", value = "Футы")
-    @Localize(locale = "de", value = "Fuß")
-    @Localize(locale = "es", value = "Pies")
-    static String FEET_DESCRIPTION;
-    @Localize("Feet & Inches")
-    @Localize(locale = "ru", value = "Футы и дюймы")
-    @Localize(locale = "de", value = "Fuß & Zoll")
-    @Localize(locale = "es", value = "Pies y Pulgadas")
-    static String FEET_AND_INCHES_NAME;
-    @Localize("Feet (') & Inches (\")")
-    @Localize(locale = "ru", value = "Футы (') и дюймы (\")")
-    @Localize(locale = "de", value = "Fuß (') & Zoll (\")")
-    @Localize(locale = "es", value = "Pies (') y Pulgadas (\") ")
-    static String FEET_AND_INCHES_DESCRIPTION;
-    @Localize("Yards")
-    @Localize(locale = "ru", value = "Ярды")
-    @Localize(locale = "de", value = "Schritt")
-    @Localize(locale = "es", value = "Yardas")
-    static String YARDS_DESCRIPTION;
-    @Localize("Miles")
-    @Localize(locale = "ru", value = "Мили")
-    @Localize(locale = "de", value = "Meilen")
-    @Localize(locale = "es", value = "Millas")
-    static String MILES_DESCRIPTION;
-    @Localize("Millimeters")
-    @Localize(locale = "ru", value = "Миллиметры")
-    @Localize(locale = "de", value = "Millimeter")
-    @Localize(locale = "es", value = "Millimetros")
-    static String MILLIMETERS_DESCRIPTION;
-    @Localize("Centimeters")
-    @Localize(locale = "ru", value = "Сантиметры")
-    @Localize(locale = "de", value = "Zentimeter")
-    @Localize(locale = "es", value = "Centimetros")
-    static String CENTIMETERS_DESCRIPTION;
-    @Localize("Meters")
-    @Localize(locale = "ru", value = "Метры")
-    @Localize(locale = "de", value = "Meter")
-    @Localize(locale = "es", value = "Metros")
-    static String METERS_DESCRIPTION;
-    @Localize("Kilometers")
-    @Localize(locale = "ru", value = "Километры")
-    @Localize(locale = "de", value = "Kilometer")
-    @Localize(locale = "es", value = "Kilometros")
-    static String KILOMETERS_DESCRIPTION;
-    @Localize("{0} {1}")
-    static String FORMAT;
-    @Localize("%s (%s)")
-    static String DESCRIPTION_FORMAT;
-
-    static {
-        Localization.initialize();
-    }
 
     private double  mFactor;
     private boolean mIsMetric;
@@ -203,7 +138,7 @@ public enum LengthUnits implements Units {
     @Override
     public String format(double value, boolean localize) {
         String textValue = localize ? Numbers.format(value) : Double.toString(value);
-        return MessageFormat.format(FORMAT, Numbers.trimTrailingZeroes(textValue, localize), getAbbreviation());
+        return MessageFormat.format("{0} {1}", Numbers.trimTrailingZeroes(textValue, localize), getAbbreviation());
     }
 
     @Override
@@ -218,7 +153,7 @@ public enum LengthUnits implements Units {
 
     @Override
     public String getDescription() {
-        return String.format(DESCRIPTION_FORMAT, getLocalizedName(), getAbbreviation());
+        return String.format("%s (%s)", getLocalizedName(), getAbbreviation());
     }
 
     public boolean isMetric() {

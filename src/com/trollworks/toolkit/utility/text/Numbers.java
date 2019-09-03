@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.utility.text;
 
-import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -22,71 +21,11 @@ import java.util.regex.Pattern;
 
 /** Various number utilities. */
 public class Numbers {
-    // In German, you say "Erster" if the word is referring to a male, and "Erste" if it is
-    // referring to a female. Plural forms not counted. Cases not counted. German is complicated.
-    // This way it is an universal form and should be ok.
-    @Localize("First")
-    @Localize(locale = "ru", value = "Первый")
-    @Localize(locale = "de", value = "Erste(r)")
-    @Localize(locale = "es", value = "Primero/a")
-    @Localize(locale = "es", value = "")
-    private static String FIRST;
-    @Localize("Second")
-    @Localize(locale = "ru", value = "Второй")
-    @Localize(locale = "de", value = "Zweite(r)")
-    @Localize(locale = "es", value = "Segundo/a")
-    private static String SECOND;
-    @Localize("Third")
-    @Localize(locale = "ru", value = "Третий")
-    @Localize(locale = "de", value = "Dritte(r)")
-    @Localize(locale = "es", value = "Tercero/a")
-    private static String THIRD;
-    @Localize("Fourth")
-    @Localize(locale = "ru", value = "Четвертый")
-    @Localize(locale = "de", value = "Vierte(r)")
-    @Localize(locale = "es", value = "Cuarto/a")
-    private static String FOURTH;
-    @Localize("Fifth")
-    @Localize(locale = "ru", value = "Пятый")
-    @Localize(locale = "de", value = "Fünfte(r)")
-    @Localize(locale = "es", value = "Quinto/a")
-    private static String FIFTH;
-    @Localize("Sixth")
-    @Localize(locale = "ru", value = "Шестой")
-    @Localize(locale = "de", value = "Sechste(r)")
-    @Localize(locale = "es", value = "Sexto/a")
-    private static String SIXTH;
-    @Localize("Seventh")
-    @Localize(locale = "ru", value = "Седьмой")
-    @Localize(locale = "de", value = "Siebte(r)")
-    @Localize(locale = "es", value = "Séptimo/a")
-    private static String SEVENTH;
-    @Localize("Eighth")
-    @Localize(locale = "ru", value = "Восьмой")
-    @Localize(locale = "de", value = "Achte(r)")
-    @Localize(locale = "es", value = "Octavo/a")
-    private static String EIGHTH;
-    @Localize("Ninth")
-    @Localize(locale = "ru", value = "Девятый")
-    @Localize(locale = "de", value = "Neunte(r)")
-    @Localize(locale = "es", value = "Noveno/a")
-    private static String NINTH;
-    @Localize("Tenth")
-    @Localize(locale = "ru", value = "Десятый")
-    @Localize(locale = "de", value = "Zehnte(r)")
-    @Localize(locale = "es", value = "Décimo/a")
-    private static String TENTH;
-
-    static {
-        Localization.initialize();
-    }
-
-    public static final String         YES                               = "yes"; //$NON-NLS-1$
-    public static final String         NO                                = "no"; //$NON-NLS-1$
+    public static final String         YES                               = "yes";
+    public static final String         NO                                = "no";
     private static final String        LOCALIZED_DECIMAL_SEPARATOR       = Character.toString(DecimalFormatSymbols.getInstance().getDecimalSeparator());
     private static final String        SAFE_LOCALIZED_GROUPING_SEPARATOR = Pattern.quote(Character.toString(DecimalFormatSymbols.getInstance().getGroupingSeparator()));
     private static final int[]         ROMAN_VALUES                      = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
-    @SuppressWarnings("nls")
     private static final String[]      ROMAN_TEXT                        = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
     private static final DecimalFormat NUMBER_FORMAT;
     private static final DecimalFormat NUMBER_PLUS_FORMAT;
@@ -96,7 +35,7 @@ public class Numbers {
         NUMBER_FORMAT.setMaximumFractionDigits(5);
 
         NUMBER_PLUS_FORMAT = (DecimalFormat) NUMBER_FORMAT.clone();
-        NUMBER_PLUS_FORMAT.setPositivePrefix("+"); //$NON-NLS-1$
+        NUMBER_PLUS_FORMAT.setPositivePrefix("+");
     }
 
     /**
@@ -133,7 +72,6 @@ public class Numbers {
      * @param buffer The text to process.
      * @return <code>true</code> if the buffer contains a 'true' value.
      */
-    @SuppressWarnings("nls")
     public static boolean extractBoolean(String buffer) {
         buffer = normalizeNumber(buffer, false);
         return "true".equalsIgnoreCase(buffer) || YES.equalsIgnoreCase(buffer) || "on".equalsIgnoreCase(buffer) || "1".equals(buffer);
@@ -413,35 +351,35 @@ public class Numbers {
     public static final String toPlace(int place) {
         switch (place) {
         case 1:
-            return FIRST;
+            return I18n.Text("First");
         case 2:
-            return SECOND;
+            return I18n.Text("Second");
         case 3:
-            return THIRD;
+            return I18n.Text("Third");
         case 4:
-            return FOURTH;
+            return I18n.Text("Fourth");
         case 5:
-            return FIFTH;
+            return I18n.Text("Fifth");
         case 6:
-            return SIXTH;
+            return I18n.Text("Sixth");
         case 7:
-            return SEVENTH;
+            return I18n.Text("Seventh");
         case 8:
-            return EIGHTH;
+            return I18n.Text("Eighth");
         case 9:
-            return NINTH;
+            return I18n.Text("Ninth");
         case 10:
-            return TENTH;
+            return I18n.Text("Tenth");
         default:
-            return ""; //$NON-NLS-1$
+            return "";
         }
     }
 
     public static final String toRoman(int number) {
         if (number < 1) {
-            throw new IllegalArgumentException("Number must be greater than 0"); //$NON-NLS-1$
+            throw new IllegalArgumentException(I18n.Text("Number must be greater than 0"));
         }
-        String text    = "I"; //$NON-NLS-1$
+        String text    = "I";
         int    closest = 1;
         for (int i = 0; i < ROMAN_VALUES.length; i++) {
             if (number >= ROMAN_VALUES[i]) {
@@ -453,7 +391,6 @@ public class Numbers {
         return number == closest ? text : text + toRoman(number - closest);
     }
 
-    @SuppressWarnings("nls")
     private static final String normalizeNumber(String buffer, boolean localized) {
         if (buffer == null) {
             return "";
@@ -469,17 +406,14 @@ public class Numbers {
         return buffer.indexOf(localized ? LOCALIZED_DECIMAL_SEPARATOR.charAt(0) : '.') != -1;
     }
 
-    @SuppressWarnings("nls")
     private static final boolean hasBillionsSuffix(String buffer) {
         return buffer.endsWith("b") || buffer.endsWith("B") || buffer.endsWith("g") || buffer.endsWith("G");
     }
 
-    @SuppressWarnings("nls")
     private static final boolean hasMillionsSuffix(String buffer) {
         return buffer.endsWith("m") || buffer.endsWith("M");
     }
 
-    @SuppressWarnings("nls")
     private static final boolean hasThousandsSuffix(String buffer) {
         return buffer.endsWith("t") || buffer.endsWith("T") || buffer.endsWith("k") || buffer.endsWith("K");
     }

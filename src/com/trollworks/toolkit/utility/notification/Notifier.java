@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -25,7 +25,7 @@ import java.util.StringTokenizer;
 /** Tracks targets of notifications and provides methods for notifying them. */
 public class Notifier implements Comparator<NotifierTarget> {
     /** The separator used between parts of a type. */
-    public static final String               SEPARATOR      = "."; //$NON-NLS-1$
+    public static final String               SEPARATOR      = ".";
     private Set<BatchNotifierTarget>         mBatchTargets  = new HashSet<>();
     private Map<String, Set<NotifierTarget>> mProductionMap = new HashMap<>();
     private Map<NotifierTarget, Set<String>> mNameMap       = new HashMap<>();

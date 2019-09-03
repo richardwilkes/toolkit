@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -23,7 +23,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 /** Provides simple XML generation. */
 public class XmlGenerator implements AutoCloseable {
-    private String          mIndent = "\t"; //$NON-NLS-1$
+    private String          mIndent = "\t";
     private XMLStreamWriter mWriter;
     private int             mDepth;
     private boolean         mHadText;
@@ -44,7 +44,7 @@ public class XmlGenerator implements AutoCloseable {
 
     /** Emits the XML document header. */
     public void startDocument() throws XMLStreamException {
-        mWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0"); //$NON-NLS-1$
+        mWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0");
     }
 
     /** Finishes the document. */
@@ -53,7 +53,7 @@ public class XmlGenerator implements AutoCloseable {
     }
 
     private void eol() throws XMLStreamException {
-        mWriter.writeCharacters("\n"); //$NON-NLS-1$
+        mWriter.writeCharacters("\n");
         for (int i = 0; i < mDepth; i++) {
             mWriter.writeCharacters(mIndent);
         }
@@ -98,7 +98,7 @@ public class XmlGenerator implements AutoCloseable {
      * @param value The value of the attribute.
      */
     public void addAttribute(String name, String value) throws XMLStreamException {
-        mWriter.writeAttribute(name, value == null ? "" : value); //$NON-NLS-1$
+        mWriter.writeAttribute(name, value == null ? "" : value);
     }
 
     /**

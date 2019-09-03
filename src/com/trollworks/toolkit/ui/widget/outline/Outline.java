@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.ui.widget.outline;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
@@ -29,7 +28,7 @@ import com.trollworks.toolkit.ui.widget.Icons;
 import com.trollworks.toolkit.ui.widget.dock.Dock;
 import com.trollworks.toolkit.ui.widget.dock.DockableTransferable;
 import com.trollworks.toolkit.utility.Geometry;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.text.Numbers;
 import com.trollworks.toolkit.utility.text.Text;
 
@@ -79,29 +78,14 @@ import javax.swing.undo.UndoableEdit;
 
 /** A panel that can show both hierarchical and tabular data. */
 public class Outline extends ActionPanel implements OutlineModelListener, ComponentListener, FocusListener, Autoscroll, Scrollable, Deletable, SelectAllCapable, DragGestureListener, DropTargetListener, MouseListener, MouseMotionListener, KeyListener {
-    @Localize("Sort")
-    @Localize(locale = "ru", value = "Сортировка")
-    @Localize(locale = "de", value = "Sortieren")
-    @Localize(locale = "es", value = "Ordenar")
-    private static String SORT_UNDO_TITLE;
-    @Localize("Row Drag & Drop")
-    @Localize(locale = "ru", value = "Перетянуть строку")
-    @Localize(locale = "de", value = "Zeile verschieben")
-    @Localize(locale = "es", value = "Mover filas")
-    private static String ROW_DROP_UNDO_TITLE;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The default double-click action command. */
-    public static final String    CMD_OPEN_SELECTION                = "Outline.OpenSelection";             //$NON-NLS-1$
+    public static final String    CMD_OPEN_SELECTION                = "Outline.OpenSelection";
     /** The default selection changed action command. */
-    public static final String    CMD_SELECTION_CHANGED             = "Outline.SelectionChanged";          //$NON-NLS-1$
+    public static final String    CMD_SELECTION_CHANGED             = "Outline.SelectionChanged";
     /** The default potential content size change action command. */
-    public static final String    CMD_POTENTIAL_CONTENT_SIZE_CHANGE = "Outline.ContentSizeMayHaveChanged"; //$NON-NLS-1$
+    public static final String    CMD_POTENTIAL_CONTENT_SIZE_CHANGE = "Outline.ContentSizeMayHaveChanged";
     /** The column visibility command. */
-    public static final String    CMD_TOGGLE_COLUMN_VISIBILITY      = "Outline.ToggleColumnVisibility";    //$NON-NLS-1$
+    public static final String    CMD_TOGGLE_COLUMN_VISIBILITY      = "Outline.ToggleColumnVisibility";
     private static final int      DIVIDER_HIT_SLOP                  = 2;
     private static final int      AUTO_SCROLL_MARGIN                = 10;
     private OutlineModel          mModel;
@@ -1784,7 +1768,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      *                  or <code>false</code> to make this column the primary and only sort column.
      */
     public void setSort(Column column, boolean ascending, boolean add) {
-        StateEdit edit  = new StateEdit(mModel, SORT_UNDO_TITLE);
+        StateEdit edit  = new StateEdit(mModel, I18n.Text("Sort"));
         int       count = mModel.getColumnCount();
         int       i;
 
@@ -1979,7 +1963,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      */
     public void applyConfig(String config) {
         try {
-            StringTokenizer tokenizer = new StringTokenizer(config, "\t"); //$NON-NLS-1$
+            StringTokenizer tokenizer = new StringTokenizer(config, "\t");
             if (getInteger(tokenizer, 0) == OutlineModel.CONFIG_VERSION) {
                 int          count    = getInteger(tokenizer, 0);
                 List<Column> columns  = mModel.getColumns();
@@ -2486,7 +2470,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     protected void dropRow(DropTargetDropEvent dtde) {
         removeDragHighlight(this);
         if (mDragChildInsertIndex != -1) {
-            StateEdit      edit         = new StateEdit(mModel, ROW_DROP_UNDO_TITLE);
+            StateEdit      edit         = new StateEdit(mModel, I18n.Text("Row Drag & Drop"));
             Row[]          dragRows     = mModel.getDragRows();
             boolean        isFromSelf   = dragRows != null && dragRows.length > 0 && mModel.getRows().contains(dragRows[0]);
             int            count        = mModel.getRowCount();

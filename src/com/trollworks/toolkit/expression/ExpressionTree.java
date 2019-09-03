@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,19 +11,10 @@
 
 package com.trollworks.toolkit.expression;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.expression.operator.Operator;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 class ExpressionTree {
-    @Localize("Expression is invalid")
-    @Localize(locale = "pt-BR", value = "A expressão é inválida")
-    private static String INVALID_EXPRESSION;
-
-    static {
-        Localization.initialize();
-    }
-
     private Evaluator mEvaluator;
     private Object    mLeftOperand;
     private Object    mRightOperand;
@@ -61,7 +52,7 @@ class ExpressionTree {
             }
         }
         if (operand == null) {
-            throw new EvaluationException(INVALID_EXPRESSION);
+            throw new EvaluationException(I18n.Text("Expression is invalid"));
         }
         return operand;
     }

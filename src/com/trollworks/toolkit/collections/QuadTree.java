@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.collections;
 
-import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.Rectangle;
 import java.util.Collections;
@@ -521,28 +520,16 @@ public class QuadTree<T extends Bounds> {
     }
 
     static class Node<T extends Bounds> implements Bounds {
-        @Localize("Objects must have a width and height greater than zero.")
-        @Localize(locale = "ru", value = "Объекты должны иметь ширину и высоту больше нуля.")
-        @Localize(locale = "de",
-                  value = "Objekte müssen eine Höhe und Breite größer als Null haben.")
-        @Localize(locale = "es", value = "El objeto debe tener anchura y altura mayor que cero.")
-        @Localize(locale = "pt-BR",
-                  value = "Objetos precisam ter a largura e altura maiores que zero.")
-        private static String MUST_HAVE_SIZE_GREATER_THAN_ZERO;
-        private int           mX;
-        private int           mY;
-        private int           mWidth;
-        private int           mHeight;
-        protected Set<T>      mContents;
-        private int           mMaxCapacity;
-        private Node<T>       mNorthEast;
-        private Node<T>       mNorthWest;
-        private Node<T>       mSouthEast;
-        private Node<T>       mSouthWest;
-
-        static {
-            Localization.initialize();
-        }
+        private int      mX;
+        private int      mY;
+        private int      mWidth;
+        private int      mHeight;
+        protected Set<T> mContents;
+        private int      mMaxCapacity;
+        private Node<T>  mNorthEast;
+        private Node<T>  mNorthWest;
+        private Node<T>  mSouthEast;
+        private Node<T>  mSouthWest;
 
         Node(int x, int y, int width, int height, int maxCapacity) {
             mX           = x;
@@ -595,7 +582,7 @@ public class QuadTree<T extends Bounds> {
 
         final void add(T obj) {
             if (obj.getWidth() < 1 || obj.getHeight() < 1) {
-                throw new IllegalArgumentException(MUST_HAVE_SIZE_GREATER_THAN_ZERO);
+                throw new IllegalArgumentException(I18n.Text("Objects must have a width and height greater than zero."));
             }
             // Do we have to split?
             if (isLeaf() && mContents.size() >= mMaxCapacity && mWidth > 1 && mHeight > 1) {
@@ -815,7 +802,6 @@ public class QuadTree<T extends Bounds> {
             }
         }
 
-        @SuppressWarnings("nls")
         @Override
         public String toString() {
             return mX + "," + mY + "," + mWidth + "," + mHeight;

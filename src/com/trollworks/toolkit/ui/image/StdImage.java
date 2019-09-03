@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2018 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,10 +11,9 @@
 
 package com.trollworks.toolkit.ui.image;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -43,26 +42,6 @@ import javax.swing.Icon;
  * Provides a {@link BufferedImage} that implements Swing's {@link Icon} interface for convenience.
  */
 public class StdImage extends BufferedImage implements Icon {
-    @Localize("Unable to load image")
-    @Localize(locale = "ru", value = "Невозможно загрузить изображение")
-    @Localize(locale = "de", value = "Kann Bild nicht laden")
-    @Localize(locale = "es", value = "")
-    private static String UNABLE_TO_LOAD_IMAGE;
-    @Localize("Invalid angle: %d")
-    @Localize(locale = "ru", value = "Недопустимый угол: %d")
-    @Localize(locale = "de", value = "Ungültiger Winkel: %d")
-    @Localize(locale = "es", value = "")
-    private static String INVALID_ANGLE;
-    @Localize("Invalid transparency")
-    @Localize(locale = "ru", value = "Недопустимая прозрачность")
-    @Localize(locale = "de", value = "Ungültige Transparenz")
-    @Localize(locale = "es", value = "La transparencia no es válida")
-    private static String INVALID_TRANSPARENCY;
-
-    static {
-        Localization.initialize();
-    }
-
     private static final String                    COLORIZED_POSTFIX = new String(new char[] { ':', 'C', 22 });
     private static final String                    FADED_POSTFIX     = new String(new char[] { ':', 'F', 22 });
     private static final HashSet<ImageLoader>      LOADERS           = new HashSet<>();
@@ -71,31 +50,31 @@ public class StdImage extends BufferedImage implements Icon {
     private static final HashSet<String>           FAILED_LOOKUPS    = new HashSet<>();
 
     static {
-        StdImage.addLoader(new ModuleImageLoader(StdImage.class.getModule(), "/com/trollworks/toolkit/ui/image/images")); //$NON-NLS-1$
+        StdImage.addLoader(new ModuleImageLoader(StdImage.class.getModule(), "/com/trollworks/toolkit/ui/image/images"));
     }
 
-    public static final StdImage    ADD                 = get("add");                           //$NON-NLS-1$
-    public static final StdImage    COLLAPSE            = get("collapse");                      //$NON-NLS-1$
-    public static final StdImage    DOCK_CLOSE          = get("dock_close");                    //$NON-NLS-1$
-    public static final StdImage    DOCK_MAXIMIZE       = get("dock_maximize");                 //$NON-NLS-1$
-    public static final StdImage    DOCK_RESTORE        = get("dock_restore");                  //$NON-NLS-1$
-    public static final StdImage    DOWN_TRIANGLE       = get("down_triangle");                 //$NON-NLS-1$
-    public static final StdImage    DOWN_TRIANGLE_ROLL  = get("down_triangle_roll");            //$NON-NLS-1$
-    public static final StdImage    EXPAND              = get("expand");                        //$NON-NLS-1$
-    public static final StdImageSet FILE                = StdImageSet.getOrLoad("file");        //$NON-NLS-1$
-    public static final StdImageSet FOLDER              = StdImageSet.getOrLoad("folder");      //$NON-NLS-1$
-    public static final StdImage    LOCKED              = get("locked");                        //$NON-NLS-1$
-    public static final StdImage    MINI_WARNING        = get("mini_warning");                  //$NON-NLS-1$
-    public static final StdImage    MODIFIED_MARKER     = get("modified_marker");               //$NON-NLS-1$
-    public static final StdImage    MORE                = get("more");                          //$NON-NLS-1$
-    public static final StdImage    NOT_MODIFIED_MARKER = get("not_modified_marker");           //$NON-NLS-1$
-    public static final StdImageSet PREFERENCES         = StdImageSet.getOrLoad("preferences"); //$NON-NLS-1$
-    public static final StdImage    REMOVE              = get("remove");                        //$NON-NLS-1$
-    public static final StdImage    RIGHT_TRIANGLE      = get("right_triangle");                //$NON-NLS-1$
-    public static final StdImage    RIGHT_TRIANGLE_ROLL = get("right_triangle_roll");           //$NON-NLS-1$
-    public static final StdImage    SIZE_TO_FIT         = get("size_to_fit");                   //$NON-NLS-1$
-    public static final StdImage    TOGGLE_OPEN         = get("toggle_open");                   //$NON-NLS-1$
-    public static final StdImage    UNLOCKED            = get("unlocked");                      //$NON-NLS-1$
+    public static final StdImage    ADD                 = get("add");
+    public static final StdImage    COLLAPSE            = get("collapse");
+    public static final StdImage    DOCK_CLOSE          = get("dock_close");
+    public static final StdImage    DOCK_MAXIMIZE       = get("dock_maximize");
+    public static final StdImage    DOCK_RESTORE        = get("dock_restore");
+    public static final StdImage    DOWN_TRIANGLE       = get("down_triangle");
+    public static final StdImage    DOWN_TRIANGLE_ROLL  = get("down_triangle_roll");
+    public static final StdImage    EXPAND              = get("expand");
+    public static final StdImageSet FILE                = StdImageSet.getOrLoad("file");
+    public static final StdImageSet FOLDER              = StdImageSet.getOrLoad("folder");
+    public static final StdImage    LOCKED              = get("locked");
+    public static final StdImage    MINI_WARNING        = get("mini_warning");
+    public static final StdImage    MODIFIED_MARKER     = get("modified_marker");
+    public static final StdImage    MORE                = get("more");
+    public static final StdImage    NOT_MODIFIED_MARKER = get("not_modified_marker");
+    public static final StdImageSet PREFERENCES         = StdImageSet.getOrLoad("preferences");
+    public static final StdImage    REMOVE              = get("remove");
+    public static final StdImage    RIGHT_TRIANGLE      = get("right_triangle");
+    public static final StdImage    RIGHT_TRIANGLE_ROLL = get("right_triangle_roll");
+    public static final StdImage    SIZE_TO_FIT         = get("size_to_fit");
+    public static final StdImage    TOGGLE_OPEN         = get("toggle_open");
+    public static final StdImage    UNLOCKED            = get("unlocked");
 
     /**
      * Adds a loader to search for images.
@@ -152,7 +131,7 @@ public class StdImage extends BufferedImage implements Icon {
         StdImage img = cache ? MAP.get(name) : null;
         if (img == null && !FAILED_LOOKUPS.contains(name)) {
             for (ImageLoader loader : LOADERS) {
-                String filename = name + ".png"; //$NON-NLS-1$
+                String filename = name + ".png";
                 try {
                     img = loader.loadImage(filename);
                 } catch (Exception exception) {
@@ -312,7 +291,7 @@ public class StdImage extends BufferedImage implements Icon {
             if (returnNullOnFailure) {
                 return null;
             }
-            Log.error(new Exception(UNABLE_TO_LOAD_IMAGE));
+            Log.error(new Exception(I18n.Text("Unable to load image")));
             return create(1, 1);
         }
         StdImage   buffer = createTransparent(image.getWidth(null), image.getHeight(null));
@@ -366,7 +345,7 @@ public class StdImage extends BufferedImage implements Icon {
         } else {
             x = 0;
             y = 0;
-            Log.error(String.format(INVALID_ANGLE, Integer.valueOf(angle)));
+            Log.error(String.format(I18n.Text("Invalid angle: %d"), Integer.valueOf(angle)));
         }
         gc.drawImage(image, x, y, null);
         gc.dispose();
@@ -686,7 +665,7 @@ public class StdImage extends BufferedImage implements Icon {
         }
         ColorModel cm = gc.getColorModel(transparency);
         if (cm == null) {
-            throw new IllegalArgumentException(INVALID_TRANSPARENCY);
+            throw new IllegalArgumentException(I18n.Text("Invalid transparency"));
         }
         return new StdImage(cm, cm.createCompatibleWritableRaster(width, height), cm.isAlphaPremultiplied(), null);
     }

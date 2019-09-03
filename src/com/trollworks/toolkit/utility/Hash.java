@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -16,11 +16,11 @@ import java.security.NoSuchAlgorithmException;
 
 public final class Hash {
     public final static byte[] md5(byte[] data) {
-        return hash("MD5", data); //$NON-NLS-1$
+        return hash("MD5", data);
     }
 
     public final static byte[] sha1(byte[] data) {
-        return hash("SHA-1", data); //$NON-NLS-1$
+        return hash("SHA-1", data);
     }
 
     public final static byte[] hash(String algorithm, byte[] data) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.expression;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.collections.Stack;
 import com.trollworks.toolkit.expression.function.Abs;
 import com.trollworks.toolkit.expression.function.Ceil;
@@ -42,7 +41,7 @@ import com.trollworks.toolkit.expression.operator.Operator;
 import com.trollworks.toolkit.expression.operator.Or;
 import com.trollworks.toolkit.expression.operator.Power;
 import com.trollworks.toolkit.expression.operator.Subtract;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,30 +50,6 @@ import java.util.Map;
 
 /** A simple expression evaluator. */
 public class Evaluator {
-    @Localize("Consecutive unary operators are not allowed (index=%d)")
-    @Localize(locale = "pt-BR",
-              value = "Operadores unários consecutivos não são permitidos (índice=%d)")
-    private static String CONSECUTIVE_UNARY_OPS;
-    @Localize("Function not closed")
-    @Localize(locale = "pt-BR", value = "Função não fechada")
-    private static String FUNCTION_NOT_CLOSED;
-    @Localize("Function not defined: %s")
-    @Localize(locale = "pt-BR", value = "Função não definida: %s")
-    private static String FUNCTION_NOT_DEFINED;
-    @Localize("Expression is invalid")
-    @Localize(locale = "pt-BR", value = "A expressão é inválida")
-    private static String INVALID_EXPRESSION;
-    @Localize("Invalid variable at index %d")
-    @Localize(locale = "pt-BR", value = "Variável inválido no índice %d")
-    private static String INVALID_VARIABLE;
-    @Localize("Unable to resolve variable $%s")
-    @Localize(locale = "pt-BR", value = "Incapaz de resolver a variável $%s")
-    private static String UNABLE_TO_RESOLVE;
-
-    static {
-        Localization.initialize();
-    }
-
     private static List<Operator>                  DEFAULT_OPERATORS = new ArrayList<>();
     private static Map<String, ExpressionFunction> DEFAULT_FUNCTIONS = new HashMap<>();
     private VariableResolver                       mVariableResolver;
@@ -190,7 +165,7 @@ public class Evaluator {
             processTree(mOperandStack, mOperatorStack);
         }
         if (mOperandStack.isEmpty()) {
-            return ""; //$NON-NLS-1$
+            return "";
         }
         return evaluateOperand(mOperandStack.pop());
     }
@@ -265,7 +240,7 @@ public class Evaluator {
                             if (unaryOperator == null) {
                                 unaryOperator = nextOperator.mOperator;
                             } else {
-                                throw new EvaluationException(String.format(CONSECUTIVE_UNARY_OPS, Integer.valueOf(i)));
+                                throw new EvaluationException(String.format(I18n.Text("Consecutive unary operators are not allowed (index=%d)"), Integer.valueOf(i)));
                             }
                         } else {
                             i             = processOperator(expression, opIndex, operator, mOperatorStack, mOperandStack, haveOperand, unaryOperator);
@@ -285,6 +260,10 @@ public class Evaluator {
         }
     }
 
+    private static final String invalidExpressionText() {
+        return I18n.Text("Expression is invalid");
+    }
+
     private static final int processOperand(String expression, int start, int operatorIndex, Stack<Object> operandStack, Operator unaryOperator) throws EvaluationException {
         String text;
         int    result;
@@ -296,7 +275,7 @@ public class Evaluator {
             result = operatorIndex;
         }
         if (text.length() == 0) {
-            throw new EvaluationException(INVALID_EXPRESSION);
+            throw new EvaluationException(invalidExpressionText());
         }
         operandStack.push(new ExpressionOperand(text, unaryOperator));
         return result;
@@ -323,11 +302,11 @@ public class Evaluator {
                 stackOp = operatorStack.size() > 0 ? operatorStack.peek() : null;
             }
             if (operatorStack.isEmpty()) {
-                throw new EvaluationException(INVALID_EXPRESSION);
+                throw new EvaluationException(invalidExpressionText());
             }
             ExpressionOperator exop = operatorStack.pop();
             if (!(exop.mOperator instanceof OpenParen)) {
-                throw new EvaluationException(INVALID_EXPRESSION);
+                throw new EvaluationException(invalidExpressionText());
             }
             if (exop.mUnaryOperator != null) {
                 operandStack.push(new ExpressionTree(this, operandStack.pop(), null, null, exop.mUnaryOperator));
@@ -352,7 +331,7 @@ public class Evaluator {
         while (parens > 0) {
             nextOperator = nextOperator(expression, next + 1, null);
             if (nextOperator == null) {
-                throw new EvaluationException(FUNCTION_NOT_CLOSED);
+                throw new EvaluationException(I18n.Text("Function not closed"));
             } else if (nextOperator.mOperator instanceof OpenParen) {
                 parens++;
             } else if (nextOperator.mOperator instanceof CloseParen) {
@@ -363,7 +342,7 @@ public class Evaluator {
         ExpressionOperand  operand  = (ExpressionOperand) operandStack.pop();
         ExpressionFunction function = mFunctions.get(operand.mValue);
         if (function == null) {
-            throw new EvaluationException(String.format(FUNCTION_NOT_DEFINED, operand.mValue));
+            throw new EvaluationException(String.format(I18n.Text("Function not defined: %s"), operand.mValue));
         }
         operandStack.push(new ParsedFunction(function, expression.substring(operatorIndex + 1, next), operand.mUnaryOperator));
         return nextOperator;
@@ -428,7 +407,7 @@ public class Evaluator {
             }
             return value;
         } else if (operand != null) {
-            throw new EvaluationException(INVALID_EXPRESSION);
+            throw new EvaluationException(invalidExpressionText());
         }
         return null;
     }
@@ -453,7 +432,7 @@ public class Evaluator {
                     value = mVariableResolver.resolveVariable(name);
                 }
                 if (value == null || value.trim().length() == 0) {
-                    throw new EvaluationException(String.format(UNABLE_TO_RESOLVE, name));
+                    throw new EvaluationException(String.format(I18n.Text("Unable to resolve variable $%s"), name));
                 }
                 StringBuilder buffer = new StringBuilder();
                 if (dollar > 0) {
@@ -465,7 +444,7 @@ public class Evaluator {
                 }
                 expression = buffer.toString();
             } else {
-                throw new EvaluationException(String.format(INVALID_VARIABLE, Integer.valueOf(dollar)));
+                throw new EvaluationException(String.format(I18n.Text("Invalid variable at index %d"), Integer.valueOf(dollar)));
             }
             dollar = expression.indexOf('$');
         }

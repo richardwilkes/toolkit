@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.ui.widget.dock;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.border.EmptyBorder;
@@ -22,7 +21,7 @@ import com.trollworks.toolkit.ui.menu.file.CloseHandler;
 import com.trollworks.toolkit.ui.menu.file.Saveable;
 import com.trollworks.toolkit.ui.widget.DataModifiedListener;
 import com.trollworks.toolkit.ui.widget.IconButton;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.text.NumericComparator;
 import com.trollworks.toolkit.utility.text.Text;
 
@@ -50,16 +49,6 @@ import javax.swing.SwingConstants;
 
 /** Provides a tab that contains the {@link Dockable}'s icon, title, and close button, if any. */
 public class DockTab extends JPanel implements ContainerListener, MouseListener, DragGestureListener, DataModifiedListener, Comparable<DockTab> {
-    @Localize("Close")
-    @Localize(locale = "ru", value = "Закрыть")
-    @Localize(locale = "de", value = "Schließen")
-    @Localize(locale = "es", value = "Cerrar")
-    private static String CLOSE_TOOLTIP;
-
-    static {
-        Localization.initialize();
-    }
-
     private Dockable mDockable;
     private JLabel   mTitle;
 
@@ -75,7 +64,7 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
         setBorder(new EmptyBorder(2, 1, 0, 1));
         addContainerListener(this);
         mTitle = new JLabel(getFullTitle(), dockable.getTitleIcon(), SwingConstants.LEFT);
-        IconButton closeButton = new IconButton(StdImage.DOCK_CLOSE, CLOSE_TOOLTIP, this::attemptClose);
+        IconButton closeButton = new IconButton(StdImage.DOCK_CLOSE, I18n.Text("Close"), this::attemptClose);
         add(mTitle, new PrecisionLayoutData().setGrabHorizontalSpace(true).setHeightHint(Math.max(mTitle.getPreferredSize().height, closeButton.getPreferredSize().height)));
         if (dockable instanceof CloseHandler) {
             add(closeButton, new PrecisionLayoutData().setEndHorizontalAlignment());
@@ -162,7 +151,7 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
         if (mgr instanceof PrecisionLayout) {
             super.setLayout(mgr);
         } else {
-            throw new IllegalArgumentException("Must use a PrecisionLayout."); //$NON-NLS-1$
+            throw new IllegalArgumentException("Must use a PrecisionLayout.");
         }
     }
 

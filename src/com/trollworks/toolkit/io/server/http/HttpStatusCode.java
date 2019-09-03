@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.io.server.http;
 
-@SuppressWarnings("nls")
 /** Stores a HTTP status code. */
 public enum HttpStatusCode {
     SWITCHING_PROTOCOLS(101, "Switching Protocols"),

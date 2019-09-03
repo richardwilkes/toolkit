@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,9 +11,8 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -22,24 +21,14 @@ import java.awt.event.WindowEvent;
 
 /** Provides the "Close" command. */
 public class CloseCommand extends Command {
-    @Localize("Close")
-    @Localize(locale = "ru", value = "Закрыть")
-    @Localize(locale = "de", value = "Schließen")
-    @Localize(locale = "es", value = "Cerrar")
-    private static String CLOSE;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The action command this command will issue. */
-    public static final String       CMD_CLOSE = "Close"; //$NON-NLS-1$
+    public static final String       CMD_CLOSE = "Close";
 
     /** The singleton {@link CloseCommand}. */
     public static final CloseCommand INSTANCE  = new CloseCommand();
 
     private CloseCommand() {
-        super(CLOSE, CMD_CLOSE, KeyEvent.VK_W);
+        super(I18n.Text("Close"), CMD_CLOSE, KeyEvent.VK_W);
     }
 
     @Override

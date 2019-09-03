@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,13 +11,12 @@
 
 package com.trollworks.toolkit.ui.print;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.xml.XMLNodeType;
 import com.trollworks.toolkit.io.xml.XMLReader;
 import com.trollworks.toolkit.io.xml.XMLWriter;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.Preferences;
 import com.trollworks.toolkit.utility.PrintProxy;
 import com.trollworks.toolkit.utility.text.Enums;
@@ -42,55 +41,25 @@ import javax.swing.JOptionPane;
 
 /** Manages printing. */
 public class PrintManager {
-    @Localize("Printing failed!")
-    @Localize(locale = "ru", value = "Ошибка печати!")
-    @Localize(locale = "de", value = "Druck fehlgeschlagen!")
-    @Localize(locale = "es", value = "¡Fallo de impresión!")
-    private static String PRINTING_FAILED;
-    @Localize("No printer is available!")
-    @Localize(locale = "ru", value = "Нет доступного принтера!")
-    @Localize(locale = "de", value = "Kein Drucker verfügbar!")
-    @Localize(locale = "es", value = "¡No hay impresora disponible!")
-    private static String NO_PRINTER_AVAILABLE;
-    @Localize("Unable to switch printers!")
-    @Localize(locale = "ru", value = "Невозможно переключить принтеры!")
-    @Localize(locale = "de", value = "Kann Drucker nicht wechseln!")
-    @Localize(locale = "es", value = "¡No se puede conectar con las impresoras!")
-    private static String UNABLE_TO_SWITCH_PRINTERS;
-    @Localize("Page Setup")
-    @Localize(locale = "ru", value = "Настройка страницы")
-    @Localize(locale = "de", value = "Seite einrichten")
-    @Localize(locale = "es", value = "Configuración de página")
-    private static String PAGE_SETUP_TITLE;
-    @Localize("Print")
-    @Localize(locale = "ru", value = "Печать")
-    @Localize(locale = "de", value = "Drucken")
-    @Localize(locale = "es", value = "Imprimir")
-    private static String PRINT_TITLE;
-
-    static {
-        Localization.initialize();
-    }
-
-    private static final String          MODULE                     = "PrintManager"; //$NON-NLS-1$
+    private static final String          MODULE                     = "PrintManager";
     private static final int             MODULE_VERSION             = 1;
-    private static final String          NATIVE_DIALOGS_ENABLED_KEY = "UseNativeDialogs"; //$NON-NLS-1$
+    private static final String          NATIVE_DIALOGS_ENABLED_KEY = "UseNativeDialogs";
     /** The XML root tag for {@link PrintManager}. */
-    public static final String           TAG_ROOT                   = "print_settings"; //$NON-NLS-1$
-    private static final String          ATTRIBUTE_UNITS            = "units"; //$NON-NLS-1$
-    private static final String          ATTRIBUTE_PRINTER          = "printer"; //$NON-NLS-1$
-    private static final String          TAG_ORIENTATION            = "orientation"; //$NON-NLS-1$
-    private static final String          TAG_WIDTH                  = "width"; //$NON-NLS-1$
-    private static final String          TAG_HEIGHT                 = "height"; //$NON-NLS-1$
-    private static final String          TAG_TOP_MARGIN             = "top_margin"; //$NON-NLS-1$
-    private static final String          TAG_BOTTOM_MARGIN          = "bottom_margin"; //$NON-NLS-1$
-    private static final String          TAG_LEFT_MARGIN            = "left_margin"; //$NON-NLS-1$
-    private static final String          TAG_RIGHT_MARGIN           = "right_margin"; //$NON-NLS-1$
-    private static final String          TAG_CHROMATICITY           = "ink_chromaticity"; //$NON-NLS-1$
-    private static final String          TAG_SIDES                  = "sides"; //$NON-NLS-1$
-    private static final String          TAG_NUMBER_UP              = "number_up"; //$NON-NLS-1$
-    private static final String          TAG_QUALITY                = "quality"; //$NON-NLS-1$
-    private static final String          TAG_RESOLUTION             = "resolution"; //$NON-NLS-1$
+    public static final String           TAG_ROOT                   = "print_settings";
+    private static final String          ATTRIBUTE_UNITS            = "units";
+    private static final String          ATTRIBUTE_PRINTER          = "printer";
+    private static final String          TAG_ORIENTATION            = "orientation";
+    private static final String          TAG_WIDTH                  = "width";
+    private static final String          TAG_HEIGHT                 = "height";
+    private static final String          TAG_TOP_MARGIN             = "top_margin";
+    private static final String          TAG_BOTTOM_MARGIN          = "bottom_margin";
+    private static final String          TAG_LEFT_MARGIN            = "left_margin";
+    private static final String          TAG_RIGHT_MARGIN           = "right_margin";
+    private static final String          TAG_CHROMATICITY           = "ink_chromaticity";
+    private static final String          TAG_SIDES                  = "sides";
+    private static final String          TAG_NUMBER_UP              = "number_up";
+    private static final String          TAG_QUALITY                = "quality";
+    private static final String          TAG_RESOLUTION             = "resolution";
     private PrinterJob                   mJob;
     private HashPrintRequestAttributeSet mSet;
 
@@ -246,7 +215,7 @@ public class PrintManager {
             }
         } else {
             PageSetupPanel panel = new PageSetupPanel(getPrintService(), mSet);
-            if (WindowUtils.showOptionDialog(UIUtilities.getComponentForDialog(proxy), panel, PAGE_SETUP_TITLE, false, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null) == JOptionPane.OK_OPTION) {
+            if (WindowUtils.showOptionDialog(UIUtilities.getComponentForDialog(proxy), panel, I18n.Text("Page Setup"), false, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null) == JOptionPane.OK_OPTION) {
                 try {
                     PrintService service = panel.accept(mSet);
                     if (service != null) {
@@ -255,7 +224,7 @@ public class PrintManager {
                     proxy.adjustToPageSetupChanges(false);
                     return true;
                 } catch (PrinterException exception) {
-                    WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), UNABLE_TO_SWITCH_PRINTERS);
+                    WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), I18n.Text("Unable to switch printers!"));
                 }
             }
         }
@@ -280,7 +249,7 @@ public class PrintManager {
                             mJob.setPrintable(proxy, createPageFormat());
                             mJob.print();
                         } catch (PrinterException exception) {
-                            WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), PRINTING_FAILED);
+                            WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), I18n.Text("Printing failed!"));
                         } finally {
                             proxy.setPrinting(false);
                         }
@@ -288,7 +257,7 @@ public class PrintManager {
                 } else {
                     mSet.add(new JobName(proxy.getPrintJobTitle(), null));
                     PrintPanel panel = new PrintPanel(getPrintService(), mSet);
-                    if (WindowUtils.showOptionDialog(UIUtilities.getComponentForDialog(proxy), panel, PRINT_TITLE, false, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null) == JOptionPane.OK_OPTION) {
+                    if (WindowUtils.showOptionDialog(UIUtilities.getComponentForDialog(proxy), panel, I18n.Text("Print"), false, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null) == JOptionPane.OK_OPTION) {
                         try {
                             mJob.setPrintService(panel.accept(mSet));
                             try {
@@ -297,17 +266,17 @@ public class PrintManager {
                                 mJob.setPrintable(proxy, createPageFormat());
                                 mJob.print(mSet);
                             } catch (PrinterException exception) {
-                                WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), PRINTING_FAILED);
+                                WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), I18n.Text("Printing failed!"));
                             } finally {
                                 proxy.setPrinting(false);
                             }
                         } catch (PrinterException exception) {
-                            WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), UNABLE_TO_SWITCH_PRINTERS);
+                            WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), I18n.Text("Unable to switch printers!"));
                         }
                     }
                 }
             } else {
-                WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), NO_PRINTER_AVAILABLE);
+                WindowUtils.showError(UIUtilities.getComponentForDialog(proxy), I18n.Text("No printer is available!"));
             }
         }
     }
@@ -414,7 +383,7 @@ public class PrintManager {
             int           y      = res.getFeedResolution(1);
             buffer.append(Integer.toString(x));
             if (x != y) {
-                buffer.append("x"); //$NON-NLS-1$
+                buffer.append("x");
                 buffer.append(Integer.toString(y));
             }
             return buffer.toString();

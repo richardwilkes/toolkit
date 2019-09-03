@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,9 +11,8 @@
 
 package com.trollworks.toolkit.ui.menu.edit;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
@@ -24,24 +23,14 @@ import javax.swing.text.JTextComponent;
 
 /** Provides the "Paste" command. */
 public class PasteCommand extends Command {
-    @Localize("Paste")
-    @Localize(locale = "ru", value = "Вставка")
-    @Localize(locale = "de", value = "Einfügen")
-    @Localize(locale = "es", value = "Pegar")
-    private static String PASTE;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The action command this command will issue. */
-    public static final String       CMD_PASTE = "Paste"; //$NON-NLS-1$
+    public static final String       CMD_PASTE = "Paste";
 
     /** The singleton {@link PasteCommand}. */
     public static final PasteCommand INSTANCE  = new PasteCommand();
 
     private PasteCommand() {
-        super(PASTE, CMD_PASTE, KeyEvent.VK_V);
+        super(I18n.Text("Paste"), CMD_PASTE, KeyEvent.VK_V);
     }
 
     @Override

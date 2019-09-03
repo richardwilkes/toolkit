@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -155,15 +155,15 @@ public class NumberFilter implements KeyListener {
                         filter(event);
                     }
                 } else if (ch == DECIMAL_CHAR) {
-                    if (buffer.indexOf("" + DECIMAL_CHAR) != -1 || mAllowSign && start == 0 && buffer.length() > 0 && (buffer.charAt(0) == '-' || buffer.charAt(0) == '+')) { //$NON-NLS-1$
+                    if (buffer.indexOf("" + DECIMAL_CHAR) != -1 || mAllowSign && start == 0 && buffer.length() > 0 && (buffer.charAt(0) == '-' || buffer.charAt(0) == '+')) {
                         filter(event);
                     }
                 } else if (ch == '\'') {
-                    if (buffer.indexOf("'") != -1) { //$NON-NLS-1$
+                    if (buffer.indexOf("'") != -1) {
                         filter(event);
                     }
                 } else if (ch == '"') {
-                    if (buffer.indexOf("\"") != -1) { //$NON-NLS-1$
+                    if (buffer.indexOf("\"") != -1) {
                         filter(event);
                     }
                 }

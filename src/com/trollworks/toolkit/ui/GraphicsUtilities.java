@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,11 +11,10 @@
 
 package com.trollworks.toolkit.ui;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.image.StdImageSet;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.Geometry;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.Platform;
 
 import java.awt.Component;
@@ -41,17 +40,6 @@ import javax.swing.UIManager;
 
 /** Provides general graphics settings and manipulation. */
 public class GraphicsUtilities {
-    @Localize(locale = "pt-BR", value = "Não há nenhum dispositivo gráfico válido")
-    @Localize("There is no valid graphics display.")
-    @Localize(locale = "ru", value = "Нет доступного графического дисплея")
-    @Localize(locale = "de", value = "Kein gültiges Grafikausgabegerät gefunden.")
-    @Localize(locale = "es", value = "No hay monitor válido disponible")
-    private static String HEADLESS;
-
-    static {
-        Localization.initialize();
-    }
-
     private static Frame         HIDDEN_FRAME                    = null;
     private static int           HIDDEN_FRAME_ICONSET_SEQUENCE   = -1;
     private static boolean       HEADLESS_PRINT_MODE             = false;
@@ -402,12 +390,12 @@ public class GraphicsUtilities {
 
     /** @return The reason <code>areGraphicsSafeToUse()</code> returned <code>false</code>. */
     public static String getReasonForUnsafeGraphics() {
-        return HEADLESS;
+        return I18n.Text("There is no valid graphics display.");
     }
 
     /** Sets up the standard UI. Should be called very early in the application launch process. */
     public static void configureStandardUI() {
-        System.setProperty("apple.laf.useScreenMenuBar", Boolean.TRUE.toString()); //$NON-NLS-1$
+        System.setProperty("apple.laf.useScreenMenuBar", Boolean.TRUE.toString());
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {

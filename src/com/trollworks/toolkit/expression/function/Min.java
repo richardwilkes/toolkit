@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,24 +11,15 @@
 
 package com.trollworks.toolkit.expression.function;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.expression.ArgumentTokenizer;
 import com.trollworks.toolkit.expression.EvaluationException;
 import com.trollworks.toolkit.expression.Evaluator;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 public class Min implements ExpressionFunction {
-    @Localize("Two numeric arguments are required")
-    @Localize(locale = "pt-BR", value = "Dois argumentos numéricos são requeridos")
-    private static String INVALID_ARGUMENTS;
-
-    static {
-        Localization.initialize();
-    }
-
     @Override
     public final String getName() {
-        return "min"; //$NON-NLS-1$
+        return "min";
     }
 
     @Override
@@ -40,7 +31,7 @@ public class Min implements ExpressionFunction {
             double            arg2      = ArgumentTokenizer.getDouble(ev.evaluate(tokenizer.nextToken()));
             return Double.valueOf(Math.min(arg1, arg2));
         } catch (Exception exception) {
-            throw new EvaluationException(INVALID_ARGUMENTS, exception);
+            throw new EvaluationException(I18n.Text("Two numeric arguments are required"), exception);
         }
     }
 }

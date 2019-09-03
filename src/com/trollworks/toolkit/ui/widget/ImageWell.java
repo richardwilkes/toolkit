@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,14 +11,13 @@
 
 package com.trollworks.toolkit.ui.widget;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.border.LineBorder;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.utility.FileType;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Color;
@@ -43,15 +42,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 public class ImageWell extends JPanel implements DropTargetListener, MouseListener {
-    @Localize("Select an image file")
-    private static String IMAGE_FILE_PROMPT;
-    @Localize("Clear Image")
-    private static String CLEAR;
-
-    static {
-        Localization.initialize();
-    }
-
     private Getter mGetter;
     private Setter mSetter;
 
@@ -153,7 +143,7 @@ public class ImageWell extends JPanel implements DropTargetListener, MouseListen
     @Override
     public void mouseClicked(MouseEvent event) {
         JPanel  panel  = new JPanel(new FlowLayout());
-        JButton button = new JButton(CLEAR);
+        JButton button = new JButton(I18n.Text("Clear Image"));
         button.addActionListener(action -> {
             mSetter.setWellImage(null);
             repaint();
@@ -163,7 +153,7 @@ public class ImageWell extends JPanel implements DropTargetListener, MouseListen
             }
         });
         panel.add(button);
-        File file = StdFileDialog.showOpenDialog(null, IMAGE_FILE_PROMPT, panel, FileType.getImageFilter());
+        File file = StdFileDialog.showOpenDialog(null, I18n.Text("Select an image file"), panel, FileType.getImageFilter());
         if (file != null) {
             loadImageFile(file);
         }

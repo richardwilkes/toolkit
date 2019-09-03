@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,10 +11,9 @@
 
 package com.trollworks.toolkit.ui;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
 import com.trollworks.toolkit.utility.BundleInfo;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.Preferences;
 import com.trollworks.toolkit.utility.Version;
 import com.trollworks.toolkit.utility.task.Tasks;
@@ -34,43 +33,8 @@ import javax.swing.JOptionPane;
 
 /** Provides a background check for updates. */
 public class UpdateChecker implements Runnable {
-    @Localize("Checking for updates\u2026")
-    @Localize(locale = "pt-BR", value = "Checando por atualizações\u2026")
-    @Localize(locale = "ru", value = "Проверка обновлений\u2026")
-    @Localize(locale = "de", value = "Prüfe auf neue Version\u2026")
-    @Localize(locale = "es", value = "Comprobando actulizaciones\u2026")
-    private static String CHECKING;
-    @Localize("You have the most recent version")
-    @Localize(locale = "pt-BR", value = "Você tem a versão mais recente")
-    @Localize(locale = "ru", value = "У вас самая последняя версия")
-    @Localize(locale = "de", value = "Programm ist aktuell")
-    @Localize(locale = "es", value = "Ya tienes la versión más reciente")
-    private static String UP_TO_DATE;
-    @Localize("A new version is available")
-    @Localize(locale = "pt-BR", value = "Uma nova versão está disponível")
-    @Localize(locale = "ru", value = "Доступна новая версия")
-    @Localize(locale = "de", value = "Eine neue Version ist verfügbar")
-    @Localize(locale = "es", value = "Hay una nueva versión disponible")
-    private static String OUT_OF_DATE;
-    @Localize("Update")
-    @Localize(locale = "pt-BR", value = "Atualize")
-    @Localize(locale = "ru", value = "Обновить")
-    @Localize(locale = "de", value = "Aktualisieren")
-    @Localize(locale = "es", value = "Actualizar")
-    private static String UPDATE_TITLE;
-    @Localize("Ignore")
-    @Localize(locale = "pt-BR", value = "Ignore")
-    @Localize(locale = "ru", value = "Игнорировать")
-    @Localize(locale = "de", value = "Ignorieren")
-    @Localize(locale = "es", value = "Ignorar")
-    private static String IGNORE_TITLE;
-
-    static {
-        Localization.initialize();
-    }
-
-    private static final String MODULE                = "Updates"; //$NON-NLS-1$
-    private static final String LAST_VERSION_KEY      = "LastVersion"; //$NON-NLS-1$
+    private static final String MODULE                = "Updates";
+    private static final String LAST_VERSION_KEY      = "LastVersion";
     private static boolean      NEW_VERSION_AVAILABLE = false;
     private static String       RESULT;
     private static String       UPDATE_URL;
@@ -126,10 +90,10 @@ public class UpdateChecker implements Runnable {
             if (currentVersion == 0) {
                 // Development version. Bail.
                 mMode  = 2;
-                RESULT = UP_TO_DATE;
+                RESULT = I18n.Text("You have the most recent version");
                 return;
             }
-            RESULT = CHECKING;
+            RESULT = I18n.Text("Checking for updates\u2026");
             long versionAvailable = currentVersion;
             mMode = 2;
             try {
@@ -155,7 +119,7 @@ public class UpdateChecker implements Runnable {
                 BufferedReader in   = new BufferedReader(new InputStreamReader(url.openStream()));
                 String         line = in.readLine();
                 while (line != null) {
-                    StringTokenizer tokenizer = new StringTokenizer(line, "\t"); //$NON-NLS-1$
+                    StringTokenizer tokenizer = new StringTokenizer(line, "\t");
                     if (tokenizer.hasMoreTokens()) {
                         try {
                             if (tokenizer.nextToken().equalsIgnoreCase(mProductKey)) {
@@ -177,7 +141,7 @@ public class UpdateChecker implements Runnable {
             if (versionAvailable > currentVersion) {
                 Preferences prefs = Preferences.getInstance();
                 NEW_VERSION_AVAILABLE = true;
-                RESULT                = OUT_OF_DATE;
+                RESULT                = I18n.Text("A new version is available");
                 if (versionAvailable > prefs.getLongValue(MODULE, LAST_VERSION_KEY, BundleInfo.getDefault().getVersion())) {
                     prefs.setValue(MODULE, LAST_VERSION_KEY, versionAvailable);
                     prefs.save();
@@ -186,13 +150,14 @@ public class UpdateChecker implements Runnable {
                     return;
                 }
             } else {
-                RESULT = UP_TO_DATE;
+                RESULT = I18n.Text("You have the most recent version");
             }
         } else if (mMode == 1) {
             if (App.isNotificationAllowed()) {
                 String result = getResult();
                 mMode = 2;
-                if (WindowUtils.showConfirmDialog(null, result, UPDATE_TITLE, JOptionPane.OK_CANCEL_OPTION, new String[] { UPDATE_TITLE, IGNORE_TITLE }, UPDATE_TITLE) == JOptionPane.OK_OPTION) {
+                String update = I18n.Text("Update");
+                if (WindowUtils.showConfirmDialog(null, result, update, JOptionPane.OK_CANCEL_OPTION, new String[] { update, I18n.Text("Ignore") }, update) == JOptionPane.OK_OPTION) {
                     goToUpdate();
                 }
             } else {

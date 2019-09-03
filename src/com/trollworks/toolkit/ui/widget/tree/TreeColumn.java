@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -31,7 +31,7 @@ import javax.swing.UIManager;
 /** The abstract base class for columns within a {@link TreeRoot}. */
 public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
     /** The data flavor for this class. */
-    public static final DataFlavor DATA_FLAVOR       = new DataFlavor(TreeColumn.class, "Tree Column"); //$NON-NLS-1$
+    public static final DataFlavor DATA_FLAVOR       = new DataFlavor(TreeColumn.class, "Tree Column");
     private static final int       SORTER_WIDTH      = 12;
     private static final int       HALF_SORTER_WIDTH = SORTER_WIDTH / 2;
     private String                 mName;
@@ -115,9 +115,9 @@ public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
     public void drawHeader(Graphics2D gc, TreePanel panel, Rectangle bounds, boolean active) {
         Font  savedFont  = gc.getFont();
         Color savedColor = gc.getColor();
-        gc.setColor(UIManager.getColor("Panel.background")); //$NON-NLS-1$
+        gc.setColor(UIManager.getColor("Panel.background"));
         gc.fill(bounds);
-        gc.setColor(UIManager.getColor("Panel.foreground")); //$NON-NLS-1$
+        gc.setColor(UIManager.getColor("Panel.foreground"));
         Font font = getHeaderFont();
         gc.setFont(font);
         int        sortSequence = -1;

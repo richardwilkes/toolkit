@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.ui.menu.help;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.App;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.UIUtilities;
@@ -19,7 +18,7 @@ import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.menu.file.CloseHandler;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.BundleInfo;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.desktop.AboutEvent;
 import java.awt.desktop.AboutHandler;
@@ -32,24 +31,14 @@ import javax.swing.JPanel;
 
 /** Provides the "About" command. */
 public class AboutCommand extends Command implements AboutHandler {
-    @Localize("About {0}")
-    @Localize(locale = "ru", value = "О программе {0}")
-    @Localize(locale = "de", value = "Über {0}")
-    @Localize(locale = "es", value = "Acerca de {0}")
-    private static String ABOUT;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The action command this command will issue. */
-    public static final String       CMD_ABOUT = "About"; //$NON-NLS-1$
+    public static final String       CMD_ABOUT = "About";
     /** The singleton {@link AboutCommand}. */
     public static final AboutCommand INSTANCE  = new AboutCommand();
     AppWindow                        mWindow   = null;
 
     private AboutCommand() {
-        super(MessageFormat.format(ABOUT, BundleInfo.getDefault().getName()), CMD_ABOUT);
+        super(MessageFormat.format(I18n.Text("About {0}"), BundleInfo.getDefault().getName()), CMD_ABOUT);
     }
 
     @Override

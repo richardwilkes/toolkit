@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -31,7 +31,7 @@ public class ConduitMessage implements Runnable {
      * @param message The message.
      */
     public ConduitMessage(String id, String message) {
-        mUser    = System.getProperty("user.name"); //$NON-NLS-1$
+        mUser    = System.getProperty("user.name");
         mID      = id;
         mMessage = message;
     }
@@ -100,6 +100,6 @@ public class ConduitMessage implements Runnable {
 
     @Override
     public String toString() {
-        return "[" + getUser() + " : " + getID() + "] " + getMessage(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return "[" + getUser() + " : " + getID() + "] " + getMessage();
     }
 }

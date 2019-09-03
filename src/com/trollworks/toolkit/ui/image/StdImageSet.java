@@ -11,8 +11,6 @@
 
 package com.trollworks.toolkit.ui.image;
 
-import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.util.ArrayList;
@@ -24,21 +22,6 @@ import java.util.Map;
 
 /** Provides a set of images at different resolutions. */
 public class StdImageSet implements Comparator<StdImage> {
-    @Localize("Invalid ICNS")
-    @Localize(locale = "ru", value = "Недопустимый ICNS")
-    @Localize(locale = "de", value = "Fehlerhafte ICNS-Datei")
-    @Localize(locale = "es", value = "fichero ICNS no es válido")
-    private static String INVALID_ICNS;
-    @Localize("Invalid ICO")
-    @Localize(locale = "ru", value = "Недопустимый ICO")
-    @Localize(locale = "de", value = "Fehlerhafte ICO-Datei")
-    @Localize(locale = "es", value = "fichero ICO no es válido")
-    private static String INVALID_ICO;
-
-    static {
-        Localization.initialize();
-    }
-
     public static final int[]               STD_SIZES = { 1024, 512, 256, 128, 64, 48, 32, 16 };
     private static Map<String, StdImageSet> SETS      = new HashMap<>();
     private static int                      SEQUENCE  = 0;
@@ -67,14 +50,14 @@ public class StdImageSet implements Comparator<StdImage> {
         if (set == null) {
             List<StdImage> images = new ArrayList<>();
             for (int size : STD_SIZES) {
-                StdImage img = StdImage.get(name + "_" + size); //$NON-NLS-1$
+                StdImage img = StdImage.get(name + "_" + size);
                 if (img == null) {
                     if (size == 16) {
                         // Try without the _16
                         img = StdImage.get(name);
                     } else if (size == 32) {
                         // Try with @2x instead of _32
-                        img = StdImage.get(name + "@2x"); //$NON-NLS-1$
+                        img = StdImage.get(name + "@2x");
                     }
                 }
                 if (img != null) {
@@ -89,7 +72,7 @@ public class StdImageSet implements Comparator<StdImage> {
     }
 
     private static final void track(String name, StdImage image) {
-        StdImage.add("is:" + name + "_" + image.getWidth() + "x" + image.getHeight(), image); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        StdImage.add("is:" + name + "_" + image.getWidth() + "x" + image.getHeight(), image);
     }
 
     /**

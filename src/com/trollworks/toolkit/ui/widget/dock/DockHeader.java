@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,14 +11,13 @@
 
 package com.trollworks.toolkit.ui.widget.dock;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.border.EmptyBorder;
 import com.trollworks.toolkit.ui.border.LineBorder;
 import com.trollworks.toolkit.ui.image.StdImage;
 import com.trollworks.toolkit.ui.widget.IconButton;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.text.Text;
 
 import java.awt.Component;
@@ -41,21 +40,6 @@ import javax.swing.border.CompoundBorder;
 
 /** The header for a {@link DockContainer}. */
 public class DockHeader extends JPanel implements LayoutManager, DropTargetListener {
-    @Localize("Maximize")
-    @Localize(locale = "ru", value = "Развернуть")
-    @Localize(locale = "de", value = "Maximieren")
-    @Localize(locale = "es", value = "Maximizar")
-    private static String MAXIMIZE_TOOLTIP;
-    @Localize("Restore")
-    @Localize(locale = "ru", value = "Восстановить")
-    @Localize(locale = "de", value = "Wiederherstellen")
-    @Localize(locale = "es", value = "Restaurar")
-    private static String RESTORE_TOOLTIP;
-
-    static {
-        Localization.initialize();
-    }
-
     private static final int MINIMUM_TAB_WIDTH = 60;
     private static final int GAP               = 4;
     private IconButton       mMaximizeRestoreButton;
@@ -78,9 +62,10 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
         }
         mShowTabsButton = new ShowTabsButton();
         add(mShowTabsButton);
-        mMaximizeRestoreButton = new IconButton(StdImage.DOCK_MAXIMIZE, MAXIMIZE_TOOLTIP, this::maximize);
+        mMaximizeRestoreButton = new IconButton(StdImage.DOCK_MAXIMIZE, "", this::maximize);
         add(mMaximizeRestoreButton);
         setDropTarget(new DropTarget(this, DnDConstants.ACTION_MOVE, this));
+        adjustToRestoredState();
     }
 
     void addTab(Dockable dockable, int index) {
@@ -129,14 +114,14 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
     void adjustToMaximizedState() {
         mMaximizeRestoreButton.setClickFunction(this::restore);
         mMaximizeRestoreButton.setIcon(StdImage.DOCK_RESTORE);
-        mMaximizeRestoreButton.setToolTipText(Text.wrapPlainTextForToolTip(RESTORE_TOOLTIP));
+        mMaximizeRestoreButton.setToolTipText(Text.wrapPlainTextForToolTip(I18n.Text("Restore")));
     }
 
     /** Called when the owning {@link DockContainer} is restored from the maximized state. */
     void adjustToRestoredState() {
         mMaximizeRestoreButton.setClickFunction(this::maximize);
         mMaximizeRestoreButton.setIcon(StdImage.DOCK_MAXIMIZE);
-        mMaximizeRestoreButton.setToolTipText(Text.wrapPlainTextForToolTip(MAXIMIZE_TOOLTIP));
+        mMaximizeRestoreButton.setToolTipText(Text.wrapPlainTextForToolTip(I18n.Text("Maximize")));
     }
 
     @Override

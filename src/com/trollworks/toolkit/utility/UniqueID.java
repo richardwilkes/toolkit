@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -113,7 +113,7 @@ public class UniqueID {
 
     @Override
     public final String toString() {
-        return Long.toString(mTimeStamp, Character.MAX_RADIX) + ":" + Long.toString(mSubID, Character.MAX_RADIX); //$NON-NLS-1$
+        return Long.toString(mTimeStamp, Character.MAX_RADIX) + ":" + Long.toString(mSubID, Character.MAX_RADIX);
     }
 
     /** @return The sub-ID. */

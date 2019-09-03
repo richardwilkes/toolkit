@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -63,7 +63,7 @@ public class EditorField extends JFormattedTextField implements ActionListener, 
             setValue(value);
         }
         if (listener != null) {
-            addPropertyChangeListener("value", listener); //$NON-NLS-1$
+            addPropertyChangeListener("value", listener);
         }
         addActionListener(this);
         setFocusLostBehavior(COMMIT_OR_REVERT);
@@ -71,10 +71,10 @@ public class EditorField extends JFormattedTextField implements ActionListener, 
         // Reset the selection colors back to what is standard for text fields.
         // This is necessary, since (at least on the Mac) JFormattedTextField
         // has the wrong values by default.
-        setCaretColor(UIManager.getColor("TextField.caretForeground")); //$NON-NLS-1$
-        setSelectionColor(UIManager.getColor("TextField.selectionBackground")); //$NON-NLS-1$
-        setSelectedTextColor(UIManager.getColor("TextField.selectionForeground")); //$NON-NLS-1$
-        setDisabledTextColor(UIManager.getColor("TextField.inactiveForeground")); //$NON-NLS-1$
+        setCaretColor(UIManager.getColor("TextField.caretForeground"));
+        setSelectionColor(UIManager.getColor("TextField.selectionBackground"));
+        setSelectedTextColor(UIManager.getColor("TextField.selectionForeground"));
+        setDisabledTextColor(UIManager.getColor("TextField.inactiveForeground"));
     }
 
     @Override

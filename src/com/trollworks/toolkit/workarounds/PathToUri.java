@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -19,7 +19,6 @@ public class PathToUri {
      * There is a bug in the JDK creation of URI's from Paths (and maybe elsewhere) in which the
      * escaping of spaces is done incorrectly. This fixes that up.
      */
-    @SuppressWarnings("nls")
     public static URI toFixedUri(Path path) {
         URI    uri  = path.toUri();
         String text = uri.toString();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -27,16 +27,16 @@ class FlexGridData {
 
     FlexGridData(FlexCell cell, int row, int column, int rowSpan, int columnSpan) {
         if (row < 0) {
-            throw new IllegalArgumentException("row must be >= 0"); //$NON-NLS-1$
+            throw new IllegalArgumentException("row must be >= 0");
         }
         if (column < 0) {
-            throw new IllegalArgumentException("column must be >= 0"); //$NON-NLS-1$
+            throw new IllegalArgumentException("column must be >= 0");
         }
         if (rowSpan < 1) {
-            throw new IllegalArgumentException("rowSpan must be > 0"); //$NON-NLS-1$
+            throw new IllegalArgumentException("rowSpan must be > 0");
         }
         if (columnSpan < 1) {
-            throw new IllegalArgumentException("columnSpan must be > 0"); //$NON-NLS-1$
+            throw new IllegalArgumentException("columnSpan must be > 0");
         }
 
         mCell       = cell;
@@ -85,7 +85,7 @@ class FlexGridData {
         }
         buffer.append(formatRowColumn(mRow / 2, mColumn / 2, false));
         if (mRowSpan > 1 || mColumnSpan > 1) {
-            buffer.append(", span "); //$NON-NLS-1$
+            buffer.append(", span ");
             buffer.append(formatRowColumn(getNonGapRowSpan(), getNonGapColumnSpan(), true));
         }
         buffer.append(']');

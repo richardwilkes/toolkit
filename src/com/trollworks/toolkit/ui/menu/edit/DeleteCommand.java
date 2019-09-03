@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,9 +11,8 @@
 
 package com.trollworks.toolkit.ui.menu.edit;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -25,24 +24,14 @@ import javax.swing.text.JTextComponent;
 
 /** Provides the "Delete" command. */
 public class DeleteCommand extends Command {
-    @Localize("Delete")
-    @Localize(locale = "ru", value = "Удалить")
-    @Localize(locale = "de", value = "Löschen")
-    @Localize(locale = "es", value = "Eliminar")
-    private static String DELETE;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The action command this command will issue. */
-    public static final String        CMD_DELETE = "Delete"; //$NON-NLS-1$
+    public static final String        CMD_DELETE = "Delete";
 
     /** The singleton {@link DeleteCommand}. */
     public static final DeleteCommand INSTANCE   = new DeleteCommand();
 
     private DeleteCommand() {
-        super(DELETE, CMD_DELETE);
+        super(I18n.Text("Delete"), CMD_DELETE);
     }
 
     @Override

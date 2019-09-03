@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,12 +11,11 @@
 
 package com.trollworks.toolkit.ui.widget.dock;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.MouseCapture;
 import com.trollworks.toolkit.ui.TextDrawing;
 import com.trollworks.toolkit.ui.UIUtilities;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.text.Numbers;
 import com.trollworks.toolkit.utility.text.Text;
 
@@ -49,16 +48,6 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 public class ShowTabsButton extends JComponent implements MouseListener, MouseMotionListener, ComponentListener, ActionListener {
-    @Localize("Show Hidden Tabs List")
-    @Localize(locale = "ru", value = "Показать список скрытых закладок")
-    @Localize(locale = "de", value = "Zeigt die Liste mit ausgeblendeten Tabs an")
-    @Localize(locale = "es", value = "Mostrar las solapas ocultas")
-    private static String TOOLTIP;
-
-    static {
-        Localization.initialize();
-    }
-
     private static final int MARGIN  = 2;
     private boolean          mInMouseDown;
     private boolean          mPressed;
@@ -68,8 +57,8 @@ public class ShowTabsButton extends JComponent implements MouseListener, MouseMo
     public ShowTabsButton() {
         setOpaque(false);
         setBackground(null);
-        setFont(UIManager.getFont("Label.font")); //$NON-NLS-1$
-        setToolTipText(Text.wrapPlainTextForToolTip(TOOLTIP));
+        setFont(UIManager.getFont("Label.font"));
+        setToolTipText(Text.wrapPlainTextForToolTip(I18n.Text("Show Hidden Tabs List")));
         setCursor(Cursor.getDefaultCursor());
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -117,7 +106,7 @@ public class ShowTabsButton extends JComponent implements MouseListener, MouseMo
     }
 
     private String getText() {
-        return "\u00bb" + Numbers.format(mHidden.size()); //$NON-NLS-1$
+        return "\u00bb" + Numbers.format(mHidden.size());
     }
 
     @Override

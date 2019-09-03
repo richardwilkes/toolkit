@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -30,10 +30,8 @@ import java.util.Map;
 import java.util.TimeZone;
 
 /** Stores a HTTP response for a request. */
-@SuppressWarnings("nls")
 public class HttpResponse {
     private static final SimpleDateFormat GMT_DATE_FORMAT = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
-    private static final String           LINE_ENDING     = "\r\n";
     private HttpStatusCode                mStatus;
     private String                        mMimeType;
     private Object                        mData;
@@ -140,7 +138,7 @@ public class HttpResponse {
             PrintWriter           pw   = new PrintWriter(baos);
             pw.print("HTTP/1.1 ");
             pw.print(mStatus.getDescription());
-            pw.print(LINE_ENDING);
+            pw.print("\r\n");
 
             if (mMimeType != null) {
                 writeHeader(pw, "Content-Type", mMimeType);
@@ -170,7 +168,7 @@ public class HttpResponse {
                 }
             }
 
-            pw.print(LINE_ENDING);
+            pw.print("\r\n");
             pw.flush();
 
             if (mRequestMethod != HttpMethod.HEAD && mData != null) {
@@ -201,6 +199,6 @@ public class HttpResponse {
         out.print(name);
         out.print(": ");
         out.print(value);
-        out.print(LINE_ENDING);
+        out.print("\r\n");
     }
 }

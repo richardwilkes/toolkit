@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -293,7 +293,7 @@ public class FlexGrid extends FlexContainer {
                     int rp = data.mRow + row;
                     int cp = data.mColumn + column;
                     if (mGrid[rp][cp] != null) {
-                        throw new InvalidParameterException(data + ": " + FlexGridData.formatRowColumn(rp / 2, cp / 2, false) + " already occupied by " + mGrid[rp][cp]); //$NON-NLS-1$ //$NON-NLS-2$
+                        throw new InvalidParameterException(data + ": " + FlexGridData.formatRowColumn(rp / 2, cp / 2, false) + " already occupied by " + mGrid[rp][cp]);
                     }
                     mGrid[rp][cp] = data;
                 }

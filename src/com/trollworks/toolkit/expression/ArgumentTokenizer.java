@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,24 +11,12 @@
 
 package com.trollworks.toolkit.expression;
 
-import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.util.Enumeration;
 
 public class ArgumentTokenizer implements Enumeration<String> {
-    @Localize("Invalid operand: ")
-    @Localize(locale = "pt-BR", value = "Operando inválido")
-    private static String INVALID_OPERAND;
-    @Localize("Invalid argument: ")
-    @Localize(locale = "pt-BR", value = "Argumento inválido")
-    private static String INVALID_ARGUMENT;
-
-    static {
-        Localization.initialize();
-    }
-
     private String mArguments = null;
 
     public ArgumentTokenizer(String arguments) {
@@ -65,7 +53,7 @@ public class ArgumentTokenizer implements Enumeration<String> {
             }
         }
         String token = mArguments;
-        mArguments = ""; //$NON-NLS-1$
+        mArguments = "";
         return token;
     }
 
@@ -91,7 +79,7 @@ public class ArgumentTokenizer implements Enumeration<String> {
         try {
             return getDouble(arg);
         } catch (Exception exception) {
-            throw new EvaluationException(INVALID_OPERAND + arg, exception);
+            throw new EvaluationException(I18n.Text("Invalid operand: ") + arg, exception);
         }
     }
 
@@ -99,7 +87,7 @@ public class ArgumentTokenizer implements Enumeration<String> {
         try {
             return getDouble(new Evaluator(evaluator).evaluate(arguments));
         } catch (Exception exception) {
-            throw new EvaluationException(INVALID_ARGUMENT + arguments, exception);
+            throw new EvaluationException(I18n.Text("Invalid argument: ") + arguments, exception);
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -16,15 +16,13 @@ import java.awt.Point;
 
 /** Provides conversion routines from one type to another. */
 public class Conversion {
-    private static final String COMMA = ","; //$NON-NLS-1$
-
     /**
      * @param dim The dimension.
      * @return A string version of the {@link Dimension} that can be extracted using
      *         {@link #extractDimension(String)}.
      */
     public static String createString(Dimension dim) {
-        return dim.width + COMMA + dim.height;
+        return dim.width + "," + dim.height;
     }
 
     /**
@@ -47,7 +45,7 @@ public class Conversion {
      *         {@link #extractPoint(String)}.
      */
     public static String createString(Point pt) {
-        return pt.x + COMMA + pt.y;
+        return pt.x + "," + pt.y;
     }
 
     /**
@@ -72,7 +70,7 @@ public class Conversion {
      */
     public static int[] extractIntegers(String buffer) {
         if (buffer != null && buffer.length() > 0) {
-            String[] buffers = buffer.split(COMMA);
+            String[] buffers = buffer.split(",");
             int[]    values  = new int[buffers.length];
 
             for (int i = 0; i < buffers.length; i++) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -30,8 +30,8 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 public class TextDrawing {
     private static HashMap<Font, TIntIntHashMap> WIDTH_MAP  = new HashMap<>();
     private static TObjectIntHashMap<Font>       HEIGHT_MAP = new TObjectIntHashMap<>();
-    private static final String                  SPACE      = " "; //$NON-NLS-1$
-    private static final String                  NEWLINE    = "\n"; //$NON-NLS-1$
+    private static final String                  SPACE      = " ";
+    private static final String                  NEWLINE    = "\n";
     private static final char                    ELLIPSIS   = '\u2026';
 
     /**
@@ -124,7 +124,7 @@ public class TextDrawing {
             int               descent    = fm.getDescent();
             // Don't use fm.getHeight(), as the PC adds too much dead space
             int               fHeight    = ascent + descent;
-            StringTokenizer   tokenizer  = new StringTokenizer(text, " \n", true); //$NON-NLS-1$
+            StringTokenizer   tokenizer  = new StringTokenizer(text, " \n", true);
             StringBuilder     buffer     = new StringBuilder(text.length());
             int               textHeight = 0;
             int               width;
@@ -349,7 +349,7 @@ public class TextDrawing {
         int[]           lineWidth  = { 0 };
         StringBuilder   buffer     = new StringBuilder(text.length() * 2);
         StringBuilder   lineBuffer = new StringBuilder(text.length());
-        StringTokenizer tokenizer  = new StringTokenizer(text + NEWLINE, " \t/\\\n", true); //$NON-NLS-1$
+        StringTokenizer tokenizer  = new StringTokenizer(text + NEWLINE, " \t/\\\n", true);
         boolean         wrapped    = false;
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();

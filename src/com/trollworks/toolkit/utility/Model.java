@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.utility;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.xml.XmlGenerator;
 import com.trollworks.toolkit.io.xml.XmlParser;
 
@@ -28,39 +27,8 @@ import javax.xml.stream.XMLStreamException;
 
 /** The abstract base model object, responsible for providing basic i/o. */
 public abstract class Model implements Cloneable {
-    @Localize("Expected tag \"{0}\", but found \"{1}\".")
-    @Localize(locale = "pt-BR", value = "A tag esperada era \"{0}\", mas foi encontrada \"{1}\"")
-    @Localize(locale = "ru", value = "Ожидаемый тег \"{0}\", но найден \"{1}\".")
-    @Localize(locale = "de", value = "Tag \"{0}\" erwartet, aber \"{1}\" erhalten.")
-    @Localize(locale = "es", value = "Se esperaba la etiqueta \"{0}\", pero se encontró \"{1}\".")
-    private static String INVALID_ROOT_TAG;
-    @Localize("The tag \"{0}\" is from an older version and cannot be loaded.")
-    @Localize(locale = "pt-BR",
-              value = "A tag \"{0}\" é de uma versão antiga e não pode ser carregada")
-    @Localize(locale = "ru",
-              value = "Тег \"{0}\" относится к более старой версии и не может быть загружен.")
-    @Localize(locale = "de",
-              value = "Das Tag \"{0}\" ist von einer älteren Version und kann nicht geladen werden.")
-    @Localize(locale = "es",
-              value = "La etiqueta \"{0}\" proviene de una versión anterior y no puede abrirse")
-    private static String TOO_OLD;
-    @Localize("The tag \"{0}\" is from a newer version and cannot be loaded.")
-    @Localize(locale = "pt-BR",
-              value = "A tag \"{0}\" é de uma versão mais recente e não pode ser carregada")
-    @Localize(locale = "ru",
-              value = "Тег \"{0}\" относится к более новой версии и не может быть загружен.")
-    @Localize(locale = "de",
-              value = "Das Tag \"{0}\" ist von einer neueren Version und kann nicht geladen werden.")
-    @Localize(locale = "es",
-              value = "La etiqueta \"{0}\" proviene de una versión posterior y no puede abrirse")
-    private static String TOO_NEW;
-
-    static {
-        Localization.initialize();
-    }
-
-    private static final String ATTR_VERSION = "version"; //$NON-NLS-1$
-    private static final String ATTR_ID      = "id"; //$NON-NLS-1$
+    private static final String ATTR_VERSION = "version";
+    private static final String ATTR_ID      = "id";
     private UUID                mId          = UUID.randomUUID();
 
     /** @return The root XML tag name. */
@@ -128,10 +96,10 @@ public abstract class Model implements Cloneable {
             String marker  = parser.getMarker();
             int    version = parser.getIntegerAttribute(ATTR_VERSION);
             if (version < getMinimumVersion()) {
-                throw new XMLStreamException(MessageFormat.format(TOO_OLD, parser.getCurrentTag()), parser.getLocation());
+                throw new XMLStreamException(MessageFormat.format(I18n.Text("The tag \"{0}\" is from an older version and cannot be loaded."), parser.getCurrentTag()), parser.getLocation());
             }
             if (version > getCurrentVersion()) {
-                throw new XMLStreamException(MessageFormat.format(TOO_NEW, parser.getCurrentTag()), parser.getLocation());
+                throw new XMLStreamException(MessageFormat.format(I18n.Text("The tag \"{0}\" is from a newer version and cannot be loaded."), parser.getCurrentTag()), parser.getLocation());
             }
             context.mVersionStack.push(Integer.valueOf(version));
             mId = parser.hasAttribute(ATTR_ID) ? UUID.fromString(parser.getAttribute(ATTR_ID)) : UUID.randomUUID();
@@ -144,7 +112,7 @@ public abstract class Model implements Cloneable {
             modelDidLoad(context);
             context.mVersionStack.pop();
         } else {
-            throw new XMLStreamException(MessageFormat.format(INVALID_ROOT_TAG, getRootTag(), tag), parser.getLocation());
+            throw new XMLStreamException(MessageFormat.format(I18n.Text("Expected tag \"{0}\", but found \"{1}\"."), getRootTag(), tag), parser.getLocation());
         }
     }
 

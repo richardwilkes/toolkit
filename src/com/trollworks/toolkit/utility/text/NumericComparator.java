@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -55,10 +55,10 @@ public class NumericComparator implements Comparator<String> {
     @Override
     public int compare(String left, String right) {
         if (left == null) {
-            left = ""; //$NON-NLS-1$
+            left = "";
         }
         if (right == null) {
-            right = ""; //$NON-NLS-1$
+            right = "";
         }
         char[] chars0          = left.toCharArray();
         char[] chars1          = right.toCharArray();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,13 +11,12 @@
 
 package com.trollworks.toolkit.ui.print;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
 import com.trollworks.toolkit.ui.layout.PrecisionLayoutData;
 import com.trollworks.toolkit.ui.widget.EditorField;
 import com.trollworks.toolkit.ui.widget.LinkedLabel;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.text.IntegerFormatter;
 
 import java.awt.event.ActionEvent;
@@ -35,36 +34,6 @@ import javax.swing.text.DefaultFormatterFactory;
 
 /** Provides the basic print panel. */
 public class PrintPanel extends PageSetupPanel {
-    @Localize("Copies")
-    @Localize(locale = "ru", value = "Копии")
-    @Localize(locale = "de", value = "Kopien")
-    @Localize(locale = "es", value = "Copias")
-    private static String COPIES;
-    @Localize("Print Range")
-    @Localize(locale = "ru", value = "Печать диапазона")
-    @Localize(locale = "de", value = "Seiten")
-    @Localize(locale = "es", value = "Rango de páginas")
-    private static String PAGE_RANGE;
-    @Localize("All")
-    @Localize(locale = "ru", value = "Всё")
-    @Localize(locale = "de", value = "alle")
-    @Localize(locale = "es", value = "Todo")
-    private static String ALL;
-    @Localize("Pages")
-    @Localize(locale = "ru", value = "Страницы")
-    @Localize(locale = "de", value = "von Seite")
-    @Localize(locale = "es", value = "Páginas")
-    private static String PAGES;
-    @Localize("to")
-    @Localize(locale = "ru", value = "-")
-    @Localize(locale = "de", value = "bis")
-    @Localize(locale = "es", value = "a")
-    private static String TO;
-
-    static {
-        Localization.initialize();
-    }
-
     private EditorField  mCopies;
     private JRadioButton mPageRangeAll;
     private JRadioButton mPageRangeSome;
@@ -93,7 +62,7 @@ public class PrintPanel extends PageSetupPanel {
         if (service.isAttributeCategorySupported(Copies.class)) {
             mCopies = new EditorField(new DefaultFormatterFactory(new IntegerFormatter(1, 999, false)), null, SwingConstants.RIGHT, Integer.valueOf(PrintUtilities.getCopies(service, set)), Integer.valueOf(999), null);
             UIUtilities.setOnlySize(mCopies, mCopies.getPreferredSize());
-            LinkedLabel label = new LinkedLabel(COPIES, mCopies);
+            LinkedLabel label = new LinkedLabel(I18n.Text("Copies"), mCopies);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mCopies);
         } else {
@@ -117,15 +86,15 @@ public class PrintPanel extends PageSetupPanel {
                     pageRanges = null;
                 }
             }
-            JLabel label = new JLabel(PAGE_RANGE, SwingConstants.CENTER);
+            JLabel label = new JLabel(I18n.Text("Print Range"), SwingConstants.CENTER);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             JPanel wrapper = new JPanel(new PrecisionLayout().setMargins(0).setColumns(5));
-            mPageRangeAll = new JRadioButton(ALL, pageRanges == null);
+            mPageRangeAll = new JRadioButton(I18n.Text("All"), pageRanges == null);
             wrapper.add(mPageRangeAll);
-            mPageRangeSome = new JRadioButton(PAGES, pageRanges != null);
+            mPageRangeSome = new JRadioButton(I18n.Text("Pages"), pageRanges != null);
             wrapper.add(mPageRangeSome);
             mPageRangeStart = createPageRangeField(start, wrapper);
-            wrapper.add(new JLabel(TO, SwingConstants.CENTER));
+            wrapper.add(new JLabel(I18n.Text("to"), SwingConstants.CENTER));
             mPageRangeEnd = createPageRangeField(end, wrapper);
             add(wrapper);
             group.add(mPageRangeAll);

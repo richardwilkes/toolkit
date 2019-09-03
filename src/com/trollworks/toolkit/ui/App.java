@@ -54,24 +54,24 @@ public class App implements KeyEventDispatcher, Runnable {
         // Sadly, this still doesn't fix stuff references from the "default" filesystem
         // class, as it is already initialized to the wrong value and won't pick this
         // change up.
-        String pwd = System.getenv("PWD"); //$NON-NLS-1$
+        String pwd = System.getenv("PWD");
         if (pwd != null && !pwd.isEmpty()) {
-            System.setProperty("user.dir", pwd); //$NON-NLS-1$
+            System.setProperty("user.dir", pwd);
         }
         BundleInfo.setDefault(new BundleInfo(theClass));
         Path path;
         try {
-            path = Paths.get(System.getProperty("java.home")); //$NON-NLS-1$
-            if (path.endsWith("Contents/PlugIns/Java.runtime/Contents/Home")) { //$NON-NLS-1$
+            path = Paths.get(System.getProperty("java.home"));
+            if (path.endsWith("Contents/PlugIns/Java.runtime/Contents/Home")) {
                 // Running inside a macOS package
                 path = path.getParent().getParent().getParent().getParent().getParent().getParent();
-            } else if (path.endsWith("Contents/MacOS/support")) { //$NON-NLS-1$
+            } else if (path.endsWith("Contents/MacOS/support")) {
                 // Running inside a macOS package (alt)
                 path = path.getParent().getParent().getParent().getParent();
-            } else if (path.endsWith("runtime")) { //$NON-NLS-1$
+            } else if (path.endsWith("runtime")) {
                 // Running inside a linux package
                 path = path.getParent();
-            } else if (path.endsWith("support")) { //$NON-NLS-1$
+            } else if (path.endsWith("support")) {
                 // Running inside module-ized package
                 path = path.getParent();
             } else {
@@ -79,7 +79,7 @@ public class App implements KeyEventDispatcher, Runnable {
                 path = Paths.get(uri).normalize().getParent().toAbsolutePath();
             }
         } catch (Throwable throwable) {
-            path = Paths.get("."); //$NON-NLS-1$
+            path = Paths.get(".");
         }
         APP_HOME_PATH = path.normalize().toAbsolutePath();
     }
@@ -134,7 +134,7 @@ public class App implements KeyEventDispatcher, Runnable {
      */
     public final void startup(CmdLine cmdLine) {
         if (mHasStarted) {
-            System.err.println(getClass().getSimpleName() + ".startup(...) may only be called once."); //$NON-NLS-1$
+            System.err.println(getClass().getSimpleName() + ".startup(...) may only be called once.");
         } else {
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
             configureApplication(cmdLine);

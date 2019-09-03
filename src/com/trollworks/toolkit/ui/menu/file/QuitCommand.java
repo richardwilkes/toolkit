@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,13 +11,12 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.Fonts;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.BaseWindow;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.Platform;
 import com.trollworks.toolkit.utility.Preferences;
 
@@ -30,23 +29,8 @@ import java.awt.event.KeyEvent;
 
 /** Provides the "Quit"/"Exit" command. */
 public class QuitCommand extends Command implements QuitHandler {
-    @Localize("Quit")
-    @Localize(locale = "ru", value = "Выход")
-    @Localize(locale = "de", value = "Beenden")
-    @Localize(locale = "es", value = "Salir")
-    private static String QUIT;
-    @Localize("Exit")
-    @Localize(locale = "ru", value = "Выход")
-    @Localize(locale = "de", value = "Beenden")
-    @Localize(locale = "es", value = "Salir")
-    private static String EXIT;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The action command this command will issue. */
-    public static final String      CMD_QUIT                             = "Quit"; //$NON-NLS-1$
+    public static final String      CMD_QUIT                             = "Quit";
 
     /** The singleton {@link QuitCommand}. */
     public static final QuitCommand INSTANCE                             = new QuitCommand();
@@ -54,7 +38,7 @@ public class QuitCommand extends Command implements QuitHandler {
     private boolean                 mAllowQuitIfNoSignificantWindowsOpen = true;
 
     private QuitCommand() {
-        super(Platform.isMacintosh() ? QUIT : EXIT, CMD_QUIT, KeyEvent.VK_Q);
+        super(Platform.isMacintosh() ? I18n.Text("Quit") : I18n.Text("Exit"), CMD_QUIT, KeyEvent.VK_Q);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -61,7 +61,7 @@ public class FileScanner implements FileVisitor<Path> {
     }
 
     private boolean shouldSkip(Path path) {
-        return mSkipHidden && !mPath.equals(path) && path.getFileName().toString().startsWith("."); //$NON-NLS-1$
+        return mSkipHidden && !mPath.equals(path) && path.getFileName().toString().startsWith(".");
     }
 
     @Override

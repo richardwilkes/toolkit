@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -26,7 +26,7 @@ import javax.swing.UIManager;
 /** A label whose tooltip reflects that of another panel. */
 public class LinkedLabel extends JLabel implements PropertyChangeListener {
     /** The property key that is monitored for error messages. */
-    public static final String ERROR_MESSAGE_KEY = "Error Message"; //$NON-NLS-1$
+    public static final String ERROR_MESSAGE_KEY = "Error Message";
     private JComponent         mLink;
     private Color              mColor;
 

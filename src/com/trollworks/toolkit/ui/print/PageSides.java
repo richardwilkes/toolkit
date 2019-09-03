@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.ui.print;
 
-import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import javax.print.attribute.standard.Sides;
 
@@ -27,7 +26,7 @@ public enum PageSides {
 
         @Override
         public String toString() {
-            return SINGLE_TITLE;
+            return I18n.Text("Single");
         }
     },
     /** Maps to {@link Sides#DUPLEX}. */
@@ -39,7 +38,7 @@ public enum PageSides {
 
         @Override
         public String toString() {
-            return DUPLEX_TITLE;
+            return I18n.Text("Duplex");
         }
     },
     /** Maps to {@link Sides#TUMBLE}. */
@@ -51,29 +50,9 @@ public enum PageSides {
 
         @Override
         public String toString() {
-            return TUMBLE_TITLE;
+            return I18n.Text("Tumble");
         }
     };
-
-    @Localize("Single")
-    @Localize(locale = "ru", value = "Один")
-    @Localize(locale = "de", value = "Einseitig")
-    @Localize(locale = "es", value = "A una cara")
-    static String SINGLE_TITLE;
-    @Localize("Duplex")
-    @Localize(locale = "ru", value = "Двухсторонний")
-    @Localize(locale = "de", value = "Lange Seite")
-    @Localize(locale = "es", value = "A dos Caras")
-    static String DUPLEX_TITLE;
-    @Localize("Tumble")
-    @Localize(locale = "ru", value = "Ручная подача")
-    @Localize(locale = "de", value = "Kurze Seite")
-    @Localize(locale = "es", value = "Boca abajo")
-    static String TUMBLE_TITLE;
-
-    static {
-        Localization.initialize();
-    }
 
     /** @return The sides attribute. */
     public abstract Sides getSides();

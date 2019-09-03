@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -30,14 +30,8 @@ import java.util.StringTokenizer;
  * only a single instance.
  */
 public class LaunchProxy implements ConduitReceiver {
-    private static final String AT               = "@"; //$NON-NLS-1$
-    private static final String SPACE            = " "; //$NON-NLS-1$
-    private static final String COMMA            = ","; //$NON-NLS-1$
-    private static final String AT_MARKER        = "@!"; //$NON-NLS-1$
-    private static final String SPACE_MARKER     = "@%"; //$NON-NLS-1$
-    private static final String COMMA_MARKER     = "@#"; //$NON-NLS-1$
-    private static final String LAUNCH_ID        = "Launched"; //$NON-NLS-1$
-    private static final String TOOK_OVER_FOR_ID = "TookOverFor"; //$NON-NLS-1$
+    private static final String LAUNCH_ID        = "Launched";
+    private static final String TOOK_OVER_FOR_ID = "TookOverFor";
     private static LaunchProxy  INSTANCE         = null;
     private Conduit             mConduit;
     private long                mTimeStamp;
@@ -66,7 +60,7 @@ public class LaunchProxy implements ConduitReceiver {
                 // Ignore
             }
         } else {
-            Log.error("Can only call configure once."); //$NON-NLS-1$
+            Log.error("Can only call configure once.");
         }
     }
 
@@ -85,7 +79,7 @@ public class LaunchProxy implements ConduitReceiver {
             } else {
                 needComma = true;
             }
-            buffer.append(file.getAbsolutePath().replaceAll(AT, AT_MARKER).replaceAll(SPACE, SPACE_MARKER).replaceAll(COMMA, COMMA_MARKER));
+            buffer.append(file.getAbsolutePath().replaceAll("@", "@!").replaceAll(" ", "@%").replaceAll(",", "@#"));
         }
         mConduit = new Conduit(this, false);
         mConduit.send(new ConduitMessage(BundleInfo.getDefault().getName(), buffer.toString()));
@@ -103,7 +97,7 @@ public class LaunchProxy implements ConduitReceiver {
 
     @Override
     public void conduitMessageReceived(ConduitMessage msg) {
-        StringTokenizer tokenizer = new StringTokenizer(msg.getMessage(), SPACE);
+        StringTokenizer tokenizer = new StringTokenizer(msg.getMessage(), " ");
         if (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             if (mReady && LAUNCH_ID.equals(token)) {
@@ -113,10 +107,10 @@ public class LaunchProxy implements ConduitReceiver {
                         mConduit.send(new ConduitMessage(BundleInfo.getDefault().getName(), TOOK_OVER_FOR_ID + ' ' + timeStamp));
                         GraphicsUtilities.forceAppToFront();
                         if (tokenizer.hasMoreTokens()) {
-                            tokenizer = new StringTokenizer(tokenizer.nextToken(), COMMA);
+                            tokenizer = new StringTokenizer(tokenizer.nextToken(), ",");
                             while (tokenizer.hasMoreTokens()) {
                                 synchronized (mFiles) {
-                                    mFiles.add(new File(tokenizer.nextToken().replaceAll(COMMA_MARKER, COMMA).replaceAll(SPACE_MARKER, SPACE).replaceAll(AT_MARKER, AT)));
+                                    mFiles.add(new File(tokenizer.nextToken().replaceAll("@#", ",").replaceAll("@%", " ").replaceAll("@!", "@")));
                                 }
                             }
                             synchronized (mFiles) {
@@ -157,6 +151,6 @@ public class LaunchProxy implements ConduitReceiver {
 
     @Override
     public String getConduitMessageUserFilter() {
-        return System.getProperty("user.name"); //$NON-NLS-1$
+        return System.getProperty("user.name");
     }
 }

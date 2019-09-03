@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.ui.print;
 
-import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.print.PageFormat;
 
@@ -29,7 +28,7 @@ public enum PageOrientation {
 
         @Override
         public String toString() {
-            return PORTRAIT_TITLE;
+            return I18n.Text("Portrait");
         }
     },
     /** Maps to {@link OrientationRequested#LANDSCAPE}. */
@@ -41,7 +40,7 @@ public enum PageOrientation {
 
         @Override
         public String toString() {
-            return LANDSCAPE_TITLE;
+            return I18n.Text("Landscape");
         }
     },
     /** Maps to {@link OrientationRequested#REVERSE_PORTRAIT}. */
@@ -53,7 +52,7 @@ public enum PageOrientation {
 
         @Override
         public String toString() {
-            return REVERSED_PORTRAIT_TITLE;
+            return I18n.Text("Reversed Portrait");
         }
     },
     /** Maps to {@link OrientationRequested#REVERSE_LANDSCAPE}. */
@@ -65,34 +64,9 @@ public enum PageOrientation {
 
         @Override
         public String toString() {
-            return REVERSED_LANDSCAPE_TITLE;
+            return I18n.Text("Reversed Landscape");
         }
     };
-
-    @Localize("Portrait")
-    @Localize(locale = "ru", value = "Книжная")
-    @Localize(locale = "de", value = "Hochformat")
-    @Localize(locale = "es", value = "Vertical")
-    static String PORTRAIT_TITLE;
-    @Localize("Landscape")
-    @Localize(locale = "ru", value = "Альбомная")
-    @Localize(locale = "de", value = "Querformat")
-    @Localize(locale = "es", value = "Horizontal")
-    static String LANDSCAPE_TITLE;
-    @Localize("Reversed Portrait")
-    @Localize(locale = "ru", value = "Зеркальная книжная")
-    @Localize(locale = "de", value = "Hochformat gedreht")
-    @Localize(locale = "es", value = "Vertical invertido")
-    static String REVERSED_PORTRAIT_TITLE;
-    @Localize("Reversed Landscape")
-    @Localize(locale = "ru", value = "Зеркальная альбомная")
-    @Localize(locale = "de", value = "Querformat gedreht")
-    @Localize(locale = "es", value = "Horizontal invertido")
-    static String REVERSED_LANDSCAPE_TITLE;
-
-    static {
-        Localization.initialize();
-    }
 
     /** @return The orientation attribute. */
     public abstract OrientationRequested getOrientationRequested();

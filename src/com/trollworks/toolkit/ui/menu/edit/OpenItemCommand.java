@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,33 +11,22 @@
 
 package com.trollworks.toolkit.ui.menu.edit;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 /** Provides the "Open Item" command. */
 public class OpenItemCommand extends Command {
-    @Localize("Open Item")
-    @Localize(locale = "ru", value = "Открыть элемент")
-    @Localize(locale = "de", value = "Element öffnen")
-    @Localize(locale = "es", value = "Abrir elemento")
-    private static String OPEN_ITEM;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The action command this command will issue. */
-    public static final String          CMD_OPEN_ITEM = "Open Item"; //$NON-NLS-1$
+    public static final String          CMD_OPEN_ITEM = "Open Item";
 
     /** The singleton {@link OpenItemCommand}. */
     public static final OpenItemCommand INSTANCE      = new OpenItemCommand();
 
     private OpenItemCommand() {
-        super(OPEN_ITEM, CMD_OPEN_ITEM, KeyEvent.VK_ENTER);
+        super(I18n.Text("Open Item"), CMD_OPEN_ITEM, KeyEvent.VK_ENTER);
     }
 
     @Override

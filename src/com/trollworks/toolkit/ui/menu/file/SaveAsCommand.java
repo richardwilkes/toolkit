@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,12 +11,11 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.StdFileDialog;
 import com.trollworks.toolkit.utility.FileType;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -24,24 +23,14 @@ import java.io.File;
 
 /** Provides the "Save As..." command. */
 public class SaveAsCommand extends Command {
-    @Localize("Save As\u2026")
-    @Localize(locale = "ru", value = "Сохранить как\u2026")
-    @Localize(locale = "de", value = "Speichern unter\u2026")
-    @Localize(locale = "es", value = "Salvar como\u2026")
-    private static String SAVE_AS;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The action command this command will issue. */
-    public static final String        CMD_SAVE_AS = "SaveAs"; //$NON-NLS-1$
+    public static final String        CMD_SAVE_AS = "SaveAs";
 
     /** The singleton {@link SaveAsCommand}. */
     public static final SaveAsCommand INSTANCE    = new SaveAsCommand();
 
     private SaveAsCommand() {
-        super(SAVE_AS, CMD_SAVE_AS, KeyEvent.VK_S, SHIFTED_COMMAND_MODIFIER);
+        super(I18n.Text("Save As\u2026"), CMD_SAVE_AS, KeyEvent.VK_S, SHIFTED_COMMAND_MODIFIER);
     }
 
     @Override
@@ -65,7 +54,7 @@ public class SaveAsCommand extends Command {
             return new File[0];
         }
         String path   = saveable.getPreferredSavePath();
-        File   result = StdFileDialog.showSaveDialog(UIUtilities.getComponentForDialog(saveable), SAVE_AS, path != null ? new File(path) : null, FileType.getFileFilters(null, saveable.getAllowedFileTypes()));
+        File   result = StdFileDialog.showSaveDialog(UIUtilities.getComponentForDialog(saveable), I18n.Text("Save As\u2026"), path != null ? new File(path) : null, FileType.getFileFilters(null, saveable.getAllowedFileTypes()));
         File[] files  = result != null ? saveable.saveTo(result) : new File[0];
         if (files != null) {
             for (File file : files) {

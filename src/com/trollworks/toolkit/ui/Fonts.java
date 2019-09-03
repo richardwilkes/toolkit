@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -26,11 +26,10 @@ import javax.swing.UIManager;
 /** Provides standardized font access and utilities. */
 public class Fonts {
     /** The notification key used when font change notifications are broadcast. */
-    public static final String                  FONT_NOTIFICATION_KEY = "FontsChanged"; //$NON-NLS-1$
-    private static final String                 COMMA                 = ","; //$NON-NLS-1$
-    private static final String                 MODULE                = "Font"; //$NON-NLS-1$
+    public static final String                  FONT_NOTIFICATION_KEY = "FontsChanged";
+    private static final String                 MODULE                = "Font";
     /** The standard text field font. */
-    public static final String                  KEY_STD_TEXT_FIELD    = "TextField.font"; //$NON-NLS-1$
+    public static final String                  KEY_STD_TEXT_FIELD    = "TextField.font";
     private static final TreeMap<String, Fonts> DEFAULTS              = new TreeMap<>();
     private String                              mDescription;
     private Font                                mDefaultFont;
@@ -93,7 +92,7 @@ public class Fonts {
      * @return The specified font as a canonical string.
      */
     public static String getStringValue(Font font) {
-        return font.getName() + COMMA + font.getStyle() + COMMA + font.getSize();
+        return font.getName() + "," + font.getStyle() + "," + font.getSize();
     }
 
     /**
@@ -128,7 +127,7 @@ public class Fonts {
         int    style = defaultValue.getStyle();
         int    size  = defaultValue.getSize();
         if (buffer != null && buffer.length() > 0) {
-            StringTokenizer tokenizer = new StringTokenizer(buffer, COMMA);
+            StringTokenizer tokenizer = new StringTokenizer(buffer, ",");
             if (tokenizer.hasMoreTokens()) {
                 name = tokenizer.nextToken();
                 if (!isValidFontName(name)) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.ui.print;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.layout.PrecisionLayout;
@@ -20,7 +19,7 @@ import com.trollworks.toolkit.ui.widget.Commitable;
 import com.trollworks.toolkit.ui.widget.EditorField;
 import com.trollworks.toolkit.ui.widget.LinkedLabel;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.text.DoubleFormatter;
 import com.trollworks.toolkit.utility.units.LengthUnits;
 
@@ -53,60 +52,6 @@ import javax.swing.text.DefaultFormatterFactory;
 
 /** Provides the basic page setup panel. */
 public class PageSetupPanel extends JPanel implements ActionListener {
-    @Localize("Printer")
-    @Localize(locale = "ru", value = "Принтер")
-    @Localize(locale = "de", value = "Drucker")
-    @Localize(locale = "es", value = "Impresora")
-    private static String PRINTER;
-    @Localize("Paper Type")
-    @Localize(locale = "ru", value = "Тип бумаги")
-    @Localize(locale = "de", value = "Papierformat")
-    @Localize(locale = "es", value = "Tipo de papel")
-    private static String PAPER_TYPE;
-    @Localize("Orientation")
-    @Localize(locale = "ru", value = "Ориентация")
-    @Localize(locale = "de", value = "Ausrichtung")
-    private static String ORIENTATION;
-    @Localize("Sides")
-    @Localize(locale = "ru", value = "Стороны")
-    @Localize(locale = "de", value = "Beidseitig")
-    @Localize(locale = "es", value = "Caras")
-    private static String SIDES;
-    @Localize("Number Up")
-    @Localize(locale = "ru", value = "Увеличить номер")
-    @Localize(locale = "de", value = "Seiten pro Blatt")
-    @Localize(locale = "es", value = "Numeración arriba")
-    private static String NUMBER_UP;
-    @Localize("Color")
-    @Localize(locale = "ru", value = "Цвет")
-    @Localize(locale = "de", value = "Farbmodus")
-    @Localize(locale = "es", value = "Color")
-    private static String CHROMATICITY;
-    @Localize("Quality")
-    @Localize(locale = "ru", value = "Качество")
-    @Localize(locale = "de", value = "Qualität")
-    @Localize(locale = "es", value = "Calidad")
-    private static String QUALITY;
-    @Localize("Resolution")
-    @Localize(locale = "ru", value = "Разрешение")
-    @Localize(locale = "de", value = "Auflösung")
-    @Localize(locale = "es", value = "Resolución")
-    private static String RESOLUTION;
-    @Localize(" dpi")
-    // TODO [L10n] Missed RU translation? "dots per inch"
-    @Localize(locale = "de", value = " DPI")
-    @Localize(locale = "es", value = " ppp")
-    private static String DPI;
-    @Localize("<html>Margins<br>(inches)")
-    @Localize(locale = "ru", value = "<html>Поля<br>(дюймы)")
-    @Localize(locale = "de", value = "<html>Ränder<br>(in Zoll)")
-    @Localize(locale = "es", value = "<html>Márgenes<br>(en pulgadas)")
-    private static String MARGINS;
-
-    static {
-        Localization.initialize();
-    }
-
     private PrintService                        mService;
     private JComboBox<WrappedPrintService>      mServices;
     private JComboBox<PageOrientation>          mOrientation;
@@ -188,7 +133,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
         UIUtilities.setOnlySize(mServices, mServices.getPreferredSize());
         mServices.addActionListener(this);
         mService = services[selection];
-        LinkedLabel label = new LinkedLabel(PRINTER, mServices);
+        LinkedLabel label = new LinkedLabel(I18n.Text("Printer"), mServices);
         add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
         add(mServices);
     }
@@ -224,7 +169,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             mPaperType = new JComboBox<>(types.toArray(new WrappedMediaSizeName[0]));
             mPaperType.setSelectedIndex(selection);
             UIUtilities.setOnlySize(mPaperType, mPaperType.getPreferredSize());
-            LinkedLabel label = new LinkedLabel(PAPER_TYPE, mPaperType);
+            LinkedLabel label = new LinkedLabel(I18n.Text("Paper Type"), mPaperType);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mPaperType);
         } else {
@@ -234,19 +179,19 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 
     private static String cleanUpMediaSizeName(MediaSizeName msn) {
         StringBuilder   builder   = new StringBuilder();
-        StringTokenizer tokenizer = new StringTokenizer(msn.toString(), "- ", true); //$NON-NLS-1$
+        StringTokenizer tokenizer = new StringTokenizer(msn.toString(), "- ", true);
 
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
 
-            if (token.equalsIgnoreCase("na")) { //$NON-NLS-1$
-                builder.append("US"); //$NON-NLS-1$
-            } else if (token.equalsIgnoreCase("iso")) { //$NON-NLS-1$
-                builder.append("ISO"); //$NON-NLS-1$
-            } else if (token.equalsIgnoreCase("jis")) { //$NON-NLS-1$
-                builder.append("JIS"); //$NON-NLS-1$
-            } else if (token.equals("-")) { //$NON-NLS-1$
-                builder.append(" "); //$NON-NLS-1$
+            if (token.equalsIgnoreCase("na")) {
+                builder.append("US");
+            } else if (token.equalsIgnoreCase("iso")) {
+                builder.append("ISO");
+            } else if (token.equalsIgnoreCase("jis")) {
+                builder.append("JIS");
+            } else if (token.equals("-")) {
+                builder.append(" ");
             } else if (token.length() > 1) {
                 builder.append(Character.toUpperCase(token.charAt(0)));
                 builder.append(token.substring(1));
@@ -274,7 +219,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             mOrientation = new JComboBox<>(choices.toArray(new PageOrientation[0]));
             mOrientation.setSelectedItem(PrintUtilities.getPageOrientation(mService, set));
             UIUtilities.setOnlySize(mOrientation, mOrientation.getPreferredSize());
-            LinkedLabel label = new LinkedLabel(ORIENTATION, mOrientation);
+            LinkedLabel label = new LinkedLabel(I18n.Text("Orientation"), mOrientation);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mOrientation);
         } else {
@@ -298,7 +243,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             mSides = new JComboBox<>(choices.toArray(new PageSides[0]));
             mSides.setSelectedItem(PrintUtilities.getSides(mService, set));
             UIUtilities.setOnlySize(mSides, mSides.getPreferredSize());
-            LinkedLabel label = new LinkedLabel(SIDES, mSides);
+            LinkedLabel label = new LinkedLabel(I18n.Text("Sides"), mSides);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mSides);
         } else {
@@ -329,7 +274,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             mNumberUp = new JComboBox<>(wrappers);
             mNumberUp.setSelectedIndex(selection);
             UIUtilities.setOnlySize(mNumberUp, mNumberUp.getPreferredSize());
-            LinkedLabel label = new LinkedLabel(NUMBER_UP, mNumberUp);
+            LinkedLabel label = new LinkedLabel(I18n.Text("Number Up"), mNumberUp);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mNumberUp);
         } else {
@@ -353,7 +298,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             mChromaticity = new JComboBox<>(choices.toArray(new InkChromaticity[0]));
             mChromaticity.setSelectedItem(PrintUtilities.getChromaticity(mService, set, true));
             UIUtilities.setOnlySize(mChromaticity, mChromaticity.getPreferredSize());
-            LinkedLabel label = new LinkedLabel(CHROMATICITY, mChromaticity);
+            LinkedLabel label = new LinkedLabel(I18n.Text("Color"), mChromaticity);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mChromaticity);
         } else {
@@ -377,7 +322,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             mPrintQuality = new JComboBox<>(choices.toArray(new Quality[0]));
             mPrintQuality.setSelectedItem(PrintUtilities.getPrintQuality(mService, set, true));
             UIUtilities.setOnlySize(mPrintQuality, mPrintQuality.getPreferredSize());
-            LinkedLabel label = new LinkedLabel(QUALITY, mPrintQuality);
+            LinkedLabel label = new LinkedLabel(I18n.Text("Quality"), mPrintQuality);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mPrintQuality);
         } else {
@@ -408,7 +353,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             mResolution = new JComboBox<>(wrappers);
             mResolution.setSelectedIndex(selection);
             UIUtilities.setOnlySize(mResolution, mResolution.getPreferredSize());
-            LinkedLabel label = new LinkedLabel(RESOLUTION, mResolution);
+            LinkedLabel label = new LinkedLabel(I18n.Text("Resolution"), mResolution);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mResolution);
         } else {
@@ -423,15 +368,15 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 
         buffer.append(Integer.toString(x));
         if (x != y) {
-            buffer.append(" x "); //$NON-NLS-1$
+            buffer.append(" x ");
             buffer.append(Integer.toString(y));
         }
-        buffer.append(DPI);
+        buffer.append(I18n.Text(" dpi"));
         return buffer.toString();
     }
 
     private void createMarginFields(PrintRequestAttributeSet set) {
-        JLabel label = new JLabel(MARGINS, SwingConstants.RIGHT);
+        JLabel label = new JLabel(I18n.Text("<html>Margins<br>(inches)"), SwingConstants.RIGHT);
         add(label, new PrecisionLayoutData().setEndHorizontalAlignment().setMiddleVerticalAlignment());
         JPanel   wrapper = new JPanel(new PrecisionLayout().setEqualColumns(true).setColumns(3));
         double[] margins = PrintUtilities.getPageMargins(mService, set, LengthUnits.IN);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -20,13 +20,13 @@ import java.util.regex.Pattern;
 
 /** Date and time handling. */
 public class DateTime {
-    private static final String  STARTING_WHITESPACE = "^\\s*"; //$NON-NLS-1$
-    private static final String  ENDING_WHITESPACE   = "\\s*$"; //$NON-NLS-1$
-    private static final String  DATE                = "([\\d]{4})-([\\d]{2})-([\\d]{2})"; //$NON-NLS-1$
-    private static final String  TIME                = "([\\d]{2}):([\\d]{2}):([\\d]{2})"; //$NON-NLS-1$
+    private static final String  STARTING_WHITESPACE = "^\\s*";
+    private static final String  ENDING_WHITESPACE   = "\\s*$";
+    private static final String  DATE                = "([\\d]{4})-([\\d]{2})-([\\d]{2})";
+    private static final String  TIME                = "([\\d]{2}):([\\d]{2}):([\\d]{2})";
     private static final Pattern DATE_PATTERN        = Pattern.compile(STARTING_WHITESPACE + DATE + ENDING_WHITESPACE);
     private static final Pattern TIME_PATTERN        = Pattern.compile(STARTING_WHITESPACE + TIME + ENDING_WHITESPACE);
-    private static final Pattern DATE_TIME_PATTERN   = Pattern.compile(STARTING_WHITESPACE + DATE + "\\s+" + TIME + ENDING_WHITESPACE); //$NON-NLS-1$
+    private static final Pattern DATE_TIME_PATTERN   = Pattern.compile(STARTING_WHITESPACE + DATE + "\\s+" + TIME + ENDING_WHITESPACE);
 
     /**
      * @param milliseconds The time to format.
@@ -36,7 +36,7 @@ public class DateTime {
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.setTimeInMillis(milliseconds);
-        return String.format("%tT", cal); //$NON-NLS-1$
+        return String.format("%tT", cal);
     }
 
     /**
@@ -64,7 +64,7 @@ public class DateTime {
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.setTimeInMillis(milliseconds);
-        return String.format("%tF", cal); //$NON-NLS-1$
+        return String.format("%tF", cal);
     }
 
     /**
@@ -95,7 +95,7 @@ public class DateTime {
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.setTimeInMillis(milliseconds);
-        return String.format("%tF %tT", cal); //$NON-NLS-1$
+        return String.format("%tF %tT", cal);
     }
 
     /**

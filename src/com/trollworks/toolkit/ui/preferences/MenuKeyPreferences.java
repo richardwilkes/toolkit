@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.ui.preferences;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.border.EmptyBorder;
 import com.trollworks.toolkit.ui.layout.ColumnLayout;
@@ -20,7 +19,7 @@ import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.widget.BandedPanel;
 import com.trollworks.toolkit.ui.widget.KeyStrokeDisplay;
 import com.trollworks.toolkit.ui.widget.WindowUtils;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.Preferences;
 
 import java.awt.BorderLayout;
@@ -39,38 +38,8 @@ import javax.swing.KeyStroke;
 
 /** The menu keys preferences panel. */
 public class MenuKeyPreferences extends PreferencePanel implements ActionListener {
-    @Localize("Menu Keys")
-    @Localize(locale = "ru", value = "Меню Клавиши")
-    @Localize(locale = "de", value = "Tastaturkürzel")
-    @Localize(locale = "es", value = "Teclas del menú")
-    private static String MENU_KEYS;
-    @Localize("Type a keystroke\u2026")
-    @Localize(locale = "ru", value = "Ввести сочетание клавиш\u2026")
-    @Localize(locale = "de", value = "Tastenkombination drücken\u2026")
-    @Localize(locale = "es", value = "Elige una combinación de teclas\u2026")
-    private static String TYPE_KEYSTROKE;
-    @Localize("Clear")
-    @Localize(locale = "ru", value = "Очистить")
-    @Localize(locale = "de", value = "Löschen")
-    @Localize(locale = "es", value = "Borrar")
-    private static String CLEAR;
-    @Localize("Accept")
-    @Localize(locale = "ru", value = "Применить")
-    @Localize(locale = "de", value = "Setzen")
-    @Localize(locale = "es", value = "Aceptar")
-    private static String ACCEPT;
-    @Localize("Reset")
-    @Localize(locale = "ru", value = "Сброс")
-    @Localize(locale = "de", value = "Standard")
-    @Localize(locale = "es", value = "Reiniciar")
-    private static String RESET;
-
-    static {
-        Localization.initialize();
-    }
-
-    private static final String       NONE   = "NONE"; //$NON-NLS-1$
-    private static final String       MODULE = "MenuKeys"; //$NON-NLS-1$
+    private static final String       NONE   = "NONE";
+    private static final String       MODULE = "MenuKeys";
     private static boolean            LOADED = false;
     private HashMap<JButton, Command> mMap   = new HashMap<>();
     private BandedPanel               mPanel;
@@ -81,9 +50,9 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
      * @param owner The owning {@link PreferencesWindow}.
      */
     public MenuKeyPreferences(PreferencesWindow owner) {
-        super(MENU_KEYS, owner);
+        super(I18n.Text("Menu Keys"), owner);
         setLayout(new BorderLayout());
-        mPanel = new BandedPanel(MENU_KEYS);
+        mPanel = new BandedPanel(I18n.Text("Menu Keys"));
         mPanel.setLayout(new ColumnLayout(2, 5, 0));
         mPanel.setBorder(new EmptyBorder(2, 5, 2, 5));
         mPanel.setOpaque(true);
@@ -113,7 +82,7 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
         JButton          button  = (JButton) event.getSource();
         Command          command = mMap.get(button);
         KeyStrokeDisplay ksd     = new KeyStrokeDisplay(command.getAccelerator());
-        switch (WindowUtils.showOptionDialog(this, ksd, TYPE_KEYSTROKE, false, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] { ACCEPT, CLEAR, RESET }, null)) {
+        switch (WindowUtils.showOptionDialog(this, ksd, I18n.Text("Type a keystroke\u2026"), false, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] { I18n.Text("Accept"), I18n.Text("Clear"), I18n.Text("Reset") }, null)) {
         case JOptionPane.CLOSED_OPTION:
         default:
             break;

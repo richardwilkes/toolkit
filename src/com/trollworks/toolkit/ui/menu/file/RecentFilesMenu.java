@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,9 +11,8 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.utility.FileType;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.PathUtils;
 import com.trollworks.toolkit.utility.Platform;
 import com.trollworks.toolkit.utility.Preferences;
@@ -28,17 +27,7 @@ import javax.swing.event.MenuListener;
 
 /** The standard "Recent Files" menu. */
 public class RecentFilesMenu extends JMenu implements MenuListener {
-    @Localize("Recent Files")
-    @Localize(locale = "ru", value = "Недавние файлы")
-    @Localize(locale = "de", value = "Zuletzt verwendete Dateien")
-    @Localize(locale = "es", value = "Archivos recientes")
-    private static String RECENT_FILES;
-
-    static {
-        Localization.initialize();
-    }
-
-    private static final String          PREFS_MODULE  = "RecentFiles"; //$NON-NLS-1$
+    private static final String          PREFS_MODULE  = "RecentFiles";
     private static final int             PREFS_VERSION = 1;
     private static final int             MAX_RECENTS   = 20;
     private static final ArrayList<File> RECENTS       = new ArrayList<>();
@@ -111,7 +100,7 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
 
     /** Creates a new {@link RecentFilesMenu}. */
     public RecentFilesMenu() {
-        super(RECENT_FILES);
+        super(I18n.Text("Recent Files"));
         addMenuListener(this);
     }
 

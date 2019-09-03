@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.ui.print;
 
-import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -28,16 +27,6 @@ import javax.print.attribute.standard.OrientationRequested;
 import javax.print.event.PrintServiceAttributeListener;
 
 class DummyPrintService implements PrintService {
-    @Localize("No printer is available!")
-    @Localize(locale = "ru", value = "Нет доступного принтера!")
-    @Localize(locale = "de", value = "Kein Drucker verfügbar!")
-    @Localize(locale = "es", value = "¡No hay impresora disponible!")
-    private static String NO_PRINTER_AVAILABLE;
-
-    static {
-        Localization.initialize();
-    }
-
     @Override
     public void addPrintServiceAttributeListener(PrintServiceAttributeListener listener) {
         // Not used.
@@ -71,7 +60,7 @@ class DummyPrintService implements PrintService {
 
     @Override
     public String getName() {
-        return NO_PRINTER_AVAILABLE;
+        return I18n.Text("No printer is available!");
     }
 
     @Override

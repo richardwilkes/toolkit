@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,13 +11,12 @@
 
 package com.trollworks.toolkit.ui.menu.window;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.menu.DynamicMenuEnabler;
 import com.trollworks.toolkit.ui.menu.MenuProvider;
 import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.widget.AppWindow;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,17 +27,7 @@ import javax.swing.JMenu;
 
 /** Provides the standard "Window" menu. */
 public class WindowMenuProvider implements MenuProvider {
-    @Localize("Window")
-    @Localize(locale = "ru", value = "Окно")
-    @Localize(locale = "de", value = "Fenster")
-    @Localize(locale = "es", value = "Ventana")
-    private static String WINDOW;
-
-    static {
-        Localization.initialize();
-    }
-
-    public static final String NAME = "Window"; //$NON-NLS-1$
+    public static final String NAME = "Window";
 
     /** Updates the available menu items. */
     public static void update() {
@@ -62,7 +51,7 @@ public class WindowMenuProvider implements MenuProvider {
 
     @Override
     public JMenu createMenu() {
-        JMenu menu = new JMenu(WINDOW);
+        JMenu menu = new JMenu(I18n.Text("Window"));
         menu.setName(NAME);
         DynamicMenuEnabler.add(menu);
         return menu;

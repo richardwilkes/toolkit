@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -55,9 +55,9 @@ public final class Debug {
     public static final String toString(Throwable throwable) {
         StringBuilder buffer = new StringBuilder();
         buffer.append(throwable.getClass().getSimpleName());
-        buffer.append(": "); //$NON-NLS-1$
+        buffer.append(": ");
         buffer.append(throwable.getMessage());
-        buffer.append(": "); //$NON-NLS-1$
+        buffer.append(": ");
         stackTrace(throwable, buffer);
         return buffer.toString();
     }
@@ -97,7 +97,7 @@ public final class Debug {
         StackTraceElement[] stackTrace = throwable.getStackTrace();
         for (int i = startAt; i < stackTrace.length; i++) {
             if (i > startAt) {
-                buffer.append(" < "); //$NON-NLS-1$
+                buffer.append(" < ");
             }
             buffer.append('(');
             buffer.append(stackTrace[i].getFileName());

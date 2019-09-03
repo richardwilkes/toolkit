@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.utility;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.SafeFileUpdater;
 import com.trollworks.toolkit.ui.Fonts;
 import com.trollworks.toolkit.utility.notification.Notifier;
@@ -33,19 +32,8 @@ import java.util.Properties;
 
 /** Provides the implementation of preferences. */
 public class Preferences {
-    @Localize("Global preferences have not been initialized yet!")
-    @Localize(locale = "pt-BR", value = "As preferências globais ainda não foram inicializadas!")
-    @Localize(locale = "ru", value = "Глобальные парметры ещё не были инициализированы!")
-    @Localize(locale = "de", value = "Globale Einstellungen wurden noch nicht initialisiert!")
-    @Localize(locale = "es", value = "Las preferencias generales no se han iniciallizado todavia")
-    private static String UNINITIALIZED;
-
-    static {
-        Localization.initialize();
-    }
-
-    public static final String  VERSION_KEY = "Version"; //$NON-NLS-1$
-    private static final String DOT         = "."; //$NON-NLS-1$
+    public static final String  VERSION_KEY = "Version";
+    private static final String DOT         = ".";
     private static Preferences  INSTANCE    = null;
     private boolean             mDirty;
     private Properties          mPrefs;
@@ -55,7 +43,7 @@ public class Preferences {
     /** @return The default, global, preferences. */
     public static synchronized Preferences getInstance() {
         if (INSTANCE == null) {
-            throw new RuntimeException(UNINITIALIZED);
+            throw new RuntimeException("Global preferences have not been initialized yet!");
         }
         return INSTANCE;
     }
@@ -109,12 +97,12 @@ public class Preferences {
      * @return The default preference file for this platform.
      */
     public static File getDefaultPreferenceFile(String packageDir, String leafName) {
-        File base = new File(System.getProperty("user.home", DOT)); //$NON-NLS-1$
+        File base = new File(System.getProperty("user.home", DOT));
 
         if (Platform.isMacintosh()) {
-            base = new File(base, "Library/Preferences"); //$NON-NLS-1$
+            base = new File(base, "Library/Preferences");
         } else if (Platform.isWindows()) {
-            base = new File(base, "Local Settings/Application Data"); //$NON-NLS-1$
+            base = new File(base, "Local Settings/Application Data");
         } else {
             if (packageDir != null) {
                 if (!packageDir.startsWith(DOT)) {
@@ -507,7 +495,7 @@ public class Preferences {
      *         normally be returned, returns an empty string instead.
      */
     public String getStringValueForced(String module, String key) {
-        return getStringValue(module, key, ""); //$NON-NLS-1$
+        return getStringValue(module, key, "");
     }
 
     /**

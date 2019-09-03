@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -33,7 +33,6 @@ import java.util.Locale;
  * rather than the regular mechanism. The first non-blank line in the file will be used as the
  * locale name.
  */
-@SuppressWarnings("nls")
 public class Localization implements PrivilegedAction<Object> {
     private static final int      MOD_EXPECTED = Modifier.STATIC;
     private static final int      MOD_MASK     = MOD_EXPECTED | Modifier.FINAL;
@@ -65,11 +64,11 @@ public class Localization implements PrivilegedAction<Object> {
     public static final File getLocaleOverrideFile() {
         String localeFile = System.getProperty("locale.file", "");
         if (!localeFile.isEmpty()) {
-            File base = new File(System.getProperty("user.home", ".")); //$NON-NLS-1$ //$NON-NLS-2$
+            File base = new File(System.getProperty("user.home", "."));
             if (Platform.isMacintosh()) {
-                base = new File(base, "Library/Preferences"); //$NON-NLS-1$
+                base = new File(base, "Library/Preferences");
             } else if (Platform.isWindows()) {
-                base = new File(base, "Local Settings/Application Data"); //$NON-NLS-1$
+                base = new File(base, "Local Settings/Application Data");
             }
             base.mkdirs();
             return new File(base, localeFile);

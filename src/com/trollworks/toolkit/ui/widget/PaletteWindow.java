@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -36,7 +36,7 @@ public abstract class PaletteWindow extends BaseWindow {
         super(title, gc);
         setFocusableWindowState(false);
         setAlwaysOnTop(true);
-        getRootPane().putClientProperty("Window.style", "small"); //$NON-NLS-1$ //$NON-NLS-2$
+        getRootPane().putClientProperty("Window.style", "small");
         initialize();
         setAppWindow(AppWindow.getTopWindow());
         restoreBounds();

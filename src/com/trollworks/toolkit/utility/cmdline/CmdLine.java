@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,9 +11,8 @@
 
 package com.trollworks.toolkit.utility.cmdline;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.utility.BundleInfo;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.Platform;
 import com.trollworks.toolkit.utility.text.Text;
 
@@ -29,48 +28,8 @@ import java.util.Set;
 
 /** Provides standardized command-line argument parsing. */
 public class CmdLine {
-    @Localize("Available options:")
-    @Localize(locale = "ru", value = "Доступные параметры:")
-    @Localize(locale = "de", value = "Vorhandene Optionen:")
-    @Localize(locale = "es", value = "Opciones disponibles:")
-    private static String AVAILABLE_OPTIONS;
-    @Localize("Unknown option \"{0}\".")
-    @Localize(locale = "ru", value = "Неизвестный параметр \"{0}\".")
-    @Localize(locale = "de", value = "Unbekannte Option \"{0}\".")
-    @Localize(locale = "es", value = "Opción desconocida \"{0}\"")
-    private static String UNEXPECTED_OPTION;
-    @Localize("The option \"{0}\" does not take an argument.")
-    @Localize(locale = "ru", value = "Параметр \"{0}\" не принимает значения.")
-    @Localize(locale = "de", value = "Die Option \"{0}\" benötigt kein Arguemnt.")
-    @Localize(locale = "es", value = "La opción \"{0}\" no tiene argumentos")
-    private static String UNEXPECTED_OPTION_ARGUMENT;
-    @Localize("The option \"{0}\" requires an argument.")
-    @Localize(locale = "ru", value = "Параметр \"{0}\" требует значения.")
-    @Localize(locale = "de", value = "Die Option \"{0}\" benötigt ein Argument.")
-    @Localize(locale = "es", value = "La opción \"{0}\" requiere un argumento")
-    private static String MISSING_OPTION_ARGUMENT;
-    @Localize("Displays a description of each option.")
-    @Localize(locale = "ru", value = "Отображать описание каждого параметра.")
-    @Localize(locale = "de", value = "Zeigt eine Beschreibung zu jeder Option an.")
-    @Localize(locale = "es", value = "Muestra una descripción de cada opción")
-    private static String HELP_DESCRIPTION;
-    @Localize("Displays the program version information.")
-    @Localize(locale = "ru", value = "Отображать версию программы.")
-    @Localize(locale = "de", value = "Zeigt die Version des Programms an.")
-    @Localize(locale = "es", value = "Muestra información de la versión del programa")
-    private static String VERSION_DESCRIPTION;
-    @Localize("The same as the \"{0}{1}\" option.")
-    @Localize(locale = "ru", value = "Тоже, что и параметр \"{0}{1}\".")
-    @Localize(locale = "de", value = "Dasselbe wie die Option \"{0}{1}\".")
-    @Localize(locale = "es", value = "Equivale a la opción \"{0}{1}\"")
-    private static String REFERENCE_DESCRIPTION;
-
-    static {
-        Localization.initialize();
-    }
-
-    private static final CmdLineOption HELP_OPTION    = new CmdLineOption(HELP_DESCRIPTION, null, "h", "?", "help");  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-    private static final CmdLineOption VERSION_OPTION = new CmdLineOption(VERSION_DESCRIPTION, null, "v", "version"); //$NON-NLS-1$ //$NON-NLS-2$
+    private static final CmdLineOption HELP_OPTION    = new CmdLineOption(I18n.Text("Displays a description of each option."), null, "h", "?", "help");
+    private static final CmdLineOption VERSION_OPTION = new CmdLineOption(I18n.Text("Displays the program version information."), null, "v", "version");
     private Map<String, CmdLineOption> mOptions       = new HashMap<>();
     private String                     mHelpHeader;
     private String                     mHelpFooter;
@@ -119,12 +78,12 @@ public class CmdLine {
         for (int i = 0; i < args.length; i++) {
             String one = args[i];
 
-            if (i == 0 && Platform.isMacintosh() && args[i].startsWith("-psn_")) { //$NON-NLS-1$
+            if (i == 0 && Platform.isMacintosh() && args[i].startsWith("-psn_")) {
                 continue;
             }
 
             if (hasOptionPrefix(one)) {
-                String        part  = one.substring(one.startsWith("--") ? 2 : 1); //$NON-NLS-1$
+                String        part  = one.substring(one.startsWith("--") ? 2 : 1);
                 String        name  = part.toLowerCase();
                 int           index = name.indexOf('=');
                 String        arg;
@@ -144,27 +103,28 @@ public class CmdLine {
                             mData.add(new CmdLineData(option, arg));
                             mUsedOptions.add(option);
                         } else {
+                            String requiredArgMsgFmt = I18n.Text("The option \"{0}\" requires an argument.");
                             if (++i < args.length) {
                                 arg = args[i];
                                 if (hasOptionPrefix(arg)) {
-                                    msgs.add(MessageFormat.format(MISSING_OPTION_ARGUMENT, one));
+                                    msgs.add(MessageFormat.format(requiredArgMsgFmt, one));
                                     i--;
                                 } else {
                                     mData.add(new CmdLineData(option, arg));
                                     mUsedOptions.add(option);
                                 }
                             } else {
-                                msgs.add(MessageFormat.format(MISSING_OPTION_ARGUMENT, one));
+                                msgs.add(MessageFormat.format(requiredArgMsgFmt, one));
                             }
                         }
                     } else if (arg != null) {
-                        msgs.add(MessageFormat.format(UNEXPECTED_OPTION_ARGUMENT, one));
+                        msgs.add(MessageFormat.format(I18n.Text("The option \"{0}\" does not take an argument."), one));
                     } else {
                         mData.add(new CmdLineData(option));
                         mUsedOptions.add(option);
                     }
                 } else {
-                    msgs.add(MessageFormat.format(UNEXPECTED_OPTION, one));
+                    msgs.add(MessageFormat.format(I18n.Text("Unknown option \"{0}\"."), one));
                 }
             } else {
                 mData.add(new CmdLineData(one));
@@ -191,7 +151,7 @@ public class CmdLine {
     }
 
     private static boolean hasOptionPrefix(String arg) {
-        return arg.startsWith("-") || Platform.isWindows() && arg.startsWith("/"); //$NON-NLS-1$ //$NON-NLS-2$
+        return arg.startsWith("-") || Platform.isWindows() && arg.startsWith("/");
     }
 
     /** Shows the help, then calls {@link System#exit(int)}. */
@@ -208,7 +168,7 @@ public class CmdLine {
             System.out.println(mHelpHeader);
             System.out.println();
         }
-        System.out.println(AVAILABLE_OPTIONS);
+        System.out.println(I18n.Text("Available options:"));
         System.out.println();
 
         for (String name : names) {
@@ -228,15 +188,15 @@ public class CmdLine {
 
             StringBuilder builder  = new StringBuilder();
             String[]      allNames = option.getNames();
-            String        prefix   = Platform.isWindows() ? "/" : "-"; //$NON-NLS-1$ //$NON-NLS-2$
+            String        prefix   = Platform.isWindows() ? "/" : "-";
             String        description;
 
             if (allNames[allNames.length - 1].equals(name)) {
                 description = option.getDescription();
             } else {
-                description = MessageFormat.format(REFERENCE_DESCRIPTION, prefix, allNames[allNames.length - 1]);
+                description = MessageFormat.format(I18n.Text("The same as the \"{0}{1}\" option."), prefix, allNames[allNames.length - 1]);
             }
-            builder.append("  "); //$NON-NLS-1$
+            builder.append("  ");
             builder.append(prefix);
             builder.append(name);
             if (option.takesArgument()) {

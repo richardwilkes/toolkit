@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.utility.text;
 
-import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -21,36 +20,14 @@ import javax.swing.SwingConstants;
 
 /** Provides text manipulation. */
 public class Text {
-    @Localize("a")
-    private static String A;
-    @Localize("an")
-    private static String AN;
-    @Localize("was")
-    @Localize(locale = "ru", value = "был")
-    @Localize(locale = "de", value = "wurde")
-    @Localize(locale = "es", value = "era")
-    private static String WAS;
-    @Localize("were")
-    @Localize(locale = "ru", value = "где")
-    @Localize(locale = "de", value = "wurden")
-    @Localize(locale = "es", value = "eran")
-    private static String WERE;
-
-    static {
-        Localization.initialize();
-    }
-
     private static final char[] HEX_DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-    private static final String SPACE      = " "; //$NON-NLS-1$
-    private static final String NEWLINE    = "\n"; //$NON-NLS-1$
-    private static final char   ELLIPSIS   = '\u2026';
 
     /**
      * @param text The text to check.
      * @return "a" or "an", as appropriate for the text that will be following it.
      */
     public static final String aAn(String text) {
-        return Text.startsWithVowel(text) ? AN : A;
+        return Text.startsWithVowel(text) ? I18n.Text("an") : I18n.Text("a");
     }
 
     /**
@@ -58,7 +35,7 @@ public class Text {
      * @return "was" or "were", as appropriate for the number of items.
      */
     public static final String wasWere(int amount) {
-        return amount == 1 ? WAS : WERE;
+        return amount == 1 ? I18n.Text("was") : I18n.Text("were");
     }
 
     /**
@@ -109,7 +86,6 @@ public class Text {
      * @param text The text to reflow.
      * @return The revised text.
      */
-    @SuppressWarnings("nls")
     public static final String reflow(String text) {
         if (text == null) {
             return "";
@@ -151,7 +127,7 @@ public class Text {
         if (count > 0) {
             count++; // Count is now the amount to remove from the string
             if (truncationPolicy == SwingConstants.LEFT) {
-                return ELLIPSIS + text.substring(count);
+                return "\u2026" + text.substring(count);
             }
             if (truncationPolicy == SwingConstants.CENTER) {
                 int           remaining = tCount - count;
@@ -162,13 +138,13 @@ public class Text {
                 if (left > 0) {
                     buffer.append(text.substring(0, left));
                 }
-                buffer.append(ELLIPSIS);
+                buffer.append("\u2026");
                 if (right > 0) {
                     buffer.append(text.substring(tCount - right));
                 }
                 return buffer.toString();
             }
-            return text.substring(0, tCount - count) + ELLIPSIS;
+            return text.substring(0, tCount - count) + "\u2026";
         }
         return text;
     }
@@ -180,7 +156,7 @@ public class Text {
      * @return The converted text.
      */
     public static final String standardizeLineEndings(String data) {
-        return standardizeLineEndings(data, NEWLINE);
+        return standardizeLineEndings(data, "\n");
     }
 
     /**
@@ -291,18 +267,18 @@ public class Text {
     public static String makeNote(String marker, String note) {
         StringBuilder   buffer    = new StringBuilder(note.length() * 2);
         String          indent    = makeFiller(marker.length() + 1, ' ');
-        StringTokenizer tokenizer = new StringTokenizer(note, NEWLINE);
+        StringTokenizer tokenizer = new StringTokenizer(note, "\n");
 
         if (tokenizer.hasMoreTokens()) {
             buffer.append(marker);
-            buffer.append(SPACE);
+            buffer.append(" ");
             buffer.append(tokenizer.nextToken());
-            buffer.append(NEWLINE);
+            buffer.append("\n");
 
             while (tokenizer.hasMoreTokens()) {
                 buffer.append(indent);
                 buffer.append(tokenizer.nextToken());
-                buffer.append(NEWLINE);
+                buffer.append("\n");
             }
         }
 
@@ -317,15 +293,15 @@ public class Text {
     public static String wrapToCharacterCount(String text, int charCount) {
         StringBuilder   buffer     = new StringBuilder(text.length() * 2);
         StringBuilder   lineBuffer = new StringBuilder(charCount + 1);
-        StringTokenizer tokenizer  = new StringTokenizer(text + NEWLINE, NEWLINE, true);
+        StringTokenizer tokenizer  = new StringTokenizer(text + "\n", "\n", true);
 
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
 
-            if (token.equals(NEWLINE)) {
+            if (token.equals("\n")) {
                 buffer.append(token);
             } else {
-                StringTokenizer tokenizer2 = new StringTokenizer(token, " \t", true); //$NON-NLS-1$
+                StringTokenizer tokenizer2 = new StringTokenizer(token, " \t", true);
                 int             length     = 0;
 
                 lineBuffer.setLength(0);
@@ -333,7 +309,7 @@ public class Text {
                     String token2      = tokenizer2.nextToken();
                     int    tokenLength = token2.length();
 
-                    if (length == 0 && token2.equals(SPACE)) {
+                    if (length == 0 && token2.equals(" ")) {
                         continue;
                     }
                     if (length == 0 || length + tokenLength <= charCount) {
@@ -341,9 +317,9 @@ public class Text {
                         length += tokenLength;
                     } else {
                         buffer.append(lineBuffer);
-                        buffer.append(NEWLINE);
+                        buffer.append("\n");
                         lineBuffer.setLength(0);
-                        if (!token2.equals(SPACE)) {
+                        if (!token2.equals(" ")) {
                             lineBuffer.append(token2);
                             length = tokenLength;
                         } else {
@@ -361,11 +337,11 @@ public class Text {
     }
 
     public static String wrapPlainTextForToolTip(String text) {
-        if (text != null && !text.isEmpty() && !text.startsWith("<html>")) { //$NON-NLS-1$
+        if (text != null && !text.isEmpty() && !text.startsWith("<html>")) {
             StringBuilder buffer = new StringBuilder();
-            buffer.append("<html><body>"); //$NON-NLS-1$
-            buffer.append(htmlEscape(wrapToCharacterCount(text, 40)).replaceAll(NEWLINE, "<br>")); //$NON-NLS-1$
-            buffer.append("</body></html>"); //$NON-NLS-1$
+            buffer.append("<html><body>");
+            buffer.append(htmlEscape(wrapToCharacterCount(text, 40)).replaceAll("\n", "<br>"));
+            buffer.append("</body></html>");
             return buffer.toString();
         }
         return text;
@@ -384,22 +360,22 @@ public class Text {
             char ch = str.charAt(i);
             switch (ch) {
             case '&':
-                buffer.append("&amp;"); //$NON-NLS-1$
+                buffer.append("&amp;");
                 break;
             case '<':
-                buffer.append("&lt;"); //$NON-NLS-1$
+                buffer.append("&lt;");
                 break;
             case '>':
-                buffer.append("&gt;"); //$NON-NLS-1$
+                buffer.append("&gt;");
                 break;
             case '"':
-                buffer.append("&quot;"); //$NON-NLS-1$
+                buffer.append("&quot;");
                 break;
             case '\'':
-                buffer.append("&#39;"); //$NON-NLS-1$
+                buffer.append("&#39;");
                 break;
             case '/':
-                buffer.append("&#47;"); //$NON-NLS-1$
+                buffer.append("&#47;");
                 break;
             default:
                 buffer.append(ch);

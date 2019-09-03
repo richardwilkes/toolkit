@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -27,9 +27,8 @@ import java.util.HashMap;
 /** A very simple XML reader with very low memory overhead. */
 public class XMLReader implements AutoCloseable {
     /** Debug option: whether to output skipped tags to standard out. */
-    public static boolean           SHOW_SKIPPED_TAGS = Numbers.extractBoolean(System.getProperty("SHOW_SKIPPED_TAGS", "false")); //$NON-NLS-1$ //$NON-NLS-2$
-    private static final String     UNEXPECTED_EOF    = "Unexpected EOF"; //$NON-NLS-1$
-    private static final String     COLON             = ":"; //$NON-NLS-1$
+    public static boolean           SHOW_SKIPPED_TAGS = Numbers.extractBoolean(System.getProperty("SHOW_SKIPPED_TAGS", "false"));
+    private static final String     UNEXPECTED_EOF    = "Unexpected EOF";
     private HashMap<String, String> mEntityMap        = new HashMap<>();
     private HashMap<String, String> mAttributeMap     = new HashMap<>();
     private ArrayList<String>       mStack            = new ArrayList<>();
@@ -100,11 +99,11 @@ public class XMLReader implements AutoCloseable {
         mPeek0  = reader.read();
         mPeek1  = reader.read();
         mEOF    = mPeek0 == -1;
-        defineCharacterEntity("amp", "&"); //$NON-NLS-1$ //$NON-NLS-2$
-        defineCharacterEntity("apos", "'"); //$NON-NLS-1$ //$NON-NLS-2$
-        defineCharacterEntity("gt", ">"); //$NON-NLS-1$ //$NON-NLS-2$
-        defineCharacterEntity("lt", "<"); //$NON-NLS-1$ //$NON-NLS-2$
-        defineCharacterEntity("quot", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+        defineCharacterEntity("amp", "&");
+        defineCharacterEntity("apos", "'");
+        defineCharacterEntity("gt", ">");
+        defineCharacterEntity("lt", "<");
+        defineCharacterEntity("quot", "\"");
     }
 
     /** Closes the underlying {@link Reader}. */
@@ -117,11 +116,11 @@ public class XMLReader implements AutoCloseable {
     public String getMarker() {
         switch (mType) {
         case START_TAG:
-            return getDepth() - 1 + COLON + getName();
+            return getDepth() - 1 + ":" + getName();
         case END_TAG:
-            return getDepth() + COLON + getName();
+            return getDepth() + ":" + getName();
         default:
-            return getDepth() + COLON + mStack.get(mStack.size() - 1);
+            return getDepth() + ":" + mStack.get(mStack.size() - 1);
         }
     }
 
@@ -131,10 +130,10 @@ public class XMLReader implements AutoCloseable {
      *
      * <pre>
      *    String marker = reader.getMarker();
-     * 
+     *
      *    do {
      *        XMLNodeType type = reader.next();
-     * 
+     *
      *        ... process the info between the start and close tag here ...
      *    } while (reader.withinMarker(marker));
      * </pre>
@@ -150,7 +149,7 @@ public class XMLReader implements AutoCloseable {
                 return false;
             }
         } else if (mType == XMLNodeType.END_DOCUMENT) {
-            fail("expected: " + XMLNodeType.END_TAG.name() + "/" + marker.substring(marker.indexOf(':') + 1)); //$NON-NLS-1$ //$NON-NLS-2$
+            fail("expected: " + XMLNodeType.END_TAG.name() + "/" + marker.substring(marker.indexOf(':') + 1));
         }
         return true;
     }
@@ -169,7 +168,7 @@ public class XMLReader implements AutoCloseable {
             next();
         }
         if (type != mType || name != null && !name.equals(getName())) {
-            fail("expected: " + type.name() + "/" + name); //$NON-NLS-1$ //$NON-NLS-2$
+            fail("expected: " + type.name() + "/" + name);
         }
     }
 
@@ -181,7 +180,7 @@ public class XMLReader implements AutoCloseable {
     public void skipTag(String name) throws IOException {
         String marker;
         if (SHOW_SKIPPED_TAGS) {
-            Log.warn("Skipping tag: " + name); //$NON-NLS-1$
+            Log.warn("Skipping tag: " + name);
         }
         require(XMLNodeType.START_TAG, name);
         marker = getMarker();
@@ -284,7 +283,7 @@ public class XMLReader implements AutoCloseable {
     }
 
     private final void fail(String desc) throws IOException {
-        throw new IOException(desc + " pos: " + getPositionDescription()); //$NON-NLS-1$
+        throw new IOException(desc + " pos: " + getPositionDescription());
     }
 
     private final void push(int ch) {
@@ -301,7 +300,7 @@ public class XMLReader implements AutoCloseable {
 
     private final void read(char ch) throws IOException {
         if (read() != ch) {
-            fail("expected: '" + ch + "'"); //$NON-NLS-1$ //$NON-NLS-2$
+            fail("expected: '" + ch + "'");
         }
     }
 
@@ -323,7 +322,7 @@ public class XMLReader implements AutoCloseable {
         int ch  = mPeek0;
 
         if ((ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z') && ch != '_' && ch != ':') {
-            fail("name expected"); //$NON-NLS-1$
+            fail("name expected");
         }
 
         do {
@@ -335,7 +334,7 @@ public class XMLReader implements AutoCloseable {
     }
 
     private final void parseLegacy(boolean push) throws IOException {
-        String req = ""; //$NON-NLS-1$
+        String req = "";
         int    term;
         int    ch;
 
@@ -345,17 +344,17 @@ public class XMLReader implements AutoCloseable {
             term = '?';
         } else if (ch == '!') {
             if (mPeek0 == '-') {
-                req  = "--"; //$NON-NLS-1$
+                req  = "--";
                 term = '-';
             } else {
-                req  = "DOCTYPE"; //$NON-NLS-1$
+                req  = "DOCTYPE";
                 term = -1;
             }
         } else {
             if (ch != '[') {
-                fail("can't reach: " + ch); //$NON-NLS-1$
+                fail("can't reach: " + ch);
             }
-            req  = "CDATA["; //$NON-NLS-1$
+            req  = "CDATA[";
             term = ']';
         }
 
@@ -419,12 +418,12 @@ public class XMLReader implements AutoCloseable {
         mName = readName();
         pos   = mStack.size() - 1;
         if (pos < 0) {
-            fail("element stack empty"); //$NON-NLS-1$
+            fail("element stack empty");
         }
         if (mName.equals(mStack.get(pos))) {
             mStack.remove(pos);
         } else {
-            fail("expected: " + mStack.get(pos)); //$NON-NLS-1$
+            fail("expected: " + mStack.get(pos));
         }
         skip();
         read('>');
@@ -482,7 +481,7 @@ public class XMLReader implements AutoCloseable {
 
             attrName = readName();
             if (attrName.length() == 0) {
-                fail("attribute name expected"); //$NON-NLS-1$
+                fail("attribute name expected");
             }
 
             skip();
@@ -490,7 +489,7 @@ public class XMLReader implements AutoCloseable {
             skip();
             ch = read();
             if (ch != '\'' && ch != '"') {
-                fail("<" + mName + ">: invalid delimiter: " + (char) ch); //$NON-NLS-1$ //$NON-NLS-2$
+                fail("<" + mName + ">: invalid delimiter: " + (char) ch);
             }
 
             pos = mTextPos;
@@ -525,7 +524,7 @@ public class XMLReader implements AutoCloseable {
 
         result = mEntityMap.get(code);
         if (result == null) {
-            result = "&" + code + ";"; //$NON-NLS-1$ //$NON-NLS-2$
+            result = "&" + code + ";";
         }
 
         for (int i = 0; i < result.length(); i++) {
@@ -583,17 +582,17 @@ public class XMLReader implements AutoCloseable {
     public String getPositionDescription() {
         StringBuilder buffer = new StringBuilder(mType.name());
 
-        buffer.append(" @" + mLine + COLON + mColumn + ": "); //$NON-NLS-1$ //$NON-NLS-2$
+        buffer.append(" @" + mLine + ":" + mColumn + ": ");
         if (mType == XMLNodeType.START_TAG) {
             buffer.append('<');
             buffer.append(mName);
             buffer.append('>');
         } else if (mType == XMLNodeType.END_TAG) {
-            buffer.append("</"); //$NON-NLS-1$
+            buffer.append("</");
             buffer.append(mName);
             buffer.append('>');
         } else if (mIsWhitespace) {
-            buffer.append("[whitespace]"); //$NON-NLS-1$
+            buffer.append("[whitespace]");
         } else {
             buffer.append(getText());
         }

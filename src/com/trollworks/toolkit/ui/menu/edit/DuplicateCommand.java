@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,32 +11,21 @@
 
 package com.trollworks.toolkit.ui.menu.edit;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 /** Provides the "Duplicate" command. */
 public class DuplicateCommand extends Command {
-    @Localize("Duplicate")
-    @Localize(locale = "ru", value = "Дублировать")
-    @Localize(locale = "de", value = "Duplizieren")
-    @Localize(locale = "es", value = "Duplicar")
-    private static String DUPLICATE;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The action command this command will issue. */
-    public static final String           CMD_DUPLICATE = "Duplicate"; //$NON-NLS-1$
+    public static final String           CMD_DUPLICATE = "Duplicate";
     /** The singleton {@link DuplicateCommand}. */
     public static final DuplicateCommand INSTANCE      = new DuplicateCommand();
 
     private DuplicateCommand() {
-        super(DUPLICATE, CMD_DUPLICATE, KeyEvent.VK_D);
+        super(I18n.Text("Duplicate"), CMD_DUPLICATE, KeyEvent.VK_D);
     }
 
     @Override

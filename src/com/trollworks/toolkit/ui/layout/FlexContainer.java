@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -228,7 +228,7 @@ public abstract class FlexContainer extends FlexCell {
         boolean needComma = false;
         for (FlexCell cell : mChildren) {
             if (needComma) {
-                buffer.append(", "); //$NON-NLS-1$
+                buffer.append(", ");
             } else {
                 needComma = true;
             }

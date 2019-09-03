@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.io.xml;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.annotation.XmlAttr;
 import com.trollworks.toolkit.annotation.XmlNoSort;
 import com.trollworks.toolkit.annotation.XmlTag;
@@ -38,7 +37,6 @@ import com.trollworks.toolkit.io.xml.helper.XmlPrimitiveShortHelper;
 import com.trollworks.toolkit.io.xml.helper.XmlShortHelper;
 import com.trollworks.toolkit.io.xml.helper.XmlStringHelper;
 import com.trollworks.toolkit.io.xml.helper.XmlUUIDHelper;
-import com.trollworks.toolkit.utility.Localization;
 import com.trollworks.toolkit.utility.introspection.FieldAnnotation;
 import com.trollworks.toolkit.utility.introspection.Introspection;
 import com.trollworks.toolkit.workarounds.PathToUri;
@@ -68,41 +66,6 @@ import javax.xml.stream.XMLStreamException;
  * Provides easy loading and saving of objects that have been annotated with appropriate xml tags.
  */
 public class Xml {
-    @Localize("The root object has not been annotated.")
-    private static String ROOT_NOT_TAGGED;
-    @Localize("The root tag \"%s\" was not present.")
-    private static String TAG_NOT_FOUND;
-    @Localize("%s has not been annotated.")
-    private static String NOT_TAGGED;
-    @Localize("%s is not an array.")
-    private static String NOT_ARRAY;
-    @Localize("Unable to create object for collection tag '%s'.")
-    @Localize(locale = "ru", value = "Невозможно создать объект для получения тэга '%s'.")
-    @Localize(locale = "de", value = "Kann Objekt für Sammlungs-Tag '%s' nicht erstellen.")
-    @Localize(locale = "es",
-              value = "Imposible crear el objeto para la colección de etiquetas '%s'.")
-    private static String UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION;
-    @Localize("The tag '%s' is from an older version and cannot be loaded.")
-    @Localize(locale = "ru",
-              value = "Тег '%s' относится к более старой версии и не может быть загружен.")
-    @Localize(locale = "de",
-              value = "Das Tag '%s' ist von einer älteren Version und kann nicht geladen werden.")
-    @Localize(locale = "es",
-              value = "La etiqueta '%s' es de una versión anterior y no puede cargarse.")
-    private static String TOO_OLD;
-    @Localize("The tag '%s' is from a newer version and cannot be loaded.")
-    @Localize(locale = "ru",
-              value = "Тег '%s' относится к более новой версии и не может быть загружен.")
-    @Localize(locale = "de",
-              value = "Das Tag '%s' ist von einer neueren Version und kann nicht geladen werden.")
-    @Localize(locale = "es",
-              value = "La etiqueta '%s' es de una versión demasiado nueva y no puede cargarse.")
-    private static String TOO_NEW;
-
-    static {
-        Localization.initialize();
-    }
-
     private static final List<XmlObjectHelper>          HELPERS    = new ArrayList<>();
     private static final Map<Class<?>, XmlObjectHelper> HELPER_MAP = new HashMap<>();
 
@@ -131,7 +94,7 @@ public class Xml {
     }
 
     /** The attribute that will be used for a tag's version. */
-    public static final String ATTR_VERSION = "version"; //$NON-NLS-1$
+    public static final String ATTR_VERSION = "version";
 
     public static final void registerHelper(XmlObjectHelper helper) {
         synchronized (HELPERS) {
@@ -261,7 +224,7 @@ public class Xml {
     public static final <T> T load(InputStream in, T obj, XmlParserContext context) throws XMLStreamException {
         XmlTag xmlTag = obj.getClass().getAnnotation(XmlTag.class);
         if (xmlTag == null) {
-            throw new XMLStreamException(ROOT_NOT_TAGGED);
+            throw new XMLStreamException("The root object has not been annotated.");
         }
         try (XmlParser xml = new XmlParser(in)) {
             String tag = xml.nextTag();
@@ -269,7 +232,7 @@ public class Xml {
                 load(xml, obj, context);
                 return obj;
             }
-            throw new XMLStreamException(String.format(TAG_NOT_FOUND, xmlTag.value()));
+            throw new XMLStreamException(String.format("The root tag \"%s\" was not present.", xmlTag.value()));
         } catch (XMLStreamException exception) {
             throw exception;
         } catch (Exception exception) {
@@ -290,10 +253,10 @@ public class Xml {
             Class<?> tagClass = obj.getClass();
             int      version  = xml.getIntegerAttribute(ATTR_VERSION, 0);
             if (version > getVersionOfTag(tagClass)) {
-                throw new XMLStreamException(String.format(TOO_NEW, xml.getCurrentTag()), xml.getLocation());
+                throw new XMLStreamException(String.format("The tag '%s' is from a newer version and cannot be loaded.", xml.getCurrentTag()), xml.getLocation());
             }
             if (version < getMinimumLoadableVersionOfTag(tagClass)) {
-                throw new XMLStreamException(String.format(TOO_OLD, xml.getCurrentTag()), xml.getLocation());
+                throw new XMLStreamException(String.format("The tag '%s' is from an older version and cannot be loaded.", xml.getCurrentTag()), xml.getLocation());
             }
             if (version != 0) {
                 context.pushVersion(version);
@@ -330,7 +293,7 @@ public class Xml {
                         if (genericType instanceof ParameterizedType) {
                             genericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
                         } else {
-                            throw new XMLStreamException(String.format(UNABLE_TO_CREATE_OBJECT_FOR_COLLECTION, tag), xml.getLocation());
+                            throw new XMLStreamException(String.format("Unable to create object for collection tag '%s'.", tag), xml.getLocation());
                         }
                         Object   fieldObj = null;
                         Class<?> cls      = Class.forName(genericType.getTypeName());
@@ -439,7 +402,7 @@ public class Xml {
         if (tag != null) {
             add(xml, tag.value(), obj);
         } else {
-            throw new XMLStreamException(String.format(NOT_TAGGED, objClass.getName()));
+            throw new XMLStreamException(String.format("%s has not been annotated.", objClass.getName()));
         }
     }
 
@@ -455,7 +418,7 @@ public class Xml {
             if (obj != null) {
                 Class<?> objClass = obj.getClass();
                 if (tag == null || tag.isEmpty()) {
-                    throw new XMLStreamException(String.format(NOT_TAGGED, objClass.getName()));
+                    throw new XMLStreamException(String.format("%s has not been annotated.", objClass.getName()));
                 }
                 if (obj instanceof TagWillSave) {
                     ((TagWillSave) obj).xmlWillSave(xml);

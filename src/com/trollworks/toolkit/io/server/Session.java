@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -25,7 +25,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 
 /** Tracks a single connection to the server. */
-@SuppressWarnings("nls")
 public class Session implements Runnable, Log.Context {
     private static final AtomicInteger NEXT_ID = new AtomicInteger();
     private int                        mId;

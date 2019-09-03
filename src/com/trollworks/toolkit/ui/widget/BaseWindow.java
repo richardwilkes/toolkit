@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -37,11 +37,11 @@ import javax.swing.WindowConstants;
 
 /** The base window class for the application windows. */
 public class BaseWindow extends JFrame implements WindowListener, WindowFocusListener {
-    private static final String WINDOW_PREFERENCES         = "WindowPrefs"; //$NON-NLS-1$
+    private static final String WINDOW_PREFERENCES         = "WindowPrefs";
     private static final int    WINDOW_PREFERENCES_VERSION = 3;
-    private static final String KEY_LOCATION               = "Location";    //$NON-NLS-1$
-    private static final String KEY_SIZE                   = "Size";        //$NON-NLS-1$
-    private static final String KEY_LAST_UPDATED           = "LastUpdated"; //$NON-NLS-1$
+    private static final String KEY_LOCATION               = "Location";
+    private static final String KEY_SIZE                   = "Size";
+    private static final String KEY_LAST_UPDATED           = "LastUpdated";
     boolean                     mWasAlive;
     private boolean             mIsClosed;
 
@@ -61,7 +61,7 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
     }
 
     /**
-     * @param      <T> The window type.
+     * @param <T>  The window type.
      * @param type The window type to return.
      * @return A list of all windows of the specified type.
      */
@@ -82,7 +82,7 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
     /**
      * Creates a new, untitled window title.
      *
-     * @param             <T> The window type.
+     * @param <T>         The window type.
      * @param windowClass The window class to use for name comparisons.
      * @param baseTitle   The base untitled name.
      * @param exclude     A window to exclude from naming decisions. May be <code>null</code>.
@@ -98,7 +98,7 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
             again = false;
             title = baseTitle;
             if (++value > 1) {
-                title += " " + value; //$NON-NLS-1$
+                title += " " + value;
             }
             for (T window : windows) {
                 if (window != exclude && title.equals(window.getTitle())) {

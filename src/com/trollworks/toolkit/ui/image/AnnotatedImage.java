@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2018 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * version 2.0. If a copy of the MPL was not distributed with this file, You
@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
 
 /** Read and write annotated image data. */
 public class AnnotatedImage {
-    private static final String TROLLWORKS_TEXT_KEY = "twtk"; //$NON-NLS-1$
+    private static final String TROLLWORKS_TEXT_KEY = "twtk";
     public StdImage             mImage;
     public String               mText;
     public int                  mDPI;
@@ -68,21 +68,21 @@ public class AnnotatedImage {
             reader = ImageIO.getImageReaders(stream).next();
             reader.setInput(stream);
             try {
-                IIOMetadataNode root    = (IIOMetadataNode) reader.getImageMetadata(0).getAsTree("javax_imageio_png_1.0"); //$NON-NLS-1$
-                NodeList        entries = root.getElementsByTagName("iTXtEntry"); //$NON-NLS-1$
+                IIOMetadataNode root    = (IIOMetadataNode) reader.getImageMetadata(0).getAsTree("javax_imageio_png_1.0");
+                NodeList        entries = root.getElementsByTagName("iTXtEntry");
                 int             length  = entries.getLength();
                 for (int i = 0; i < length; i++) {
                     IIOMetadataNode node = (IIOMetadataNode) entries.item(i);
-                    if (TROLLWORKS_TEXT_KEY.equals(node.getAttribute("keyword"))) { //$NON-NLS-1$
-                        result.mText = node.getAttribute("text"); //$NON-NLS-1$
+                    if (TROLLWORKS_TEXT_KEY.equals(node.getAttribute("keyword"))) {
+                        result.mText = node.getAttribute("text");
                         break;
                     }
                 }
-                entries = root.getElementsByTagName("pHYs"); //$NON-NLS-1$
+                entries = root.getElementsByTagName("pHYs");
                 if (entries.getLength() > 0) {
                     IIOMetadataNode node = (IIOMetadataNode) entries.item(0);
-                    if (node.getAttribute("unitSpecifier") == "meter") { //$NON-NLS-1$ //$NON-NLS-2$
-                        result.mDPI = (int) (Integer.parseInt(node.getAttribute("pixelsPerUnitXAxis")) * 0.0254f + 0.5f); //$NON-NLS-1$
+                    if (node.getAttribute("unitSpecifier") == "meter") {
+                        result.mDPI = (int) (Integer.parseInt(node.getAttribute("pixelsPerUnitXAxis")) * 0.0254f + 0.5f);
                     }
                 }
             } catch (Exception exception) {
@@ -146,7 +146,7 @@ public class AnnotatedImage {
         data[offset++]  = 0;
         data[offset++]  = 0;
         data[offset++]  = 0;
-        AnnotatedImage.writeChunk(os, "IHDR", data); //$NON-NLS-1$
+        AnnotatedImage.writeChunk(os, "IHDR", data);
 
         // Add DPI, if provided
         if (dpi > 0) {
@@ -155,7 +155,7 @@ public class AnnotatedImage {
             EndianUtils.writeBEInt(ppu, data, 0);
             EndianUtils.writeBEInt(ppu, data, 4);
             data[8] = 1;
-            AnnotatedImage.writeChunk(os, "pHYs", data); //$NON-NLS-1$
+            AnnotatedImage.writeChunk(os, "pHYs", data);
         }
 
         // Write text, if provided
@@ -172,7 +172,7 @@ public class AnnotatedImage {
                     }
                 }
             }
-            AnnotatedImage.writeChunk(os, "iTXt", ba.toByteArray()); //$NON-NLS-1$
+            AnnotatedImage.writeChunk(os, "iTXt", ba.toByteArray());
         }
 
         // Write pixel data
@@ -194,7 +194,7 @@ public class AnnotatedImage {
         // Write IEND
         try {
             pw.close();
-            AnnotatedImage.writeChunk(os, "IEND", null); //$NON-NLS-1$
+            AnnotatedImage.writeChunk(os, "IEND", null);
         } finally {
             os.close();
         }

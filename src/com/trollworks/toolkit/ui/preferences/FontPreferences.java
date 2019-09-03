@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,14 +11,13 @@
 
 package com.trollworks.toolkit.ui.preferences;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Fonts;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.layout.Alignment;
 import com.trollworks.toolkit.ui.layout.FlexComponent;
 import com.trollworks.toolkit.ui.layout.FlexGrid;
 import com.trollworks.toolkit.ui.widget.FontPanel;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -28,16 +27,6 @@ import javax.swing.UIManager;
 
 /** The font preferences panel. */
 public class FontPreferences extends PreferencePanel implements ActionListener {
-    @Localize("Fonts")
-    @Localize(locale = "ru", value = "Шрифты")
-    @Localize(locale = "de", value = "Schriftarten")
-    @Localize(locale = "es", value = "Fuentes")
-    private static String FONTS;
-
-    static {
-        Localization.initialize();
-    }
-
     private FontPanel[] mFontPanels;
     private boolean     mIgnore;
 
@@ -47,7 +36,7 @@ public class FontPreferences extends PreferencePanel implements ActionListener {
      * @param owner The owning {@link PreferencesWindow}.
      */
     public FontPreferences(PreferencesWindow owner) {
-        super(FONTS, owner);
+        super(I18n.Text("Fonts"), owner);
         FlexGrid grid = new FlexGrid();
         String[] keys = Fonts.getKeys();
         mFontPanels = new FontPanel[keys.length];

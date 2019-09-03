@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.utility;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.io.Log;
 
 import java.io.BufferedOutputStream;
@@ -24,48 +23,15 @@ import java.util.jar.Manifest;
 
 /** Provides information for a bundle of code. */
 public class BundleInfo {
-    @Localize("Development")
-    @Localize(locale = "pt-BR", value = "Desenvolvimento")
-    @Localize(locale = "ru", value = "Разработка")
-    @Localize(locale = "de", value = "Entwicklung")
-    @Localize(locale = "es", value = "Desarrollo")
-    private static String DEVELOPMENT;
-    @Localize("Unspecified")
-    @Localize(locale = "pt-BR", value = "Não especificado")
-    @Localize(locale = "ru", value = "Не указан")
-    @Localize(locale = "de", value = "Nicht angegeben")
-    @Localize(locale = "es", value = "No especificado")
-    private static String UNSPECIFIED;
-    @Localize("%s %s\n%s\n%s")
-    private static String APP_BANNER_FORMAT;
-    @Localize("Copyright \u00A9 %s by %s")
-    @Localize(locale = "pt-BR", value = "Direitos autorais \u00A9 %s por %s")
-    @Localize(locale = "ru", value = "Авторское право \u00A9 %s от %s")
-    @Localize(locale = "de", value = "Copyright \u00A9 %2$s, %1$s")
-    @Localize(locale = "es", value = "Copyright \u00A9 %2$s, %1$s")
-    private static String COPYRIGHT_FORMAT;
-    @Localize("All rights reserved")
-    @Localize(locale = "pt-BR", value = "Todos os direitos reservados")
-    @Localize(locale = "ru", value = "Все права защищены")
-    @Localize(locale = "de", value = "Alle Rechte vorbehalten")
-    @Localize(locale = "es", value = "Reservados todos los derechos")
-    private static String ALL_RIGHTS_RESERVED;
-    @Localize("%s. %s.")
-    private static String COPYRIGHT_BANNER_FORMAT;
-
-    static {
-        Localization.initialize();
-    }
-
-    public static final String BUNDLE_NAME            = "bundle-name";            //$NON-NLS-1$
-    public static final String BUNDLE_VERSION         = "bundle-version";         //$NON-NLS-1$
-    public static final String BUNDLE_COPYRIGHT_OWNER = "bundle-copyright-owner"; //$NON-NLS-1$
-    public static final String BUNDLE_COPYRIGHT_YEARS = "bundle-copyright-years"; //$NON-NLS-1$
-    public static final String BUNDLE_LICENSE         = "bundle-license";         //$NON-NLS-1$
-    public static final String BUNDLE_EXECUTABLE      = "bundle-executable";      //$NON-NLS-1$
-    public static final String BUNDLE_ID              = "bundle-id";              //$NON-NLS-1$
-    public static final String BUNDLE_SIGNATURE       = "bundle-signature";       //$NON-NLS-1$
-    public static final String BUNDLE_CATEGORY        = "bundle-category";        //$NON-NLS-1$
+    public static final String BUNDLE_NAME            = "bundle-name";
+    public static final String BUNDLE_VERSION         = "bundle-version";
+    public static final String BUNDLE_COPYRIGHT_OWNER = "bundle-copyright-owner";
+    public static final String BUNDLE_COPYRIGHT_YEARS = "bundle-copyright-years";
+    public static final String BUNDLE_LICENSE         = "bundle-license";
+    public static final String BUNDLE_EXECUTABLE      = "bundle-executable";
+    public static final String BUNDLE_ID              = "bundle-id";
+    public static final String BUNDLE_SIGNATURE       = "bundle-signature";
+    public static final String BUNDLE_CATEGORY        = "bundle-category";
     private static BundleInfo  DEFAULT;
     private String             mName;
     private long               mVersion;
@@ -102,7 +68,7 @@ public class BundleInfo {
      */
     public BundleInfo(Class<?> theClass) {
         Module module = theClass.getModule();
-        try (InputStream in = module.getResourceAsStream("/META-INF/MANIFEST.MF")) { //$NON-NLS-1$
+        try (InputStream in = module.getResourceAsStream("/META-INF/MANIFEST.MF")) {
             load(new Manifest(in).getMainAttributes());
         } catch (Exception exception) {
             // Ignore... we'll fill in default values below
@@ -181,26 +147,27 @@ public class BundleInfo {
         if (mName == null || mName.trim().isEmpty()) {
             mName = defaultName;
         }
+        String unspecified = I18n.Text("Unspecified");
         if (mCopyrightOwner == null || mCopyrightOwner.trim().isEmpty()) {
-            mCopyrightOwner = UNSPECIFIED;
+            mCopyrightOwner = unspecified;
         }
         if (mCopyrightYears == null || mCopyrightYears.trim().isEmpty()) {
-            mCopyrightYears = UNSPECIFIED;
+            mCopyrightYears = unspecified;
         }
         if (mLicense == null || mLicense.trim().isEmpty()) {
-            mLicense = UNSPECIFIED;
+            mLicense = unspecified;
         }
         if (mExecutableName == null) {
-            mExecutableName = ""; //$NON-NLS-1$
+            mExecutableName = "";
         }
         if (mId == null) {
-            mId = ""; //$NON-NLS-1$
+            mId = "";
         }
         if (mSignature == null) {
-            mSignature = ""; //$NON-NLS-1$
+            mSignature = "";
         }
         if (mCategory == null) {
-            mCategory = ""; //$NON-NLS-1$
+            mCategory = "";
         }
     }
 
@@ -226,18 +193,18 @@ public class BundleInfo {
 
     /** @return The formatted copyright notice for the code bundle. */
     public String getCopyright() {
-        return String.format(COPYRIGHT_FORMAT, mCopyrightYears, mCopyrightOwner);
+        return String.format(I18n.Text("Copyright \u00A9 %s by %s"), mCopyrightYears, mCopyrightOwner);
     }
 
     /** @return The rights declaration for the code bundle, usually "All rights reserved". */
     @SuppressWarnings("static-method")
     public String getReservedRights() {
-        return ALL_RIGHTS_RESERVED;
+        return I18n.Text("All rights reserved");
     }
 
     /** @return A full copyright banner for this code bundle. */
     public String getCopyrightBanner() {
-        return String.format(COPYRIGHT_BANNER_FORMAT, getCopyright(), getReservedRights());
+        return String.format("%s. %s.", getCopyright(), getReservedRights());
     }
 
     /** @return The license the code bundle uses. */
@@ -247,7 +214,7 @@ public class BundleInfo {
 
     /** @return A full application banner for this code bundle. */
     public String getAppBanner() {
-        return String.format(APP_BANNER_FORMAT, getName(), Version.toString(mVersion, false), Version.toBuildTimestamp(mVersion), getCopyrightBanner());
+        return String.format("%s %s\n%s\n%s", getName(), Version.toString(mVersion, false), Version.toBuildTimestamp(mVersion), getCopyrightBanner());
     }
 
     /** @return The name of the executable the code bundle is launched by. */
@@ -277,7 +244,6 @@ public class BundleInfo {
      * @param file    The Info.plist file to create.
      * @param appIcon The name of the application icon, i.e. something like "app.icns".
      */
-    @SuppressWarnings("nls")
     public void write(File file, String appIcon) {
         try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)))) {
             mOut   = out;
@@ -354,33 +320,33 @@ public class BundleInfo {
 
     private void startDictionary() {
         emitTabs();
-        mOut.println("<dict>"); //$NON-NLS-1$
+        mOut.println("<dict>");
         mDepth++;
     }
 
     private void endDictionary() {
         mDepth--;
         emitTabs();
-        mOut.println("</dict>"); //$NON-NLS-1$
+        mOut.println("</dict>");
     }
 
     private void startArray() {
         emitTabs();
-        mOut.println("<array>"); //$NON-NLS-1$
+        mOut.println("<array>");
         mDepth++;
     }
 
     private void endArray() {
         mDepth--;
         emitTabs();
-        mOut.println("</array>"); //$NON-NLS-1$
+        mOut.println("</array>");
     }
 
     public void emitKey(String key) {
         emitTabs();
-        mOut.print("<key>"); //$NON-NLS-1$
+        mOut.print("<key>");
         mOut.print(key);
-        mOut.println("</key>"); //$NON-NLS-1$
+        mOut.println("</key>");
     }
 
     private void emitKeyValue(String key, boolean value) {
@@ -388,15 +354,15 @@ public class BundleInfo {
         emitTabs();
         mOut.print('<');
         mOut.print(value);
-        mOut.println("/>"); //$NON-NLS-1$
+        mOut.println("/>");
     }
 
     private void emitKeyValue(String key, String value) {
         emitKey(key);
         emitTabs();
-        mOut.print("<string>"); //$NON-NLS-1$
+        mOut.print("<string>");
         mOut.print(value);
-        mOut.println("</string>"); //$NON-NLS-1$
+        mOut.println("</string>");
     }
 
     private void emitKeyValues(String key, String... values) {
@@ -404,9 +370,9 @@ public class BundleInfo {
         startArray();
         for (String value : values) {
             emitTabs();
-            mOut.print("<string>"); //$NON-NLS-1$
+            mOut.print("<string>");
             mOut.print(value);
-            mOut.println("</string>"); //$NON-NLS-1$
+            mOut.println("</string>");
         }
         endArray();
     }

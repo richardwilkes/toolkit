@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -27,9 +27,9 @@ import javax.swing.undo.StateEditable;
 
 /** The data model underlying a {@link Outline}. */
 public class OutlineModel implements SelectionOwner, StateEditable {
-    private static final String             UNDO_KEY_ROWS        = "Rows"; //$NON-NLS-1$
-    private static final String             UNDO_KEY_SELECTION   = "Selection"; //$NON-NLS-1$
-    private static final String             UNDO_KEY_SORT_CONFIG = "SortConfig"; //$NON-NLS-1$
+    private static final String             UNDO_KEY_ROWS        = "Rows";
+    private static final String             UNDO_KEY_SELECTION   = "Selection";
+    private static final String             UNDO_KEY_SORT_CONFIG = "SortConfig";
     /** The current config version. */
     public static final int                 CONFIG_VERSION       = 4;
     private ArrayList<OutlineModelListener> mListeners;
@@ -594,9 +594,9 @@ public class OutlineModel implements SelectionOwner, StateEditable {
 
     private int applySortConfigInternal(String config) {
         int result = -1;
-        if (config != null && config.startsWith("S")) { //$NON-NLS-1$
+        if (config != null && config.startsWith("S")) {
             try {
-                StringTokenizer tokenizer = new StringTokenizer(config, "\t"); //$NON-NLS-1$
+                StringTokenizer tokenizer = new StringTokenizer(config, "\t");
                 if (Numbers.extractInteger(tokenizer.nextToken().substring(1), 0, false) == CONFIG_VERSION) {
                     int count = Numbers.extractInteger(tokenizer.nextToken(), 0, false);
                     if (clearSortInternal()) {

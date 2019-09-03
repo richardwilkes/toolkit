@@ -149,7 +149,7 @@ class PNGPixelsWriter {
                 buffer = tmp;
                 System.arraycopy(mBuffer, 0, tmp, 0, tmp.length);
             }
-            AnnotatedImage.writeChunk(mOut, "IDAT", buffer); //$NON-NLS-1$
+            AnnotatedImage.writeChunk(mOut, "IDAT", buffer);
             mOffset    = 0;
             mAvailable = mBuffer.length;
         }

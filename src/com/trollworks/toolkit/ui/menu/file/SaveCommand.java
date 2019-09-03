@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,11 +11,10 @@
 
 package com.trollworks.toolkit.ui.menu.file;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.Command;
 import com.trollworks.toolkit.ui.widget.Commitable;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -27,29 +26,14 @@ import javax.swing.JOptionPane;
 
 /** Provides the "Save" command. */
 public class SaveCommand extends Command {
-    @Localize("Save")
-    @Localize(locale = "ru", value = "Сохранить")
-    @Localize(locale = "de", value = "Speichern")
-    @Localize(locale = "es", value = "Salvar")
-    private static String SAVE;
-    @Localize("Save changes to \"{0}\"?")
-    @Localize(locale = "ru", value = "Сохранить изменения в \"{0}\"?")
-    @Localize(locale = "de", value = "Änderungen in \"{0}\" speichern?")
-    @Localize(locale = "es", value = "Salvar cambios en \"{0}\"?")
-    private static String SAVE_CHANGES;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The action command this command will issue. */
-    public static final String      CMD_SAVE = "Save"; //$NON-NLS-1$
+    public static final String      CMD_SAVE = "Save";
 
     /** The singleton {@link SaveCommand}. */
     public static final SaveCommand INSTANCE = new SaveCommand();
 
     private SaveCommand() {
-        super(SAVE, CMD_SAVE, KeyEvent.VK_S);
+        super(I18n.Text("Save"), CMD_SAVE, KeyEvent.VK_S);
     }
 
     @Override
@@ -97,7 +81,7 @@ public class SaveCommand extends Command {
     private static boolean attemptSaveInternal(Saveable saveable) {
         if (saveable.isModified()) {
             saveable.toFrontAndFocus();
-            int answer = JOptionPane.showConfirmDialog(UIUtilities.getComponentForDialog(saveable), MessageFormat.format(SAVE_CHANGES, saveable.getSaveTitle()), SAVE, JOptionPane.YES_NO_CANCEL_OPTION);
+            int answer = JOptionPane.showConfirmDialog(UIUtilities.getComponentForDialog(saveable), MessageFormat.format(I18n.Text("Save changes to \"{0}\"?"), saveable.getSaveTitle()), I18n.Text("Save"), JOptionPane.YES_NO_CANCEL_OPTION);
             if (answer == JOptionPane.CANCEL_OPTION || answer == JOptionPane.CLOSED_OPTION) {
                 return false;
             }

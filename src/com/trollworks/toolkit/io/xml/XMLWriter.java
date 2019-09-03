@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -22,26 +22,26 @@ import java.util.Date;
 
 /** A {@link PrintWriter} that has been extended to provide common XML writing helper methods. */
 public class XMLWriter extends PrintWriter {
-    private static final String END_TAG             = "/>"; //$NON-NLS-1$
-    private static final String ENTITY_CODE_PREFIX  = "&#"; //$NON-NLS-1$
-    private static final String AMPERSAND_ENTITY    = "&amp;"; //$NON-NLS-1$
-    private static final String LESS_THAN_ENTITY    = "&lt;"; //$NON-NLS-1$
-    private static final String GREATER_THAN_ENTITY = "&gt;"; //$NON-NLS-1$
-    private static final String END_COMMENT         = " -->"; //$NON-NLS-1$
+    private static final String END_TAG             = "/>";
+    private static final String ENTITY_CODE_PREFIX  = "&#";
+    private static final String AMPERSAND_ENTITY    = "&amp;";
+    private static final String LESS_THAN_ENTITY    = "&lt;";
+    private static final String GREATER_THAN_ENTITY = "&gt;";
+    private static final String END_COMMENT         = " -->";
     /** The encoding used. */
-    public static final String  ENCODING            = "US-ASCII"; //$NON-NLS-1$
+    public static final String  ENCODING            = "US-ASCII";
     /** The 'year' attribute. */
-    public static final String  YEAR                = "year"; //$NON-NLS-1$
+    public static final String  YEAR                = "year";
     /** The 'month' attribute. */
-    public static final String  MONTH               = "month"; //$NON-NLS-1$
+    public static final String  MONTH               = "month";
     /** The 'day' attribute. */
-    public static final String  DAY                 = "day"; //$NON-NLS-1$
+    public static final String  DAY                 = "day";
     /** The 'hour' attribute. */
-    public static final String  HOUR                = "hour"; //$NON-NLS-1$
+    public static final String  HOUR                = "hour";
     /** The 'minute' attribute. */
-    public static final String  MINUTE              = "minute"; //$NON-NLS-1$
+    public static final String  MINUTE              = "minute";
     /** The 'second' attribute. */
-    public static final String  SECOND              = "second"; //$NON-NLS-1$
+    public static final String  SECOND              = "second";
     private int                 mIndent;
 
     /**
@@ -55,9 +55,9 @@ public class XMLWriter extends PrintWriter {
 
     /** Writes a standard XML header. */
     public void writeHeader() {
-        print("<?xml version=\"1.0\" encoding=\""); //$NON-NLS-1$
+        print("<?xml version=\"1.0\" encoding=\"");
         print(ENCODING);
-        println("\" ?>"); //$NON-NLS-1$
+        println("\" ?>");
     }
 
     /**
@@ -74,7 +74,7 @@ public class XMLWriter extends PrintWriter {
 
     /** Starts an XML comment. */
     public void startComment() {
-        print("<!-- "); //$NON-NLS-1$
+        print("<!-- ");
     }
 
     /** Finishes an XML comment. */
@@ -140,9 +140,9 @@ public class XMLWriter extends PrintWriter {
             } else if (ch == '&') {
                 print(AMPERSAND_ENTITY);
             } else if (ch == '"') {
-                print("&quot;"); //$NON-NLS-1$
+                print("&quot;");
             } else if (ch == '\'') {
-                print("&apos;"); //$NON-NLS-1$
+                print("&apos;");
             } else if (ch >= ' ' && ch <= '~') {
                 print(ch);
             } else {
@@ -212,7 +212,7 @@ public class XMLWriter extends PrintWriter {
     public void writeAttribute(String name, String value) {
         print(' ');
         print(name);
-        print("=\""); //$NON-NLS-1$
+        print("=\"");
         writeEncodedAttribute(value);
         print('"');
     }
@@ -419,7 +419,7 @@ public class XMLWriter extends PrintWriter {
 
     private static String toString(double value) {
         String result = Double.toString(value);
-        if (result.endsWith(".0")) { //$NON-NLS-1$
+        if (result.endsWith(".0")) {
             result = result.substring(0, result.length() - 2);
         }
         return result;
@@ -602,7 +602,7 @@ public class XMLWriter extends PrintWriter {
         if (indent) {
             writeIndentation();
         }
-        print("</"); //$NON-NLS-1$
+        print("</");
         print(name);
         finishTagEOL();
     }

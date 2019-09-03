@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2018 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * version 2.0. If a copy of the MPL was not distributed with this file, You
@@ -69,7 +69,7 @@ public class JsonWriter extends FilterWriter {
 
     public void value(boolean value) throws IOException {
         commaIfNeeded();
-        write(value ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$
+        write(value ? "true" : "false");
     }
 
     public void value(short value) throws IOException {
@@ -125,14 +125,14 @@ public class JsonWriter extends FilterWriter {
 
     public void keyValue(String key, boolean value) throws IOException {
         key(key);
-        write(value ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$
+        write(value ? "true" : "false");
         mNeedComma = true;
     }
 
     public void keyValueNot(String key, boolean value, boolean not) throws IOException {
         if (value != not) {
             key(key);
-            write(value ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$
+            write(value ? "true" : "false");
             mNeedComma = true;
         }
     }

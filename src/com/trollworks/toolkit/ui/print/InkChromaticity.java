@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,8 +11,7 @@
 
 package com.trollworks.toolkit.ui.print;
 
-import com.trollworks.toolkit.annotation.Localize;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import javax.print.attribute.standard.Chromaticity;
 
@@ -27,7 +26,7 @@ public enum InkChromaticity {
 
         @Override
         public String toString() {
-            return COLOR_TITLE;
+            return I18n.Text("Color");
         }
     },
     /** Maps to {@link Chromaticity#MONOCHROME}. */
@@ -39,24 +38,9 @@ public enum InkChromaticity {
 
         @Override
         public String toString() {
-            return MONOCHROME_TITLE;
+            return I18n.Text("Monochrome");
         }
     };
-
-    @Localize("Color")
-    @Localize(locale = "ru", value = "Цвет")
-    @Localize(locale = "de", value = "Farbe")
-    @Localize(locale = "es", value = "Color")
-    static String COLOR_TITLE;
-    @Localize("Monochrome")
-    @Localize(locale = "ru", value = "Черно-белый")
-    @Localize(locale = "de", value = "Graustufen")
-    @Localize(locale = "es", value = "Monocromo")
-    static String MONOCHROME_TITLE;
-
-    static {
-        Localization.initialize();
-    }
 
     /** @return The chromaticity attribute. */
     public abstract Chromaticity getChromaticity();

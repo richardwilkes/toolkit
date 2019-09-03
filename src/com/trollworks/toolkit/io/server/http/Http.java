@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -43,7 +43,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /** A {@link Personality} for handling HTTP connections. */
-@SuppressWarnings("nls")
 public class Http extends Personality {
     private static final int          MAXIMUM_HEADER_SIZE  = 8 * 1024;
     private static final int          MAXIMUM_CONTENT_SIZE = 1024 * 1024;

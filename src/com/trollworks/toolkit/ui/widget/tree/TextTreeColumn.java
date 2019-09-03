@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -205,7 +205,7 @@ public class TextTreeColumn extends TreeColumn {
      */
     protected String getText(TreeRow row) {
         String result = mFieldAccessor.getField(row);
-        return result != null ? result : ""; //$NON-NLS-1$
+        return result != null ? result : "";
     }
 
     /**

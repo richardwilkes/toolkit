@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -854,7 +854,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     }
 
     private static void setHighlightColorAndComposite(Graphics2D gc) {
-        gc.setColor(UIManager.getColor("List.selectionBackground")); //$NON-NLS-1$
+        gc.setColor(UIManager.getColor("List.selectionBackground"));
         gc.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, DRAG_OPACITY));
     }
 

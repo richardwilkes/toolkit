@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,12 +11,11 @@
 
 package com.trollworks.toolkit.ui.widget;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.Colors;
 import com.trollworks.toolkit.ui.GraphicsUtilities;
 import com.trollworks.toolkit.ui.TextDrawing;
 import com.trollworks.toolkit.ui.border.LineBorder;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.task.Tasks;
 import com.trollworks.toolkit.utility.text.Numbers;
 import com.trollworks.toolkit.utility.text.Text;
@@ -41,21 +40,6 @@ import javax.swing.SwingConstants;
 
 /** Displays the current memory usage. */
 public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, MouseListener {
-    @Localize("{0}MB used of {1}MB")
-    @Localize(locale = "ru", value = "{0}Мб использовано из {1}Мб")
-    @Localize(locale = "de", value = "{0}MiB von {1}MiB benutzt")
-    @Localize(locale = "es", value = "Usados {0}MB de {1}MB")
-    private static String FORMAT;
-    @Localize("Click to run garbage collection")
-    @Localize(locale = "ru", value = "Нажмите, чтобы запустить сбор мусора")
-    @Localize(locale = "de", value = "Klicken, um eine Speicherbereinigung durchzuführen")
-    @Localize(locale = "es", value = "Haz click para ejecutar el recolector de basura")
-    private static String TOOLTIP;
-
-    static {
-        Localization.initialize();
-    }
-
     private static final long MB            = 1024 * 1024;
     private MemoryMXBean      mMemoryMXBean = ManagementFactory.getMemoryMXBean();
     private long              mUsed;
@@ -66,7 +50,7 @@ public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, 
     public MemoryPanel() {
         super(null);
         setBorder(new LineBorder());
-        setToolTipText(Text.wrapPlainTextForToolTip(TOOLTIP));
+        setToolTipText(Text.wrapPlainTextForToolTip(I18n.Text("Click to run garbage collection")));
         addMouseListener(this);
         addHierarchyListener(this);
         refresh();
@@ -126,7 +110,7 @@ public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, 
     }
 
     private String getText() {
-        return MessageFormat.format(FORMAT, formatMB(mUsed), formatMB(mMax));
+        return MessageFormat.format(I18n.Text("{0}MB used of {1}MB"), formatMB(mUsed), formatMB(mMax));
     }
 
     private static String formatMB(long amt) {

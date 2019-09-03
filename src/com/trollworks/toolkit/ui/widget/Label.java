@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -29,8 +29,8 @@ import javax.swing.SwingConstants;
 /** A simple label replacement that is scalable. */
 public class Label extends JComponent implements PropertyChangeListener {
     /** The property key that is monitored for error messages. */
-    public static final String ERROR_MESSAGE_KEY    = "Error Message"; //$NON-NLS-1$
-    private String             mText                = ""; //$NON-NLS-1$
+    public static final String ERROR_MESSAGE_KEY    = "Error Message";
+    private String             mText                = "";
     private int                mHorizontalAlignment = SwingConstants.LEFT;
     private int                mVerticalAlignment   = SwingConstants.CENTER;
     private JComponent         mRefersTo;
@@ -107,7 +107,7 @@ public class Label extends JComponent implements PropertyChangeListener {
     /** @param text The text to use. */
     public void setText(String text) {
         if (text == null) {
-            text = ""; //$NON-NLS-1$
+            text = "";
         }
         if (!mText.equals(text)) {
             mText = text;

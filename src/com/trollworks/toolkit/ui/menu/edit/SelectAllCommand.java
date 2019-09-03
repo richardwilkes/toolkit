@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,9 +11,8 @@
 
 package com.trollworks.toolkit.ui.menu.edit;
 
-import com.trollworks.toolkit.annotation.Localize;
 import com.trollworks.toolkit.ui.menu.Command;
-import com.trollworks.toolkit.utility.Localization;
+import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -23,24 +22,14 @@ import javax.swing.text.JTextComponent;
 
 /** Provides the "Select All" command. */
 public class SelectAllCommand extends Command {
-    @Localize("Select All")
-    @Localize(locale = "ru", value = "Выбрать всё")
-    @Localize(locale = "de", value = "Alles auswählen")
-    @Localize(locale = "es", value = "Selecionar todo")
-    private static String SELECT_ALL;
-
-    static {
-        Localization.initialize();
-    }
-
     /** The action command this command will issue. */
-    public static final String           CMD_SELECT_ALL = "SelectAll"; //$NON-NLS-1$
+    public static final String           CMD_SELECT_ALL = "SelectAll";
 
     /** The singleton {@link SelectAllCommand}. */
     public static final SelectAllCommand INSTANCE       = new SelectAllCommand();
 
     private SelectAllCommand() {
-        super(SELECT_ALL, CMD_SELECT_ALL, KeyEvent.VK_A);
+        super(I18n.Text("Select All"), CMD_SELECT_ALL, KeyEvent.VK_A);
     }
 
     @Override

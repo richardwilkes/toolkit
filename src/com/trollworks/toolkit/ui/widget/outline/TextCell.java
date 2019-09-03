@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -100,7 +100,7 @@ public class TextCell implements Cell {
     public int getPreferredHeight(Outline outline, Row row, Column column) {
         Scale scale     = Scale.get(outline);
         Font  font      = scale.scale(getFont(row, column));
-        int   minHeight = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
+        int   minHeight = TextDrawing.getPreferredSize(font, "Mg").height;
         int   height    = TextDrawing.getPreferredSize(font, getPresentationText(outline, row, column)).height;
         if (row == null) {
             height = adjustHeight(scale, column.getIcon(), height);
@@ -131,9 +131,9 @@ public class TextCell implements Cell {
         Scale           scale         = Scale.get(outline);
         Font            font          = scale.scale(getFont(row, column));
         int             ascent        = gc.getFontMetrics(font).getAscent();
-        StringTokenizer tokenizer     = new StringTokenizer(getPresentationText(outline, row, column), "\n", true); //$NON-NLS-1$
+        StringTokenizer tokenizer     = new StringTokenizer(getPresentationText(outline, row, column), "\n", true);
         int             totalHeight   = getPreferredHeight(outline, row, column);
-        int             lineHeight    = TextDrawing.getPreferredSize(font, "Mg").height; //$NON-NLS-1$
+        int             lineHeight    = TextDrawing.getPreferredSize(font, "Mg").height;
         int             lineCount     = 0;
         RetinaIcon      icon          = getIcon(row, column);
         int             scaledHMargin = scale.scale(H_MARGIN);
@@ -159,7 +159,7 @@ public class TextCell implements Cell {
         gc.setFont(font);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            if (token.equals("\n")) { //$NON-NLS-1$
+            if (token.equals("\n")) {
                 lineCount++;
             } else {
                 String text = TextDrawing.truncateIfNecessary(font, token, cellWidth, getTruncationPolicy());
@@ -227,7 +227,7 @@ public class TextCell implements Cell {
         if (row != null) {
             String text = row.getDataAsText(column);
             if (text == null) {
-                return nullOK ? null : ""; //$NON-NLS-1$
+                return nullOK ? null : "";
             }
             return text;
         }
@@ -241,7 +241,7 @@ public class TextCell implements Cell {
      */
     @SuppressWarnings("static-method")
     public Font getFont(Row row, Column column) {
-        return UIManager.getFont("TextField.font"); //$NON-NLS-1$
+        return UIManager.getFont("TextField.font");
     }
 
     /** @return The horizontal alignment. */
@@ -290,7 +290,7 @@ public class TextCell implements Cell {
         if (row != null) {
             String text = row.getToolTip(column);
             if (text == null) {
-                return nullOK ? null : ""; //$NON-NLS-1$
+                return nullOK ? null : "";
             }
             return text;
         }

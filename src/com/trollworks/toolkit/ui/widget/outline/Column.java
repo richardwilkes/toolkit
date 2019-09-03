@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -24,7 +24,7 @@ import java.awt.event.MouseEvent;
 /** Represents a single column within a {@link Outline} panel. */
 public class Column implements Transferable {
     /** The data flavor for this class. */
-    public static final DataFlavor DATA_FLAVOR = new DataFlavor(Column.class, "Outline Column"); //$NON-NLS-1$
+    public static final DataFlavor DATA_FLAVOR = new DataFlavor(Column.class, "Outline Column");
     private HeaderCell             mHeaderCell;
     private Cell                   mRowCell;
     private boolean                mVisible;
@@ -111,7 +111,7 @@ public class Column implements Transferable {
      * @param rowCell     The cell to use for rows.
      */
     public Column(int id, String name, RetinaIcon icon, String toolTipText, Cell rowCell) {
-        mName        = name == null || name.length() == 0 ? " " : name; //$NON-NLS-1$
+        mName        = name == null || name.length() == 0 ? " " : name;
         mIcon        = icon;
         mToolTipText = toolTipText;
         mHeaderCell  = new HeaderCell();
@@ -266,7 +266,7 @@ public class Column implements Transferable {
      * @param name The name of this column, which can be retrieved by using {@link #toString()}.
      */
     public void setName(String name) {
-        mName = name == null || name.length() == 0 ? " " : name; //$NON-NLS-1$
+        mName = name == null || name.length() == 0 ? " " : name;
     }
 
     @Override
@@ -276,7 +276,7 @@ public class Column implements Transferable {
 
     /** @return The name of this column, with any new lines replaced with spaces. */
     public String getSanitizedName() {
-        return mName.replaceAll("\n", " "); //$NON-NLS-1$ //$NON-NLS-2$
+        return mName.replaceAll("\n", " ");
     }
 
     /** @return The icon used in the header of this column, if any. */

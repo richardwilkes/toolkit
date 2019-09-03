@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -44,7 +44,7 @@ import javax.swing.JPanel;
 
 /** Provides an area where {@link Dockable} components can be displayed and rearranged. */
 public class Dock extends JPanel implements MouseListener, MouseMotionListener, PropertyChangeListener, DropTargetListener {
-    private static final String PERMANENT_FOCUS_OWNER_KEY = "permanentFocusOwner";         //$NON-NLS-1$
+    private static final String PERMANENT_FOCUS_OWNER_KEY = "permanentFocusOwner";
     private static final int    GRIP_GAP                  = 1;
     private static final int    GRIP_WIDTH                = 4;
     private static final int    GRIP_HEIGHT               = 2;
@@ -364,7 +364,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
         if (mgr instanceof DockLayout) {
             super.setLayout(mgr);
         } else {
-            throw new IllegalArgumentException("Must use a DockLayout."); //$NON-NLS-1$
+            throw new IllegalArgumentException("Must use a DockLayout.");
         }
     }
 
@@ -400,7 +400,6 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
         }
     }
 
-    @SuppressWarnings("nls")
     private static void pad(StringBuilder buffer, int depth) {
         for (int i = 0; i < depth; i++) {
             buffer.append("...");
@@ -458,7 +457,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
     }
 
     private static final IllegalComponentStateException createIllegalComponentStateException() {
-        return new IllegalComponentStateException("Use one of the dock() methods instead"); //$NON-NLS-1$
+        return new IllegalComponentStateException("Use one of the dock() methods instead");
     }
 
     @Override
@@ -685,7 +684,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
             again = false;
             title = baseTitle;
             if (++value > 1) {
-                title += " " + value; //$NON-NLS-1$
+                title += " " + value;
             }
             for (Dockable dockable : dockables) {
                 if (dockable != exclude && title.equals(dockable.getTitle())) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -11,29 +11,10 @@
 
 package com.trollworks.toolkit.utility;
 
-import com.trollworks.toolkit.annotation.Localize;
-
 import java.util.Calendar;
 
 /** Provides support for various forms of version numbers. */
 public class Version {
-    @Localize("Invalid version format")
-    @Localize(locale = "pt-BR", value = "Formato de versão inválido")
-    @Localize(locale = "ru", value = "Недопустимая верия формата")
-    @Localize(locale = "de", value = "Ungültiges Format der Versionsnumer")
-    @Localize(locale = "es", value = "Formato de versión no válido")
-    private static String INVALID_VERSION_FORMAT;
-    @Localize("Built on %1$tB %1$te, %1$tY at %1$tr")
-    @Localize(locale = "pt-BR", value = "Compilado no %1$tB %1$te, %1$tY em %1$tr")
-    @Localize(locale = "ru", value = "Сборка программы от %1$tB %1$te, %1$tY в %1$tr")
-    @Localize(locale = "de", value = "Erstellt am %1$te. %1$tB %1$tY um %1$tT")
-    @Localize(locale = "es", value = "Compilado el %1$tB %1$te, %1$tY at %1$tr")
-    private static String BUILD_FORMAT;
-
-    static {
-        Localization.initialize();
-    }
-
     public static final int  MAJOR_BITS             = 8;
     public static final int  MINOR_BITS             = 8;
     public static final int  BUGFIX_BITS            = 9;
@@ -113,7 +94,7 @@ public class Version {
     }
 
     public static String toBuildTimestamp(long version) {
-        return String.format(BUILD_FORMAT, getQualifierAsCalendar(version));
+        return String.format(I18n.Text("Built on %1$tB %1$te, %1$tY at %1$tr"), getQualifierAsCalendar(version));
     }
 
     public static String toString(long version, boolean includeQualifier) {
@@ -167,7 +148,7 @@ public class Version {
     }
 
     public static long extract(String version) throws NumberFormatException {
-        String[] parts = version.split("[\\._-]", 9); //$NON-NLS-1$
+        String[] parts = version.split("[\\._-]", 9);
         switch (parts.length) {
         case 2:
             long c2p1 = Long.parseLong(parts[0]);
@@ -246,13 +227,13 @@ public class Version {
             }
             return toVersion(check((int) c4p1, MAJOR_BITS), check((int) c4p2, MINOR_BITS), check((int) c4p3, BUGFIX_BITS), check(year, QUALIFIER_YEAR_BITS), check(month, QUALIFIER_MONTH_BITS), check(day, QUALIFIER_DAY_BITS), check(hour, QUALIFIER_HOUR_BITS), check(minute, QUALIFIER_MINUTE_BITS), check(second, QUALIFIER_SECOND_BITS));
         default:
-            throw new NumberFormatException(INVALID_VERSION_FORMAT);
+            throw new NumberFormatException(I18n.Text("Invalid version format"));
         }
     }
 
     private static int check(int value, int maxBits) throws NumberFormatException {
         if (value > (1 << maxBits) - 1) {
-            throw new NumberFormatException(INVALID_VERSION_FORMAT);
+            throw new NumberFormatException(I18n.Text("Invalid version format"));
         }
         return value;
     }

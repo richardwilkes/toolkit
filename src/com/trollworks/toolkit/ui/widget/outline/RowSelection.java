@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -18,7 +18,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 /** Allows rows to be part of drag and drop operations internal to the JVM. */
 public class RowSelection implements Transferable {
     /** The data flavor for this class. */
-    public static final DataFlavor DATA_FLAVOR = new DataFlavor(RowSelection.class, "Outline Rows"); //$NON-NLS-1$
+    public static final DataFlavor DATA_FLAVOR = new DataFlavor(RowSelection.class, "Outline Rows");
     private OutlineModel           mModel;
     private Row[]                  mRows;
     private String                 mCache;

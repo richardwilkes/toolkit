@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -19,18 +19,18 @@ import java.util.Date;
 
 /** Provides standardized logging. */
 public class Log {
-    private static final String           SEPARATOR = " | "; //$NON-NLS-1$
-    private static final SimpleDateFormat FORMAT    = new SimpleDateFormat("yyyy.MM.dd" + SEPARATOR + "HH:mm:ss.SSS"); //$NON-NLS-1$ //$NON-NLS-2$
+    private static final String           SEPARATOR = " | ";
+    private static final SimpleDateFormat FORMAT    = new SimpleDateFormat("yyyy.MM.dd" + SEPARATOR + "HH:mm:ss.SSS");
     private static PrintStream            OUT;
 
     static {
         OUT = System.out;
-        String property = Debug.getPropertyOrEnvironmentSetting("com.trollworks.log"); //$NON-NLS-1$
+        String property = Debug.getPropertyOrEnvironmentSetting("com.trollworks.log");
         if (property != null && !property.isEmpty()) {
             try {
                 OUT = new PrintStream(property);
             } catch (Throwable throwable) {
-                error(null, "Unable to redirect log to " + property, throwable); //$NON-NLS-1$
+                error(null, "Unable to redirect log to " + property, throwable);
             }
         }
     }
