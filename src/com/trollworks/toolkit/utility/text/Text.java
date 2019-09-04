@@ -59,6 +59,23 @@ public class Text {
     }
 
     /**
+     * @param ch the digit to convert.
+     * @return the hex value or zero if it is not a valid hex digit.
+     */
+    public static int hexDigitValue(char ch) {
+        if (ch >= '0' && ch <= '9') {
+            return ch - '0';
+        }
+        if (ch >= 'a' && ch <= 'f') {
+            return 10 + ch - 'a';
+        }
+        if (ch >= 'A' && ch <= 'F') {
+            return 10 + ch - 'A';
+        }
+        return 0;
+    }
+
+    /**
      * @param data The data to create a hex string for.
      * @return A string of two character hexadecimal values for each byte.
      */
@@ -379,6 +396,162 @@ public class Text {
                 break;
             default:
                 buffer.append(ch);
+            }
+        }
+        return buffer.toString();
+    }
+
+    /**
+     * @param ch the character to check.
+     * @return <code>true</code> if the character is a valid hex digit.
+     */
+    public static boolean isHexDigit(char ch) {
+        return ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'f' || ch >= 'A' && ch <= 'F';
+    }
+
+    /**
+     * @param ch the character to check.
+     * @return <code>true</code> if the character is printable.
+     */
+    public static boolean isPrintableChar(char ch) {
+        if (!Character.isISOControl(ch) && Character.isDefined(ch)) {
+            try {
+                Character.UnicodeBlock block = Character.UnicodeBlock.of(ch);
+                return block != null && block != Character.UnicodeBlock.SPECIALS;
+            } catch (Exception ex) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param in the string to quote.
+     * @return the quoted version of the string.
+     */
+    public static String quote(String in) {
+        StringBuilder buffer = new StringBuilder();
+        int           length = in.length();
+        buffer.append('"');
+        for (int i = 0; i < length; i++) {
+            char ch = in.charAt(i);
+            if (ch == '"' || ch == '\\') {
+                buffer.append('\\');
+                buffer.append(ch);
+            } else if (isPrintableChar(ch)) {
+                buffer.append(ch);
+            } else {
+                switch (ch) {
+                case '\b':
+                    buffer.append("\\b");
+                    break;
+                case '\f':
+                    buffer.append("\\f");
+                    break;
+                case '\n':
+                    buffer.append("\\n");
+                    break;
+                case '\r':
+                    buffer.append("\\r");
+                    break;
+                case '\t':
+                    buffer.append("\\t");
+                    break;
+                default:
+                    buffer.append("\\u");
+                    buffer.append(HEX_DIGITS[ch >> 12 & 0xF]);
+                    buffer.append(HEX_DIGITS[ch >> 8 & 0xF]);
+                    buffer.append(HEX_DIGITS[ch >> 4 & 0xF]);
+                    buffer.append(HEX_DIGITS[ch & 0xF]);
+                    break;
+                }
+            }
+        }
+        buffer.append('"');
+        return buffer.toString();
+    }
+
+    /**
+     * @param in a string previously passed to {@link #quote(String)} to unquote.
+     * @return the unquoted version of the string.
+     */
+    public static String unquote(String in) {
+        StringBuilder buffer = new StringBuilder();
+        int           length = in.length();
+        if (length < 2 || in.charAt(0) != '"' || in.charAt(length - 1) != '"') {
+            return "";
+        }
+        length--;
+        int state = 0;
+        int value = 0;
+        for (int i = 1; i < length; i++) {
+            char ch = in.charAt(i);
+            switch (state) {
+            case 0: // Normal
+                if (ch == '\\') {
+                    state = 1;
+                } else {
+                    buffer.append(ch);
+                }
+                break;
+            case 1: // Process escape
+                switch (ch) {
+                case '\\':
+                    buffer.append(ch);
+                    state = 0;
+                    break;
+                case '"':
+                    buffer.append(ch);
+                    state = 0;
+                    break;
+                case 'b':
+                    buffer.append('\b');
+                    state = 0;
+                    break;
+                case 'f':
+                    buffer.append('\f');
+                    state = 0;
+                    break;
+                case 'n':
+                    buffer.append('\n');
+                    state = 0;
+                    break;
+                case 'r':
+                    buffer.append('\r');
+                    state = 0;
+                    break;
+                case 't':
+                    buffer.append('\t');
+                    state = 0;
+                    break;
+                case 'u':
+                    value = 0;
+                    state = 2;
+                    break;
+                default:
+                    state = 0; // In case bogus input was provided
+                    break;
+                }
+                break;
+            case 2: // Process 4-byte escape, part 1
+                value = hexDigitValue(ch) << 12;
+                state++;
+                break;
+            case 3: // Process 4-byte escape, part 2
+                value |= hexDigitValue(ch) << 8;
+                state++;
+                break;
+            case 4: // Process 4-byte escape, part 3
+                value |= hexDigitValue(ch) << 4;
+                state++;
+                break;
+            case 5: // Process 4-byte escape, part 4
+                buffer.append((char) (value | hexDigitValue(ch)));
+                state = 0;
+                break;
+            default:
+                state = 0; // In case bogus input was provided
+                break;
             }
         }
         return buffer.toString();
