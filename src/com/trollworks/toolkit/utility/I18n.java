@@ -11,10 +11,11 @@
 
 package com.trollworks.toolkit.utility;
 
+import com.trollworks.toolkit.workarounds.AppHome;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,17 +58,13 @@ public class I18n {
      * Creates a new I18n from the files at 'dir'.
      *
      * @param dir the directory to scan for localization files. If null, then a directory named
-     *            'i18n' will be used.
+     *            'i18n' off of the AppHome.get() will be used.
      */
     public I18n(Path dir) {
         try {
             if (dir == null) {
-                // user.dir may not be set correctly if this is a bundled app, so try PWD first
-                String pwd = System.getenv("PWD");
-                if (pwd == null || pwd.isEmpty()) {
-                    pwd = System.getProperty("user.dir");
-                }
-                dir = Paths.get(pwd, "i18n").normalize().toAbsolutePath();
+                AppHome.setup(I18n.class); // This should have already been called...
+                dir = AppHome.get().resolve("i18n");
             }
             if (Files.isDirectory(dir)) {
                 Files.list(dir).forEach(path -> {

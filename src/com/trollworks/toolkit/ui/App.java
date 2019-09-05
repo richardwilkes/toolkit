@@ -21,6 +21,7 @@ import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.BundleInfo;
 import com.trollworks.toolkit.utility.LaunchProxy;
 import com.trollworks.toolkit.utility.cmdline.CmdLine;
+import com.trollworks.toolkit.workarounds.AppHome;
 
 import java.awt.Desktop;
 import java.awt.Desktop.Action;
@@ -30,9 +31,7 @@ import java.awt.KeyboardFocusManager;
 import java.awt.desktop.QuitStrategy;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.net.URI;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.BitSet;
 
 import javax.swing.JMenuBar;
@@ -43,50 +42,19 @@ import javax.swing.JPanel;
  * this information should be filled out as early as possible.
  */
 public class App implements KeyEventDispatcher, Runnable {
-    private static Path                    APP_HOME_PATH;
     private static boolean                 NOTIFICATION_ALLOWED = false;
     private static Class<? extends JPanel> ABOUT_PANEL_CLASS    = null;
     private static BitSet                  KEY_STATE            = new BitSet();
     private boolean                        mHasStarted;
 
     public static final void setup(Class<?> theClass) {
-        // Fix the current working directory, as bundled apps break the normal logic.
-        // Sadly, this still doesn't fix stuff references from the "default" filesystem
-        // class, as it is already initialized to the wrong value and won't pick this
-        // change up.
-        String pwd = System.getenv("PWD");
-        if (pwd != null && !pwd.isEmpty()) {
-            System.setProperty("user.dir", pwd);
-        }
+        AppHome.setup(theClass);
         BundleInfo.setDefault(new BundleInfo(theClass));
-        Path path;
-        try {
-            path = Paths.get(System.getProperty("java.home"));
-            if (path.endsWith("Contents/PlugIns/Java.runtime/Contents/Home")) {
-                // Running inside a macOS package
-                path = path.getParent().getParent().getParent().getParent().getParent().getParent();
-            } else if (path.endsWith("Contents/MacOS/support")) {
-                // Running inside a macOS package (alt)
-                path = path.getParent().getParent().getParent().getParent();
-            } else if (path.endsWith("runtime")) {
-                // Running inside a linux package
-                path = path.getParent();
-            } else if (path.endsWith("support")) {
-                // Running inside module-ized package
-                path = path.getParent();
-            } else {
-                URI uri = theClass.getProtectionDomain().getCodeSource().getLocation().toURI();
-                path = Paths.get(uri).normalize().getParent().toAbsolutePath();
-            }
-        } catch (Throwable throwable) {
-            path = Paths.get(".");
-        }
-        APP_HOME_PATH = path.normalize().toAbsolutePath();
     }
 
     /** @return The application's 'home' directory. */
     public static final Path getHomePath() {
-        return APP_HOME_PATH;
+        return AppHome.get();
     }
 
     /** Creates a new {@link App}. */
