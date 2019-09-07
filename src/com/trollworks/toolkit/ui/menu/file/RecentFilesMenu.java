@@ -31,6 +31,7 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
     private static final int             PREFS_VERSION = 1;
     private static final int             MAX_RECENTS   = 20;
     private static final ArrayList<File> RECENTS       = new ArrayList<>();
+    private static boolean               NEED_REFRESH  = true;
 
     static {
         loadFromPreferences();
@@ -60,7 +61,8 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
         for (String allowed : FileType.getOpenableExtensions()) {
             if (allowed.equals(extension)) {
                 if (file.canRead()) {
-                    file = PathUtils.getFile(PathUtils.getFullPath(file));
+                    NEED_REFRESH = true;
+                    file         = PathUtils.getFile(PathUtils.getFullPath(file));
                     RECENTS.remove(file);
                     RECENTS.add(0, file);
                     if (RECENTS.size() > MAX_RECENTS) {
@@ -116,25 +118,28 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
 
     @Override
     public void menuSelected(MenuEvent event) {
-        removeAll();
-        ArrayList<File> list = new ArrayList<>();
-        for (File file : RECENTS) {
-            if (file.canRead()) {
-                list.add(file);
-                add(new JMenuItem(new OpenDataFileCommand(PathUtils.getLeafName(file.getName(), false), file)));
-                if (list.size() == MAX_RECENTS) {
-                    break;
+        if (NEED_REFRESH) {
+            NEED_REFRESH = false;
+            removeAll();
+            ArrayList<File> list = new ArrayList<>();
+            for (File file : RECENTS) {
+                if (file.canRead()) {
+                    list.add(file);
+                    add(new JMenuItem(new OpenDataFileCommand(PathUtils.getLeafName(file.getName(), false), file)));
+                    if (list.size() == MAX_RECENTS) {
+                        break;
+                    }
                 }
             }
-        }
-        RECENTS.clear();
-        RECENTS.addAll(list);
+            RECENTS.clear();
+            RECENTS.addAll(list);
 
-        if (getRecentCount() > 0) {
-            addSeparator();
+            if (getRecentCount() > 0) {
+                addSeparator();
+            }
+            JMenuItem item = new JMenuItem(ClearRecentFilesMenuCommand.INSTANCE);
+            ClearRecentFilesMenuCommand.INSTANCE.adjust();
+            add(item);
         }
-        JMenuItem item = new JMenuItem(ClearRecentFilesMenuCommand.INSTANCE);
-        ClearRecentFilesMenuCommand.INSTANCE.adjust();
-        add(item);
     }
 }
