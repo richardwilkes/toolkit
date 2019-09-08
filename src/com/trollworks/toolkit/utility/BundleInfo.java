@@ -214,7 +214,13 @@ public class BundleInfo {
 
     /** @return A full application banner for this code bundle. */
     public String getAppBanner() {
-        return String.format("%s %s\n%s\n%s", getName(), Version.toString(mVersion, false), Version.toBuildTimestamp(mVersion), getCopyrightBanner());
+        String banner = String.format("%s %s\n%s\n%s", getName(), Version.toString(mVersion, false), Version.toBuildTimestamp(mVersion), getCopyrightBanner());
+        if (Platform.isWindows()) {
+            // The windows command prompt doesn't understand the copyright symbol, so translate it
+            // to something it can deal with.
+            banner = banner.replaceAll("\u00A9", "(c)");
+        }
+        return banner;
     }
 
     /** @return The name of the executable the code bundle is launched by. */
