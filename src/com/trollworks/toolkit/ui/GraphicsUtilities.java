@@ -26,11 +26,14 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.InputEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.print.PrinterGraphics;
@@ -325,23 +328,37 @@ public class GraphicsUtilities {
 
     /** Attempts to force the app to the front. */
     public static void forceAppToFront() {
-        boolean useFallback = false;
+        // Calling Desktop.isDesktopSupported() generally doesn't have the desired effect on Windows
+        boolean force = Platform.isWindows();
         if (Desktop.isDesktopSupported()) {
             try {
                 Desktop.getDesktop().requestForeground(true);
             } catch (UnsupportedOperationException uoex) {
-                useFallback = true;
+                force = true;
             }
         }
-        if (useFallback) {
+        if (force) {
             AppWindow topWindow = AppWindow.getTopWindow();
             if (topWindow != null) {
+                if (!topWindow.isVisible()) {
+                    topWindow.setVisible(true);
+                }
                 boolean alwaysOnTop = topWindow.isAlwaysOnTop();
-                topWindow.setExtendedState(topWindow.getExtendedState() & ~Frame.ICONIFIED & Frame.NORMAL);
-                topWindow.setAlwaysOnTop(true);
+                topWindow.setExtendedState(Frame.NORMAL);
                 topWindow.toFront();
-                topWindow.requestFocus();
-                topWindow.setAlwaysOnTop(alwaysOnTop);
+                topWindow.setAlwaysOnTop(true);
+                try {
+                    Point savedMouse = MouseInfo.getPointerInfo().getLocation();
+                    Robot robot      = new Robot();
+                    robot.mouseMove(topWindow.getX() + 100, topWindow.getY() + 10);
+                    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                    robot.mouseMove(savedMouse.x, savedMouse.y);
+                } catch (Exception ex) {
+                    // Ignore
+                } finally {
+                    topWindow.setAlwaysOnTop(alwaysOnTop);
+                }
             }
         }
     }
