@@ -25,60 +25,64 @@ import java.util.Set;
 
 public class LinuxDesktop {
     public static void createDesktopFile(BundleInfo bi, List<String> execArgs, List<String> categories, List<String> keywords) throws IOException {
-        String home = System.getenv("HOME");
-        if (home == null) {
-            home = ".";
-        }
-        home = home.replaceAll(" ", "\\ ");
-        String appHome  = AppHome.get().toString().replaceAll(" ", "\\ ");
-        String exeName  = bi.getExecutableName().replaceAll(" ", "\\ ");
-        Path   filePath = Paths.get(home, ".local", "share", "applications", exeName + ".desktop");
-        try (PrintStream out = new PrintStream(filePath.toString())) {
-            out.println("[Desktop Entry]");
-            out.println("Version=1.0");
-            out.println("Type=Application");
-            out.println("Name=" + bi.getName());
-            out.println("Icon=" + appHome + "/support/" + exeName + ".png");
-            out.println("Path=" + appHome);
-            out.print("Exec=" + appHome + "/" + exeName);
-            for (String arg : execArgs) {
-                out.print(" ");
-                out.print(arg);
+        String exeName = bi.getExecutableName().replaceAll(" ", "\\ ");
+        if (exeName != "") {
+            String home = System.getenv("HOME");
+            if (home == null) {
+                home = ".";
             }
-            out.println();
-            out.println("Categories=");
-            boolean first = true;
-            for (String category : categories) {
-                if (first) {
-                    first = false;
-                } else {
-                    out.print(";");
+            home = home.replaceAll(" ", "\\ ");
+            String appHome  = AppHome.get().toString().replaceAll(" ", "\\ ");
+            Path   filePath = Paths.get(home, ".local", "share", "applications");
+            Files.createDirectories(filePath);
+            filePath = filePath.resolve(exeName + ".desktop");
+            try (PrintStream out = new PrintStream(filePath.toString())) {
+                out.println("[Desktop Entry]");
+                out.println("Version=1.0");
+                out.println("Type=Application");
+                out.println("Name=" + bi.getName());
+                out.println("Icon=" + appHome + "/support/app.png");
+                out.println("Path=" + appHome);
+                out.print("Exec=" + appHome + "/" + exeName);
+                for (String arg : execArgs) {
+                    out.print(" ");
+                    out.print(arg);
                 }
-                out.print(category);
-            }
-            out.println();
-            out.println("Keywords=");
-            first = true;
-            for (String keyword : keywords) {
-                if (first) {
-                    first = false;
-                } else {
-                    out.print(";");
+                out.println();
+                out.print("Categories=");
+                boolean first = true;
+                for (String category : categories) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        out.print(";");
+                    }
+                    out.print(category);
                 }
-                out.print(keyword);
+                out.println();
+                out.print("Keywords=");
+                first = true;
+                for (String keyword : keywords) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        out.print(";");
+                    }
+                    out.print(keyword);
+                }
+                out.println();
+                out.println("Terminal=false");
             }
-            out.println();
-            out.println("Terminal=false");
+            Set<PosixFilePermission> attrs = new HashSet<>();
+            attrs.add(PosixFilePermission.OWNER_READ);
+            attrs.add(PosixFilePermission.OWNER_WRITE);
+            attrs.add(PosixFilePermission.OWNER_EXECUTE);
+            attrs.add(PosixFilePermission.GROUP_READ);
+            attrs.add(PosixFilePermission.GROUP_WRITE);
+            attrs.add(PosixFilePermission.GROUP_EXECUTE);
+            attrs.add(PosixFilePermission.OTHERS_READ);
+            attrs.add(PosixFilePermission.OTHERS_EXECUTE);
+            Files.setPosixFilePermissions(filePath, attrs);
         }
-        Set<PosixFilePermission> attrs = new HashSet<>();
-        attrs.add(PosixFilePermission.OWNER_READ);
-        attrs.add(PosixFilePermission.OWNER_WRITE);
-        attrs.add(PosixFilePermission.OWNER_EXECUTE);
-        attrs.add(PosixFilePermission.GROUP_READ);
-        attrs.add(PosixFilePermission.GROUP_WRITE);
-        attrs.add(PosixFilePermission.GROUP_EXECUTE);
-        attrs.add(PosixFilePermission.OTHERS_READ);
-        attrs.add(PosixFilePermission.OTHERS_EXECUTE);
-        Files.setPosixFilePermissions(filePath, attrs);
     }
 }
