@@ -23,6 +23,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
@@ -411,5 +413,25 @@ public class UIUtilities {
             }
         }
         return false;
+    }
+
+    public static Point convertDropTargetDragPointTo(DropTargetDragEvent dtde, Component comp) {
+        Point pt = dtde.getLocation();
+        convertPoint(pt, dtde.getDropTargetContext().getComponent(), comp);
+        return pt;
+    }
+
+    public static void updateDropTargetDragPointTo(DropTargetDragEvent dtde, Component comp) {
+        convertPoint(dtde.getLocation(), dtde.getDropTargetContext().getComponent(), comp);
+    }
+
+    public static Point convertDropTargetDropPointTo(DropTargetDropEvent dtde, Component comp) {
+        Point pt = dtde.getLocation();
+        convertPoint(pt, dtde.getDropTargetContext().getComponent(), comp);
+        return pt;
+    }
+
+    public static void updateDropTargetDropPointTo(DropTargetDropEvent dtde, Component comp) {
+        convertPoint(dtde.getLocation(), dtde.getDropTargetContext().getComponent(), comp);
     }
 }
