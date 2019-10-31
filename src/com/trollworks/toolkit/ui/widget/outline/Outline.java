@@ -2098,7 +2098,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                 return;
             }
         } else if (mAlternateDragDestination != null) {
-            UIUtilities.convertPoint(dtde.getLocation(), this, mAlternateDragDestination);
+            setDragPointToAlternate(dtde);
             mAlternateDragDestination.dragEnter(dtde);
             return;
         }
@@ -2151,11 +2151,21 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                 return;
             }
         } else if (mAlternateDragDestination != null) {
-            UIUtilities.convertPoint(dtde.getLocation(), this, mAlternateDragDestination);
+            setDragPointToAlternate(dtde);
             mAlternateDragDestination.dragOver(dtde);
             return;
         }
         dtde.rejectDrag();
+    }
+
+    private void setDragPointToAlternate(DropTargetDragEvent dtde) {
+        UIUtilities.convertPoint(dtde.getLocation(), dtde.getDropTargetContext().getComponent(), mAlternateDragDestination);
+    }
+
+    private Point dragPointToLocal(DropTargetDragEvent dtde) {
+        Point pt = dtde.getLocation();
+        UIUtilities.convertPoint(pt, dtde.getDropTargetContext().getComponent(), this);
+        return pt;
     }
 
     /**
@@ -2165,7 +2175,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
      * @return The value to return via {@link DropTargetDragEvent#acceptDrag(int)}.
      */
     protected int dragOverColumn(DropTargetDragEvent dtde) {
-        int x    = dtde.getLocation().x;
+        int x    = dragPointToLocal(dtde).x;
         int over = overColumnIndex(x);
         int cur  = mModel.getIndexOfColumn(mModel.getDragColumn());
         if (over != cur && over != -1) {
@@ -2204,7 +2214,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
         int       savedChildInsertIndex = mDragChildInsertIndex;
         Row       parentRow             = null;
         int       childInsertIndex      = -1;
-        Point     pt                    = dtde.getLocation();
+        Point     pt                    = dragPointToLocal(dtde);
         int       y                     = getInsets().top;
         int       last                  = getLastRowToDisplay();
         Row[]     dragRows              = mModel.getDragRows();
@@ -2323,7 +2333,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                 return;
             }
         } else if (mAlternateDragDestination != null) {
-            UIUtilities.convertPoint(dtde.getLocation(), this, mAlternateDragDestination);
+            setDragPointToAlternate(dtde);
             mAlternateDragDestination.dropActionChanged(dtde);
             return;
         }
@@ -2430,7 +2440,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
             }
             dtde.dropComplete(true);
         } else if (mAlternateDragDestination != null) {
-            UIUtilities.convertPoint(dtde.getLocation(), this, mAlternateDragDestination);
+            UIUtilities.convertPoint(dtde.getLocation(), dtde.getDropTargetContext().getComponent(), mAlternateDragDestination);
             mAlternateDragDestination.drop(dtde);
         }
     }
