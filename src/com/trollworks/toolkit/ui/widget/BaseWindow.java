@@ -52,7 +52,7 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
     public static boolean hasOwnedWindowsShowing(Window window) {
         if (window != null) {
             for (Window one : window.getOwnedWindows()) {
-                if (one.isShowing()) {
+                if (one.isShowing() && one.getType() != Window.Type.POPUP) {
                     return true;
                 }
             }
