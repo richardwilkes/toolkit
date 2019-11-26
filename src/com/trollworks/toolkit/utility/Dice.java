@@ -291,6 +291,21 @@ public class Dice implements Cloneable {
         return mCount;
     }
 
+    /** @return The number of sides on each die. */
+    public int getDieSides() {
+        return mSides;
+    }
+
+    /** @return The bonus or penalty to the roll. */
+    public int getModifier() {
+        return mModifier;
+    }
+
+    /** @return The multiplier for the roll. */
+    public int getMultiplier() {
+        return mMultiplier;
+    }
+
     /** @return The result of rolling the dice. */
     public int roll() {
         return roll(RANDOM);
