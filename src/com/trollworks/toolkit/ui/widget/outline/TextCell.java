@@ -262,11 +262,11 @@ public class TextCell implements Cell {
 
     @Override
     public String getToolTipText(Outline outline, MouseEvent event, Rectangle bounds, Row row, Column column) {
-        Scale scale = Scale.get(outline);
-        if (row.alwaysShowToolTip(column) || getPreferredWidth(outline, row, column) - scale.scale(H_MARGIN) > column.getWidth() - scale.scale(row.getOwner().getIndentWidth(row, column))) {
-            return getToolTip(row, column, true);
+        String text = row.getToolTip(column);
+        if (text == null || text.isBlank()) {
+            return null;
         }
-        return null;
+        return text;
     }
 
     @Override
@@ -278,23 +278,4 @@ public class TextCell implements Cell {
     public void mouseClicked(MouseEvent event, Rectangle bounds, Row row, Column column) {
         // Does nothing
     }
-
-    /**
-     * @param row    The row.
-     * @param column The column.
-     * @param nullOK <code>true</code> if <code>null</code> may be returned.
-     * @return The tooltip of this cell as a string.
-     */
-    @SuppressWarnings("static-method")
-    protected String getToolTip(Row row, Column column, boolean nullOK) {
-        if (row != null) {
-            String text = row.getToolTip(column);
-            if (text == null) {
-                return nullOK ? null : "";
-            }
-            return text;
-        }
-        return column.toString();
-    }
-
 }

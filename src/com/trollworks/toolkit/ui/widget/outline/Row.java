@@ -334,19 +334,9 @@ public abstract class Row {
         return depth;
     }
 
-    /**
-     * @column The column to provide a tooltip for.
-     * @return Whether a tooltip should be shown even for those columns whose text isn't being
-     *         truncated.
-     */
-    @SuppressWarnings("static-method")
-    public boolean alwaysShowToolTip(@SuppressWarnings("unused") Column column) {
-        return false;
-    }
-
-    /** @return The string to display as tooltip. Defaults to the column's data. */
+    /** @return The string to display as tooltip. Defaults to <code>null</code>. */
+    @SuppressWarnings({ "static-method", "unused" })
     public String getToolTip(Column column) {
-        return getDataAsText(column);
+        return null;
     }
-
 }
