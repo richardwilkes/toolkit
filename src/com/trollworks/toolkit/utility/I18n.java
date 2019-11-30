@@ -11,11 +11,13 @@
 
 package com.trollworks.toolkit.utility;
 
+import com.trollworks.toolkit.utility.text.Text;
 import com.trollworks.toolkit.workarounds.AppHome;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +67,9 @@ public class I18n {
             if (dir == null) {
                 AppHome.setup(I18n.class); // This should have already been called...
                 dir = AppHome.get().resolve("i18n");
+                if (Platform.isMacintosh() && !Files.isDirectory(dir)) {
+                    dir = Paths.get(System.getProperty("java.home")).resolve("../../../app/i18n");
+                }
             }
             if (Files.isDirectory(dir)) {
                 Files.list(dir).forEach(path -> {
@@ -85,20 +90,20 @@ public class I18n {
                                         kv.value = null;
                                     }
                                     if (kv.key == null) {
-                                        kv.key              = line.substring(2);
+                                        kv.key              = Text.unquote(line.substring(2));
                                         kv.lastKeyLineStart = kv.line;
                                     } else {
                                         kv.key += '\n';
-                                        kv.key += line.substring(2);
+                                        kv.key += Text.unquote(line.substring(2));
                                     }
                                     kv.last = 'k';
                                 } else if (line.startsWith("v:")) {
                                     if (kv.key != null) {
                                         if (kv.value == null) {
-                                            kv.value = line.substring(2);
+                                            kv.value = Text.unquote(line.substring(2));
                                         } else {
                                             kv.value += '\n';
-                                            kv.value += line.substring(2);
+                                            kv.value += Text.unquote(line.substring(2));
                                         }
                                         kv.last = 'v';
                                     } else {
