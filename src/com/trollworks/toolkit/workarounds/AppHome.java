@@ -32,12 +32,9 @@ public class AppHome {
             Path path;
             try {
                 path = Paths.get(System.getProperty("java.home"));
-                if (path.endsWith("Contents/PlugIns/Java.runtime/Contents/Home")) {
+                if (path.endsWith("Contents/runtime/Contents/Home")) {
                     // Running inside a macOS package
-                    path = path.getParent().getParent().getParent().getParent().getParent().getParent();
-                } else if (path.endsWith("Contents/MacOS/support")) {
-                    // Running inside a macOS package (alt)
-                    path = path.getParent().getParent().getParent().getParent();
+                    path = path.getParent().getParent().getParent().getParent().getParent();
                 } else if (path.endsWith("runtime")) {
                     // Running inside a linux package
                     path = path.getParent();

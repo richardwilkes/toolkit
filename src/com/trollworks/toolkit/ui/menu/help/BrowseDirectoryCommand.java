@@ -17,21 +17,20 @@ import com.trollworks.toolkit.ui.widget.WindowUtils;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.IOException;
 
-/** A command that will open a specific file using the OS-preferred mechanism. */
-public class OpenLocalFileCommand extends Command {
-    private File mFile;
+/** A command that will open a specific directory using the OS-preferred mechanism. */
+public class BrowseDirectoryCommand extends Command {
+    private File mDir;
 
     /**
-     * Creates a new {@link OpenLocalFileCommand}.
+     * Creates a new {@link BrowseDirectoryCommand}.
      *
      * @param title The title to use.
-     * @param file  The file to open.
+     * @param dir   The file to open.
      */
-    public OpenLocalFileCommand(String title, File file) {
-        super(title, "OpenLocalFile[" + file.getName() + "]");
-        mFile = file;
+    public BrowseDirectoryCommand(String title, File dir) {
+        super(title, "BrowseDirectory[" + dir.getName() + "]");
+        mDir = dir;
     }
 
     @Override
@@ -42,8 +41,8 @@ public class OpenLocalFileCommand extends Command {
     @Override
     public void actionPerformed(ActionEvent event) {
         try {
-            Desktop.getDesktop().open(mFile);
-        } catch (IOException exception) {
+            Desktop.getDesktop().browseFileDirectory(mDir.getCanonicalFile());
+        } catch (Exception exception) {
             WindowUtils.showError(null, exception.getMessage());
         }
     }
