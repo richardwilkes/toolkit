@@ -67,8 +67,12 @@ public class I18n {
             if (dir == null) {
                 AppHome.setup(I18n.class); // This should have already been called...
                 dir = AppHome.get().resolve("i18n");
-                if (Platform.isMacintosh() && !Files.isDirectory(dir)) {
-                    dir = Paths.get(System.getProperty("java.home")).resolve("../../../app/i18n");
+                if (!Files.isDirectory(dir)) {
+                    if (Platform.isMacintosh()) {
+                        dir = Paths.get(System.getProperty("java.home")).resolve("../../../app/i18n");
+                    } else {
+                        dir = AppHome.get().resolve("app/i18n");
+                    }
                 }
             }
             if (Files.isDirectory(dir)) {
