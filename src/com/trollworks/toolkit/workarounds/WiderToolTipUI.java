@@ -36,7 +36,10 @@ public class WiderToolTipUI extends BasicToolTipUI {
     @Override
     public Dimension getPreferredSize(JComponent comp) {
         Dimension size = super.getPreferredSize(comp);
-        size.width += 4;
+        // This value was chosen because it worked for all cases I
+        // tried... however, it may not be enough for all possible
+        // variants.
+        size.width += 7;
         return size;
     }
 }
