@@ -17,6 +17,7 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 /** An outline which gets its data and selection from another {@link Outline}. */
@@ -162,5 +163,10 @@ public class OutlineProxy extends Outline {
     protected void dropRow(DropTargetDropEvent dtde) {
         mOutlineToProxy.dropRow(dtde, this);
         super.dropRow(dtde);
+    }
+
+    @Override
+    protected void showContextMenu(MouseEvent event) {
+        mOutlineToProxy.showContextMenu(event);
     }
 }
