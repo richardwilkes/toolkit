@@ -121,6 +121,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     protected int                 mLastRow;
     private int                   mSelectOnMouseUp;
     private boolean               mUserSortable;
+    private boolean               mIgnoreClick;
     private Deletable             mDeletableProxy;
     private Dock                  mAlternateDragDestination;
     private String                mLastTooltipText;
@@ -1285,51 +1286,53 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     @Override
     public void mouseClicked(MouseEvent event) {
-        requestFocus();
-        Row rollRow = null;
-        try {
-            boolean local      = event.getSource() == this;
-            int     x          = event.getX();
-            int     y          = event.getY();
-            Row     rowHit;
-            Column  column;
-            int     clickCount = event.getClickCount();
+        if (!mIgnoreClick) {
+            requestFocus();
+            Row rollRow = null;
+            try {
+                boolean local      = event.getSource() == this;
+                int     x          = event.getX();
+                int     y          = event.getY();
+                Row     rowHit;
+                Column  column;
+                int     clickCount = event.getClickCount();
 
-            rollRow = mRollRow;
-            if (clickCount == 1) {
-                if (local) {
-                    column = overColumn(x);
-                    if (column != null) {
-                        rowHit = overRow(y);
-                        if (rowHit != null && !overDisclosureControl(x, y, column, rowHit)) {
-                            Cell cell = column.getRowCell(rowHit);
-                            if (cell != null) {
-                                cell.mouseClicked(event, getCellBounds(rowHit, column), rowHit, column);
-                            }
-                        }
-                    }
-                }
-            } else if (clickCount == 2) {
-                column = overColumnDivider(x);
-                if (column == null) {
+                rollRow = mRollRow;
+                if (clickCount == 1) {
                     if (local) {
-                        rowHit = overRow(y);
-                        if (rowHit != null) {
-                            column = overColumn(x);
-                            if ((column == null || !overDisclosureControl(x, y, column, rowHit)) && mModel.isRowSelected(rowHit)) {
-                                notifyActionListeners();
+                        column = overColumn(x);
+                        if (column != null) {
+                            rowHit = overRow(y);
+                            if (rowHit != null && !overDisclosureControl(x, y, column, rowHit)) {
+                                Cell cell = column.getRowCell(rowHit);
+                                if (cell != null) {
+                                    cell.mouseClicked(event, getCellBounds(rowHit, column), rowHit, column);
+                                }
                             }
                         }
                     }
-                } else if (allowColumnResize()) {
-                    int width = column.getPreferredWidth(this);
-                    if (width != column.getWidth()) {
-                        adjustColumnWidth(column, width);
+                } else if (clickCount == 2) {
+                    column = overColumnDivider(x);
+                    if (column == null) {
+                        if (local) {
+                            rowHit = overRow(y);
+                            if (rowHit != null) {
+                                column = overColumn(x);
+                                if ((column == null || !overDisclosureControl(x, y, column, rowHit)) && mModel.isRowSelected(rowHit)) {
+                                    notifyActionListeners();
+                                }
+                            }
+                        }
+                    } else if (allowColumnResize()) {
+                        int width = column.getPreferredWidth(this);
+                        if (width != column.getWidth()) {
+                            adjustColumnWidth(column, width);
+                        }
                     }
                 }
+            } finally {
+                repaintChangedRollRow(rollRow);
             }
-        } finally {
-            repaintChangedRollRow(rollRow);
         }
     }
 
@@ -1365,6 +1368,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
     @Override
     public void mousePressed(MouseEvent event) {
         if (isEnabled()) {
+            mIgnoreClick = false;
             Row rollRow = null;
             try {
                 boolean local = event.getSource() == this;
@@ -1407,6 +1411,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                     reapplyRowFilter();
                     if (event.isPopupTrigger()) {
                         mSelectOnMouseUp = -1;
+                        mIgnoreClick     = true;
                         showContextMenu(event);
                     }
                 }
@@ -1429,6 +1434,11 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
                 if (mSelectOnMouseUp != -1) {
                     mModel.select(mSelectOnMouseUp, false);
                     mSelectOnMouseUp = -1;
+                }
+                if (event.isPopupTrigger()) {
+                    mSelectOnMouseUp = -1;
+                    mIgnoreClick     = true;
+                    showContextMenu(event);
                 }
             } finally {
                 repaintChangedRollRow(rollRow);
@@ -2014,7 +2024,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     @Override
     public void dragGestureRecognized(DragGestureEvent dge) {
-        if (mDividerDrag == null && mModel.hasSelection() && allowRowDrag()) {
+        if (mDividerDrag == null && mModel.hasSelection() && allowRowDrag() && hasFocus()) {
             Point        pt        = dge.getDragOrigin();
             RowSelection selection = new RowSelection(mModel, mModel.getSelectionAsList(true).toArray(new Row[0]));
             if (DragSource.isDragImageSupported()) {
