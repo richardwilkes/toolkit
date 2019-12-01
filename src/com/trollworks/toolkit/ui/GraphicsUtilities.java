@@ -16,6 +16,7 @@ import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.Geometry;
 import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.Platform;
+import com.trollworks.toolkit.workarounds.WiderToolTipUI;
 
 import java.awt.Component;
 import java.awt.Desktop;
@@ -415,6 +416,7 @@ public class GraphicsUtilities {
         System.setProperty("apple.laf.useScreenMenuBar", Boolean.TRUE.toString());
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            WiderToolTipUI.installIfNeeded();
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
