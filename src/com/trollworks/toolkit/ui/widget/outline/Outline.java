@@ -359,7 +359,7 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
         } else {
             int insertAt = getAbsoluteInsertionIndex(parent, insertAtIndex);
             int indent   = parent != null ? scale.scale(mModel.getIndentWidth(parent, mModel.getHierarchyColumn())) + scale.scale(mModel.getIndentWidth()) : 0;
-            if (insertAt < rowCount) {
+            if (insertAt != -1 && insertAt < rowCount) {
                 bounds = getRowBounds(mModel.getRowAtIndex(insertAt));
                 if (mDrawRowDividers && insertAt != 0) {
                     bounds.y -= one;

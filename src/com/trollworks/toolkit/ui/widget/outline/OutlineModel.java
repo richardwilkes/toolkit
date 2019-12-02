@@ -18,9 +18,11 @@ import com.trollworks.toolkit.utility.text.Numbers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.swing.undo.StateEditable;
@@ -46,6 +48,7 @@ public class OutlineModel implements SelectionOwner, StateEditable {
     private int                             mIndentWidth;
     private int                             mHierarchyColumnID   = -1;
     private RowFilter                       mRowFilter;
+    private Map<String, Object>             mProperties          = new HashMap<>();
 
     /** Creates a new model. */
     public OutlineModel() {
@@ -54,6 +57,14 @@ public class OutlineModel implements SelectionOwner, StateEditable {
         mRows               = new ArrayList<>();
         mSelection          = new Selection(this);
         mNotifyOfSelections = true;
+    }
+
+    public Object getProperty(String key) {
+        return mProperties.get(key);
+    }
+
+    public void setProperty(String key, Object data) {
+        mProperties.put(key, data);
     }
 
     /**
@@ -343,14 +354,12 @@ public class OutlineModel implements SelectionOwner, StateEditable {
     public void removeRows(Row[] rows) {
         HashSet<Row> set = new HashSet<>();
         int          i;
-
         for (i = 0; i < rows.length; i++) {
             int index = getIndexOfRow(rows[i]);
             if (index > -1) {
-                collectRows(set, index);
+                collectRowAndDescendantsAtIndex(set, index);
             }
         }
-
         int[] indexes = new int[set.size()];
         i = 0;
         for (Row row : set) {
@@ -368,15 +377,12 @@ public class OutlineModel implements SelectionOwner, StateEditable {
         HashSet<Row> set = new HashSet<>();
         int          max = mRows.size();
         int          i;
-
         for (i = 0; i < indexes.length; i++) {
             int index = indexes[i];
-
             if (index > -1 && index < max) {
-                collectRows(set, index);
+                collectRowAndDescendantsAtIndex(set, index);
             }
         }
-
         int[] rows = new int[set.size()];
         i = 0;
         for (Row row : set) {
@@ -385,23 +391,23 @@ public class OutlineModel implements SelectionOwner, StateEditable {
         removeRowsInternal(rows);
     }
 
-    private int collectRows(HashSet<Row> set, int index) {
+    /**
+     * Adds the specified row index to the provided set as well as any descendant rows.
+     *
+     * @param set   The set to add the rows to.
+     * @param index The index to start at.
+     */
+    public void collectRowAndDescendantsAtIndex(HashSet<Row> set, int index) {
         Row row = getRowAtIndex(index);
         int max = mRows.size();
-
         set.add(row);
-        index++;
-        while (index < max) {
+        while (++index < max) {
             Row next = getRowAtIndex(index);
-
-            if (next.isDescendantOf(row)) {
-                set.add(next);
-                index++;
-            } else {
+            if (!next.isDescendantOf(row)) {
                 break;
             }
+            set.add(next);
         }
-        return index;
     }
 
     private void removeRowsInternal(int[] indexes) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998-2017 by Richard A. Wilkes. All rights reserved.
+ * Copyright (c) 1998-2019 by Richard A. Wilkes. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, version 2.0. If a copy of the MPL was not distributed with
@@ -224,13 +224,11 @@ public abstract class Row {
      */
     public boolean insertChild(int index, Row row) {
         if (canHaveChildren()) {
-            int max;
-
             row.removeFromParent();
             if (index < 0) {
                 index = 0;
             }
-            max = mChildren.size();
+            int max = mChildren.size();
             if (index > max) {
                 index = max;
             }
@@ -287,7 +285,6 @@ public abstract class Row {
      */
     public boolean isDescendantOf(Row row) {
         Row parent = mParent;
-
         while (parent != null) {
             if (parent == row) {
                 return true;
@@ -313,7 +310,6 @@ public abstract class Row {
     public Row[] getPath() {
         ArrayList<Row> list   = new ArrayList<>();
         Row            parent = mParent;
-
         list.add(this);
         while (parent != null) {
             list.add(0, parent);
@@ -326,7 +322,6 @@ public abstract class Row {
     public int getDepth() {
         Row parent = mParent;
         int depth  = 0;
-
         while (parent != null) {
             depth++;
             parent = parent.mParent;
