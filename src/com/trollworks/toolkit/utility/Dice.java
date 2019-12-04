@@ -358,7 +358,7 @@ public class Dice implements Cloneable {
     private void updateAlt() {
         mAltCount    = mCount;
         mAltModifier = mModifier;
-        if (EXTRA_DICE_FROM_MODIFIERS) {
+        if (EXTRA_DICE_FROM_MODIFIERS && mSides > 0) {
             int average = (mSides + 1) / 2;
             if ((mSides & 1) == 1) {
                 // Odd number of sides, so average is a whole number
