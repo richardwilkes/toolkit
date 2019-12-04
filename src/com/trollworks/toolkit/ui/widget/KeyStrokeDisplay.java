@@ -45,7 +45,7 @@ public class KeyStrokeDisplay extends JLabel implements KeyListener {
         setBorder(new CompoundBorder(new LineBorder(), new EmptyBorder(2, 5, 2, 5)));
         addKeyListener(this);
         mKeyStroke = ks;
-        UIUtilities.setOnlySize(this, getPreferredSize());
+        UIUtilities.setToPreferredSizeOnly(this);
         setText(getKeyStrokeDisplay(mKeyStroke));
     }
 

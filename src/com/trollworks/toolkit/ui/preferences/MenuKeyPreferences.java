@@ -59,7 +59,7 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
         mPanel.setBackground(Color.WHITE);
         for (Command cmd : StdMenuBar.getCommands()) {
             JButton button = new JButton(KeyStrokeDisplay.getKeyStrokeDisplay(KeyStroke.getKeyStroke('Z', InputEvent.META_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)));
-            UIUtilities.setOnlySize(button, button.getPreferredSize());
+            UIUtilities.setToPreferredSizeOnly(button);
             button.setText(getAcceleratorText(cmd));
             mMap.put(button, cmd);
             button.addActionListener(this);

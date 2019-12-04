@@ -120,7 +120,7 @@ public abstract class PreferencePanel extends JPanel {
         label.setOpaque(false);
         label.setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
         label.setIcon(icon);
-        UIUtilities.setOnlySize(label, label.getPreferredSize());
+        UIUtilities.setToPreferredSizeOnly(label);
         add(label);
         return label;
     }

@@ -13,6 +13,7 @@ package com.trollworks.toolkit.ui;
 
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.utility.Platform;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -84,6 +85,22 @@ public class UIUtilities {
         comp.setMinimumSize(size);
         comp.setMaximumSize(size);
         comp.setPreferredSize(size);
+    }
+
+    /**
+     * Sets a {@link Component}'s min & max sizes to its preferred size. Note that this applies a
+     * fudge factor to the width on the Windows platform to attempt to get around highly inaccurate
+     * font measurements.
+     *
+     * @param comp The {@link Component} to work on.
+     */
+    public static void setToPreferredSizeOnly(Component comp) {
+        Dimension size = comp.getPreferredSize();
+        if (Platform.isWindows()) {
+            size.width += 4; // Fudge the width on Windows, since its text measurement seems to be
+                             // off in many cases
+        }
+        setOnlySize(comp, size);
     }
 
     /** @param comps The {@link Component}s to set to the same size. */

@@ -130,7 +130,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
         }
         mServices = new JComboBox<>(serviceWrappers);
         mServices.setSelectedIndex(selection);
-        UIUtilities.setOnlySize(mServices, mServices.getPreferredSize());
+        UIUtilities.setToPreferredSizeOnly(mServices);
         mServices.addActionListener(this);
         mService = services[selection];
         LinkedLabel label = new LinkedLabel(I18n.Text("Printer"), mServices);
@@ -168,7 +168,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             }
             mPaperType = new JComboBox<>(types.toArray(new WrappedMediaSizeName[0]));
             mPaperType.setSelectedIndex(selection);
-            UIUtilities.setOnlySize(mPaperType, mPaperType.getPreferredSize());
+            UIUtilities.setToPreferredSizeOnly(mPaperType);
             LinkedLabel label = new LinkedLabel(I18n.Text("Paper Type"), mPaperType);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mPaperType);
@@ -218,7 +218,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             }
             mOrientation = new JComboBox<>(choices.toArray(new PageOrientation[0]));
             mOrientation.setSelectedItem(PrintUtilities.getPageOrientation(mService, set));
-            UIUtilities.setOnlySize(mOrientation, mOrientation.getPreferredSize());
+            UIUtilities.setToPreferredSizeOnly(mOrientation);
             LinkedLabel label = new LinkedLabel(I18n.Text("Orientation"), mOrientation);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mOrientation);
@@ -242,7 +242,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             }
             mSides = new JComboBox<>(choices.toArray(new PageSides[0]));
             mSides.setSelectedItem(PrintUtilities.getSides(mService, set));
-            UIUtilities.setOnlySize(mSides, mSides.getPreferredSize());
+            UIUtilities.setToPreferredSizeOnly(mSides);
             LinkedLabel label = new LinkedLabel(I18n.Text("Sides"), mSides);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mSides);
@@ -273,7 +273,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             }
             mNumberUp = new JComboBox<>(wrappers);
             mNumberUp.setSelectedIndex(selection);
-            UIUtilities.setOnlySize(mNumberUp, mNumberUp.getPreferredSize());
+            UIUtilities.setToPreferredSizeOnly(mNumberUp);
             LinkedLabel label = new LinkedLabel(I18n.Text("Number Up"), mNumberUp);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mNumberUp);
@@ -297,7 +297,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             }
             mChromaticity = new JComboBox<>(choices.toArray(new InkChromaticity[0]));
             mChromaticity.setSelectedItem(PrintUtilities.getChromaticity(mService, set, true));
-            UIUtilities.setOnlySize(mChromaticity, mChromaticity.getPreferredSize());
+            UIUtilities.setToPreferredSizeOnly(mChromaticity);
             LinkedLabel label = new LinkedLabel(I18n.Text("Color"), mChromaticity);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mChromaticity);
@@ -321,7 +321,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             }
             mPrintQuality = new JComboBox<>(choices.toArray(new Quality[0]));
             mPrintQuality.setSelectedItem(PrintUtilities.getPrintQuality(mService, set, true));
-            UIUtilities.setOnlySize(mPrintQuality, mPrintQuality.getPreferredSize());
+            UIUtilities.setToPreferredSizeOnly(mPrintQuality);
             LinkedLabel label = new LinkedLabel(I18n.Text("Quality"), mPrintQuality);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mPrintQuality);
@@ -352,7 +352,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
             }
             mResolution = new JComboBox<>(wrappers);
             mResolution.setSelectedIndex(selection);
-            UIUtilities.setOnlySize(mResolution, mResolution.getPreferredSize());
+            UIUtilities.setToPreferredSizeOnly(mResolution);
             LinkedLabel label = new LinkedLabel(I18n.Text("Resolution"), mResolution);
             add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
             add(mResolution);
@@ -394,7 +394,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 
     private static EditorField createMarginField(double margin, JPanel wrapper) {
         EditorField field = new EditorField(new DefaultFormatterFactory(new DoubleFormatter(0, 999.999, false)), null, SwingConstants.RIGHT, Double.valueOf(margin), Double.valueOf(999.999), null);
-        UIUtilities.setOnlySize(field, field.getPreferredSize());
+        UIUtilities.setToPreferredSizeOnly(field);
         wrapper.add(field);
         return field;
     }
