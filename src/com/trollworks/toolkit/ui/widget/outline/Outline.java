@@ -1511,40 +1511,42 @@ public class Outline extends ActionPanel implements OutlineModelListener, Compon
 
     @Override
     public void keyPressed(KeyEvent event) {
-        Selection selection = mModel.getSelection();
-        boolean   shiftDown = event.isShiftDown();
-        int       index;
-        switch (event.getKeyCode()) {
-        case KeyEvent.VK_LEFT:
-            index = selection.firstSelectedIndex();
-            while (index >= 0) {
-                mModel.getRowAtIndex(index).setOpen(false);
-                index = selection.nextSelectedIndex(index + 1);
+        if ((event.getModifiersEx() & getToolkit().getMenuShortcutKeyMaskEx()) == 0) {
+            Selection selection = mModel.getSelection();
+            boolean   shiftDown = event.isShiftDown();
+            int       index;
+            switch (event.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+                index = selection.firstSelectedIndex();
+                while (index >= 0) {
+                    mModel.getRowAtIndex(index).setOpen(false);
+                    index = selection.nextSelectedIndex(index + 1);
+                }
+                break;
+            case KeyEvent.VK_RIGHT:
+                index = selection.firstSelectedIndex();
+                while (index >= 0) {
+                    mModel.getRowAtIndex(index).setOpen(true);
+                    index = selection.nextSelectedIndex(index + 1);
+                }
+                break;
+            case KeyEvent.VK_UP:
+                keyScroll(selection.selectUp(shiftDown));
+                break;
+            case KeyEvent.VK_DOWN:
+                keyScroll(selection.selectDown(shiftDown));
+                break;
+            case KeyEvent.VK_HOME:
+                keyScroll(selection.selectToHome(shiftDown));
+                break;
+            case KeyEvent.VK_END:
+                keyScroll(selection.selectToEnd(shiftDown));
+                break;
+            default:
+                return;
             }
-            break;
-        case KeyEvent.VK_RIGHT:
-            index = selection.firstSelectedIndex();
-            while (index >= 0) {
-                mModel.getRowAtIndex(index).setOpen(true);
-                index = selection.nextSelectedIndex(index + 1);
-            }
-            break;
-        case KeyEvent.VK_UP:
-            keyScroll(selection.selectUp(shiftDown));
-            break;
-        case KeyEvent.VK_DOWN:
-            keyScroll(selection.selectDown(shiftDown));
-            break;
-        case KeyEvent.VK_HOME:
-            keyScroll(selection.selectToHome(shiftDown));
-            break;
-        case KeyEvent.VK_END:
-            keyScroll(selection.selectToEnd(shiftDown));
-            break;
-        default:
-            return;
+            event.consume();
         }
-        event.consume();
     }
 
     @Override
