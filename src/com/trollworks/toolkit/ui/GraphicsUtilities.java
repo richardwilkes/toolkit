@@ -21,6 +21,7 @@ import com.trollworks.toolkit.workarounds.WiderToolTipUI;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -416,6 +417,10 @@ public class GraphicsUtilities {
         System.setProperty("apple.laf.useScreenMenuBar", Boolean.TRUE.toString());
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            if (Platform.isLinux()) {
+                Font current = UIManager.getFont(Fonts.KEY_STD_TEXT_FIELD);
+                UIManager.getDefaults().put(Fonts.KEY_STD_TEXT_FIELD, new Font("SansSerif", current.getStyle(), current.getSize()));
+            }
             WiderToolTipUI.installIfNeeded();
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
