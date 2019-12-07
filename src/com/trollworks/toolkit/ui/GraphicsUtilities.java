@@ -417,7 +417,7 @@ public class GraphicsUtilities {
         System.setProperty("apple.laf.useScreenMenuBar", Boolean.TRUE.toString());
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            if (Platform.isLinux()) {
+            if (!Platform.isMacintosh()) {
                 Font current = UIManager.getFont(Fonts.KEY_STD_TEXT_FIELD);
                 UIManager.getDefaults().put(Fonts.KEY_STD_TEXT_FIELD, new Font("SansSerif", current.getStyle(), current.getSize()));
             }
