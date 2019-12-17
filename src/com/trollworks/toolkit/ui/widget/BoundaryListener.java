@@ -24,8 +24,8 @@ public interface BoundaryListener {
      * Called to perform any necessary adjustments on the mouse coordinates before they are used for
      * tracking.
      *
-     * @param where The coordinates, relative to the {@link Component} containing the
-     *              {@link Rectangle} being tracked.
+     * @param where The coordinates, relative to the {@link Component} containing the {@link
+     *              Rectangle} being tracked.
      * @return The object that was passed in, adjusted as necessary.
      */
     Point convertToLocalCoordinates(Point where);

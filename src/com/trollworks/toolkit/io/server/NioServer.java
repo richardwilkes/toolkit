@@ -36,7 +36,6 @@ import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.net.ssl.SSLContext;
 
 /** The core non-blocking i/o server. */
@@ -49,25 +48,24 @@ public class NioServer extends Thread {
     private List<NioWorker>                            mWorkers          = new ArrayList<>();
     private Set<Session>                               mSessions         = new HashSet<>();
     private SSLContext                                 mSSLContext;
-    private TimeoutMonitor                             mTimeoutMonitor;
 
     /**
-     * @param sslContext The {@link SSLContext} to use. Typically created by calling
-     *                   {@link SSLSupport#createContext(URL, String)}.
+     * @param sslContext The {@link SSLContext} to use. Typically created by calling {@link
+     *                   SSLSupport#createContext(URL, String)}.
      */
     public NioServer(SSLContext sslContext) throws IOException {
         setName(getClass().getSimpleName());
         setDaemon(true);
         mSSLContext = sslContext;
-        mSelector   = SelectorProvider.provider().openSelector();
+        mSelector = SelectorProvider.provider().openSelector();
         int count = Runtime.getRuntime().availableProcessors() + 1;
         for (int i = 0; i < count; i++) {
             NioWorker worker = new NioWorker(mQueue);
             worker.start();
             mWorkers.add(worker);
         }
-        mTimeoutMonitor = new TimeoutMonitor(TimeUnit.MILLISECONDS.convert(2, TimeUnit.MINUTES));
-        mTimeoutMonitor.start();
+        TimeoutMonitor timeoutMonitor = new TimeoutMonitor(TimeUnit.MILLISECONDS.convert(2, TimeUnit.MINUTES));
+        timeoutMonitor.start();
     }
 
     /** @return The {@link SSLContext} to use with this server. */
@@ -104,14 +102,13 @@ public class NioServer extends Thread {
     }
 
     /**
-     * @param hostAddress    The address to listen on. Pass in <code>null</code> to indicate all
+     * @param hostAddress    The address to listen on. Pass in {@code null} to indicate all
      *                       addresses.
      * @param port           The port to listen on.
      * @param sessionFactory The {@link SessionFactory} to use for new connections.
      */
     public final void listen(InetAddress hostAddress, int port, SessionFactory sessionFactory) throws IOException {
-        @SuppressWarnings("resource")
-        ServerSocketChannel channel = ServerSocketChannel.open();
+        @SuppressWarnings("resource") ServerSocketChannel channel = ServerSocketChannel.open();
         channel.configureBlocking(false);
         channel.socket().bind(new InetSocketAddress(hostAddress, port));
         channel.register(mSelector, SelectionKey.OP_ACCEPT, sessionFactory);
@@ -122,10 +119,11 @@ public class NioServer extends Thread {
         while (true) {
             try {
                 // Adjust what we're waiting on
+                Selector selector = mSelector;
                 synchronized (mPendingChanges) {
                     for (ChangeRequest request : mPendingChanges) {
                         try {
-                            request.mSocket.keyFor(mSelector).interestOps(request.mOperation);
+                            request.mSocket.keyFor(selector).interestOps(request.mOperation);
                         } catch (Exception exception) {
                             // Ignore
                         }
@@ -202,20 +200,18 @@ public class NioServer extends Thread {
 
     /**
      * @param socket The socket to check.
-     * @return <code>true</code> if there is data waiting to be sent on the specified socket.
+     * @return {@code true} if there is data waiting to be sent on the specified socket.
      */
     public final boolean hasPendingWrite(SocketChannel socket) {
         synchronized (mPendingWriteData) {
-            LinkedList<ByteBuffer> list = mPendingWriteData.get(socket);
+            List<ByteBuffer> list = mPendingWriteData.get(socket);
             return list != null && !list.isEmpty();
         }
     }
 
-    private final void accept(SelectionKey key) throws IOException {
-        @SuppressWarnings("resource")
-        ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
-        @SuppressWarnings("resource")
-        SocketChannel       socketChannel       = serverSocketChannel.accept();
+    private void accept(SelectionKey key) throws IOException {
+        @SuppressWarnings("resource") ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
+        @SuppressWarnings("resource") SocketChannel socketChannel = serverSocketChannel.accept();
         socketChannel.configureBlocking(false);
         Session session = ((SessionFactory) key.attachment()).createSession(this, socketChannel);
         synchronized (mSessions) {
@@ -224,10 +220,9 @@ public class NioServer extends Thread {
         socketChannel.register(mSelector, SelectionKey.OP_READ, session);
     }
 
-    private final void read(SelectionKey key) {
-        @SuppressWarnings("resource")
-        SocketChannel socketChannel = (SocketChannel) key.channel();
-        Session       session       = (Session) key.attachment();
+    private void read(SelectionKey key) {
+        @SuppressWarnings("resource") SocketChannel socketChannel = (SocketChannel) key.channel();
+        Session session = (Session) key.attachment();
         mReadBuffer.clear();
         int amount;
         try {
@@ -252,7 +247,7 @@ public class NioServer extends Thread {
     }
 
     @SuppressWarnings("resource")
-    private final void write(SelectionKey key) {
+    private void write(SelectionKey key) {
         SocketChannel socketChannel = (SocketChannel) key.channel();
         synchronized (mPendingWriteData) {
             LinkedList<ByteBuffer> list = mPendingWriteData.get(socketChannel);
@@ -282,14 +277,14 @@ public class NioServer extends Thread {
         final int           mOperation;
 
         ChangeRequest(SocketChannel socket, int operation) {
-            mSocket    = socket;
+            mSocket = socket;
             mOperation = operation;
         }
     }
 
     private static class NioWorker extends Thread {
-        private static final AtomicInteger   NEXT_ID = new AtomicInteger();
-        private LinkedBlockingQueue<Session> mQueue;
+        private static final AtomicInteger                NEXT_ID = new AtomicInteger();
+        private              LinkedBlockingQueue<Session> mQueue;
 
         NioWorker(LinkedBlockingQueue<Session> queue) {
             mQueue = queue;

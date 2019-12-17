@@ -16,26 +16,25 @@ import com.trollworks.toolkit.ui.Colors;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.List;
-
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
 import javax.swing.MutableComboBoxModel;
 import javax.swing.event.ListDataListener;
 
 public class PopupButton<T> extends JComboBox<T> {
-    MutableComboBoxModel<T>             mModel;
+    MutableComboBoxModel<T> mModel;
     private ListCellRenderer<? super T> mRenderer;
 
-    @SuppressWarnings("unchecked")
     public PopupButton(List<T> items) {
+        //noinspection SuspiciousArrayCast,unchecked
         this((T[]) items.toArray());
     }
 
     public PopupButton(T[] items) {
         super(items);
-        mModel    = (MutableComboBoxModel<T>) getModel();
+        mModel = (MutableComboBoxModel<T>) getModel();
         mRenderer = getRenderer();
-        setModel(new MutableComboBoxModel<T>() {
+        setModel(new MutableComboBoxModel<>() {
             @Override
             public int getSize() {
                 return mModel.getSize();

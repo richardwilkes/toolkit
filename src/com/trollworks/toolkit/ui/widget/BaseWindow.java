@@ -30,7 +30,6 @@ import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -42,12 +41,12 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
     private static final String KEY_LOCATION               = "Location";
     private static final String KEY_SIZE                   = "Size";
     private static final String KEY_LAST_UPDATED           = "LastUpdated";
-    boolean                     mWasAlive;
-    private boolean             mIsClosed;
+    boolean mWasAlive;
+    private boolean mIsClosed;
 
     /**
      * @param window The window to check.
-     * @return <code>true</code> if an owned window is showing.
+     * @return {@code true} if an owned window is showing.
      */
     public static boolean hasOwnedWindowsShowing(Window window) {
         if (window != null) {
@@ -65,9 +64,9 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
      * @param type The window type to return.
      * @return A list of all windows of the specified type.
      */
-    public static <T extends BaseWindow> ArrayList<T> getWindows(Class<T> type) {
-        ArrayList<T> windows = new ArrayList<>();
-        Frame[]      frames  = Frame.getFrames();
+    public static <T extends BaseWindow> List<T> getWindows(Class<T> type) {
+        List<T> windows = new ArrayList<>();
+        Frame[] frames  = Frame.getFrames();
         for (Frame element : frames) {
             if (type.isInstance(element)) {
                 T window = type.cast(element);
@@ -85,7 +84,7 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
      * @param <T>         The window type.
      * @param windowClass The window class to use for name comparisons.
      * @param baseTitle   The base untitled name.
-     * @param exclude     A window to exclude from naming decisions. May be <code>null</code>.
+     * @param exclude     A window to exclude from naming decisions. May be {@code null}.
      * @return The new window title.
      */
     public static <T extends BaseWindow> String getNextUntitledWindowName(Class<T> windowClass, String baseTitle, BaseWindow exclude) {
@@ -150,7 +149,7 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
         }
     }
 
-    /** @return <code>true</code> if the window has been closed. */
+    /** @return {@code true} if the window has been closed. */
     public final boolean isClosed() {
         return mIsClosed;
     }
@@ -236,8 +235,8 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 
     /**
      * @return The prefix for keys in the {@link #WINDOW_PREFERENCES}module for this window. If
-     *         <code>null</code> is returned from this method, then no standard window preferences
-     *         will be saved. Returns <code>null</code> by default.
+     *         {@code null} is returned from this method, then no standard window preferences will
+     *         be saved. Returns {@code null} by default.
      */
     @SuppressWarnings("static-method")
     public String getWindowPrefsPrefix() {
@@ -299,9 +298,9 @@ public class BaseWindow extends JFrame implements WindowListener, WindowFocusLis
 
     private static void pruneOldWindowPreferences(Preferences prefs) {
         // 45 days ago, in milliseconds
-        long              cutoff = System.currentTimeMillis() - 1000L * 60L * 60L * 24L * 45L;
-        List<String>      keys   = prefs.getModuleKeys(WINDOW_PREFERENCES);
-        ArrayList<String> list   = new ArrayList<>();
+        long         cutoff = System.currentTimeMillis() - 1000L * 60L * 60L * 24L * 45L;
+        List<String> keys   = prefs.getModuleKeys(WINDOW_PREFERENCES);
+        List<String> list   = new ArrayList<>();
         for (String key : keys) {
             if (key.endsWith(KEY_LAST_UPDATED)) {
                 if (prefs.getLongValue(WINDOW_PREFERENCES, key, 0) < cutoff) {

@@ -11,17 +11,16 @@
 
 package com.trollworks.toolkit.ui.widget.outline;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /** Sorts rows by the sort sequence specified in the associated columns. */
 public class RowSorter implements Comparator<Row> {
     private Column[] mSortingOrder;
 
-    private RowSorter(ArrayList<Column> columns) {
+    private RowSorter(List<Column> columns) {
         int      count = columns.size();
         Column[] orig  = new Column[count];
         int      pos   = -1;
@@ -64,7 +63,7 @@ public class RowSorter implements Comparator<Row> {
      * @param columns The columns in the {@link Outline}.
      * @param rows    The rows in the {@link Outline}.
      */
-    public static void sort(ArrayList<Column> columns, ArrayList<Row> rows) {
+    public static void sort(List<Column> columns, List<Row> rows) {
         sort(columns, rows, false);
     }
 
@@ -73,19 +72,18 @@ public class RowSorter implements Comparator<Row> {
      *
      * @param columns  The columns in the {@link Outline}.
      * @param rows     The rows in the {@link Outline}.
-     * @param internal Pass in <code>true</code> if the actual row child storage should also be
-     *                 sorted.
+     * @param internal Pass in {@code true} if the actual row child storage should also be sorted.
      */
-    public static void sort(ArrayList<Column> columns, ArrayList<Row> rows, boolean internal) {
+    public static void sort(List<Column> columns, List<Row> rows, boolean internal) {
         for (Column column : columns) {
             if (column.getSortSequence() != -1) {
                 RowSorter rowSorter = new RowSorter(columns);
 
-                Collections.sort(rows, rowSorter);
+                rows.sort(rowSorter);
                 if (internal) {
-                    for (Row row : collectContainerRows(rows, new HashSet<Row>())) {
+                    for (Row row : collectContainerRows(rows, new HashSet<>())) {
                         if (row.hasChildren()) {
-                            Collections.sort(row.getChildList(), rowSorter);
+                            row.getChildList().sort(rowSorter);
                         }
                     }
                 }
@@ -101,7 +99,7 @@ public class RowSorter implements Comparator<Row> {
      * @param containers The set to add the container rows to.
      * @return The passed in set.
      */
-    public static HashSet<Row> collectContainerRows(List<Row> rows, HashSet<Row> containers) {
+    public static Set<Row> collectContainerRows(List<Row> rows, Set<Row> containers) {
         for (Row row : rows) {
             if (row.canHaveChildren()) {
                 containers.add(row);
@@ -139,7 +137,7 @@ public class RowSorter implements Comparator<Row> {
             Row[] oneParents = rowOne.getPath();
             Row[] twoParents = rowTwo.getPath();
             int   max        = Math.min(oneParents.length, twoParents.length);
-            int   i          = 0;
+            int   i;
 
             for (i = 0; i < max; i++) {
                 if (oneParents[i] != twoParents[i]) {

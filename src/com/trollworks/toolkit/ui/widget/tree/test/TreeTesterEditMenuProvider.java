@@ -28,7 +28,6 @@ import com.trollworks.toolkit.utility.Platform;
 
 import java.util.Collections;
 import java.util.Set;
-
 import javax.swing.JMenu;
 
 public class TreeTesterEditMenuProvider implements MenuProvider {

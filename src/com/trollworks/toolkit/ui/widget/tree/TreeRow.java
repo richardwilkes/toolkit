@@ -17,14 +17,14 @@ import com.trollworks.toolkit.utility.notification.Notifier;
 public class TreeRow implements Cloneable {
     /** The {@link TreeRow}'s parent. */
     protected TreeContainerRow mParent;
-    private int                mIndex;
+    private   int              mIndex;
 
     @Override
     protected TreeRow clone() {
         try {
             TreeRow other = (TreeRow) super.clone();
             other.mParent = null;
-            other.mIndex  = 0;
+            other.mIndex = 0;
             return other;
         } catch (CloneNotSupportedException exception) {
             return null; // Not possible
@@ -50,8 +50,8 @@ public class TreeRow implements Cloneable {
 
     /**
      * @param row The {@link TreeContainerRow} to check for.
-     * @return Whether this {@link TreeRow} is a descendant of the specified
-     *         {@link TreeContainerRow}.
+     * @return Whether this {@link TreeRow} is a descendant of the specified {@link
+     *         TreeContainerRow}.
      */
     public boolean isDescendantOf(TreeContainerRow row) {
         TreeContainerRow parent = mParent;
@@ -88,8 +88,8 @@ public class TreeRow implements Cloneable {
     }
 
     /**
-     * Sends a notification if this {@link TreeRow} belongs to {@link TreeRoot} which has a
-     * {@link Notifier}.
+     * Sends a notification if this {@link TreeRow} belongs to {@link TreeRoot} which has a {@link
+     * Notifier}.
      *
      * @param name The notification name.
      */

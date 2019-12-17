@@ -19,7 +19,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
-
+import java.util.Objects;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -31,10 +31,10 @@ import javax.swing.KeyStroke;
 /** Represents a command in the user interface. */
 public abstract class Command extends AbstractAction implements Comparable<Command> {
     /** The standard command modifier for this platform. */
-    public static final int COMMAND_MODIFIER         = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+    public static final int       COMMAND_MODIFIER         = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
     /** The standard command modifier for this platform, plus the shift key. */
-    public static final int SHIFTED_COMMAND_MODIFIER = COMMAND_MODIFIER | InputEvent.SHIFT_DOWN_MASK;
-    private KeyStroke       mOriginalAccelerator;
+    public static final int       SHIFTED_COMMAND_MODIFIER = COMMAND_MODIFIER | InputEvent.SHIFT_DOWN_MASK;
+    private             KeyStroke mOriginalAccelerator;
 
     /**
      * Creates a new {@link Command}.
@@ -178,21 +178,20 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
         putValue(ACTION_COMMAND_KEY, cmd);
     }
 
-    /** @return The current keyboard accelerator for this {@link Command}, or <code>null</code>. */
+    /** @return The current keyboard accelerator for this {@link Command}, or {@code null}. */
     public final KeyStroke getAccelerator() {
         Object value = getValue(ACCELERATOR_KEY);
         return value instanceof KeyStroke ? (KeyStroke) value : null;
     }
 
-    /** @return The original keyboard accelerator for this {@link Command}, or <code>null</code>. */
+    /** @return The original keyboard accelerator for this {@link Command}, or {@code null}. */
     public final KeyStroke getOriginalAccelerator() {
         return mOriginalAccelerator;
     }
 
     /** @return Whether the original accelerator is still set. */
     public final boolean hasOriginalAccelerator() {
-        KeyStroke ks = getAccelerator();
-        return ks == null ? mOriginalAccelerator == null : ks.equals(mOriginalAccelerator);
+        return Objects.equals(getAccelerator(), mOriginalAccelerator);
     }
 
     /**
@@ -244,7 +243,18 @@ public abstract class Command extends AbstractAction implements Comparable<Comma
 
     @Override
     public int compareTo(Command other) {
-        int result = getTitle().compareTo(other.getTitle());
+        if (other == null) {
+            return 1;
+        }
+        String title = getTitle();
+        if (title == null) {
+            title = "";
+        }
+        String otherTitle = other.getTitle();
+        if (otherTitle == null) {
+            otherTitle = "";
+        }
+        int result = title.compareTo(otherTitle);
         if (result == 0) {
             int hc  = hashCode();
             int ohc = other.hashCode();

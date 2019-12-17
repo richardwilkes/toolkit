@@ -22,10 +22,10 @@ public enum BoundaryArea {
     LEFT {
         @Override
         public void adjust(int dx, int dy, Rectangle adjustee, Rectangle original) {
-            adjustee.x     = original.x + dx;
+            adjustee.x = original.x + dx;
             adjustee.width = original.width - dx;
             if (adjustee.width < 1) {
-                adjustee.x     = original.x + original.width - 1;
+                adjustee.x = original.x + original.width - 1;
                 adjustee.width = 1;
             }
         }
@@ -54,10 +54,10 @@ public enum BoundaryArea {
     TOP {
         @Override
         public void adjust(int dx, int dy, Rectangle adjustee, Rectangle original) {
-            adjustee.y      = original.y + dy;
+            adjustee.y = original.y + dy;
             adjustee.height = original.height - dy;
             if (adjustee.height < 1) {
-                adjustee.y      = original.y + original.height - 1;
+                adjustee.y = original.y + original.height - 1;
                 adjustee.height = 1;
             }
         }
@@ -223,7 +223,7 @@ public enum BoundaryArea {
         return OUTSIDE;
     }
 
-    private static final boolean over(int value, int target) {
+    private static boolean over(int value, int target) {
         return value > target - SLOP && value < target + SLOP;
     }
 

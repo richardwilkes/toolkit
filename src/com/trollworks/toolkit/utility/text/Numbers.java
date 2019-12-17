@@ -21,12 +21,12 @@ import java.util.regex.Pattern;
 
 /** Various number utilities. */
 public class Numbers {
-    public static final String         YES                               = "yes";
-    public static final String         NO                                = "no";
+    public static final  String        YES                               = "yes";
+    public static final  String        NO                                = "no";
     private static final String        LOCALIZED_DECIMAL_SEPARATOR       = Character.toString(DecimalFormatSymbols.getInstance().getDecimalSeparator());
     private static final String        SAFE_LOCALIZED_GROUPING_SEPARATOR = Pattern.quote(Character.toString(DecimalFormatSymbols.getInstance().getGroupingSeparator()));
-    private static final int[]         ROMAN_VALUES                      = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
-    private static final String[]      ROMAN_TEXT                        = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+    private static final int[]         ROMAN_VALUES                      = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+    private static final String[]      ROMAN_TEXT                        = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
     private static final DecimalFormat NUMBER_FORMAT;
     private static final DecimalFormat NUMBER_PLUS_FORMAT;
 
@@ -39,38 +39,8 @@ public class Numbers {
     }
 
     /**
-     * @param a A value to compare.
-     * @param b A value to compare.
-     * @return -1 if a is less than b, 1 if a is greater than b, 0 if a is equal to b.
-     */
-    public static int compare(int a, int b) {
-        if (a < b) {
-            return -1;
-        }
-        if (a > b) {
-            return 1;
-        }
-        return 0;
-    }
-
-    /**
-     * @param a A value to compare.
-     * @param b A value to compare.
-     * @return -1 if a is less than b, 1 if a is greater than b, 0 if a is equal to b.
-     */
-    public static int compare(long a, long b) {
-        if (a < b) {
-            return -1;
-        }
-        if (a > b) {
-            return 1;
-        }
-        return 0;
-    }
-
-    /**
      * @param buffer The text to process.
-     * @return <code>true</code> if the buffer contains a 'true' value.
+     * @return {@code true} if the buffer contains a 'true' value.
      */
     public static boolean extractBoolean(String buffer) {
         buffer = normalizeNumber(buffer, false);
@@ -88,7 +58,7 @@ public class Numbers {
      *
      * @param buffer    The text to process.
      * @param def       The default value to return, if the buffer cannot be parsed.
-     * @param localized <code>true</code> if the text was localized.
+     * @param localized {@code true} if the text was localized.
      * @return The value.
      */
     public static final int extractInteger(String buffer, int def, boolean localized) {
@@ -99,13 +69,13 @@ public class Numbers {
         int multiplier = 1;
         if (hasBillionsSuffix(buffer)) {
             multiplier = 1000000000;
-            buffer     = removeSuffix(buffer);
+            buffer = removeSuffix(buffer);
         } else if (hasMillionsSuffix(buffer)) {
             multiplier = 1000000;
-            buffer     = removeSuffix(buffer);
+            buffer = removeSuffix(buffer);
         } else if (hasThousandsSuffix(buffer)) {
             multiplier = 1000;
-            buffer     = removeSuffix(buffer);
+            buffer = removeSuffix(buffer);
         }
         int max = Integer.MAX_VALUE / multiplier;
         int min = Integer.MIN_VALUE / multiplier;
@@ -135,7 +105,7 @@ public class Numbers {
      * @param def       The default value to return, if the buffer cannot be parsed.
      * @param min       The minimum value to return.
      * @param max       The maximum value to return.
-     * @param localized <code>true</code> if the text was localized.
+     * @param localized {@code true} if the text was localized.
      * @return The value.
      */
     public static final int extractInteger(String buffer, int def, int min, int max, boolean localized) {
@@ -153,7 +123,7 @@ public class Numbers {
      *
      * @param buffer    The text to process.
      * @param def       The default value to return, if the buffer cannot be parsed.
-     * @param localized <code>true</code> if the text was localized.
+     * @param localized {@code true} if the text was localized.
      * @return The value.
      */
     public static final long extractLong(String buffer, long def, boolean localized) {
@@ -164,13 +134,13 @@ public class Numbers {
         long multiplier = 1;
         if (hasBillionsSuffix(buffer)) {
             multiplier = 1000000000;
-            buffer     = removeSuffix(buffer);
+            buffer = removeSuffix(buffer);
         } else if (hasMillionsSuffix(buffer)) {
             multiplier = 1000000;
-            buffer     = removeSuffix(buffer);
+            buffer = removeSuffix(buffer);
         } else if (hasThousandsSuffix(buffer)) {
             multiplier = 1000;
-            buffer     = removeSuffix(buffer);
+            buffer = removeSuffix(buffer);
         }
         long max = Long.MAX_VALUE / multiplier;
         long min = Long.MIN_VALUE / multiplier;
@@ -200,7 +170,7 @@ public class Numbers {
      * @param def       The default value to return, if the buffer cannot be parsed.
      * @param min       The minimum value to return.
      * @param max       The maximum value to return.
-     * @param localized <code>true</code> if the text was localized.
+     * @param localized {@code true} if the text was localized.
      * @return The value.
      */
     public static final long extractLong(String buffer, long def, long min, long max, boolean localized) {
@@ -218,7 +188,7 @@ public class Numbers {
      *
      * @param buffer    The text to process.
      * @param def       The default value to return, if the buffer cannot be parsed.
-     * @param localized <code>true</code> if the text was localized.
+     * @param localized {@code true} if the text was localized.
      * @return The value.
      */
     public static final double extractDouble(String buffer, double def, boolean localized) {
@@ -226,13 +196,13 @@ public class Numbers {
         double multiplier = 1;
         if (hasBillionsSuffix(buffer)) {
             multiplier = 1000000000;
-            buffer     = removeSuffix(buffer);
+            buffer = removeSuffix(buffer);
         } else if (hasMillionsSuffix(buffer)) {
             multiplier = 1000000;
-            buffer     = removeSuffix(buffer);
+            buffer = removeSuffix(buffer);
         } else if (hasThousandsSuffix(buffer)) {
             multiplier = 1000;
-            buffer     = removeSuffix(buffer);
+            buffer = removeSuffix(buffer);
         }
         double max = Double.MAX_VALUE / multiplier;
         // NOTE: Do not use Double.MIN_VALUE here, as it isn't actually the minimum value... it is
@@ -270,7 +240,7 @@ public class Numbers {
      * @param def       The default value to return, if the buffer cannot be parsed.
      * @param min       The minimum value to return.
      * @param max       The maximum value to return.
-     * @param localized <code>true</code> if the text was localized.
+     * @param localized {@code true} if the text was localized.
      * @return The value.
      */
     public static final double extractDouble(String buffer, double def, double min, double max, boolean localized) {
@@ -317,10 +287,10 @@ public class Numbers {
 
     /**
      * @param text      The text to process.
-     * @param localized <code>true</code> if the text was localized.
+     * @param localized {@code true} if the text was localized.
      * @return The input, minus any trailing '0' characters. If at least one '0' was removed and the
-     *         result would end with a '.' (or the localized equivalent, if <code>localized</code>
-     *         is <code>true</code>), then the '.' is removed as well.
+     *         result would end with a '.' (or the localized equivalent, if {@code localized} is
+     *         {@code true}), then the '.' is removed as well.
      */
     public static final String trimTrailingZeroes(String text, boolean localized) {
         if (text == null) {
@@ -381,44 +351,45 @@ public class Numbers {
         }
         String text    = "I";
         int    closest = 1;
-        for (int i = 0; i < ROMAN_VALUES.length; i++) {
+        int    length  = ROMAN_VALUES.length;
+        for (int i = 0; i < length; i++) {
             if (number >= ROMAN_VALUES[i]) {
                 closest = ROMAN_VALUES[i];
-                text    = ROMAN_TEXT[i];
+                text = ROMAN_TEXT[i];
                 break;
             }
         }
         return number == closest ? text : text + toRoman(number - closest);
     }
 
-    private static final String normalizeNumber(String buffer, boolean localized) {
+    private static String normalizeNumber(String buffer, boolean localized) {
         if (buffer == null) {
             return "";
         }
         buffer = buffer.replaceAll(localized ? SAFE_LOCALIZED_GROUPING_SEPARATOR : ",", "").trim();
-        if (buffer.length() > 0 && buffer.charAt(0) == '+') {
+        if (!buffer.isEmpty() && buffer.charAt(0) == '+') {
             return buffer.substring(1).trim();
         }
         return buffer;
     }
 
-    private static final boolean hasDecimalSeparator(String buffer, boolean localized) {
+    private static boolean hasDecimalSeparator(String buffer, boolean localized) {
         return buffer.indexOf(localized ? LOCALIZED_DECIMAL_SEPARATOR.charAt(0) : '.') != -1;
     }
 
-    private static final boolean hasBillionsSuffix(String buffer) {
+    private static boolean hasBillionsSuffix(String buffer) {
         return buffer.endsWith("b") || buffer.endsWith("B") || buffer.endsWith("g") || buffer.endsWith("G");
     }
 
-    private static final boolean hasMillionsSuffix(String buffer) {
+    private static boolean hasMillionsSuffix(String buffer) {
         return buffer.endsWith("m") || buffer.endsWith("M");
     }
 
-    private static final boolean hasThousandsSuffix(String buffer) {
+    private static boolean hasThousandsSuffix(String buffer) {
         return buffer.endsWith("t") || buffer.endsWith("T") || buffer.endsWith("k") || buffer.endsWith("K");
     }
 
-    private static final String removeSuffix(String buffer) {
+    private static String removeSuffix(String buffer) {
         return buffer.substring(0, buffer.length() - 1).trim();
     }
 

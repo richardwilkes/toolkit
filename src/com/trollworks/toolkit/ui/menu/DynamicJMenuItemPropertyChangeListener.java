@@ -15,16 +15,15 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
-
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 class DynamicJMenuItemPropertyChangeListener implements PropertyChangeListener {
     private static ReferenceQueue<JMenuItem> QUEUE = new ReferenceQueue<>();
-    private WeakReference<JMenuItem>         mTarget;
-    private Action                           mAction;
-    private PropertyChangeListener           mChainedListener;
+    private        WeakReference<JMenuItem>  mTarget;
+    private        Action                    mAction;
+    private        PropertyChangeListener    mChainedListener;
 
     DynamicJMenuItemPropertyChangeListener(JMenuItem menuItem, Action action, PropertyChangeListener chainedListener) {
         OwnedWeakReference ref;
@@ -35,8 +34,8 @@ class DynamicJMenuItemPropertyChangeListener implements PropertyChangeListener {
                 oldAction.removePropertyChangeListener(old);
             }
         }
-        mTarget          = new OwnedWeakReference(menuItem, QUEUE, this);
-        mAction          = action;
+        mTarget = new OwnedWeakReference(menuItem, QUEUE, this);
+        mAction = action;
         mChainedListener = chainedListener;
     }
 
@@ -56,7 +55,7 @@ class DynamicJMenuItemPropertyChangeListener implements PropertyChangeListener {
         mChainedListener.propertyChange(event);
     }
 
-    private class OwnedWeakReference extends WeakReference<JMenuItem> {
+    private static class OwnedWeakReference extends WeakReference<JMenuItem> {
         private DynamicJMenuItemPropertyChangeListener mOwner;
 
         OwnedWeakReference(JMenuItem target, ReferenceQueue<JMenuItem> queue, DynamicJMenuItemPropertyChangeListener owner) {

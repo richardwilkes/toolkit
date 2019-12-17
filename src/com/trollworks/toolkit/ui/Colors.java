@@ -14,7 +14,6 @@ package com.trollworks.toolkit.ui;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.UIManager;
 
 /** Provides standardized color access. */
@@ -174,7 +173,7 @@ public class Colors {
         add("YellowGreen", "154,205,50");
     }
 
-    private static final void add(String name, String rgb) {
+    private static void add(String name, String rgb) {
         NAME_TO_RGB.put(name.toLowerCase(), rgb);
         RGB_TO_NAME.put(rgb, name);
     }
@@ -209,14 +208,10 @@ public class Colors {
             }
             String[] color = buffer.split(",");
             if (color.length == 3 || color.length == 4) {
-                red   = parseColorComponent(color[0]);
+                red = parseColorComponent(color[0]);
                 green = parseColorComponent(color[1]);
-                blue  = parseColorComponent(color[2]);
-                if (color.length == 4) {
-                    alpha = parseColorComponent(color[3]);
-                } else {
-                    alpha = 255;
-                }
+                blue = parseColorComponent(color[2]);
+                alpha = color.length == 4 ? parseColorComponent(color[3]) : 255;
             } else if (color.length == 1 && color[0].startsWith("#")) {
                 buffer = color[0].substring(1);
                 int length = buffer.length();
@@ -239,15 +234,15 @@ public class Colors {
                     single |= 0xFF000000;
                 }
                 alpha = single >> 24 & 0xFF;
-                red   = single >> 16 & 0xFF;
+                red = single >> 16 & 0xFF;
                 green = single >> 8 & 0xFF;
-                blue  = single & 0xFF;
+                blue = single & 0xFF;
             }
         }
         return new Color(red, green, blue, alpha);
     }
 
-    private static final int parseColorComponent(String buffer) {
+    private static int parseColorComponent(String buffer) {
         try {
             int value = Integer.parseInt(buffer);
             if (value < 0) {
@@ -271,7 +266,7 @@ public class Colors {
 
     /**
      * @param color The color to check.
-     * @return <code>true</code> if each color channel is the same.
+     * @return {@code true} if each color channel is the same.
      */
     public static boolean isMonochrome(Color color) {
         int green = color.getGreen();
@@ -280,7 +275,7 @@ public class Colors {
 
     /**
      * @param color The color to check.
-     * @return <code>true</code> if the color's perceived brightness is less than 50%.
+     * @return {@code true} if the color's perceived brightness is less than 50%.
      */
     public static boolean isDim(Color color) {
         return perceivedBrightness(color) < 0.5;
@@ -288,8 +283,7 @@ public class Colors {
 
     /**
      * @param color The color to check.
-     * @return <code>true</code> if the color's perceived brightness is greater than or equal to
-     *         50%.
+     * @return {@code true} if the color's perceived brightness is greater than or equal to 50%.
      */
     public static boolean isBright(Color color) {
         return perceivedBrightness(color) >= 0.5;
@@ -327,7 +321,7 @@ public class Colors {
      */
     public static final Color adjustSaturation(Color color, float amount) {
         float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-        return new Color(Color.HSBtoRGB(hsb[0], Math.max(Math.min(hsb[1] + amount, 1f), 0f), hsb[2]));
+        return new Color(Color.HSBtoRGB(hsb[0], Math.max(Math.min(hsb[1] + amount, 1.0f), 0.0f), hsb[2]));
     }
 
     /**
@@ -337,7 +331,7 @@ public class Colors {
      */
     public static final Color adjustBrightness(Color color, float amount) {
         float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-        return new Color(Color.HSBtoRGB(hsb[0], hsb[1], Math.max(Math.min(hsb[2] + amount, 1f), 0f)));
+        return new Color(Color.HSBtoRGB(hsb[0], hsb[1], Math.max(Math.min(hsb[2] + amount, 1.0f), 0.0f)));
     }
 
     /**
@@ -347,7 +341,7 @@ public class Colors {
      */
     public static final Color adjustHue(Color color, float amount) {
         float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-        return new Color(Color.HSBtoRGB(Math.max(Math.min(hsb[0] + amount, 1f), 0f), hsb[1], hsb[2]));
+        return new Color(Color.HSBtoRGB(Math.max(Math.min(hsb[0] + amount, 1.0f), 0.0f), hsb[1], hsb[2]));
     }
 
     /**
@@ -369,9 +363,9 @@ public class Colors {
             Color color = UIManager.getColor("List.selectionBackground");
             if (!active) {
                 Color previous = color;
-                color = Colors.adjustSaturation(color, -0.5f);
+                color = adjustSaturation(color, -0.5f);
                 if (previous.getRGB() == color.getRGB()) {
-                    color = Colors.adjustBrightness(color, 0.2f);
+                    color = adjustBrightness(color, 0.2f);
                 }
             }
             return color;

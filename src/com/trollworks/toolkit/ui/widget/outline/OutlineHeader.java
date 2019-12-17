@@ -43,7 +43,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JPanel;
 import javax.swing.ToolTipManager;
 
@@ -61,7 +60,6 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
      * @param owner The owning outline.
      */
     public OutlineHeader(Outline owner) {
-        super();
         mOwner = owner;
         setOpaque(true);
         addMouseListener(this);
@@ -79,7 +77,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
         return mTopDividerColor == null ? mOwner.getDividerColor() : mTopDividerColor;
     }
 
-    /** @param color The new top divider color. Pass in <code>null</code> to restore defaults. */
+    /** @param color The new top divider color. Pass in {@code null} to restore defaults. */
     public void setTopDividerColor(Color color) {
         mTopDividerColor = color;
     }
@@ -102,11 +100,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
     @Override
     public void mousePressed(MouseEvent event) {
         if (event.isPopupTrigger()) {
-            Column column = mOwner.overColumn(event.getX());
-            if (column != null && mOwner.allowColumnContextMenu()) {
-                ArrayList<Column> selection = new ArrayList<>();
-                selection.add(column);
-            }
+            // Nothing to do
         } else if (mOwner.overColumnDivider(event.getX()) == null) {
             mSortColumn = mOwner.overColumn(event.getX());
         } else {
@@ -158,12 +152,12 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
 
     @Override
     public Dimension getPreferredSize() {
-        int               one          = Scale.get(this).scale(1);
-        List<Column>      columns      = mOwner.getModel().getColumns();
-        boolean           drawDividers = mOwner.shouldDrawColumnDividers();
-        Insets            insets       = getInsets();
-        Dimension         size         = new Dimension(insets.left + insets.right, 0);
-        ArrayList<Column> changed      = new ArrayList<>();
+        int          one          = Scale.get(this).scale(1);
+        List<Column> columns      = mOwner.getModel().getColumns();
+        boolean      drawDividers = mOwner.shouldDrawColumnDividers();
+        Insets       insets       = getInsets();
+        Dimension    size         = new Dimension(insets.left + insets.right, 0);
+        List<Column> changed      = new ArrayList<>();
         for (Column col : columns) {
             if (col.isVisible()) {
                 int tmp = col.getWidth();
@@ -173,7 +167,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
                     changed.add(col);
                 }
                 size.width += tmp + (drawDividers ? one : 0);
-                tmp         = col.getPreferredHeaderHeight(mOwner) + one;
+                tmp = col.getPreferredHeaderHeight(mOwner) + one;
                 if (tmp > size.height) {
                     size.height = tmp;
                 }
@@ -254,7 +248,7 @@ public class OutlineHeader extends JPanel implements DragGestureListener, DropTa
     public Rectangle getColumnBounds(Column column) {
         Insets    insets = getInsets();
         Rectangle bounds = new Rectangle(insets.left, insets.top, getWidth() - (insets.left + insets.right), getHeight() - (insets.top + insets.bottom));
-        bounds.x     = mOwner.getColumnStart(column);
+        bounds.x = mOwner.getColumnStart(column);
         bounds.width = column.getWidth();
         return bounds;
     }

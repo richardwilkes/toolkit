@@ -21,17 +21,17 @@ public final class JsonNull {
     }
 
     @Override
-    public final boolean equals(Object other) {
+    public boolean equals(Object other) {
         return other == null || other == this;
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return super.hashCode();
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return "null";
     }
 }

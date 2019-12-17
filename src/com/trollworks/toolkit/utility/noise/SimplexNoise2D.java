@@ -15,18 +15,19 @@ import java.util.Random;
 
 /** Provides a Simplex noise generator. */
 public class SimplexNoise2D implements Noise2D {
-    private static final double F2          = 0.5 * (Math.sqrt(3.0) - 1.0);
-    private static final double G2          = (3.0 - Math.sqrt(3.0)) / 6.0;
-    private static final int[]  X           = { 1, -1, 1, -1, 1, -1, 1, -1, 0, 0, 0, 0 };
-    private static final int[]  Y           = { 1, 1, -1, -1, 0, 0, 0, 0, 1, -1, 1, -1 };
-    private final int[]         mTable      = new int[512];
-    private final int[]         mTableMod12 = new int[512];
+    private static final double sqrt3       = 1.7320508075688772;
+    private static final double F2          = 0.5 * (sqrt3 - 1.0);
+    private static final double G2          = (3.0 - sqrt3) / 6.0;
+    private static final int[]  X           = {1, -1, 1, -1, 1, -1, 1, -1, 0, 0, 0, 0};
+    private static final int[]  Y           = {1, 1, -1, -1, 0, 0, 0, 0, 1, -1, 1, -1};
+    private final        int[]  mTable      = new int[512];
+    private final        int[]  mTableMod12 = new int[512];
 
     /** @param seed The seed to be passed to the random number generator when creating the state. */
     public SimplexNoise2D(long seed) {
         Random random = new Random(seed);
         for (int i = 0; i < 256; i++) {
-            mTable[i + 256]      = mTable[i] = random.nextInt(256);
+            mTable[i + 256] = mTable[i] = random.nextInt(256);
             mTableMod12[i + 256] = mTableMod12[i] = mTable[i] % 12;
         }
     }
@@ -40,14 +41,14 @@ public class SimplexNoise2D implements Noise2D {
         int    ii   = i & 255;
         int    jj   = j & 255;
 
-        double x0   = xin - (i - t);
-        double y0   = yin - (j - t);
-        double t0   = 0.5 - x0 * x0 - y0 * y0;
-        int    gi0  = mTableMod12[ii + mTable[jj]];
-        double n0   = t0 < 0 ? 0.0 : t0 * t0 * t0 * t0 * (X[gi0] * x0 + Y[gi0] * y0);
+        double x0  = xin - (i - t);
+        double y0  = yin - (j - t);
+        double t0  = 0.5 - x0 * x0 - y0 * y0;
+        int    gi0 = mTableMod12[ii + mTable[jj]];
+        double n0  = t0 < 0 ? 0.0 : t0 * t0 * t0 * t0 * (X[gi0] * x0 + Y[gi0] * y0);
 
-        int    i1;
-        int    j1;
+        int i1;
+        int j1;
         if (x0 > y0) {
             i1 = 1;
             j1 = 0;

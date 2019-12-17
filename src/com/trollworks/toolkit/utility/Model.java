@@ -22,14 +22,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.MessageFormat;
 import java.util.UUID;
-
 import javax.xml.stream.XMLStreamException;
 
 /** The abstract base model object, responsible for providing basic i/o. */
 public abstract class Model implements Cloneable {
     private static final String ATTR_VERSION = "version";
     private static final String ATTR_ID      = "id";
-    private UUID                mId          = UUID.randomUUID();
+    private              UUID   mId          = UUID.randomUUID();
 
     /** @return The root XML tag name. */
     public abstract String getRootTag();
@@ -121,9 +120,9 @@ public abstract class Model implements Cloneable {
      *
      * @param parser  The {@link XmlParser} to load from.
      * @param context The {@link ModelContext} to use.
-     * @return <code>true</code> if a call was made to {@link XmlParser#getText()}.
+     * @return {@code true} if a call was made to {@link XmlParser#getText()}.
      */
-    @SuppressWarnings({ "unused", "static-method" })
+    @SuppressWarnings({"unused", "static-method"})
     protected boolean loadContents(XmlParser parser, ModelContext context) throws XMLStreamException {
         return false;
     }

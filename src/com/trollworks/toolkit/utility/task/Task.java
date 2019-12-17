@@ -14,22 +14,23 @@ package com.trollworks.toolkit.utility.task;
 import com.trollworks.toolkit.io.Log;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Task implements Runnable {
     private static final ScheduledExecutorService EXECUTOR = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() + 1);
-    private static final HashSet<Object>          PENDING  = new HashSet<>();
-    private Runnable                              mTask;
-    private Object                                mKey;
-    private long                                  mPeriod  = -1;
-    private boolean                               mWasCancelled;
-    private boolean                               mWasExecuted;
+    private static final Set<Object>              PENDING  = new HashSet<>();
+    private              Runnable                 mTask;
+    private              Object                   mKey;
+    private              long                     mPeriod  = -1;
+    private              boolean                  mWasCancelled;
+    private              boolean                  mWasExecuted;
 
     Task(Runnable runnable, Object key) {
         mTask = runnable;
-        mKey  = key;
+        mKey = key;
     }
 
     void schedule(long delay, TimeUnit delayUnits) {
@@ -80,13 +81,13 @@ public class Task implements Runnable {
         return mPeriod != -1;
     }
 
-    /** @return <code>true</code> if the task was cancelled and will not be executed. */
+    /** @return {@code true} if the task was cancelled and will not be executed. */
     public synchronized boolean wasCancelled() {
         return mWasCancelled;
     }
 
     /**
-     * @return <code>true</code> if the task was successfully cancelled and will not be executed.
+     * @return {@code true} if the task was successfully cancelled and will not be executed.
      */
     public synchronized boolean cancel() {
         if (mWasExecuted) {

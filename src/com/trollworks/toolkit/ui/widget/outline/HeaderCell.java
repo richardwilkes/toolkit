@@ -17,24 +17,23 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-
 import javax.swing.SwingConstants;
 
 /** Used to draw headers in a {@link Outline}. */
 public class HeaderCell extends TextCell {
     /** The width of the sorter widget. */
-    public static final int SORTER_WIDTH = 12;
-    private int             mSortSequence;
-    private boolean         mSortAscending;
-    private Color           mSorterColor;
-    private boolean         mAllowSort;
+    public static final int     SORTER_WIDTH = 12;
+    private             int     mSortSequence;
+    private             boolean mSortAscending;
+    private             Color   mSorterColor;
+    private             boolean mAllowSort;
 
     /** Create a new header cell. */
     public HeaderCell() {
         super(SwingConstants.CENTER);
-        mSortSequence  = -1;
+        mSortSequence = -1;
         mSortAscending = true;
-        mAllowSort     = true;
+        mAllowSort = true;
     }
 
     /** @return Whether sorting is allowed and displayed. */
@@ -53,7 +52,7 @@ public class HeaderCell extends TextCell {
     }
 
     /**
-     * @return <code>true</code> if the column should be sorted in ascending order.
+     * @return {@code true} if the column should be sorted in ascending order.
      */
     public boolean isSortAscending() {
         return mSortAscending;
@@ -62,17 +61,17 @@ public class HeaderCell extends TextCell {
     /**
      * Sets the sort criteria for this column.
      *
-     * @param sequence  The column's sort sequence. Use <code>-1</code> if it has none.
-     * @param ascending Pass in <code>true</code> for an ascending sort.
+     * @param sequence  The column's sort sequence. Use {@code -1} if it has none.
+     * @param ascending Pass in {@code true} for an ascending sort.
      */
     public void setSortCriteria(int sequence, boolean ascending) {
         if (mAllowSort) {
-            mSortSequence  = sequence;
+            mSortSequence = sequence;
             mSortAscending = ascending;
         }
     }
 
-    /** @return The column's sort sequence, or <code>-1</code> if it has none. */
+    /** @return The column's sort sequence, or {@code -1} if it has none. */
     public int getSortSequence() {
         return mSortSequence;
     }
@@ -85,8 +84,8 @@ public class HeaderCell extends TextCell {
      * @param bounds   The bounds of the cell.
      * @param row      The row to draw.
      * @param column   The column to draw.
-     * @param selected Pass in <code>true</code> if the cell should be drawn in its selected state.
-     * @param active   Pass in <code>true</code> if the cell should be drawn in its active state.
+     * @param selected Pass in {@code true} if the cell should be drawn in its selected state.
+     * @param active   Pass in {@code true} if the cell should be drawn in its active state.
      */
     protected void drawCellSuper(Outline outline, Graphics gc, Rectangle bounds, Row row, Column column, boolean selected, boolean active) {
         super.drawCell(outline, gc, bounds, row, column, selected, active);
@@ -98,7 +97,7 @@ public class HeaderCell extends TextCell {
             Scale scale       = Scale.get(outline);
             int   sorterWidth = scale.scale(SORTER_WIDTH);
             int   two         = scale.scale(2);
-            bounds.x     += two;
+            bounds.x += two;
             bounds.width -= two + two;
 
             if (mSortSequence != -1) {
@@ -114,8 +113,8 @@ public class HeaderCell extends TextCell {
                 int i;
 
                 bounds.width += sorterWidth;
-                x             = bounds.x + bounds.width - (three + three);
-                y             = bounds.y + bounds.height / 2 - 1;
+                x = bounds.x + bounds.width - (three + three);
+                y = bounds.y + bounds.height / 2 - 1;
 
                 gc.setColor(getSorterColor());
                 int count = 0;
@@ -140,7 +139,7 @@ public class HeaderCell extends TextCell {
                 }
             }
 
-            bounds.x     -= two;
+            bounds.x -= two;
             bounds.width += two + two;
         } else {
             drawCellSuper(outline, gc, bounds, row, column, selected, active);

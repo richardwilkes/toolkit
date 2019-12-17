@@ -16,15 +16,15 @@ import java.util.BitSet;
 /** Provides standardized handling of selections. */
 public class Selection {
     /** The constant if no relevant keys were held down during a mouse-click. */
-    public static final int MOUSE_NONE   = 0;
+    public static final int            MOUSE_NONE   = 0;
     /** The constant if the shift key was held down during a mouse-click. */
-    public static final int MOUSE_EXTEND = 1;
+    public static final int            MOUSE_EXTEND = 1;
     /** The constant if the platform command key was held down during a mouse-click. */
-    public static final int MOUSE_FLIP   = 2;
-    private BitSet          mSelection;
-    private int             mSize;
-    private int             mAnchor;
-    private SelectionOwner  mOwner;
+    public static final int            MOUSE_FLIP   = 2;
+    private             BitSet         mSelection;
+    private             int            mSize;
+    private             int            mAnchor;
+    private             SelectionOwner mOwner;
 
     /**
      * Creates a new selection.
@@ -32,9 +32,9 @@ public class Selection {
      * @param owner The owner of this selection.
      */
     public Selection(SelectionOwner owner) {
-        mOwner     = owner;
+        mOwner = owner;
         mSelection = new BitSet();
-        mAnchor    = -1;
+        mAnchor = -1;
     }
 
     /**
@@ -54,10 +54,10 @@ public class Selection {
      * @param other The selection to clone.
      */
     public Selection(Selection other) {
-        mOwner     = other.mOwner;
+        mOwner = other.mOwner;
         mSelection = (BitSet) other.mSelection.clone();
-        mSize      = other.mSize;
-        mAnchor    = other.mAnchor;
+        mSize = other.mSize;
+        mAnchor = other.mAnchor;
     }
 
     /** @return The anchor index (used when extending selections). */
@@ -89,7 +89,7 @@ public class Selection {
      * Checks the specified index to determine if it is selected.
      *
      * @param index The index to check.
-     * @return <code>true</code> if the specified index is selected, <code>false</code> if it isn't.
+     * @return {@code true} if the specified index is selected, {@code false} if it isn't.
      */
     public boolean isSelected(int index) {
         if (index < 0 || index >= mSize) {
@@ -113,22 +113,22 @@ public class Selection {
         return mSelection.cardinality();
     }
 
-    /** @return The first selected index, or <code>-1</code> if there is none. */
+    /** @return The first selected index, or {@code -1} if there is none. */
     public int firstSelectedIndex() {
         return nextSelectedIndex(0);
     }
 
     /**
      * @param fromIndex The index to start checking at.
-     * @return The index of the first selected index on or after <code>fromIndex</code>, or
-     *         <code>-1</code> if there is none.
+     * @return The index of the first selected index on or after {@code fromIndex}, or {@code -1} if
+     *         there is none.
      */
     public int nextSelectedIndex(int fromIndex) {
         int index = mSelection.nextSetBit(fromIndex);
         return index < mSize ? index : -1;
     }
 
-    /** @return The last selected index, or <code>-1</code> if there is none. */
+    /** @return The last selected index, or {@code -1} if there is none. */
     public int lastSelectedIndex() {
         int index = mSelection.length() - 1;
         return index < mSize ? index : -1;
@@ -141,7 +141,7 @@ public class Selection {
         int   index = firstSelectedIndex();
         while (index != -1) {
             array[i++] = index;
-            index      = nextSelectedIndex(index + 1);
+            index = nextSelectedIndex(index + 1);
         }
         return array;
     }
@@ -163,11 +163,11 @@ public class Selection {
 
     /**
      * Selects a specific index. If the selection is replaced or there was no prior selection, the
-     * anchor is set to the <code>index</code>.
+     * anchor is set to the {@code index}.
      *
      * @param index The index to select.
-     * @param add   Pass in <code>true</code> to add the index to the current selection,
-     *              <code>false</code> to replace the current selection.
+     * @param add   Pass in {@code true} to add the index to the current selection, {@code false} to
+     *              replace the current selection.
      */
     public void select(int index, boolean add) {
         BitSet newSel = (BitSet) mSelection.clone();
@@ -186,14 +186,14 @@ public class Selection {
     }
 
     /**
-     * Selects the range <code>fromIndex</code> (inclusive) to <code>toIndex</code> (inclusive). If
-     * the selection is replaced or there was no prior selection, the anchor is set to
-     * <code>fromIndex</code>.
+     * Selects the range {@code fromIndex} (inclusive) to {@code toIndex} (inclusive). If the
+     * selection is replaced or there was no prior selection, the anchor is set to {@code
+     * fromIndex}.
      *
      * @param fromIndex The first index to select.
      * @param toIndex   The last index to select.
-     * @param add       Pass in <code>true</code> to add the range to the current selection,
-     *                  <code>false</code> to replace the current selection.
+     * @param add       Pass in {@code true} to add the range to the current selection, {@code
+     *                  false} to replace the current selection.
      */
     public void select(int fromIndex, int toIndex, boolean add) {
         BitSet newSel = (BitSet) mSelection.clone();
@@ -208,7 +208,7 @@ public class Selection {
         if (fromIndex > toIndex) {
             int tmp = fromIndex;
             fromIndex = toIndex;
-            toIndex   = tmp;
+            toIndex = tmp;
         }
         if (fromIndex < mSize) {
             if (toIndex >= mSize) {
@@ -224,8 +224,8 @@ public class Selection {
      * the anchor is set to the first index, if any.
      *
      * @param indexes The indexes to select.
-     * @param add     Pass in <code>true</code> to add the indexes to the current selection,
-     *                <code>false</code> to replace the current selection.
+     * @param add     Pass in {@code true} to add the indexes to the current selection, {@code
+     *                false} to replace the current selection.
      */
     public void select(int[] indexes, boolean add) {
         BitSet newSel = (BitSet) mSelection.clone();
@@ -236,7 +236,7 @@ public class Selection {
         index = index < mSize ? index : -1;
         if (index == -1) {
             if (indexes.length > 0) {
-                index   = indexes[0];
+                index = indexes[0];
                 mAnchor = index < 0 || index >= mSize ? -1 : index;
             } else {
                 mAnchor = -1;
@@ -255,7 +255,7 @@ public class Selection {
      * Does a logical "select up" (such as from the keyboard up-arrow).
      *
      * @param extend Whether to extend the current selection or replace it.
-     * @return The index that should be scrolled into view, or <code>-1</code> if there isn't one.
+     * @return The index that should be scrolled into view, or {@code -1} if there isn't one.
      */
     public int selectUp(boolean extend) {
         int index = -1;
@@ -292,7 +292,7 @@ public class Selection {
      * Does a logical "select down" (such as from the keyboard down-arrow).
      *
      * @param extend Whether to extend the current selection or replace it.
-     * @return The index that should be scrolled into view, or <code>-1</code> if there isn't one.
+     * @return The index that should be scrolled into view, or {@code -1} if there isn't one.
      */
     public int selectDown(boolean extend) {
         int index = -1;
@@ -329,7 +329,7 @@ public class Selection {
      * Does a logical "select home" (such as from the keyboard HOME key).
      *
      * @param extend Whether to extend the current selection or replace it.
-     * @return The index that should be scrolled into view, or <code>-1</code> if there isn't one.
+     * @return The index that should be scrolled into view, or {@code -1} if there isn't one.
      */
     public int selectToHome(boolean extend) {
         if (mSize > 0) {
@@ -350,7 +350,7 @@ public class Selection {
      * Does a logical "select end" (such as from the keyboard END key).
      *
      * @param extend Whether to extend the current selection or replace it.
-     * @return The index that should be scrolled into view, or <code>-1</code> if there isn't one.
+     * @return The index that should be scrolled into view, or {@code -1} if there isn't one.
      */
     public int selectToEnd(boolean extend) {
         if (mSize > 0) {
@@ -371,13 +371,15 @@ public class Selection {
      * Helper method for selecting one or more indexes by mouse.
      *
      * @param index  The index that was clicked on.
-     * @param method The type of click, one of {@link #MOUSE_NONE}, {@link #MOUSE_EXTEND}, or
-     *               {@link #MOUSE_FLIP}.
-     * @return <code>-1</code> if no selection on mouse-up should occur, or the passed in index if
+     * @param method The type of click, one of {@link #MOUSE_NONE}, {@link #MOUSE_EXTEND}, or {@link
+     *               #MOUSE_FLIP}.
+     * @return {@code -1} if no selection on mouse-up should occur, or the passed in index if
      *         selection on mouse-up is a possibility.
      */
     public int selectByMouse(int index, int method) {
-        if (index != -1) {
+        if (index == -1) {
+            deselect();
+        } else {
             if (mAnchor >= 0 && (method & MOUSE_EXTEND) == MOUSE_EXTEND) {
                 select(mAnchor, index, true);
             } else if ((method & MOUSE_FLIP) == MOUSE_FLIP) {
@@ -394,8 +396,6 @@ public class Selection {
                 // the sole selection if it wasn't already
                 return index;
             }
-        } else {
-            deselect();
         }
         return -1;
     }
@@ -427,7 +427,7 @@ public class Selection {
     }
 
     /**
-     * Deselects the range <code>fromIndex</code> (inclusive) to <code>toIndex</code> (inclusive).
+     * Deselects the range {@code fromIndex} (inclusive) to {@code toIndex} (inclusive).
      *
      * @param fromIndex The first index to deselect.
      * @param toIndex   The last index to deselect.
@@ -437,7 +437,7 @@ public class Selection {
         if (fromIndex > toIndex) {
             int tmp = fromIndex;
             fromIndex = toIndex;
-            toIndex   = tmp;
+            toIndex = tmp;
         }
         newSel.clear(fromIndex, toIndex + 1);
         if (mAnchor >= fromIndex && mAnchor <= toIndex) {

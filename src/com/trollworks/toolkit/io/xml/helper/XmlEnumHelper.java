@@ -17,13 +17,13 @@ import com.trollworks.toolkit.io.xml.XmlGenerator;
 import com.trollworks.toolkit.io.xml.XmlParserContext;
 
 import java.lang.reflect.Field;
-
 import javax.xml.stream.XMLStreamException;
 
 public class XmlEnumHelper implements XmlObjectHelper {
     public static final XmlEnumHelper SINGLETON = new XmlEnumHelper();
 
-    private XmlEnumHelper() {}
+    private XmlEnumHelper() {
+    }
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -76,7 +76,7 @@ public class XmlEnumHelper implements XmlObjectHelper {
         xml.endTag();
     }
 
-    private static final String getEnumXmlName(Enum<?> value) {
+    private static String getEnumXmlName(Enum<?> value) {
         String name = value.name();
         XmlTag xmlTag;
         try {

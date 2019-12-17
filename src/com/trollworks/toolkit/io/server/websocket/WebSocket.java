@@ -47,23 +47,23 @@ import java.nio.charset.StandardCharsets;
  * </pre>
  */
 public class WebSocket extends Personality {
-    public static final int       MAX_PAYLOAD_LENGTH = 128 * 1024;
-    private WebSocketHandler      mHandler;
-    private boolean               mFinalFragment;
-    private Opcode                mOpcode;
-    private Opcode                mLastOpcode;
-    private byte[]                mData;
-    private int                   mState;
-    private long                  mLength;
-    private int                   mCount;
-    private byte[]                mMask;
-    private ByteArrayOutputStream mBuffer;
-    private boolean               mClosed;
+    public static final int                   MAX_PAYLOAD_LENGTH = 128 * 1024;
+    private             WebSocketHandler      mHandler;
+    private             boolean               mFinalFragment;
+    private             Opcode                mOpcode;
+    private             Opcode                mLastOpcode;
+    private             byte[]                mData;
+    private             int                   mState;
+    private             long                  mLength;
+    private             int                   mCount;
+    private             byte[]                mMask;
+    private             ByteArrayOutputStream mBuffer;
+    private             boolean               mClosed;
 
     /** @param handler The {@link WebSocketHandler} to delegate to. */
     public WebSocket(WebSocketHandler handler) {
-        mHandler    = handler;
-        mBuffer     = new ByteArrayOutputStream();
+        mHandler = handler;
+        mBuffer = new ByteArrayOutputStream();
         mLastOpcode = Opcode.UNDEFINED;
     }
 
@@ -79,12 +79,12 @@ public class WebSocket extends Personality {
 
     private void reset() {
         mFinalFragment = false;
-        mOpcode        = Opcode.UNDEFINED;
-        mData          = null;
-        mState         = 0;
-        mLength        = 0;
-        mCount         = 0;
-        mMask          = null;
+        mOpcode = Opcode.UNDEFINED;
+        mData = null;
+        mState = 0;
+        mLength = 0;
+        mCount = 0;
+        mMask = null;
     }
 
     @Override
@@ -167,31 +167,31 @@ public class WebSocket extends Personality {
             mLength = b & 0x7F;
             if (mLength == 127) {
                 mLength = 0;
-                mState  = 2;
+                mState = 2;
             } else if (mLength == 126) {
                 mLength = 0;
-                mState  = 3;
+                mState = 3;
             } else {
-                mData  = new byte[(int) mLength];
+                mData = new byte[(int) mLength];
                 mState = mMask != null ? 4 : 5;
             }
             return false;
         case 2:
-            mLength |= (b & 0xFF) << (7 - mCount) * 8;
+            mLength |= (b & 0xFFL) << (7 - mCount) * 8;
             if (mLength > MAX_PAYLOAD_LENGTH) {
                 throw new IOException("Payload length too large");
             }
             if (++mCount == 8) {
                 mCount = 0;
-                mData  = new byte[(int) mLength];
+                mData = new byte[(int) mLength];
                 mState = mMask != null ? 4 : 5;
             }
             return false;
         case 3:
-            mLength |= (b & 0xFF) << (1 - mCount) * 8;
+            mLength |= (b & 0xFFL) << (1 - mCount) * 8;
             if (++mCount == 2) {
                 mCount = 0;
-                mData  = new byte[(int) mLength];
+                mData = new byte[(int) mLength];
                 mState = mMask != null ? 4 : 5;
             }
             return false;
@@ -204,11 +204,7 @@ public class WebSocket extends Personality {
             return false;
         case 5:
             if (mCount < mData.length) {
-                if (mMask != null) {
-                    mData[mCount] = (byte) ((b ^ mMask[mCount % mMask.length]) & 0xFF);
-                } else {
-                    mData[mCount] = b;
-                }
+                mData[mCount] = mMask != null ? (byte) ((b ^ mMask[mCount % mMask.length]) & 0xFF) : b;
                 ++mCount;
             }
             if (mCount == mData.length) {
@@ -252,7 +248,7 @@ public class WebSocket extends Personality {
         send(Opcode.BINARY, data);
     }
 
-    private final void send(Opcode opcode, byte[] data) {
+    private void send(Opcode opcode, byte[] data) {
         ByteArrayOutputStream baos      = new ByteArrayOutputStream(10 + Math.min(data.length, MAX_PAYLOAD_LENGTH));
         int                   position  = 0;
         int                   remaining = data.length;
@@ -274,8 +270,8 @@ public class WebSocket extends Personality {
             }
             if (length > 0) {
                 baos.write(data, position, length);
-                opcode     = Opcode.CONTINUATION;
-                position  += length;
+                opcode = Opcode.CONTINUATION;
+                position += length;
                 remaining -= length;
             }
             if (remaining <= 0) {
@@ -285,20 +281,14 @@ public class WebSocket extends Personality {
         send(ByteBuffer.wrap(baos.toByteArray()));
     }
 
-    static enum Opcode {
-        UNDEFINED((byte) 0xFF, true),
-        CONTINUATION((byte) 0, false),
-        TEXT((byte) 1, false),
-        BINARY((byte) 2, false),
-        CLOSE((byte) 8, true),
-        PING((byte) 9, true),
-        PONG((byte) 10, true);
+    enum Opcode {
+        UNDEFINED((byte) 0xFF, true), CONTINUATION((byte) 0, false), TEXT((byte) 1, false), BINARY((byte) 2, false), CLOSE((byte) 8, true), PING((byte) 9, true), PONG((byte) 10, true);
 
         private byte    mOpcode;
         private boolean mIsControl;
 
-        private Opcode(byte opcode, boolean isControl) {
-            mOpcode    = opcode;
+        Opcode(byte opcode, boolean isControl) {
+            mOpcode = opcode;
             mIsControl = isControl;
         }
 

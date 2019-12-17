@@ -16,13 +16,12 @@ import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
 import javax.swing.undo.UndoManager;
 
 /** Provides the "Undo" command. */
 public class UndoCommand extends Command {
     /** The action command this command will issue. */
-    public static final String      CMD_UNDO = "Undo";
+    public static final String CMD_UNDO = "Undo";
 
     /** The singleton {@link UndoCommand}. */
     public static final UndoCommand INSTANCE = new UndoCommand();

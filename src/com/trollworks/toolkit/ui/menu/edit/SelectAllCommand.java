@@ -17,16 +17,15 @@ import com.trollworks.toolkit.utility.I18n;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
 import javax.swing.text.JTextComponent;
 
 /** Provides the "Select All" command. */
 public class SelectAllCommand extends Command {
     /** The action command this command will issue. */
-    public static final String           CMD_SELECT_ALL = "SelectAll";
+    public static final String CMD_SELECT_ALL = "SelectAll";
 
     /** The singleton {@link SelectAllCommand}. */
-    public static final SelectAllCommand INSTANCE       = new SelectAllCommand();
+    public static final SelectAllCommand INSTANCE = new SelectAllCommand();
 
     private SelectAllCommand() {
         super(I18n.Text("Select All"), CMD_SELECT_ALL, KeyEvent.VK_A);

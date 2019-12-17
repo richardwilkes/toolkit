@@ -20,7 +20,7 @@ public class Add extends Operator {
     }
 
     @Override
-    public final Object evaluate(Object left, Object right) throws EvaluationException {
+    public final Object evaluate(Object left, Object right) {
         try {
             return Double.valueOf(ArgumentTokenizer.getDouble(left) + ArgumentTokenizer.getDouble(right));
         } catch (Exception exception) {

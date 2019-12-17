@@ -18,17 +18,16 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-
 import javax.swing.KeyStroke;
 import javax.swing.text.JTextComponent;
 
 /** Provides the "Delete" command. */
 public class DeleteCommand extends Command {
     /** The action command this command will issue. */
-    public static final String        CMD_DELETE = "Delete";
+    public static final String CMD_DELETE = "Delete";
 
     /** The singleton {@link DeleteCommand}. */
-    public static final DeleteCommand INSTANCE   = new DeleteCommand();
+    public static final DeleteCommand INSTANCE = new DeleteCommand();
 
     private DeleteCommand() {
         super(I18n.Text("Delete"), CMD_DELETE);

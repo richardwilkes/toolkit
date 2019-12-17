@@ -21,8 +21,7 @@ import java.lang.annotation.Target;
 /**
  * Provides a default value for an object that can be constructed with a {@link String} and whose
  * {@link #toString()} method can be used to match the value.
- */
-public @interface XmlDefault {
+ */ public @interface XmlDefault {
     /** @return The default value. */
     String value();
 }

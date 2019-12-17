@@ -20,10 +20,10 @@ class UITask extends Task {
 
     @Override
     public void run() {
-        if (!EventQueue.isDispatchThread()) {
-            EventQueue.invokeLater(this);
-        } else {
+        if (EventQueue.isDispatchThread()) {
             super.run();
+        } else {
+            EventQueue.invokeLater(this);
         }
     }
 }

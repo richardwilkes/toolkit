@@ -32,7 +32,7 @@ public class URLImageLoader implements ImageLoader {
 
     @Override
     public int hashCode() {
-        return 31 + (mURL == null ? 0 : mURL.hashCode());
+        return 31 + (mURL == null ? 0 : mURL.toString().hashCode());
     }
 
     @Override
@@ -41,7 +41,7 @@ public class URLImageLoader implements ImageLoader {
             return true;
         }
         if (obj instanceof URLImageLoader) {
-            return mURL.equals(((URLImageLoader) obj).mURL);
+            return mURL.toString().equals(((URLImageLoader) obj).mURL.toString());
         }
         return false;
     }

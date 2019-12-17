@@ -20,7 +20,7 @@ public class TreeRoot extends TreeContainerRow {
     /**
      * Creates a new {@link TreeRoot}.
      *
-     * @param notifier The {@link Notifier} to use. Must not be <code>null</code>.
+     * @param notifier The {@link Notifier} to use. Must not be {@code null}.
      */
     public TreeRoot(Notifier notifier) {
         mNotifier = notifier;

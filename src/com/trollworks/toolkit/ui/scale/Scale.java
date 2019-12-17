@@ -19,8 +19,8 @@ import java.awt.Insets;
 
 /** Provides convenience for scaling. */
 public class Scale {
-    private static Scale OVERRIDE;
-    private double       mScale;
+    private static Scale  OVERRIDE;
+    private        double mScale;
 
     public static void setOverride(Scale scale) {
         OVERRIDE = scale;
@@ -86,8 +86,9 @@ public class Scale {
         if (mScale == 1) {
             return values;
         }
-        double[] scaled = new double[values.length];
-        for (int i = 0; i < values.length; i++) {
+        int      length = values.length;
+        double[] scaled = new double[length];
+        for (int i = 0; i < length; i++) {
             scaled[i] = values[i] * mScale;
         }
         return scaled;

@@ -18,7 +18,6 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-
 import javax.swing.Icon;
 
 public class RetinaIcon implements Icon {

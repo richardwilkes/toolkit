@@ -24,23 +24,22 @@ import java.net.UnknownHostException;
 /** Provides a conduit through which messages from external processes can be received. */
 public class Conduit implements Runnable {
     /** The default port used by the conduit. */
-    public static final int   DEFAULT_PORT = 13321;
-    private InetSocketAddress mSocketAddress;
-    private Server            mServer;
-    private Socket            mSocket;
-    private DataInputStream   mInput;
-    private DataOutputStream  mOutput;
-    private ConduitReceiver   mReceiver;
-    private boolean           mOnEventThread;
-    private Thread            mReceptionThread;
-    private String            mUserFilter;
-    private String            mIDFilter;
+    public static final int               DEFAULT_PORT = 13321;
+    private             InetSocketAddress mSocketAddress;
+    private             Server            mServer;
+    private             Socket            mSocket;
+    private             DataInputStream   mInput;
+    private             DataOutputStream  mOutput;
+    private             ConduitReceiver   mReceiver;
+    private             boolean           mOnEventThread;
+    private             String            mUserFilter;
+    private             String            mIDFilter;
 
     /**
      * Creates a new conduit with the default port on the loopback address.
      *
      * @param receiver      The object that wants the messages from this conduit.
-     * @param onEventThread Pass in <code>true</code> to receive the messages on the event thread.
+     * @param onEventThread Pass in {@code true} to receive the messages on the event thread.
      */
     public Conduit(ConduitReceiver receiver, boolean onEventThread) {
         this(null, receiver, onEventThread);
@@ -51,7 +50,7 @@ public class Conduit implements Runnable {
      *
      * @param port          The port to communicate on.
      * @param receiver      The object that wants the messages from this conduit.
-     * @param onEventThread Pass in <code>true</code> to receive the messages on the event thread.
+     * @param onEventThread Pass in {@code true} to receive the messages on the event thread.
      */
     public Conduit(int port, ConduitReceiver receiver, boolean onEventThread) {
         this(new InetSocketAddress(getLoopBackAddress(), port), receiver, onEventThread);
@@ -63,7 +62,7 @@ public class Conduit implements Runnable {
      * @param address       The address to communicate on.
      * @param port          The port to communicate on.
      * @param receiver      The object that wants the messages from this conduit.
-     * @param onEventThread Pass in <code>true</code> to receive the messages on the event thread.
+     * @param onEventThread Pass in {@code true} to receive the messages on the event thread.
      */
     public Conduit(InetAddress address, int port, ConduitReceiver receiver, boolean onEventThread) {
         this(new InetSocketAddress(address, port), receiver, onEventThread);
@@ -74,25 +73,25 @@ public class Conduit implements Runnable {
      *
      * @param socketAddress The socket address to use.
      * @param receiver      The object that wants the messages from this conduit.
-     * @param onEventThread Pass in <code>true</code> to receive the messages on the event thread.
+     * @param onEventThread Pass in {@code true} to receive the messages on the event thread.
      */
     public Conduit(InetSocketAddress socketAddress, ConduitReceiver receiver, boolean onEventThread) {
         if (socketAddress == null) {
             socketAddress = new InetSocketAddress(getLoopBackAddress(), DEFAULT_PORT);
         }
-        mSocketAddress   = socketAddress;
-        mReceiver        = receiver;
-        mOnEventThread   = onEventThread;
-        mReceptionThread = new Thread(this, Conduit.class.getSimpleName() + '@' + mSocketAddress);
-        mUserFilter      = mReceiver.getConduitMessageUserFilter();
-        mIDFilter        = mReceiver.getConduitMessageIDFilter();
+        mSocketAddress = socketAddress;
+        mReceiver = receiver;
+        mOnEventThread = onEventThread;
+        Thread receptionThread = new Thread(this, Conduit.class.getSimpleName() + '@' + mSocketAddress);
+        mUserFilter = mReceiver.getConduitMessageUserFilter();
+        mIDFilter = mReceiver.getConduitMessageIDFilter();
         reconnect();
-        mReceptionThread.setPriority(Thread.NORM_PRIORITY);
-        mReceptionThread.setDaemon(true);
-        mReceptionThread.start();
+        receptionThread.setPriority(Thread.NORM_PRIORITY);
+        receptionThread.setDaemon(true);
+        receptionThread.start();
     }
 
-    private static final InetAddress getLoopBackAddress() {
+    private static InetAddress getLoopBackAddress() {
         try {
             return InetAddress.getByName(null);
         } catch (UnknownHostException uhe) {
@@ -121,7 +120,7 @@ public class Conduit implements Runnable {
             mSocket = new Socket();
             try {
                 mSocket.connect(mSocketAddress);
-                mInput  = new DataInputStream(mSocket.getInputStream());
+                mInput = new DataInputStream(mSocket.getInputStream());
                 mOutput = new DataOutputStream(mSocket.getOutputStream());
                 return;
             } catch (Exception ex2) {
@@ -175,7 +174,7 @@ public class Conduit implements Runnable {
                 // Ignore.
             }
             mSocket = null;
-            mInput  = null;
+            mInput = null;
             mOutput = null;
         }
     }

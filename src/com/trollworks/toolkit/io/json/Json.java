@@ -78,7 +78,7 @@ public class Json {
         return obj;
     }
 
-    private static final void loadFieldFromMap(Field field, String name, Object obj, JsonMap map) {
+    private static void loadFieldFromMap(Field field, String name, Object obj, JsonMap map) {
         Introspection.makeFieldAccessible(field);
         Class<?> fieldType = field.getType();
         try {
@@ -128,7 +128,7 @@ public class Json {
     }
 
     /** Does not support creating Arrays containing Arrays, Lists or Maps. */
-    private static final Object createArray(Field field, JsonArray array) {
+    private static Object createArray(Field field, JsonArray array) {
         if (array == null) {
             return null;
         }
@@ -198,7 +198,7 @@ public class Json {
     }
 
     /** Does not support creating Lists containing Arrays, Lists or Maps. */
-    private static final List<?> createList(Field field, JsonArray array) {
+    private static List<?> createList(Field field, JsonArray array) {
         if (array != null) {
             Type genericType = field.getGenericType();
             if (genericType instanceof ParameterizedType) {
@@ -226,7 +226,7 @@ public class Json {
     }
 
     /** Does not support creating Maps containing Arrays, Lists or Maps. */
-    private static final Map<String, ?> createMap(Field field, JsonMap map) {
+    private static Map<String, ?> createMap(Field field, JsonMap map) {
         if (map != null) {
             Type genericType = field.getGenericType();
             if (genericType instanceof ParameterizedType) {
@@ -258,7 +258,7 @@ public class Json {
     }
 
     /** Does not support creating Arrays, Lists or Maps. */
-    private static final Object createObject(Class<?> type, Object jsonData) {
+    private static Object createObject(Class<?> type, Object jsonData) {
         if (type == boolean.class || type == Boolean.class) {
             return asBooleanObject(jsonData);
         }
@@ -303,7 +303,7 @@ public class Json {
         return null;
     }
 
-    private static final Enum<?> extractEnum(String value, Enum<?>[] constants) {
+    private static Enum<?> extractEnum(String value, Enum<?>[] constants) {
         for (Enum<?> one : constants) {
             if (one.toString().equals(value)) {
                 return one;
@@ -358,8 +358,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>false</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a boolean.
+     * @return The value associated with the object or {@code false} if the object is {@code null}
+     *         or the value cannot be converted to a boolean.
      */
     public static final boolean asBoolean(Object obj) {
         return Boolean.TRUE.equals(obj) || obj instanceof String && Boolean.TRUE.toString().equalsIgnoreCase((String) obj);
@@ -367,8 +367,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>false</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a {@link Boolean}.
+     * @return The value associated with the object or {@code false} if the object is {@code null}
+     *         or the value cannot be converted to a {@link Boolean}.
      */
     public static final Boolean asBooleanObject(Object obj) {
         return asBoolean(obj) ? Boolean.TRUE : Boolean.FALSE;
@@ -376,8 +376,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a byte.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a byte.
      */
     public static final byte asByte(Object obj) {
         if (obj instanceof Number) {
@@ -395,8 +395,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a {@link Byte}.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a {@link Byte}.
      */
     public static final Byte asByteObject(Object obj) {
         return Byte.valueOf(asByte(obj));
@@ -404,8 +404,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a char.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a char.
      */
     public static final char asChar(Object obj) {
         if (obj instanceof Number) {
@@ -413,7 +413,7 @@ public class Json {
         }
         if (obj instanceof String) {
             String str = (String) obj;
-            if (str.length() > 0) {
+            if (!str.isEmpty()) {
                 return str.charAt(0);
             }
         }
@@ -422,8 +422,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a {@link Character}.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a {@link Character}.
      */
     public static final Character asCharObject(Object obj) {
         return Character.valueOf(asChar(obj));
@@ -431,8 +431,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a short.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a short.
      */
     public static final short asShort(Object obj) {
         if (obj instanceof Number) {
@@ -450,8 +450,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a {@link Short}.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a {@link Short}.
      */
     public static final Short asShortObject(Object obj) {
         return Short.valueOf(asShort(obj));
@@ -459,8 +459,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to an int.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to an int.
      */
     public static final int asInt(Object obj) {
         if (obj instanceof Number) {
@@ -478,8 +478,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to an {@link Integer}.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to an {@link Integer}.
      */
     public static final Integer asIntObject(Object obj) {
         return Integer.valueOf(asInt(obj));
@@ -487,8 +487,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a long.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a long.
      */
     public static final long asLong(Object obj) {
         if (obj instanceof Number) {
@@ -506,8 +506,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a {@link Long}.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a {@link Long}.
      */
     public static final Long asLongObject(Object obj) {
         return Long.valueOf(asLong(obj));
@@ -515,8 +515,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a float.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a float.
      */
     public static final float asFloat(Object obj) {
         if (obj instanceof Number) {
@@ -534,8 +534,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a {@link Float}.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a {@link Float}.
      */
     public static final Float asFloatObject(Object obj) {
         return Float.valueOf(asFloat(obj));
@@ -543,8 +543,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a double.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a double.
      */
     public static final double asDouble(Object obj) {
         if (obj instanceof Number) {
@@ -562,8 +562,8 @@ public class Json {
 
     /**
      * @param obj An object to process.
-     * @return The value associated with the object or <code>0</code> if the object is
-     *         <code>null</code> or the value cannot be converted to a {@link Double}.
+     * @return The value associated with the object or {@code 0} if the object is {@code null} or
+     *         the value cannot be converted to a {@link Double}.
      */
     public static final Double asDoubleObject(Object obj) {
         return Double.valueOf(asDouble(obj));
@@ -571,8 +571,8 @@ public class Json {
 
     /**
      * @param obj       An object to process.
-     * @param allowNull <code>false</code> to return an empty string if the result would be
-     *                  <code>null</code>.
+     * @param allowNull {@code false} to return an empty string if the result would be {@code
+     *                  null}.
      * @return The value associated with the object.
      */
     public static final String asString(Object obj, boolean allowNull) {
@@ -584,8 +584,8 @@ public class Json {
 
     /**
      * @param obj       An object to process.
-     * @param allowNull <code>false</code> to return an empty array if the object is
-     *                  <code>null</code> or the value is not a {@link JsonArray}.
+     * @param allowNull {@code false} to return an empty array if the object is {@code null} or the
+     *                  value is not a {@link JsonArray}.
      * @return The {@link JsonArray}.
      */
     public static final JsonArray asArray(Object obj, boolean allowNull) {
@@ -597,8 +597,8 @@ public class Json {
 
     /**
      * @param obj       An object to process.
-     * @param allowNull <code>false</code> to return an empty map if the object is <code>null</code>
-     *                  or the value is not a {@link JsonMap}.
+     * @param allowNull {@code false} to return an empty map if the object is {@code null} or the
+     *                  value is not a {@link JsonMap}.
      * @return The {@link JsonMap}.
      */
     public static final JsonMap asMap(Object obj, boolean allowNull) {
@@ -610,8 +610,8 @@ public class Json {
 
     /**
      * @param obj       An object to process.
-     * @param allowNull <code>false</code> to return an empty point if the object is
-     *                  <code>null</code> or the value cannot be converted to a {@link Point}.
+     * @param allowNull {@code false} to return an empty point if the object is {@code null} or the
+     *                  value cannot be converted to a {@link Point}.
      * @return The value associated with the object.
      */
     public static final Point asPoint(Object obj, boolean allowNull) {
@@ -630,8 +630,8 @@ public class Json {
 
     /**
      * @param obj       An object to process.
-     * @param allowNull <code>false</code> to return an empty point if the object is
-     *                  <code>null</code> or the value cannot be converted to a {@link Rectangle}.
+     * @param allowNull {@code false} to return an empty point if the object is {@code null} or the
+     *                  value cannot be converted to a {@link Rectangle}.
      * @return The value associated with the object.
      */
     public static final Rectangle asRectangle(Object obj, boolean allowNull) {
@@ -781,7 +781,7 @@ public class Json {
         if (string == null || (len = string.length()) == 0) {
             return "\"\"";
         }
-        StringBuffer buffer = new StringBuffer(len + 4);
+        StringBuilder buffer = new StringBuilder(len + 4);
         buffer.append('"');
         char ch = 0;
         for (int i = 0; i < len; i++) {
@@ -817,7 +817,7 @@ public class Json {
             default:
                 if (ch < ' ' || ch >= '\u0080' && ch < '\u00a0' || ch >= '\u2000' && ch < '\u2100') {
                     String hex = "000" + Integer.toHexString(ch);
-                    buffer.append("\\u" + hex.substring(hex.length() - 4));
+                    buffer.append("\\u").append(hex.substring(hex.length() - 4));
                 } else {
                     buffer.append(ch);
                 }
@@ -836,12 +836,12 @@ public class Json {
         int c;
         if (mUsePrevious) {
             mUsePrevious = false;
-            c            = mPrevious;
+            c = mPrevious;
         } else {
             c = mReader.read();
             if (c <= 0) { // End of stream
                 mEOF = true;
-                c    = 0;
+                c = 0;
             }
         }
         mIndex++;
@@ -859,7 +859,7 @@ public class Json {
     }
 
     private char nextSkippingWhitespace() throws IOException {
-        for (;;) {
+        for (; ; ) {
             char c = next();
             if (c == 0 || c > ' ') {
                 return c;
@@ -886,7 +886,7 @@ public class Json {
             break;
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         while (c >= ' ' && ",:]}/\\\"[{;=#".indexOf(c) < 0) {
             sb.append(c);
             c = next();
@@ -894,16 +894,16 @@ public class Json {
         back();
 
         s = sb.toString().trim();
-        if (s.equals("")) {
+        if (s.isEmpty()) {
             throw syntaxError("Missing value");
         }
-        if (s.equalsIgnoreCase("true")) {
+        if ("true".equalsIgnoreCase(s)) {
             return Boolean.TRUE;
         }
-        if (s.equalsIgnoreCase("false")) {
+        if ("false".equalsIgnoreCase(s)) {
             return Boolean.FALSE;
         }
-        if (s.equalsIgnoreCase("null")) {
+        if ("null".equalsIgnoreCase(s)) {
             return JsonNull.INSTANCE;
         }
 
@@ -947,10 +947,10 @@ public class Json {
             return array;
         }
         back();
-        for (;;) {
+        for (; ; ) {
             if (nextSkippingWhitespace() == ',') {
                 back();
-                array.put((Object) null);
+                array.put(null);
             } else {
                 back();
                 array.put(nextValue());
@@ -1026,9 +1026,9 @@ public class Json {
     }
 
     private String nextString(char quote) throws IOException {
-        char         c;
-        StringBuffer buffer = new StringBuffer();
-        for (;;) {
+        char          c;
+        StringBuilder buffer = new StringBuilder();
+        for (; ; ) {
             c = next();
             switch (c) {
             case 0:
@@ -1082,7 +1082,7 @@ public class Json {
         mIndex--;
         mCharacter--;
         mUsePrevious = true;
-        mEOF         = false;
+        mEOF = false;
     }
 
     private String next(int n) throws IOException {

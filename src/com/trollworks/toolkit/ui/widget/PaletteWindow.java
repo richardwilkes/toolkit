@@ -43,13 +43,13 @@ public abstract class PaletteWindow extends BaseWindow {
     }
 
     /**
-     * Called to initialize the {@link PaletteWindow}. At this point, no associated
-     * {@link AppWindow} will have been set. Immediately after this call completes, a call to
-     * {@link #adjustForAppWindow(AppWindow)} will be made.
+     * Called to initialize the {@link PaletteWindow}. At this point, no associated {@link
+     * AppWindow} will have been set. Immediately after this call completes, a call to {@link
+     * #adjustForAppWindow(AppWindow)} will be made.
      */
     protected abstract void initialize();
 
-    /** @return The {@link AppWindow} to work with. May be <code>null</code>. */
+    /** @return The {@link AppWindow} to work with. May be {@code null}. */
     public AppWindow getAppWindow() {
         return mAppWindow;
     }
@@ -64,7 +64,7 @@ public abstract class PaletteWindow extends BaseWindow {
     /**
      * Called whenever the top-most {@link AppWindow} changes.
      *
-     * @param window The new top-most {@link AppWindow}. May be <code>null</code>.
+     * @param window The new top-most {@link AppWindow}. May be {@code null}.
      */
     protected abstract void adjustForAppWindow(AppWindow window);
 }

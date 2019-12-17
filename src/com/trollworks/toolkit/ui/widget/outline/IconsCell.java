@@ -21,7 +21,6 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.SwingConstants;
 
 /** Represents icons in an {@link Outline}. */

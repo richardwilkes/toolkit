@@ -12,12 +12,13 @@
 package com.trollworks.toolkit.ui.widget.outline;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /** The information an undo for the row needs to operate. */
 public class RowUndoSnapshot {
-    private Row            mParent;
-    private boolean        mOpen;
-    private ArrayList<Row> mChildren;
+    private Row       mParent;
+    private boolean   mOpen;
+    private List<Row> mChildren;
 
     /**
      * Creates a snapshot of the information needed to undo any changes to the row.
@@ -25,13 +26,13 @@ public class RowUndoSnapshot {
      * @param row The row to create a snapshot for.
      */
     public RowUndoSnapshot(Row row) {
-        mParent   = row.getParent();
-        mOpen     = row.isOpen();
+        mParent = row.getParent();
+        mOpen = row.isOpen();
         mChildren = row.canHaveChildren() ? new ArrayList<>(row.getChildren()) : null;
     }
 
     /** @return The children. */
-    public ArrayList<Row> getChildren() {
+    public List<Row> getChildren() {
         return mChildren;
     }
 

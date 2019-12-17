@@ -36,7 +36,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -104,8 +103,7 @@ public class ImageWell extends JPanel implements DropTargetListener, MouseListen
             if (dataFlavor.isFlavorJavaFileListType()) {
                 try {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
-                    @SuppressWarnings("unchecked")
-                    List<File> transferData = (List<File>) dtde.getTransferable().getTransferData(dataFlavor);
+                    @SuppressWarnings("unchecked") List<File> transferData = (List<File>) dtde.getTransferable().getTransferData(dataFlavor);
                     for (File file : transferData) {
                         if (loadImageFile(file)) {
                             break;

@@ -14,7 +14,6 @@ package com.trollworks.toolkit.workarounds;
 import com.trollworks.toolkit.utility.Platform;
 
 import java.awt.Dimension;
-
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -29,6 +28,7 @@ public class WiderToolTipUI extends BasicToolTipUI {
         }
     }
 
+    @SuppressWarnings("MethodOverridesStaticMethodOfSuperclass")
     public static ComponentUI createUI(JComponent comp) {
         return sharedInstance;
     }

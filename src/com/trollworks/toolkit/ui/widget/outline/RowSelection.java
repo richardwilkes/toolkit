@@ -18,10 +18,10 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 /** Allows rows to be part of drag and drop operations internal to the JVM. */
 public class RowSelection implements Transferable {
     /** The data flavor for this class. */
-    public static final DataFlavor DATA_FLAVOR = new DataFlavor(RowSelection.class, "Outline Rows");
-    private OutlineModel           mModel;
-    private Row[]                  mRows;
-    private String                 mCache;
+    public static final DataFlavor   DATA_FLAVOR = new DataFlavor(RowSelection.class, "Outline Rows");
+    private             OutlineModel mModel;
+    private             Row[]        mRows;
+    private             String       mCache;
 
     /**
      * Creates a new transferable row object.
@@ -31,13 +31,13 @@ public class RowSelection implements Transferable {
      */
     public RowSelection(OutlineModel model, Row[] rows) {
         mModel = model;
-        mRows  = new Row[rows.length];
+        mRows = new Row[rows.length];
         System.arraycopy(rows, 0, mRows, 0, rows.length);
     }
 
     @Override
     public DataFlavor[] getTransferDataFlavors() {
-        return new DataFlavor[] { DATA_FLAVOR, DataFlavor.stringFlavor };
+        return new DataFlavor[]{DATA_FLAVOR, DataFlavor.stringFlavor};
     }
 
     @Override

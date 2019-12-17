@@ -29,16 +29,15 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 import javax.swing.JComponent;
 
 public class IconButton extends JComponent implements MouseListener, MouseMotionListener, ComponentListener {
-    private static final int MARGIN = 4;
-    private RetinaIcon       mIcon;
-    private Runnable         mClickFunction;
-    private boolean          mInMouseDown;
-    private boolean          mPressed;
-    private boolean          mShowBorder;
+    private static final int        MARGIN = 4;
+    private              RetinaIcon mIcon;
+    private              Runnable   mClickFunction;
+    private              boolean    mInMouseDown;
+    private              boolean    mPressed;
+    private              boolean    mShowBorder;
 
     public IconButton(StdImage img, String tooltip, Runnable clickFunction) {
         this(new RetinaIcon(img), tooltip, clickFunction);
@@ -116,7 +115,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
     public void mousePressed(MouseEvent event) {
         if (isEnabled() && !event.isPopupTrigger() && event.getButton() == 1) {
             mInMouseDown = true;
-            mPressed     = true;
+            mPressed = true;
             repaint();
             MouseCapture.start(this, Cursor.getDefaultCursor());
         }
@@ -137,7 +136,7 @@ public class IconButton extends JComponent implements MouseListener, MouseMotion
     public void mouseReleased(MouseEvent event) {
         if (isEnabled()) {
             mouseDragged(event);
-            mShowBorder  = mPressed;
+            mShowBorder = mPressed;
             mInMouseDown = false;
             MouseCapture.stop(this);
             if (mPressed) {

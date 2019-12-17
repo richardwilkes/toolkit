@@ -15,7 +15,6 @@ import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
-
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -24,10 +23,10 @@ import javax.xml.stream.XMLStreamReader;
 
 /** Provides simple XML parsing. */
 public class XmlParser implements AutoCloseable {
-    private static final String SEPARATOR = "\u0000";
-    private XMLStreamReader     mReader;
-    private int                 mDepth;
-    private String              mMarker;
+    private static final String          SEPARATOR = "\u0000";
+    private              XMLStreamReader mReader;
+    private              int             mDepth;
+    private              String          mMarker;
 
     /**
      * Creates a new {@link XmlParser}.
@@ -50,7 +49,7 @@ public class XmlParser implements AutoCloseable {
         return mMarker;
     }
 
-    /** @return The current tag's name, or <code>null</code>. */
+    /** @return The current tag's name, or {@code null}. */
     public String getCurrentTag() {
         return mReader.getLocalName();
     }
@@ -58,7 +57,7 @@ public class XmlParser implements AutoCloseable {
     /**
      * Advances to the next position.
      *
-     * @return The next tag's name, or <code>null</code>.
+     * @return The next tag's name, or {@code null}.
      */
     public String nextTag() throws XMLStreamException {
         return nextTag(null);
@@ -67,9 +66,9 @@ public class XmlParser implements AutoCloseable {
     /**
      * Advances to the next position.
      *
-     * @param marker If this is not <code>null</code>, when an end tag matches this marker return
-     *               <code>null</code>.
-     * @return The next tag's name, or <code>null</code>.
+     * @param marker If this is not {@code null}, when an end tag matches this marker return {@code
+     *               null}.
+     * @return The next tag's name, or {@code null}.
      */
     public String nextTag(String marker) throws XMLStreamException {
         while (mReader.hasNext()) {
@@ -80,7 +79,7 @@ public class XmlParser implements AutoCloseable {
                 return name;
             case XMLStreamConstants.END_ELEMENT:
                 mMarker = --mDepth + SEPARATOR + mReader.getLocalName();
-                if (marker != null && marker.equals(mMarker)) {
+                if (mMarker.equals(marker)) {
                     return null;
                 }
                 break;
@@ -122,7 +121,7 @@ public class XmlParser implements AutoCloseable {
 
     /**
      * @param name The name of the attribute to retrieve.
-     * @return The attribute value, or <code>null</code>.
+     * @return The attribute value, or {@code null}.
      */
     public String getAttribute(String name) {
         return mReader.getAttributeValue(null, name);

@@ -30,16 +30,16 @@ import java.util.StringTokenizer;
  * only a single instance.
  */
 public class LaunchProxy implements ConduitReceiver {
-    private static final String LAUNCH_ID        = "Launched";
-    private static final String TOOK_OVER_FOR_ID = "TookOverFor";
-    private static LaunchProxy  INSTANCE         = null;
-    private Conduit             mConduit;
-    private long                mTimeStamp;
-    private boolean             mReady;
-    private ArrayList<File>     mFiles;
+    private static final String      LAUNCH_ID        = "Launched";
+    private static final String      TOOK_OVER_FOR_ID = "TookOverFor";
+    private static       LaunchProxy INSTANCE;
+    private              Conduit     mConduit;
+    private              long        mTimeStamp;
+    private              boolean     mReady;
+    private              List<File>  mFiles;
 
     /** @return The single instance of the app launch proxy. */
-    public synchronized static LaunchProxy getInstance() {
+    public static synchronized LaunchProxy getInstance() {
         return INSTANCE;
     }
 
@@ -50,9 +50,15 @@ public class LaunchProxy implements ConduitReceiver {
      * @param files The files, if any, that should be passed on to another instance of the app that
      *              may already be running.
      */
-    public synchronized static void configure(List<File> files) {
-        if (INSTANCE == null) {
-            INSTANCE = new LaunchProxy(files);
+    public static void configure(List<File> files) {
+        boolean needSleep = false;
+        synchronized (LaunchProxy.class) {
+            if (INSTANCE == null) {
+                INSTANCE = new LaunchProxy(files);
+                needSleep = true;
+            }
+        }
+        if (needSleep) {
             try {
                 // Give it a chance to terminate this run...
                 Thread.sleep(1500);
@@ -60,13 +66,13 @@ public class LaunchProxy implements ConduitReceiver {
                 // Ignore
             }
         } else {
-            Log.error("Can only call configure once.");
+            Log.error("Should only call configure once.");
         }
     }
 
     private LaunchProxy(List<File> files) {
         StringBuilder buffer = new StringBuilder();
-        mFiles     = new ArrayList<>();
+        mFiles = new ArrayList<>();
         mTimeStamp = System.currentTimeMillis();
         buffer.append(LAUNCH_ID);
         buffer.append(' ');

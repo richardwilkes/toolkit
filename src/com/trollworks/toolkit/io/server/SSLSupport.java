@@ -17,7 +17,6 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
@@ -28,13 +27,13 @@ import javax.net.ssl.SSLSession;
 /** Provides simple SSL processing. */
 public class SSLSupport {
     private static final ByteBuffer EMPTY_BUFFER = ByteBuffer.allocate(0);
-    private Session                 mSession;
-    private SSLEngine               mEngine;
-    private SSLSession              mSSLSession;
-    private ByteBuffer              mUnderflowData;
-    private ByteBuffer              mAppData;
-    private ByteBuffer              mInboundData;
-    private ByteBuffer              mOutboundData;
+    private              Session    mSession;
+    private              SSLEngine  mEngine;
+    private              SSLSession mSSLSession;
+    private              ByteBuffer mUnderflowData;
+    private              ByteBuffer mAppData;
+    private              ByteBuffer mInboundData;
+    private              ByteBuffer mOutboundData;
 
     /**
      * @param keyStore The location to load a valid SSL keystore from.
@@ -60,19 +59,19 @@ public class SSLSupport {
      */
     public SSLSupport(Session session, SSLContext sslContext) throws SSLException {
         mSession = session;
-        mEngine  = sslContext.createSSLEngine();
+        mEngine = sslContext.createSSLEngine();
         mEngine.setUseClientMode(false);
         mEngine.setNeedClientAuth(false);
         mSSLSession = mEngine.getSession();
         int applicationBufferSize = mSSLSession.getApplicationBufferSize();
         int packetBufferSize      = mSSLSession.getPacketBufferSize();
-        mAppData      = ByteBuffer.allocate(applicationBufferSize);
+        mAppData = ByteBuffer.allocate(applicationBufferSize);
         mOutboundData = ByteBuffer.allocate(packetBufferSize);
         mEngine.beginHandshake();
     }
 
     private void runSSLTasks() {
-        Runnable task = null;
+        Runnable task;
         while ((task = mEngine.getDelegatedTask()) != null) {
             task.run();
         }
@@ -164,7 +163,7 @@ public class SSLSupport {
             newBuffer.put(mUnderflowData);
             newBuffer.put(mInboundData);
             newBuffer.flip();
-            mInboundData   = newBuffer;
+            mInboundData = newBuffer;
             mUnderflowData = null;
         }
     }

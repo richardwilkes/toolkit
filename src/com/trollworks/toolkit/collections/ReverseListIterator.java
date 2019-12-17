@@ -13,6 +13,7 @@ package com.trollworks.toolkit.collections;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class ReverseListIterator<T> implements Iterator<T>, Iterable<T> {
     private List<T> mList;
@@ -20,7 +21,7 @@ public class ReverseListIterator<T> implements Iterator<T>, Iterable<T> {
 
     public ReverseListIterator(List<T> list) {
         mList = list;
-        mPos  = mList.size() - 1;
+        mPos = mList.size() - 1;
     }
 
     @Override
@@ -29,7 +30,10 @@ public class ReverseListIterator<T> implements Iterator<T>, Iterable<T> {
     }
 
     @Override
-    public T next() {
+    public T next() throws NoSuchElementException {
+        if (mPos < 0) {
+            throw new NoSuchElementException();
+        }
         return mList.get(mPos--);
     }
 

@@ -17,7 +17,7 @@ package com.trollworks.toolkit.utility.notification;
  */
 public interface NotifierTarget {
     /** @return The relative notification priority. Higher gets delivered first. */
-    public int getNotificationPriority();
+    int getNotificationPriority();
 
     /**
      * Called when a notification is delivered.
@@ -26,5 +26,5 @@ public interface NotifierTarget {
      * @param name     The notification name.
      * @param data     Extra data specific to the notification.
      */
-    public void handleNotification(Object producer, String name, Object data);
+    void handleNotification(Object producer, String name, Object data);
 }

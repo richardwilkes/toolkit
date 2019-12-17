@@ -22,7 +22,7 @@ public class NotEqual extends Operator {
     @Override
     public final Object evaluate(Object left, Object right) {
         try {
-            return Double.valueOf(ArgumentTokenizer.getDouble(left) != ArgumentTokenizer.getDouble(right) ? 1 : 0);
+            return Double.valueOf(ArgumentTokenizer.getDouble(left) == ArgumentTokenizer.getDouble(right) ? 0 : 1);
         } catch (Exception exception) {
             return Double.valueOf(left.toString().equals(right.toString()) ? 0 : 1);
         }

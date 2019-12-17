@@ -15,7 +15,7 @@ import java.util.Random;
 
 /** Provides a Perlin noise generator. */
 public class PerlinNoise2D implements Noise2D {
-    private int mTable[] = new int[512];
+    private int[] mTable = new int[512];
 
     /** @param seed The seed to be passed to the random number generator when creating the state. */
     public PerlinNoise2D(long seed) {
@@ -46,15 +46,15 @@ public class PerlinNoise2D implements Noise2D {
         return lerp(0, lerp(v, laa, lab), lerp(v, lba, lbb));
     }
 
-    private static final double fade(double t) {
+    private static double fade(double t) {
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
-    private static final double lerp(double t, double a, double b) {
+    private static double lerp(double t, double a, double b) {
         return a + t * (b - a);
     }
 
-    private static final double grad(int hash, double x, double y, double z) {
+    private static double grad(int hash, double x, double y, double z) {
         hash &= 15;
         double u = hash < 8 ? x : y;
         if ((hash & 1) != 0) {

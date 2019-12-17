@@ -18,32 +18,33 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 /** Provides information for a bundle of code. */
 public class BundleInfo {
-    public static final String BUNDLE_NAME            = "bundle-name";
-    public static final String BUNDLE_VERSION         = "bundle-version";
-    public static final String BUNDLE_COPYRIGHT_OWNER = "bundle-copyright-owner";
-    public static final String BUNDLE_COPYRIGHT_YEARS = "bundle-copyright-years";
-    public static final String BUNDLE_LICENSE         = "bundle-license";
-    public static final String BUNDLE_EXECUTABLE      = "bundle-executable";
-    public static final String BUNDLE_ID              = "bundle-id";
-    public static final String BUNDLE_SIGNATURE       = "bundle-signature";
-    public static final String BUNDLE_CATEGORY        = "bundle-category";
-    private static BundleInfo  DEFAULT;
-    private String             mName;
-    private long               mVersion;
-    private String             mCopyrightOwner;
-    private String             mCopyrightYears;
-    private String             mLicense;
-    private String             mExecutableName;
-    private String             mId;
-    private String             mSignature;
-    private String             mCategory;
-    private PrintWriter        mOut;
-    private int                mDepth;
+    public static final String      BUNDLE_NAME            = "bundle-name";
+    public static final String      BUNDLE_VERSION         = "bundle-version";
+    public static final String      BUNDLE_COPYRIGHT_OWNER = "bundle-copyright-owner";
+    public static final String      BUNDLE_COPYRIGHT_YEARS = "bundle-copyright-years";
+    public static final String      BUNDLE_LICENSE         = "bundle-license";
+    public static final String      BUNDLE_EXECUTABLE      = "bundle-executable";
+    public static final String      BUNDLE_ID              = "bundle-id";
+    public static final String      BUNDLE_SIGNATURE       = "bundle-signature";
+    public static final String      BUNDLE_CATEGORY        = "bundle-category";
+    private static      BundleInfo  DEFAULT;
+    private             String      mName;
+    private             long        mVersion;
+    private             String      mCopyrightOwner;
+    private             String      mCopyrightYears;
+    private             String      mLicense;
+    private             String      mExecutableName;
+    private             String      mId;
+    private             String      mSignature;
+    private             String      mCategory;
+    private             PrintWriter mOut;
+    private             int         mDepth;
 
     /** @param bundleInfo The {@link BundleInfo} to use for the application. */
     public static final synchronized void setDefault(BundleInfo bundleInfo) {
@@ -132,15 +133,15 @@ public class BundleInfo {
     }
 
     private void load(Attributes attributes) {
-        mName           = attributes.getValue(BUNDLE_NAME);
-        mVersion        = Version.extract(attributes.getValue(BUNDLE_VERSION), 0);
+        mName = attributes.getValue(BUNDLE_NAME);
+        mVersion = Version.extract(attributes.getValue(BUNDLE_VERSION), 0);
         mCopyrightOwner = attributes.getValue(BUNDLE_COPYRIGHT_OWNER);
         mCopyrightYears = attributes.getValue(BUNDLE_COPYRIGHT_YEARS);
-        mLicense        = attributes.getValue(BUNDLE_LICENSE);
+        mLicense = attributes.getValue(BUNDLE_LICENSE);
         mExecutableName = attributes.getValue(BUNDLE_EXECUTABLE);
-        mId             = attributes.getValue(BUNDLE_ID);
-        mSignature      = attributes.getValue(BUNDLE_SIGNATURE);
-        mCategory       = attributes.getValue(BUNDLE_CATEGORY);
+        mId = attributes.getValue(BUNDLE_ID);
+        mSignature = attributes.getValue(BUNDLE_SIGNATURE);
+        mCategory = attributes.getValue(BUNDLE_CATEGORY);
     }
 
     private void validate(String defaultName) {
@@ -251,8 +252,8 @@ public class BundleInfo {
      * @param appIcon The name of the application icon, i.e. something like "app.icns".
      */
     public void write(File file, String appIcon) {
-        try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)))) {
-            mOut   = out;
+        try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)), false, StandardCharsets.UTF_8)) {
+            mOut = out;
             mDepth = 0;
             mOut.println("<?xml version=\"1.0\" ?>");
             mOut.println("<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">");

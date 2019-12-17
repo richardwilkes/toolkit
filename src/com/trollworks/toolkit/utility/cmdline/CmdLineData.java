@@ -41,7 +41,7 @@ class CmdLineData {
      * @param argument The option's argument.
      */
     CmdLineData(CmdLineOption option, String argument) {
-        mOption   = option;
+        mOption = option;
         mArgument = argument;
     }
 
@@ -50,7 +50,7 @@ class CmdLineData {
         return mOption != null;
     }
 
-    /** @return The option, or <code>null</code> if this is not an option. */
+    /** @return The option, or {@code null} if this is not an option. */
     CmdLineOption getOption() {
         return mOption;
     }

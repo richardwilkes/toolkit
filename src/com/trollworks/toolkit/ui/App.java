@@ -33,7 +33,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.BitSet;
-
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
@@ -42,10 +41,10 @@ import javax.swing.JPanel;
  * this information should be filled out as early as possible.
  */
 public class App implements KeyEventDispatcher, Runnable {
-    private static boolean                 NOTIFICATION_ALLOWED = false;
-    private static Class<? extends JPanel> ABOUT_PANEL_CLASS    = null;
-    private static BitSet                  KEY_STATE            = new BitSet();
-    private boolean                        mHasStarted;
+    private static boolean                 NOTIFICATION_ALLOWED;
+    private static Class<? extends JPanel> ABOUT_PANEL_CLASS;
+    private static BitSet                  KEY_STATE = new BitSet();
+    private        boolean                 mHasStarted;
 
     public static final void setup(Class<?> theClass) {
         AppHome.setup(theClass);
@@ -98,7 +97,7 @@ public class App implements KeyEventDispatcher, Runnable {
     /**
      * Must be called as early as possible and only once.
      *
-     * @param cmdLine The command-line arguments. May be <code>null</code>.
+     * @param cmdLine The command-line arguments. May be {@code null}.
      */
     public final void startup(CmdLine cmdLine) {
         if (mHasStarted) {
@@ -123,23 +122,23 @@ public class App implements KeyEventDispatcher, Runnable {
      * Called to configure the application and start any asynchronous startup tasks. This method
      * should return quickly. Does nothing by default.
      *
-     * @param cmdLine The command-line arguments. May be <code>null</code>.
+     * @param cmdLine The command-line arguments. May be {@code null}.
      */
     public void configureApplication(CmdLine cmdLine) {
         // Does nothing.
     }
 
     @Override
-    public synchronized final void run() {
+    public final synchronized void run() {
         OpenDataFileCommand.enablePassThrough();
-        if (AppWindow.getAllWindows().isEmpty()) {
+        if (AppWindow.getAllAppWindows().isEmpty()) {
             noWindowsAreOpenAtStartup(false);
-            if (AppWindow.getAllWindows().isEmpty()) {
+            if (AppWindow.getAllAppWindows().isEmpty()) {
                 noWindowsAreOpenAtStartup(true);
             }
         }
         finalStartup();
-        App.setNotificationAllowed(true);
+        setNotificationAllowed(true);
     }
 
     /**
@@ -176,7 +175,7 @@ public class App implements KeyEventDispatcher, Runnable {
         return KEY_STATE.get(keyCode);
     }
 
-    /** @return A newly created about panel, or <code>null</code>. */
+    /** @return A newly created about panel, or {@code null}. */
     public static JPanel createAboutPanel() {
         if (ABOUT_PANEL_CLASS != null) {
             try {

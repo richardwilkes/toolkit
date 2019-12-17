@@ -17,13 +17,15 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /** Allows rows to be part of drag and drop operations internal to the JVM. */
 public class TreeRowSelection implements Transferable {
     /** The data flavor for this class. */
-    public static final DataFlavor    DATA_FLAVOR = new DataFlavor(TreeRowSelection.class, "Tree Rows");
-    private ArrayList<TreeRow>        mRows;
-    private HashSet<TreeContainerRow> mOpenRows   = new HashSet<>();
+    public static final DataFlavor            DATA_FLAVOR = new DataFlavor(TreeRowSelection.class, "Tree Rows");
+    private             List<TreeRow>         mRows;
+    private             Set<TreeContainerRow> mOpenRows;
 
     /**
      * Creates a new transferable row object.
@@ -32,13 +34,13 @@ public class TreeRowSelection implements Transferable {
      * @param openRows The {@link TreeContainerRow}s within rows which are 'open'.
      */
     public TreeRowSelection(Collection<TreeRow> rows, Collection<TreeContainerRow> openRows) {
-        mRows     = new ArrayList<>(rows);
+        mRows = new ArrayList<>(rows);
         mOpenRows = new HashSet<>(openRows);
     }
 
     @Override
     public DataFlavor[] getTransferDataFlavors() {
-        return new DataFlavor[] { DATA_FLAVOR };
+        return new DataFlavor[]{DATA_FLAVOR};
     }
 
     @Override
@@ -55,12 +57,12 @@ public class TreeRowSelection implements Transferable {
     }
 
     /** @return The {@link TreeRow}s being transferred. */
-    public ArrayList<TreeRow> getRows() {
+    public List<TreeRow> getRows() {
         return mRows;
     }
 
     /** @return The {@link TreeContainerRow}s within rows which are 'open'. */
-    public HashSet<TreeContainerRow> getOpenRows() {
+    public Set<TreeContainerRow> getOpenRows() {
         return mOpenRows;
     }
 }

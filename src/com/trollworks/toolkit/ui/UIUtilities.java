@@ -28,7 +28,6 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -98,7 +97,7 @@ public class UIUtilities {
         Dimension size = comp.getPreferredSize();
         if (Platform.isWindows()) {
             size.width += 4; // Fudge the width on Windows, since its text measurement seems to be
-                             // off in many cases
+            // off in many cases
         }
         setOnlySize(comp, size);
     }
@@ -215,8 +214,8 @@ public class UIUtilities {
     /**
      * @param parent The parent {@link Container}.
      * @param child  The child {@link Component}.
-     * @return The index of the specified {@link Component}. -1 will be returned if the
-     *         {@link Component} isn't a direct child.
+     * @return The index of the specified {@link Component}. -1 will be returned if the {@link
+     *         Component} isn't a direct child.
      */
     public static int getIndexOf(Container parent, Component child) {
         if (parent != null) {
@@ -248,7 +247,7 @@ public class UIUtilities {
      * Clones a {@link MouseEvent}.
      *
      * @param event       The event to clone.
-     * @param refreshTime Pass in <code>true</code> to generate a new time stamp.
+     * @param refreshTime Pass in {@code true} to generate a new time stamp.
      * @return The new {@link MouseEvent}.
      */
     public static final MouseEvent cloneMouseEvent(MouseEvent event, boolean refreshTime) {
@@ -265,7 +264,7 @@ public class UIUtilities {
      * @param event       The event to clone.
      * @param source      Pass in a new source.
      * @param where       Pass in a new location.
-     * @param refreshTime Pass in <code>true</code> to generate a new time stamp.
+     * @param refreshTime Pass in {@code true} to generate a new time stamp.
      * @return The new {@link MouseEvent}.
      */
     public static final MouseEvent cloneMouseEvent(MouseEvent event, Component source, Point where, boolean refreshTime) {
@@ -283,7 +282,7 @@ public class UIUtilities {
      * @param from  The component that originally received the event.
      * @param to    The component the event should be forwarded to.
      */
-    static public void forwardMouseEvent(MouseEvent event, Component from, Component to) {
+    public static void forwardMouseEvent(MouseEvent event, Component from, Component to) {
         translateMouseEvent(event, from, to);
         to.dispatchEvent(event);
     }
@@ -295,10 +294,10 @@ public class UIUtilities {
      * @param from  The component that originally received the event.
      * @param to    The component the event should be forwarded to.
      */
-    static public void translateMouseEvent(MouseEvent event, Component from, Component to) {
+    public static void translateMouseEvent(MouseEvent event, Component from, Component to) {
         Point evtPt = event.getPoint();
         Point pt    = new Point(evtPt);
-        UIUtilities.convertPoint(pt, from, to);
+        convertPoint(pt, from, to);
         event.setSource(to);
         event.translatePoint(pt.x - evtPt.x, pt.y - evtPt.y);
     }
@@ -344,7 +343,7 @@ public class UIUtilities {
      * @param component The component to be looked at.
      * @param type      The type of component being looked for.
      * @return The first object that matches, starting with the component itself and working up
-     *         through its parents, or <code>null</code>.
+     *         through its parents, or {@code null}.
      */
     @SuppressWarnings("unchecked")
     public static <T> T getSelfOrAncestorOfType(Component component, Class<T> type) {
@@ -360,7 +359,7 @@ public class UIUtilities {
     /**
      * @param component The component whose ancestor chain is to be looked at.
      * @param type      The type of ancestor being looked for.
-     * @return The ancestor, or <code>null</code>.
+     * @return The ancestor, or {@code null}.
      */
     @SuppressWarnings("unchecked")
     public static <T> T getAncestorOfType(Component component, Class<T> type) {
@@ -380,7 +379,7 @@ public class UIUtilities {
      */
     public static <E> E getTypedSelectedItemFromCombo(JComboBox<E> combo) {
         int index = combo.getSelectedIndex();
-        return index != -1 ? combo.getItemAt(index) : null;
+        return index == -1 ? null : combo.getItemAt(index);
     }
 
     /**
@@ -394,7 +393,7 @@ public class UIUtilities {
             try {
                 Rectangle bounds = component.getVisibleRect();
                 offscreen = StdImage.createTransparent(component.getGraphicsConfiguration(), bounds.width, bounds.height);
-                gc        = offscreen.getGraphics();
+                gc = offscreen.getGraphics();
                 gc.translate(-bounds.x, -bounds.y);
                 component.paint(gc);
             } catch (Exception exception) {
@@ -410,7 +409,7 @@ public class UIUtilities {
 
     /**
      * @param obj The object to extract a {@link Component} for.
-     * @return The {@link Component} to use for the dialog, or <code>null</code>.
+     * @return The {@link Component} to use for the dialog, or {@code null}.
      */
     public static Component getComponentForDialog(Object obj) {
         return obj instanceof Component ? (Component) obj : null;

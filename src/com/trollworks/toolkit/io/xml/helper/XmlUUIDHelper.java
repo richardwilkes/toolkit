@@ -17,13 +17,13 @@ import com.trollworks.toolkit.io.xml.XmlParserContext;
 
 import java.lang.reflect.Field;
 import java.util.UUID;
-
 import javax.xml.stream.XMLStreamException;
 
 public class XmlUUIDHelper implements XmlObjectHelper {
     public static final XmlUUIDHelper SINGLETON = new XmlUUIDHelper();
 
-    private XmlUUIDHelper() {}
+    private XmlUUIDHelper() {
+    }
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {

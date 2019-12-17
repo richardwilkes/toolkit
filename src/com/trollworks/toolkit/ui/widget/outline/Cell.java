@@ -26,10 +26,10 @@ public interface Cell {
      * @param bounds   The bounds of the cell.
      * @param row      The row to draw.
      * @param column   The column to draw.
-     * @param selected Pass in <code>true</code> if the cell should be drawn in its selected state.
-     * @param active   Pass in <code>true</code> if the cell should be drawn in its active state.
+     * @param selected Pass in {@code true} if the cell should be drawn in its selected state.
+     * @param active   Pass in {@code true} if the cell should be drawn in its active state.
      */
-    public void drawCell(Outline outline, Graphics gc, Rectangle bounds, Row row, Column column, boolean selected, boolean active);
+    void drawCell(Outline outline, Graphics gc, Rectangle bounds, Row row, Column column, boolean selected, boolean active);
 
     /**
      * @param outline The {@link Outline} being used.
@@ -37,7 +37,7 @@ public interface Cell {
      * @param column  The column to get data from.
      * @return The preferred width of the cell for the specified data.
      */
-    public int getPreferredWidth(Outline outline, Row row, Column column);
+    int getPreferredWidth(Outline outline, Row row, Column column);
 
     /**
      * @param outline The {@link Outline} being used.
@@ -45,7 +45,7 @@ public interface Cell {
      * @param column  The column to get data from.
      * @return The preferred height of the cell for the specified data.
      */
-    public int getPreferredHeight(Outline outline, Row row, Column column);
+    int getPreferredHeight(Outline outline, Row row, Column column);
 
     /**
      * Compare the column in row one with row two.
@@ -53,10 +53,10 @@ public interface Cell {
      * @param column The column to compare.
      * @param one    The first row.
      * @param two    The second row.
-     * @return <code>< 0</code> if row one is less than row two, <code>0</code> if they are equal,
-     *         and <code>> 0</code> if row one is greater than row two.
+     * @return {@code < 0} if row one is less than row two, {@code 0} if they are equal, and {@code
+     *         > 0} if row one is greater than row two.
      */
-    public int compare(Column column, Row one, Row two);
+    int compare(Column column, Row one, Row two);
 
     /**
      * @param event  The {@link MouseEvent} that caused the tooltip to be shown.
@@ -65,7 +65,7 @@ public interface Cell {
      * @param column The column to get data from.
      * @return The cursor appropriate for the location within the cell.
      */
-    public Cursor getCursor(MouseEvent event, Rectangle bounds, Row row, Column column);
+    Cursor getCursor(MouseEvent event, Rectangle bounds, Row row, Column column);
 
     /**
      * @param event  The {@link MouseEvent} that caused the tooltip to be shown.
@@ -74,12 +74,12 @@ public interface Cell {
      * @param column The column to get data from.
      * @return The tooltip string for this cell.
      */
-    public String getToolTipText(Outline outline, MouseEvent event, Rectangle bounds, Row row, Column column);
+    String getToolTipText(Outline outline, MouseEvent event, Rectangle bounds, Row row, Column column);
 
     /**
-     * @return <code>true</code> if this cell wants to participate in dynamic row layout.
+     * @return {@code true} if this cell wants to participate in dynamic row layout.
      */
-    public boolean participatesInDynamicRowLayout();
+    boolean participatesInDynamicRowLayout();
 
     /**
      * Called when a mouse click has occurred on the cell.
@@ -89,5 +89,5 @@ public interface Cell {
      * @param row    The row to get data from.
      * @param column The column to get data from.
      */
-    public void mouseClicked(MouseEvent event, Rectangle bounds, Row row, Column column);
+    void mouseClicked(MouseEvent event, Rectangle bounds, Row row, Column column);
 }

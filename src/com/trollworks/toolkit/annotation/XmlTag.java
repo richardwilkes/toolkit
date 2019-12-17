@@ -17,9 +17,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.FIELD })
-/** Marks classes and fields that correspond to an XML tag. */
-public @interface XmlTag {
+@Target({ElementType.TYPE, ElementType.FIELD})
+/** Marks classes and fields that correspond to an XML tag. */ public @interface XmlTag {
     /** @return The XML tag name. */
     String value();
 }

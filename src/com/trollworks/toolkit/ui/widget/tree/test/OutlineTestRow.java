@@ -37,22 +37,18 @@ public class OutlineTestRow extends Row {
 
     @Override
     public Object getData(Column column) {
-        switch (column.getID()) {
-        case 0:
+        if (column.getID() == 0) {
             return getName();
-        default:
-            return Integer.valueOf(mName.length());
         }
+        return Integer.valueOf(mName.length());
     }
 
     @Override
     public String getDataAsText(Column column) {
-        switch (column.getID()) {
-        case 0:
+        if (column.getID() == 0) {
             return getName();
-        default:
-            return getSecond();
         }
+        return getSecond();
     }
 
     @Override

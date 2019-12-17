@@ -20,22 +20,20 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-
 import javax.swing.SwingConstants;
 
 /** Displays text in a {@link TreeColumn}. */
 public class TextTreeColumn extends TreeColumn {
-    public static final int ICON_GAP          = 2;
-    public static final int HMARGIN           = 2;
-    public static final int VMARGIN           = 1;
-    private FieldAccessor   mFieldAccessor;
-    private IconAccessor    mIconAccessor;
-    private int             mAlignment;
-    private int             mTruncationPolicy = SwingConstants.CENTER;
-    private WrappingMode    mWrappingMode;
+    public static final int           ICON_GAP = 2;
+    public static final int           HMARGIN  = 2;
+    public static final int           VMARGIN  = 1;
+    private             FieldAccessor mFieldAccessor;
+    private             IconAccessor  mIconAccessor;
+    private             int           mAlignment;
+    private             WrappingMode  mWrappingMode;
 
     public enum WrappingMode {
-        NORMAL, WRAPPED, SINGLE_LINE;
+        NORMAL, WRAPPED, SINGLE_LINE
     }
 
     /**
@@ -106,9 +104,9 @@ public class TextTreeColumn extends TreeColumn {
     public TextTreeColumn(String name, FieldAccessor fieldAccessor, IconAccessor iconAccessor, int alignment, WrappingMode wrappingMode) {
         super(name);
         mFieldAccessor = fieldAccessor;
-        mIconAccessor  = iconAccessor;
-        mAlignment     = alignment;
-        mWrappingMode  = wrappingMode;
+        mIconAccessor = iconAccessor;
+        mAlignment = alignment;
+        mWrappingMode = wrappingMode;
     }
 
     @Override
@@ -160,13 +158,13 @@ public class TextTreeColumn extends TreeColumn {
 
     @Override
     public void draw(Graphics2D gc, TreePanel panel, TreeRow row, int position, int top, int left, int width, boolean selected, boolean active) {
-        left  += HMARGIN;
+        left += HMARGIN;
         width -= HMARGIN + HMARGIN;
         RetinaIcon icon = getIcon(row);
         if (icon != null) {
             icon.paintIcon(panel, gc, left, top + VMARGIN);
             int iconSize = icon.getIconWidth() + ICON_GAP;
-            left  += iconSize;
+            left += iconSize;
             width -= iconSize;
         }
         Font font = getFont(row);
@@ -180,9 +178,9 @@ public class TextTreeColumn extends TreeColumn {
     /**
      * @param row           The {@link TreeRow} to extract information from.
      * @param font          The {@link Font} to use.
-     * @param width         The adjusted width of the column. This may be less than
-     *                      {@link #getWidth()} due to display of disclosure controls.
-     * @param forHeightOnly Will be <code>true</code> when only the number of lines matters.
+     * @param width         The adjusted width of the column. This may be less than {@link
+     *                      #getWidth()} due to display of disclosure controls.
+     * @param forHeightOnly Will be {@code true} when only the number of lines matters.
      * @return The text to display, wrapped if necessary.
      */
     protected String getPresentationText(TreeRow row, Font font, int width, boolean forHeightOnly) {
@@ -196,7 +194,7 @@ public class TextTreeColumn extends TreeColumn {
                 text = text.substring(0, cut);
             }
         }
-        return forHeightOnly ? text : TextDrawing.truncateIfNecessary(font, text, width, mTruncationPolicy);
+        return forHeightOnly ? text : TextDrawing.truncateIfNecessary(font, text, width, SwingConstants.CENTER);
     }
 
     /**

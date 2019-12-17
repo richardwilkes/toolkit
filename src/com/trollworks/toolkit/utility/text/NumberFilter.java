@@ -17,23 +17,22 @@ import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-
 import javax.swing.JTextField;
 
 /** A standard numeric key entry filter. */
 public class NumberFilter implements KeyListener {
-    private static final char GROUP_CHAR;
-    private static final char DECIMAL_CHAR;
-    private JTextField        mField;
-    private boolean           mIsHeightFilter;
-    private boolean           mAllowDecimal;
-    private boolean           mAllowSign;
-    private boolean           mAllowGroup;
-    private int               mMaxDigits;
+    private static final char       GROUP_CHAR;
+    private static final char       DECIMAL_CHAR;
+    private              JTextField mField;
+    private              boolean    mIsHeightFilter;
+    private              boolean    mAllowDecimal;
+    private              boolean    mAllowSign;
+    private              boolean    mAllowGroup;
+    private              int        mMaxDigits;
 
     static {
         DecimalFormatSymbols symbols = ((DecimalFormat) NumberFormat.getNumberInstance()).getDecimalFormatSymbols();
-        GROUP_CHAR   = symbols.getGroupingSeparator();
+        GROUP_CHAR = symbols.getGroupingSeparator();
         DECIMAL_CHAR = symbols.getDecimalSeparator();
     }
 
@@ -51,8 +50,8 @@ public class NumberFilter implements KeyListener {
      * Creates a new numeric key entry filter.
      *
      * @param field        The {@link JTextField} to filter.
-     * @param allowDecimal Pass in <code>true</code> to allow floating point.
-     * @param allowSign    Pass in <code>true</code> to allow sign characters.
+     * @param allowDecimal Pass in {@code true} to allow floating point.
+     * @param allowSign    Pass in {@code true} to allow sign characters.
      */
     public NumberFilter(JTextField field, boolean allowDecimal, boolean allowSign) {
         this(field, allowDecimal, allowSign, true, Integer.MAX_VALUE);
@@ -62,9 +61,9 @@ public class NumberFilter implements KeyListener {
      * Creates a new numeric key entry filter.
      *
      * @param field        The {@link JTextField} to filter.
-     * @param allowDecimal Pass in <code>true</code> to allow floating point.
-     * @param allowSign    Pass in <code>true</code> to allow sign characters.
-     * @param allowGroup   Pass in <code>true</code> to allow group characters.
+     * @param allowDecimal Pass in {@code true} to allow floating point.
+     * @param allowSign    Pass in {@code true} to allow sign characters.
+     * @param allowGroup   Pass in {@code true} to allow group characters.
      */
     public NumberFilter(JTextField field, boolean allowDecimal, boolean allowSign, boolean allowGroup) {
         this(field, allowDecimal, allowSign, allowGroup, Integer.MAX_VALUE);
@@ -74,8 +73,8 @@ public class NumberFilter implements KeyListener {
      * Creates a new numeric key entry filter.
      *
      * @param field        The {@link JTextField} to filter.
-     * @param allowDecimal Pass in <code>true</code> to allow floating point.
-     * @param allowSign    Pass in <code>true</code> to allow sign characters.
+     * @param allowDecimal Pass in {@code true} to allow floating point.
+     * @param allowSign    Pass in {@code true} to allow sign characters.
      * @param maxDigits    The maximum number of digits (not necessarily characters) the field can
      *                     have.
      */
@@ -87,18 +86,18 @@ public class NumberFilter implements KeyListener {
      * Creates a new numeric key entry filter.
      *
      * @param field        The {@link JTextField} to filter.
-     * @param allowDecimal Pass in <code>true</code> to allow floating point.
-     * @param allowSign    Pass in <code>true</code> to allow sign characters.
-     * @param allowGroup   Pass in <code>true</code> to allow group characters.
+     * @param allowDecimal Pass in {@code true} to allow floating point.
+     * @param allowSign    Pass in {@code true} to allow sign characters.
+     * @param allowGroup   Pass in {@code true} to allow group characters.
      * @param maxDigits    The maximum number of digits (not necessarily characters) the field can
      *                     have.
      */
     public NumberFilter(JTextField field, boolean allowDecimal, boolean allowSign, boolean allowGroup, int maxDigits) {
-        mField        = field;
+        mField = field;
         mAllowDecimal = allowDecimal;
-        mAllowSign    = allowSign;
-        mAllowGroup   = allowGroup;
-        mMaxDigits    = maxDigits;
+        mAllowSign = allowSign;
+        mAllowGroup = allowGroup;
+        mMaxDigits = maxDigits;
         for (KeyListener listener : mField.getKeyListeners()) {
             if (listener instanceof NumberFilter) {
                 mField.removeKeyListener(listener);
@@ -133,11 +132,9 @@ public class NumberFilter implements KeyListener {
                 if (ch >= '0' && ch <= '9') {
                     int length = buffer.length();
                     int count  = 0;
-
                     for (int i = 0; i < length; i++) {
                         char one = buffer.charAt(i);
-
-                        if (one >= '0' && ch <= '9') {
+                        if (one >= '0' && one <= '9') {
                             count++;
                         }
                     }

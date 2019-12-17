@@ -11,8 +11,10 @@
 
 package com.trollworks.toolkit.ui.layout;
 
-import static com.trollworks.toolkit.ui.layout.PrecisionLayoutAlignment.*;
-
+import static com.trollworks.toolkit.ui.layout.PrecisionLayoutAlignment.BEGINNING;
+import static com.trollworks.toolkit.ui.layout.PrecisionLayoutAlignment.END;
+import static com.trollworks.toolkit.ui.layout.PrecisionLayoutAlignment.FILL;
+import static com.trollworks.toolkit.ui.layout.PrecisionLayoutAlignment.MIDDLE;
 import com.trollworks.toolkit.ui.scale.Scale;
 
 import java.awt.Component;
@@ -23,25 +25,25 @@ import java.awt.Dimension;
  * objects. Each component should have its own.
  */
 public final class PrecisionLayoutData {
-    public static final int          DEFAULT       = -1;
-    private int                      mCacheMinWidth;
-    private int                      mCacheWidth;
-    private int                      mCacheHeight;
-    private PrecisionLayoutAlignment mVAlign       = MIDDLE;
-    private PrecisionLayoutAlignment mHAlign       = BEGINNING;
-    private int                      mMarginTop    = 0;
-    private int                      mMarginLeft   = 0;
-    private int                      mMarginBottom = 0;
-    private int                      mMarginRight  = 0;
-    private int                      mWidthHint    = DEFAULT;
-    private int                      mHeightHint   = DEFAULT;
-    private int                      mHSpan        = 1;
-    private int                      mVSpan        = 1;
-    private int                      mMinWidth     = DEFAULT;
-    private int                      mMinHeight    = DEFAULT;
-    private boolean                  mHGrab        = false;
-    private boolean                  mVGrab        = false;
-    private boolean                  mExclude      = false;
+    public static final int                      DEFAULT     = -1;
+    private             int                      mCacheMinWidth;
+    private             int                      mCacheWidth;
+    private             int                      mCacheHeight;
+    private             PrecisionLayoutAlignment mVAlign     = MIDDLE;
+    private             PrecisionLayoutAlignment mHAlign     = BEGINNING;
+    private             int                      mMarginTop;
+    private             int                      mMarginLeft;
+    private             int                      mMarginBottom;
+    private             int                      mMarginRight;
+    private             int                      mWidthHint  = DEFAULT;
+    private             int                      mHeightHint = DEFAULT;
+    private             int                      mHSpan      = 1;
+    private             int                      mVSpan      = 1;
+    private             int                      mMinWidth   = DEFAULT;
+    private             int                      mMinHeight  = DEFAULT;
+    private             boolean                  mHGrab;
+    private             boolean                  mVGrab;
+    private             boolean                  mExclude;
 
     /**
      * Position the component at the left of the cell. This is the default.
@@ -90,7 +92,7 @@ public final class PrecisionLayoutData {
 
     /**
      * @param alignment Specifies how components will be positioned horizontally within a cell. The
-     *                  default value is {@link #BEGINNING}.
+     *                  default value is {@link PrecisionLayoutAlignment#BEGINNING}.
      * @return This layout data.
      */
     public PrecisionLayoutData setHorizontalAlignment(PrecisionLayoutAlignment alignment) {
@@ -145,7 +147,7 @@ public final class PrecisionLayoutData {
 
     /**
      * @param alignment Specifies how components will be positioned vertically within a cell. The
-     *                  default value is {@link #MIDDLE}.
+     *                  default value is {@link PrecisionLayoutAlignment#MIDDLE}.
      * @return This layout data.
      */
     public PrecisionLayoutData setVerticalAlignment(PrecisionLayoutAlignment alignment) {
@@ -199,9 +201,9 @@ public final class PrecisionLayoutData {
 
     /**
      * @param horizontal Specifies how components will be positioned horizontally within a cell. The
-     *                   default value is {@link #BEGINNING}.
+     *                   default value is {@link PrecisionLayoutAlignment#BEGINNING}.
      * @param vertical   Specifies how components will be positioned vertically within a cell. The
-     *                   default value is {@link #MIDDLE}.
+     *                   default value is {@link PrecisionLayoutAlignment#MIDDLE}.
      * @return This layout data.
      */
     public PrecisionLayoutData setAlignment(PrecisionLayoutAlignment horizontal, PrecisionLayoutAlignment vertical) {
@@ -288,10 +290,10 @@ public final class PrecisionLayoutData {
      * @return This layout data.
      */
     public PrecisionLayoutData setMargins(int margins) {
-        mMarginTop    = margins;
-        mMarginLeft   = margins;
+        mMarginTop = margins;
+        mMarginLeft = margins;
         mMarginBottom = margins;
-        mMarginRight  = margins;
+        mMarginRight = margins;
         return this;
     }
 
@@ -307,10 +309,10 @@ public final class PrecisionLayoutData {
      * @return This layout data.
      */
     public PrecisionLayoutData setMargins(int top, int left, int bottom, int right) {
-        mMarginTop    = top;
-        mMarginLeft   = left;
+        mMarginTop = top;
+        mMarginLeft = left;
         mMarginBottom = bottom;
-        mMarginRight  = right;
+        mMarginRight = right;
         return this;
     }
 
@@ -324,8 +326,8 @@ public final class PrecisionLayoutData {
 
     /**
      * @param width The preferred width in pixels. A value of {@link #DEFAULT} indicates the
-     *              component should be asked for its preferred size. The default value is
-     *              {@link #DEFAULT}.
+     *              component should be asked for its preferred size. The default value is {@link
+     *              #DEFAULT}.
      * @return This layout data.
      */
     public PrecisionLayoutData setWidthHint(int width) {
@@ -334,20 +336,19 @@ public final class PrecisionLayoutData {
     }
 
     /**
-     * @return The minimum width in pixels. This value applies only if
-     *         {@link #shouldGrabHorizontalSpace()} is <code>true</code>. A value of
-     *         {@link #DEFAULT} means that the minimum width will be determined by calling
-     *         {@link Component#getMinimumSize()}.
+     * @return The minimum width in pixels. This value applies only if {@link
+     *         #shouldGrabHorizontalSpace()} is {@code true}. A value of {@link #DEFAULT} means that
+     *         the minimum width will be determined by calling {@link Component#getMinimumSize()}.
      */
     public int getMinimumWidth() {
         return mMinWidth;
     }
 
     /**
-     * @param width The minimum width in pixels. This value applies only if
-     *              {@link #shouldGrabHorizontalSpace()} is <code>true</code>. A value of
-     *              {@link #DEFAULT} means that the minimum width will be determined by calling
-     *              {@link Component#getMinimumSize()}. The default value is {@link #DEFAULT}.
+     * @param width The minimum width in pixels. This value applies only if {@link
+     *              #shouldGrabHorizontalSpace()} is {@code true}. A value of {@link #DEFAULT} means
+     *              that the minimum width will be determined by calling {@link
+     *              Component#getMinimumSize()}. The default value is {@link #DEFAULT}.
      * @return This layout data.
      */
     public PrecisionLayoutData setMinimumWidth(int width) {
@@ -365,8 +366,8 @@ public final class PrecisionLayoutData {
 
     /**
      * @param height The preferred height in pixels. A value of {@link #DEFAULT} indicates the
-     *               component should be asked for its preferred size. The default value is
-     *               {@link #DEFAULT}.
+     *               component should be asked for its preferred size. The default value is {@link
+     *               #DEFAULT}.
      * @return This layout data.
      */
     public PrecisionLayoutData setHeightHint(int height) {
@@ -375,19 +376,19 @@ public final class PrecisionLayoutData {
     }
 
     /**
-     * @return The minimum height in pixels. This value applies only if
-     *         {@link #shouldGrabVerticalSpace()} is true. A value of {@link #DEFAULT} means that
-     *         the minimum height will be determined by calling {@link Component#getMinimumSize()}.
+     * @return The minimum height in pixels. This value applies only if {@link
+     *         #shouldGrabVerticalSpace()} is true. A value of {@link #DEFAULT} means that the
+     *         minimum height will be determined by calling {@link Component#getMinimumSize()}.
      */
     public int getMinimumHeight() {
         return mMinHeight;
     }
 
     /**
-     * @param height The minimum height in pixels. This value applies only if
-     *               {@link #shouldGrabVerticalSpace()} is true. A value of {@link #DEFAULT} means
-     *               that the minimum height will be determined by calling
-     *               {@link Component#getMinimumSize()}. The default value is {@link #DEFAULT}.
+     * @param height The minimum height in pixels. This value applies only if {@link
+     *               #shouldGrabVerticalSpace()} is true. A value of {@link #DEFAULT} means that the
+     *               minimum height will be determined by calling {@link Component#getMinimumSize()}.
+     *               The default value is {@link #DEFAULT}.
      * @return This layout data.
      */
     public PrecisionLayoutData setMinimumHeight(int height) {
@@ -430,7 +431,7 @@ public final class PrecisionLayoutData {
 
     /**
      * @return Whether the width of the cell changes depending on the size of the parent container.
-     *         If <code>true</code>, the following rules apply to the width of the cell:
+     *         If {@code true}, the following rules apply to the width of the cell:
      *         <ul>
      *         <li>If extra horizontal space is available in the parent, the cell will grow to be
      *         wider than its preferred width. The new width will be "preferred width + delta" where
@@ -448,8 +449,7 @@ public final class PrecisionLayoutData {
 
     /**
      * @param grab Whether the width of the cell changes depending on the size of the parent
-     *             container. If <code>true</code>, the following rules apply to the width of the
-     *             cell:
+     *             container. If {@code true}, the following rules apply to the width of the cell:
      *             <ul>
      *             <li>If extra horizontal space is available in the parent, the cell will grow to
      *             be wider than its preferred width. The new width will be "preferred width +
@@ -461,7 +461,7 @@ public final class PrecisionLayoutData {
      *             {@link #getMinimumWidth()}" and "preferred width - delta", where delta is the
      *             amount of space missing divided by the number of grabbing columns.</li>
      *             </ul>
-     *             The default value is <code>false</code>.
+     *             The default value is {@code false}.
      * @return This layout data.
      */
     public PrecisionLayoutData setGrabHorizontalSpace(boolean grab) {
@@ -471,7 +471,7 @@ public final class PrecisionLayoutData {
 
     /**
      * @return Whether the height of the cell changes depending on the size of the parent container.
-     *         If <code>true</code>, the following rules apply to the height of the cell:
+     *         If {@code true}, the following rules apply to the height of the cell:
      *         <ul>
      *         <li>If extra vertical space is available in the parent, the cell will grow to be
      *         taller than its preferred height. The new height will be "preferred height + delta"
@@ -489,8 +489,7 @@ public final class PrecisionLayoutData {
 
     /**
      * @param grab Whether the height of the cell changes depending on the size of the parent
-     *             container. If <code>true</code>, the following rules apply to the height of the
-     *             cell:
+     *             container. If {@code true}, the following rules apply to the height of the cell:
      *             <ul>
      *             <li>If extra vertical space is available in the parent, the cell will grow to be
      *             taller than its preferred height. The new height will be "preferred height +
@@ -502,7 +501,7 @@ public final class PrecisionLayoutData {
      *             {@link #getMinimumHeight()}" and "preferred height - delta", where delta is the
      *             amount of space missing divided by the number of grabbing rows.</li>
      *             </ul>
-     *             The default value is <code>false</code>.
+     *             The default value is {@code false}.
      * @return This layout data.
      */
     public PrecisionLayoutData setGrabVerticalSpace(boolean grab) {
@@ -522,9 +521,9 @@ public final class PrecisionLayoutData {
     }
 
     /**
-     * @return <code>true</code> if the size and position of the component will not be managed by
-     *         the layout. <code>false</code> ifthe size and position of the component will be
-     *         computed and assigned.
+     * @return {@code true} if the size and position of the component will not be managed by the
+     *         layout. {@code false} ifthe size and position of the component will be computed and
+     *         assigned.
      */
     public boolean shouldExclude() {
         return mExclude;
@@ -533,10 +532,9 @@ public final class PrecisionLayoutData {
     /**
      * Informs the layout to ignore this component when sizing and positioning components.
      *
-     * @param exclude <code>true</code> if the size and position of the component will not be
-     *                managed by the layout. <code>false</code> if the size and position of the
-     *                component will be computed and assigned. The default value is
-     *                <code>false</code>.
+     * @param exclude {@code true} if the size and position of the component will not be managed by
+     *                the layout. {@code false} if the size and position of the component will be
+     *                computed and assigned. The default value is {@code false}.
      */
     public PrecisionLayoutData setExclude(boolean exclude) {
         mExclude = exclude;
@@ -546,8 +544,8 @@ public final class PrecisionLayoutData {
     /** Clear the height and width caches. */
     void clearCache() {
         mCacheMinWidth = 0;
-        mCacheWidth    = 0;
-        mCacheHeight   = 0;
+        mCacheWidth = 0;
+        mCacheHeight = 0;
     }
 
     /** @return The cached width. */
@@ -573,14 +571,14 @@ public final class PrecisionLayoutData {
     void computeSize(Scale scale, Component component, int wHint, int hHint, boolean useMinimumSize) {
         int       scaledMinWidth  = scale.scale(mMinWidth);
         int       scaledMinHeight = scale.scale(mMinHeight);
-        Dimension size            = null;
+        Dimension size;
         if (wHint != DEFAULT || hHint != DEFAULT) {
-            size           = component.getMinimumSize();
-            mCacheMinWidth = mMinWidth != DEFAULT ? scaledMinWidth : size.width;
+            size = component.getMinimumSize();
+            mCacheMinWidth = mMinWidth == DEFAULT ? size.width : scaledMinWidth;
             if (wHint != DEFAULT && wHint < mCacheMinWidth) {
                 wHint = mCacheMinWidth;
             }
-            int minHeight = mMinHeight != DEFAULT ? scaledMinHeight : size.height;
+            int minHeight = mMinHeight == DEFAULT ? size.height : scaledMinHeight;
             if (hHint != DEFAULT && hHint < minHeight) {
                 hHint = minHeight;
             }
@@ -593,8 +591,8 @@ public final class PrecisionLayoutData {
             }
         }
         if (useMinimumSize) {
-            size           = component.getMinimumSize();
-            mCacheMinWidth = mMinWidth != DEFAULT ? scaledMinWidth : size.width;
+            size = component.getMinimumSize();
+            mCacheMinWidth = mMinWidth == DEFAULT ? size.width : scaledMinWidth;
         } else {
             size = component.getPreferredSize();
         }
@@ -616,7 +614,7 @@ public final class PrecisionLayoutData {
         if (hHint != DEFAULT) {
             size.height = hHint;
         }
-        mCacheWidth  = size.width;
+        mCacheWidth = size.width;
         mCacheHeight = size.height;
     }
 }

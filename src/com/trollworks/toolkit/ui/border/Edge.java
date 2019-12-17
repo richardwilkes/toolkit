@@ -12,5 +12,5 @@
 package com.trollworks.toolkit.ui.border;
 
 public enum Edge {
-    TOP, LEFT, BOTTOM, RIGHT;
+    TOP, LEFT, BOTTOM, RIGHT
 }

@@ -24,10 +24,10 @@ import java.awt.event.KeyEvent;
 /** Provides the "Page Setup..." command. */
 public class PageSetupCommand extends Command {
     /** The action command this command will issue. */
-    public static final String           CMD_PAGE_SETUP = "PageSetup";
+    public static final String CMD_PAGE_SETUP = "PageSetup";
 
     /** The singleton {@link PageSetupCommand}. */
-    public static final PageSetupCommand INSTANCE       = new PageSetupCommand();
+    public static final PageSetupCommand INSTANCE = new PageSetupCommand();
 
     private PageSetupCommand() {
         super(I18n.Text("Page Setup\u2026"), CMD_PAGE_SETUP, KeyEvent.VK_P, SHIFTED_COMMAND_MODIFIER);

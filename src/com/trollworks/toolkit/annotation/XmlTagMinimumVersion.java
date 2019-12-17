@@ -17,9 +17,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE })
-/** Provides the minimum version for classes that can be loaded from XML. */
-public @interface XmlTagMinimumVersion {
+@Target(ElementType.TYPE)
+/** Provides the minimum version for classes that can be loaded from XML. */ public @interface XmlTagMinimumVersion {
     /** @return The minimum version for classes that can be loaded from XML. */
     int value();
 }

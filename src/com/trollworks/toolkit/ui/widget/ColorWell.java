@@ -22,7 +22,6 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
@@ -35,7 +34,7 @@ public class ColorWell extends JPanel implements MouseListener {
     }
 
     public ColorWell(Color color, ColorChangedListener listener, String tooltip) {
-        mColor    = color;
+        mColor = color;
         mListener = listener;
         setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
         setBorder(new LineBorder());

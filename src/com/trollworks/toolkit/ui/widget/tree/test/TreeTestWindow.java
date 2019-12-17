@@ -22,7 +22,6 @@ import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.awt.BorderLayout;
 import java.awt.dnd.DnDConstants;
-
 import javax.swing.SwingConstants;
 
 public class TreeTestWindow extends AppWindow implements SignificantFrame {

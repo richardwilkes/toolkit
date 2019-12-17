@@ -17,7 +17,7 @@ import com.trollworks.toolkit.utility.text.Text;
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
+import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -26,9 +26,9 @@ import javax.swing.UIManager;
 /** A label whose tooltip reflects that of another panel. */
 public class LinkedLabel extends JLabel implements PropertyChangeListener {
     /** The property key that is monitored for error messages. */
-    public static final String ERROR_MESSAGE_KEY = "Error Message";
-    private JComponent         mLink;
-    private Color              mColor;
+    public static final String     ERROR_MESSAGE_KEY = "Error Message";
+    private             JComponent mLink;
+    private             Color      mColor;
 
     /**
      * Creates a label with the specified icon.
@@ -166,13 +166,13 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
             tooltip = (String) mLink.getClientProperty(ERROR_MESSAGE_KEY);
             if (tooltip == null) {
                 tooltip = mLink.getToolTipText();
-                color   = mColor;
+                color = mColor;
             } else {
                 color = Color.RED;
             }
         } else {
             tooltip = null;
-            color   = mColor;
+            color = mColor;
         }
         setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
         super.setForeground(color);
@@ -195,11 +195,10 @@ public class LinkedLabel extends JLabel implements PropertyChangeListener {
      * Sets/clears the error message that a {@link LinkedLabel} will respond to.
      *
      * @param comp The {@link JComponent} to set the message on.
-     * @param msg  The error message or <code>null</code>.
+     * @param msg  The error message or {@code null}.
      */
     public static void setErrorMessage(JComponent comp, String msg) {
-        Object old = comp.getClientProperty(ERROR_MESSAGE_KEY);
-        if (old == null ? msg != null : !old.equals(msg)) {
+        if (!Objects.equals(comp.getClientProperty(ERROR_MESSAGE_KEY), msg)) {
             comp.putClientProperty(ERROR_MESSAGE_KEY, msg);
         }
     }

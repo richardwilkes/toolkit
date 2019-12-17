@@ -21,13 +21,12 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.Collection;
-
 import javax.swing.JOptionPane;
 
 /** Provides the "Save" command. */
 public class SaveCommand extends Command {
     /** The action command this command will issue. */
-    public static final String      CMD_SAVE = "Save";
+    public static final String CMD_SAVE = "Save";
 
     /** The singleton {@link SaveCommand}. */
     public static final SaveCommand INSTANCE = new SaveCommand();
@@ -40,7 +39,7 @@ public class SaveCommand extends Command {
     public void adjust() {
         Saveable saveable = getTarget(Saveable.class);
         Commitable.sendCommitToFocusOwner();
-        setEnabled(saveable != null ? saveable.isModified() : false);
+        setEnabled(saveable != null && saveable.isModified());
     }
 
     @Override
@@ -52,7 +51,7 @@ public class SaveCommand extends Command {
      * Makes an attempt to save the specified {@link Saveable}s if any have been modified.
      *
      * @param saveables The {@link Saveable}s to work on.
-     * @return <code>false</code> if a save was cancelled or failed.
+     * @return {@code false} if a save was cancelled or failed.
      */
     public static boolean attemptSave(Collection<Saveable> saveables) {
         Commitable.sendCommitToFocusOwner();
@@ -68,7 +67,7 @@ public class SaveCommand extends Command {
      * Makes an attempt to save the specified {@link Saveable} if it has been modified.
      *
      * @param saveable The {@link Saveable} to work on.
-     * @return <code>false</code> if the save was cancelled or failed.
+     * @return {@code false} if the save was cancelled or failed.
      */
     public static boolean attemptSave(Saveable saveable) {
         if (saveable != null) {
@@ -86,10 +85,8 @@ public class SaveCommand extends Command {
                 return false;
             }
             if (answer == JOptionPane.YES_OPTION) {
-                SaveCommand.save(saveable);
-                if (saveable.isModified()) {
-                    return false;
-                }
+                save(saveable);
+                return !saveable.isModified();
             }
         }
         return true;

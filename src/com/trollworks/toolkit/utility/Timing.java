@@ -23,14 +23,14 @@ public final class Timing {
     }
 
     /** Resets the base time to this instant. */
-    public final void reset() {
+    public void reset() {
         mBase = System.nanoTime();
     }
 
     /**
      * @return The number of elapsed nanoseconds since the timing object was created or last reset.
      */
-    public final long elapsed() {
+    public long elapsed() {
         return System.nanoTime() - mBase;
     }
 
@@ -38,14 +38,14 @@ public final class Timing {
      * @return The number of elapsed nanoseconds since the timing object was created or last reset,
      *         then resets it.
      */
-    public final long elapsedThenReset() {
+    public long elapsedThenReset() {
         long oldBase = mBase;
         mBase = System.nanoTime();
         return mBase - oldBase;
     }
 
     /** @return The number of elapsed seconds since the timing object was created or last reset. */
-    public final double elapsedSeconds() {
+    public double elapsedSeconds() {
         return elapsed() / 1000000000.0;
     }
 
@@ -53,36 +53,36 @@ public final class Timing {
      * @return The number of elapsed seconds since the timing object was created or last reset, then
      *         resets it.
      */
-    public final double elapsedSecondsThenReset() {
+    public double elapsedSecondsThenReset() {
         return elapsedThenReset() / 1000000000.0;
     }
 
-    public final String toStringWithNanoResolution() {
+    public String toStringWithNanoResolution() {
         return String.format("%,.9fs", Double.valueOf(elapsedSeconds()));
     }
 
-    public final String toStringWithNanoResolutionThenReset() {
+    public String toStringWithNanoResolutionThenReset() {
         return String.format("%,.9fs", Double.valueOf(elapsedSecondsThenReset()));
     }
 
-    public final String toStringWithMicroResolution() {
+    public String toStringWithMicroResolution() {
         return String.format("%,.6fs", Double.valueOf(elapsedSeconds()));
     }
 
-    public final String toStringWithMicroResolutionThenReset() {
+    public String toStringWithMicroResolutionThenReset() {
         return String.format("%,.6fs", Double.valueOf(elapsedSecondsThenReset()));
     }
 
-    public final String toStringWithMilliResolution() {
+    public String toStringWithMilliResolution() {
         return String.format("%,.3fs", Double.valueOf(elapsedSeconds()));
     }
 
-    public final String toStringWithMilliResolutionThenReset() {
+    public String toStringWithMilliResolutionThenReset() {
         return String.format("%,.3fs", Double.valueOf(elapsedSecondsThenReset()));
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return Numbers.trimTrailingZeroes(toStringWithMicroResolutionThenReset(), true);
     }
 }

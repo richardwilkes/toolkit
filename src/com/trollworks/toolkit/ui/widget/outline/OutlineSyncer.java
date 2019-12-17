@@ -19,7 +19,7 @@ import java.util.Set;
 public class OutlineSyncer implements Runnable {
     private static final OutlineSyncer INSTANCE = new OutlineSyncer();
     private static final Set<Outline>  OUTLINES = new HashSet<>();
-    private static boolean             PENDING  = false;
+    private static       boolean       PENDING;
 
     /**
      * @param outline The {@link Outline} to add to the set of outlines that need to be
@@ -49,7 +49,7 @@ public class OutlineSyncer implements Runnable {
     public void run() {
         Set<Outline> outlines;
         synchronized (OUTLINES) {
-            PENDING  = false;
+            PENDING = false;
             outlines = new HashSet<>(OUTLINES);
             OUTLINES.clear();
         }

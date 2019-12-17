@@ -18,8 +18,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-/** Provides a default value for a long value. */
-public @interface XmlDefaultLong {
+/** Provides a default value for a long value. */ public @interface XmlDefaultLong {
     /** @return The default value. */
     long value();
 }

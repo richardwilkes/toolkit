@@ -12,19 +12,17 @@
 package com.trollworks.toolkit.ui.menu;
 
 import java.beans.PropertyChangeListener;
-
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
 
 /**
- * A replacement for {@link JCheckBoxMenuItem} that responds to changes in an attached
- * {@link Action}'s accelerator.
+ * A replacement for {@link JCheckBoxMenuItem} that responds to changes in an attached {@link
+ * Action}'s accelerator.
  */
 public class DynamicCheckBoxMenuItem extends JCheckBoxMenuItem {
     /** Creates a new {@link DynamicCheckBoxMenuItem}. */
     public DynamicCheckBoxMenuItem() {
-        super();
     }
 
     /**

@@ -24,7 +24,7 @@ public class PathToUri {
         String text = uri.toString();
         if (text.contains("%2520")) {
             text = text.replaceAll("%2520", "%20");
-            uri  = URI.create(text);
+            uri = URI.create(text);
         }
         return uri;
     }

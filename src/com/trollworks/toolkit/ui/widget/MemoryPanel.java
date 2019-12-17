@@ -34,17 +34,16 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
-
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 /** Displays the current memory usage. */
 public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, MouseListener {
-    private static final long MB            = 1024 * 1024;
-    private MemoryMXBean      mMemoryMXBean = ManagementFactory.getMemoryMXBean();
-    private long              mUsed;
-    private long              mMax;
-    private boolean           mPending;
+    private static final long         MB            = 1024 * 1024;
+    private              MemoryMXBean mMemoryMXBean = ManagementFactory.getMemoryMXBean();
+    private              long         mUsed;
+    private              long         mMax;
+    private              boolean      mPending;
 
     /** Creates a new {@link MemoryPanel}. */
     public MemoryPanel() {
@@ -65,7 +64,7 @@ public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, 
     public Dimension getPreferredSize() {
         Insets    insets = getInsets();
         Dimension size   = TextDrawing.getPreferredSize(getFont(), getText());
-        size.width  += insets.left + insets.right;
+        size.width += insets.left + insets.right;
         size.height += insets.top + insets.bottom;
         return size;
     }
@@ -92,7 +91,7 @@ public class MemoryPanel extends JPanel implements Runnable, HierarchyListener, 
     private void refresh() {
         MemoryUsage heapMemoryUsage = mMemoryMXBean.getHeapMemoryUsage();
         mUsed = heapMemoryUsage.getUsed();
-        mMax  = heapMemoryUsage.getMax();
+        mMax = heapMemoryUsage.getMax();
         repaint();
     }
 

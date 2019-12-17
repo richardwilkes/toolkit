@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.ui.widget.tree;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -22,16 +21,6 @@ public class TreeRowIterator implements Iterator<TreeRow>, Iterable<TreeRow> {
     private List<TreeRow>   mRows;
     private TreeRowIterator mIterator;
     private int             mIndex;
-
-    /**
-     * Creates a new {@link TreeRowIterator}.
-     *
-     * @param row The {@link TreeRow} to start iterating over.
-     */
-    public TreeRowIterator(TreeRow row) {
-        mRows = new ArrayList<>();
-        mRows.add(row);
-    }
 
     /**
      * Creates a new {@link TreeRowIterator}.
@@ -61,7 +50,7 @@ public class TreeRowIterator implements Iterator<TreeRow>, Iterable<TreeRow> {
         boolean hasNext = mIterator != null && mIterator.hasNext();
         if (!hasNext) {
             mIterator = null;
-            hasNext   = mIndex < mRows.size();
+            hasNext = mIndex < mRows.size();
         }
         return hasNext;
     }

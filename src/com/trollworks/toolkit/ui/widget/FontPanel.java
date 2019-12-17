@@ -20,16 +20,15 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JComboBox;
 
 /** A standard font selection panel. */
 public class FontPanel extends ActionPanel implements ActionListener {
-    private static final String[] STD_STYLES = { I18n.Text("Plain"), I18n.Text("Bold"), I18n.Text("Italic"), I18n.Text("Bold Italic") };
-    private JComboBox<Integer>    mFontSizeMenu;
-    private JComboBox<String>     mFontNameMenu;
-    private JComboBox<String>     mFontStyleMenu;
-    private boolean               mNoNotify;
+    private static final String[]           STD_STYLES = {I18n.Text("Plain"), I18n.Text("Bold"), I18n.Text("Italic"), I18n.Text("Bold Italic")};
+    private              JComboBox<Integer> mFontSizeMenu;
+    private              JComboBox<String>  mFontNameMenu;
+    private              JComboBox<String>  mFontStyleMenu;
+    private              boolean            mNoNotify;
 
     /**
      * Creates a new font panel.
@@ -52,9 +51,9 @@ public class FontPanel extends ActionPanel implements ActionListener {
         for (int i = 0; i < 7; i++) {
             sizes[i] = Integer.valueOf(6 + i);
         }
-        sizes[7]      = Integer.valueOf(14);
-        sizes[8]      = Integer.valueOf(16);
-        sizes[9]      = Integer.valueOf(18);
+        sizes[7] = Integer.valueOf(14);
+        sizes[8] = Integer.valueOf(16);
+        sizes[9] = Integer.valueOf(18);
         mFontSizeMenu = new JComboBox<>(sizes);
         mFontSizeMenu.setOpaque(false);
         mFontSizeMenu.setToolTipText(Text.wrapPlainTextForToolTip(I18n.Text("Changes the font size")));
@@ -87,7 +86,11 @@ public class FontPanel extends ActionPanel implements ActionListener {
 
     /** @return The font this panel has been set to. */
     public Font getCurrentFont() {
-        return new Font((String) mFontNameMenu.getSelectedItem(), mFontStyleMenu.getSelectedIndex(), ((Integer) mFontSizeMenu.getSelectedItem()).intValue());
+        Integer size = (Integer) mFontSizeMenu.getSelectedItem();
+        if (size == null) {
+            size = Integer.valueOf(12);
+        }
+        return new Font((String) mFontNameMenu.getSelectedItem(), mFontStyleMenu.getSelectedIndex(), size.intValue());
     }
 
     /** @param font The new font. */

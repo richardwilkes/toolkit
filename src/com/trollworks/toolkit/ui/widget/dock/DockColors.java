@@ -14,7 +14,6 @@ package com.trollworks.toolkit.ui.widget.dock;
 import com.trollworks.toolkit.ui.Colors;
 
 import java.awt.Color;
-
 import javax.swing.UIManager;
 
 /** Provides the colors used by the {@link Dock}. */

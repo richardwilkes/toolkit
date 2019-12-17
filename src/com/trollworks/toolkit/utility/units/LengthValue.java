@@ -18,7 +18,7 @@ import com.trollworks.toolkit.utility.text.Numbers;
 public class LengthValue extends UnitsValue<LengthUnits> {
     /**
      * @param buffer    The buffer to extract a {@link LengthValue} from.
-     * @param localized <code>true</code> if the string might have localized notation within it.
+     * @param localized {@code true} if the string might have localized notation within it.
      * @return The result.
      */
     public static LengthValue extract(String buffer, boolean localized) {
@@ -36,7 +36,7 @@ public class LengthValue extends UnitsValue<LengthUnits> {
                 String part   = buffer.substring(inchesMark != -1 && feetMark > inchesMark ? inchesMark + 1 : 0, feetMark);
                 double inches = (localized ? Numbers.extractDouble(part, 0, true) : Numbers.extractDouble(part, 0, false)) * 12;
                 if (inchesMark != -1) {
-                    part    = buffer.substring(feetMark < inchesMark ? feetMark + 1 : 0, inchesMark);
+                    part = buffer.substring(feetMark < inchesMark ? feetMark + 1 : 0, inchesMark);
                     inches += localized ? Numbers.extractDouble(part, 0, true) : Numbers.extractDouble(part, 0, false);
                 }
                 return new LengthValue(inches, LengthUnits.FT_IN);
@@ -44,7 +44,7 @@ public class LengthValue extends UnitsValue<LengthUnits> {
             for (LengthUnits lu : LengthUnits.values()) {
                 String text = Enums.toId(lu);
                 if (buffer.endsWith(text)) {
-                    units  = lu;
+                    units = lu;
                     buffer = buffer.substring(0, buffer.length() - text.length());
                     break;
                 }
@@ -73,8 +73,8 @@ public class LengthValue extends UnitsValue<LengthUnits> {
     }
 
     /**
-     * Creates a new {@link LengthValue} from an existing one and converts it to the given
-     * {@link LengthUnits}.
+     * Creates a new {@link LengthValue} from an existing one and converts it to the given {@link
+     * LengthUnits}.
      *
      * @param other The {@link LengthValue} to convert.
      * @param units The {@link LengthUnits} to use.

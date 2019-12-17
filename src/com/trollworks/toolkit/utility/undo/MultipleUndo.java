@@ -25,7 +25,6 @@ public class MultipleUndo extends CompoundEdit {
      * @param name The name of the undo edit.
      */
     public MultipleUndo(String name) {
-        super();
         mName = name;
     }
 

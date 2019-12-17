@@ -18,8 +18,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-/** Provides a default value for a double value. */
-public @interface XmlDefaultDouble {
+/** Provides a default value for a double value. */ public @interface XmlDefaultDouble {
     /** @return The default value. */
     double value();
 }

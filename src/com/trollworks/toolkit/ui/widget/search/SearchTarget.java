@@ -14,14 +14,13 @@ package com.trollworks.toolkit.ui.widget.search;
 import com.trollworks.toolkit.ui.menu.edit.JumpToSearchTarget;
 
 import java.util.List;
-
 import javax.swing.ListCellRenderer;
 
 /** Defines the methods which must be implemented to be the target of a {@link Search} control. */
 public interface SearchTarget extends JumpToSearchTarget {
     /**
      * Called to obtain a {@link ListCellRenderer} for displaying in the drop-down list.
-     * 
+     *
      * @return The item renderer.
      */
     ListCellRenderer<Object> getSearchRenderer();
@@ -29,7 +28,7 @@ public interface SearchTarget extends JumpToSearchTarget {
     /**
      * Called to have the target search itself with the specified filter and return the matching
      * objects.
-     * 
+     *
      * @param filter The filter to apply.
      * @return The matching objects.
      */
@@ -37,7 +36,7 @@ public interface SearchTarget extends JumpToSearchTarget {
 
     /**
      * Called to have the target select the objects specified.
-     * 
+     *
      * @param selection The objects to select.
      */
     void searchSelect(List<Object> selection);

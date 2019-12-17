@@ -17,7 +17,7 @@ import com.trollworks.toolkit.utility.text.Numbers;
 import java.util.Enumeration;
 
 public class ArgumentTokenizer implements Enumeration<String> {
-    private String mArguments = null;
+    private String mArguments;
 
     public ArgumentTokenizer(String arguments) {
         mArguments = arguments;
@@ -29,7 +29,7 @@ public class ArgumentTokenizer implements Enumeration<String> {
     }
 
     public final boolean hasMoreTokens() {
-        return mArguments.length() > 0;
+        return !mArguments.isEmpty();
     }
 
     @Override

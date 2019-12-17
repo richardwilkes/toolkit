@@ -17,7 +17,7 @@ import com.trollworks.toolkit.ui.image.StdImage;
 public interface IconAccessor {
     /**
      * @param row The {@link TreeRow} to operate on.
-     * @return The {@link StdImage} for the field, or <code>null</code>.
+     * @return The {@link StdImage} for the field, or {@code null}.
      */
     RetinaIcon getIcon(TreeRow row);
 }

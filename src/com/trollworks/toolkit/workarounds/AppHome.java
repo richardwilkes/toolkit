@@ -15,7 +15,7 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class AppHome {
+public final class AppHome {
     private static Path APP_HOME_PATH;
 
     public static synchronized void setup(Class<?> theClass) {
@@ -53,7 +53,7 @@ public class AppHome {
     }
 
     /** @return The application's 'home' directory. */
-    public static final Path get() {
+    public static synchronized Path get() {
         return APP_HOME_PATH;
     }
 }

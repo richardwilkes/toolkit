@@ -17,13 +17,13 @@ import com.trollworks.toolkit.io.xml.XmlParserContext;
 import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.lang.reflect.Field;
-
 import javax.xml.stream.XMLStreamException;
 
 public class XmlPrimitiveBooleanHelper implements XmlObjectHelper {
     public static final XmlPrimitiveBooleanHelper SINGLETON = new XmlPrimitiveBooleanHelper();
 
-    private XmlPrimitiveBooleanHelper() {}
+    private XmlPrimitiveBooleanHelper() {
+    }
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -44,7 +44,7 @@ public class XmlPrimitiveBooleanHelper implements XmlObjectHelper {
     @Override
     public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
         XmlDefaultBoolean def = field.getAnnotation(XmlDefaultBoolean.class);
-        field.setBoolean(obj, context.getParser().isAttributeSet(name, def != null ? def.value() : false));
+        field.setBoolean(obj, context.getParser().isAttributeSet(name, def != null && def.value()));
     }
 
     @Override

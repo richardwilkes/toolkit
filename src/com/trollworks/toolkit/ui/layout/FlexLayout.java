@@ -53,9 +53,9 @@ public class FlexLayout implements LayoutManager2 {
         if (mRootCell != null) {
             Rectangle bounds = target.getBounds();
             Insets    insets = target.getInsets();
-            bounds.x       = insets.left;
-            bounds.y       = insets.top;
-            bounds.width  -= insets.left + insets.right;
+            bounds.x = insets.left;
+            bounds.y = insets.top;
+            bounds.width -= insets.left + insets.right;
             bounds.height -= insets.top + insets.bottom;
             mRootCell.layout(Scale.get(target), bounds);
         }
@@ -64,7 +64,7 @@ public class FlexLayout implements LayoutManager2 {
     private Dimension getLayoutSize(Container target, LayoutSize sizeType) {
         Insets    insets = target.getInsets();
         Dimension size   = mRootCell != null ? mRootCell.getSize(Scale.get(target), sizeType) : new Dimension();
-        size.width  += insets.left + insets.right;
+        size.width += insets.left + insets.right;
         size.height += insets.top + insets.bottom;
         return size;
     }

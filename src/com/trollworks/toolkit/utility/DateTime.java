@@ -95,7 +95,7 @@ public class DateTime {
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.setTimeInMillis(milliseconds);
-        return String.format("%tF %tT", cal);
+        return String.format("%tF %tT", cal, cal);
     }
 
     /**

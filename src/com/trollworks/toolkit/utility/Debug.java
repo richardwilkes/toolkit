@@ -23,9 +23,9 @@ public final class Debug {
      * system environment if it is not set in the system properties.
      *
      * @param key The key to check.
-     * @return The value of the specified key, or <code>null</code> if it has not been defined.
+     * @return The value of the specified key, or {@code null} if it has not been defined.
      */
-    public static final String getPropertyOrEnvironmentSetting(String key) {
+    public static String getPropertyOrEnvironmentSetting(String key) {
         String value = System.getProperty(key);
         if (value == null) {
             value = System.getenv(key);
@@ -38,9 +38,9 @@ public final class Debug {
      * falling back to the system environment if it is not set at all in the system properties.
      *
      * @param key The key to check.
-     * @return <code>true</code> if the key is enabled.
+     * @return {@code true} if the key is enabled.
      */
-    public static final boolean isKeySet(String key) {
+    public static boolean isKeySet(String key) {
         return Numbers.extractBoolean(getPropertyOrEnvironmentSetting(key));
     }
 
@@ -52,7 +52,7 @@ public final class Debug {
      * @param throwable The {@link Throwable} to process.
      * @return The formatted {@link Throwable}.
      */
-    public static final String toString(Throwable throwable) {
+    public static String toString(Throwable throwable) {
         StringBuilder buffer = new StringBuilder();
         buffer.append(throwable.getClass().getSimpleName());
         buffer.append(": ");
@@ -68,7 +68,7 @@ public final class Debug {
      *
      * @return The formatted stack trace.
      */
-    public static final String stackTrace() {
+    public static String stackTrace() {
         return stackTrace(new Exception(), 1, new StringBuilder()).toString();
     }
 
@@ -80,7 +80,7 @@ public final class Debug {
      * @param buffer    The buffer to store the result in.
      * @return The {@link StringBuilder} that was passed in.
      */
-    public static final StringBuilder stackTrace(Throwable throwable, StringBuilder buffer) {
+    public static StringBuilder stackTrace(Throwable throwable, StringBuilder buffer) {
         return stackTrace(throwable, 0, buffer);
     }
 
@@ -93,9 +93,10 @@ public final class Debug {
      * @param buffer    The buffer to store the result in.
      * @return The {@link StringBuilder} that was passed in.
      */
-    public static final StringBuilder stackTrace(Throwable throwable, int startAt, StringBuilder buffer) {
+    public static StringBuilder stackTrace(Throwable throwable, int startAt, StringBuilder buffer) {
         StackTraceElement[] stackTrace = throwable.getStackTrace();
-        for (int i = startAt; i < stackTrace.length; i++) {
+        int                 length     = stackTrace.length;
+        for (int i = startAt; i < length; i++) {
             if (i > startAt) {
                 buffer.append(" < ");
             }

@@ -14,7 +14,6 @@ package com.trollworks.toolkit.utility.text;
 import com.trollworks.toolkit.utility.Dice;
 
 import java.text.ParseException;
-
 import javax.swing.JFormattedTextField;
 
 /** Provides dice field conversion. */

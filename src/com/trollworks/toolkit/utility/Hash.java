@@ -15,15 +15,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public final class Hash {
-    public final static byte[] md5(byte[] data) {
+    public static byte[] md5(byte[] data) {
         return hash("MD5", data);
     }
 
-    public final static byte[] sha1(byte[] data) {
+    public static byte[] sha1(byte[] data) {
         return hash("SHA-1", data);
     }
 
-    public final static byte[] hash(String algorithm, byte[] data) {
+    public static byte[] hash(String algorithm, byte[] data) {
         try {
             return MessageDigest.getInstance(algorithm).digest(data);
         } catch (NoSuchAlgorithmException exception) {

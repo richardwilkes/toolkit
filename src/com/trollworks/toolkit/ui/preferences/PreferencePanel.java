@@ -22,7 +22,6 @@ import com.trollworks.toolkit.utility.text.Text;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ItemListener;
-
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -43,7 +42,6 @@ public abstract class PreferencePanel extends JPanel {
      * @param owner The owning {@link PreferencesWindow}.
      */
     public PreferencePanel(String title, PreferencesWindow owner) {
-        super();
         setBorder(new EmptyBorder(5));
         setOpaque(false);
         mTitle = title;

@@ -24,10 +24,10 @@ import java.io.File;
 /** Provides the "Save As..." command. */
 public class SaveAsCommand extends Command {
     /** The action command this command will issue. */
-    public static final String        CMD_SAVE_AS = "SaveAs";
+    public static final String CMD_SAVE_AS = "SaveAs";
 
     /** The singleton {@link SaveAsCommand}. */
-    public static final SaveAsCommand INSTANCE    = new SaveAsCommand();
+    public static final SaveAsCommand INSTANCE = new SaveAsCommand();
 
     private SaveAsCommand() {
         super(I18n.Text("Save As\u2026"), CMD_SAVE_AS, KeyEvent.VK_S, SHIFTED_COMMAND_MODIFIER);

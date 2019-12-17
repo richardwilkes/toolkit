@@ -25,13 +25,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /** Provides the "Open..." command. */
 public class OpenCommand extends Command implements OpenFilesHandler {
     /** The action command this command will issue. */
-    public static final String      CMD_OPEN = "Open";
+    public static final String CMD_OPEN = "Open";
 
     /** The singleton {@link OpenCommand}. */
     public static final OpenCommand INSTANCE = new OpenCommand();

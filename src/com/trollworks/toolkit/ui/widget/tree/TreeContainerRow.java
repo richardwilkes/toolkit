@@ -18,7 +18,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /** A {@link TreeRow} which can have children. */
 public class TreeContainerRow extends TreeRow {
@@ -101,7 +103,7 @@ public class TreeContainerRow extends TreeRow {
      * @param row   The {@link TreeRow} to add as a child.
      */
     public void addRow(int index, TreeRow row) {
-        ArrayList<TreeRow> rows = new ArrayList<>(1);
+        List<TreeRow> rows = new ArrayList<>(1);
         rows.add(row);
         addRow(index, rows);
     }
@@ -117,12 +119,12 @@ public class TreeContainerRow extends TreeRow {
      */
     public void addRow(int index, List<TreeRow> rows) {
         if (!rows.isEmpty()) {
-            HashMap<TreeContainerRow, HashSet<TreeRow>> map    = new HashMap<>();
-            HashSet<TreeRow>                            exists = new HashSet<>();
-            ArrayList<TreeRow>                          list   = new ArrayList<>();
+            Map<TreeContainerRow, Set<TreeRow>> map    = new HashMap<>();
+            Set<TreeRow>                        exists = new HashSet<>();
+            List<TreeRow>                       list   = new ArrayList<>();
             for (TreeRow row : rows) {
                 if (row.mParent != null) {
-                    HashSet<TreeRow> set = map.get(row.mParent);
+                    Set<TreeRow> set = map.get(row.mParent);
                     if (set == null) {
                         set = new HashSet<>();
                         map.put(row.mParent, set);
@@ -134,7 +136,7 @@ public class TreeContainerRow extends TreeRow {
                     list.add(row);
                 }
             }
-            for (Entry<TreeContainerRow, HashSet<TreeRow>> entry : map.entrySet()) {
+            for (Entry<TreeContainerRow, Set<TreeRow>> entry : map.entrySet()) {
                 entry.getKey().removeRow(entry.getValue());
             }
             index = Math.min(index, mChildren.size());
@@ -149,22 +151,21 @@ public class TreeContainerRow extends TreeRow {
     }
 
     /**
-     * Removes a child {@link TreeRow} from this {@link TreeContainerRow}. If the specified
-     * {@link TreeRow} is not an immediate child of this {@link TreeContainerRow}, nothing will be
-     * done.
+     * Removes a child {@link TreeRow} from this {@link TreeContainerRow}. If the specified {@link
+     * TreeRow} is not an immediate child of this {@link TreeContainerRow}, nothing will be done.
      *
      * @param row The child {@link TreeRow} to remove.
      */
     public void removeRow(TreeRow row) {
-        ArrayList<TreeRow> rows = new ArrayList<>(1);
+        List<TreeRow> rows = new ArrayList<>(1);
         rows.add(row);
         removeRow(rows);
     }
 
     /**
-     * Removes the specified child {@link TreeRow}s from this {@link TreeContainerRow}. If a
-     * {@link TreeRow} is not an immediate child of this {@link TreeContainerRow}, nothing will be
-     * done to it.
+     * Removes the specified child {@link TreeRow}s from this {@link TreeContainerRow}. If a {@link
+     * TreeRow} is not an immediate child of this {@link TreeContainerRow}, nothing will be done to
+     * it.
      *
      * @param rows The child {@link TreeRow}s to remove.
      */
@@ -207,15 +208,15 @@ public class TreeContainerRow extends TreeRow {
                     ((TreeContainerRow) child).sort(sorter);
                 }
             }
-            Collections.sort(mChildren, sorter);
+            mChildren.sort(sorter);
             renumber(0);
         }
     }
 
     /**
-     * @param list A {@link List} to add the child containers into. May be <code>null</code>.
+     * @param list A {@link List} to add the child containers into. May be {@code null}.
      * @return The child containers. This list will be the one passed in, or a newly created one, if
-     *         <code>null</code> was passed for the <code>list</code> parameter.
+     *         {@code null} was passed for the {@code list} parameter.
      */
     public List<TreeContainerRow> getRecursiveChildContainers(List<TreeContainerRow> list) {
         if (list == null) {

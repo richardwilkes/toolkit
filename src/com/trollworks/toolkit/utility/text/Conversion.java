@@ -18,8 +18,8 @@ import java.awt.Point;
 public class Conversion {
     /**
      * @param dim The dimension.
-     * @return A string version of the {@link Dimension} that can be extracted using
-     *         {@link #extractDimension(String)}.
+     * @return A string version of the {@link Dimension} that can be extracted using {@link
+     *         #extractDimension(String)}.
      */
     public static String createString(Dimension dim) {
         return dim.width + "," + dim.height;
@@ -29,7 +29,7 @@ public class Conversion {
      * Extracts a {@link Dimension}from the string.
      *
      * @param buffer The string to extract from.
-     * @return The extracted {@link Dimension}, or <code>null</code> if valid data can't be found.
+     * @return The extracted {@link Dimension}, or {@code null} if valid data can't be found.
      */
     public static Dimension extractDimension(String buffer) {
         int[] values = extractIntegers(buffer);
@@ -41,8 +41,8 @@ public class Conversion {
 
     /**
      * @param pt The point.
-     * @return A string version of the {@link Point} that can be extracted using
-     *         {@link #extractPoint(String)}.
+     * @return A string version of the {@link Point} that can be extracted using {@link
+     *         #extractPoint(String)}.
      */
     public static String createString(Point pt) {
         return pt.x + "," + pt.y;
@@ -52,7 +52,7 @@ public class Conversion {
      * Extracts a {@link Point}from the string.
      *
      * @param buffer The string to extract from.
-     * @return The extracted {@link Point}, or <code>null</code> if valid data can't be found.
+     * @return The extracted {@link Point}, or {@code null} if valid data can't be found.
      */
     public static Point extractPoint(String buffer) {
         int[] values = extractIntegers(buffer);
@@ -63,17 +63,17 @@ public class Conversion {
     }
 
     /**
-     * Extracts an <code>int</code> array from the string.
+     * Extracts an {@code int} array from the string.
      *
      * @param buffer The buffer to extract from.
      * @return An array of integers.
      */
     public static int[] extractIntegers(String buffer) {
-        if (buffer != null && buffer.length() > 0) {
+        if (buffer != null && !buffer.isEmpty()) {
             String[] buffers = buffer.split(",");
-            int[]    values  = new int[buffers.length];
-
-            for (int i = 0; i < buffers.length; i++) {
+            int      length  = buffers.length;
+            int[]    values  = new int[length];
+            for (int i = 0; i < length; i++) {
                 try {
                     values[i] = Integer.parseInt(buffers[i].trim());
                 } catch (Exception exception) {

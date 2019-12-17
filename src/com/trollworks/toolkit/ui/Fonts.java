@@ -20,19 +20,18 @@ import java.awt.GraphicsEnvironment;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-
 import javax.swing.UIManager;
 
 /** Provides standardized font access and utilities. */
 public class Fonts {
     /** The notification key used when font change notifications are broadcast. */
-    public static final String                  FONT_NOTIFICATION_KEY = "FontsChanged";
+    public static final  String                 FONT_NOTIFICATION_KEY = "FontsChanged";
     private static final String                 MODULE                = "Font";
     /** The standard text field font. */
-    public static final String                  KEY_STD_TEXT_FIELD    = "TextField.font";
+    public static final  String                 KEY_STD_TEXT_FIELD    = "TextField.font";
     private static final TreeMap<String, Fonts> DEFAULTS              = new TreeMap<>();
-    private String                              mDescription;
-    private Font                                mDefaultFont;
+    private              String                 mDescription;
+    private              Font                   mDefaultFont;
 
     /**
      * Registers a default for a specific font key.
@@ -48,7 +47,7 @@ public class Fonts {
 
     /** @return The available font keys. */
     public static String[] getKeys() {
-        return DEFAULTS.keySet().toArray(new String[DEFAULTS.size()]);
+        return DEFAULTS.keySet().toArray(new String[0]);
     }
 
     /**
@@ -126,7 +125,7 @@ public class Fonts {
         String name  = defaultValue.getName();
         int    style = defaultValue.getStyle();
         int    size  = defaultValue.getSize();
-        if (buffer != null && buffer.length() > 0) {
+        if (buffer != null && !buffer.isEmpty()) {
             StringTokenizer tokenizer = new StringTokenizer(buffer, ",");
             if (tokenizer.hasMoreTokens()) {
                 name = tokenizer.nextToken();
@@ -164,7 +163,7 @@ public class Fonts {
 
     /**
      * @param name The name to check.
-     * @return <code>true</code> if the specified name is a valid font name.
+     * @return {@code true} if the specified name is a valid font name.
      */
     public static boolean isValidFontName(String name) {
         for (String element : GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()) {

@@ -24,7 +24,7 @@ public class RecursiveDirectoryRemover implements FileVisitor<Path> {
 
     /**
      * @param path           The starting point.
-     * @param includeRootDir Pass in <code>true</code> to remove the specified path as well as its
+     * @param includeRootDir Pass in {@code true} to remove the specified path as well as its
      *                       contents.
      */
     public static final void remove(Path path, boolean includeRootDir) {

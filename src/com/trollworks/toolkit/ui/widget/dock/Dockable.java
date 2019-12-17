@@ -14,7 +14,6 @@ package com.trollworks.toolkit.ui.widget.dock;
 import com.trollworks.toolkit.ui.UIUtilities;
 
 import java.awt.LayoutManager;
-
 import javax.swing.Icon;
 import javax.swing.JPanel;
 

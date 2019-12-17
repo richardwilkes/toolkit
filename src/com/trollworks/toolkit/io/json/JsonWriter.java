@@ -14,6 +14,7 @@ package com.trollworks.toolkit.io.json;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Objects;
 
 public class JsonWriter extends FilterWriter {
     private boolean mNeedComma;
@@ -102,7 +103,7 @@ public class JsonWriter extends FilterWriter {
     }
 
     public void keyValueNot(String key, String value, String not) throws IOException {
-        if (value == null ? not != null : !value.equals(not)) {
+        if (!Objects.equals(value, not)) {
             key(key);
             write(Json.quote(value));
             mNeedComma = true;
@@ -116,7 +117,7 @@ public class JsonWriter extends FilterWriter {
     }
 
     public void keyValueNot(String key, Number value, Number not) throws IOException {
-        if (value == null ? not != null : !value.equals(not)) {
+        if (!Objects.equals(value, not)) {
             key(key);
             write(Json.toString(value));
             mNeedComma = true;

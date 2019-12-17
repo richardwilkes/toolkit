@@ -22,7 +22,7 @@ public class NumericComparator implements Comparator<String> {
     public static final NumericComparator CASELESS_COMPARATOR = new NumericComparator(true);
     /** The standard case-sensitive, numeric-aware string comparator. */
     public static final NumericComparator COMPARATOR          = new NumericComparator(false);
-    private boolean                       mCaseless;
+    private             boolean           mCaseless;
 
     private NumericComparator(boolean caseless) {
         mCaseless = caseless;
@@ -102,24 +102,16 @@ public class NumericComparator implements Comparator<String> {
                 }
 
                 try {
-                    long val0 = Long.parseLong(left.substring(pos0 - count0, pos0));
-                    long val1 = Long.parseLong(right.substring(pos1 - count1, pos1));
                     normalCompare = false;
-                    if (val0 > val1) {
-                        result = 1;
-                    } else if (val0 < val1) {
-                        result = -1;
-                    } else {
-                        result = 0;
-                    }
+                    result = Long.compare(Long.parseLong(left.substring(pos0 - count0, pos0)), Long.parseLong(right.substring(pos1 - count1, pos1)));
                     if (result == 0 && secondaryResult == 0) {
                         secondaryResult = count0 - count1;
                     }
                 } catch (NumberFormatException nfex) {
                     pos0 -= count0;
                     pos1 -= count1;
-                    c0    = chars0[pos0++];
-                    c1    = chars1[pos1++];
+                    c0 = chars0[pos0++];
+                    c1 = chars1[pos1++];
                 }
             }
 
@@ -156,7 +148,7 @@ public class NumericComparator implements Comparator<String> {
         return result;
     }
 
-    private static final boolean isDigit(char ch) {
+    private static boolean isDigit(char ch) {
         return ch >= '0' && ch <= '9';
     }
 }

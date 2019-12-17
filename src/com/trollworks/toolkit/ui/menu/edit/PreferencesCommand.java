@@ -24,10 +24,10 @@ import java.awt.event.KeyEvent;
 /** Provides the "Preferences..." command. */
 public class PreferencesCommand extends Command implements PreferencesHandler {
     /** The action command this command will issue. */
-    public static final String             CMD_PREFERENCES = "Preferences";
+    public static final String CMD_PREFERENCES = "Preferences";
 
     /** The singleton {@link PreferencesCommand}. */
-    public static final PreferencesCommand INSTANCE        = new PreferencesCommand();
+    public static final PreferencesCommand INSTANCE = new PreferencesCommand();
 
     private PreferencesCommand() {
         super(I18n.Text("Preferences\u2026"), CMD_PREFERENCES, KeyEvent.VK_COMMA);

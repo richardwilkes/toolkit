@@ -12,7 +12,6 @@
 package com.trollworks.toolkit.utility.text;
 
 import java.text.ParseException;
-
 import javax.swing.JFormattedTextField;
 
 /** Provides integer field conversion. */
@@ -48,13 +47,13 @@ public class IntegerFormatter extends JFormattedTextField.AbstractFormatter {
      * @param minValue    The minimum value allowed.
      * @param maxValue    The maximum value allowed.
      * @param forceSign   Whether or not a plus sign should be forced for positive numbers.
-     * @param blankOnZero When <code>true</code>, a value of zero resolves to the empty string when
+     * @param blankOnZero When {@code true}, a value of zero resolves to the empty string when
      *                    calling {@link #valueToString(Object)}.
      */
     public IntegerFormatter(int minValue, int maxValue, boolean forceSign, boolean blankOnZero) {
-        mMinValue    = minValue;
-        mMaxValue    = maxValue;
-        mForceSign   = forceSign;
+        mMinValue = minValue;
+        mMaxValue = maxValue;
+        mForceSign = forceSign;
         mBlankOnZero = blankOnZero;
     }
 

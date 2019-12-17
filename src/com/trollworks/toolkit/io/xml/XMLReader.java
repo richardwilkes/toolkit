@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -27,27 +28,27 @@ import java.util.HashMap;
 /** A very simple XML reader with very low memory overhead. */
 public class XMLReader implements AutoCloseable {
     /** Debug option: whether to output skipped tags to standard out. */
-    public static boolean           SHOW_SKIPPED_TAGS = Numbers.extractBoolean(System.getProperty("SHOW_SKIPPED_TAGS", "false"));
-    private static final String     UNEXPECTED_EOF    = "Unexpected EOF";
-    private HashMap<String, String> mEntityMap        = new HashMap<>();
-    private HashMap<String, String> mAttributeMap     = new HashMap<>();
-    private ArrayList<String>       mStack            = new ArrayList<>();
-    private char[]                  mBuffer           = new char[32768];
-    private char[]                  mTextBuffer       = new char[128];
-    private XMLNodeType             mType             = XMLNodeType.START_DOCUMENT;
-    private int                     mLine             = 1;
-    private int                     mColumn           = 1;
-    private Reader                  mReader;
-    private int                     mPos;
-    private int                     mCount;
-    private boolean                 mEOF;
-    private int                     mPeek0;
-    private int                     mPeek1;
-    private int                     mTextPos;
-    private String                  mText;
-    private boolean                 mIsWhitespace;
-    private String                  mName;
-    private boolean                 mIsEmptyElementTag;
+    public static        boolean                 SHOW_SKIPPED_TAGS = Numbers.extractBoolean(System.getProperty("SHOW_SKIPPED_TAGS", "false"));
+    private static final String                  UNEXPECTED_EOF    = "Unexpected EOF";
+    private              HashMap<String, String> mEntityMap        = new HashMap<>();
+    private              HashMap<String, String> mAttributeMap     = new HashMap<>();
+    private              ArrayList<String>       mStack            = new ArrayList<>();
+    private              char[]                  mBuffer           = new char[32768];
+    private              char[]                  mTextBuffer       = new char[128];
+    private              XMLNodeType             mType             = XMLNodeType.START_DOCUMENT;
+    private              int                     mLine             = 1;
+    private              int                     mColumn           = 1;
+    private              Reader                  mReader;
+    private              int                     mPos;
+    private              int                     mCount;
+    private              boolean                 mEOF;
+    private              int                     mPeek0;
+    private              int                     mPeek1;
+    private              int                     mTextPos;
+    private              String                  mText;
+    private              boolean                 mIsWhitespace;
+    private              String                  mName;
+    private              boolean                 mIsEmptyElementTag;
 
     /**
      * Creates a new {@link XMLReader}.
@@ -55,7 +56,7 @@ public class XMLReader implements AutoCloseable {
      * @param stream The underlying {@link InputStream} to use.
      */
     public XMLReader(InputStream stream) throws IOException {
-        this(new InputStreamReader(stream));
+        this(new InputStreamReader(stream, StandardCharsets.UTF_8));
     }
 
     /**
@@ -96,9 +97,9 @@ public class XMLReader implements AutoCloseable {
      */
     public XMLReader(Reader reader) throws IOException {
         mReader = reader;
-        mPeek0  = reader.read();
-        mPeek1  = reader.read();
-        mEOF    = mPeek0 == -1;
+        mPeek0 = reader.read();
+        mPeek1 = reader.read();
+        mEOF = mPeek0 == -1;
         defineCharacterEntity("amp", "&");
         defineCharacterEntity("apos", "'");
         defineCharacterEntity("gt", ">");
@@ -157,11 +158,11 @@ public class XMLReader implements AutoCloseable {
     /**
      * Requires the current type to be the specified type and optionally requires the name to match
      * as well. If the current type is {@link XMLNodeType#TEXT} and {@link #isWhitespace()} is
-     * <code>true</code> and required type is not {@link XMLNodeType#TEXT}, then {@link #next()} is
+     * {@code true} and required type is not {@link XMLNodeType#TEXT}, then {@link #next()} is
      * called prior to the check.
      *
      * @param type The type to require.
-     * @param name The name to require. Pass in <code>null</code> to allow any name.
+     * @param name The name to require. Pass in {@code null} to allow any name.
      */
     public void require(XMLNodeType type, String name) throws IOException {
         if (mType == XMLNodeType.TEXT && type != XMLNodeType.TEXT && isWhitespace()) {
@@ -248,12 +249,11 @@ public class XMLReader implements AutoCloseable {
     /** @return The {@link Calendar} representing the date and time read. */
     public Calendar readDateTime() {
         Calendar calendar = Calendar.getInstance();
-
-        calendar.set(getAttributeAsInteger(XMLWriter.YEAR, 1970), getAttributeAsInteger(XMLWriter.MONTH, 1), getAttributeAsInteger(XMLWriter.DAY, 1), getAttributeAsInteger(XMLWriter.HOUR, 0), getAttributeAsInteger(XMLWriter.MINUTE, 0), getAttributeAsInteger(XMLWriter.SECOND, 0));
+        calendar.set(getAttributeAsInteger(XMLWriter.YEAR, 1970), getAttributeAsInteger(XMLWriter.MONTH, 1) - 1, getAttributeAsInteger(XMLWriter.DAY, 1), getAttributeAsInteger(XMLWriter.HOUR, 0), getAttributeAsInteger(XMLWriter.MINUTE, 0), getAttributeAsInteger(XMLWriter.SECOND, 0));
         return calendar;
     }
 
-    private final int read() throws IOException {
+    private int read() throws IOException {
         int result = mPeek0;
 
         mPeek0 = mPeek1;
@@ -282,11 +282,11 @@ public class XMLReader implements AutoCloseable {
         return result;
     }
 
-    private final void fail(String desc) throws IOException {
+    private void fail(String desc) throws IOException {
         throw new IOException(desc + " pos: " + getPositionDescription());
     }
 
-    private final void push(int ch) {
+    private void push(int ch) {
         if (ch != 0) {
             if (mTextPos == mTextBuffer.length) {
                 char[] bigger = new char[mTextPos * 4 / 3 + 4];
@@ -298,26 +298,26 @@ public class XMLReader implements AutoCloseable {
         }
     }
 
-    private final void read(char ch) throws IOException {
+    private void read(char ch) throws IOException {
         if (read() != ch) {
             fail("expected: '" + ch + "'");
         }
     }
 
-    private final void skip() throws IOException {
+    private void skip() throws IOException {
         while (!mEOF && mPeek0 <= ' ') {
             read();
         }
     }
 
-    private final String pop(int pos) {
+    private String pop(int pos) {
         String result = new String(mTextBuffer, pos, mTextPos - pos);
 
         mTextPos = pos;
         return result;
     }
 
-    private final String readName() throws IOException {
+    private String readName() throws IOException {
         int pos = mTextPos;
         int ch  = mPeek0;
 
@@ -333,7 +333,7 @@ public class XMLReader implements AutoCloseable {
         return pop(pos);
     }
 
-    private final void parseLegacy(boolean push) throws IOException {
+    private void parseLegacy(boolean push) throws IOException {
         String req = "";
         int    term;
         int    ch;
@@ -344,17 +344,17 @@ public class XMLReader implements AutoCloseable {
             term = '?';
         } else if (ch == '!') {
             if (mPeek0 == '-') {
-                req  = "--";
+                req = "--";
                 term = '-';
             } else {
-                req  = "DOCTYPE";
+                req = "DOCTYPE";
                 term = -1;
             }
         } else {
             if (ch != '[') {
                 fail("can't reach: " + ch);
             }
-            req  = "CDATA[";
+            req = "CDATA[";
             term = ']';
         }
 
@@ -388,7 +388,7 @@ public class XMLReader implements AutoCloseable {
         }
     }
 
-    private final void parseDoctype() throws IOException {
+    private void parseDoctype() throws IOException {
         int nesting = 1;
 
         while (true) {
@@ -410,13 +410,13 @@ public class XMLReader implements AutoCloseable {
         }
     }
 
-    private final void parseEndTag() throws IOException {
+    private void parseEndTag() throws IOException {
         int pos;
 
         read(); // '<'
         read(); // '/'
         mName = readName();
-        pos   = mStack.size() - 1;
+        pos = mStack.size() - 1;
         if (pos < 0) {
             fail("element stack empty");
         }
@@ -429,7 +429,7 @@ public class XMLReader implements AutoCloseable {
         read('>');
     }
 
-    private final XMLNodeType peekType() {
+    private XMLNodeType peekType() {
         switch (mPeek0) {
         case -1:
             return XMLNodeType.END_DOCUMENT;
@@ -452,7 +452,7 @@ public class XMLReader implements AutoCloseable {
         }
     }
 
-    private final void parseStartTag() throws IOException {
+    private void parseStartTag() throws IOException {
         read(); // <
         mName = readName();
         mStack.add(mName);
@@ -480,7 +480,7 @@ public class XMLReader implements AutoCloseable {
             }
 
             attrName = readName();
-            if (attrName.length() == 0) {
+            if (attrName.isEmpty()) {
                 fail("attribute name expected");
             }
 
@@ -495,13 +495,14 @@ public class XMLReader implements AutoCloseable {
             pos = mTextPos;
             pushText(ch);
             mAttributeMap.put(attrName, pop(pos));
+            //noinspection ConstantConditions
             if (ch != ' ') {
                 read(); // skip end quote
             }
         }
     }
 
-    private final boolean pushEntity() throws IOException {
+    private boolean pushEntity() throws IOException {
         boolean whitespace = true;
         int     pos;
         String  code;
@@ -515,7 +516,7 @@ public class XMLReader implements AutoCloseable {
 
         code = pop(pos);
         read();
-        if (code.length() > 0 && code.charAt(0) == '#') {
+        if (!code.isEmpty() && code.charAt(0) == '#') {
             int c = code.charAt(1) == 'x' ? Integer.parseInt(code.substring(2), 16) : Integer.parseInt(code.substring(1));
 
             push(c);
@@ -538,7 +539,7 @@ public class XMLReader implements AutoCloseable {
         return whitespace;
     }
 
-    private final boolean pushText(int delimiter) throws IOException {
+    private boolean pushText(int delimiter) throws IOException {
         boolean whitespace = true;
         int     next       = mPeek0;
 
@@ -581,16 +582,11 @@ public class XMLReader implements AutoCloseable {
     /** @return A description of the current parse position. */
     public String getPositionDescription() {
         StringBuilder buffer = new StringBuilder(mType.name());
-
-        buffer.append(" @" + mLine + ":" + mColumn + ": ");
+        buffer.append(" @").append(mLine).append(":").append(mColumn).append(": ");
         if (mType == XMLNodeType.START_TAG) {
-            buffer.append('<');
-            buffer.append(mName);
-            buffer.append('>');
+            buffer.append('<').append(mName).append('>');
         } else if (mType == XMLNodeType.END_TAG) {
-            buffer.append("</");
-            buffer.append(mName);
-            buffer.append('>');
+            buffer.append("</").append(mName).append('>');
         } else if (mIsWhitespace) {
             buffer.append("[whitespace]");
         } else {
@@ -678,7 +674,8 @@ public class XMLReader implements AutoCloseable {
 
     /**
      * @param name     The attribute name.
-     * @param defValue The default value to use if the attribute value can't be converted to a long.
+     * @param defValue The default value to use if the attribute value can't be converted to a
+     *                 long.
      * @return The value of the tag.
      */
     public long getAttributeAsLong(String name, long defValue) {
@@ -712,13 +709,13 @@ public class XMLReader implements AutoCloseable {
      */
     public XMLNodeType next() throws IOException {
         if (mIsEmptyElementTag) {
-            mType              = XMLNodeType.END_TAG;
+            mType = XMLNodeType.END_TAG;
             mIsEmptyElementTag = false;
             mStack.remove(mStack.size() - 1);
         } else {
             int textOrdinal = XMLNodeType.TEXT.ordinal();
 
-            mTextPos      = 0;
+            mTextPos = 0;
             mIsWhitespace = true;
             do {
                 mAttributeMap.clear();

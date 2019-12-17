@@ -20,10 +20,10 @@ import java.awt.event.ActionEvent;
 public class ClearRecentFilesMenuCommand extends Command {
 
     /** The action command this command will issue. */
-    public static final String                      CMD_CLEAR_RECENT_FILES_MENU = "ClearRecentFilesMenu";
+    public static final String CMD_CLEAR_RECENT_FILES_MENU = "ClearRecentFilesMenu";
 
     /** The singleton {@link ClearRecentFilesMenuCommand}. */
-    public static final ClearRecentFilesMenuCommand INSTANCE                    = new ClearRecentFilesMenuCommand();
+    public static final ClearRecentFilesMenuCommand INSTANCE = new ClearRecentFilesMenuCommand();
 
     private ClearRecentFilesMenuCommand() {
         super(I18n.Text("Clear"), CMD_CLEAR_RECENT_FILES_MENU);

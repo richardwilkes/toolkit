@@ -16,7 +16,6 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
-
 import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;

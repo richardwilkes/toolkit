@@ -16,13 +16,12 @@ import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
 import javax.swing.undo.UndoManager;
 
 /** Provides the "Redo" command. */
 public class RedoCommand extends Command {
     /** The action command this command will issue. */
-    public static final String      CMD_REDO = "Redo";
+    public static final String CMD_REDO = "Redo";
 
     /** The singleton {@link RedoCommand}. */
     public static final RedoCommand INSTANCE = new RedoCommand();

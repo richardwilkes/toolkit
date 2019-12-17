@@ -21,9 +21,9 @@ public class Geometry {
     private static final Point2D[] NO_LINE_INTERSECTION = new Point2D[0];
 
     /**
-     * Intersects two {@link Rectangle}s, producing a third. Unlike the
-     * {@link Rectangle#intersection(Rectangle)} method, the resulting {@link Rectangle}'s width &
-     * height will not be set to less than zero when there is no overlap.
+     * Intersects two {@link Rectangle}s, producing a third. Unlike the {@link
+     * Rectangle#intersection(Rectangle)} method, the resulting {@link Rectangle}'s width & height
+     * will not be set to less than zero when there is no overlap.
      *
      * @param first  The first {@link Rectangle}.
      * @param second The second {@link Rectangle}.
@@ -44,9 +44,9 @@ public class Geometry {
     }
 
     /**
-     * Unions two {@link Rectangle}s, producing a third. Unlike the
-     * {@link Rectangle#union(Rectangle)} method, an empty {@link Rectangle} will not cause the
-     * {@link Rectangle}'s boundary to extend to the 0,0 point.
+     * Unions two {@link Rectangle}s, producing a third. Unlike the {@link
+     * Rectangle#union(Rectangle)} method, an empty {@link Rectangle} will not cause the {@link
+     * Rectangle}'s boundary to extend to the 0,0 point.
      *
      * @param first  The first {@link Rectangle}.
      * @param second The second {@link Rectangle}.
@@ -122,9 +122,9 @@ public class Geometry {
      * @return The {@link Rectangle} that was passed in.
      */
     public static final Rectangle inset(int amount, Rectangle bounds) {
-        bounds.x      += amount;
-        bounds.y      += amount;
-        bounds.width  -= amount * 2;
+        bounds.x += amount;
+        bounds.y += amount;
+        bounds.width -= amount * 2;
         bounds.height -= amount * 2;
         if (bounds.width < 0) {
             bounds.width = 0;
@@ -200,15 +200,18 @@ public class Geometry {
         if (ccw == 0) {
             ccw = px * (long) x2 + py * (long) y2;
             if (ccw > 0) {
-                px  -= x2;
-                py  -= y2;
-                ccw  = px * (long) x2 + py * (long) y2;
+                px -= x2;
+                py -= y2;
+                ccw = px * (long) x2 + py * (long) y2;
                 if (ccw < 0) {
                     ccw = 0;
                 }
             }
         }
-        return ccw < 0 ? -1 : ccw > 0 ? 1 : 0;
+        if (ccw < 0) {
+            return -1;
+        }
+        return ccw > 0 ? 1 : 0;
     }
 
     /**
@@ -242,15 +245,15 @@ public class Geometry {
         boolean bIsPt = b1x == b2x && b1y == b2y;
         if (aIsPt && bIsPt) {
             if (a1x == b1x && a1y == b1y) {
-                return new Point2D[] { new Point2D.Double(a1x, a1y) };
+                return new Point2D[]{new Point2D.Double(a1x, a1y)};
             }
         } else if (aIsPt) {
             if (Line2D.ptSegDist(b1x, b1y, b2x, b2y, a1x, a1y) == 0) {
-                return new Point2D[] { new Point2D.Double(a1x, a1y) };
+                return new Point2D[]{new Point2D.Double(a1x, a1y)};
             }
         } else if (bIsPt) {
             if (Line2D.ptSegDist(a1x, a1y, a2x, a2y, b1x, b1y) == 0) {
-                return new Point2D[] { new Point2D.Double(b1x, b1y) };
+                return new Point2D[]{new Point2D.Double(b1x, b1y)};
             }
         } else {
             double abdx = a1x - b1x;
@@ -262,16 +265,7 @@ public class Geometry {
             double ady  = a2y - a1y;
             double ubt  = adx * abdy - ady * abdx;
             double ub   = bdy * adx - bdx * ady;
-            if (ub != 0) {
-                // Not parallel, so find intersection point
-                double a = uat / ub;
-                if (a >= 0 && a <= 1) {
-                    double b = ubt / ub;
-                    if (b >= 0 && b <= 1) {
-                        return new Point2D[] { new Point2D.Double(a1x + a * adx, a1y + a * ady) };
-                    }
-                }
-            } else {
+            if (ub == 0) {
                 // Parallel, so check for overlap
                 if (uat == 0 || ubt == 0) {
                     double ub1, ub2;
@@ -284,10 +278,21 @@ public class Geometry {
                     }
                     double left  = Math.max(0, Math.min(ub1, ub2));
                     double right = Math.min(1, Math.max(ub1, ub2));
+                    double x     = a2x * left + a1x * (1.0f - left);
+                    double y     = a2y * left + a1y * (1.0f - left);
                     if (left < right) {
-                        return new Point2D[] { new Point2D.Double(a2x * left + a1x * (1.0f - left), a2y * left + a1y * (1.0f - left)), new Point2D.Double(a2x * right + a1x * (1.0f - right), a2y * right + a1y * (1.0f - right)) };
+                        return new Point2D[]{new Point2D.Double(x, y), new Point2D.Double(a2x * right + a1x * (1.0f - right), a2y * right + a1y * (1.0f - right))};
                     } else if (left == right) {
-                        return new Point2D[] { new Point2D.Double(a2x * left + a1x * (1.0f - left), a2y * left + a1y * (1.0f - left)) };
+                        return new Point2D[]{new Point2D.Double(x, y)};
+                    }
+                }
+            } else {
+                // Not parallel, so find intersection point
+                double a = uat / ub;
+                if (a >= 0 && a <= 1) {
+                    double b = ubt / ub;
+                    if (b >= 0 && b <= 1) {
+                        return new Point2D[]{new Point2D.Double(a1x + a * adx, a1y + a * ady)};
                     }
                 }
             }

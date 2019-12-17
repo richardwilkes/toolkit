@@ -14,6 +14,7 @@ package com.trollworks.toolkit.utility;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 /** Provides standard file path manipulation facilities. */
@@ -24,17 +25,17 @@ public class PathUtils {
 
     static {
         if (Platform.isWindows()) {
-            INVALID_CHARACTERS = new char[] { '\\', '/', ':', '*', '?', '"', '<', '>', '|' };
-            INVALID_BASENAMES  = new String[] { "aux", "com1", "com2", "com3", "com4", "com5", "com6", "com7", "com8", "com9", "con", "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9", "nul", "prn" };
-            INVALID_FULLNAMES  = new String[] { "clock$" };
+            INVALID_CHARACTERS = new char[]{'\\', '/', ':', '*', '?', '"', '<', '>', '|'};
+            INVALID_BASENAMES = new String[]{"aux", "com1", "com2", "com3", "com4", "com5", "com6", "com7", "com8", "com9", "con", "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9", "nul", "prn"};
+            INVALID_FULLNAMES = new String[]{"clock$"};
         } else if (Platform.isMacintosh()) {
-            INVALID_CHARACTERS = new char[] { '/', ':', '\0', };
-            INVALID_BASENAMES  = null;
-            INVALID_FULLNAMES  = null;
+            INVALID_CHARACTERS = new char[]{'/', ':', '\0',};
+            INVALID_BASENAMES = null;
+            INVALID_FULLNAMES = null;
         } else {
-            INVALID_CHARACTERS = new char[] { '/', '\0', };
-            INVALID_BASENAMES  = null;
-            INVALID_FULLNAMES  = null;
+            INVALID_CHARACTERS = new char[]{'/', '\0',};
+            INVALID_BASENAMES = null;
+            INVALID_FULLNAMES = null;
         }
     }
 
@@ -54,8 +55,8 @@ public class PathUtils {
      *
      * @param name              The name to process.
      * @param extension         The desired extension.
-     * @param onlyIfNoExtension Pass <code>true</code> if extensions other than the one passed in
-     *                          are acceptable.
+     * @param onlyIfNoExtension Pass {@code true} if extensions other than the one passed in are
+     *                          acceptable.
      * @return A new string with the specified extension.
      */
     public static final String enforceExtension(String name, String extension, boolean onlyIfNoExtension) {
@@ -85,7 +86,7 @@ public class PathUtils {
     /**
      * @param fullPathOne The first full path.
      * @param fullPathTwo The second full path.
-     * @return The common root path of two full paths, or <code>null</code> if there is none.
+     * @return The common root path of two full paths, or {@code null} if there is none.
      */
     public static final String getCommonRoot(String fullPathOne, String fullPathTwo) {
         int i;
@@ -97,17 +98,17 @@ public class PathUtils {
             len1 = 0;
         } else {
             fullPathOne = fullPathOne.replace('\\', '/');
-            len1        = fullPathOne.length();
+            len1 = fullPathOne.length();
         }
 
         if (fullPathTwo == null) {
             len2 = 0;
         } else {
             fullPathTwo = fullPathTwo.replace('\\', '/');
-            len2        = fullPathTwo.length();
+            len2 = fullPathTwo.length();
         }
 
-        max = len1 > len2 ? len2 : len1;
+        max = Math.min(len1, len2);
 
         for (i = 0; i < max; i++) {
             if (fullPathOne.charAt(i) != fullPathTwo.charAt(i)) {
@@ -192,10 +193,8 @@ public class PathUtils {
             } else {
                 result = relativePath.replace('\\', '/');
             }
-        } else if (baseFullPath != null) {
-            result = baseFullPath;
         } else {
-            result = "./";
+            result = Objects.requireNonNullElse(baseFullPath, "./");
         }
 
         if (result.startsWith("./") || result.startsWith("../")) {
@@ -227,8 +226,8 @@ public class PathUtils {
 
     /**
      * @param path             The path to process.
-     * @param includeExtension Pass in <code>true</code> to leave the extension on the name or
-     *                         <code>false</code> to strip it off.
+     * @param includeExtension Pass in {@code true} to leave the extension on the name or {@code
+     *                         false} to strip it off.
      * @return The leaf portion of the path name (everything to the right of the last path
      *         separator).
      */
@@ -238,8 +237,8 @@ public class PathUtils {
 
     /**
      * @param path             The path to process.
-     * @param includeExtension Pass in <code>true</code> to leave the extension on the name or
-     *                         <code>false</code> to strip it off.
+     * @param includeExtension Pass in {@code true} to leave the extension on the name or {@code
+     *                         false} to strip it off.
      * @return The leaf portion of the path name (everything to the right of the last path
      *         separator).
      */
@@ -247,7 +246,7 @@ public class PathUtils {
         if (path != null) {
             int index;
 
-            path  = path.replace('\\', '/');
+            path = path.replace('\\', '/');
             index = path.lastIndexOf('/');
             if (index != -1) {
                 if (index == path.length() - 1) {
@@ -278,7 +277,8 @@ public class PathUtils {
 
     /**
      * @param path               The path to operate on.
-     * @param includeTrailingSep Whether or not the trailing separator character should be included.
+     * @param includeTrailingSep Whether or not the trailing separator character should be
+     *                           included.
      * @return The parent portion of the path name (everything to the left of the last path
      *         separator, plus the path separator itself, if desired).
      */
@@ -289,7 +289,7 @@ public class PathUtils {
             return null;
         }
 
-        path  = path.replace('\\', '/');
+        path = path.replace('\\', '/');
         index = path.lastIndexOf('/');
         if (index == -1) {
             return "";
@@ -312,20 +312,16 @@ public class PathUtils {
      *         target full path is returned.
      */
     public static final String getRelativePath(String baseFullPath, String targetFullPath) {
-        if (baseFullPath != null) {
-            baseFullPath = baseFullPath.replace('\\', '/');
+        if (baseFullPath == null || targetFullPath == null) {
+            return targetFullPath;
         }
-        if (targetFullPath != null) {
-            targetFullPath = targetFullPath.replace('\\', '/');
-        }
-
+        baseFullPath = baseFullPath.replace('\\', '/');
+        targetFullPath = targetFullPath.replace('\\', '/');
         String common = getCommonRoot(baseFullPath, targetFullPath);
-
         if (common != null) {
             if (common.equals(baseFullPath)) {
                 return targetFullPath.substring(common.length());
             }
-
             StringBuilder buffer    = new StringBuilder(targetFullPath.length());
             String        remainder = baseFullPath.substring(common.length());
             int           i         = remainder.indexOf('/');
@@ -352,7 +348,7 @@ public class PathUtils {
 
     /**
      * @param path The path to operate on.
-     * @return <code>true</code> if the specified path is an absolute path.
+     * @return {@code true} if the specified path is an absolute path.
      */
     public static final boolean isFullPath(String path) {
         boolean isFullPath = false;
@@ -364,7 +360,7 @@ public class PathUtils {
                 char ch;
 
                 path = path.replace('\\', '/');
-                ch   = path.charAt(0);
+                ch = path.charAt(0);
 
                 if (ch == '/' || path.startsWith("//") || length > 1 && path.charAt(1) == ':' && (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z')) {
                     isFullPath = true;
@@ -452,7 +448,7 @@ public class PathUtils {
      * @param path        The path to check.
      * @param extraBinDir A directory to check for the executable, in addition to the standard
      *                    locations.
-     * @return The {@link File} representing the full path to the executable, or <code>null</code>.
+     * @return The {@link File} representing the full path to the executable, or {@code null}.
      */
     public static File isCommandPathViable(String path, File extraBinDir) {
         if (path != null) {
@@ -488,10 +484,10 @@ public class PathUtils {
 
     /**
      * @param name The name to check. This should be just the name and no path components.
-     * @return <code>true</code> if the name is valid as a file name on your platform.
+     * @return {@code true} if the name is valid as a file name on your platform.
      */
     public static final boolean isNameValidForFile(String name) {
-        if (name == null || name.isEmpty() || name.equals(".") || name.equals("..")) {
+        if (name == null || name.isEmpty() || ".".equals(name) || "..".equals(name)) {
             return false;
         }
         for (char ch : INVALID_CHARACTERS) {

@@ -66,57 +66,55 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import javax.swing.UIManager;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
 
 /** Provides a flexible tree widget. */
 public class TreePanel extends DirectScrollPanel implements Runnable, Openable, Deletable, SelectAllCapable, DropTargetListener, DragSourceListener, DragGestureListener, FocusListener, KeyListener, MouseListener, MouseMotionListener, NotifierTarget {
-    private static final float         DRAG_OPACITY              = 0.75f;
+    private static final float                      DRAG_OPACITY            = 0.75f;
     /** The amount of 'slop' to allow for hit detection. */
-    public static final int            HIT_SLOP                  = 4;
-    private static final int           DRAG_FOCUS_WIDTH          = 3;
-    private static final int           DRAG_INSERT_WIDTH         = 3;
+    public static final  int                        HIT_SLOP                = 4;
+    private static final int                        DRAG_FOCUS_WIDTH        = 3;
+    private static final int                        DRAG_INSERT_WIDTH       = 3;
     /** The amount of indent per level of hierarchy. */
-    public static final int            INDENT                    = TextTreeColumn.HMARGIN + 16 + TextTreeColumn.ICON_GAP;
-    private TreeRoot                   mRoot;
-    private ArrayList<TreeColumn>      mColumns                  = new ArrayList<>();
-    private DirectScrollPanelArea      mViewArea;
-    private Deletable                  mDeletableProxy;
-    private Openable                   mOpenableProxy;
-    private Point                      mDragStart;
-    private Color                      mDividerColor             = Color.GRAY;
-    private Color                      mHierarchyLineColor       = new Color(224, 224, 224);
-    private HashSet<TreeContainerRow>  mOpenRows                 = new HashSet<>();
-    private HashSet<TreeRow>           mSelectedRows             = new HashSet<>();
-    private TObjectIntHashMap<TreeRow> mRowHeightMap             = new TObjectIntHashMap<>();
-    private int                        mRowHeight                = TextTreeColumn.VMARGIN + TextDrawing.getFontHeight(Fonts.getDefaultFont()) + TextTreeColumn.VMARGIN;
-    private int                        mMouseOverColumnDivider   = -1;
-    private int                        mDragColumnDivider        = -1;
-    private int                        mAllowedRowDragTypes      = DnDConstants.ACTION_COPY_OR_MOVE;
-    private int                        mAllowedRowDropTypes      = DnDConstants.ACTION_COPY_OR_MOVE;
-    private TreeSorter                 mSorter                   = new TreeSorter();
-    private TreeColumn                 mSortColumn;
-    private TreeColumn                 mSourceDragColumn;
-    private TreeDragState              mDragState;
-    private TreeRow                    mAnchorRow;
-    private TreeRow                    mRowToSelectOnMouseUp;
-    private TreeRow                    mResizeRow;
-    private Dock                       mAlternateDragDestination;
-    private boolean                    mShowDisclosureControls   = true;
-    private boolean                    mUseBanding               = true;
-    private boolean                    mAllowColumnResize        = true;
-    private boolean                    mAllowColumnDrag          = true;
-    private boolean                    mAllowColumnContextMenu   = true;
-    private boolean                    mAllowRowDropFromExternal = false;
-    private boolean                    mUserSortable             = true;
-    private boolean                    mShowColumnDivider        = true;
-    private boolean                    mShowRowDivider           = true;
-    private boolean                    mShowHeader               = true;
-    private boolean                    mDropReceived;
-    private boolean                    mResizePending;
-    private boolean                    mIgnoreNextDragGesture;
+    public static final  int                        INDENT                  = TextTreeColumn.HMARGIN + 16 + TextTreeColumn.ICON_GAP;
+    private              TreeRoot                   mRoot;
+    private              ArrayList<TreeColumn>      mColumns                = new ArrayList<>();
+    private              DirectScrollPanelArea      mViewArea;
+    private              Deletable                  mDeletableProxy;
+    private              Openable                   mOpenableProxy;
+    private              Color                      mDividerColor           = Color.GRAY;
+    private              Color                      mHierarchyLineColor     = new Color(224, 224, 224);
+    private              HashSet<TreeContainerRow>  mOpenRows               = new HashSet<>();
+    private              HashSet<TreeRow>           mSelectedRows           = new HashSet<>();
+    private              TObjectIntHashMap<TreeRow> mRowHeightMap           = new TObjectIntHashMap<>();
+    private              int                        mRowHeight              = TextTreeColumn.VMARGIN + TextDrawing.getFontHeight(Fonts.getDefaultFont()) + TextTreeColumn.VMARGIN;
+    private              int                        mMouseOverColumnDivider = -1;
+    private              int                        mDragColumnDivider      = -1;
+    private              int                        mAllowedRowDragTypes    = DnDConstants.ACTION_COPY_OR_MOVE;
+    private              int                        mAllowedRowDropTypes    = DnDConstants.ACTION_COPY_OR_MOVE;
+    private              TreeSorter                 mSorter                 = new TreeSorter();
+    private              TreeColumn                 mSortColumn;
+    private              TreeColumn                 mSourceDragColumn;
+    private              TreeDragState              mDragState;
+    private              TreeRow                    mAnchorRow;
+    private              TreeRow                    mRowToSelectOnMouseUp;
+    private              TreeRow                    mResizeRow;
+    private              Dock                       mAlternateDragDestination;
+    private              boolean                    mShowDisclosureControls = true;
+    private              boolean                    mUseBanding             = true;
+    private              boolean                    mAllowColumnResize      = true;
+    private              boolean                    mAllowColumnDrag        = true;
+    private              boolean                    mAllowColumnContextMenu = true;
+    private              boolean                    mAllowRowDropFromExternal;
+    private              boolean                    mUserSortable           = true;
+    private              boolean                    mShowColumnDivider      = true;
+    private              boolean                    mShowRowDivider         = true;
+    private              boolean                    mShowHeader             = true;
+    private              boolean                    mDropReceived;
+    private              boolean                    mResizePending;
+    private              boolean                    mIgnoreNextDragGesture;
 
     /**
      * Creates a new {@link TreePanel}.
@@ -204,26 +202,26 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         requestFocusInWindow();
         Point where = event.getPoint();
         mIgnoreNextDragGesture = false;
-        mRowToSelectOnMouseUp  = null;
-        mViewArea              = checkAndConvertToArea(where);
+        mRowToSelectOnMouseUp = null;
+        mViewArea = checkAndConvertToArea(where);
         if (mViewArea != DirectScrollPanelArea.NONE) {
-            mDragStart = new Point(where);
-            if (setColumnDividerHighlight(mDragStart.x)) {
+            Point dragStart = new Point(where);
+            if (setColumnDividerHighlight(dragStart.x)) {
                 mDragColumnDivider = mMouseOverColumnDivider;
             } else {
                 boolean isPopupTrigger = event.isPopupTrigger();
                 switch (mViewArea) {
                 case CONTENT:
-                    TreeContainerRow disclosureRow = overDisclosureControl(mDragStart.x, mDragStart.y);
+                    TreeContainerRow disclosureRow = overDisclosureControl(dragStart.x, dragStart.y);
                     if (disclosureRow != null) {
                         setOpen(!isOpen(disclosureRow), disclosureRow);
                     } else {
                         boolean handled = false;
-                        TreeRow row     = overRow(mDragStart.y);
+                        TreeRow row     = overRow(dragStart.y);
                         if (row != null) {
-                            TreeColumn column = overColumn(mDragStart.x);
+                            TreeColumn column = overColumn(dragStart.x);
                             if (column != null) {
-                                handled = column.mousePress(row, new Point(mDragStart));
+                                handled = column.mousePress(row, new Point(dragStart));
                                 if (handled) {
                                     mIgnoreNextDragGesture = true;
                                 }
@@ -472,8 +470,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     }
 
     /**
-     * @return The row height for each row. If this is <code>0</code>, then each row potentially has
-     *         a separate height, as calculated by asking each column to compute a height for each
+     * @return The row height for each row. If this is {@code 0}, then each row potentially has a
+     *         separate height, as calculated by asking each column to compute a height for each
      *         row.
      */
     public final int getRowHeight() {
@@ -481,8 +479,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     }
 
     /**
-     * @param height The row height for each row. If this is <code>0</code>, then each row may have
-     *               a separate height, as calculated by asking each column to compute a height for
+     * @param height The row height for each row. If this is {@code 0}, then each row may have a
+     *               separate height, as calculated by asking each column to compute a height for
      *               each row. <b>WARNING</b>: Using anything other than fixed row heights can cause
      *               severe performance problems when large numbers of rows are visible.
      */
@@ -514,14 +512,14 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     /** @param column The {@link TreeColumn} to add. */
     public void addColumn(TreeColumn column) {
         mColumns.add(column);
-        notify(TreeNotificationKeys.COLUMN_ADDED, new TreeColumn[] { column });
+        notify(TreeNotificationKeys.COLUMN_ADDED, new TreeColumn[]{column});
         sizeColumnToFit(column);
     }
 
     /** @param columns The {@link TreeColumn}s to add. */
     public void addColumn(List<TreeColumn> columns) {
         if (mColumns.addAll(columns)) {
-            notify(TreeNotificationKeys.COLUMN_ADDED, columns.toArray(new TreeColumn[columns.size()]));
+            notify(TreeNotificationKeys.COLUMN_ADDED, columns.toArray(new TreeColumn[0]));
             sizeColumnsToFit(columns);
         }
     }
@@ -532,7 +530,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      */
     public void addColumn(int index, TreeColumn column) {
         mColumns.add(index, column);
-        notify(TreeNotificationKeys.COLUMN_ADDED, new TreeColumn[] { column });
+        notify(TreeNotificationKeys.COLUMN_ADDED, new TreeColumn[]{column});
         sizeColumnToFit(column);
     }
 
@@ -542,7 +540,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      */
     public void addColumn(int index, List<TreeColumn> columns) {
         if (mColumns.addAll(index, columns)) {
-            notify(TreeNotificationKeys.COLUMN_ADDED, columns.toArray(new TreeColumn[columns.size()]));
+            notify(TreeNotificationKeys.COLUMN_ADDED, columns.toArray(new TreeColumn[0]));
             sizeColumnsToFit(columns);
         }
     }
@@ -550,19 +548,19 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     /** @param column The {@link TreeColumn} to remove. */
     public void removeColumn(TreeColumn column) {
         if (mColumns.remove(column)) {
-            notify(TreeNotificationKeys.COLUMN_REMOVED, new TreeColumn[] { column });
+            notify(TreeNotificationKeys.COLUMN_REMOVED, new TreeColumn[]{column});
         }
     }
 
     /** @param columns The {@link TreeColumn}s to remove. */
     public void removeColumn(Collection<TreeColumn> columns) {
         if (mColumns.removeAll(columns)) {
-            notify(TreeNotificationKeys.COLUMN_REMOVED, columns.toArray(new TreeColumn[columns.size()]));
+            notify(TreeNotificationKeys.COLUMN_REMOVED, columns.toArray(new TreeColumn[0]));
         }
     }
 
     /** @param columns The {@link TreeColumn}s to use. */
-    protected void restoreColumns(ArrayList<TreeColumn> columns) {
+    protected void restoreColumns(List<TreeColumn> columns) {
         mColumns.clear();
         mColumns.addAll(columns);
         repaint();
@@ -575,8 +573,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         if (mShowHeader) {
             for (TreeColumn column : mColumns) {
                 Dimension headerSize = column.calculatePreferredHeaderSize(this);
-                width  += headerSize.width;
-                height  = Math.max(headerSize.height, height);
+                width += headerSize.width;
+                height = Math.max(headerSize.height, height);
             }
             int columnDividerWidth = getColumnDividerWidth();
             int size               = mColumns.size() - 1;
@@ -627,11 +625,10 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         int width = 0;
         for (int i = 0; i < count; i++) {
             TreeColumn one = mColumns.get(i);
-            if (one != column) {
-                width += one.getWidth();
-            } else {
+            if (one == column) {
                 return width + getColumnDividerWidth() * i;
             }
+            width += one.getWidth();
         }
         return 0;
     }
@@ -673,7 +670,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     public void invalidateRowHeight(TreeRow row) {
         if (mRowHeight < 1) {
             if (mRowHeightMap.remove(row) != 0) {
-                notify(TreeNotificationKeys.ROW_HEIGHT, new TreeRow[] { row });
+                notify(TreeNotificationKeys.ROW_HEIGHT, new TreeRow[]{row});
             }
         }
     }
@@ -696,16 +693,12 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         int       right        = clipBounds.x + clipBounds.width;
         Rectangle colBounds    = getHeaderViewBounds();
         int       dividerWidth = getColumnDividerWidth();
-        colBounds.x       = 0;
+        colBounds.x = 0;
         colBounds.height -= dividerWidth;
         int count = mColumns.size();
         for (int i = 0; i < count; i++) {
             TreeColumn column = mColumns.get(i);
-            if (i != count - 1) {
-                colBounds.width = column.getWidth();
-            } else {
-                colBounds.width = Math.max(column.getWidth(), right - colBounds.x);
-            }
+            colBounds.width = i == count - 1 ? Math.max(column.getWidth(), right - colBounds.x) : column.getWidth();
             if (colBounds.x < right && colBounds.x + colBounds.width > left) {
                 column.drawHeader(gc, this, colBounds, active);
             }
@@ -906,15 +899,15 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
                     int depth  = row.getDepth();
                     int indent = INDENT * depth;
                     colWidth -= indent;
-                    tmpX     += indent;
+                    tmpX += indent;
                     if ((mShowDisclosureControls || depth > 0) && mHierarchyLineColor != null) {
                         TreeRow firstRow = mRoot.getChild(0);
                         if (row != firstRow || mRoot.getChildCount() > 1 || firstRow instanceof TreeContainerRow) {
                             int xx = x + indent - INDENT / 2;
                             gc.setColor(mHierarchyLineColor);
                             gc.drawLine(xx, top + rowHeight / 2, x + indent, top + rowHeight / 2);
-                            int yt = row != firstRow ? top : top + rowHeight / 2;
-                            int yb = top + (row.getIndex() != row.getParent().getChildCount() - 1 ? height : rowHeight / 2);
+                            int yt = row == firstRow ? top + rowHeight / 2 : top;
+                            int yb = top + (row.getIndex() == row.getParent().getChildCount() - 1 ? rowHeight / 2 : height);
                             if (yt != yb) {
                                 gc.drawLine(xx, yt, xx, yb);
                             }
@@ -971,7 +964,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     /**
      * @param x The coordinate to check.
-     * @return The column divider index, or <code>-1</code>.
+     * @return The column divider index, or {@code -1}.
      */
     public int overColumnDivider(int x) {
         int divider = getColumnDividerWidth();
@@ -992,7 +985,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * @param x The x-coordinate to check.
      * @param y The y-coordinate to check.
      * @return The {@link TreeContainerRow} whose disclosure control is at the specified
-     *         coordinates, or <code>null</code>.
+     *         coordinates, or {@code null}.
      */
     public TreeContainerRow overDisclosureControl(int x, int y) {
         if (mShowDisclosureControls && !mColumns.isEmpty()) {
@@ -1016,14 +1009,14 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     /** @param rows The {@link TreeRow}s to repaint. */
     public void repaintRows(Collection<TreeRow> rows) {
-        HashSet<TreeRow> set           = new HashSet<>(rows);
-        Rectangle        bounds        = getContentViewBounds();
-        int              min           = bounds.y;
-        int              max           = bounds.y + bounds.height;
-        int              x             = bounds.x;
-        int              width         = bounds.width;
-        int              y             = 0;
-        int              dividerHeight = getRowDividerHeight();
+        Set<TreeRow> set           = new HashSet<>(rows);
+        Rectangle    bounds        = getContentViewBounds();
+        int          min           = bounds.y;
+        int          max           = bounds.y + bounds.height;
+        int          x             = bounds.x;
+        int          width         = bounds.width;
+        int          y             = 0;
+        int          dividerHeight = getRowDividerHeight();
         for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
             int height = getRowHeight(row) + dividerHeight;
             if (y + height > min) {
@@ -1044,8 +1037,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     /**
      * @param row The {@link TreeRow} to determine the bounds of.
-     * @return The bounds of the {@link TreeRow} or <code>null</code> if it is not currently
-     *         viewable.
+     * @return The bounds of the {@link TreeRow} or {@code null} if it is not currently viewable.
      */
     public Rectangle getRowBounds(TreeRow row) {
         int y             = 0;
@@ -1064,7 +1056,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * Finds the {@link TreeColumn} at the specified x-coordinate.
      *
      * @param x The coordinate to check.
-     * @return The {@link TreeColumn} at the specified x-coordinate, or <code>null</code>.
+     * @return The {@link TreeColumn} at the specified x-coordinate, or {@code null}.
      */
     public TreeColumn overColumn(int x) {
         if (x >= 0 && !mColumns.isEmpty()) {
@@ -1087,7 +1079,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * Finds the {@link TreeRow} at the specified y-coordinate.
      *
      * @param y The y-coordinate to look for.
-     * @return The {@link TreeRow} at the specified y-coordinate, or <code>null</code>.
+     * @return The {@link TreeRow} at the specified y-coordinate, or {@code null}.
      */
     public TreeRow overRow(int y) {
         if (y < 0) {
@@ -1162,7 +1154,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     }
 
     /**
-     * @param color The {@link Color} to use for the hierarchy lines. If <code>null</code>, then no
+     * @param color The {@link Color} to use for the hierarchy lines. If {@code null}, then no
      *              hierarchy lines will be drawn.
      */
     public void setHierarchyLineColor(Color color) {
@@ -1188,12 +1180,12 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      */
     public Color getDefaultRowBackground(int position, boolean selected, boolean active) {
         if (selected) {
-            return Colors.getListBackground(selected, active);
+            return Colors.getListBackground(true, active);
         }
         return mUseBanding ? Colors.getBanding(position % 2 == 0) : Color.WHITE;
     }
 
-    /** @return <code>true</code> if background banding is enabled. */
+    /** @return {@code true} if background banding is enabled. */
     public boolean useBanding() {
         return mUseBanding;
     }
@@ -1257,8 +1249,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
             }
         }
         if (!modified.isEmpty()) {
-            ArrayList<TreeRow> selectionRemoved = new ArrayList<>();
-            TreeContainerRow[] data             = modified.toArray(new TreeContainerRow[modified.size()]);
+            List<TreeRow>      selectionRemoved = new ArrayList<>();
+            TreeContainerRow[] data             = modified.toArray(new TreeContainerRow[0]);
             if (open) {
                 mOpenRows.addAll(modified);
             } else {
@@ -1273,7 +1265,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
             }
             notify(open ? TreeNotificationKeys.ROW_OPENED : TreeNotificationKeys.ROW_CLOSED, data);
             if (!selectionRemoved.isEmpty()) {
-                TreeRow[] oldSelection = mSelectedRows.toArray(new TreeRow[mSelectedRows.size()]);
+                TreeRow[] oldSelection = mSelectedRows.toArray(new TreeRow[0]);
                 mSelectedRows.removeAll(selectionRemoved);
                 if (mAnchorRow != null && !mSelectedRows.contains(mAnchorRow)) {
                     mAnchorRow = getFirstSelectedRow();
@@ -1354,7 +1346,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     @Override
     public void selectAll() {
-        TreeRow[] oldSelection = mSelectedRows.toArray(new TreeRow[mSelectedRows.size()]);
+        TreeRow[] oldSelection = mSelectedRows.toArray(new TreeRow[0]);
         boolean   added        = false;
         mAnchorRow = null;
         for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
@@ -1379,7 +1371,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      */
     public void select(Collection<TreeRow> rows) {
         if (!mSelectedRows.equals(rows)) {
-            TreeRow[] oldSelection = mSelectedRows.toArray(new TreeRow[mSelectedRows.size()]);
+            TreeRow[] oldSelection = mSelectedRows.toArray(new TreeRow[0]);
             mSelectedRows.clear();
             mSelectedRows.addAll(rows);
             mAnchorRow = getFirstSelectedRow();
@@ -1393,11 +1385,11 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * selection, the anchor is set to the {@link TreeRow} passed in.
      *
      * @param row The {@link TreeRow} to select.
-     * @param add Pass in <code>true</code> to add to the current selection, <code>false</code> to
-     *            replace the current selection.
+     * @param add Pass in {@code true} to add to the current selection, {@code false} to replace the
+     *            current selection.
      */
     public void select(TreeRow row, boolean add) {
-        TreeRow[] savedRows = mSelectedRows.toArray(new TreeRow[mSelectedRows.size()]);
+        TreeRow[] savedRows = mSelectedRows.toArray(new TreeRow[0]);
         boolean   modified  = false;
         if (!add) {
             modified = !mSelectedRows.isEmpty();
@@ -1423,14 +1415,14 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      *
      * @param fromRow The first {@link TreeRow} to select.
      * @param toRow   The last {@link TreeRow} to select.
-     * @param add     Pass in <code>true</code> to add the range to the current selection,
-     *                <code>false</code> to replace the current selection.
+     * @param add     Pass in {@code true} to add the range to the current selection, {@code false}
+     *                to replace the current selection.
      */
     public void select(TreeRow fromRow, TreeRow toRow, boolean add) {
         if (fromRow == toRow) {
             select(fromRow, add);
         } else {
-            TreeRow[] savedRows = mSelectedRows.toArray(new TreeRow[mSelectedRows.size()]);
+            TreeRow[] savedRows = mSelectedRows.toArray(new TreeRow[0]);
             if (!add) {
                 repaintRows(mSelectedRows);
                 mSelectedRows.clear();
@@ -1462,7 +1454,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     /** Deselect all. */
     public void deselect() {
         if (!mSelectedRows.isEmpty()) {
-            TreeRow[] rows = mSelectedRows.toArray(new TreeRow[mSelectedRows.size()]);
+            TreeRow[] rows = mSelectedRows.toArray(new TreeRow[0]);
             repaintRows(mSelectedRows);
             mSelectedRows.clear();
             mAnchorRow = null;
@@ -1477,7 +1469,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      */
     public void deselect(TreeRow row) {
         if (mSelectedRows.contains(row)) {
-            TreeRow[] rows = mSelectedRows.toArray(new TreeRow[mSelectedRows.size()]);
+            TreeRow[] rows = mSelectedRows.toArray(new TreeRow[0]);
             mSelectedRows.remove(row);
             if (mAnchorRow == row) {
                 mAnchorRow = getFirstSelectedRow();
@@ -1491,8 +1483,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * Does a logical "select up" (such as from the keyboard up-arrow).
      *
      * @param extend Whether to extend the current selection or replace it.
-     * @return The {@link TreeRow} that should be scrolled into view, or <code>null</code> if there
-     *         isn't one.
+     * @return The {@link TreeRow} that should be scrolled into view, or {@code null} if there isn't
+     *         one.
      */
     public TreeRow selectUp(boolean extend) {
         TreeRow scrollTo = null;
@@ -1530,8 +1522,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * Does a logical "select down" (such as from the keyboard down-arrow).
      *
      * @param extend Whether to extend the current selection or replace it.
-     * @return The {@link TreeRow} that should be scrolled into view, or <code>null</code> if there
-     *         isn't one.
+     * @return The {@link TreeRow} that should be scrolled into view, or {@code null} if there isn't
+     *         one.
      */
     public TreeRow selectDown(boolean extend) {
         TreeRow scrollTo = null;
@@ -1569,8 +1561,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * Does a logical "select home" (such as from the keyboard HOME key).
      *
      * @param extend Whether to extend the current selection or replace it.
-     * @return The {@link TreeRow} that should be scrolled into view, or <code>null</code> if there
-     *         isn't one.
+     * @return The {@link TreeRow} that should be scrolled into view, or {@code null} if there isn't
+     *         one.
      */
     public TreeRow selectToHome(boolean extend) {
         TreeRow scrollTo = null;
@@ -1592,8 +1584,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * Does a logical "select end" (such as from the keyboard END key).
      *
      * @param extend Whether to extend the current selection or replace it.
-     * @return The {@link TreeRow} that should be scrolled into view, or <code>null</code> if there
-     *         isn't one.
+     * @return The {@link TreeRow} that should be scrolled into view, or {@code null} if there isn't
+     *         one.
      */
     public TreeRow selectToEnd(boolean extend) {
         TreeRow scrollTo = null;
@@ -1611,7 +1603,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         return scrollTo;
     }
 
-    /** @return The first {@link TreeRow}, or <code>null</code>. */
+    /** @return The first {@link TreeRow}, or {@code null}. */
     public TreeRow getFirstRow() {
         List<TreeRow> children = mRoot.getChildren();
         if (!children.isEmpty()) {
@@ -1620,7 +1612,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         return null;
     }
 
-    /** @return The last disclosed {@link TreeRow}, or <code>null</code>. */
+    /** @return The last disclosed {@link TreeRow}, or {@code null}. */
     public TreeRow getLastDisclosedRow() {
         return getLastChild(mRoot);
     }
@@ -1652,8 +1644,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
     }
 
     /** @return The currently selected {@link TreeRow}s. */
-    public ArrayList<TreeRow> getExplicitlySelectedRows() {
-        ArrayList<TreeRow> selection = new ArrayList<>();
+    public List<TreeRow> getExplicitlySelectedRows() {
+        List<TreeRow> selection = new ArrayList<>();
         if (!mSelectedRows.isEmpty()) {
             for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
                 if (mSelectedRows.contains(row)) {
@@ -1668,8 +1660,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * @return The currently selected {@link TreeRow}s. If any ancestor of a {@link TreeRow} is
      *         selected, then it will not appear in the result.
      */
-    public ArrayList<TreeRow> getSelectedRows() {
-        ArrayList<TreeRow> selection = new ArrayList<>();
+    public List<TreeRow> getSelectedRows() {
+        List<TreeRow> selection = new ArrayList<>();
         if (!mSelectedRows.isEmpty()) {
             for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
                 if (mSelectedRows.contains(row) && !isAncestorSelected(row)) {
@@ -1680,7 +1672,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         return selection;
     }
 
-    /** @return The first selected {@link TreeRow}, or <code>null</code>. */
+    /** @return The first selected {@link TreeRow}, or {@code null}. */
     public TreeRow getFirstSelectedRow() {
         if (!mSelectedRows.isEmpty()) {
             for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
@@ -1692,10 +1684,10 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         return null;
     }
 
-    /** @return The last selected {@link TreeRow}, or <code>null</code>. */
+    /** @return The last selected {@link TreeRow}, or {@code null}. */
     public TreeRow getLastSelectedRow() {
         if (!mSelectedRows.isEmpty()) {
-            HashSet<TreeRow> rows = new HashSet<>(mSelectedRows);
+            Set<TreeRow> rows = new HashSet<>(mSelectedRows);
             for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
                 if (rows.contains(row)) {
                     rows.remove(row);
@@ -1710,21 +1702,19 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     private TreeRow getAfterLastSelectedRow() {
         if (!mSelectedRows.isEmpty()) {
-            HashSet<TreeRow> rows = new HashSet<>(mSelectedRows);
+            Set<TreeRow> rows = new HashSet<>(mSelectedRows);
             for (TreeRow row : new TreeRowViewIterator(this, mRoot.getChildren())) {
                 if (rows.isEmpty()) {
                     return row;
                 }
-                if (rows.contains(row)) {
-                    rows.remove(row);
-                }
+                rows.remove(row);
             }
         }
         return null;
     }
 
-    private static ArrayList<TreeContainerRow> getTreeContainerRows(Collection<TreeRow> rows, boolean includeChildren) {
-        ArrayList<TreeContainerRow> result = new ArrayList<>();
+    private static List<TreeContainerRow> getTreeContainerRows(Collection<TreeRow> rows, boolean includeChildren) {
+        List<TreeContainerRow> result = new ArrayList<>();
         for (TreeRow row : rows) {
             if (row instanceof TreeContainerRow) {
                 TreeContainerRow container = (TreeContainerRow) row;
@@ -1768,7 +1758,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         if (row != null) {
             Rectangle bounds     = getRowBounds(row);
             Rectangle viewBounds = getContentViewBounds();
-            bounds.x     = viewBounds.x;
+            bounds.x = viewBounds.x;
             bounds.width = 1;
             scrollContentIntoView(bounds);
         }
@@ -1856,7 +1846,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     @Override
     public void handleNotification(Object producer, String name, Object data) {
-        if (name == TreeNotificationKeys.ROW_REMOVED) {
+        if (TreeNotificationKeys.ROW_REMOVED.equals(name)) {
             for (TreeRow row : new TreeRowIterator((TreeRow[]) data)) {
                 mSelectedRows.remove(row);
                 if (row instanceof TreeContainerRow) {
@@ -1899,13 +1889,13 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     private StdImage createColumnDragImage(TreeColumn column) {
         Graphics2D gc   = null;
-        StdImage   off2 = null;
         StdImage   off1 = createImage();
+        StdImage   off2;
         try {
             int width  = column.getWidth();
             int height = getHeight();
             off2 = StdImage.createTransparent(getGraphicsConfiguration(), width, height);
-            gc   = off2.getGraphics();
+            gc = off2.getGraphics();
             gc.setClip(new Rectangle(0, 0, width, height));
             gc.setBackground(new Color(0, true));
             gc.clearRect(0, 0, width, height);
@@ -1936,11 +1926,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
                     StdImage  dragImage = createDragImage(where);
                     Point     imageOffset;
                     Rectangle dragClip  = getDragClip();
-                    if (dragClip != null) {
-                        imageOffset = new Point(dragClip.x - where.x, dragClip.y - where.y);
-                    } else {
-                        imageOffset = new Point();
-                    }
+                    imageOffset = dragClip != null ? new Point(dragClip.x - where.x, dragClip.y - where.y) : new Point();
                     event.startDrag(null, dragImage, imageOffset, selection, this);
                 } else {
                     event.startDrag(null, selection, this);
@@ -1965,7 +1951,7 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
 
     /**
      * @param event The {@link DropTargetDragEvent}.
-     * @return A newly created {@link TreeDragState}, or <code>null</code> if the drag was not
+     * @return A newly created {@link TreeDragState}, or {@code null} if the drag was not
      *         acceptable.
      */
     protected TreeDragState checkDragAcceptability(DropTargetDragEvent event) {
@@ -1973,17 +1959,15 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
         try {
             if (event.isDataFlavorSupported(TreeColumn.DATA_FLAVOR)) {
                 TreeColumn column = (TreeColumn) event.getTransferable().getTransferData(TreeColumn.DATA_FLAVOR);
-                if (column != null && isColumnDragAcceptable(event, column)) {
+                if (isColumnDragAcceptable(event, column)) {
                     return new TreeColumnDragState(this, column);
                 }
             }
             if (event.isDataFlavorSupported(TreeRowSelection.DATA_FLAVOR)) {
                 TreeRowSelection rowSelection = (TreeRowSelection) event.getTransferable().getTransferData(TreeRowSelection.DATA_FLAVOR);
-                if (rowSelection != null) {
-                    ArrayList<TreeRow> rows = rowSelection.getRows();
-                    if (rows.size() != 0 && isRowDragAcceptable(event, rows)) {
-                        return new TreeRowDragState(this, rowSelection);
-                    }
+                List<TreeRow>    rows         = rowSelection.getRows();
+                if (!rows.isEmpty() && isRowDragAcceptable(event, rows)) {
+                    return new TreeRowDragState(this, rowSelection);
                 }
             }
             if (event.isDataFlavorSupported(DockableTransferable.DATA_FLAVOR)) {
@@ -2011,8 +1995,8 @@ public class TreePanel extends DirectScrollPanel implements Runnable, Openable, 
      * @param rows  The {@link TreeRow}s.
      * @return Whether or not the {@link TreeRow}s can be dropped here.
      */
-    protected boolean isRowDragAcceptable(DropTargetDragEvent event, ArrayList<TreeRow> rows) {
-        return mAllowRowDropFromExternal ? true : rows.get(0).getTreeRoot() == mRoot;
+    protected boolean isRowDragAcceptable(DropTargetDragEvent event, List<TreeRow> rows) {
+        return mAllowRowDropFromExternal || rows.get(0).getTreeRoot() == mRoot;
     }
 
     @Override

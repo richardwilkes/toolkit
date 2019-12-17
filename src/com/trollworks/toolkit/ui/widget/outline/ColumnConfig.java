@@ -21,7 +21,7 @@ public class ColumnConfig {
     public int     mWidth;
     /** the sort sequence of the column */
     public int     mSortSequence;
-    /** <code>true</code> if the sort is ascending */
+    /** {@code true} if the sort is ascending */
     public boolean mSortAscending;
 
     /**
@@ -50,7 +50,7 @@ public class ColumnConfig {
      * @param id            The id of the column.
      * @param visible       The visiblity of the column.
      * @param sortSequence  The sort sequence of the column.
-     * @param sortAscending <code>true</code> if the sort is ascending.
+     * @param sortAscending {@code true} if the sort is ascending.
      */
     public ColumnConfig(int id, boolean visible, int sortSequence, boolean sortAscending) {
         this(id, visible, -1, sortSequence, sortAscending);
@@ -64,13 +64,13 @@ public class ColumnConfig {
      * @param visible       The visiblity of the column.
      * @param width         The width of the column.
      * @param sortSequence  The sort sequence of the column.
-     * @param sortAscending <code>true</code> if the sort is ascending.
+     * @param sortAscending {@code true} if the sort is ascending.
      */
     public ColumnConfig(int id, boolean visible, int width, int sortSequence, boolean sortAscending) {
-        mID            = id;
-        mVisible       = visible;
-        mWidth         = width;
-        mSortSequence  = sortSequence;
+        mID = id;
+        mVisible = visible;
+        mWidth = width;
+        mSortSequence = sortSequence;
         mSortAscending = sortAscending;
     }
 }

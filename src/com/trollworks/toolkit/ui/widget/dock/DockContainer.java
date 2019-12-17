@@ -24,7 +24,6 @@ import java.awt.KeyboardFocusManager;
 import java.awt.LayoutManager;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JPanel;
 
 /**
@@ -123,8 +122,8 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
     }
 
     /**
-     * Calls the owning {@link Dock}'s {@link Dock#maximize(DockContainer)} method with this
-     * {@link DockContainer} as the argument.
+     * Calls the owning {@link Dock}'s {@link Dock#maximize(DockContainer)} method with this {@link
+     * DockContainer} as the argument.
      */
     public void maximize() {
         mDock.maximize(this);
@@ -212,8 +211,8 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
     /**
      * Attempt to close a {@link Dockable} within this {@link DockContainer}. This only has an
      * affect if the {@link Dockable} is contained by this {@link DockContainer} and implements the
-     * {@link CloseHandler} interface. Note that the {@link CloseHandler} must call this
-     * {@link DockContainer}'s {@link #close(Dockable)} method to actually close the tab.
+     * {@link CloseHandler} interface. Note that the {@link CloseHandler} must call this {@link
+     * DockContainer}'s {@link #close(Dockable)} method to actually close the tab.
      */
     public void attemptClose(Dockable dockable) {
         if (dockable instanceof CloseHandler) {
@@ -227,9 +226,9 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
     }
 
     /**
-     * Closes the specified {@link Dockable}. If the last {@link Dockable} within this
-     * {@link DockContainer} is closed, then this {@link DockContainer} is also removed from the
-     * {@link Dock}.
+     * Closes the specified {@link Dockable}. If the last {@link Dockable} within this {@link
+     * DockContainer} is closed, then this {@link DockContainer} is also removed from the {@link
+     * Dock}.
      */
     public void close(Dockable dockable) {
         int index = mDockables.indexOf(dockable);
@@ -253,8 +252,8 @@ public class DockContainer extends JPanel implements DockLayoutNode, LayoutManag
     }
 
     /**
-     * @return <code>true</code> if this {@link DockContainer} or one of its children has the
-     *         keyboard focus.
+     * @return {@code true} if this {@link DockContainer} or one of its children has the keyboard
+     *         focus.
      */
     public boolean isActive() {
         return mActive;

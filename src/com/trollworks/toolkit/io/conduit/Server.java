@@ -36,8 +36,8 @@ class Server extends Thread {
         setPriority(NORM_PRIORITY);
         setDaemon(true);
         mServerSocket = new ServerSocket(socketAddress.getPort(), 0, socketAddress.getAddress());
-        mClients      = new ArrayList<>();
-        mSendLock     = new Object();
+        mClients = new ArrayList<>();
+        mSendLock = new Object();
     }
 
     /** @return The next client counter. */
@@ -55,8 +55,7 @@ class Server extends Thread {
     public void run() {
         try {
             while (true) {
-                @SuppressWarnings("resource")
-                Socket socket = mServerSocket.accept();
+                @SuppressWarnings("resource") Socket socket = mServerSocket.accept();
                 try {
                     Client client = new Client(this, socket);
                     client.setDaemon(true);
@@ -111,11 +110,14 @@ class Server extends Thread {
     }
 
     /** Shuts down this communication server. */
-    synchronized void shutdown() {
-        try {
-            mServerSocket.close();
-        } catch (Exception exception) {
-            Log.error(exception);
+    void shutdown() {
+        ServerSocket ss = mServerSocket;
+        synchronized (this) {
+            try {
+                ss.close();
+            } catch (Exception exception) {
+                Log.error(exception);
+            }
         }
     }
 

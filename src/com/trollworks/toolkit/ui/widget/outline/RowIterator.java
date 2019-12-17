@@ -49,7 +49,7 @@ public class RowIterator<T extends Row> implements Iterator<T>, Iterable<T> {
     }
 
     private RowIterator(List<T> rows, Filter<T> filter) {
-        mList   = rows;
+        mList = rows;
         mFilter = filter;
     }
 
@@ -79,11 +79,11 @@ public class RowIterator<T extends Row> implements Iterator<T>, Iterable<T> {
     public T next() {
         if (hasNext()) {
             if (mIterator == null) {
-                Row row = mList.get(mIndex++);
+                T row = mList.get(mIndex++);
                 if (row.hasChildren()) {
                     mIterator = new RowIterator<>((List<T>) row.getChildren(), mFilter);
                 }
-                return (T) row;
+                return row;
             }
             return mIterator.next();
         }

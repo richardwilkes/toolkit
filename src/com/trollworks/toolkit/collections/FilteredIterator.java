@@ -27,7 +27,7 @@ public class FilteredIterator<T> implements Iterator<T>, Iterable<T> {
     private boolean     mOmitNulls;
 
     /**
-     * Creates a new {@link FilteredIterator}. Will not include <code>null</code> values.
+     * Creates a new {@link FilteredIterator}. Will not include {@code null} values.
      *
      * @param iterable     The {@link Iterable} to filter by type.
      * @param contentClass The class of objects to extract from the collection.
@@ -41,12 +41,12 @@ public class FilteredIterator<T> implements Iterator<T>, Iterable<T> {
      *
      * @param iterable     The {@link Iterable} to filter by type.
      * @param contentClass The class of objects to extract from the collection.
-     * @param omitNulls    Whether to omit <code>null</code> values or not.
+     * @param omitNulls    Whether to omit {@code null} values or not.
      */
     public FilteredIterator(Iterable<?> iterable, Class<T> contentClass, boolean omitNulls) {
-        mIterator     = iterable.iterator();
+        mIterator = iterable.iterator();
         mContentClass = contentClass;
-        mOmitNulls    = omitNulls;
+        mOmitNulls = omitNulls;
     }
 
     @Override
@@ -59,12 +59,12 @@ public class FilteredIterator<T> implements Iterator<T>, Iterable<T> {
 
             if (obj == null) {
                 if (!mOmitNulls) {
-                    mNext      = null;
+                    mNext = null;
                     mNextValid = true;
                     return true;
                 }
             } else if (mContentClass.isInstance(obj)) {
-                mNext      = mContentClass.cast(obj);
+                mNext = mContentClass.cast(obj);
                 mNextValid = true;
                 return true;
             }

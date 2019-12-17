@@ -17,7 +17,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
-
 import javax.swing.border.Border;
 
 /** A border that allows varying colors and thicknesses for each side. */
@@ -128,7 +127,7 @@ public class LineBorder implements Border {
      */
     public void setColorAndThickness(Edge edge, Color color, int thickness) {
         int i = edge.ordinal();
-        mColor[i]     = color;
+        mColor[i] = color;
         mThickness[i] = thickness;
     }
 
@@ -142,19 +141,19 @@ public class LineBorder implements Border {
             gc.setColor(mColor[i]);
             gc.fillRect(x, y, thickness, height);
         }
-        i         = Edge.RIGHT.ordinal();
+        i = Edge.RIGHT.ordinal();
         thickness = scale.scale(mThickness[i]);
         if (thickness > 0) {
             gc.setColor(mColor[i]);
             gc.fillRect(x + width - thickness, y, thickness, height);
         }
-        i         = Edge.TOP.ordinal();
+        i = Edge.TOP.ordinal();
         thickness = scale.scale(mThickness[i]);
         if (thickness > 0) {
             gc.setColor(mColor[i]);
             gc.fillRect(x, y, width, thickness);
         }
-        i         = Edge.BOTTOM.ordinal();
+        i = Edge.BOTTOM.ordinal();
         thickness = scale.scale(mThickness[i]);
         if (thickness > 0) {
             gc.setColor(mColor[i]);

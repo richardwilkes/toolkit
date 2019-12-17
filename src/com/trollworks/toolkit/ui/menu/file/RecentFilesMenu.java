@@ -19,7 +19,7 @@ import com.trollworks.toolkit.utility.Preferences;
 
 import java.io.File;
 import java.util.ArrayList;
-
+import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
@@ -31,7 +31,7 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
     private static final int             PREFS_VERSION = 1;
     private static final int             MAX_RECENTS   = 20;
     private static final ArrayList<File> RECENTS       = new ArrayList<>();
-    private static boolean               NEED_REFRESH  = true;
+    private static       boolean         NEED_REFRESH  = true;
 
     static {
         loadFromPreferences();
@@ -62,7 +62,7 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
             if (allowed.equals(extension)) {
                 if (file.canRead()) {
                     NEED_REFRESH = true;
-                    file         = PathUtils.getFile(PathUtils.getFullPath(file));
+                    file = PathUtils.getFile(PathUtils.getFullPath(file));
                     RECENTS.remove(file);
                     RECENTS.add(0, file);
                     if (RECENTS.size() > MAX_RECENTS) {
@@ -121,7 +121,7 @@ public class RecentFilesMenu extends JMenu implements MenuListener {
         if (NEED_REFRESH) {
             NEED_REFRESH = false;
             removeAll();
-            ArrayList<File> list = new ArrayList<>();
+            List<File> list = new ArrayList<>();
             for (File file : RECENTS) {
                 if (file.canRead()) {
                     list.add(file);

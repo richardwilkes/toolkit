@@ -22,10 +22,10 @@ class ExpressionTree {
     private Operator  mUnaryOperator;
 
     ExpressionTree(Evaluator evaluator, Object leftOperand, Object rightOperand, Operator operator, Operator unaryOperator) {
-        mEvaluator     = evaluator;
-        mLeftOperand   = leftOperand;
-        mRightOperand  = rightOperand;
-        mOperator      = operator;
+        mEvaluator = evaluator;
+        mLeftOperand = leftOperand;
+        mRightOperand = rightOperand;
+        mOperator = operator;
         mUnaryOperator = unaryOperator;
     }
 
@@ -36,14 +36,7 @@ class ExpressionTree {
             Object result = mOperator.evaluate(left, right);
             return mUnaryOperator != null ? mUnaryOperator.evaluate(result) : result;
         }
-        Object operand;
-        if (mLeftOperand != null && mRightOperand == null) {
-            operand = left;
-        } else if (mLeftOperand == null && mRightOperand != null) {
-            operand = right;
-        } else {
-            operand = null;
-        }
+        Object operand = mRightOperand == null ? left : right;
         if (operand != null) {
             if (mUnaryOperator != null) {
                 operand = mUnaryOperator.evaluate(operand);

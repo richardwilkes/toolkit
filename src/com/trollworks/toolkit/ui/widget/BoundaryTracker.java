@@ -38,12 +38,12 @@ public class BoundaryTracker implements MouseListener, MouseMotionListener {
      * @param listener       The {@link BoundaryListener} to notify when changes occur.
      */
     public BoundaryTracker(Component component, Rectangle boundsToAdjust, BoundaryListener listener) {
-        mComponent      = component;
-        mListener       = listener;
+        mComponent = component;
+        mListener = listener;
         mBoundsToAdjust = boundsToAdjust;
         mBoundsSnapshot = new Rectangle(mBoundsToAdjust);
-        mInterimBounds  = new Rectangle(mBoundsToAdjust);
-        mAdjuster       = BoundaryArea.OUTSIDE;
+        mInterimBounds = new Rectangle(mBoundsToAdjust);
+        mAdjuster = BoundaryArea.OUTSIDE;
         mComponent.addMouseListener(this);
         mComponent.addMouseMotionListener(this);
     }

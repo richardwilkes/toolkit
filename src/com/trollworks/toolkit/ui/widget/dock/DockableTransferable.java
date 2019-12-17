@@ -19,7 +19,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 public class DockableTransferable implements Transferable {
     /** The data flavor for this class. */
     public static final DataFlavor DATA_FLAVOR = new DataFlavor(DockableTransferable.class, "Dockable");
-    private Dockable               mDockable;
+    private             Dockable   mDockable;
 
     public DockableTransferable(Dockable dockable) {
         mDockable = dockable;
@@ -27,7 +27,7 @@ public class DockableTransferable implements Transferable {
 
     @Override
     public DataFlavor[] getTransferDataFlavors() {
-        return new DataFlavor[] { DATA_FLAVOR };
+        return new DataFlavor[]{DATA_FLAVOR};
     }
 
     @Override

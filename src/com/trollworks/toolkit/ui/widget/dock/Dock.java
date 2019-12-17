@@ -39,31 +39,30 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JPanel;
 
 /** Provides an area where {@link Dockable} components can be displayed and rearranged. */
 public class Dock extends JPanel implements MouseListener, MouseMotionListener, PropertyChangeListener, DropTargetListener {
-    private static final String PERMANENT_FOCUS_OWNER_KEY = "permanentFocusOwner";
-    private static final int    GRIP_GAP                  = 1;
-    private static final int    GRIP_WIDTH                = 4;
-    private static final int    GRIP_HEIGHT               = 2;
-    private static final int    GRIP_LENGTH               = GRIP_HEIGHT * 5 + GRIP_GAP * 4;
-    public static final int     DIVIDER_SIZE              = GRIP_WIDTH + 4;
-    private static final int    DRAG_THRESHOLD            = 5;
-    private static final long   DRAG_DELAY                = 250;
-    private long                mDividerDragStartedAt;
-    private int                 mDividerDragStartX;
-    private int                 mDividerDragStartY;
-    private DockLayout          mDividerDragLayout;
-    private int                 mDividerDragInitialEventPosition;
-    private int                 mDividerDragInitialDividerPosition;
-    private boolean             mDividerDragIsValid;
-    private Dockable            mDragDockable;
-    private DockLayoutNode      mDragOverNode;
-    private DockLocation        mDragOverLocation;
-    private DockContainer       mMaximizedContainer;
-    private MouseMonitor        mMouseMonitor;
+    private static final String         PERMANENT_FOCUS_OWNER_KEY = "permanentFocusOwner";
+    private static final int            GRIP_GAP                  = 1;
+    private static final int            GRIP_WIDTH                = 4;
+    private static final int            GRIP_HEIGHT               = 2;
+    private static final int            GRIP_LENGTH               = GRIP_HEIGHT * 5 + GRIP_GAP * 4;
+    public static final  int            DIVIDER_SIZE              = GRIP_WIDTH + 4;
+    private static final int            DRAG_THRESHOLD            = 5;
+    private static final long           DRAG_DELAY                = 250;
+    private              long           mDividerDragStartedAt;
+    private              int            mDividerDragStartX;
+    private              int            mDividerDragStartY;
+    private              DockLayout     mDividerDragLayout;
+    private              int            mDividerDragInitialEventPosition;
+    private              int            mDividerDragInitialDividerPosition;
+    private              boolean        mDividerDragIsValid;
+    private              Dockable       mDragDockable;
+    private              DockLayoutNode mDragOverNode;
+    private              DockLocation   mDragOverLocation;
+    private              DockContainer  mMaximizedContainer;
+    private              MouseMonitor   mMouseMonitor;
 
     /** Creates a new, empty {@link Dock}. */
     public Dock() {
@@ -102,9 +101,9 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
      *
      * @param dockable                 The {@link Dockable} to install into this {@link Dock}.
      * @param target                   The target {@link Dockable}.
-     * @param locationRelativeToTarget The location relative to the target to install the
-     *                                 {@link Dockable}. You may pass in <code>null</code> to have
-     *                                 it stack with the target.
+     * @param locationRelativeToTarget The location relative to the target to install the {@link
+     *                                 Dockable}. You may pass in {@code null} to have it stack with
+     *                                 the target.
      */
     public void dock(Dockable dockable, Dockable target, DockLocation locationRelativeToTarget) {
         DockContainer dc = target.getDockContainer();
@@ -119,10 +118,9 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
      *
      * @param dockable                 The {@link Dockable} to install into this {@link Dock}.
      * @param target                   The target {@link DockLayoutNode}.
-     * @param locationRelativeToTarget The location relative to the target to install the
-     *                                 {@link Dockable}. If the target is a {@link DockContainer},
-     *                                 you may pass in <code>null</code> to have it stack with the
-     *                                 target.
+     * @param locationRelativeToTarget The location relative to the target to install the {@link
+     *                                 Dockable}. If the target is a {@link DockContainer}, you may
+     *                                 pass in {@code null} to have it stack with the target.
      */
     public void dock(Dockable dockable, DockLayoutNode target, DockLocation locationRelativeToTarget) {
         DockLayout layout = getLayout();
@@ -271,13 +269,13 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
     public void mousePressed(MouseEvent event) {
         DockLayoutNode over = over(event.getX(), event.getY());
         if (over instanceof DockLayout) {
-            mDividerDragLayout                 = (DockLayout) over;
-            mDividerDragStartedAt              = event.getWhen();
-            mDividerDragStartX                 = event.getX();
-            mDividerDragStartY                 = event.getY();
-            mDividerDragInitialEventPosition   = mDividerDragLayout.isHorizontal() ? event.getX() : event.getY();
+            mDividerDragLayout = (DockLayout) over;
+            mDividerDragStartedAt = event.getWhen();
+            mDividerDragStartX = event.getX();
+            mDividerDragStartY = event.getY();
+            mDividerDragInitialEventPosition = mDividerDragLayout.isHorizontal() ? event.getX() : event.getY();
             mDividerDragInitialDividerPosition = mDividerDragLayout.getDividerPosition();
-            mDividerDragIsValid                = false;
+            mDividerDragIsValid = false;
             MouseCapture.start(this, mDividerDragLayout.isHorizontal() ? Cursors.HORIZONTAL_RESIZE : Cursors.VERTICAL_RESIZE);
         }
     }
@@ -294,7 +292,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
             }
             if (mDividerDragIsValid) {
                 int pos = mDividerDragInitialDividerPosition - (mDividerDragInitialEventPosition - (mDividerDragLayout.isHorizontal() ? event.getX() : event.getY()));
-                mDividerDragLayout.setDividerPosition(pos < 0 ? 0 : pos);
+                mDividerDragLayout.setDividerPosition(Math.max(pos, 0));
             }
         }
     }
@@ -322,7 +320,11 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
 
     private void updateCursor(MouseEvent event) {
         DockLayoutNode over = over(event.getX(), event.getY());
-        setCursor(over instanceof DockLayout ? ((DockLayout) over).isHorizontal() ? Cursors.HORIZONTAL_RESIZE : Cursors.VERTICAL_RESIZE : null);
+        if (over instanceof DockLayout) {
+            setCursor(((DockLayout) over).isHorizontal() ? Cursors.HORIZONTAL_RESIZE : Cursors.VERTICAL_RESIZE);
+        } else {
+            setCursor(null);
+        }
     }
 
     private static boolean containedBy(DockLayoutNode node, int x, int y) {
@@ -401,15 +403,12 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
     }
 
     private static void pad(StringBuilder buffer, int depth) {
-        for (int i = 0; i < depth; i++) {
-            buffer.append("...");
-        }
+        buffer.append("...".repeat(Math.max(0, depth)));
     }
 
     /**
-     * Use one of {@link #dock(Dockable, DockLocation)},
-     * {@link #dock(Dockable, Dockable, DockLocation)}, or
-     * {@link #dock(Dockable, DockLayoutNode, DockLocation)} instead.
+     * Use one of {@link #dock(Dockable, DockLocation)}, {@link #dock(Dockable, Dockable,
+     * DockLocation)}, or {@link #dock(Dockable, DockLayoutNode, DockLocation)} instead.
      */
     @Override
     public final Component add(Component comp) {
@@ -417,9 +416,8 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
     }
 
     /**
-     * Use one of {@link #dock(Dockable, DockLocation)},
-     * {@link #dock(Dockable, Dockable, DockLocation)}, or
-     * {@link #dock(Dockable, DockLayoutNode, DockLocation)} instead.
+     * Use one of {@link #dock(Dockable, DockLocation)}, {@link #dock(Dockable, Dockable,
+     * DockLocation)}, or {@link #dock(Dockable, DockLayoutNode, DockLocation)} instead.
      */
     @Override
     public final Component add(Component comp, int index) {
@@ -427,9 +425,8 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
     }
 
     /**
-     * Use one of {@link #dock(Dockable, DockLocation)},
-     * {@link #dock(Dockable, Dockable, DockLocation)}, or
-     * {@link #dock(Dockable, DockLayoutNode, DockLocation)} instead.
+     * Use one of {@link #dock(Dockable, DockLocation)}, {@link #dock(Dockable, Dockable,
+     * DockLocation)}, or {@link #dock(Dockable, DockLayoutNode, DockLocation)} instead.
      */
     @Override
     public final void add(Component comp, Object constraints) {
@@ -437,9 +434,8 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
     }
 
     /**
-     * Use one of {@link #dock(Dockable, DockLocation)},
-     * {@link #dock(Dockable, Dockable, DockLocation)}, or
-     * {@link #dock(Dockable, DockLayoutNode, DockLocation)} instead.
+     * Use one of {@link #dock(Dockable, DockLocation)}, {@link #dock(Dockable, Dockable,
+     * DockLocation)}, or {@link #dock(Dockable, DockLayoutNode, DockLocation)} instead.
      */
     @Override
     public final void add(Component comp, Object constraints, int index) {
@@ -447,16 +443,15 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
     }
 
     /**
-     * Use one of {@link #dock(Dockable, DockLocation)},
-     * {@link #dock(Dockable, Dockable, DockLocation)}, or
-     * {@link #dock(Dockable, DockLayoutNode, DockLocation)} instead.
+     * Use one of {@link #dock(Dockable, DockLocation)}, {@link #dock(Dockable, Dockable,
+     * DockLocation)}, or {@link #dock(Dockable, DockLayoutNode, DockLocation)} instead.
      */
     @Override
     public final Component add(String name, Component comp) {
         throw createIllegalComponentStateException();
     }
 
-    private static final IllegalComponentStateException createIllegalComponentStateException() {
+    private static IllegalComponentStateException createIllegalComponentStateException() {
         return new IllegalComponentStateException("Use one of the dock() methods instead");
     }
 
@@ -477,12 +472,12 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
         getLayout().forEachDockContainer((dc) -> dc.updateActiveHighlight());
     }
 
-    /** @return The {@link DockContainer} with the current keyboard focus, or <code>null</code>. */
+    /** @return The {@link DockContainer} with the current keyboard focus, or {@code null}. */
     public DockContainer getFocusedDockContainer() {
         return getLayout().getFocusedDockContainer();
     }
 
-    /** @return The current maximized {@link DockContainer}, or <code>null</code>. */
+    /** @return The current maximized {@link DockContainer}, or {@code null}. */
     public DockContainer getMaximizedContainer() {
         return mMaximizedContainer;
     }
@@ -543,7 +538,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
     public void dragEnter(DropTargetDragEvent dtde) {
         mDragDockable = getDockableInDrag(dtde);
         if (mDragDockable != null) {
-            mDragOverNode     = null;
+            mDragOverNode = null;
             mDragOverLocation = null;
             updateForDragOver(dtde.getLocation());
             dtde.acceptDrag(DnDConstants.ACTION_MOVE);
@@ -600,8 +595,8 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
         if (mDragOverNode != null) {
             repaint(getDragOverBounds());
         }
-        mDragDockable     = null;
-        mDragOverNode     = null;
+        mDragDockable = null;
+        mDragOverNode = null;
         mDragOverLocation = null;
     }
 
@@ -621,7 +616,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
                 location = DockLocation.WEST;
             } else {
                 location = DockLocation.EAST;
-                ex       = width - ex;
+                ex = width - ex;
             }
             if (ey < height / 2) {
                 if (ex > ey) {
@@ -635,7 +630,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
             if (mDragOverNode != null) {
                 repaint(getDragOverBounds());
             }
-            mDragOverNode     = over;
+            mDragOverNode = over;
             mDragOverLocation = location;
             if (mDragOverNode != null) {
                 repaint(getDragOverBounds());
@@ -671,8 +666,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
      * Creates a new, untitled window title.
      *
      * @param baseTitle The base untitled name.
-     * @param exclude   A {@link Dockable} to exclude from naming decisions. May be
-     *                  <code>null</code>.
+     * @param exclude   A {@link Dockable} to exclude from naming decisions. May be {@code null}.
      * @return The new {@link Dockable} title.
      */
     public String getNextUntitledDockableName(String baseTitle, Dockable exclude) {
@@ -705,11 +699,7 @@ public class Dock extends JPanel implements MouseListener, MouseMotionListener, 
                     Component comp = (Component) source;
                     if (Dock.this == UIUtilities.getAncestorOfType(comp, Dock.class)) {
                         Dockable dockable;
-                        if (comp instanceof Dockable) {
-                            dockable = (Dockable) comp;
-                        } else {
-                            dockable = UIUtilities.getAncestorOfType(comp, Dockable.class);
-                        }
+                        dockable = comp instanceof Dockable ? (Dockable) comp : UIUtilities.getAncestorOfType(comp, Dockable.class);
                         if (dockable != null) {
                             DockContainer dc = dockable.getDockContainer();
                             if (dc != null) {

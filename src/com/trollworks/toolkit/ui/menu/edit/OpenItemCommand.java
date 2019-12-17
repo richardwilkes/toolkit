@@ -20,10 +20,10 @@ import java.awt.event.KeyEvent;
 /** Provides the "Open Item" command. */
 public class OpenItemCommand extends Command {
     /** The action command this command will issue. */
-    public static final String          CMD_OPEN_ITEM = "Open Item";
+    public static final String CMD_OPEN_ITEM = "Open Item";
 
     /** The singleton {@link OpenItemCommand}. */
-    public static final OpenItemCommand INSTANCE      = new OpenItemCommand();
+    public static final OpenItemCommand INSTANCE = new OpenItemCommand();
 
     private OpenItemCommand() {
         super(I18n.Text("Open Item"), CMD_OPEN_ITEM, KeyEvent.VK_ENTER);

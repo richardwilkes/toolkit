@@ -19,7 +19,7 @@ public class MenuBarUtilities {
     /**
      * @param bar  The {@link JMenuBar} to search.
      * @param type The {@link Class} to look for as a top-level {@link JMenu}.
-     * @return The found {@link JMenu}, or <code>null</code>.
+     * @return The found {@link JMenu}, or {@code null}.
      */
     public static JMenu findMenu(JMenuBar bar, Class<? extends JMenu> type) {
         if (bar != null) {

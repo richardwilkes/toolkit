@@ -14,7 +14,6 @@ package com.trollworks.toolkit.ui.widget;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
-
 import javax.accessibility.Accessible;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -36,7 +35,7 @@ public class SizeAwareBasicOptionPaneUI extends BasicOptionPaneUI {
 
     @Override
     public Dimension getMinimumSize(JComponent c) {
-        if ((JOptionPane) c == optionPane) {
+        if (c == optionPane) {
             Dimension     ourMin = getMinimumOptionPaneSize();
             LayoutManager lm     = c.getLayout();
             if (lm != null) {

@@ -28,13 +28,13 @@ import java.util.Set;
 
 /** Provides standardized command-line argument parsing. */
 public class CmdLine {
-    private static final CmdLineOption HELP_OPTION    = new CmdLineOption(I18n.Text("Displays a description of each option."), null, "h", "?", "help");
-    private static final CmdLineOption VERSION_OPTION = new CmdLineOption(I18n.Text("Displays the program version information."), null, "v", "version");
-    private Map<String, CmdLineOption> mOptions       = new HashMap<>();
-    private String                     mHelpHeader;
-    private String                     mHelpFooter;
-    private List<CmdLineData>          mData;
-    private Set<CmdLineOption>         mUsedOptions;
+    private static final CmdLineOption              HELP_OPTION    = new CmdLineOption(I18n.Text("Displays a description of each option."), null, "h", "?", "help");
+    private static final CmdLineOption              VERSION_OPTION = new CmdLineOption(I18n.Text("Displays the program version information."), null, "v", "version");
+    private              Map<String, CmdLineOption> mOptions       = new HashMap<>();
+    private              String                     mHelpHeader;
+    private              String                     mHelpFooter;
+    private              List<CmdLineData>          mData;
+    private              Set<CmdLineOption>         mUsedOptions;
 
     public CmdLine() {
         addOptions(HELP_OPTION, VERSION_OPTION);
@@ -68,14 +68,14 @@ public class CmdLine {
      * Processes the specified command line arguments. If the command line arguments are invalid, or
      * the version number or help is requested, then this method will cause the program to exit.
      *
-     * @param args The arguments passed to <code>main</code>.
+     * @param args The arguments passed to {@code main}.
      */
     public void processArguments(String[] args) {
         List<String> msgs = new ArrayList<>();
-        mData        = new ArrayList<>();
+        mData = new ArrayList<>();
         mUsedOptions = new HashSet<>();
-
-        for (int i = 0; i < args.length; i++) {
+        int length = args.length;
+        for (int i = 0; i < length; i++) {
             String one = args[i];
 
             if (i == 0 && Platform.isMacintosh() && args[i].startsWith("-psn_")) {
@@ -89,11 +89,11 @@ public class CmdLine {
                 String        arg;
                 CmdLineOption option;
 
-                if (index != -1) {
-                    arg  = part.substring(index + 1);
-                    name = name.substring(0, index);
-                } else {
+                if (index == -1) {
                     arg = null;
+                } else {
+                    arg = part.substring(index + 1);
+                    name = name.substring(0, index);
                 }
 
                 option = mOptions.get(name);
@@ -184,18 +184,11 @@ public class CmdLine {
         }
 
         for (String name : names) {
-            CmdLineOption option   = mOptions.get(name);
-
-            StringBuilder builder  = new StringBuilder();
-            String[]      allNames = option.getNames();
-            String        prefix   = Platform.isWindows() ? "/" : "-";
-            String        description;
-
-            if (allNames[allNames.length - 1].equals(name)) {
-                description = option.getDescription();
-            } else {
-                description = MessageFormat.format(I18n.Text("The same as the \"{0}{1}\" option."), prefix, allNames[allNames.length - 1]);
-            }
+            CmdLineOption option      = mOptions.get(name);
+            StringBuilder builder     = new StringBuilder();
+            String[]      allNames    = option.getNames();
+            String        prefix      = Platform.isWindows() ? "/" : "-";
+            String        description = allNames[allNames.length - 1].equals(name) ? option.getDescription() : MessageFormat.format(I18n.Text("The same as the \"{0}{1}\" option."), prefix, allNames[allNames.length - 1]);
             builder.append("  ");
             builder.append(prefix);
             builder.append(name);

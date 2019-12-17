@@ -24,15 +24,14 @@ import java.awt.LayoutManager;
 import java.awt.LayoutManager2;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 
 public class Toolbar extends JPanel implements LayoutManager2 {
-    public static final String     LAYOUT_FILL         = "fill";
-    public static final String     LAYOUT_EXTRA_BEFORE = "extra_before";
-    private static final int       GAP                 = 2;
-    private Map<Component, String> mConstraints        = new HashMap<>();
+    public static final  String                 LAYOUT_FILL         = "fill";
+    public static final  String                 LAYOUT_EXTRA_BEFORE = "extra_before";
+    private static final int                    GAP                 = 2;
+    private              Map<Component, String> mConstraints        = new HashMap<>();
 
     public Toolbar() {
         super(true);
@@ -131,11 +130,11 @@ public class Toolbar extends JPanel implements LayoutManager2 {
         boolean[]   isExtra     = new boolean[count];
         for (int i = 0; i < count; i++) {
             Dimension size = comps[i].getPreferredSize();
-            widths[i]    = size.width;
-            heights[i]   = size.height;
+            widths[i] = size.width;
+            heights[i] = size.height;
             minWidths[i] = comps[i].getMinimumSize().width;
             String constraint = mConstraints.get(comps[i]);
-            isFill[i]  = LAYOUT_FILL.equals(constraint);
+            isFill[i] = LAYOUT_FILL.equals(constraint);
             isExtra[i] = LAYOUT_EXTRA_BEFORE.equals(constraint);
         }
         if (extra < 0) {
@@ -153,12 +152,12 @@ public class Toolbar extends JPanel implements LayoutManager2 {
                     int perComp = Math.max(remaining / avail, 1);
                     for (int i = 0; i < count && remaining > 0; i++) {
                         if (widths[i] > minWidths[i]) {
-                            found      = true;
+                            found = true;
                             remaining -= perComp;
                             widths[i] -= perComp;
                             if (widths[i] <= minWidths[i]) {
                                 remaining += minWidths[i] - widths[i];
-                                widths[i]  = minWidths[i];
+                                widths[i] = minWidths[i];
                             }
                         }
                     }
@@ -179,7 +178,7 @@ public class Toolbar extends JPanel implements LayoutManager2 {
                     int perComp = Math.max(remaining / avail, 1);
                     for (int i = 0; i < count && remaining > 0; i++) {
                         if (isFill[i]) {
-                            found      = true;
+                            found = true;
                             remaining -= perComp;
                             widths[i] += perComp;
                         }
@@ -194,8 +193,8 @@ public class Toolbar extends JPanel implements LayoutManager2 {
                         int perComp = Math.max(remaining / avail, 1);
                         for (int i = 0; i < count && remaining > 0; i++) {
                             if (isExtra[i]) {
-                                found           = true;
-                                remaining      -= perComp;
+                                found = true;
+                                remaining -= perComp;
                                 extraBefore[i] += perComp;
                             }
                         }

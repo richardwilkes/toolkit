@@ -22,8 +22,8 @@ public class TreeNotificationKeys {
     /** The prefix used on all notifications regarding {@link TreeColumn}s. */
     public static final String COLUMN_PREFIX  = PREFIX + "column" + Notifier.SEPARATOR;
     /**
-     * The notification emitted when the header visibility is changed. Producer: The owning
-     * {@link TreePanel}. Data: A {@link Boolean} indicating whether or not the header is visible.
+     * The notification emitted when the header visibility is changed. Producer: The owning {@link
+     * TreePanel}. Data: A {@link Boolean} indicating whether or not the header is visible.
      */
     public static final String HEADER         = PREFIX + "header";
     /**
@@ -74,8 +74,8 @@ public class TreeNotificationKeys {
      */
     public static final String ROW_DROP       = ROW_PREFIX + "drop";
     /**
-     * The notification emitted when one or more {@link TreeColumn}s are added. Producer: The
-     * {@link TreePanel} that was modified. Data: The array of {@link TreeColumn}s that were added.
+     * The notification emitted when one or more {@link TreeColumn}s are added. Producer: The {@link
+     * TreePanel} that was modified. Data: The array of {@link TreeColumn}s that were added.
      */
     public static final String COLUMN_ADDED   = COLUMN_PREFIX + "added";
     /**

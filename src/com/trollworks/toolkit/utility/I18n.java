@@ -26,12 +26,12 @@ import java.util.Map;
 
 /** Provides localization support via a single directory of translation files. */
 public class I18n {
-    public static final String               EXTENSION = ".i18n";
-    private static I18n                      GLOBAL;
-    private Map<String, Map<String, String>> mLangMap  = new HashMap<>();
-    private Map<String, List<String>>        mHierMap  = new HashMap<>();
-    private Locale                           mLocale   = Locale.getDefault();
-    private String                           mLang     = mLocale.toString().toLowerCase();
+    public static final String                           EXTENSION = ".i18n";
+    private static      I18n                             GLOBAL;
+    private             Map<String, Map<String, String>> mLangMap  = new HashMap<>();
+    private             Map<String, List<String>>        mHierMap  = new HashMap<>();
+    private             Locale                           mLocale   = Locale.getDefault();
+    private             String                           mLang     = mLocale.toString().toLowerCase();
 
     /** @return the global {@link I18n} object. */
     public static synchronized I18n getGlobal() {
@@ -68,33 +68,29 @@ public class I18n {
                 AppHome.setup(I18n.class); // This should have already been called...
                 dir = AppHome.get().resolve("i18n");
                 if (!Files.isDirectory(dir)) {
-                    if (Platform.isMacintosh()) {
-                        dir = Paths.get(System.getProperty("java.home")).resolve("../../../app/i18n");
-                    } else {
-                        dir = AppHome.get().resolve("app/i18n");
-                    }
+                    dir = Platform.isMacintosh() ? Paths.get(System.getProperty("java.home")).resolve("../../../app/i18n") : AppHome.get().resolve("app/i18n");
                 }
             }
             if (Files.isDirectory(dir)) {
                 Files.list(dir).forEach(path -> {
                     if (path.toString().toLowerCase().endsWith(EXTENSION)) {
                         try {
-                            final kvInfo kv = new kvInfo();
+                            kvInfo kv = new kvInfo();
                             kv.translations = new HashMap<>();
                             Files.lines(path).forEachOrdered(line -> {
                                 kv.line++;
                                 if (line.startsWith("k:")) {
                                     if (kv.last == 'v') {
-                                        if (!kv.translations.containsKey(kv.key)) {
-                                            kv.translations.put(kv.key, kv.value);
-                                        } else {
+                                        if (kv.translations.containsKey(kv.key)) {
                                             System.err.println("ignoring duplicate key on line " + kv.lastKeyLineStart);
+                                        } else {
+                                            kv.translations.put(kv.key, kv.value);
                                         }
-                                        kv.key   = null;
+                                        kv.key = null;
                                         kv.value = null;
                                     }
                                     if (kv.key == null) {
-                                        kv.key              = Text.unquote(line.substring(2));
+                                        kv.key = Text.unquote(line.substring(2));
                                         kv.lastKeyLineStart = kv.line;
                                     } else {
                                         kv.key += '\n';
@@ -117,10 +113,10 @@ public class I18n {
                             });
                             if (kv.key != null) {
                                 if (kv.value != null) {
-                                    if (!kv.translations.containsKey(kv.key)) {
-                                        kv.translations.put(kv.key, kv.value);
-                                    } else {
+                                    if (kv.translations.containsKey(kv.key)) {
                                         System.err.println("ignoring duplicate key on line " + kv.lastKeyLineStart);
+                                    } else {
+                                        kv.translations.put(kv.key, kv.value);
                                     }
                                 } else {
                                     System.err.println("ignoring key with missing value on line " + kv.lastKeyLineStart);
@@ -167,7 +163,7 @@ public class I18n {
     public void setLocale(Locale locale) {
         synchronized (mHierMap) {
             mLocale = locale;
-            mLang   = locale.toString().toLowerCase();
+            mLang = locale.toString().toLowerCase();
         }
     }
 

@@ -15,6 +15,8 @@ import com.trollworks.toolkit.ui.menu.edit.Deletable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /** Provides a standard implementation of {@link Deletable} for the {@link TreePanel}. */
 public class StdTreeDeleter implements Deletable {
@@ -36,19 +38,19 @@ public class StdTreeDeleter implements Deletable {
 
     @Override
     public void deleteSelection() {
-        HashMap<TreeContainerRow, ArrayList<TreeRow>> map  = new HashMap<>();
-        ArrayList<TreeRow>                            rows = mPanel.getSelectedRows();
+        Map<TreeContainerRow, List<TreeRow>> map  = new HashMap<>();
+        List<TreeRow>                        rows = mPanel.getSelectedRows();
         for (TreeRow row : rows) {
-            TreeContainerRow   parent = row.getParent();
-            ArrayList<TreeRow> list   = map.get(parent);
+            TreeContainerRow parent = row.getParent();
+            List<TreeRow>    list   = map.get(parent);
             if (list == null) {
                 list = new ArrayList<>();
                 map.put(parent, list);
             }
             list.add(row);
         }
-        for (TreeContainerRow row : map.keySet()) {
-            row.removeRow(map.get(row));
+        for (Map.Entry<TreeContainerRow, List<TreeRow>> entry : map.entrySet()) {
+            entry.getKey().removeRow(entry.getValue());
         }
         mPanel.pack();
     }

@@ -21,7 +21,8 @@ public class Circle extends Ellipse2D {
     private double mRadius;
 
     /** Creates a new {@link Circle} with a center point of 0,0 and a radius of 0. */
-    public Circle() {}
+    public Circle() {
+    }
 
     /**
      * Creates a new {@link Circle}.
@@ -81,22 +82,22 @@ public class Circle extends Ellipse2D {
      * @param radius The radius to use. Will be forced to a minimum of 0.
      */
     public void set(double x, double y, double radius) {
-        mX      = x;
-        mY      = y;
+        mX = x;
+        mY = y;
         mRadius = Math.max(radius, 0);
     }
 
     /** @param other Another circle to copy the state from. */
     public void set(Circle other) {
-        mX      = other.mX;
-        mY      = other.mY;
+        mX = other.mX;
+        mY = other.mY;
         mRadius = other.mRadius;
     }
 
     /**
      * @param x The horizontal coordinate to test.
      * @param y The vertical coordinate to test.
-     * @return <code>true</code> if the coordinates are within the {@link Circle}.
+     * @return {@code true} if the coordinates are within the {@link Circle}.
      */
     @Override
     public boolean contains(double x, double y) {
@@ -107,8 +108,8 @@ public class Circle extends Ellipse2D {
 
     /**
      * @param circle The {@link Circle} to test.
-     * @return <code>true</code> if the passed-in {@link Circle} is completely within the
-     *         {@link Circle}.
+     * @return {@code true} if the passed-in {@link Circle} is completely within the {@link
+     *         Circle}.
      */
     public boolean contains(Circle circle) {
         double x = mX - circle.mX;
@@ -118,7 +119,7 @@ public class Circle extends Ellipse2D {
 
     /**
      * @param circle The {@link Circle} to test.
-     * @return <code>true</code> if the passed-in {@link Circle} overlaps the {@link Circle}.
+     * @return {@code true} if the passed-in {@link Circle} overlaps the {@link Circle}.
      */
     public boolean intersects(Circle circle) {
         double x      = mX - circle.mX;
@@ -155,14 +156,14 @@ public class Circle extends Ellipse2D {
         if (height < 0) {
             height = 0;
         }
-        if (width != height) {
-            mRadius = Math.min(width, height) / 2;
-            mX      = x + mRadius + (width / 2 - mRadius);
-            mY      = y + mRadius + (height / 2 - mRadius);
-        } else {
+        if (width == height) {
             mRadius = width / 2;
-            mX      = x + mRadius;
-            mY      = y + mRadius;
+            mX = x + mRadius;
+            mY = y + mRadius;
+        } else {
+            mRadius = Math.min(width, height) / 2;
+            mX = x + mRadius + (width / 2 - mRadius);
+            mY = y + mRadius + (height / 2 - mRadius);
         }
     }
 

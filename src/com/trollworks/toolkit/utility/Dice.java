@@ -15,23 +15,23 @@ import java.util.Random;
 
 /** Simulates dice. */
 public class Dice implements Cloneable {
-    private static final Random RANDOM                    = new Random();
-    private static boolean      SHOW_SINGLE_DIE_COUNT     = true;
-    private static int          ASSUMED_SIDE_COUNT        = 0;
-    private static boolean      EXTRA_DICE_FROM_MODIFIERS = false;
-    private int                 mCount;
-    private int                 mSides;
-    private int                 mModifier;
-    private int                 mMultiplier;
-    private int                 mAltCount;
-    private int                 mAltModifier;
+    private static final Random  RANDOM                = new Random();
+    private static       boolean SHOW_SINGLE_DIE_COUNT = true;
+    private static       int     ASSUMED_SIDE_COUNT;
+    private static       boolean EXTRA_DICE_FROM_MODIFIERS;
+    private              int     mCount;
+    private              int     mSides;
+    private              int     mModifier;
+    private              int     mMultiplier;
+    private              int     mAltCount;
+    private              int     mAltModifier;
 
     /**
      * Determines whether a "1" will be shown when a single die is being displayed.<br>
      * <br>
-     * By default, this is set to <code>true</code>.
+     * By default, this is set to {@code true}.
      *
-     * @param show <code>true</code> to show "1d6", false to show "d6".
+     * @param show {@code true} to show "1d6", false to show "d6".
      */
     public static final void setShowSingleDieCount(boolean show) {
         SHOW_SINGLE_DIE_COUNT = show;
@@ -40,12 +40,12 @@ public class Dice implements Cloneable {
     /**
      * Sets the assumed number of sides per die. When this is set to a positive value greater than
      * 0, the {@link #toString()} method will emit dice notations without the dice sides if it
-     * matches this value. For example, if the assumed side count is 6, then rather than
-     * <code>2d6+2</code>, {@link #toString()} would generate <code>2d+2</code>. Likewise, input
-     * dice specifications for the {@link #Dice(String)} constructor will use this value if the
-     * number of sides is omitted.<br>
+     * matches this value. For example, if the assumed side count is 6, then rather than {@code
+     * 2d6+2}, {@link #toString()} would generate {@code 2d+2}. Likewise, input dice specifications
+     * for the {@link #Dice(String)} constructor will use this value if the number of sides is
+     * omitted.<br>
      * <br>
-     * By default, this is set to <code>0</code>.
+     * By default, this is set to {@code 0}.
      *
      * @param sides The number of sides to assume.
      */
@@ -54,11 +54,11 @@ public class Dice implements Cloneable {
     }
 
     /**
-     * By default, this is set to <code>false</code>.
+     * By default, this is set to {@code false}.
      *
-     * @param convert <code>true</code> if modifiers greater than or equal to the average result of
-     *                the base die should be converted to extra dice. For example,
-     *                <code>1d6+8</code> will become <code>3d6+1</code>.
+     * @param convert {@code true} if modifiers greater than or equal to the average result of the
+     *                base die should be converted to extra dice. For example, {@code 1d6+8} will
+     *                become {@code 3d6+1}.
      */
     public static final void setConvertModifiersToExtraDice(boolean convert) {
         EXTRA_DICE_FROM_MODIFIERS = convert;
@@ -112,7 +112,7 @@ public class Dice implements Cloneable {
         }
         if (mCount != 0 && mSides == 0 && mModifier == 0) {
             mModifier = mCount;
-            mCount    = 0;
+            mCount = 0;
         }
     }
 
@@ -120,8 +120,8 @@ public class Dice implements Cloneable {
      * @param text The text containing a dice specification.
      * @return A 2 element array of integers with the first element containing the starting index of
      *         the dice specification and the second element containing the last index of the dice
-     *         specification. If there was no dice specification detected, then <code>null</code>
-     *         will be returned instead.
+     *         specification. If there was no dice specification detected, then {@code null} will be
+     *         returned instead.
      */
     public static final int[] extractDicePosition(String text) {
         int start = -1;
@@ -156,11 +156,7 @@ public class Dice implements Cloneable {
                 break;
             case 2:
                 if ((ch < '0' || ch > '9') && ch != ' ') {
-                    if (ch == 'x') {
-                        state = 3;
-                    } else {
-                        state = 4;
-                    }
+                    state = ch == 'x' ? 3 : 4;
                 }
                 break;
             case 3:
@@ -185,7 +181,7 @@ public class Dice implements Cloneable {
                 max--;
             }
             if (start < max) {
-                return new int[] { start, max };
+                return new int[]{start, max};
             }
         }
         return null;
@@ -249,9 +245,9 @@ public class Dice implements Cloneable {
      * @param multiplier A multiplier for the roll.
      */
     public Dice(int count, int sides, int modifier, int multiplier) {
-        mCount      = Math.max(count, 0);
-        mSides      = Math.max(sides, 0);
-        mModifier   = modifier;
+        mCount = Math.max(count, 0);
+        mSides = Math.max(sides, 0);
+        mModifier = modifier;
         mMultiplier = multiplier;
     }
 
@@ -279,7 +275,7 @@ public class Dice implements Cloneable {
      * @param multiply The amount to multiply each die component.
      */
     public void multiply(int multiply) {
-        mCount    *= multiply;
+        mCount *= multiply;
         mModifier *= multiply;
         if (mMultiplier != 1) {
             mMultiplier *= multiply;
@@ -356,20 +352,20 @@ public class Dice implements Cloneable {
     }
 
     private void updateAlt() {
-        mAltCount    = mCount;
+        mAltCount = mCount;
         mAltModifier = mModifier;
         if (EXTRA_DICE_FROM_MODIFIERS && mSides > 0) {
             int average = (mSides + 1) / 2;
             if ((mSides & 1) == 1) {
                 // Odd number of sides, so average is a whole number
-                mAltCount    += mAltModifier / average;
+                mAltCount += mAltModifier / average;
                 mAltModifier %= average;
             } else {
                 // Even number of sides, so average has an extra half, which means we alternate
                 while (mAltModifier > average) {
                     if (mAltModifier > 2 * average) {
                         mAltModifier -= 2 * average + 1;
-                        mAltCount    += 2;
+                        mAltCount += 2;
                     } else {
                         mAltModifier -= average + 1;
                         mAltCount++;

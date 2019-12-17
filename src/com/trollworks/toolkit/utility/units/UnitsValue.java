@@ -42,8 +42,8 @@ public class UnitsValue<T extends Units> implements Comparable<UnitsValue<T>> {
     }
 
     /**
-     * Creates a new {@link UnitsValue} from an existing one and converts it to the given
-     * {@link Units}.
+     * Creates a new {@link UnitsValue} from an existing one and converts it to the given {@link
+     * Units}.
      *
      * @param other The {@link UnitsValue} to convert.
      * @param units The {@link Units} to use.
@@ -95,7 +95,7 @@ public class UnitsValue<T extends Units> implements Comparable<UnitsValue<T>> {
     }
 
     /**
-     * @return The default units to use during a load if nothing matches. <code>null</code> may be
+     * @return The default units to use during a load if nothing matches. {@code null} may be
      *         returned to indicate an error should occur instead.
      */
     public T getDefaultUnits() {
@@ -107,14 +107,7 @@ public class UnitsValue<T extends Units> implements Comparable<UnitsValue<T>> {
         if (this == other) {
             return 0;
         }
-        double result = getNormalizedValue() - other.getNormalizedValue();
-        if (result < 0.0) {
-            return -1;
-        }
-        if (result > 0.0) {
-            return 1;
-        }
-        return 0;
+        return Double.compare(getNormalizedValue() - other.getNormalizedValue(), 0.0);
     }
 
     @Override

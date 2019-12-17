@@ -16,8 +16,8 @@ import com.trollworks.toolkit.ui.RetinaIcon;
 /** Commonly used icons. */
 public class Icons {
     /**
-     * @param open <code>true</code> for the 'open' version.
-     * @param roll <code>true</code> for the highlighted version.
+     * @param open {@code true} for the 'open' version.
+     * @param roll {@code true} for the highlighted version.
      */
     public static RetinaIcon getDisclosure(boolean open, boolean roll) {
         if (open) {

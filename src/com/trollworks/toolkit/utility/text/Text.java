@@ -15,19 +15,18 @@ import com.trollworks.toolkit.utility.I18n;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
 import javax.swing.SwingConstants;
 
 /** Provides text manipulation. */
 public class Text {
-    private static final char[] HEX_DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     /**
      * @param text The text to check.
      * @return "a" or "an", as appropriate for the text that will be following it.
      */
     public static final String aAn(String text) {
-        return Text.startsWithVowel(text) ? I18n.Text("an") : I18n.Text("a");
+        return startsWithVowel(text) ? I18n.Text("an") : I18n.Text("a");
     }
 
     /**
@@ -40,7 +39,7 @@ public class Text {
 
     /**
      * @param ch The character to check.
-     * @return <code>true</code> if the character is a vowel.
+     * @return {@code true} if the character is a vowel.
      */
     public static final boolean isVowel(char ch) {
         ch = Character.toLowerCase(ch);
@@ -49,7 +48,7 @@ public class Text {
 
     /**
      * @param text The text to check.
-     * @return <code>true</code> if the text starts with a vowel.
+     * @return {@code true} if the text starts with a vowel.
      */
     public static final boolean startsWithVowel(String text) {
         if (text != null && !text.isEmpty()) {
@@ -79,7 +78,7 @@ public class Text {
      * @param data The data to create a hex string for.
      * @return A string of two character hexadecimal values for each byte.
      */
-    public final static String bytesToHex(byte[] data) {
+    public static final String bytesToHex(byte[] data) {
         return bytesToHex(data, 0, data.length);
     }
 
@@ -89,7 +88,7 @@ public class Text {
      * @param length The number of bytes to use.
      * @return A string of two character hexadecimal values for each byte.
      */
-    public final static String bytesToHex(byte[] data, int offset, int length) {
+    public static final String bytesToHex(byte[] data, int offset, int length) {
         StringBuilder buffer = new StringBuilder(length * 2);
         for (int i = 0; i < length; i++) {
             byte b = data[i + offset];
@@ -112,7 +111,7 @@ public class Text {
         StringTokenizer tokenizer = new StringTokenizer(text.replaceAll("[\\x00-\\x08]", "").replaceAll("[\\x0b\\x0c]", "").replaceAll("[\\x0e-\\x1f]", "").replaceAll("[\\x7f-\\x9f]", "").replaceAll("\r\n", "\n").replace('\r', '\n').replaceAll("[ \t\f]+", " ").trim(), "\n", true);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            if (token.equals("\n")) {
+            if ("\n".equals(token)) {
                 count++;
             } else {
                 if (count == 1) {
@@ -153,7 +152,7 @@ public class Text {
                 StringBuilder buffer    = new StringBuilder(remaining + 1);
 
                 if (left > 0) {
-                    buffer.append(text.substring(0, left));
+                    buffer.append(text, 0, left);
                 }
                 buffer.append("\u2026");
                 if (right > 0) {
@@ -212,8 +211,8 @@ public class Text {
      * Extracts lines of text from the specified data.
      *
      * @param data     The text to extract lines from.
-     * @param tabWidth The width (in spaces) of a tab character. Pass in <code>0</code> or less to
-     *                 leave tab characters in place.
+     * @param tabWidth The width (in spaces) of a tab character. Pass in {@code 0} or less to leave
+     *                 tab characters in place.
      * @return The lines of text.
      */
     public static final ArrayList<String> extractLines(String data, int tabWidth) {
@@ -230,12 +229,12 @@ public class Text {
                 ignoreCh = 0;
             } else if (ch == '\r') {
                 ignoreCh = '\n';
-                column   = 0;
+                column = 0;
                 lines.add(buffer.toString());
                 buffer.setLength(0);
             } else if (ch == '\n') {
                 ignoreCh = '\r';
-                column   = 0;
+                column = 0;
                 lines.add(buffer.toString());
                 buffer.setLength(0);
             } else if (ch == '\t' && tabWidth > 0) {
@@ -265,12 +264,7 @@ public class Text {
      * @return A string filled with a specific character.
      */
     public static String makeFiller(int amt, char filler) {
-        StringBuilder buffer = new StringBuilder(amt);
-
-        for (int i = 0; i < amt; i++) {
-            buffer.append(filler);
-        }
-        return buffer.toString();
+        return String.valueOf(filler).repeat(Math.max(0, amt));
     }
 
     /**
@@ -315,7 +309,7 @@ public class Text {
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
 
-            if (token.equals("\n")) {
+            if ("\n".equals(token)) {
                 buffer.append(token);
             } else {
                 StringTokenizer tokenizer2 = new StringTokenizer(token, " \t", true);
@@ -326,7 +320,7 @@ public class Text {
                     String token2      = tokenizer2.nextToken();
                     int    tokenLength = token2.length();
 
-                    if (length == 0 && token2.equals(" ")) {
+                    if (length == 0 && " ".equals(token2)) {
                         continue;
                     }
                     if (length == 0 || length + tokenLength <= charCount) {
@@ -336,11 +330,11 @@ public class Text {
                         buffer.append(lineBuffer);
                         buffer.append("\n");
                         lineBuffer.setLength(0);
-                        if (!token2.equals(" ")) {
+                        if (" ".equals(token2)) {
+                            length = 0;
+                        } else {
                             lineBuffer.append(token2);
                             length = tokenLength;
-                        } else {
-                            length = 0;
                         }
                     }
                 }
@@ -355,11 +349,7 @@ public class Text {
 
     public static String wrapPlainTextForToolTip(String text) {
         if (text != null && !text.isEmpty() && !text.startsWith("<html>")) {
-            StringBuilder buffer = new StringBuilder();
-            buffer.append("<html><body>");
-            buffer.append(htmlEscape(wrapToCharacterCount(text, 40)).replaceAll("\n", "<br>"));
-            buffer.append("</body></html>");
-            return buffer.toString();
+            return "<html><body>" + htmlEscape(wrapToCharacterCount(text, 40)).replaceAll("\n", "<br>") + "</body></html>";
         }
         return text;
     }
@@ -403,7 +393,7 @@ public class Text {
 
     /**
      * @param ch the character to check.
-     * @return <code>true</code> if the character is a valid hex digit.
+     * @return {@code true} if the character is a valid hex digit.
      */
     public static boolean isHexDigit(char ch) {
         return ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'f' || ch >= 'A' && ch <= 'F';
@@ -411,7 +401,7 @@ public class Text {
 
     /**
      * @param ch the character to check.
-     * @return <code>true</code> if the character is printable.
+     * @return {@code true} if the character is printable.
      */
     public static boolean isPrintableChar(char ch) {
         if (!Character.isISOControl(ch) && Character.isDefined(ch)) {
@@ -497,9 +487,6 @@ public class Text {
             case 1: // Process escape
                 switch (ch) {
                 case '\\':
-                    buffer.append(ch);
-                    state = 0;
-                    break;
                 case '"':
                     buffer.append(ch);
                     state = 0;

@@ -41,8 +41,8 @@ public class HttpSessionFactory implements SessionFactory {
     /**
      * @param uri     The URI to register a {@link HttpRequestHandler} for.
      * @param handler The {@link HttpRequestHandler} to use for the specified URI.
-     * @return Any existing {@link HttpRequestHandler} for the specified URI, or <code>null</code>
-     *         if there was none.
+     * @return Any existing {@link HttpRequestHandler} for the specified URI, or {@code null} if
+     *         there was none.
      */
     public final synchronized HttpRequestHandler registerHttpHandler(String uri, HttpRequestHandler handler) {
         return mHttpHandlers.put(uri, handler);
@@ -50,8 +50,8 @@ public class HttpSessionFactory implements SessionFactory {
 
     /**
      * @param uri The URI to get a {@link HttpRequestHandler} for.
-     * @return The {@link HttpRequestHandler} for the specified URI, or <code>null</code> if there
-     *         is none.
+     * @return The {@link HttpRequestHandler} for the specified URI, or {@code null} if there is
+     *         none.
      */
     public final synchronized HttpRequestHandler getHttpHandler(String uri) {
         return mHttpHandlers.get(uri);
@@ -60,8 +60,8 @@ public class HttpSessionFactory implements SessionFactory {
     /**
      * @param uri     The URI to register a {@link WebSocketFactory} for.
      * @param handler The {@link WebSocketFactory} to use for the specified URI.
-     * @return Any existing {@link WebSocketFactory} for the specified URI, or <code>null</code> if
-     *         there was none.
+     * @return Any existing {@link WebSocketFactory} for the specified URI, or {@code null} if there
+     *         was none.
      */
     public final synchronized WebSocketFactory registerWebSocketFactory(String uri, WebSocketFactory handler) {
         return mWebSocketFactories.put(uri, handler);
@@ -69,7 +69,7 @@ public class HttpSessionFactory implements SessionFactory {
 
     /**
      * @param uri The URI to get a {@link WebSocketFactory} for.
-     * @return The {@link WebSocketFactory} for the specified URI, or <code>null</code> if there is
+     * @return The {@link WebSocketFactory} for the specified URI, or {@code null} if there is
      *         none.
      */
     public final synchronized WebSocketFactory getWebSocketFactory(String uri) {

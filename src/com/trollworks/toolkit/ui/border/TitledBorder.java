@@ -20,7 +20,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
-
 import javax.swing.SwingConstants;
 
 /** A border consisting of a frame and optional title. */
@@ -30,7 +29,8 @@ public class TitledBorder extends LineBorder {
     private Font   mFont;
 
     /** Creates a new border without a title. */
-    public TitledBorder() {}
+    public TitledBorder() {
+    }
 
     /**
      * Creates a new border without a title.
@@ -39,7 +39,7 @@ public class TitledBorder extends LineBorder {
      * @param title The title to use.
      */
     public TitledBorder(Font font, String title) {
-        mFont  = font;
+        mFont = font;
         mTitle = title;
     }
 

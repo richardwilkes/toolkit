@@ -16,7 +16,6 @@ import com.trollworks.toolkit.utility.PrintProxy;
 import com.trollworks.toolkit.utility.units.LengthUnits;
 
 import java.awt.Component;
-
 import javax.print.PrintService;
 import javax.print.attribute.Attribute;
 import javax.print.attribute.PrintRequestAttributeSet;
@@ -53,8 +52,8 @@ public class PrintUtilities {
      * @param set              The {@link PrintRequestAttributeSet} to use.
      * @param type             The setting type to extract.
      * @param tryDefaultIfNull Whether to ask for the default if no value is present in the set.
-     * @return The value for the setting, or <code>null</code> if neither the set or the service has
-     *         a value for it.
+     * @return The value for the setting, or {@code null} if neither the set or the service has a
+     *         value for it.
      */
     public static Attribute getSetting(PrintService service, PrintRequestAttributeSet set, Class<? extends Attribute> type, boolean tryDefaultIfNull) {
         Attribute attribute = set.get(type);
@@ -100,7 +99,7 @@ public class PrintUtilities {
         }
         x = current.getX(MediaPrintableArea.INCH);
         y = current.getY(MediaPrintableArea.INCH);
-        return new double[] { units.convert(LengthUnits.IN, y), units.convert(LengthUnits.IN, x), units.convert(LengthUnits.IN, size[1] - (y + current.getHeight(MediaPrintableArea.INCH))), units.convert(LengthUnits.IN, size[0] - (x + current.getWidth(MediaPrintableArea.INCH))) };
+        return new double[]{units.convert(LengthUnits.IN, y), units.convert(LengthUnits.IN, x), units.convert(LengthUnits.IN, size[1] - (y + current.getHeight(MediaPrintableArea.INCH))), units.convert(LengthUnits.IN, size[0] - (x + current.getWidth(MediaPrintableArea.INCH)))};
     }
 
     /**
@@ -128,13 +127,13 @@ public class PrintUtilities {
         double[]        margins     = getPaperMargins(service, set, units);
 
         if (orientation == PageOrientation.LANDSCAPE) {
-            return new double[] { margins[1], margins[2], margins[3], margins[0] };
+            return new double[]{margins[1], margins[2], margins[3], margins[0]};
         }
         if (orientation == PageOrientation.REVERSE_PORTRAIT) {
-            return new double[] { margins[2], margins[3], margins[0], margins[1] };
+            return new double[]{margins[2], margins[3], margins[0], margins[1]};
         }
         if (orientation == PageOrientation.REVERSE_LANDSCAPE) {
-            return new double[] { margins[3], margins[0], margins[1], margins[2] };
+            return new double[]{margins[3], margins[0], margins[1], margins[2]};
         }
         return margins;
     }
@@ -149,11 +148,11 @@ public class PrintUtilities {
         PageOrientation orientation = getPageOrientation(service, set);
 
         if (orientation == PageOrientation.LANDSCAPE) {
-            setPaperMargins(service, set, new double[] { margins[3], margins[0], margins[1], margins[2] }, units);
+            setPaperMargins(service, set, new double[]{margins[3], margins[0], margins[1], margins[2]}, units);
         } else if (orientation == PageOrientation.REVERSE_PORTRAIT) {
-            setPaperMargins(service, set, new double[] { margins[2], margins[3], margins[0], margins[1] }, units);
+            setPaperMargins(service, set, new double[]{margins[2], margins[3], margins[0], margins[1]}, units);
         } else if (orientation == PageOrientation.REVERSE_LANDSCAPE) {
-            setPaperMargins(service, set, new double[] { margins[1], margins[2], margins[3], margins[0] }, units);
+            setPaperMargins(service, set, new double[]{margins[1], margins[2], margins[3], margins[0]}, units);
         } else {
             setPaperMargins(service, set, margins, units);
         }
@@ -180,7 +179,7 @@ public class PrintUtilities {
         if (size == null) {
             size = MediaSize.NA.LETTER;
         }
-        return new double[] { units.convert(LengthUnits.IN, size.getX(Size2DSyntax.INCH)), units.convert(LengthUnits.IN, size.getY(Size2DSyntax.INCH)) };
+        return new double[]{units.convert(LengthUnits.IN, size.getX(Size2DSyntax.INCH)), units.convert(LengthUnits.IN, size.getY(Size2DSyntax.INCH))};
     }
 
     /**
@@ -234,7 +233,7 @@ public class PrintUtilities {
         PageOrientation orientation = getPageOrientation(service, set);
 
         if (orientation == PageOrientation.LANDSCAPE || orientation == PageOrientation.REVERSE_LANDSCAPE) {
-            size = new double[] { size[1], size[0] };
+            size = new double[]{size[1], size[0]};
         }
         setPaperSize(service, set, size, units);
     }
@@ -304,7 +303,7 @@ public class PrintUtilities {
      * @return The copies to print.
      */
     public static int getCopies(PrintService service, PrintRequestAttributeSet set) {
-        Copies copies = (Copies) PrintUtilities.getSetting(service, set, Copies.class, false);
+        Copies copies = (Copies) getSetting(service, set, Copies.class, false);
         return copies == null ? 1 : copies.getValue();
     }
 
@@ -324,7 +323,7 @@ public class PrintUtilities {
      * @return The number up to print.
      */
     public static NumberUp getNumberUp(PrintService service, PrintRequestAttributeSet set) {
-        return (NumberUp) PrintUtilities.getSetting(service, set, NumberUp.class, false);
+        return (NumberUp) getSetting(service, set, NumberUp.class, false);
     }
 
     /**
@@ -343,7 +342,7 @@ public class PrintUtilities {
      * @return The page ranges to print.
      */
     public static PageRanges getPageRanges(PrintService service, PrintRequestAttributeSet set) {
-        return (PageRanges) PrintUtilities.getSetting(service, set, PageRanges.class, false);
+        return (PageRanges) getSetting(service, set, PageRanges.class, false);
     }
 
     /**

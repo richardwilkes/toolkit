@@ -76,10 +76,10 @@ class DummyPrintService implements PrintService {
     @Override
     public Object getSupportedAttributeValues(Class<? extends Attribute> category, DocFlavor flavor, AttributeSet attributes) {
         if (category == Media.class) {
-            return new Media[] { MediaSizeName.NA_LETTER, MediaSizeName.NA_LEGAL, MediaSizeName.ISO_A4 };
+            return new Media[]{MediaSizeName.NA_LETTER, MediaSizeName.NA_LEGAL, MediaSizeName.ISO_A4};
         }
         if (category == OrientationRequested.class) {
-            return new OrientationRequested[] { OrientationRequested.PORTRAIT, OrientationRequested.LANDSCAPE };
+            return new OrientationRequested[]{OrientationRequested.PORTRAIT, OrientationRequested.LANDSCAPE};
         }
         return null;
     }

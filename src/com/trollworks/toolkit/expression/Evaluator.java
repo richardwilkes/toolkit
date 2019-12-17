@@ -52,11 +52,11 @@ import java.util.Map;
 public class Evaluator {
     private static List<Operator>                  DEFAULT_OPERATORS = new ArrayList<>();
     private static Map<String, ExpressionFunction> DEFAULT_FUNCTIONS = new HashMap<>();
-    private VariableResolver                       mVariableResolver;
-    private List<Operator>                         mOperators        = new ArrayList<>();
-    private Map<String, ExpressionFunction>        mFunctions        = new HashMap<>();
-    private Stack<ExpressionOperator>              mOperatorStack;
-    private Stack<Object>                          mOperandStack;
+    private        VariableResolver                mVariableResolver;
+    private        List<Operator>                  mOperators        = new ArrayList<>();
+    private        Map<String, ExpressionFunction> mFunctions        = new HashMap<>();
+    private        Stack<ExpressionOperator>       mOperatorStack;
+    private        Stack<Object>                   mOperandStack;
 
     static {
         addDefaultOperator(new OpenParen());
@@ -157,11 +157,10 @@ public class Evaluator {
      *
      * @param expression The expression to evaluate.
      * @return The result. May be a {@link String} or a {@link Double}.
-     * @throws EvaluationException
      */
     public final Object evaluate(String expression) throws EvaluationException {
         parse(expression);
-        while (mOperatorStack.size() > 0) {
+        while (!mOperatorStack.isEmpty()) {
             processTree(mOperandStack, mOperatorStack);
         }
         if (mOperandStack.isEmpty()) {
@@ -176,7 +175,6 @@ public class Evaluator {
      * @param expression The expression to evaluate.
      * @return The result. If the result can't be translated to a number, an EvaluationException
      *         will be thrown.
-     * @throws EvaluationException
      */
     public final double evaluateToNumber(String expression) throws EvaluationException {
         try {
@@ -192,7 +190,6 @@ public class Evaluator {
      * @param expression The expression to evaluate.
      * @return The result. If the result can't be translated to an integer, an EvaluationException
      *         will be thrown.
-     * @throws EvaluationException
      */
     public final int evaluateToInteger(String expression) throws EvaluationException {
         try {
@@ -202,15 +199,15 @@ public class Evaluator {
         }
     }
 
-    private final void processTree(Stack<Object> operandStack, Stack<ExpressionOperator> operatorStack) {
-        Object rightOperand = operandStack.size() > 0 ? operandStack.pop() : null;
-        Object leftOperand  = operandStack.size() > 0 ? operandStack.pop() : null;
+    private void processTree(Stack<Object> operandStack, Stack<ExpressionOperator> operatorStack) {
+        Object rightOperand = operandStack.isEmpty() ? null : operandStack.pop();
+        Object leftOperand  = operandStack.isEmpty() ? null : operandStack.pop();
         operandStack.push(new ExpressionTree(this, leftOperand, rightOperand, operatorStack.pop().mOperator, null));
     }
 
-    private final void parse(String expression) throws EvaluationException {
+    private void parse(String expression) throws EvaluationException {
         try {
-            mOperandStack  = new Stack<>();
+            mOperandStack = new Stack<>();
             mOperatorStack = new Stack<>();
             boolean  haveOperand   = false;
             boolean  haveOperator  = false;
@@ -226,12 +223,12 @@ public class Evaluator {
                     NextOperator nextOperator = nextOperator(expression, i, null);
                     if (nextOperator != null) {
                         operator = nextOperator.mOperator;
-                        opIndex  = nextOperator.mIndex;
+                        opIndex = nextOperator.mIndex;
                     }
                     if (opIndex > i || opIndex == -1) {
-                        i             = processOperand(expression, i, opIndex, mOperandStack, unaryOperator);
-                        haveOperand   = true;
-                        haveOperator  = false;
+                        i = processOperand(expression, i, opIndex, mOperandStack, unaryOperator);
+                        haveOperand = true;
+                        haveOperator = false;
                         unaryOperator = null;
                     }
                     if (opIndex == i) {
@@ -243,11 +240,11 @@ public class Evaluator {
                                 throw new EvaluationException(String.format(I18n.Text("Consecutive unary operators are not allowed (index=%d)"), Integer.valueOf(i)));
                             }
                         } else {
-                            i             = processOperator(expression, opIndex, operator, mOperatorStack, mOperandStack, haveOperand, unaryOperator);
+                            i = processOperator(expression, opIndex, operator, mOperatorStack, mOperandStack, haveOperand, unaryOperator);
                             unaryOperator = null;
                         }
                         if (!(nextOperator != null && nextOperator.mOperator instanceof CloseParen)) {
-                            haveOperand  = false;
+                            haveOperand = false;
                             haveOperator = true;
                         }
                     }
@@ -260,46 +257,46 @@ public class Evaluator {
         }
     }
 
-    private static final String invalidExpressionText() {
+    private static String invalidExpressionText() {
         return I18n.Text("Expression is invalid");
     }
 
-    private static final int processOperand(String expression, int start, int operatorIndex, Stack<Object> operandStack, Operator unaryOperator) throws EvaluationException {
+    private static int processOperand(String expression, int start, int operatorIndex, Stack<Object> operandStack, Operator unaryOperator) throws EvaluationException {
         String text;
         int    result;
         if (operatorIndex == -1) {
-            text   = expression.substring(start).trim();
+            text = expression.substring(start).trim();
             result = expression.length();
         } else {
-            text   = expression.substring(start, operatorIndex).trim();
+            text = expression.substring(start, operatorIndex).trim();
             result = operatorIndex;
         }
-        if (text.length() == 0) {
+        if (text.isEmpty()) {
             throw new EvaluationException(invalidExpressionText());
         }
         operandStack.push(new ExpressionOperand(text, unaryOperator));
         return result;
     }
 
-    private final int processOperator(String expression, int index, Operator operator, Stack<ExpressionOperator> operatorStack, Stack<Object> operandStack, boolean haveOperand, Operator unaryOperator) throws EvaluationException {
+    private int processOperator(String expression, int index, Operator operator, Stack<ExpressionOperator> operatorStack, Stack<Object> operandStack, boolean haveOperand, Operator unaryOperator) throws EvaluationException {
         if (haveOperand && operator instanceof OpenParen) {
             NextOperator nextOperator = processFunction(expression, index, operandStack);
-            operator     = nextOperator.mOperator;
-            index        = nextOperator.mIndex + operator.getLength();
+            operator = nextOperator.mOperator;
+            index = nextOperator.mIndex + operator.getLength();
             nextOperator = nextOperator(expression, index, null);
             if (nextOperator == null) {
                 return index;
             }
             operator = nextOperator.mOperator;
-            index    = nextOperator.mIndex;
+            index = nextOperator.mIndex;
         }
         if (operator instanceof OpenParen) {
             operatorStack.push(new ExpressionOperator(operator, unaryOperator));
         } else if (operator instanceof CloseParen) {
-            ExpressionOperator stackOp = operatorStack.size() > 0 ? operatorStack.peek() : null;
+            ExpressionOperator stackOp = operatorStack.isEmpty() ? null : operatorStack.peek();
             while (stackOp != null && !(stackOp.mOperator instanceof OpenParen)) {
                 processTree(operandStack, operatorStack);
-                stackOp = operatorStack.size() > 0 ? operatorStack.peek() : null;
+                stackOp = operatorStack.isEmpty() ? null : operatorStack.peek();
             }
             if (operatorStack.isEmpty()) {
                 throw new EvaluationException(invalidExpressionText());
@@ -312,11 +309,11 @@ public class Evaluator {
                 operandStack.push(new ExpressionTree(this, operandStack.pop(), null, null, exop.mUnaryOperator));
             }
         } else {
-            if (operatorStack.size() > 0) {
+            if (!operatorStack.isEmpty()) {
                 ExpressionOperator stackOp = operatorStack.peek();
                 while (stackOp != null && stackOp.mOperator.getPrecedence() >= operator.getPrecedence()) {
                     processTree(operandStack, operatorStack);
-                    stackOp = operatorStack.size() > 0 ? operatorStack.peek() : null;
+                    stackOp = operatorStack.isEmpty() ? null : operatorStack.peek();
                 }
             }
             operatorStack.push(new ExpressionOperator(operator, unaryOperator));
@@ -324,7 +321,7 @@ public class Evaluator {
         return index + operator.getLength();
     }
 
-    private final NextOperator processFunction(String expression, int operatorIndex, Stack<Object> operandStack) throws EvaluationException {
+    private NextOperator processFunction(String expression, int operatorIndex, Stack<Object> operandStack) throws EvaluationException {
         int          parens       = 1;
         NextOperator nextOperator = null;
         int          next         = operatorIndex;
@@ -348,7 +345,7 @@ public class Evaluator {
         return nextOperator;
     }
 
-    private final NextOperator nextOperator(String expression, int start, Operator match) {
+    private NextOperator nextOperator(String expression, int start, Operator match) {
         int length = expression.length();
         for (int i = start; i < length; i++) {
             if (match != null) {
@@ -357,9 +354,8 @@ public class Evaluator {
                     return next;
                 }
             } else {
-                int opCount = mOperators.size();
-                for (int j = 0; j < opCount; j++) {
-                    NextOperator next = nextOperator(expression, i, length, mOperators.get(j));
+                for (Operator operator : mOperators) {
+                    NextOperator next = nextOperator(expression, i, length, operator);
                     if (next != null) {
                         return next;
                     }
@@ -369,7 +365,7 @@ public class Evaluator {
         return null;
     }
 
-    private static final NextOperator nextOperator(String expression, int start, int max, Operator operator) {
+    private static NextOperator nextOperator(String expression, int start, int max, Operator operator) {
         int    length = operator.getLength();
         String symbol = operator.getSymbol();
         if (length == 1) {
@@ -412,7 +408,7 @@ public class Evaluator {
         return null;
     }
 
-    private final String replaceVariables(String expression) throws EvaluationException {
+    private String replaceVariables(String expression) throws EvaluationException {
         int dollar = expression.indexOf('$');
         while (dollar >= 0) {
             int last = dollar;
@@ -425,26 +421,26 @@ public class Evaluator {
                     break;
                 }
             }
-            if (dollar != last) {
+            if (dollar == last) {
+                throw new EvaluationException(String.format(I18n.Text("Invalid variable at index %d"), Integer.valueOf(dollar)));
+            } else {
                 String name  = expression.substring(dollar + 1, last + 1);
                 String value = null;
                 if (mVariableResolver != null) {
                     value = mVariableResolver.resolveVariable(name);
                 }
-                if (value == null || value.trim().length() == 0) {
+                if (value == null || value.trim().isEmpty()) {
                     throw new EvaluationException(String.format(I18n.Text("Unable to resolve variable $%s"), name));
                 }
                 StringBuilder buffer = new StringBuilder();
                 if (dollar > 0) {
-                    buffer.append(expression.substring(0, dollar));
+                    buffer.append(expression, 0, dollar);
                 }
                 buffer.append(value);
                 if (last + 1 < max) {
                     buffer.append(expression.substring(last + 1));
                 }
                 expression = buffer.toString();
-            } else {
-                throw new EvaluationException(String.format(I18n.Text("Invalid variable at index %d"), Integer.valueOf(dollar)));
             }
             dollar = expression.indexOf('$');
         }

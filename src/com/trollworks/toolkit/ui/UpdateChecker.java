@@ -26,21 +26,21 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
-
 import javax.swing.JOptionPane;
 
 /** Provides a background check for updates. */
 public class UpdateChecker implements Runnable {
-    private static final String MODULE                = "Updates";
-    private static final String LAST_VERSION_KEY      = "LastVersion";
-    private static boolean      NEW_VERSION_AVAILABLE = false;
-    private static String       RESULT;
-    private static String       UPDATE_URL;
-    private String              mProductKey;
-    private String              mCheckURL;
-    private int                 mMode;
+    private static final String  MODULE           = "Updates";
+    private static final String  LAST_VERSION_KEY = "LastVersion";
+    private static       boolean NEW_VERSION_AVAILABLE;
+    private static       String  RESULT;
+    private static       String  UPDATE_URL;
+    private              String  mProductKey;
+    private              String  mCheckURL;
+    private              int     mMode;
 
     /**
      * Initiates a check for updates.
@@ -51,36 +51,48 @@ public class UpdateChecker implements Runnable {
      */
     public static void check(String productKey, String checkURL, String updateURL) {
         Thread thread = new Thread(new UpdateChecker(productKey, checkURL), UpdateChecker.class.getSimpleName());
-        UPDATE_URL = updateURL;
+        synchronized (UpdateChecker.class) {
+            UPDATE_URL = updateURL;
+        }
         thread.setPriority(Thread.NORM_PRIORITY);
         thread.setDaemon(true);
         thread.start();
     }
 
     /** @return Whether a new version is available. */
-    public static boolean isNewVersionAvailable() {
+    public static synchronized boolean isNewVersionAvailable() {
         return NEW_VERSION_AVAILABLE;
     }
 
     /** @return The result. */
-    public static String getResult() {
+    public static synchronized String getResult() {
         return RESULT;
+    }
+
+    private static synchronized void setResult(String result) {
+        RESULT = result;
     }
 
     /** Go to the update location on the web, if a new version is available. */
     public static void goToUpdate() {
-        if (NEW_VERSION_AVAILABLE && Desktop.isDesktopSupported()) {
-            try {
-                Desktop.getDesktop().browse(new URI(UPDATE_URL));
-            } catch (Exception exception) {
-                WindowUtils.showError(null, exception.getMessage());
+        if (isNewVersionAvailable() && Desktop.isDesktopSupported()) {
+            String updateURL;
+            synchronized (UpdateChecker.class) {
+                updateURL = UPDATE_URL;
+            }
+            if (updateURL != null) {
+                try {
+                    Desktop.getDesktop().browse(new URI(updateURL));
+                } catch (Exception exception) {
+                    WindowUtils.showError(null, exception.getMessage());
+                }
             }
         }
     }
 
     private UpdateChecker(String productKey, String checkURL) {
         mProductKey = productKey;
-        mCheckURL   = checkURL;
+        mCheckURL = checkURL;
     }
 
     @Override
@@ -89,11 +101,11 @@ public class UpdateChecker implements Runnable {
             long currentVersion = BundleInfo.getDefault().getVersion();
             if (currentVersion == 0) {
                 // Development version. Bail.
-                mMode  = 2;
-                RESULT = I18n.Text("You have the most recent version");
+                mMode = 2;
+                setResult(I18n.Text("You have the most recent version"));
                 return;
             }
-            RESULT = I18n.Text("Checking for updates\u2026");
+            setResult(I18n.Text("Checking for updates\u2026"));
             long versionAvailable = currentVersion;
             mMode = 2;
             try {
@@ -115,49 +127,50 @@ public class UpdateChecker implements Runnable {
                 } catch (Exception exception) {
                     // Ignore. Means the code below is likely to fail, too.
                 }
-                URL            url  = new URL(buffer.toString());
-                BufferedReader in   = new BufferedReader(new InputStreamReader(url.openStream()));
-                String         line = in.readLine();
-                while (line != null) {
-                    StringTokenizer tokenizer = new StringTokenizer(line, "\t");
-                    if (tokenizer.hasMoreTokens()) {
-                        try {
-                            if (tokenizer.nextToken().equalsIgnoreCase(mProductKey)) {
-                                String token   = tokenizer.nextToken();
-                                long   version = Version.extract(token, 0);
-                                if (version > versionAvailable) {
-                                    versionAvailable = version;
+                URL url = new URL(buffer.toString());
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
+                    String line = in.readLine();
+                    while (line != null) {
+                        StringTokenizer tokenizer = new StringTokenizer(line, "\t");
+                        if (tokenizer.hasMoreTokens()) {
+                            try {
+                                if (tokenizer.nextToken().equalsIgnoreCase(mProductKey)) {
+                                    String token   = tokenizer.nextToken();
+                                    long   version = Version.extract(token, 0);
+                                    if (version > versionAvailable) {
+                                        versionAvailable = version;
+                                    }
                                 }
+                            } catch (Exception exception) {
+                                // Don't care
                             }
-                        } catch (Exception exception) {
-                            // Don't care
                         }
+                        line = in.readLine();
                     }
-                    line = in.readLine();
                 }
             } catch (Exception exception) {
                 // Don't care
             }
             if (versionAvailable > currentVersion) {
                 Preferences prefs = Preferences.getInstance();
-                NEW_VERSION_AVAILABLE = true;
-                RESULT                = I18n.Text("A new version is available");
+                synchronized (UpdateChecker.class) {
+                    NEW_VERSION_AVAILABLE = true;
+                }
+                setResult(I18n.Text("A new version is available"));
                 if (versionAvailable > prefs.getLongValue(MODULE, LAST_VERSION_KEY, BundleInfo.getDefault().getVersion())) {
                     prefs.setValue(MODULE, LAST_VERSION_KEY, versionAvailable);
                     prefs.save();
                     mMode = 1;
                     EventQueue.invokeLater(this);
-                    return;
                 }
             } else {
-                RESULT = I18n.Text("You have the most recent version");
+                setResult(I18n.Text("You have the most recent version"));
             }
         } else if (mMode == 1) {
             if (App.isNotificationAllowed()) {
-                String result = getResult();
                 mMode = 2;
                 String update = I18n.Text("Update");
-                if (WindowUtils.showConfirmDialog(null, result, update, JOptionPane.OK_CANCEL_OPTION, new String[] { update, I18n.Text("Ignore") }, update) == JOptionPane.OK_OPTION) {
+                if (WindowUtils.showConfirmDialog(null, getResult(), update, JOptionPane.OK_CANCEL_OPTION, new String[]{update, I18n.Text("Ignore")}, update) == JOptionPane.OK_OPTION) {
                     goToUpdate();
                 }
             } else {

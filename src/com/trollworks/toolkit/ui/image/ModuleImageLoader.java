@@ -11,6 +11,8 @@
 
 package com.trollworks.toolkit.ui.image;
 
+import java.util.Objects;
+
 public class ModuleImageLoader implements ImageLoader {
     private Module mModule;
     private String mPath;
@@ -41,7 +43,7 @@ public class ModuleImageLoader implements ImageLoader {
         }
         if (obj instanceof ModuleImageLoader) {
             ModuleImageLoader o = (ModuleImageLoader) obj;
-            return mPath == o.mPath && mModule == o.mModule;
+            return Objects.equals(mPath, o.mPath) && Objects.equals(mModule, o.mModule);
         }
         return false;
     }

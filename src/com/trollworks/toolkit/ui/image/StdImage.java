@@ -34,7 +34,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
-
+import java.util.Map;
+import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 
@@ -42,15 +43,15 @@ import javax.swing.Icon;
  * Provides a {@link BufferedImage} that implements Swing's {@link Icon} interface for convenience.
  */
 public class StdImage extends BufferedImage implements Icon {
-    private static final String                    COLORIZED_POSTFIX = new String(new char[] { ':', 'C', 22 });
-    private static final String                    FADED_POSTFIX     = new String(new char[] { ':', 'F', 22 });
-    private static final HashSet<ImageLoader>      LOADERS           = new HashSet<>();
-    private static final HashMap<String, StdImage> MAP               = new HashMap<>();
-    private static final HashMap<StdImage, String> REVERSE_MAP       = new HashMap<>();
-    private static final HashSet<String>           FAILED_LOOKUPS    = new HashSet<>();
+    private static final String                COLORIZED_POSTFIX = new String(new char[]{':', 'C', 22});
+    private static final String                FADED_POSTFIX     = new String(new char[]{':', 'F', 22});
+    private static final Set<ImageLoader>      LOADERS           = new HashSet<>();
+    private static final Map<String, StdImage> MAP               = new HashMap<>();
+    private static final Map<StdImage, String> REVERSE_MAP       = new HashMap<>();
+    private static final Set<String>           FAILED_LOOKUPS    = new HashSet<>();
 
     static {
-        StdImage.addLoader(new ModuleImageLoader(StdImage.class.getModule(), "/com/trollworks/toolkit/ui/image/images"));
+        addLoader(new ModuleImageLoader(StdImage.class.getModule(), "/com/trollworks/toolkit/ui/image/images"));
     }
 
     public static final StdImage    ADD                 = get("add");
@@ -122,9 +123,8 @@ public class StdImage extends BufferedImage implements Icon {
 
     /**
      * @param name  The name to search for.
-     * @param cache Whether or not to cache the image. If <code>cache</code> is <code>false</code>,
-     *              then a new copy of the image will be generated, even if it was in the cache
-     *              already.
+     * @param cache Whether or not to cache the image. If {@code cache} is {@code false}, then a new
+     *              copy of the image will be generated, even if it was in the cache already.
      * @return The image for the specified name.
      */
     public static final synchronized StdImage get(String name, boolean cache) {
@@ -204,7 +204,7 @@ public class StdImage extends BufferedImage implements Icon {
         do {
             int prevCurrentWidth  = currentWidth;
             int prevCurrentHeight = currentHeight;
-            currentWidth  = reduce(currentWidth, scaledWidth);
+            currentWidth = reduce(currentWidth, scaledWidth);
             currentHeight = reduce(currentHeight, scaledHeight);
             if (prevCurrentWidth == currentWidth && prevCurrentHeight == currentHeight) {
                 break;
@@ -213,13 +213,13 @@ public class StdImage extends BufferedImage implements Icon {
             if (needFlush) {
                 img.flush();
             }
-            img       = intermediate;
+            img = intermediate;
             needFlush = true;
         } while (currentWidth != scaledWidth || currentHeight != scaledHeight);
         return img;
     }
 
-    private static final int reduce(int current, int desired) {
+    private static int reduce(int current, int desired) {
         if (current > desired) {
             current -= current / 7;
             if (current < desired) {
@@ -229,7 +229,7 @@ public class StdImage extends BufferedImage implements Icon {
         return current;
     }
 
-    private static final StdImage internalScale(StdImage image, int scaledWidth, int scaledHeight) {
+    private static StdImage internalScale(StdImage image, int scaledWidth, int scaledHeight) {
         StdImage   buffer = createTransparent(scaledWidth, scaledHeight);
         Graphics2D gc     = buffer.getGraphics();
         GraphicsUtilities.setMaximumQualityForGraphics(gc);
@@ -254,8 +254,8 @@ public class StdImage extends BufferedImage implements Icon {
      * then a new {@link StdImage} is created with the contents of the image and returned.
      *
      * @param image               The image to work on.
-     * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *                            of creating a 1x1 pixel image.
+     * @param returnNullOnFailure {@code true} to return {@code null} on a failure instead of
+     *                            creating a 1x1 pixel image.
      * @return A buffered image.
      */
     public static final StdImage getToolkitImage(Image image, boolean returnNullOnFailure) {
@@ -325,7 +325,7 @@ public class StdImage extends BufferedImage implements Icon {
         return rotate(image, 270);
     }
 
-    private static final StdImage rotate(StdImage image, int angle) {
+    private static StdImage rotate(StdImage image, int angle) {
         int        width  = image.getWidth();
         int        height = image.getHeight();
         StdImage   buffer = createTransparent(height, width);
@@ -435,7 +435,7 @@ public class StdImage extends BufferedImage implements Icon {
         StdImage img  = null;
         if (name != null) {
             name = name + color + COLORIZED_POSTFIX;
-            img  = get(name);
+            img = get(name);
         }
         if (img == null) {
             img = ColorFilter.createColorizedImage(image, color);
@@ -460,7 +460,7 @@ public class StdImage extends BufferedImage implements Icon {
         StdImage img  = null;
         if (name != null) {
             name = name + percentage + useWhite + FADED_POSTFIX;
-            img  = get(name);
+            img = get(name);
         }
         if (img == null) {
             img = FadeFilter.createFadedImage(image, percentage, useWhite);
@@ -496,8 +496,8 @@ public class StdImage extends BufferedImage implements Icon {
      * Loads an optimized, buffered image from the specified file.
      *
      * @param file                The file to load from.
-     * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *                            of creating a 1x1 pixel image.
+     * @param returnNullOnFailure {@code true} to return {@code null} on a failure instead of
+     *                            creating a 1x1 pixel image.
      * @return The image.
      */
     public static final StdImage loadImage(File file, boolean returnNullOnFailure) {
@@ -522,8 +522,8 @@ public class StdImage extends BufferedImage implements Icon {
      * Loads an optimized, buffered image from the specified URL.
      *
      * @param url                 The URL to load from.
-     * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *                            of creating a 1x1 pixel image.
+     * @param returnNullOnFailure {@code true} to return {@code null} on a failure instead of
+     *                            creating a 1x1 pixel image.
      * @return The image.
      */
     public static final StdImage loadImage(URL url, boolean returnNullOnFailure) {
@@ -550,8 +550,8 @@ public class StdImage extends BufferedImage implements Icon {
      *
      * @param module              The module to load from.
      * @param path                The path within the module to load from.
-     * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *                            of creating a 1x1 pixel image.
+     * @param returnNullOnFailure {@code true} to return {@code null} on a failure instead of
+     *                            creating a 1x1 pixel image.
      * @return The image.
      */
     public static final StdImage loadImage(Module module, String path, boolean returnNullOnFailure) {
@@ -576,8 +576,8 @@ public class StdImage extends BufferedImage implements Icon {
      * Loads an optimized, buffered image from the specified stream.
      *
      * @param in                  The stream to load from.
-     * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *                            of creating a 1x1 pixel image.
+     * @param returnNullOnFailure {@code true} to return {@code null} on a failure instead of
+     *                            creating a 1x1 pixel image.
      * @return The image.
      */
     public static final StdImage loadImage(InputStream in, boolean returnNullOnFailure) {
@@ -602,8 +602,8 @@ public class StdImage extends BufferedImage implements Icon {
      * Loads an optimized, buffered image from the specified byte array.
      *
      * @param data                The byte array to load from.
-     * @param returnNullOnFailure <code>true</code> to return <code>null</code> on a failure instead
-     *                            of creating a 1x1 pixel image.
+     * @param returnNullOnFailure {@code true} to return {@code null} on a failure instead of
+     *                            creating a 1x1 pixel image.
      * @return The image.
      */
     public static final StdImage loadImage(byte[] data, boolean returnNullOnFailure) {
@@ -702,7 +702,8 @@ public class StdImage extends BufferedImage implements Icon {
     }
 
     /**
-     * Clears the image, filling it with black or, if the image isn't opaque, complete transparency.
+     * Clears the image, filling it with black or, if the image isn't opaque, complete
+     * transparency.
      */
     public void clear() {
         fill(new Color(0, getTransparency() != OPAQUE));

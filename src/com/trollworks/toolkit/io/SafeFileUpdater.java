@@ -28,7 +28,7 @@ public class SafeFileUpdater {
     /** Creates a new transaction. */
     public SafeFileUpdater() {
         mStarted = 0;
-        mFiles   = new HashMap<>();
+        mFiles = new HashMap<>();
     }
 
     /**
@@ -52,8 +52,8 @@ public class SafeFileUpdater {
      * Commits the transaction. If a transactional file was removed, the corresponding real file
      * will be removed as well.
      *
-     * @throws IOException if a failure occurs. In this case, no files will be altered, as if
-     *                     <code>abort()</code> had been called instead.
+     * @throws IOException if a failure occurs. In this case, no files will be altered, as if {@code
+     *                     abort()} had been called instead.
      */
     public void commit() throws IOException {
         if (mStarted == 0) {
@@ -61,15 +61,15 @@ public class SafeFileUpdater {
         }
 
         if (--mStarted == 0) {
-            HashMap<File, File> renameMap = new HashMap<>();
-            File                destFile;
-            File                tmpFile;
+            Map<File, File> renameMap = new HashMap<>();
+            File            destFile;
+            File            tmpFile;
 
             // Attempt to swap all the necessary files
             try {
                 for (Map.Entry<File, File> entry1 : mFiles.entrySet()) {
                     destFile = entry1.getKey();
-                    tmpFile  = entry1.getValue();
+                    tmpFile = entry1.getValue();
 
                     if (destFile.exists()) {
                         File tmpRenameFile = File.createTempFile("ren", null, destFile.getParentFile());
@@ -88,7 +88,7 @@ public class SafeFileUpdater {
             } catch (IOException ioe) {
                 for (Map.Entry<File, File> entry2 : renameMap.entrySet()) {
                     destFile = entry2.getKey();
-                    tmpFile  = entry2.getValue();
+                    tmpFile = entry2.getValue();
 
                     destFile.delete();
                     tmpFile.renameTo(destFile);
@@ -109,12 +109,12 @@ public class SafeFileUpdater {
     }
 
     /**
-     * When <code>commit</code> is called, the transactional file obtained from this call will be
-     * swapped with the original.
+     * When {@code commit} is called, the transactional file obtained from this call will be swapped
+     * with the original.
      *
      * @param file The file to be created/modified.
-     * @return A <code>File</code> object that can be written to as if it were the file specified.
-     *         It initially points to an empty, zero-byte file.
+     * @return A {@code File} object that can be written to as if it were the file specified. It
+     *         initially points to an empty, zero-byte file.
      * @throws IOException if the transactional file cannot be created.
      */
     public File getTransactionFile(File file) throws IOException {

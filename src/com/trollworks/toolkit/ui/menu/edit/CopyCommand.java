@@ -17,13 +17,12 @@ import com.trollworks.toolkit.utility.I18n;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
 import javax.swing.text.JTextComponent;
 
 /** Provides the "Copy" command. */
 public class CopyCommand extends Command {
     /** The action command this command will issue. */
-    public static final String      CMD_COPY = "Copy";
+    public static final String CMD_COPY = "Copy";
 
     /** The singleton {@link CopyCommand}. */
     public static final CopyCommand INSTANCE = new CopyCommand();

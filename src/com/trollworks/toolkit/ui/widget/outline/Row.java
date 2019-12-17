@@ -19,10 +19,10 @@ import java.util.List;
 
 /** Represents a single row of data within an {@link OutlineModel}. */
 public abstract class Row {
-    private OutlineModel     mOwner;
-    private int              mHeight;
-    private boolean          mOpen;
-    private Row              mParent;
+    private   OutlineModel   mOwner;
+    private   int            mHeight;
+    private   boolean        mOpen;
+    private   Row            mParent;
     /** The children of this row. */
     protected ArrayList<Row> mChildren;
 
@@ -46,9 +46,9 @@ public abstract class Row {
      * @param snapshot An undo snapshot.
      */
     void applyUndoSnapshot(OutlineModel owner, RowUndoSnapshot snapshot) {
-        mOwner  = owner;
+        mOwner = owner;
         mParent = snapshot.getParent();
-        mOpen   = snapshot.isOpen();
+        mOpen = snapshot.isOpen();
         if (canHaveChildren()) {
             mChildren.clear();
             for (Row child : snapshot.getChildren()) {
@@ -60,13 +60,13 @@ public abstract class Row {
 
     /** @param owner The owning model. */
     void resetOwner(OutlineModel owner) {
-        mOwner  = owner;
+        mOwner = owner;
         mParent = null;
     }
 
     /**
      * @param column The column.
-     * @return The icon for the specified column, or <code>null</code>.
+     * @return The icon for the specified column, or {@code null}.
      */
     @SuppressWarnings("static-method")
     public RetinaIcon getIcon(Column column) {
@@ -163,7 +163,7 @@ public abstract class Row {
     }
 
     /** @return The children of this node. */
-    ArrayList<Row> getChildList() {
+    List<Row> getChildList() {
         return canHaveChildren() ? mChildren : null;
     }
 
@@ -196,7 +196,7 @@ public abstract class Row {
      * @param open Whether this row is open or closed.
      */
     public void setOpen(boolean open) {
-        if (mOpen != open && (!open || open && canHaveChildren())) {
+        if (mOpen != open && (!open || canHaveChildren())) {
             mOpen = open;
             if (mOwner != null) {
                 mOwner.rowOpenStateChanged(this, mOpen);
@@ -206,7 +206,7 @@ public abstract class Row {
 
     /**
      * @param row The child row to determine the index of.
-     * @return The index of the row, or <code>-1</code> if its not an immediate child.
+     * @return The index of the row, or {@code -1} if its not an immediate child.
      */
     public int getIndexOfChild(Row row) {
         if (canHaveChildren()) {
@@ -220,7 +220,7 @@ public abstract class Row {
      *
      * @param index The index to insert at.
      * @param row   The row to add as a child.
-     * @return <code>true</code> if the row was added, <code>false</code> if it was not.
+     * @return {@code true} if the row was added, {@code false} if it was not.
      */
     public boolean insertChild(int index, Row row) {
         if (canHaveChildren()) {
@@ -243,7 +243,7 @@ public abstract class Row {
      * Adds a child row to this row.
      *
      * @param row The row to add as a child.
-     * @return <code>true</code> if the row was added, <code>false</code> if it was not.
+     * @return {@code true} if the row was added, {@code false} if it was not.
      */
     public boolean addChild(Row row) {
         if (canHaveChildren()) {
@@ -259,8 +259,7 @@ public abstract class Row {
      * Removes a child row from this row.
      *
      * @param row The child row to remove.
-     * @return <code>true</code> if the row was removed, <code>false</code> if it wasn't a child of
-     *         this row.
+     * @return {@code true} if the row was removed, {@code false} if it wasn't a child of this row.
      */
     public boolean removeChild(Row row) {
         if (row.isChildOf(this)) {
@@ -273,7 +272,7 @@ public abstract class Row {
 
     /**
      * @param parent The parent row.
-     * @return <code>true</code> if this row is a child of the specified row.
+     * @return {@code true} if this row is a child of the specified row.
      */
     public boolean isChildOf(Row parent) {
         return mParent == parent;
@@ -281,7 +280,7 @@ public abstract class Row {
 
     /**
      * @param row The descendant row.
-     * @return <code>true</code> if this row is a descendant of the specified row.
+     * @return {@code true} if this row is a descendant of the specified row.
      */
     public boolean isDescendantOf(Row row) {
         Row parent = mParent;
@@ -329,8 +328,8 @@ public abstract class Row {
         return depth;
     }
 
-    /** @return The string to display as tooltip. Defaults to <code>null</code>. */
-    @SuppressWarnings({ "static-method", "unused" })
+    /** @return The string to display as tooltip. Defaults to {@code null}. */
+    @SuppressWarnings({"static-method", "unused"})
     public String getToolTip(Column column) {
         return null;
     }

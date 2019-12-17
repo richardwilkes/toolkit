@@ -25,16 +25,15 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.StringTokenizer;
-
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 /** Represents text cells in an {@link Outline}. */
 public class TextCell implements Cell {
     /** The standard horizontal margin. */
-    public static final int H_MARGIN = 2;
-    private int             mHAlignment;
-    private boolean         mWrapped;
+    public static final int     H_MARGIN = 2;
+    private             int     mHAlignment;
+    private             boolean mWrapped;
 
     /** Create a new text cell. */
     public TextCell() {
@@ -54,11 +53,11 @@ public class TextCell implements Cell {
      * Create a new text cell.
      *
      * @param hAlignment The horizontal text alignment to use.
-     * @param wrapped    Pass in <code>true</code> to enable wrapping.
+     * @param wrapped    Pass in {@code true} to enable wrapping.
      */
     public TextCell(int hAlignment, boolean wrapped) {
         mHAlignment = hAlignment;
-        mWrapped    = wrapped;
+        mWrapped = wrapped;
     }
 
     @SuppressWarnings("unchecked")
@@ -108,7 +107,7 @@ public class TextCell implements Cell {
             height = adjustHeight(scale, Icons.getDisclosure(true, true), height);
             height = adjustHeight(scale, row.getIcon(column), height);
         }
-        return minHeight > height ? minHeight : height;
+        return Math.max(minHeight, height);
     }
 
     private static int adjustHeight(Scale scale, RetinaIcon icon, int height) {
@@ -159,7 +158,7 @@ public class TextCell implements Cell {
         gc.setFont(font);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            if (token.equals("\n")) {
+            if ("\n".equals(token)) {
                 lineCount++;
             } else {
                 String text = TextDrawing.truncateIfNecessary(font, token, cellWidth, getTruncationPolicy());
@@ -219,7 +218,7 @@ public class TextCell implements Cell {
     /**
      * @param row    The row.
      * @param column The column.
-     * @param nullOK <code>true</code> if <code>null</code> may be returned.
+     * @param nullOK {@code true} if {@code null} may be returned.
      * @return The data of this cell as a string.
      */
     @SuppressWarnings("static-method")

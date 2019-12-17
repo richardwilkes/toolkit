@@ -12,7 +12,6 @@
 package com.trollworks.toolkit.utility.text;
 
 import java.text.ParseException;
-
 import javax.swing.JFormattedTextField;
 
 /** Provides integer field conversion. */
@@ -29,8 +28,8 @@ public class DoubleFormatter extends JFormattedTextField.AbstractFormatter {
      * @param forceSign Whether or not a plus sign should be forced for positive numbers.
      */
     public DoubleFormatter(double minValue, double maxValue, boolean forceSign) {
-        mMinValue  = minValue;
-        mMaxValue  = maxValue;
+        mMinValue = minValue;
+        mMaxValue = maxValue;
         mForceSign = forceSign;
     }
 

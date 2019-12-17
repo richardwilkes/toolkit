@@ -120,7 +120,7 @@ public class Version {
         return buffer.toString();
     }
 
-    private static final void pad2(int value, StringBuilder buffer) {
+    private static void pad2(int value, StringBuilder buffer) {
         if (value < 10) {
             buffer.append('0');
         }
@@ -163,11 +163,11 @@ public class Version {
                 int minute;
                 int second;
                 if (parts[1].length() > 4) {
-                    hour   = (int) (c2p2 / 10000);
+                    hour = (int) (c2p2 / 10000);
                     minute = (int) ((c2p2 - hour * 10000) / 100);
                     second = (int) (c2p2 - (hour * 10000 + minute * 100));
                 } else {
-                    hour   = (int) (c2p2 / 100);
+                    hour = (int) (c2p2 / 100);
                     minute = (int) (c2p2 - hour * 100);
                     second = 0;
                 }
@@ -189,11 +189,11 @@ public class Version {
                 // Assume it is a qualifier in the form of YYYY-MM-DD-HHMMSS, or YYYY-MM-DD-HHMM
                 // since the first value is too large to fit into the major portion
                 if (parts[3].length() > 4) {
-                    hour   = (int) (c4p4 / 10000);
+                    hour = (int) (c4p4 / 10000);
                     minute = (int) ((c4p4 - hour * 10000) / 100);
                     second = (int) (c4p4 - (hour * 10000 + minute * 100));
                 } else {
-                    hour   = (int) (c4p4 / 100);
+                    hour = (int) (c4p4 / 100);
                     minute = (int) (c4p4 - hour * 100);
                     second = 0;
                 }
@@ -204,26 +204,26 @@ public class Version {
             int month;
             int day;
             if (parts[3].length() > 12) {
-                year    = (int) (c4p4 / 10000000000L);
-                c4p4   -= year * 10000000000L;
-                month   = (int) (c4p4 / 100000000L);
-                second  = (int) (c4p4 - month * 100000000L);
-                day     = second / 1000000;
+                year = (int) (c4p4 / 10000000000L);
+                c4p4 -= year * 10000000000L;
+                month = (int) (c4p4 / 100000000L);
+                second = (int) (c4p4 - month * 100000000L);
+                day = second / 1000000;
                 second -= day * 1000000;
-                hour    = second / 10000;
+                hour = second / 10000;
                 second -= hour * 10000;
-                minute  = second / 100;
+                minute = second / 100;
                 second -= minute * 100;
             } else {
-                year    = (int) (c4p4 / 100000000L);
-                c4p4   -= year * 100000000L;
-                month   = (int) (c4p4 / 1000000L);
-                minute  = (int) (c4p4 - month * 1000000L);
-                day     = minute / 10000;
+                year = (int) (c4p4 / 100000000L);
+                c4p4 -= year * 100000000L;
+                month = (int) (c4p4 / 1000000L);
+                minute = (int) (c4p4 - month * 1000000L);
+                day = minute / 10000;
                 minute -= day * 10000;
-                hour    = minute / 100;
+                hour = minute / 100;
                 minute -= hour * 100;
-                second  = 0;
+                second = 0;
             }
             return toVersion(check((int) c4p1, MAJOR_BITS), check((int) c4p2, MINOR_BITS), check((int) c4p3, BUGFIX_BITS), check(year, QUALIFIER_YEAR_BITS), check(month, QUALIFIER_MONTH_BITS), check(day, QUALIFIER_DAY_BITS), check(hour, QUALIFIER_HOUR_BITS), check(minute, QUALIFIER_MINUTE_BITS), check(second, QUALIFIER_SECOND_BITS));
         default:

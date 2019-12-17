@@ -22,8 +22,8 @@ import java.util.Random;
  */
 public class UniqueID {
     private static final Random RANDOM = new Random();
-    private long                mTimeStamp;
-    private final long          mSubID;
+    private              long   mTimeStamp;
+    private final        long   mSubID;
 
     /** Creates a unique ID. */
     public UniqueID() {
@@ -33,18 +33,18 @@ public class UniqueID {
     /**
      * Creates a unique ID.
      *
-     * @param uniqueID An ID obtained by called {@link #toString()} on a previous instance of
-     *                 {@link UniqueID}.
+     * @param uniqueID An ID obtained by called {@link #toString()} on a previous instance of {@link
+     *                 UniqueID}.
      */
     public UniqueID(String uniqueID) {
         long id;
         try {
             int colon = uniqueID.indexOf(':');
             mTimeStamp = Long.parseLong(uniqueID.substring(0, colon), Character.MAX_RADIX);
-            id         = Long.parseLong(uniqueID.substring(colon + 1), Character.MAX_RADIX);
+            id = Long.parseLong(uniqueID.substring(colon + 1), Character.MAX_RADIX);
         } catch (Exception exception) {
             mTimeStamp = System.currentTimeMillis();
-            id         = RANDOM.nextLong();
+            id = RANDOM.nextLong();
         }
         mSubID = id;
     }
@@ -52,14 +52,14 @@ public class UniqueID {
     /**
      * Creates a unique ID.
      *
-     * @param timeStamp The time stamp for this unique ID. Typically, the result of a call to
-     *                  {@link System#currentTimeMillis()}.
-     * @param subID     The sub-ID for this unique ID. Typically, the result of a call to
-     *                  {@link Random#nextLong()}.
+     * @param timeStamp The time stamp for this unique ID. Typically, the result of a call to {@link
+     *                  System#currentTimeMillis()}.
+     * @param subID     The sub-ID for this unique ID. Typically, the result of a call to {@link
+     *                  Random#nextLong()}.
      */
     public UniqueID(long timeStamp, long subID) {
         mTimeStamp = timeStamp;
-        mSubID     = subID;
+        mSubID = subID;
     }
 
     @Override
@@ -76,8 +76,8 @@ public class UniqueID {
 
     /**
      * @param obj The object to check.
-     * @return <code>true</code> if the passed-in object is also a {@link UniqueID} and their
-     *         sub-ID's match.
+     * @return {@code true} if the passed-in object is also a {@link UniqueID} and their sub-ID's
+     *         match.
      */
     public final boolean subIDEquals(Object obj) {
         if (obj == this) {
@@ -92,7 +92,7 @@ public class UniqueID {
 
     /**
      * @param obj The object to check.
-     * @return <code>true</code> if the passed-in object is also a {@link UniqueID}, their sub-ID's
+     * @return {@code true} if the passed-in object is also a {@link UniqueID}, their sub-ID's
      *         match, and the passed-in object's time stamp is newer.
      */
     public final boolean subIDEqualsAndNewer(Object obj) {

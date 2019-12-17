@@ -24,18 +24,17 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.util.Comparator;
-
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 /** The abstract base class for columns within a {@link TreeRoot}. */
 public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
     /** The data flavor for this class. */
-    public static final DataFlavor DATA_FLAVOR       = new DataFlavor(TreeColumn.class, "Tree Column");
-    private static final int       SORTER_WIDTH      = 12;
-    private static final int       HALF_SORTER_WIDTH = SORTER_WIDTH / 2;
-    private String                 mName;
-    private int                    mWidth;
+    public static final  DataFlavor DATA_FLAVOR       = new DataFlavor(TreeColumn.class, "Tree Column");
+    private static final int        SORTER_WIDTH      = 12;
+    private static final int        HALF_SORTER_WIDTH = SORTER_WIDTH / 2;
+    private              String     mName;
+    private              int        mWidth;
 
     /**
      * Creates a new {@link TreeColumn}.
@@ -244,7 +243,7 @@ public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
      *
      * @param row   The {@link TreeRow} at the mouse press location.
      * @param where The mouse press location.
-     * @return <code>true</code> if the mouse press has been handled.
+     * @return {@code true} if the mouse press has been handled.
      */
     @SuppressWarnings("static-method")
     public boolean mousePress(TreeRow row, Point where) {
@@ -265,7 +264,7 @@ public abstract class TreeColumn implements Comparator<TreeRow>, Transferable {
 
     @Override
     public DataFlavor[] getTransferDataFlavors() {
-        return new DataFlavor[] { DATA_FLAVOR };
+        return new DataFlavor[]{DATA_FLAVOR};
     }
 
     @Override

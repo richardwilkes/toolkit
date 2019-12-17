@@ -18,11 +18,11 @@ import java.io.IOException;
 /** The message sent between between processes using a conduit. */
 public class ConduitMessage implements Runnable {
     // No repeating characters allowed!
-    private static final byte[] ID = { '#', 'W', 'i', 'l', 'k', 'e', 's', '!' };
-    private String              mUser;
-    private String              mID;
-    private String              mMessage;
-    private ConduitReceiver     mReceiver;
+    private static final byte[]          ID = {'#', 'W', 'i', 'l', 'k', 'e', 's', '!'};
+    private              String          mUser;
+    private              String          mID;
+    private              String          mMessage;
+    private              ConduitReceiver mReceiver;
 
     /**
      * Creates a new conduit message.
@@ -31,8 +31,8 @@ public class ConduitMessage implements Runnable {
      * @param message The message.
      */
     public ConduitMessage(String id, String message) {
-        mUser    = System.getProperty("user.name");
-        mID      = id;
+        mUser = System.getProperty("user.name");
+        mID = id;
         mMessage = message;
     }
 
@@ -43,8 +43,9 @@ public class ConduitMessage implements Runnable {
      * @throws IOException if the underlying data stream throws an exception.
      */
     public ConduitMessage(DataInputStream stream) throws IOException {
-        int i = 0;
-        while (i < ID.length) {
+        int i      = 0;
+        int length = ID.length;
+        while (i < length) {
             byte value = stream.readByte();
             if (value == ID[i]) {
                 i++;
@@ -54,8 +55,8 @@ public class ConduitMessage implements Runnable {
                 i = 0;
             }
         }
-        mUser    = stream.readUTF();
-        mID      = stream.readUTF();
+        mUser = stream.readUTF();
+        mID = stream.readUTF();
         mMessage = stream.readUTF();
     }
 

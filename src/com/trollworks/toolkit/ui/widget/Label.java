@@ -22,20 +22,20 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
+import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 
 /** A simple label replacement that is scalable. */
 public class Label extends JComponent implements PropertyChangeListener {
     /** The property key that is monitored for error messages. */
-    public static final String ERROR_MESSAGE_KEY    = "Error Message";
-    private String             mText                = "";
-    private int                mHorizontalAlignment = SwingConstants.LEFT;
-    private int                mVerticalAlignment   = SwingConstants.CENTER;
-    private JComponent         mRefersTo;
-    private Color              mColor               = Color.BLACK;
-    private boolean            mUsePreferredSizeOnly;
+    public static final String     ERROR_MESSAGE_KEY    = "Error Message";
+    private             String     mText                = "";
+    private             int        mHorizontalAlignment = SwingConstants.LEFT;
+    private             int        mVerticalAlignment   = SwingConstants.CENTER;
+    private             JComponent mRefersTo;
+    private             Color      mColor               = Color.BLACK;
+    private             boolean    mUsePreferredSizeOnly;
 
     /** Create a new, empty label. */
     public Label() {
@@ -45,8 +45,8 @@ public class Label extends JComponent implements PropertyChangeListener {
     /**
      * Create a new label.
      *
-     * @param usePreferredSizeOnly <code>true</code> if only the preferred size is to be reported
-     *                             for min/max.
+     * @param usePreferredSizeOnly {@code true} if only the preferred size is to be reported for
+     *                             min/max.
      */
     public Label(boolean usePreferredSizeOnly) {
         this();
@@ -78,8 +78,8 @@ public class Label extends JComponent implements PropertyChangeListener {
      * Create a new label.
      *
      * @param text                 The text to use.
-     * @param usePreferredSizeOnly <code>true</code> if only the preferred size is to be reported
-     *                             for min/max.
+     * @param usePreferredSizeOnly {@code true} if only the preferred size is to be reported for
+     *                             min/max.
      */
     public Label(String text, boolean usePreferredSizeOnly) {
         this(text);
@@ -91,8 +91,8 @@ public class Label extends JComponent implements PropertyChangeListener {
      *
      * @param text                 The text to use.
      * @param horizontalAlignment  The horizontal alignment to use.
-     * @param usePreferredSizeOnly <code>true</code> if only the preferred size is to be reported
-     *                             for min/max.
+     * @param usePreferredSizeOnly {@code true} if only the preferred size is to be reported for
+     *                             min/max.
      */
     public Label(String text, int horizontalAlignment, boolean usePreferredSizeOnly) {
         this(text, usePreferredSizeOnly);
@@ -163,7 +163,7 @@ public class Label extends JComponent implements PropertyChangeListener {
         }
         Insets    insets = getInsets();
         Dimension size   = TextDrawing.getPreferredSize(Scale.get(this).scale(getFont()), mText);
-        size.width  += insets.left + insets.right;
+        size.width += insets.left + insets.right;
         size.height += insets.top + insets.bottom;
         return size;
     }
@@ -209,13 +209,13 @@ public class Label extends JComponent implements PropertyChangeListener {
             tooltip = (String) mRefersTo.getClientProperty(ERROR_MESSAGE_KEY);
             if (tooltip == null) {
                 tooltip = mRefersTo.getToolTipText();
-                color   = mColor;
+                color = mColor;
             } else {
                 color = Color.RED;
             }
         } else {
             tooltip = null;
-            color   = mColor;
+            color = mColor;
         }
         setToolTipText(Text.wrapPlainTextForToolTip(tooltip));
         super.setForeground(color);
@@ -233,11 +233,10 @@ public class Label extends JComponent implements PropertyChangeListener {
      * Sets/clears the error message that a {@link Label} will respond to.
      *
      * @param comp The {@link JComponent} to set the message on.
-     * @param msg  The error message or <code>null</code>.
+     * @param msg  The error message or {@code null}.
      */
     public static void setErrorMessage(JComponent comp, String msg) {
-        Object old = comp.getClientProperty(ERROR_MESSAGE_KEY);
-        if (old == null ? msg != null : !old.equals(msg)) {
+        if (!Objects.equals(comp.getClientProperty(ERROR_MESSAGE_KEY), msg)) {
             comp.putClientProperty(ERROR_MESSAGE_KEY, msg);
         }
     }

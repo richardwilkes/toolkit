@@ -32,7 +32,6 @@ import java.awt.dnd.DragGestureEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.event.ChangeEvent;
@@ -41,23 +40,23 @@ import javax.swing.event.ChangeListener;
 /** Provides a panel that manages scrolling internally to itself. */
 public abstract class DirectScrollPanel extends JPanel implements Autoscroll, LayoutManager, ChangeListener, MouseWheelListener {
     /** The autoscroll margin. */
-    public static final int       AUTO_SCROLL_MARGIN = 10;
-    private JScrollBar            mHSB               = new JScrollBar(Adjustable.HORIZONTAL);
-    private JScrollBar            mVSB               = new JScrollBar(Adjustable.VERTICAL);
-    private int                   mHSBHeight         = mHSB.getPreferredSize().height;
-    private int                   mVSBWidth          = mVSB.getPreferredSize().width;
-    private Dimension             mHeaderSize        = new Dimension();
-    private Dimension             mContentSize       = new Dimension();
-    private Rectangle             mHeaderBounds      = new Rectangle();
-    private Rectangle             mContentBounds     = new Rectangle();
-    private DirectScrollPanelArea mLastAreaClicked;
-    private Rectangle             mDragClip;
-    private Component             mHSBLeftCorner;
-    private Component             mHSBRightCorner;
-    private Component             mVSBTopCorner;
-    private Component             mVSBBottomCorner;
-    private boolean               mDrawingDragImage;
-    private boolean               mInAutoscroll;
+    public static final int                   AUTO_SCROLL_MARGIN = 10;
+    private             JScrollBar            mHSB               = new JScrollBar(Adjustable.HORIZONTAL);
+    private             JScrollBar            mVSB               = new JScrollBar(Adjustable.VERTICAL);
+    private             int                   mHSBHeight         = mHSB.getPreferredSize().height;
+    private             int                   mVSBWidth          = mVSB.getPreferredSize().width;
+    private             Dimension             mHeaderSize        = new Dimension();
+    private             Dimension             mContentSize       = new Dimension();
+    private             Rectangle             mHeaderBounds      = new Rectangle();
+    private             Rectangle             mContentBounds     = new Rectangle();
+    private             DirectScrollPanelArea mLastAreaClicked;
+    private             Rectangle             mDragClip;
+    private             Component             mHSBLeftCorner;
+    private             Component             mHSBRightCorner;
+    private             Component             mVSBTopCorner;
+    private             Component             mVSBBottomCorner;
+    private             boolean               mDrawingDragImage;
+    private             boolean               mInAutoscroll;
 
     /** Creates a new {@link DirectScrollPanel}. */
     public DirectScrollPanel() {
@@ -355,7 +354,7 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
             if (tl.x < mContentBounds.x) {
                 xadj = tl.x - mContentBounds.x;
             } else if (right > contentRight) {
-                xadj  = right - contentRight;
+                xadj = right - contentRight;
                 tl.x -= xadj;
                 if (tl.x < mContentBounds.x) {
                     xadj += tl.x - mContentBounds.x;
@@ -368,7 +367,7 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
             if (tl.y < mContentBounds.y) {
                 yadj = tl.y - mContentBounds.y;
             } else if (bottom > contentBottom) {
-                yadj  = bottom - contentBottom;
+                yadj = bottom - contentBottom;
                 tl.y -= yadj;
                 if (tl.y < mContentBounds.y) {
                     yadj += tl.y - mContentBounds.y;
@@ -439,13 +438,13 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
                 }
             }
         }
-        mHeaderBounds.x       = insets.left;
-        mHeaderBounds.y       = insets.top;
-        mHeaderBounds.width   = Math.max(width, 0);
-        mHeaderBounds.height  = headerSize.height;
-        mContentBounds.x      = insets.left;
-        mContentBounds.y      = mHeaderBounds.y + mHeaderBounds.height;
-        mContentBounds.width  = mHeaderBounds.width;
+        mHeaderBounds.x = insets.left;
+        mHeaderBounds.y = insets.top;
+        mHeaderBounds.width = Math.max(width, 0);
+        mHeaderBounds.height = headerSize.height;
+        mContentBounds.x = insets.left;
+        mContentBounds.y = mHeaderBounds.y + mHeaderBounds.height;
+        mContentBounds.width = mHeaderBounds.width;
         mContentBounds.height = Math.max(height, 0);
         mHSB.setVisible(needHSB);
         if (needHSB) {
@@ -613,9 +612,9 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
     /**
      * Call to determine where the {@link Point} is.
      *
-     * @param where The {@link Point} to check. If this method returns anything other than
-     *              {@link DirectScrollPanelArea#NONE}, the passed-in {@link Point} will have its
-     *              position adjusted for the area.
+     * @param where The {@link Point} to check. If this method returns anything other than {@link
+     *              DirectScrollPanelArea#NONE}, the passed-in {@link Point} will have its position
+     *              adjusted for the area.
      * @return The {@link DirectScrollPanelArea} the {@link Point} occurred within.
      */
     public DirectScrollPanelArea checkAndConvertToArea(Point where) {
@@ -623,11 +622,7 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
         if (mContentBounds.contains(where)) {
             area = DirectScrollPanelArea.CONTENT;
         } else {
-            if (mHeaderBounds.contains(where)) {
-                area = DirectScrollPanelArea.HEADER;
-            } else {
-                area = DirectScrollPanelArea.NONE;
-            }
+            area = mHeaderBounds.contains(where) ? DirectScrollPanelArea.HEADER : DirectScrollPanelArea.NONE;
         }
         area.convertPoint(this, where);
         return area;
@@ -691,17 +686,17 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
     /**
      * @return A {@link StdImage} containing the currently visible header and contents (no scroll
      *         bars). If something goes wrong (unable to allocate an offscreen buffer, for
-     *         instance), then <code>null</code> may be returned.
+     *         instance), then {@code null} may be returned.
      */
     public StdImage createImage() {
-        StdImage offscreen = null;
+        int        width     = mHeaderBounds.width;
+        int        height    = mHeaderBounds.height + mContentBounds.height;
+        StdImage   offscreen = null;
+        Graphics2D g2d       = null;
         synchronized (getTreeLock()) {
-            Graphics2D g2d = null;
             try {
-                int width  = mHeaderBounds.width;
-                int height = mHeaderBounds.height + mContentBounds.height;
                 offscreen = StdImage.createTransparent(getGraphicsConfiguration(), width, height);
-                g2d       = offscreen.getGraphics();
+                g2d = offscreen.getGraphics();
                 Color saved = g2d.getBackground();
                 g2d.setBackground(new Color(0, true));
                 g2d.clearRect(0, 0, width, height);
@@ -727,12 +722,12 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
         return mDrawingDragImage;
     }
 
-    /** @return The current drag clip area. May be <code>null</code>. */
+    /** @return The current drag clip area. May be {@code null}. */
     protected Rectangle getDragClip() {
         return mDragClip;
     }
 
-    /** @param bounds The current drag clip area. May be <code>null</code>. */
+    /** @param bounds The current drag clip area. May be {@code null}. */
     protected void setDragClip(Rectangle bounds) {
         mDragClip = bounds != null ? new Rectangle(bounds) : null;
     }
@@ -743,15 +738,14 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
     }
 
     /**
-     * @param dragOrigin The drag origin point, as returned by
-     *                   {@link DragGestureEvent#getDragOrigin()}.
+     * @param dragOrigin The drag origin point, as returned by {@link DragGestureEvent#getDragOrigin()}.
      * @return The drag image.
      */
     public StdImage createDragImage(Point dragOrigin) {
-        Graphics2D gc   = null;
-        StdImage   off2 = null;
+        Graphics2D gc = null;
+        StdImage   off2;
         mDrawingDragImage = true;
-        mDragClip         = null;
+        mDragClip = null;
         StdImage off1 = createImage();
         mDrawingDragImage = false;
         if (mDragClip == null) {
@@ -759,7 +753,7 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
         }
         try {
             off2 = StdImage.createTransparent(getGraphicsConfiguration(), mDragClip.width, mDragClip.height);
-            gc   = off2.getGraphics();
+            gc = off2.getGraphics();
             gc.setClip(new Rectangle(0, 0, mDragClip.width, mDragClip.height));
             gc.setBackground(new Color(0, true));
             gc.clearRect(0, 0, mDragClip.width, mDragClip.height);
@@ -767,7 +761,7 @@ public abstract class DirectScrollPanel extends JPanel implements Autoscroll, La
             Point pt = toContentView(new Point(mHeaderBounds.x, mHeaderBounds.y));
             gc.drawImage(off1, -(mDragClip.x - pt.x), -(mDragClip.y - pt.y), this);
         } catch (Exception paintException) {
-            off2      = null;
+            off2 = null;
             mDragClip = new Rectangle(dragOrigin.x, dragOrigin.y, 1, 1);
             Log.error(paintException);
         } finally {

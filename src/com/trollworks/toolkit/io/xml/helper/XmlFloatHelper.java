@@ -16,13 +16,13 @@ import com.trollworks.toolkit.io.xml.XmlGenerator;
 import com.trollworks.toolkit.io.xml.XmlParserContext;
 
 import java.lang.reflect.Field;
-
 import javax.xml.stream.XMLStreamException;
 
 public class XmlFloatHelper implements XmlObjectHelper {
     public static final XmlFloatHelper SINGLETON = new XmlFloatHelper();
 
-    private XmlFloatHelper() {}
+    private XmlFloatHelper() {
+    }
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {

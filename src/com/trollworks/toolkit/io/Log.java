@@ -21,7 +21,7 @@ import java.util.Date;
 public class Log {
     private static final String           SEPARATOR = " | ";
     private static final SimpleDateFormat FORMAT    = new SimpleDateFormat("yyyy.MM.dd" + SEPARATOR + "HH:mm:ss.SSS");
-    private static PrintStream            OUT;
+    private static       PrintStream      OUT;
 
     static {
         OUT = System.out;
@@ -46,9 +46,9 @@ public class Log {
 
     /**
      * @param stream The {@link PrintStream} to write the log data to. By default, logging is sent
-     *               to {@link System#out}. Note that when {@link Debug#DEV_MODE} is
-     *               <code>true</code>, calling this method has no effect and logging is always
-     *               performed to {@link System#out}.
+     *               to {@link System#out}. Note that when {@link Debug#DEV_MODE} is {@code true},
+     *               calling this method has no effect and logging is always performed to {@link
+     *               System#out}.
      */
     public static final void setPrintStream(PrintStream stream) {
         if (!Debug.DEV_MODE) {
@@ -239,7 +239,7 @@ public class Log {
         post('I', context, msg, throwable);
     }
 
-    private static final void post(char levelCode, Context context, String msg, Throwable throwable) {
+    private static void post(char levelCode, Context context, String msg, Throwable throwable) {
         StringBuilder buffer = new StringBuilder();
         buffer.append(levelCode);
         buffer.append(SEPARATOR);

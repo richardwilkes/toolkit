@@ -18,10 +18,9 @@ import com.trollworks.toolkit.ui.menu.StdMenuBar;
 import com.trollworks.toolkit.ui.widget.AppWindow;
 import com.trollworks.toolkit.utility.I18n;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 
@@ -31,7 +30,7 @@ public class WindowMenuProvider implements MenuProvider {
 
     /** Updates the available menu items. */
     public static void update() {
-        ArrayList<AppWindow> windows = AppWindow.getAllWindows();
+        List<AppWindow> windows = AppWindow.getAllAppWindows();
         Collections.sort(windows);
         for (AppWindow window : windows) {
             JMenu windowMenu = StdMenuBar.findMenuByName(window.getJMenuBar(), NAME);

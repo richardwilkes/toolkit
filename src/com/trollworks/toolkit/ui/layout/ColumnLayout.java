@@ -35,13 +35,13 @@ import java.awt.LayoutManager2;
  */
 public class ColumnLayout implements LayoutManager2 {
     /** The default horizontal gap size. */
-    public static final int DEFAULT_H_GAP_SIZE = 5;
+    public static final int             DEFAULT_H_GAP_SIZE = 5;
     /** The default vertical gap size. */
-    public static final int DEFAULT_V_GAP_SIZE = 2;
-    private int             mColumns;
-    private int             mHGap;
-    private int             mVGap;
-    private RowDistribution mDistribution;
+    public static final int             DEFAULT_V_GAP_SIZE = 2;
+    private             int             mColumns;
+    private             int             mHGap;
+    private             int             mVGap;
+    private             RowDistribution mDistribution;
 
     /** Creates a new layout with a single column. */
     public ColumnLayout() {
@@ -91,9 +91,9 @@ public class ColumnLayout implements LayoutManager2 {
             throw new IllegalArgumentException("columns must be greater than zero");
         }
 
-        mColumns      = columns;
-        mHGap         = hgap;
-        mVGap         = vgap;
+        mColumns = columns;
+        mHGap = hgap;
+        mVGap = vgap;
         mDistribution = distribution;
     }
 
@@ -171,10 +171,10 @@ public class ColumnLayout implements LayoutManager2 {
             int         participants;
 
             for (i = 0; i < compCount; i++) {
-                comp         = parent.getComponent(i);
+                comp = parent.getComponent(i);
                 prefSizes[i] = comp.getPreferredSize();
-                maxSizes[i]  = comp.getMaximumSize();
-                minSizes[i]  = comp.getMinimumSize();
+                maxSizes[i] = comp.getMaximumSize();
+                minSizes[i] = comp.getMinimumSize();
             }
 
             for (i = 0; i < compCount; i += mColumns) {
@@ -211,10 +211,10 @@ public class ColumnLayout implements LayoutManager2 {
                         if (widths[i] < maxWidths[i]) {
                             if (widths[i] + portion <= maxWidths[i]) {
                                 widths[i] += portion;
-                                width     -= portion;
+                                width -= portion;
                             } else {
-                                width     -= maxWidths[i] - widths[i];
-                                widths[i]  = maxWidths[i];
+                                width -= maxWidths[i] - widths[i];
+                                widths[i] = maxWidths[i];
                             }
                         }
                         if (widths[i] < maxWidths[i]) {
@@ -236,10 +236,10 @@ public class ColumnLayout implements LayoutManager2 {
                         if (widths[i] > minWidths[i]) {
                             if (widths[i] - portion >= minWidths[i]) {
                                 widths[i] -= portion;
-                                width     -= portion;
+                                width -= portion;
                             } else {
-                                width     -= widths[i] - minWidths[i];
-                                widths[i]  = minWidths[i];
+                                width -= widths[i] - minWidths[i];
+                                widths[i] = minWidths[i];
                             }
                         }
                         if (widths[i] > minWidths[i]) {
@@ -293,8 +293,8 @@ public class ColumnLayout implements LayoutManager2 {
                     }
 
                     if (doit) {
-                        portion    += heights[i] - newHeight;
-                        heights[i]  = newHeight;
+                        portion += heights[i] - newHeight;
+                        heights[i] = newHeight;
                         participants++;
                     }
                 }
@@ -355,7 +355,7 @@ public class ColumnLayout implements LayoutManager2 {
     public Dimension maximumLayoutSize(Container parent) {
         Scale scale  = Scale.get(parent);
         long  height = 0;
-        long  width  = (mColumns - 1) * scale.scale(mHGap);
+        long  width  = (long) (mColumns - 1) * scale.scale(mHGap);
 
         synchronized (parent.getTreeLock()) {
             Insets insets    = parent.getInsets();
@@ -386,7 +386,7 @@ public class ColumnLayout implements LayoutManager2 {
             }
             height += insets.top + insets.bottom;
             if (rows > 0) {
-                height += (rows - 1) * scale.scale(mVGap);
+                height += (long) (rows - 1) * scale.scale(mVGap);
             }
 
             for (i = 0; i < mColumns; i++) {

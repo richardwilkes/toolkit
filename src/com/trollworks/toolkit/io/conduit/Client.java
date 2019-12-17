@@ -35,23 +35,26 @@ class Client extends Thread {
         super(Conduit.class.getSimpleName() + '$' + Client.class.getSimpleName() + '#' + server.getNextClientCounter() + '@' + server.getServerSocket().getLocalSocketAddress());
         setPriority(NORM_PRIORITY);
         setDaemon(true);
-        mServer       = server;
+        mServer = server;
         mClientSocket = socket;
-        mClientInput  = new DataInputStream(socket.getInputStream());
+        mClientInput = new DataInputStream(socket.getInputStream());
         mClientOutput = new DataOutputStream(socket.getOutputStream());
     }
 
     @Override
     public void run() {
+        Server server;
+        synchronized (this) {
+            server = mServer;
+        }
         try {
             while (true) {
-                mServer.send(new ConduitMessage(mClientInput));
+                server.send(new ConduitMessage(mClientInput));
             }
         } catch (Exception exception) {
             // An exception here can be ignored, as its just the connection
             // going away, which we deal with later.
         }
-
         shutdown();
     }
 

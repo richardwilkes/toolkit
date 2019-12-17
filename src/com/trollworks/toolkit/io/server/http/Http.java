@@ -44,20 +44,20 @@ import java.util.regex.Pattern;
 
 /** A {@link Personality} for handling HTTP connections. */
 public class Http extends Personality {
-    private static final int          MAXIMUM_HEADER_SIZE  = 8 * 1024;
-    private static final int          MAXIMUM_CONTENT_SIZE = 1024 * 1024;
-    private static final Pattern      REQUEST_PATTERN      = Pattern.compile("^(\\S+)\\s+(\\S+)\\s+HTTP/(\\d+)\\.(\\d+)$");
-    private HttpSessionFactory        mFactory;
-    private int                       mState;
-    private int                       mContentSize;
-    private ByteArrayOutputStream     mBuffer              = new ByteArrayOutputStream(MAXIMUM_HEADER_SIZE);
-    private byte[]                    mBody;
-    private String                    mUri;
-    private HttpMethod                mMethod;
-    private int                       mVersionMajor;
-    private int                       mVersionMinor;
-    private Map<String, List<String>> mParameters          = new HashMap<>();
-    private Map<String, List<String>> mHeaders             = new HashMap<>();
+    private static final int                       MAXIMUM_HEADER_SIZE  = 8 * 1024;
+    private static final int                       MAXIMUM_CONTENT_SIZE = 1024 * 1024;
+    private static final Pattern                   REQUEST_PATTERN      = Pattern.compile("^(\\S+)\\s+(\\S+)\\s+HTTP/(\\d+)\\.(\\d+)$");
+    private              HttpSessionFactory        mFactory;
+    private              int                       mState;
+    private              int                       mContentSize;
+    private              ByteArrayOutputStream     mBuffer              = new ByteArrayOutputStream(MAXIMUM_HEADER_SIZE);
+    private              byte[]                    mBody;
+    private              String                    mUri;
+    private              HttpMethod                mMethod;
+    private              int                       mVersionMajor;
+    private              int                       mVersionMinor;
+    private              Map<String, List<String>> mParameters          = new HashMap<>();
+    private              Map<String, List<String>> mHeaders             = new HashMap<>();
 
     /** @param factory The factory to use when creating new {@link Session}s. */
     public Http(HttpSessionFactory factory) {
@@ -70,16 +70,16 @@ public class Http extends Personality {
     }
 
     private void reset() {
-        mState        = 0;
-        mContentSize  = 0;
-        mBuffer       = new ByteArrayOutputStream(MAXIMUM_HEADER_SIZE);
-        mBody         = null;
-        mUri          = null;
-        mMethod       = null;
+        mState = 0;
+        mContentSize = 0;
+        mBuffer = new ByteArrayOutputStream(MAXIMUM_HEADER_SIZE);
+        mBody = null;
+        mUri = null;
+        mMethod = null;
         mVersionMajor = 0;
         mVersionMinor = 0;
-        mParameters   = new HashMap<>();
-        mHeaders      = new HashMap<>();
+        mParameters = new HashMap<>();
+        mHeaders = new HashMap<>();
     }
 
     @Override
@@ -253,86 +253,93 @@ public class Http extends Personality {
     }
 
     private void parseHeaders() throws IOException {
-        BufferedReader in   = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(mBuffer.toByteArray())));
-        String         line = in.readLine();
-        if (line == null) {
-            throw new SocketTimeoutException();
-        }
-
-        Matcher matcher = REQUEST_PATTERN.matcher(line);
-        if (!matcher.find() || matcher.groupCount() != 4) {
-            throw new HttpResponseException(HttpStatusCode.BAD_REQUEST, "BAD REQUEST");
-        }
-
-        mMethod = HttpMethod.lookup(matcher.group(1));
-        if (mMethod == null) {
-            throw new HttpResponseException(HttpStatusCode.BAD_REQUEST, "BAD REQUEST");
-        }
-
-        mUri          = matcher.group(2);
-        mVersionMajor = Integer.parseInt(matcher.group(3));
-        mVersionMinor = Integer.parseInt(matcher.group(4));
-
-        int index = mUri.indexOf('?');
-        if (index != -1) {
-            if (mUri.length() > index + 1) {
-                decodeParameters(mUri.substring(index + 1));
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(mBuffer.toByteArray()), StandardCharsets.UTF_8))) {
+            String line = in.readLine();
+            if (line == null) {
+                throw new SocketTimeoutException();
             }
-            mUri = mUri.substring(0, index);
-        }
-        mUri = decodePercent(mUri);
 
-        line = in.readLine();
-        while (line != null) {
-            line = line.trim();
-            if (line.isEmpty()) {
-                break;
+            Matcher matcher = REQUEST_PATTERN.matcher(line);
+            if (!matcher.find() || matcher.groupCount() != 4) {
+                throw new HttpResponseException(HttpStatusCode.BAD_REQUEST, "BAD REQUEST");
             }
-            index = line.indexOf(':');
+
+            mMethod = HttpMethod.lookup(matcher.group(1));
+            if (mMethod == null) {
+                throw new HttpResponseException(HttpStatusCode.BAD_REQUEST, "BAD REQUEST");
+            }
+
+            mUri = matcher.group(2);
+            mVersionMajor = Integer.parseInt(matcher.group(3));
+            mVersionMinor = Integer.parseInt(matcher.group(4));
+
+            int index = mUri.indexOf('?');
             if (index != -1) {
-                String       name = line.substring(0, index).trim().toLowerCase();
-                List<String> list = mHeaders.get(name);
-                if (list == null) {
-                    list = new ArrayList<>();
-                    mHeaders.put(name, list);
+                if (mUri.length() > index + 1) {
+                    decodeParameters(mUri.substring(index + 1));
                 }
-                if (++index < line.length()) {
-                    list.add(line.substring(index).trim());
-                }
+                mUri = mUri.substring(0, index);
             }
+            mUri = decodePercent(mUri);
+
             line = in.readLine();
-        }
-        mBuffer.reset();
-        try {
-            mContentSize = Integer.parseInt(getFirstHeader("content-length"));
-            if (mContentSize > 0) {
-                if (mContentSize > MAXIMUM_CONTENT_SIZE) {
-                    throw new HttpResponseException(HttpStatusCode.BAD_REQUEST, "BAD REQUEST: Content too large");
+            while (line != null) {
+                line = line.trim();
+                if (line.isEmpty()) {
+                    break;
                 }
-                if (mContentSize > MAXIMUM_HEADER_SIZE) {
-                    mBuffer = new ByteArrayOutputStream(mContentSize);
+                index = line.indexOf(':');
+                if (index != -1) {
+                    String       name = line.substring(0, index).trim().toLowerCase();
+                    List<String> list = mHeaders.get(name);
+                    if (list == null) {
+                        list = new ArrayList<>();
+                        mHeaders.put(name, list);
+                    }
+                    if (++index < line.length()) {
+                        list.add(line.substring(index).trim());
+                    }
                 }
-            } else {
-                mContentSize = 0;
+                line = in.readLine();
             }
-        } catch (Exception exception) {
-            // No support for indeterminate content size for now, as I don't need it. Assume zero in
-            // this case.
-            mContentSize = 0;
+            mBuffer.reset();
+            String hdr = getFirstHeader("content-length");
+            if (hdr == null) {
+                mContentSize = 0;
+            } else {
+                try {
+                    mContentSize = Integer.parseInt(hdr);
+                    if (mContentSize > 0) {
+                        if (mContentSize > MAXIMUM_CONTENT_SIZE) {
+                            throw new HttpResponseException(HttpStatusCode.BAD_REQUEST, "BAD REQUEST: Content too large");
+                        }
+                        if (mContentSize > MAXIMUM_HEADER_SIZE) {
+                            mBuffer = new ByteArrayOutputStream(mContentSize);
+                        }
+                    } else {
+                        mContentSize = 0;
+                    }
+                } catch (Exception exception) {
+                    // No support for indeterminate content size for now, as I don't need it. Assume zero in
+                    // this case.
+                    mContentSize = 0;
+                }
+            }
         }
     }
 
     private void parseBody() throws IOException {
-        mState  = 5;
-        mBody   = mBuffer.toByteArray();
+        mState = 5;
+        mBody = mBuffer.toByteArray();
         mBuffer = null;
-        if (HttpMethod.POST.equals(mMethod)) {
+        if (HttpMethod.POST == mMethod) {
             if ("application/x-www-form-urlencoded".equals(getFirstHeader("content-type"))) {
-                BufferedReader in   = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(mBody)));
-                String         line = in.readLine();
-                while (line != null) {
-                    decodeParameters(line);
-                    line = in.readLine();
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(mBody), StandardCharsets.UTF_8))) {
+                    String line = in.readLine();
+                    while (line != null) {
+                        decodeParameters(line);
+                        line = in.readLine();
+                    }
                 }
             }
         }
@@ -398,7 +405,7 @@ public class Http extends Personality {
 
     /**
      * @param name The name of a parameter to return.
-     * @return The value(s) for that parameter, or <code>null</code> if no parameter with that name
+     * @return The value(s) for that parameter, or {@code null} if no parameter with that name
      *         exists.
      */
     public final List<String> getParameter(String name) {
@@ -407,8 +414,8 @@ public class Http extends Personality {
 
     /**
      * @param name The name of a parameter to return.
-     * @return The first value for that parameter, or <code>null</code> if no parameter with that
-     *         name exists.
+     * @return The first value for that parameter, or {@code null} if no parameter with that name
+     *         exists.
      */
     public final String getFirstParameter(String name) {
         List<String> list = getParameter(name);
@@ -425,8 +432,7 @@ public class Http extends Personality {
 
     /**
      * @param name The name of a header to return.
-     * @return The value(s) for that header, or <code>null</code> if no header with that name
-     *         exists.
+     * @return The value(s) for that header, or {@code null} if no header with that name exists.
      */
     public final List<String> getHeader(String name) {
         return mHeaders.get(name);
@@ -434,7 +440,7 @@ public class Http extends Personality {
 
     /**
      * @param name The name of a header to check.
-     * @return <code>true</code> if the header exists in the current request.
+     * @return {@code true} if the header exists in the current request.
      */
     public final boolean hasHeader(String name) {
         return mHeaders.containsKey(name);
@@ -442,8 +448,7 @@ public class Http extends Personality {
 
     /**
      * @param name The name of a header to return.
-     * @return The first value for that header, or <code>null</code> if no header with that name
-     *         exists.
+     * @return The first value for that header, or {@code null} if no header with that name exists.
      */
     public final String getFirstHeader(String name) {
         List<String> list = getHeader(name);
@@ -455,12 +460,16 @@ public class Http extends Personality {
 
     /**
      * @param name The name of a header to return.
-     * @return The first value for that header, transformed into an integer, or <code>-1</code> if
-     *         no header with that name exists or it cannot be parsed as an integer.
+     * @return The first value for that header, transformed into an integer, or {@code -1} if no
+     *         header with that name exists or it cannot be parsed as an integer.
      */
     public final int getFirstHeaderAsInt(String name) {
+        String hdr = getFirstHeader(name);
+        if (hdr == null) {
+            return -1;
+        }
         try {
-            return Integer.parseInt(getFirstHeader(name));
+            return Integer.parseInt(hdr);
         } catch (Exception exception) {
             return -1;
         }

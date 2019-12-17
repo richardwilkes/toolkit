@@ -12,7 +12,6 @@
 package com.trollworks.toolkit.ui.menu;
 
 import java.util.Set;
-
 import javax.swing.JMenu;
 
 /** Provides a single top-level menu for the menu bar. */

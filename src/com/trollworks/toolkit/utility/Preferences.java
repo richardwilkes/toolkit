@@ -26,19 +26,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
 /** Provides the implementation of preferences. */
 public class Preferences {
-    public static final String  VERSION_KEY = "Version";
-    private static final String DOT         = ".";
-    private static Preferences  INSTANCE    = null;
-    private boolean             mDirty;
-    private Properties          mPrefs;
-    private File                mFile;
-    private Notifier            mNotifier;
+    public static final  String      VERSION_KEY = "Version";
+    private static final String      DOT         = ".";
+    private static       Preferences INSTANCE;
+    private              boolean     mDirty;
+    private              Properties  mPrefs;
+    private              File        mFile;
+    private              Notifier    mNotifier;
 
     /** @return The default, global, preferences. */
     public static synchronized Preferences getInstance() {
@@ -84,7 +83,7 @@ public class Preferences {
 
     /**
      * @param leafName The leaf file name to use, such as "appname.prf".
-     * @return <code>true</code> if the module has preferences set.
+     * @return {@code true} if the module has preferences set.
      */
     public static File getDefaultPreferenceFile(String leafName) {
         return getDefaultPreferenceFile(null, leafName);
@@ -98,7 +97,6 @@ public class Preferences {
      */
     public static File getDefaultPreferenceFile(String packageDir, String leafName) {
         File base = new File(System.getProperty("user.home", DOT));
-
         if (Platform.isMacintosh()) {
             base = new File(base, "Library/Preferences");
         } else if (Platform.isWindows()) {
@@ -114,13 +112,10 @@ public class Preferences {
                 }
             }
         }
-
         if (packageDir != null) {
             base = new File(base, packageDir);
         }
-
         base.mkdirs(); // Ensure the directory exists...
-
         return new File(base, leafName);
     }
 
@@ -139,8 +134,8 @@ public class Preferences {
      * @param prefsFile The file containing preferences.
      */
     public Preferences(File prefsFile) {
-        mFile     = prefsFile;
-        mPrefs    = new Properties();
+        mFile = prefsFile;
+        mPrefs = new Properties();
         mNotifier = new Notifier();
         if (mFile.exists()) {
             try (InputStream in = new FileInputStream(mFile)) {
@@ -183,9 +178,13 @@ public class Preferences {
         }
         // Can't really dispose of the global preferences,
         // so only do the remaining cleanup for non-global preferences.
-        if (INSTANCE != this) {
-            mPrefs    = null;
-            mFile     = null;
+        Preferences global;
+        synchronized (Preferences.class) {
+            global = INSTANCE;
+        }
+        if (global != this) {
+            mPrefs = null;
+            mFile = null;
             mNotifier = null;
         }
     }
@@ -193,7 +192,7 @@ public class Preferences {
     /**
      * @param module The module to work with.
      * @param key    The key this preference is tied to.
-     * @return The specified preference as a boolean. <code>false</code> will be returned if the key
+     * @return The specified preference as a boolean. {@code false} will be returned if the key
      *         cannot be extracted.
      */
     public boolean getBooleanValue(String module, String key) {
@@ -208,7 +207,6 @@ public class Preferences {
      */
     public boolean getBooleanValue(String module, String key, boolean defaultValue) {
         String buffer = getStringValueForced(module, key);
-
         if (Boolean.TRUE.toString().equals(buffer)) {
             return true;
         }
@@ -221,8 +219,8 @@ public class Preferences {
     /**
      * @param module The module to work with.
      * @param key    The key this preference is tied to.
-     * @return The specified preference as a {@link Dimension}. <code>null</code> will be returned
-     *         if the key cannot be extracted.
+     * @return The specified preference as a {@link Dimension}. {@code null} will be returned if the
+     *         key cannot be extracted.
      */
     public Dimension getDimensionValue(String module, String key) {
         return getDimensionValue(module, key, null);
@@ -236,7 +234,6 @@ public class Preferences {
      */
     public Dimension getDimensionValue(String module, String key, Dimension defaultValue) {
         Dimension dim = Conversion.extractDimension(getStringValue(module, key));
-
         return dim == null ? defaultValue : dim;
     }
 
@@ -261,7 +258,6 @@ public class Preferences {
     public double getDoubleValue(String module, String key, double defaultValue, double minimum, double maximum) {
         String buffer = getStringValue(module, key);
         double value  = defaultValue;
-
         if (buffer != null) {
             try {
                 value = Double.parseDouble(buffer);
@@ -269,14 +265,12 @@ public class Preferences {
                 // Use the default value instead
             }
         }
-
         if (value < minimum) {
             value = minimum;
         }
         if (value > maximum) {
             value = maximum;
         }
-
         return value;
     }
 
@@ -301,7 +295,6 @@ public class Preferences {
     public float getFloatValue(String module, String key, float defaultValue, float minimum, float maximum) {
         String buffer = getStringValue(module, key);
         float  value  = defaultValue;
-
         if (buffer != null) {
             try {
                 value = Float.parseFloat(buffer);
@@ -309,26 +302,23 @@ public class Preferences {
                 // Use the default value instead
             }
         }
-
         if (value < minimum) {
             value = minimum;
         }
         if (value > maximum) {
             value = maximum;
         }
-
         return value;
     }
 
     /**
      * @param module The module to work with.
      * @param key    The key this preference is tied to.
-     * @return The specified preference as a {@link Font}. <code>null</code> will be returned if the
-     *         key cannot be extracted.
+     * @return The specified preference as a {@link Font}. {@code null} will be returned if the key
+     *         cannot be extracted.
      */
     public Font getFontValue(String module, String key) {
         String value = getStringValue(module, key);
-
         return value == null ? null : Fonts.create(value);
     }
 
@@ -363,7 +353,6 @@ public class Preferences {
     public int getIntValue(String module, String key, int defaultValue, int minimum, int maximum) {
         String buffer = getStringValue(module, key);
         int    value  = defaultValue;
-
         if (buffer != null) {
             try {
                 value = Integer.parseInt(buffer);
@@ -371,14 +360,12 @@ public class Preferences {
                 // Use the default value instead
             }
         }
-
         if (value < minimum) {
             value = minimum;
         }
         if (value > maximum) {
             value = maximum;
         }
-
         return value;
     }
 
@@ -403,7 +390,6 @@ public class Preferences {
     public long getLongValue(String module, String key, long defaultValue, long minimum, long maximum) {
         String buffer = getStringValue(module, key);
         long   value  = defaultValue;
-
         if (buffer != null) {
             try {
                 value = Long.parseLong(buffer);
@@ -411,14 +397,12 @@ public class Preferences {
                 // Use the default value instead
             }
         }
-
         if (value < minimum) {
             value = minimum;
         }
         if (value > maximum) {
             value = maximum;
         }
-
         return value;
     }
 
@@ -427,28 +411,24 @@ public class Preferences {
      * @return All of the keys for the specified module.
      */
     public List<String> getModuleKeys(String module) {
-        ArrayList<String>   keys    = new ArrayList<>();
-        Enumeration<Object> keyEnum = mPrefs.keys();
-
-        while (keyEnum.hasMoreElements()) {
-            String key = (String) keyEnum.nextElement();
-
+        List<String> keys = new ArrayList<>();
+        for (Object o : mPrefs.keySet()) {
+            String key = (String) o;
             if (key.startsWith(module)) {
                 key = key.substring(key.indexOf('.') + 1);
-                if (key != null && key.length() > 0) {
+                if (!key.isEmpty()) {
                     keys.add(key);
                 }
             }
         }
-
         return keys;
     }
 
     /**
      * @param module The module to work with.
      * @param key    The key this preference is tied to.
-     * @return The specified preference as a {@link Point}.<code>null</code> will be returned if the
-     *         key cannot be extracted.
+     * @return The specified preference as a {@link Point}.{@code null} will be returned if the key
+     *         cannot be extracted.
      */
     public Point getPointValue(String module, String key) {
         return getPointValue(module, key, null);
@@ -462,15 +442,13 @@ public class Preferences {
      */
     public Point getPointValue(String module, String key, Point defaultValue) {
         Point pt = Conversion.extractPoint(getStringValue(module, key));
-
         return pt == null ? defaultValue : pt;
     }
 
     /**
      * @param module The module to work with.
      * @param key    The key this preference is tied to.
-     * @return The specified general preference as a {@link String}. <code>null</code> may be
-     *         returned.
+     * @return The specified general preference as a {@link String}. {@code null} may be returned.
      */
     public String getStringValue(String module, String key) {
         return mPrefs.getProperty(getModuleKey(module, key));
@@ -484,15 +462,14 @@ public class Preferences {
      */
     public String getStringValue(String module, String key, String defaultValue) {
         String value = getStringValue(module, key);
-
         return value == null ? defaultValue : value;
     }
 
     /**
      * @param module The module to work with.
      * @param key    The key this preference is tied to.
-     * @return The specified preference as a {@link String}. If a <code>null</code> value would
-     *         normally be returned, returns an empty string instead.
+     * @return The specified preference as a {@link String}. If a {@code null} value would normally
+     *         be returned, returns an empty string instead.
      */
     public String getStringValueForced(String module, String key) {
         return getStringValue(module, key, "");
@@ -508,14 +485,12 @@ public class Preferences {
 
     /**
      * @param module The module to check.
-     * @return <code>true</code> if the module has preferences set.
+     * @return {@code true} if the module has preferences set.
      */
     public boolean hasPreferences(String module) {
         module += '.';
-
-        for (Enumeration<Object> keys = mPrefs.keys(); keys.hasMoreElements();) {
-            String key = (String) keys.nextElement();
-
+        for (Object o : mPrefs.keySet()) {
+            String key = (String) o;
             if (key.startsWith(module)) {
                 return true;
             }
@@ -539,18 +514,15 @@ public class Preferences {
      * @param module The module to remove preferences from.
      */
     public void removePreferences(String module) {
-        String            prefix = module + '.';
-        ArrayList<String> list   = new ArrayList<>();
-        int               length = prefix.length();
-
-        for (Enumeration<Object> keys = mPrefs.keys(); keys.hasMoreElements();) {
-            String key = (String) keys.nextElement();
-
+        String       prefix = module + '.';
+        List<String> list   = new ArrayList<>();
+        int          length = prefix.length();
+        for (Object o : mPrefs.keySet()) {
+            String key = (String) o;
             if (key.startsWith(prefix)) {
                 list.add(key.substring(length));
             }
         }
-
         if (!list.isEmpty()) {
             startBatch();
             mDirty = true;
@@ -586,7 +558,6 @@ public class Preferences {
         if (mDirty) {
             try {
                 SafeFileUpdater trans = new SafeFileUpdater();
-
                 trans.begin();
                 try {
                     File file = trans.getTransactionFile(mFile);
@@ -622,7 +593,7 @@ public class Preferences {
      *
      * @param module The module to work with.
      * @param key    The key this preference is tied to.
-     * @param value  The value to set the key to. Pass <code>null</code> to remove the key.
+     * @param value  The value to set the key to. Pass {@code null} to remove the key.
      */
     public void setValue(String module, String key, String value) {
         key = getModuleKey(module, key);
@@ -640,7 +611,7 @@ public class Preferences {
     }
 
     /**
-     * Sets the specified preference as a <code>Dimension</code>.
+     * Sets the specified preference as a {@code Dimension}.
      *
      * @param module The module to work with.
      * @param key    The key this preference is tied to.
@@ -651,7 +622,7 @@ public class Preferences {
     }
 
     /**
-     * Sets the specified preference as a <code>Font</code>.
+     * Sets the specified preference as a {@code Font}.
      *
      * @param module The module to work with.
      * @param key    The key this preference is tied to.
@@ -706,7 +677,7 @@ public class Preferences {
     }
 
     /**
-     * Sets the specified preference as a <code>Point</code>.
+     * Sets the specified preference as a {@code Point}.
      *
      * @param module The module to work with.
      * @param key    The key this preference is tied to.

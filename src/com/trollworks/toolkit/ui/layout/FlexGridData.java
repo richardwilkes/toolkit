@@ -39,24 +39,24 @@ class FlexGridData {
             throw new IllegalArgumentException("columnSpan must be > 0");
         }
 
-        mCell       = cell;
-        mRow        = row * 2;
-        mColumn     = column * 2;
-        mRowSpan    = 1 + (rowSpan - 1) * 2;
+        mCell = cell;
+        mRow = row * 2;
+        mColumn = column * 2;
+        mRowSpan = 1 + (rowSpan - 1) * 2;
         mColumnSpan = 1 + (columnSpan - 1) * 2;
     }
 
     FlexGridData(Scale scale, int gapRow, int gapColumn, int rowGap, int columnGap) {
         boolean oddRow    = (gapRow & 1) == 1;
         boolean oddColumn = (gapColumn & 1) == 1;
-        mCell       = new FlexSpacer(columnGap, rowGap, oddRow && !oddColumn, !oddRow && oddColumn);
-        mRow        = gapRow;
-        mColumn     = gapColumn;
-        mRowSpan    = 1;
+        mCell = new FlexSpacer(columnGap, rowGap, oddRow && !oddColumn, !oddRow && oddColumn);
+        mRow = gapRow;
+        mColumn = gapColumn;
+        mRowSpan = 1;
         mColumnSpan = 1;
-        mSize       = mCell.getSize(scale, LayoutSize.PREFERRED);
-        mMinSize    = mCell.getSize(scale, LayoutSize.MINIMUM);
-        mMaxSize    = mCell.getSize(scale, LayoutSize.MAXIMUM);
+        mSize = mCell.getSize(scale, LayoutSize.PREFERRED);
+        mMinSize = mCell.getSize(scale, LayoutSize.MINIMUM);
+        mMaxSize = mCell.getSize(scale, LayoutSize.MAXIMUM);
     }
 
     int getLastRow() {
@@ -80,7 +80,7 @@ class FlexGridData {
         StringBuilder buffer = new StringBuilder();
         buffer.append(getClass().getSimpleName());
         buffer.append('[');
-        if (mRow % 2 == 1 || mColumn % 2 == 1) {
+        if ((mRow & 1) == 1 || (mColumn & 1) == 1) {
             buffer.append('g');
         }
         buffer.append(formatRowColumn(mRow / 2, mColumn / 2, false));

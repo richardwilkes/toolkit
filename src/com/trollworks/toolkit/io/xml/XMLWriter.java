@@ -29,20 +29,20 @@ public class XMLWriter extends PrintWriter {
     private static final String GREATER_THAN_ENTITY = "&gt;";
     private static final String END_COMMENT         = " -->";
     /** The encoding used. */
-    public static final String  ENCODING            = "US-ASCII";
+    public static final  String ENCODING            = "US-ASCII";
     /** The 'year' attribute. */
-    public static final String  YEAR                = "year";
+    public static final  String YEAR                = "year";
     /** The 'month' attribute. */
-    public static final String  MONTH               = "month";
+    public static final  String MONTH               = "month";
     /** The 'day' attribute. */
-    public static final String  DAY                 = "day";
+    public static final  String DAY                 = "day";
     /** The 'hour' attribute. */
-    public static final String  HOUR                = "hour";
+    public static final  String HOUR                = "hour";
     /** The 'minute' attribute. */
-    public static final String  MINUTE              = "minute";
+    public static final  String MINUTE              = "minute";
     /** The 'second' attribute. */
-    public static final String  SECOND              = "second";
-    private int                 mIndent;
+    public static final  String SECOND              = "second";
+    private              int    mIndent;
 
     /**
      * Creates a new XML writer.
@@ -540,7 +540,7 @@ public class XMLWriter extends PrintWriter {
      * @param value The data to place between the tags.
      */
     public void simpleTagNotEmpty(String name, String value) {
-        if (value != null && value.length() != 0) {
+        if (value != null && !value.isEmpty()) {
             startSimpleTag(name);
             writeEncodedData(value);
             endTagEOL(name, false);
@@ -653,8 +653,8 @@ public class XMLWriter extends PrintWriter {
      * @param dateInMillis   The date to output.
      * @param includeDate    Whether to output the date fields.
      * @param includeTime    Whether to output the time fields.
-     * @param includeSeconds Whether to output the seconds field. Only relevant if
-     *                       <code>includeTime</code> was <code>true</code>.
+     * @param includeSeconds Whether to output the seconds field. Only relevant if {@code
+     *                       includeTime} was {@code true}.
      */
     public void writeDateTimeTag(String name, long dateInMillis, boolean includeDate, boolean includeTime, boolean includeSeconds) {
         Calendar calendar = Calendar.getInstance();
@@ -670,8 +670,8 @@ public class XMLWriter extends PrintWriter {
      * @param date           The date to output.
      * @param includeDate    Whether to output the date fields.
      * @param includeTime    Whether to output the time fields.
-     * @param includeSeconds Whether to output the seconds field. Only relevant if
-     *                       <code>includeTime</code> was <code>true</code>.
+     * @param includeSeconds Whether to output the seconds field. Only relevant if {@code
+     *                       includeTime} was {@code true}.
      */
     public void writeDateTimeTag(String name, Date date, boolean includeDate, boolean includeTime, boolean includeSeconds) {
         Calendar calendar = Calendar.getInstance();
@@ -687,8 +687,8 @@ public class XMLWriter extends PrintWriter {
      * @param calendar       The calendar to output.
      * @param includeDate    Whether to output the date fields.
      * @param includeTime    Whether to output the time fields.
-     * @param includeSeconds Whether to output the seconds field. Only relevant if
-     *                       <code>includeTime</code> was <code>true</code>.
+     * @param includeSeconds Whether to output the seconds field. Only relevant if {@code
+     *                       includeTime} was {@code true}.
      */
     public void writeDateTimeTag(String name, Calendar calendar, boolean includeDate, boolean includeTime, boolean includeSeconds) {
         startTag(name);

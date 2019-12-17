@@ -31,7 +31,7 @@ public class TreeColumnDragState extends TreeDragState {
      */
     public TreeColumnDragState(TreePanel panel, TreeColumn column) {
         super(panel);
-        mColumn   = column;
+        mColumn = column;
         mOriginal = new ArrayList<>(panel.getColumns());
         setHeaderFocus(true);
         setContentsFocus(true);

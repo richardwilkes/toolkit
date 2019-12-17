@@ -20,11 +20,11 @@ import java.awt.image.RGBImageFilter;
 
 /** Colorizes an image by blending any solid pixels with the specified color. */
 public class ColorFilter extends RGBImageFilter {
-    private static final int OPAQUE = 0xFF000000;
-    private int              mRed;
-    private int              mGreen;
-    private int              mBlue;
-    private boolean          mIncludeAlpha;
+    private static final int     OPAQUE = 0xFF000000;
+    private              int     mRed;
+    private              int     mGreen;
+    private              int     mBlue;
+    private              boolean mIncludeAlpha;
 
     /**
      * Constructs an image filter that colorizes an image by blending any solid pixels with the
@@ -45,10 +45,10 @@ public class ColorFilter extends RGBImageFilter {
      *                     colorization.
      */
     public ColorFilter(Color color, boolean includeAlpha) {
-        mRed                     = color.getRed();
-        mGreen                   = color.getGreen();
-        mBlue                    = color.getBlue();
-        mIncludeAlpha            = includeAlpha;
+        mRed = color.getRed();
+        mGreen = color.getGreen();
+        mBlue = color.getBlue();
+        mIncludeAlpha = includeAlpha;
         canFilterIndexColorModel = true;
     }
 

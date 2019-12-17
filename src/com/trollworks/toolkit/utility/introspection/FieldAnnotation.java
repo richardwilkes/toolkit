@@ -19,15 +19,15 @@ public final class FieldAnnotation<T extends Annotation> {
     private T     mAnnotation;
 
     public FieldAnnotation(Field field, T annotation) {
-        mField      = field;
+        mField = field;
         mAnnotation = annotation;
     }
 
-    public final Field getField() {
+    public Field getField() {
         return mField;
     }
 
-    public final T getAnnotation() {
+    public T getAnnotation() {
         return mAnnotation;
     }
 }

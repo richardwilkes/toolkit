@@ -39,17 +39,16 @@ import java.awt.event.InputEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.print.PrinterGraphics;
-
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
 /** Provides general graphics settings and manipulation. */
 public class GraphicsUtilities {
-    private static Frame         HIDDEN_FRAME                    = null;
-    private static int           HIDDEN_FRAME_ICONSET_SEQUENCE   = -1;
-    private static boolean       HEADLESS_PRINT_MODE             = false;
-    private static int           HEADLESS_CHECK_RESULT           = 0;
-    private static BufferedImage FALLBACK_GRAPHICS_BACKING_STORE = null;
+    private static Frame         HIDDEN_FRAME;
+    private static int           HIDDEN_FRAME_ICONSET_SEQUENCE = -1;
+    private static boolean       HEADLESS_PRINT_MODE;
+    private static int           HEADLESS_CHECK_RESULT;
+    private static BufferedImage FALLBACK_GRAPHICS_BACKING_STORE;
 
     /** @return Whether the headless print mode is enabled. */
     public static boolean inHeadlessPrintMode() {
@@ -160,9 +159,9 @@ public class GraphicsUtilities {
                     insets.bottom = 48;
                 }
 
-                bounds.x      += insets.left;
-                bounds.y      += insets.top;
-                bounds.width  -= insets.left + insets.right;
+                bounds.x += insets.left;
+                bounds.y += insets.top;
+                bounds.width -= insets.left + insets.right;
                 bounds.height -= insets.top + insets.bottom;
             }
             return bounds;
@@ -219,7 +218,7 @@ public class GraphicsUtilities {
         if (bounds.x + bounds.width >= maxBounds.x + maxBounds.width) {
             bounds.x = maxBounds.x + maxBounds.width - bounds.width;
             if (bounds.x < maxBounds.x) {
-                bounds.x     = maxBounds.x;
+                bounds.x = maxBounds.x;
                 bounds.width = maxBounds.width;
             }
         }
@@ -233,7 +232,7 @@ public class GraphicsUtilities {
         if (bounds.y + bounds.height >= maxBounds.y + maxBounds.height) {
             bounds.y = maxBounds.y + maxBounds.height - bounds.height;
             if (bounds.y < maxBounds.y) {
-                bounds.y      = maxBounds.y;
+                bounds.y = maxBounds.y;
                 bounds.height = maxBounds.height;
             }
         }
@@ -248,14 +247,14 @@ public class GraphicsUtilities {
 
     /** Forces a full repaint of all windows, disposing of any window buffers. */
     public static void forceRepaint() {
-        for (AppWindow window : AppWindow.getAllWindows()) {
+        for (AppWindow window : AppWindow.getAllAppWindows()) {
             window.repaint();
         }
     }
 
     /** Forces a full repaint and invalidate on all windows, disposing of any window buffers. */
     public static void forceRepaintAndInvalidate() {
-        for (AppWindow window : AppWindow.getAllWindows()) {
+        for (AppWindow window : AppWindow.getAllAppWindows()) {
             window.invalidate(window.getRootPane());
         }
     }
@@ -303,10 +302,14 @@ public class GraphicsUtilities {
                     }
                 }
             }
-            if (FALLBACK_GRAPHICS_BACKING_STORE == null) {
-                FALLBACK_GRAPHICS_BACKING_STORE = new BufferedImage(32, 1, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage fallback;
+            synchronized (GraphicsUtilities.class) {
+                if (FALLBACK_GRAPHICS_BACKING_STORE == null) {
+                    FALLBACK_GRAPHICS_BACKING_STORE = new BufferedImage(32, 1, BufferedImage.TYPE_INT_ARGB);
+                }
+                fallback = FALLBACK_GRAPHICS_BACKING_STORE;
             }
-            return FALLBACK_GRAPHICS_BACKING_STORE.createGraphics();
+            return fallback.createGraphics();
         }
         return prepare(g2d);
     }
@@ -387,7 +390,7 @@ public class GraphicsUtilities {
         return HIDDEN_FRAME;
     }
 
-    /** @return <code>true</code> if the graphics system is safe to use. */
+    /** @return {@code true} if the graphics system is safe to use. */
     public static boolean areGraphicsSafeToUse() {
         if (!GraphicsEnvironment.isHeadless()) {
             if (HEADLESS_CHECK_RESULT == 0) {
@@ -400,14 +403,12 @@ public class GraphicsUtilities {
                     HEADLESS_CHECK_RESULT = 2;
                 }
             }
-            if (HEADLESS_CHECK_RESULT == 1) {
-                return true;
-            }
+            return HEADLESS_CHECK_RESULT == 1;
         }
         return false;
     }
 
-    /** @return The reason <code>areGraphicsSafeToUse()</code> returned <code>false</code>. */
+    /** @return The reason {@code areGraphicsSafeToUse()} returned {@code false}. */
     public static String getReasonForUnsafeGraphics() {
         return I18n.Text("There is no valid graphics display.");
     }
@@ -430,8 +431,8 @@ public class GraphicsUtilities {
      * of 2x if being drawn onto a retina display.
      *
      * @param gc The {@link Graphics} to check.
-     * @return <code>true</code> if the specified graphics context is set to a 2x scale transform or
-     *         is a printer context.
+     * @return {@code true} if the specified graphics context is set to a 2x scale transform or is a
+     *         printer context.
      */
     public static boolean isRetinaDisplay(Graphics gc) {
         if (gc instanceof PrinterGraphics) {

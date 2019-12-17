@@ -28,7 +28,6 @@ import java.awt.print.Paper;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.IOException;
-
 import javax.print.DocFlavor;
 import javax.print.PrintService;
 import javax.print.attribute.Attribute;
@@ -41,27 +40,27 @@ import javax.swing.JOptionPane;
 
 /** Manages printing. */
 public class PrintManager {
-    private static final String          MODULE                     = "PrintManager";
-    private static final int             MODULE_VERSION             = 1;
-    private static final String          NATIVE_DIALOGS_ENABLED_KEY = "UseNativeDialogs";
+    private static final String                       MODULE                     = "PrintManager";
+    private static final int                          MODULE_VERSION             = 1;
+    private static final String                       NATIVE_DIALOGS_ENABLED_KEY = "UseNativeDialogs";
     /** The XML root tag for {@link PrintManager}. */
-    public static final String           TAG_ROOT                   = "print_settings";
-    private static final String          ATTRIBUTE_UNITS            = "units";
-    private static final String          ATTRIBUTE_PRINTER          = "printer";
-    private static final String          TAG_ORIENTATION            = "orientation";
-    private static final String          TAG_WIDTH                  = "width";
-    private static final String          TAG_HEIGHT                 = "height";
-    private static final String          TAG_TOP_MARGIN             = "top_margin";
-    private static final String          TAG_BOTTOM_MARGIN          = "bottom_margin";
-    private static final String          TAG_LEFT_MARGIN            = "left_margin";
-    private static final String          TAG_RIGHT_MARGIN           = "right_margin";
-    private static final String          TAG_CHROMATICITY           = "ink_chromaticity";
-    private static final String          TAG_SIDES                  = "sides";
-    private static final String          TAG_NUMBER_UP              = "number_up";
-    private static final String          TAG_QUALITY                = "quality";
-    private static final String          TAG_RESOLUTION             = "resolution";
-    private PrinterJob                   mJob;
-    private HashPrintRequestAttributeSet mSet;
+    public static final  String                       TAG_ROOT                   = "print_settings";
+    private static final String                       ATTRIBUTE_UNITS            = "units";
+    private static final String                       ATTRIBUTE_PRINTER          = "printer";
+    private static final String                       TAG_ORIENTATION            = "orientation";
+    private static final String                       TAG_WIDTH                  = "width";
+    private static final String                       TAG_HEIGHT                 = "height";
+    private static final String                       TAG_TOP_MARGIN             = "top_margin";
+    private static final String                       TAG_BOTTOM_MARGIN          = "bottom_margin";
+    private static final String                       TAG_LEFT_MARGIN            = "left_margin";
+    private static final String                       TAG_RIGHT_MARGIN           = "right_margin";
+    private static final String                       TAG_CHROMATICITY           = "ink_chromaticity";
+    private static final String                       TAG_SIDES                  = "sides";
+    private static final String                       TAG_NUMBER_UP              = "number_up";
+    private static final String                       TAG_QUALITY                = "quality";
+    private static final String                       TAG_RESOLUTION             = "resolution";
+    private              PrinterJob                   mJob;
+    private              HashPrintRequestAttributeSet mSet;
 
     static {
         Preferences.getInstance().resetIfVersionMisMatch(MODULE, MODULE_VERSION);
@@ -81,7 +80,7 @@ public class PrintManager {
      */
     public PrintManager(double margins, LengthUnits units) {
         this();
-        setPageMargins(new double[] { margins, margins, margins, margins }, units);
+        setPageMargins(new double[]{margins, margins, margins, margins}, units);
     }
 
     /**
@@ -105,7 +104,7 @@ public class PrintManager {
     public PrintManager(PageOrientation orientation, double margins, LengthUnits units) {
         this();
         setPageOrientation(orientation);
-        setPageMargins(new double[] { margins, margins, margins, margins }, units);
+        setPageMargins(new double[]{margins, margins, margins, margins}, units);
     }
 
     /**
@@ -138,10 +137,10 @@ public class PrintManager {
         String      marker  = reader.getMarker();
         LengthUnits units   = Enums.extract(reader.getAttribute(ATTRIBUTE_UNITS), LengthUnits.values(), LengthUnits.IN);
         String      printer = reader.getAttribute(ATTRIBUTE_PRINTER);
-        double[]    size    = new double[] { 8.5, 11.0 };
-        double[]    margins = new double[] { 0, 0, 0, 0 };
+        double[]    size    = {8.5, 11.0};
+        double[]    margins = {0, 0, 0, 0};
 
-        if (printer != null && printer.length() > 0) {
+        if (printer != null && !printer.isEmpty()) {
             try {
                 for (PrintService one : PrinterJob.lookupPrintServices()) {
                     if (one.getName().equalsIgnoreCase(printer)) {
@@ -309,8 +308,8 @@ public class PrintManager {
     public void adjustSettingsToPageFormat(PageFormat format) {
         Paper paper = format.getPaper();
         setPageOrientation(PageOrientation.get(format));
-        setPaperSize(new double[] { paper.getWidth(), paper.getHeight() }, LengthUnits.PT);
-        setPaperMargins(new double[] { paper.getImageableY(), paper.getImageableX(), paper.getHeight() - (paper.getImageableY() + paper.getImageableHeight()), paper.getWidth() - (paper.getImageableX() + paper.getImageableWidth()) }, LengthUnits.PT);
+        setPaperSize(new double[]{paper.getWidth(), paper.getHeight()}, LengthUnits.PT);
+        setPaperMargins(new double[]{paper.getImageableY(), paper.getImageableX(), paper.getHeight() - (paper.getImageableY() + paper.getImageableHeight()), paper.getWidth() - (paper.getImageableX() + paper.getImageableWidth())}, LengthUnits.PT);
     }
 
     /**
@@ -356,7 +355,7 @@ public class PrintManager {
     }
 
     private static PrinterResolution extractFromResolutionString(String buffer) {
-        if (buffer != null && buffer.length() > 0) {
+        if (buffer != null && !buffer.isEmpty()) {
             int sep = buffer.indexOf('x');
             int x;
             int y;

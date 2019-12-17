@@ -20,7 +20,7 @@ import java.io.OutputStream;
 /** Utility methods for use with streams. */
 public class StreamUtils {
     /**
-     * Copy the contents of <code>in</code> into <code>out</code>.
+     * Copy the contents of {@code in} into {@code out}.
      *
      * @param in  The {@link InputStream} to read from.
      * @param out The {@link OutputStream} to write to.
@@ -40,7 +40,7 @@ public class StreamUtils {
      * @param in     The stream to read from.
      * @param buffer The buffer to place the bytes into.
      */
-    public static final void readFully(InputStream in, byte buffer[]) throws IOException {
+    public static final void readFully(InputStream in, byte[] buffer) throws IOException {
         readFully(in, buffer, 0, buffer.length);
     }
 
@@ -53,7 +53,7 @@ public class StreamUtils {
      * @param offset The position within the buffer to start placing bytes.
      * @param length The number of bytes to read.
      */
-    public static final void readFully(InputStream in, byte buffer[], int offset, int length) throws IOException {
+    public static final void readFully(InputStream in, byte[] buffer, int offset, int length) throws IOException {
         int total = 0;
         while (total < length) {
             int read = in.read(buffer, offset + total, length - total);
@@ -72,8 +72,8 @@ public class StreamUtils {
      * @param length The number of bytes to skip.
      */
     public static final void skipFully(InputStream in, long length) throws IOException {
-        long total   = 0;
-        long skipped = 0;
+        long total = 0;
+        long skipped;
         while (total < length && (skipped = in.skip(length - total)) > 0) {
             total += skipped;
         }

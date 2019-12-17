@@ -20,7 +20,6 @@ import com.trollworks.toolkit.utility.I18n;
 import com.trollworks.toolkit.utility.text.IntegerFormatter;
 
 import java.awt.event.ActionEvent;
-
 import javax.print.PrintService;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
@@ -81,7 +80,7 @@ public class PrintPanel extends PageSetupPanel {
                 int[][] ranges = pageRanges.getMembers();
                 if (ranges.length > 0 && ranges[0].length > 1) {
                     start = ranges[0][0];
-                    end   = ranges[0][1];
+                    end = ranges[0][1];
                 } else {
                     pageRanges = null;
                 }
@@ -103,10 +102,10 @@ public class PrintPanel extends PageSetupPanel {
             mPageRangeAll.addActionListener(this);
             mPageRangeSome.addActionListener(this);
         } else {
-            mPageRangeAll   = null;
-            mPageRangeSome  = null;
+            mPageRangeAll = null;
+            mPageRangeSome = null;
             mPageRangeStart = null;
-            mPageRangeEnd   = null;
+            mPageRangeEnd = null;
         }
     }
 
@@ -138,7 +137,7 @@ public class PrintPanel extends PageSetupPanel {
                 if (start > end) {
                     int tmp = start;
                     start = end;
-                    end   = tmp;
+                    end = tmp;
                 }
                 PrintUtilities.setPageRanges(set, new PageRanges(start, end));
             }

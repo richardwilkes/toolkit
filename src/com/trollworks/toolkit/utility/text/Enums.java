@@ -33,8 +33,8 @@ public class Enums {
      * @param <T>    The type of {@link Enum}.
      * @param buffer The buffer to load from.
      * @param values The possible values.
-     * @return The {@link Enum} representing the buffer, or <code>null</code> if a match could not
-     *         be found.
+     * @return The {@link Enum} representing the buffer, or {@code null} if a match could not be
+     *         found.
      */
     public static final <T extends Enum<?>> T extract(String buffer, T[] values) {
         if (buffer != null) {

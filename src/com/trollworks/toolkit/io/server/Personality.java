@@ -28,7 +28,7 @@ public abstract class Personality {
         mSession = session;
     }
 
-    /** @return <code>true</code> if the associated {@link Session} is secure. */
+    /** @return {@code true} if the associated {@link Session} is secure. */
     public final boolean isSecure() {
         return getSession().isSecure();
     }
@@ -54,7 +54,7 @@ public abstract class Personality {
     /**
      * Requests that the associated {@link Session} be closed.
      *
-     * @param dueToError Pass in <code>true</code> if an error condition triggered this request.
+     * @param dueToError Pass in {@code true} if an error condition triggered this request.
      */
     public final void requestClose(boolean dueToError) {
         mSession.requestClose(dueToError);

@@ -17,12 +17,12 @@ package com.trollworks.toolkit.utility.notification;
  */
 public interface BatchNotifierTarget extends NotifierTarget {
     /**
-     * Called when a series of notifications is about to be broadcast. The
-     * {@link BatchNotifierTarget} may or may not have intervening calls to
-     * {@link NotifierTarget#handleNotification(Object,String,Object)} made to it.
+     * Called when a series of notifications is about to be broadcast. The {@link
+     * BatchNotifierTarget} may or may not have intervening calls to {@link
+     * NotifierTarget#handleNotification(Object, String, Object)} made to it.
      */
-    public void enterBatchMode();
+    void enterBatchMode();
 
     /** Called after a series of notifications was broadcast. */
-    public void leaveBatchMode();
+    void leaveBatchMode();
 }

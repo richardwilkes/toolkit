@@ -15,23 +15,23 @@ import com.trollworks.toolkit.io.xml.XmlGenerator;
 import com.trollworks.toolkit.io.xml.XmlParserContext;
 
 import java.lang.reflect.Field;
-
 import javax.xml.stream.XMLStreamException;
 
 /**
- * An interface that allows custom handling of specific classes of object during xml loading/saving.
+ * An interface that allows custom handling of specific classes of object during xml
+ * loading/saving.
  */
 public interface XmlObjectHelper {
     /**
      * @param clazz The class that will be processed.
-     * @return <code>true</code> if this instance wants to handle loading and saving of the
-     *         specified class.
+     * @return {@code true} if this instance wants to handle loading and saving of the specified
+     *         class.
      */
     boolean canHandleClass(Class<?> clazz);
 
     /**
      * Called to emit an xml attribute for an object whose class {@link #canHandleClass(Class)}
-     * returned <code>true</code> for.
+     * returned {@code true} for.
      *
      * @param xml   The {@link XmlGenerator} to use.
      * @param obj   The object to emit the attribute for.
@@ -43,8 +43,8 @@ public interface XmlObjectHelper {
     void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException;
 
     /**
-     * Called to emit a fully-formed xml tag for an object whose class
-     * {@link #canHandleClass(Class)} returned <code>true</code> for.
+     * Called to emit a fully-formed xml tag for an object whose class {@link
+     * #canHandleClass(Class)} returned {@code true} for.
      *
      * @param xml The {@link XmlGenerator} to use.
      * @param tag The xml tag to use for the object.

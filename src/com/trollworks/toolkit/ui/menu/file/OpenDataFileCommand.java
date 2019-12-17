@@ -18,26 +18,26 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
-
+import java.util.List;
 import javax.swing.SwingUtilities;
 
 /** A command that will open a specific data file. */
 public class OpenDataFileCommand extends Command implements Runnable {
-    private static final String    CMD_PREFIX    = "OpenDataFile[";
-    private static final String    CMD_POSTFIX   = "]";
-    private static boolean         PASS_THROUGH  = false;
-    private static ArrayList<File> PENDING_FILES = null;
-    private File                   mFile;
-    private boolean                mVerify;
+    private static final String     CMD_PREFIX  = "OpenDataFile[";
+    private static final String     CMD_POSTFIX = "]";
+    private static       boolean    PASS_THROUGH;
+    private static       List<File> PENDING_FILES;
+    private              File       mFile;
+    private              boolean    mVerify;
 
     /** @param file The file to open. */
     public static synchronized void open(File file) {
         if (PASS_THROUGH) {
             OpenDataFileCommand opener = new OpenDataFileCommand(file);
-            if (!SwingUtilities.isEventDispatchThread()) {
-                EventQueue.invokeLater(opener);
-            } else {
+            if (SwingUtilities.isEventDispatchThread()) {
                 opener.run();
+            } else {
+                EventQueue.invokeLater(opener);
             }
         } else {
             if (PENDING_FILES == null) {
@@ -73,14 +73,14 @@ public class OpenDataFileCommand extends Command implements Runnable {
     }
 
     /**
-     * Creates a new {@link OpenDataFileCommand} that can only be invoked successfully if
-     * {@link OpenCommand} is enabled.
+     * Creates a new {@link OpenDataFileCommand} that can only be invoked successfully if {@link
+     * OpenCommand} is enabled.
      *
      * @param file The file to open.
      */
     public OpenDataFileCommand(File file) {
         super(file.getName(), CMD_PREFIX + file.getName() + CMD_POSTFIX);
-        mFile   = file;
+        mFile = file;
         mVerify = true;
     }
 

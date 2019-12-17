@@ -16,7 +16,6 @@ import com.trollworks.toolkit.ui.scale.Scale;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.LayoutManager2;
-
 import javax.swing.JPanel;
 
 /** A wrapper panel which is initially transparent. */
@@ -26,7 +25,6 @@ public class Wrapper extends JPanel {
 
     /** Creates a new {@link Wrapper}. */
     public Wrapper() {
-        super();
         setOpaque(false);
     }
 
@@ -41,7 +39,7 @@ public class Wrapper extends JPanel {
     }
 
     public void setOnlySize(int width, int height) {
-        mWidth  = width;
+        mWidth = width;
         mHeight = height;
     }
 

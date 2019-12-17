@@ -19,8 +19,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.StringTokenizer;
-
 import javax.swing.SwingConstants;
 
 import gnu.trove.map.hash.TIntIntHashMap;
@@ -28,11 +28,11 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 
 /** General text drawing utilities. */
 public class TextDrawing {
-    private static HashMap<Font, TIntIntHashMap> WIDTH_MAP  = new HashMap<>();
-    private static TObjectIntHashMap<Font>       HEIGHT_MAP = new TObjectIntHashMap<>();
-    private static final String                  SPACE      = " ";
-    private static final String                  NEWLINE    = "\n";
-    private static final char                    ELLIPSIS   = '\u2026';
+    private static       HashMap<Font, TIntIntHashMap> WIDTH_MAP  = new HashMap<>();
+    private static       TObjectIntHashMap<Font>       HEIGHT_MAP = new TObjectIntHashMap<>();
+    private static final String                        SPACE      = " ";
+    private static final String                        NEWLINE    = "\n";
+    private static final char                          ELLIPSIS   = '\u2026';
 
     /**
      * @param font The {@link Font} to measure with.
@@ -89,10 +89,10 @@ public class TextDrawing {
      * @param gc     The graphics context.
      * @param bounds The bounding rectangle to draw the text within.
      * @param text   The text to draw.
-     * @param hAlign The horizontal alignment to use. One of {@link SwingConstants#LEFT},
-     *               {@link SwingConstants#CENTER}, or {@link SwingConstants#RIGHT}.
-     * @param vAlign The vertical alignment to use. One of {@link SwingConstants#LEFT},
-     *               {@link SwingConstants#CENTER}, or {@link SwingConstants#RIGHT}.
+     * @param hAlign The horizontal alignment to use. One of {@link SwingConstants#LEFT}, {@link
+     *               SwingConstants#CENTER}, or {@link SwingConstants#RIGHT}.
+     * @param vAlign The vertical alignment to use. One of {@link SwingConstants#LEFT}, {@link
+     *               SwingConstants#CENTER}, or {@link SwingConstants#RIGHT}.
      * @return The bottom of the drawn text.
      */
     public static final int draw(Graphics gc, Rectangle bounds, String text, int hAlign, int vAlign) {
@@ -109,36 +109,36 @@ public class TextDrawing {
      *                        {@link SwingConstants#CENTER}, or {@link SwingConstants#RIGHT}.
      * @param vAlign          The vertical alignment to use. One of {@link SwingConstants#LEFT},
      *                        {@link SwingConstants#CENTER}, or {@link SwingConstants#RIGHT}.
-     * @param strikeThruColor If not <code>null</code>, then a line of this color will be drawn
-     *                        through the text.
+     * @param strikeThruColor If not {@code null}, then a line of this color will be drawn through
+     *                        the text.
      * @param strikeThruSize  The line width to use when drawing the strike-thru.
      * @return The bottom of the drawn text.
      */
     public static final int draw(Graphics gc, Rectangle bounds, String text, int hAlign, int vAlign, Color strikeThruColor, int strikeThruSize) {
         int y = bounds.y;
-        if (text.length() > 0) {
-            ArrayList<String> list       = new ArrayList<>();
-            Font              font       = gc.getFont();
-            FontMetrics       fm         = gc.getFontMetrics();
-            int               ascent     = fm.getAscent();
-            int               descent    = fm.getDescent();
+        if (!text.isEmpty()) {
+            List<String> list    = new ArrayList<>();
+            Font         font    = gc.getFont();
+            FontMetrics  fm      = gc.getFontMetrics();
+            int          ascent  = fm.getAscent();
+            int          descent = fm.getDescent();
             // Don't use fm.getHeight(), as the PC adds too much dead space
-            int               fHeight    = ascent + descent;
-            StringTokenizer   tokenizer  = new StringTokenizer(text, " \n", true);
-            StringBuilder     buffer     = new StringBuilder(text.length());
-            int               textHeight = 0;
-            int               width;
+            int             fHeight    = ascent + descent;
+            StringTokenizer tokenizer  = new StringTokenizer(text, " \n", true);
+            StringBuilder   buffer     = new StringBuilder(text.length());
+            int             textHeight = 0;
+            int             width;
             while (tokenizer.hasMoreTokens()) {
                 String token = tokenizer.nextToken();
                 if (token.equals(NEWLINE)) {
-                    text        = buffer.toString();
+                    text = buffer.toString();
                     textHeight += fHeight;
                     list.add(text);
                     buffer.setLength(0);
                 } else {
-                    width = getSimpleWidth(font, buffer.toString() + token);
+                    width = getSimpleWidth(font, buffer + token);
                     if (width > bounds.width && buffer.length() > 0) {
-                        text        = buffer.toString();
+                        text = buffer.toString();
                         textHeight += fHeight;
                         list.add(text);
                         buffer.setLength(0);
@@ -147,7 +147,7 @@ public class TextDrawing {
                 }
             }
             if (buffer.length() > 0) {
-                text        = buffer.toString();
+                text = buffer.toString();
                 textHeight += fHeight;
                 list.add(text);
             }
@@ -161,10 +161,10 @@ public class TextDrawing {
                 int x = bounds.x;
                 if (hAlign == SwingConstants.CENTER) {
                     width = getSimpleWidth(font, piece);
-                    x     = x + (bounds.width - width) / 2;
+                    x += (bounds.width - width) / 2;
                 } else if (hAlign == SwingConstants.RIGHT) {
                     width = getSimpleWidth(font, piece);
-                    x     = x + bounds.width - (1 + width);
+                    x += bounds.width - (1 + width);
                 }
                 gc.drawString(piece, x, y + ascent);
                 if (strikeThruColor != null) {
@@ -346,7 +346,7 @@ public class TextDrawing {
      * @return A new, wrapped version of the text.
      */
     public static String wrapToPixelWidth(Font font, String text, int width) {
-        int[]           lineWidth  = { 0 };
+        int[]           lineWidth  = {0};
         StringBuilder   buffer     = new StringBuilder(text.length() * 2);
         StringBuilder   lineBuffer = new StringBuilder(text.length());
         StringTokenizer tokenizer  = new StringTokenizer(text + NEWLINE, " \t/\\\n", true);
@@ -402,7 +402,7 @@ public class TextDrawing {
             lineBuffer.setLength(0);
             lineWidth[0] = 0;
             if (!token.equals(SPACE)) {
-                return processOneTokenForWrapToPixelWidth(token, font, buffer, lineBuffer, width, lineWidth, hasBeenWrapped);
+                return processOneTokenForWrapToPixelWidth(token, font, buffer, lineBuffer, width, lineWidth, true);
             }
         }
         return hasBeenWrapped;

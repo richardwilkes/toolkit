@@ -33,15 +33,15 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
-
+import java.util.List;
 import javax.swing.JToolBar;
 
 /** Provides a base OS-level window. */
 public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undoable {
-    private static StdImageSet                DEFAULT_WINDOW_ICONSET = null;
-    private static final ArrayList<AppWindow> WINDOW_LIST            = new ArrayList<>();
-    private StdImage                          mMenuIcon;
-    private StdUndoManager                    mUndoManager;
+    private static       StdImageSet          DEFAULT_WINDOW_ICONSET;
+    private static final ArrayList<AppWindow> WINDOW_LIST = new ArrayList<>();
+    private              StdImage             mMenuIcon;
+    private              StdUndoManager       mUndoManager;
 
     /** @return The top-most window. */
     public static AppWindow getTopWindow() {
@@ -59,7 +59,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
     /**
      * Creates a new {@link AppWindow}.
      *
-     * @param title The window title. May be <code>null</code>.
+     * @param title The window title. May be {@code null}.
      */
     public AppWindow(String title) {
         this(title, null, null, false);
@@ -68,7 +68,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
     /**
      * Creates a new {@link AppWindow}.
      *
-     * @param title   The window title. May be <code>null</code>.
+     * @param title   The window title. May be {@code null}.
      * @param iconset The window {@link StdImageSet}.
      */
     public AppWindow(String title, StdImageSet iconset) {
@@ -200,7 +200,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
 
     /**
      * @param windowClass The window class to return.
-     * @param             <T> The window type.
+     * @param <T>         The window type.
      * @return The current visible windows, in order from top to bottom.
      */
     public static <T extends AppWindow> ArrayList<T> getActiveWindows(Class<T> windowClass) {
@@ -237,7 +237,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
      */
     public static FileProxy findFileProxy(File file) {
         String fullPath = PathUtils.getFullPath(file);
-        for (AppWindow window : AppWindow.getAllWindows()) {
+        for (AppWindow window : getAllAppWindows()) {
             if (window instanceof FileProxy) {
                 FileProxy proxy = (FileProxy) window;
                 File      wFile = proxy.getBackingFile();
@@ -257,7 +257,7 @@ public class AppWindow extends BaseWindow implements Comparable<AppWindow>, Undo
     }
 
     /** @return A list of all {@link AppWindow}s created by this application. */
-    public static ArrayList<AppWindow> getAllWindows() {
+    public static List<AppWindow> getAllAppWindows() {
         return getWindows(AppWindow.class);
     }
 

@@ -16,9 +16,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 
 public class IconTreeColumn extends TreeColumn {
-    public static final int HMARGIN = 2;
-    public static final int VMARGIN = 1;
-    private IconInteractor  mIconInteractor;
+    public static final int            HMARGIN = 2;
+    public static final int            VMARGIN = 1;
+    private             IconInteractor mIconInteractor;
 
     public IconTreeColumn(String name, IconInteractor iconInteractor) {
         super(name);

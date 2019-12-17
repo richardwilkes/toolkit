@@ -14,7 +14,6 @@ package com.trollworks.toolkit.ui.print;
 import com.trollworks.toolkit.utility.I18n;
 
 import java.awt.print.PageFormat;
-
 import javax.print.attribute.standard.OrientationRequested;
 
 /** Constants representing the various page orientation possibilities. */
@@ -91,12 +90,12 @@ public enum PageOrientation {
     public static final PageOrientation get(PageFormat format) {
         switch (format.getOrientation()) {
         case PageFormat.LANDSCAPE:
-            return PageOrientation.LANDSCAPE;
+            return LANDSCAPE;
         case PageFormat.REVERSE_LANDSCAPE:
-            return PageOrientation.REVERSE_LANDSCAPE;
+            return REVERSE_LANDSCAPE;
         case PageFormat.PORTRAIT:
         default:
-            return PageOrientation.PORTRAIT;
+            return PORTRAIT;
         }
     }
 }

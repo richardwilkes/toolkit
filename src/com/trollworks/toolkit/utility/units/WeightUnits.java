@@ -73,8 +73,8 @@ public enum WeightUnits implements Units {
     private double  mFactor;
     private boolean mIsMetric;
 
-    private WeightUnits(double factor, boolean isMetric) {
-        mFactor   = factor;
+    WeightUnits(double factor, boolean isMetric) {
+        mFactor = factor;
         mIsMetric = isMetric;
     }
 

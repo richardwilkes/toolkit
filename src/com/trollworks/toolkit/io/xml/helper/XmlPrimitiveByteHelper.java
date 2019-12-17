@@ -16,13 +16,13 @@ import com.trollworks.toolkit.io.xml.XmlGenerator;
 import com.trollworks.toolkit.io.xml.XmlParserContext;
 
 import java.lang.reflect.Field;
-
 import javax.xml.stream.XMLStreamException;
 
 public class XmlPrimitiveByteHelper implements XmlObjectHelper {
     public static final XmlPrimitiveByteHelper SINGLETON = new XmlPrimitiveByteHelper();
 
-    private XmlPrimitiveByteHelper() {}
+    private XmlPrimitiveByteHelper() {
+    }
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {

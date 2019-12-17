@@ -26,7 +26,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -36,10 +35,10 @@ import javax.swing.event.ChangeListener;
 /** A window for editing application preferences. */
 public class PreferencesWindow extends AppWindow implements ActionListener, ChangeListener, CloseHandler {
     private static final String                           PREFIX     = "PreferencesWindow.";
-    private static PreferencesWindow                      INSTANCE   = null;
+    private static       PreferencesWindow                INSTANCE;
     private static final List<PreferenceCategoryProvider> CATEGORIES = new ArrayList<>();
-    private JTabbedPane                                   mTabPanel;
-    private JButton                                       mResetButton;
+    private              JTabbedPane                      mTabPanel;
+    private              JButton                          mResetButton;
 
     /**
      * Adds a category of preference items.
@@ -53,10 +52,14 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
     /** Displays the preferences window. */
     public static void display() {
         if (!UIUtilities.inModalState()) {
-            if (INSTANCE == null) {
-                INSTANCE = new PreferencesWindow();
+            PreferencesWindow wnd;
+            synchronized (PreferencesWindow.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new PreferencesWindow();
+                }
+                wnd = INSTANCE;
             }
-            INSTANCE.setVisible(true);
+            wnd.setVisible(true);
         }
     }
 
@@ -84,7 +87,9 @@ public class PreferencesWindow extends AppWindow implements ActionListener, Chan
 
     @Override
     public void dispose() {
-        INSTANCE = null;
+        synchronized (PreferencesWindow.class) {
+            INSTANCE = null;
+        }
         super.dispose();
     }
 

@@ -18,8 +18,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-/** Provides a default value for a float value. */
-public @interface XmlDefaultFloat {
+/** Provides a default value for a float value. */ public @interface XmlDefaultFloat {
     /** @return The default value. */
     float value();
 }

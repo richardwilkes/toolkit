@@ -18,8 +18,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-/** Provides a default value for a short value. */
-public @interface XmlDefaultShort {
+/** Provides a default value for a short value. */ public @interface XmlDefaultShort {
     /** @return The default value. */
     short value();
 }

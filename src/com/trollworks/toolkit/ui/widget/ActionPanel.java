@@ -15,7 +15,6 @@ import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.JPanel;
 
 /** A {@link JPanel} with {@link ActionListener} support. */
@@ -31,7 +30,7 @@ public class ActionPanel extends JPanel {
     /**
      * Creates a new {@link ActionPanel} with the specified layout.
      *
-     * @param layout The layout manager to use. May be <code>null</code>.
+     * @param layout The layout manager to use. May be {@code null}.
      */
     public ActionPanel(LayoutManager layout) {
         super(layout);

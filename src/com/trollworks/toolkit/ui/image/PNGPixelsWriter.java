@@ -4,44 +4,40 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.Deflater;
 
-class PNGPixelsWriter {
+class PNGPixelsWriter implements AutoCloseable {
     private enum FilterType {
         // Do not change the order of these... and DEFAULT must be last
-        NONE, SUB, UP, AVERAGE, PAETH, DEFAULT;
+        NONE, SUB, UP, AVERAGE, PAETH, DEFAULT
     }
 
-    private OutputStream mOut;
-    private final int    mCols;
-    private final int    mRows;
-    private final int    mBlockLen;
-    private final int    mBytesRow;
-    private int          mOffset;
-    private int          mAvailable;
-    private Deflater     mDeflater;
-    private FilterType   mFilterType;
-    private FilterType   mCurrentFilterType;
-    private byte[]       mRow;
-    private byte[]       mPreviousRow;
-    private byte[]       mRowFilter;
-    private byte[]       mBuffer;
+    private       OutputStream mOut;
+    private final int          mBlockLen;
+    private final int          mBytesRow;
+    private       int          mOffset;
+    private       int          mAvailable;
+    private       Deflater     mDeflater;
+    private       FilterType   mFilterType;
+    private       FilterType   mCurrentFilterType;
+    private       byte[]       mRow;
+    private       byte[]       mPreviousRow;
+    private       byte[]       mRowFilter;
+    private       byte[]       mBuffer;
 
     PNGPixelsWriter(OutputStream out, int cols, int rows) {
-        mOut         = out;
-        mCols        = cols;
-        mRows        = rows;
-        mBytesRow    = 4 * mCols;
-        mBlockLen    = mBytesRow + 1;
-        mRow         = new byte[mBlockLen];
-        mRowFilter   = new byte[mBlockLen];
+        mOut = out;
+        mBytesRow = 4 * cols;
+        mBlockLen = mBytesRow + 1;
+        mRow = new byte[mBlockLen];
+        mRowFilter = new byte[mBlockLen];
         mPreviousRow = new byte[mBlockLen];
-        mBuffer      = new byte[32768];
-        mAvailable   = mBuffer.length;
-        mDeflater    = new Deflater(9);
-        if (mCols * (long) mRows < 1024) {
+        mBuffer = new byte[32768];
+        mAvailable = mBuffer.length;
+        mDeflater = new Deflater(9);
+        if (cols * (long) rows < 1024) {
             mFilterType = FilterType.NONE;
-        } else if (mRows == 1) {
+        } else if (rows == 1) {
             mFilterType = FilterType.SUB;
-        } else if (mCols == 1) {
+        } else if (cols == 1) {
             mFilterType = FilterType.UP;
         } else {
             mFilterType = FilterType.PAETH;
@@ -59,7 +55,7 @@ class PNGPixelsWriter {
         int    offset = 0;
         int    length = buffer.length;
         while (length > 0) {
-            int amt = length < mBlockLen ? length : mBlockLen;
+            int amt = Math.min(length, mBlockLen);
             mDeflater.setInput(buffer, offset, amt);
             while (!mDeflater.needsInput()) {
                 deflate();
@@ -68,14 +64,14 @@ class PNGPixelsWriter {
             length -= amt;
         }
         byte[] tmp = mRow;
-        mRow         = mPreviousRow;
+        mRow = mPreviousRow;
         mPreviousRow = tmp;
     }
 
     private void deflate() throws IOException {
         int len = mDeflater.deflate(mBuffer, mOffset, mAvailable);
         if (len > 0) {
-            mOffset    += len;
+            mOffset += len;
             mAvailable -= len;
             if (mAvailable == 0) {
                 flush();
@@ -90,9 +86,7 @@ class PNGPixelsWriter {
         buffer[0] = (byte) mCurrentFilterType.ordinal();
         switch (mCurrentFilterType) {
         case SUB:
-            for (int i = 1; i <= 4; i++) {
-                buffer[i] = mRow[i];
-            }
+            System.arraycopy(mRow, 1, buffer, 1, 4);
             for (int j = 1, i = 5; i <= mBytesRow; i++, j++) {
                 buffer[i] = (byte) (mRow[i] - mRow[j]);
             }
@@ -124,13 +118,13 @@ class PNGPixelsWriter {
         return buffer;
     }
 
-    private static int paeth(final int r, final int left, final int up, final int upleft) {
+    private static int paeth(int r, int left, int up, int upleft) {
         // from http://www.libpng.org/pub/png/spec/1.2/PNG-Filters.html
-        final int p  = left + up - upleft;
-        final int pa = p >= left ? p - left : left - p;
-        final int pb = p >= up ? p - up : up - p;
-        final int pc = p >= upleft ? p - upleft : upleft - p;
-        int       predictor;
+        int p  = left + up - upleft;
+        int pa = p >= left ? p - left : left - p;
+        int pb = p >= up ? p - up : up - p;
+        int pc = p >= upleft ? p - upleft : upleft - p;
+        int predictor;
         if (pa <= pb && pa <= pc) {
             predictor = left;
         } else if (pb <= pc) {
@@ -150,12 +144,12 @@ class PNGPixelsWriter {
                 System.arraycopy(mBuffer, 0, tmp, 0, tmp.length);
             }
             AnnotatedImage.writeChunk(mOut, "IDAT", buffer);
-            mOffset    = 0;
+            mOffset = 0;
             mAvailable = mBuffer.length;
         }
     }
 
-    void close() throws IOException {
+    public void close() throws IOException {
         if (!mDeflater.finished()) {
             mDeflater.finish();
             while (!mDeflater.finished()) {

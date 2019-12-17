@@ -23,7 +23,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
-
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 
@@ -53,7 +52,7 @@ public class BandedPanel extends ActionPanel implements Scrollable {
         int count = getComponentCount();
         for (int i = 0; i < count; i += step) {
             Rectangle compBounds = getComponent(i).getBounds();
-            bounds.y      = compBounds.y;
+            bounds.y = compBounds.y;
             bounds.height = compBounds.height;
             int logical = i / step;
             gc.setColor(Colors.getBanding(logical % 2 == 0));

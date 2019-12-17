@@ -27,7 +27,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Collections;
 import java.util.List;
-
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -50,7 +49,7 @@ public class Search extends JPanel implements DocumentListener, KeyListener, Foc
      * @param target The search target.
      */
     public Search(SearchTarget target) {
-        mTarget      = target;
+        mTarget = target;
 
         mFilterField = new JTextField(10);
         mFilterField.getDocument().addDocumentListener(this);
@@ -120,7 +119,7 @@ public class Search extends JPanel implements DocumentListener, KeyListener, Foc
 
     private void documentChanged() {
         String filterText = mFilterField.getText();
-        mFilter = filterText.length() > 0 ? filterText : null;
+        mFilter = filterText.isEmpty() ? null : filterText;
         adjustHits();
     }
 

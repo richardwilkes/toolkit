@@ -30,12 +30,12 @@ import java.awt.event.KeyEvent;
 /** Provides the "Quit"/"Exit" command. */
 public class QuitCommand extends Command implements QuitHandler {
     /** The action command this command will issue. */
-    public static final String      CMD_QUIT                             = "Quit";
+    public static final String CMD_QUIT = "Quit";
 
     /** The singleton {@link QuitCommand}. */
-    public static final QuitCommand INSTANCE                             = new QuitCommand();
+    public static final QuitCommand INSTANCE = new QuitCommand();
 
-    private boolean                 mAllowQuitIfNoSignificantWindowsOpen = true;
+    private boolean mAllowQuitIfNoSignificantWindowsOpen = true;
 
     private QuitCommand() {
         super(Platform.isMacintosh() ? I18n.Text("Quit") : I18n.Text("Exit"), CMD_QUIT, KeyEvent.VK_Q);

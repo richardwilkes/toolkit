@@ -28,5 +28,5 @@ public enum XMLNodeType {
     /** An entity reference. */
     ENTITY_REF,
     /** Other... */
-    OTHER;
+    OTHER
 }

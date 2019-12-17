@@ -21,7 +21,6 @@ import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -30,8 +29,8 @@ import javax.swing.text.JTextComponent;
 /** Utilities for use with windows. */
 public class WindowUtils {
     /**
-     * @param comp The {@link Component} to use for determining the parent {@link Frame} or
-     *             {@link Dialog}.
+     * @param comp The {@link Component} to use for determining the parent {@link Frame} or {@link
+     *             Dialog}.
      * @param msg  The message to display.
      */
     public static void showError(Component comp, String msg) {
@@ -39,8 +38,8 @@ public class WindowUtils {
     }
 
     /**
-     * @param comp The {@link Component} to use for determining the parent {@link Frame} or
-     *             {@link Dialog}.
+     * @param comp The {@link Component} to use for determining the parent {@link Frame} or {@link
+     *             Dialog}.
      * @param msg  The message to display.
      */
     public static void showError(Component comp, Component msg) {
@@ -48,8 +47,8 @@ public class WindowUtils {
     }
 
     /**
-     * @param comp The {@link Component} to use for determining the parent {@link Frame} or
-     *             {@link Dialog}.
+     * @param comp The {@link Component} to use for determining the parent {@link Frame} or {@link
+     *             Dialog}.
      * @param msg  The message to display.
      */
     public static void showWarning(Component comp, String msg) {
@@ -57,8 +56,8 @@ public class WindowUtils {
     }
 
     /**
-     * @param comp The {@link Component} to use for determining the parent {@link Frame} or
-     *             {@link Dialog}.
+     * @param comp The {@link Component} to use for determining the parent {@link Frame} or {@link
+     *             Dialog}.
      * @param msg  The message to display.
      */
     public static void showWarning(Component comp, Component msg) {
@@ -68,7 +67,7 @@ public class WindowUtils {
     /**
      * Shows a confirmation dialog with custom options.
      *
-     * @param comp         The {@link Component} to use. May be <code>null</code>.
+     * @param comp         The {@link Component} to use. May be {@code null}.
      * @param message      The message.
      * @param title        The title to use.
      * @param optionType   The type of option dialog. Use the {@link JOptionPane} constants.
@@ -83,14 +82,14 @@ public class WindowUtils {
     /**
      * Shows an option dialog.
      *
-     * @param parentComponent The parent {@link Component} to use. May be <code>null</code>.
+     * @param parentComponent The parent {@link Component} to use. May be {@code null}.
      * @param message         The message. May be a {@link Component}.
      * @param title           The title to use.
      * @param resizable       Whether to allow the dialog to be resized by the user.
      * @param optionType      The type of option dialog. Use the {@link JOptionPane} constants.
      * @param messageType     The type of message. Use the {@link JOptionPane} constants.
-     * @param icon            The icon to use. May be <code>null</code>.
-     * @param options         The options to display. May be <code>null</code>.
+     * @param icon            The icon to use. May be {@code null}.
+     * @param options         The options to display. May be {@code null}.
      * @param initialValue    The initial option.
      * @return See the documentation for {@link JOptionPane}.
      */
@@ -100,11 +99,11 @@ public class WindowUtils {
         pane.setInitialValue(initialValue);
         pane.setComponentOrientation((parentComponent == null ? JOptionPane.getRootFrame() : parentComponent).getComponentOrientation());
 
-        final JDialog dialog = pane.createDialog(getWindowForComponent(parentComponent), title);
+        JDialog dialog = pane.createDialog(getWindowForComponent(parentComponent), title);
         WindowSizeEnforcer.monitor(dialog);
         pane.selectInitialValue();
         dialog.setResizable(resizable);
-        final Component field = getFirstFocusableField(message);
+        Component field = getFirstFocusableField(message);
         if (field != null) {
             dialog.addWindowFocusListener(new WindowAdapter() {
                 @Override
@@ -125,7 +124,8 @@ public class WindowUtils {
                     return ((Integer) selectedValue).intValue();
                 }
             } else {
-                for (int i = 0; i < options.length; i++) {
+                int length = options.length;
+                for (int i = 0; i < length; i++) {
                     if (options[i].equals(selectedValue)) {
                         return i;
                     }
@@ -151,7 +151,7 @@ public class WindowUtils {
     }
 
     /**
-     * @param comp The {@link Component} to use. May be <code>null</code>.
+     * @param comp The {@link Component} to use. May be {@code null}.
      * @return The most logical {@link Window} associated with the component.
      */
     public static Window getWindowForComponent(Component comp) {

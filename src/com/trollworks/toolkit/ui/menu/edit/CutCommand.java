@@ -17,13 +17,12 @@ import com.trollworks.toolkit.utility.I18n;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
 import javax.swing.text.JTextComponent;
 
 /** Provides the "Cut" command. */
 public class CutCommand extends Command {
     /** The action command this command will issue. */
-    public static final String     CMD_CUT  = "Cut";
+    public static final String CMD_CUT = "Cut";
 
     /** The singleton {@link CutCommand}. */
     public static final CutCommand INSTANCE = new CutCommand();

@@ -20,14 +20,15 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /** A {@link FlexCell} that contains other {@link FlexCell}s. */
 public abstract class FlexContainer extends FlexCell {
-    private ArrayList<FlexCell> mChildren       = new ArrayList<>();
-    private int                 mHorizontalGap  = 5;
-    private int                 mVerticalGap    = 2;
-    private boolean             mFillHorizontal = false;
-    private boolean             mFillVertical   = false;
+    private List<FlexCell> mChildren      = new ArrayList<>();
+    private int            mHorizontalGap = 5;
+    private int            mVerticalGap   = 2;
+    private boolean        mFillHorizontal;
+    private boolean        mFillVertical;
 
     /** @param cell The {@link FlexCell} to add as a child. */
     public void add(FlexCell cell) {
@@ -45,7 +46,7 @@ public abstract class FlexContainer extends FlexCell {
     }
 
     /** @return The children of this {@link FlexContainer}. */
-    protected ArrayList<FlexCell> getChildren() {
+    protected List<FlexCell> getChildren() {
         return mChildren;
     }
 
@@ -68,7 +69,8 @@ public abstract class FlexContainer extends FlexCell {
      * @param bounds The bounds to use for each child.
      */
     protected void layoutChildren(Scale scale, Rectangle[] bounds) {
-        for (int i = 0; i < bounds.length; i++) {
+        int length = bounds.length;
+        for (int i = 0; i < length; i++) {
             mChildren.get(i).layout(scale, bounds[i]);
         }
     }
@@ -96,7 +98,7 @@ public abstract class FlexContainer extends FlexCell {
     /** @param fill Whether all space will be taken up by expanding the gaps, if necessary. */
     public void setFill(boolean fill) {
         mFillHorizontal = fill;
-        mFillVertical   = fill;
+        mFillVertical = fill;
     }
 
     /**
@@ -143,14 +145,16 @@ public abstract class FlexContainer extends FlexCell {
     }
 
     private static int distributeShrink(int amt, int[] values, int[] min) {
-        int orig[] = new int[values.length];
-        System.arraycopy(values, 0, orig, 0, values.length);
-        int max[] = new int[min.length];
-        for (int i = 0; i < min.length; i++) {
+        int   valuesLength = values.length;
+        int[] orig         = new int[valuesLength];
+        System.arraycopy(values, 0, orig, 0, valuesLength);
+        int   minLength = min.length;
+        int[] max       = new int[minLength];
+        for (int i = 0; i < minLength; i++) {
             max[i] = values[i] * 2 - min[i];
         }
         amt = distributeGrow(amt, values, max);
-        for (int i = 0; i < values.length; i++) {
+        for (int i = 0; i < valuesLength; i++) {
             values[i] = orig[i] * 2 - values[i];
         }
         return -amt;
@@ -158,18 +162,19 @@ public abstract class FlexContainer extends FlexCell {
 
     private static int distributeGrow(int amt, int[] values, int[] max) {
         // Copy the values and sort them from smallest to largest
-        int[] order = new int[values.length];
-        System.arraycopy(values, 0, order, 0, values.length);
+        int   length = values.length;
+        int[] order  = new int[length];
+        System.arraycopy(values, 0, order, 0, length);
         Arrays.sort(order);
 
         // Find the next-to-smallest
         int pos = 1;
-        while (pos < values.length && order[pos] == order[pos - 1]) {
+        while (pos < length && order[pos] == order[pos - 1]) {
             pos++;
         }
 
         // Go through each position and try to expand it
-        for (; pos < values.length && amt > 0; pos++) {
+        for (; pos < length && amt > 0; pos++) {
             amt = fill(amt, order[pos], values, max);
         }
         if (amt > 0) {
@@ -180,9 +185,10 @@ public abstract class FlexContainer extends FlexCell {
     }
 
     private static int fill(int amt, int upTo, int[] values, int[] max) {
-        int count = 0;
-        int total = 0;
-        for (int i = 0; i < values.length; i++) {
+        int count  = 0;
+        int total  = 0;
+        int length = values.length;
+        for (int i = 0; i < length; i++) {
             if (values[i] < upTo && values[i] < max[i]) {
                 total += Math.min(upTo, max[i]) - values[i];
                 count++;
@@ -190,7 +196,7 @@ public abstract class FlexContainer extends FlexCell {
         }
         if (count > 0) {
             if (total <= amt) {
-                for (int i = 0; i < values.length; i++) {
+                for (int i = 0; i < length; i++) {
                     if (values[i] < upTo && values[i] < max[i]) {
                         values[i] = Math.min(upTo, max[i]);
                     }
@@ -200,17 +206,17 @@ public abstract class FlexContainer extends FlexCell {
                 while (count > 0 && amt > 0) {
                     int portion = Math.max(amt / count, 1);
                     count = 0;
-                    for (int i = 0; i < values.length && amt > 0; i++) {
+                    for (int i = 0; i < length && amt > 0; i++) {
                         if (values[i] < upTo && values[i] < max[i]) {
                             if (values[i] + portion <= max[i]) {
                                 values[i] += portion;
-                                amt       -= portion;
+                                amt -= portion;
                                 if (values[i] != upTo) {
                                     count++;
                                 }
                             } else {
-                                amt       -= max[i] - values[i];
-                                values[i]  = max[i];
+                                amt -= max[i] - values[i];
+                                values[i] = max[i];
                             }
                         }
                     }

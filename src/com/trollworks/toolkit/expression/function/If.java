@@ -22,7 +22,7 @@ public class If implements ExpressionFunction {
     }
 
     @Override
-    public final Object execute(final Evaluator evaluator, final String arguments) throws EvaluationException {
+    public final Object execute(Evaluator evaluator, String arguments) throws EvaluationException {
         ArgumentTokenizer tokenizer = new ArgumentTokenizer(arguments);
         Evaluator         ev        = new Evaluator(evaluator);
         Object            result    = ev.evaluate(tokenizer.nextToken());

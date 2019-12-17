@@ -11,7 +11,7 @@
 
 package com.trollworks.toolkit.collections;
 
-import com.trollworks.toolkit.utility.text.Numbers;
+import java.util.Objects;
 
 /** Creates a tuple with two values. */
 public class Pair<F, S> implements Comparable<Pair<F, S>> {
@@ -25,7 +25,7 @@ public class Pair<F, S> implements Comparable<Pair<F, S>> {
      * @param second The second value of the pair.
      */
     public Pair(F first, S second) {
-        mFirst  = first;
+        mFirst = first;
         mSecond = second;
     }
 
@@ -46,7 +46,7 @@ public class Pair<F, S> implements Comparable<Pair<F, S>> {
         }
         if (obj instanceof Pair) {
             Pair<?, ?> other = (Pair<?, ?>) obj;
-            return (mFirst == null ? other.mFirst == null : mFirst.equals(other.mFirst)) && (mSecond == null ? other.mSecond == null : mSecond.equals(other.mSecond));
+            return Objects.equals(mFirst, other.mFirst) && Objects.equals(mSecond, other.mSecond);
         }
         return false;
     }
@@ -60,17 +60,9 @@ public class Pair<F, S> implements Comparable<Pair<F, S>> {
     @Override
     public final int compareTo(Pair<F, S> other) {
         int result;
-        if (mFirst instanceof Comparable) {
-            result = ((Comparable<F>) mFirst).compareTo(other.mFirst);
-        } else {
-            result = Numbers.compare(mFirst.hashCode(), other.mFirst.hashCode());
-        }
+        result = mFirst instanceof Comparable ? ((Comparable<F>) mFirst).compareTo(other.mFirst) : Integer.compare(mFirst.hashCode(), other.mFirst.hashCode());
         if (result == 0) {
-            if (mSecond instanceof Comparable) {
-                result = ((Comparable<S>) mSecond).compareTo(other.mSecond);
-            } else {
-                result = Numbers.compare(mSecond.hashCode(), other.mSecond.hashCode());
-            }
+            result = mSecond instanceof Comparable ? ((Comparable<S>) mSecond).compareTo(other.mSecond) : Integer.compare(mSecond.hashCode(), other.mSecond.hashCode());
         }
         return result;
     }

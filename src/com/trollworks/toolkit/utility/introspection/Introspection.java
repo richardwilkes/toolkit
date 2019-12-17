@@ -35,7 +35,7 @@ public class Introspection {
      *
      * @param field The {@link Field} to mark as accessible.
      */
-    public static void makeFieldAccessible(final Field field) throws SecurityException {
+    public static void makeFieldAccessible(Field field) throws SecurityException {
         boolean canAccess = false;
         try {
             canAccess = field.canAccess(field.getDeclaringClass());
@@ -113,7 +113,7 @@ public class Introspection {
             List<FieldAnnotation<?>> annotations = CLASS_DEEP_FIELD_ANNOTATION_MAP.get(ca);
             if (annotations == null) {
                 annotations = new ArrayList<>();
-                for (Class<?> one : Introspection.getClassTree(cls)) {
+                for (Class<?> one : getClassTree(cls)) {
                     annotations.addAll(getFieldAnnotations(one, annotationCls));
                 }
                 CLASS_DEEP_FIELD_ANNOTATION_MAP.put(ca, annotations);

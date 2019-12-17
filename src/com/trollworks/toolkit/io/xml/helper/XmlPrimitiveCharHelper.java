@@ -16,13 +16,13 @@ import com.trollworks.toolkit.io.xml.XmlGenerator;
 import com.trollworks.toolkit.io.xml.XmlParserContext;
 
 import java.lang.reflect.Field;
-
 import javax.xml.stream.XMLStreamException;
 
 public class XmlPrimitiveCharHelper implements XmlObjectHelper {
     public static final XmlPrimitiveCharHelper SINGLETON = new XmlPrimitiveCharHelper();
 
-    private XmlPrimitiveCharHelper() {}
+    private XmlPrimitiveCharHelper() {
+    }
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {
@@ -42,9 +42,13 @@ public class XmlPrimitiveCharHelper implements XmlObjectHelper {
 
     @Override
     public void loadAttributeValue(XmlParserContext context, Object obj, Field field, String name) throws XMLStreamException, ReflectiveOperationException {
-        XmlDefaultChar def     = field.getAnnotation(XmlDefaultChar.class);
-        String         charStr = context.getParser().getAttribute(name);
-        field.setChar(obj, charStr == null || charStr.isEmpty() ? def != null ? def.value() : 0 : charStr.charAt(0));
+        String charStr = context.getParser().getAttribute(name);
+        if (charStr == null || charStr.isEmpty()) {
+            XmlDefaultChar def = field.getAnnotation(XmlDefaultChar.class);
+            field.setChar(obj, def != null ? def.value() : 0);
+        } else {
+            field.setChar(obj, charStr.charAt(0));
+        }
     }
 
     @Override

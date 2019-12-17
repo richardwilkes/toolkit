@@ -26,9 +26,7 @@ public abstract class JsonCollection {
 
     protected static void indent(StringBuilder buffer, boolean compact, int depth) {
         if (!compact) {
-            for (int i = 0; i < depth; i++) {
-                buffer.append('\t');
-            }
+            buffer.append("\t".repeat(depth));
         }
     }
 }

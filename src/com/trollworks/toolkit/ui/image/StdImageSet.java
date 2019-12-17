@@ -11,10 +11,7 @@
 
 package com.trollworks.toolkit.ui.image;
 
-import com.trollworks.toolkit.utility.text.Numbers;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -22,13 +19,13 @@ import java.util.Map;
 
 /** Provides a set of images at different resolutions. */
 public class StdImageSet implements Comparator<StdImage> {
-    public static final int[]               STD_SIZES = { 1024, 512, 256, 128, 64, 48, 32, 16 };
-    private static Map<String, StdImageSet> SETS      = new HashMap<>();
-    private static int                      SEQUENCE  = 0;
-    private String                          mName;
-    private StdImageSet[]                   mLayers;
-    private List<StdImage>                  mImages;
-    private int                             mSequence;
+    public static final int[]                    STD_SIZES = {1024, 512, 256, 128, 64, 48, 32, 16};
+    private static      Map<String, StdImageSet> SETS      = new HashMap<>();
+    private static      int                      SEQUENCE;
+    private             String                   mName;
+    private             StdImageSet[]            mLayers;
+    private             List<StdImage>           mImages;
+    private             int                      mSequence;
 
     /**
      * @param name The name of the {@link StdImageSet}.
@@ -71,31 +68,31 @@ public class StdImageSet implements Comparator<StdImage> {
         return set;
     }
 
-    private static final void track(String name, StdImage image) {
+    private static void track(String name, StdImage image) {
         StdImage.add("is:" + name + "_" + image.getWidth() + "x" + image.getHeight(), image);
     }
 
     /**
      * Creates a new {@link StdImageSet}.
      *
-     * @param name   The name of this {@link StdImageSet}. This can be used to retrieve the
-     *               {@link StdImageSet} later, via a call to {@link #get(String)}.
+     * @param name   The name of this {@link StdImageSet}. This can be used to retrieve the {@link
+     *               StdImageSet} later, via a call to {@link #get(String)}.
      * @param images The images that belong in this {@link StdImageSet}.
      */
     public StdImageSet(String name, List<StdImage> images) {
         mName = name;
         updateSequence();
         mImages = new ArrayList<>(images);
-        Collections.sort(mImages, this);
+        mImages.sort(this);
         SETS.put(name, this);
     }
 
     /**
-     * Creates a new {@link StdImageSet} that composites multiple images together from other
-     * {@link StdImageSet}s to form its images.
+     * Creates a new {@link StdImageSet} that composites multiple images together from other {@link
+     * StdImageSet}s to form its images.
      *
-     * @param name   The name of this {@link StdImageSet}. This can be used to retrieve the
-     *               {@link StdImageSet} later, via a call to {@link #get(String)}.
+     * @param name   The name of this {@link StdImageSet}. This can be used to retrieve the {@link
+     *               StdImageSet} later, via a call to {@link #get(String)}.
      * @param layers Two or more other {@link StdImageSet}s to use. Each one will be layered on top
      *               of the previous one, creating a single image for a given size.
      */
@@ -113,11 +110,11 @@ public class StdImageSet implements Comparator<StdImage> {
 
     @Override
     public int compare(StdImage o1, StdImage o2) {
-        int result = Numbers.compare(o2.getWidth(), o1.getWidth());
+        int result = Integer.compare(o2.getWidth(), o1.getWidth());
         if (result == 0) {
-            result = Numbers.compare(o2.getHeight(), o1.getHeight());
+            result = Integer.compare(o2.getHeight(), o1.getHeight());
             if (result == 0) {
-                result = Numbers.compare(o2.hashCode(), o1.hashCode());
+                result = Integer.compare(o2.hashCode(), o1.hashCode());
             }
         }
         return result;
@@ -130,7 +127,7 @@ public class StdImageSet implements Comparator<StdImage> {
 
     /**
      * @param size The width and height of the image.
-     * @return <code>true</code> if the image exists.
+     * @return {@code true} if the image exists.
      */
     public boolean hasImage(int size) {
         return hasImage(size, size);
@@ -139,7 +136,7 @@ public class StdImageSet implements Comparator<StdImage> {
     /**
      * @param width  The width of the image.
      * @param height The height of the image.
-     * @return <code>true</code> if the image exists.
+     * @return {@code true} if the image exists.
      */
     public boolean hasImage(int width, int height) {
         for (StdImage image : mImages) {
@@ -152,8 +149,7 @@ public class StdImageSet implements Comparator<StdImage> {
 
     /**
      * @param size The width and height of the image.
-     * @return An image from the set, or <code>null</code> if the desired dimensions cannot be
-     *         found.
+     * @return An image from the set, or {@code null} if the desired dimensions cannot be found.
      */
     public StdImage getImageNoCreate(int size) {
         return getImageNoCreate(size, size);
@@ -162,8 +158,7 @@ public class StdImageSet implements Comparator<StdImage> {
     /**
      * @param width  The width of the image.
      * @param height The height of the image.
-     * @return An image from the set, or <code>null</code> if the desired dimensions cannot be
-     *         found.
+     * @return An image from the set, or {@code null} if the desired dimensions cannot be found.
      */
     public StdImage getImageNoCreate(int width, int height) {
         for (StdImage image : mImages) {
@@ -194,7 +189,8 @@ public class StdImageSet implements Comparator<StdImage> {
         if (match == null) {
             if (mLayers != null) {
                 match = mLayers[0].getImage(width, height);
-                for (int i = 1; i < mLayers.length; i++) {
+                int length = mLayers.length;
+                for (int i = 1; i < length; i++) {
                     StdImage previous = match;
                     match = StdImage.superimpose(match, mLayers[i].getImage(width, height));
                     if (i > 1) {
@@ -211,11 +207,11 @@ public class StdImageSet implements Comparator<StdImage> {
                     int heuristic   = (imageWidth - width) * (imageHeight - height);
                     if (imageWidth > width || imageHeight > height) {
                         if (heuristic < best) {
-                            best  = heuristic;
+                            best = heuristic;
                             match = image;
                         }
                     } else if (match == null && heuristic > inverseBest) {
-                        inverseBest  = heuristic;
+                        inverseBest = heuristic;
                         inverseMatch = image;
                     }
                 }
@@ -226,7 +222,7 @@ public class StdImageSet implements Comparator<StdImage> {
             }
             track(mName, match);
             mImages.add(match);
-            Collections.sort(mImages, this);
+            mImages.sort(this);
         }
         return match;
     }
@@ -245,7 +241,9 @@ public class StdImageSet implements Comparator<StdImage> {
         return mSequence;
     }
 
-    private synchronized void updateSequence() {
-        mSequence = ++SEQUENCE;
+    private void updateSequence() {
+        synchronized (StdImageSet.class) {
+            mSequence = ++SEQUENCE;
+        }
     }
 }

@@ -22,10 +22,10 @@ import java.awt.event.WindowEvent;
 /** Provides the "Close" command. */
 public class CloseCommand extends Command {
     /** The action command this command will issue. */
-    public static final String       CMD_CLOSE = "Close";
+    public static final String CMD_CLOSE = "Close";
 
     /** The singleton {@link CloseCommand}. */
-    public static final CloseCommand INSTANCE  = new CloseCommand();
+    public static final CloseCommand INSTANCE = new CloseCommand();
 
     private CloseCommand() {
         super(I18n.Text("Close"), CMD_CLOSE, KeyEvent.VK_W);
@@ -34,7 +34,7 @@ public class CloseCommand extends Command {
     @Override
     public void adjust() {
         CloseHandler handler = getTarget(CloseHandler.class);
-        setEnabled(handler != null ? handler.mayAttemptClose() : false);
+        setEnabled(handler != null && handler.mayAttemptClose());
     }
 
     @Override

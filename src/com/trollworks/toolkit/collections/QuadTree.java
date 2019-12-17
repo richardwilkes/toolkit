@@ -45,10 +45,9 @@ public class QuadTree<T extends Bounds> {
      * Adds an object to the {@link QuadTree}.
      * <p>
      * <b>Note</b>: Once an object is added to the {@link QuadTree}, the values it returns from
-     * calls to {@link Bounds#getX()}, {@link Bounds#getY()}, {@link Bounds#getWidth()}, and
-     * {@link Bounds#getHeight()} <b>MUST REMAIN THE SAME</b> as when the object was added. When the
-     * object is removed from the {@link QuadTree}, it is safe to once again allow those values to
-     * change.
+     * calls to {@link Bounds#getX()}, {@link Bounds#getY()}, {@link Bounds#getWidth()}, and {@link
+     * Bounds#getHeight()} <b>MUST REMAIN THE SAME</b> as when the object was added. When the object
+     * is removed from the {@link QuadTree}, it is safe to once again allow those values to change.
      *
      * @param obj The object to add to the tree.
      */
@@ -79,17 +78,17 @@ public class QuadTree<T extends Bounds> {
                     int otherX = one.getX();
                     int otherY = one.getY();
                     if (width <= 0 || height <= 0) {
-                        x      = otherX;
-                        y      = otherY;
-                        width  = otherWidth;
+                        x = otherX;
+                        y = otherY;
+                        width = otherWidth;
                         height = otherHeight;
                     } else {
                         int x1 = Math.min(x, otherX);
                         int y1 = Math.min(y, otherY);
-                        width  = Math.max(x + width, otherX + otherWidth) - x1;
+                        width = Math.max(x + width, otherX + otherWidth) - x1;
                         height = Math.max(y + height, otherY + otherHeight) - y1;
-                        x      = x1;
-                        y      = y1;
+                        x = x1;
+                        y = y1;
                     }
                 }
             }
@@ -112,15 +111,15 @@ public class QuadTree<T extends Bounds> {
 
     /** Removes all objects from the {@link QuadTree}. */
     public final void clear() {
-        mRoot    = new Node<>(0, 0, 0, 0, mThreshold);
+        mRoot = new Node<>(0, 0, 0, 0, mThreshold);
         mOutside = new HashSet<>();
-        mAll     = new HashSet<>();
+        mAll = new HashSet<>();
     }
 
     /**
      * @param x The horizontal coordinate to check.
      * @param y The vertical coordinate to check.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that contains the
+     * @return {@code true} if this {@link QuadTree} has at least one object that contains the
      *         specified coordinates.
      */
     public final boolean contains(int x, int y) {
@@ -139,7 +138,7 @@ public class QuadTree<T extends Bounds> {
      * @param x       The horizontal coordinate to check.
      * @param y       The vertical coordinate to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that contains the
+     * @return {@code true} if this {@link QuadTree} has at least one object that contains the
      *         specified coordinates and passes the {@link Matcher}'s test.
      */
     public final boolean contains(int x, int y, Matcher<T> matcher) {
@@ -156,8 +155,8 @@ public class QuadTree<T extends Bounds> {
 
     /**
      * @param bounds The bounds to check.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
-     *         with the specified bounds.
+     * @return {@code true} if this {@link QuadTree} has at least one object that intersects with
+     *         the specified bounds.
      */
     public final boolean intersects(Rectangle bounds) {
         return intersects(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -165,8 +164,8 @@ public class QuadTree<T extends Bounds> {
 
     /**
      * @param bounds The bounds to check.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
-     *         with the specified bounds.
+     * @return {@code true} if this {@link QuadTree} has at least one object that intersects with
+     *         the specified bounds.
      */
     public final boolean intersects(Bounds bounds) {
         return intersects(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
@@ -177,8 +176,8 @@ public class QuadTree<T extends Bounds> {
      * @param y      The vertical coordinate to check.
      * @param width  The width of the space to check.
      * @param height The height of the space to check.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
-     *         with the specified bounds.
+     * @return {@code true} if this {@link QuadTree} has at least one object that intersects with
+     *         the specified bounds.
      */
     public final boolean intersects(int x, int y, int width, int height) {
         if (mRoot.intersects(x, y, width, height)) {
@@ -195,8 +194,8 @@ public class QuadTree<T extends Bounds> {
     /**
      * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
-     *         with the specified bounds and passes the {@link Matcher}'s test.
+     * @return {@code true} if this {@link QuadTree} has at least one object that intersects with
+     *         the specified bounds and passes the {@link Matcher}'s test.
      */
     public final boolean intersects(Rectangle bounds, Matcher<T> matcher) {
         return intersects(bounds.x, bounds.y, bounds.width, bounds.height, matcher);
@@ -205,8 +204,8 @@ public class QuadTree<T extends Bounds> {
     /**
      * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
-     *         with the specified bounds and passes the {@link Matcher}'s test.
+     * @return {@code true} if this {@link QuadTree} has at least one object that intersects with
+     *         the specified bounds and passes the {@link Matcher}'s test.
      */
     public final boolean intersects(Bounds bounds, Matcher<T> matcher) {
         return intersects(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), matcher);
@@ -218,8 +217,8 @@ public class QuadTree<T extends Bounds> {
      * @param width   The width of the space to check.
      * @param height  The height of the space to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that intersects
-     *         with the specified bounds and passes the {@link Matcher}'s test.
+     * @return {@code true} if this {@link QuadTree} has at least one object that intersects with
+     *         the specified bounds and passes the {@link Matcher}'s test.
      */
     public final boolean intersects(int x, int y, int width, int height, Matcher<T> matcher) {
         if (mRoot.intersects(x, y, width, height, matcher)) {
@@ -235,8 +234,8 @@ public class QuadTree<T extends Bounds> {
 
     /**
      * @param bounds The bounds to check.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
-     *         contained by the specified bounds.
+     * @return {@code true} if this {@link QuadTree} has at least one object that would be contained
+     *         by the specified bounds.
      */
     public final boolean containedBy(Rectangle bounds) {
         return containedBy(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -244,8 +243,8 @@ public class QuadTree<T extends Bounds> {
 
     /**
      * @param bounds The bounds to check.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
-     *         contained by the specified bounds.
+     * @return {@code true} if this {@link QuadTree} has at least one object that would be contained
+     *         by the specified bounds.
      */
     public final boolean containedBy(Bounds bounds) {
         return containedBy(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
@@ -256,8 +255,8 @@ public class QuadTree<T extends Bounds> {
      * @param y      The vertical coordinate to check.
      * @param width  The width of the space to check.
      * @param height The height of the space to check.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
-     *         contained by the specified bounds.
+     * @return {@code true} if this {@link QuadTree} has at least one object that would be contained
+     *         by the specified bounds.
      */
     public final boolean containedBy(int x, int y, int width, int height) {
         if (mRoot.inside(x, y, width, height)) {
@@ -274,8 +273,8 @@ public class QuadTree<T extends Bounds> {
     /**
      * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
-     *         contained by the specified bounds and passes the {@link Matcher}'s test.
+     * @return {@code true} if this {@link QuadTree} has at least one object that would be contained
+     *         by the specified bounds and passes the {@link Matcher}'s test.
      */
     public final boolean containedBy(Rectangle bounds, Matcher<T> matcher) {
         return containedBy(bounds.x, bounds.y, bounds.width, bounds.height, matcher);
@@ -284,8 +283,8 @@ public class QuadTree<T extends Bounds> {
     /**
      * @param bounds  The bounds to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
-     *         contained by the specified bounds and passes the {@link Matcher}'s test.
+     * @return {@code true} if this {@link QuadTree} has at least one object that would be contained
+     *         by the specified bounds and passes the {@link Matcher}'s test.
      */
     public final boolean containedBy(Bounds bounds, Matcher<T> matcher) {
         return containedBy(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), matcher);
@@ -297,8 +296,8 @@ public class QuadTree<T extends Bounds> {
      * @param width   The width of the space to check.
      * @param height  The height of the space to check.
      * @param matcher A {@link Matcher} to use to verify any potential matches.
-     * @return <code>true</code> if this {@link QuadTree} has at least one object that would be
-     *         contained by the specified bounds and passes the {@link Matcher}'s test.
+     * @return {@code true} if this {@link QuadTree} has at least one object that would be contained
+     *         by the specified bounds and passes the {@link Matcher}'s test.
      */
     public final boolean containedBy(int x, int y, int width, int height, Matcher<T> matcher) {
         if (mRoot.inside(x, y, width, height, matcher)) {
@@ -324,8 +323,8 @@ public class QuadTree<T extends Bounds> {
 
     /**
      * @param matcher A {@link Matcher} to use to verify any potential matches.
-     * @return All objects that have been added to this {@link QuadTree} and pass the
-     *         {@link Matcher}'s test.
+     * @return All objects that have been added to this {@link QuadTree} and pass the {@link
+     *         Matcher}'s test.
      */
     public final Set<T> all(Matcher<T> matcher) {
         Set<T> result = new HashSet<>();
@@ -447,7 +446,8 @@ public class QuadTree<T extends Bounds> {
 
     /**
      * @param bounds The bounds to check.
-     * @return All objects in this {@link QuadTree} that would be contained by the specified bounds.
+     * @return All objects in this {@link QuadTree} that would be contained by the specified
+     *         bounds.
      */
     public final Set<T> findContainedBy(Rectangle bounds) {
         return findContainedBy(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -455,7 +455,8 @@ public class QuadTree<T extends Bounds> {
 
     /**
      * @param bounds The bounds to check.
-     * @return All objects in this {@link QuadTree} that would be contained by the specified bounds.
+     * @return All objects in this {@link QuadTree} that would be contained by the specified
+     *         bounds.
      */
     public final Set<T> findContainedBy(Bounds bounds) {
         return findContainedBy(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
@@ -466,7 +467,8 @@ public class QuadTree<T extends Bounds> {
      * @param y      The vertical coordinate to check.
      * @param width  The width of the space to check.
      * @param height The height of the space to check.
-     * @return All objects in this {@link QuadTree} that would be contained by the specified bounds.
+     * @return All objects in this {@link QuadTree} that would be contained by the specified
+     *         bounds.
      */
     public final Set<T> findContainedBy(int x, int y, int width, int height) {
         Set<T> result = new HashSet<>();
@@ -520,30 +522,30 @@ public class QuadTree<T extends Bounds> {
     }
 
     static class Node<T extends Bounds> implements Bounds {
-        private int      mX;
-        private int      mY;
-        private int      mWidth;
-        private int      mHeight;
-        protected Set<T> mContents;
-        private int      mMaxCapacity;
-        private Node<T>  mNorthEast;
-        private Node<T>  mNorthWest;
-        private Node<T>  mSouthEast;
-        private Node<T>  mSouthWest;
+        private   int     mX;
+        private   int     mY;
+        private   int     mWidth;
+        private   int     mHeight;
+        protected Set<T>  mContents;
+        private   int     mMaxCapacity;
+        private   Node<T> mNorthEast;
+        private   Node<T> mNorthWest;
+        private   Node<T> mSouthEast;
+        private   Node<T> mSouthWest;
 
         Node(int x, int y, int width, int height, int maxCapacity) {
-            mX           = x;
-            mY           = y;
-            mWidth       = width;
-            mHeight      = height;
+            mX = x;
+            mY = y;
+            mWidth = width;
+            mHeight = height;
             mMaxCapacity = maxCapacity;
-            mContents    = new HashSet<>();
+            mContents = new HashSet<>();
         }
 
         final void zeroBounds() {
-            mX      = 0;
-            mY      = 0;
-            mWidth  = 0;
+            mX = 0;
+            mY = 0;
+            mWidth = 0;
             mHeight = 0;
         }
 
@@ -567,7 +569,7 @@ public class QuadTree<T extends Bounds> {
             return mHeight;
         }
 
-        private final boolean isLeaf() {
+        private boolean isLeaf() {
             return mNorthEast == null;
         }
 
@@ -606,7 +608,7 @@ public class QuadTree<T extends Bounds> {
             }
         }
 
-        private final void split() {
+        private void split() {
             if (isLeaf()) {
                 int hw = mWidth / 2;
                 int hh = mHeight / 2;

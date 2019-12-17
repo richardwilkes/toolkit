@@ -16,7 +16,7 @@ import com.trollworks.toolkit.utility.text.Numbers;
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-
+import java.util.Objects;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -83,10 +83,10 @@ public class XmlGenerator implements AutoCloseable {
     /** Closes the current tag. */
     public void endTag() throws XMLStreamException {
         mDepth--;
-        if (!mHadText) {
-            eol();
-        } else {
+        if (mHadText) {
             mHadText = false;
+        } else {
+            eol();
         }
         mWriter.writeEndElement();
     }
@@ -148,7 +148,7 @@ public class XmlGenerator implements AutoCloseable {
      * @param value The value of the attribute.
      */
     public void addAttributeNotEmpty(String name, String value) throws XMLStreamException {
-        if (value != null && value.length() > 0) {
+        if (value != null && !value.isEmpty()) {
             mWriter.writeAttribute(name, value);
         }
     }
@@ -161,7 +161,7 @@ public class XmlGenerator implements AutoCloseable {
      * @param not   Only add the attribute if it is not equal to this value.
      */
     public void addAttributeNot(String name, String value, String not) throws XMLStreamException {
-        if (not != null ? !not.equals(value) : value != null) {
+        if (!Objects.equals(not, value)) {
             addAttribute(name, value);
         }
     }

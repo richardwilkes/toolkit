@@ -57,7 +57,7 @@ public interface OutlineModelListener {
      * Called whenever the model is sorted.
      *
      * @param model     The model that was sorted.
-     * @param restoring <code>true</code> when the sort is being restored (usually due to row
+     * @param restoring {@code true} when the sort is being restored (usually due to row
      *                  disclosure).
      */
     void sorted(OutlineModel model, boolean restoring);

@@ -20,8 +20,8 @@ class ParsedFunction {
     Operator           mUnaryOperator;
 
     ParsedFunction(ExpressionFunction function, String arguments, Operator unaryOperator) {
-        mFunction      = function;
-        mArguments     = arguments;
+        mFunction = function;
+        mArguments = arguments;
         mUnaryOperator = unaryOperator;
     }
 }

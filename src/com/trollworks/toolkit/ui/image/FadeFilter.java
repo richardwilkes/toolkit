@@ -19,9 +19,9 @@ import java.awt.image.RGBImageFilter;
 
 /** Fades an image by blending the pixels with white or black. */
 public class FadeFilter extends RGBImageFilter {
-    private static final int OPAQUE = 0xFF000000;
-    private int              mPercentage;
-    private boolean          mUseWhite;
+    private static final int     OPAQUE = 0xFF000000;
+    private              int     mPercentage;
+    private              boolean mUseWhite;
 
     /**
      * Constructs an image filter that fades an image by blending the pixels with the specified
@@ -31,8 +31,8 @@ public class FadeFilter extends RGBImageFilter {
      * @param useWhite   Whether to use white or black.
      */
     public FadeFilter(int percentage, boolean useWhite) {
-        mPercentage              = percentage;
-        mUseWhite                = useWhite;
+        mPercentage = percentage;
+        mUseWhite = useWhite;
         canFilterIndexColorModel = true;
     }
 
@@ -58,9 +58,9 @@ public class FadeFilter extends RGBImageFilter {
         int p1    = 100 - mPercentage;
         int p2    = mUseWhite ? 255 * mPercentage : 0;
 
-        red   = (red * p1 + p2) / 100;
+        red = (red * p1 + p2) / 100;
         green = (green * p1 + p2) / 100;
-        blue  = (blue * p1 + p2) / 100;
+        blue = (blue * p1 + p2) / 100;
         return argb & OPAQUE | red << 16 | green << 8 | blue;
     }
 }

@@ -20,38 +20,37 @@ import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 
 /** Tracks a single connection to the server. */
 public class Session implements Runnable, Log.Context {
-    private static final AtomicInteger NEXT_ID = new AtomicInteger();
-    private int                        mId;
-    private NioServer                  mServer;
-    private SocketChannel              mChannel;
-    private InetAddress                mAddress;
-    private Personality                mPersonality;
-    private SSLSupport                 mSSLSupport;
-    private LinkedList<Request>        mRequests;
-    private long                       mLastActivity;
-    private boolean                    mInRequest;
-    private boolean                    mHasClosed;
-    private boolean                    mNoFurtherWrites;
+    private static final AtomicInteger       NEXT_ID = new AtomicInteger();
+    private              int                 mId;
+    private              NioServer           mServer;
+    private              SocketChannel       mChannel;
+    private              InetAddress         mAddress;
+    private              Personality         mPersonality;
+    private              SSLSupport          mSSLSupport;
+    private              LinkedList<Request> mRequests;
+    private              long                mLastActivity;
+    private              boolean             mInRequest;
+    private              boolean             mHasClosed;
+    private              boolean             mNoFurtherWrites;
 
     /**
      * @param server      The {@link NioServer} that will be providing the connection.
      * @param channel     The {@link SocketChannel} that was connected.
-     * @param sslContext  The {@link SSLContext} to use. May be <code>null</code> if SSL is not
+     * @param sslContext  The {@link SSLContext} to use. May be {@code null} if SSL is not
      *                    required.
      * @param personality The {@link Personality} to use for processing the incoming data.
      */
     public Session(NioServer server, SocketChannel channel, SSLContext sslContext, Personality personality) throws SSLException {
-        mServer   = server;
-        mChannel  = channel;
-        mAddress  = channel.socket().getInetAddress();
+        mServer = server;
+        mChannel = channel;
+        mAddress = channel.socket().getInetAddress();
         mRequests = new LinkedList<>();
-        mId       = NEXT_ID.incrementAndGet();
+        mId = NEXT_ID.incrementAndGet();
         if (sslContext != null) {
             mSSLSupport = new SSLSupport(this, sslContext);
         }
@@ -70,7 +69,7 @@ public class Session implements Runnable, Log.Context {
     /**
      * Requests that the {@link Session} be closed.
      *
-     * @param dueToError Pass in <code>true</code> if an error condition triggered this request.
+     * @param dueToError Pass in {@code true} if an error condition triggered this request.
      */
     final void requestClose(boolean dueToError) {
         addRequest(new Request(dueToError));
@@ -86,7 +85,7 @@ public class Session implements Runnable, Log.Context {
         addRequest(new Request(buffer));
     }
 
-    private final void addRequest(Request request) {
+    private void addRequest(Request request) {
         synchronized (mRequests) {
             mRequests.add(request);
         }
@@ -117,7 +116,7 @@ public class Session implements Runnable, Log.Context {
                         getPersonality().processInput(buffer);
                     }
                 } else {
-                    mHasClosed       = true;
+                    mHasClosed = true;
                     mNoFurtherWrites = request.isCloseRequestDueToError();
                     try {
                         getPersonality().closing();
@@ -182,7 +181,7 @@ public class Session implements Runnable, Log.Context {
         mPersonality.setSession(this);
     }
 
-    /** @return <code>true</code> if SSL support has been enabled for this {@link Session}. */
+    /** @return {@code true} if SSL support has been enabled for this {@link Session}. */
     public final boolean isSecure() {
         return mSSLSupport != null;
     }

@@ -31,12 +31,12 @@ import java.util.TimeZone;
 
 /** Stores a HTTP response for a request. */
 public class HttpResponse {
-    private static final SimpleDateFormat GMT_DATE_FORMAT = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
-    private HttpStatusCode                mStatus;
-    private String                        mMimeType;
-    private Object                        mData;
-    private Map<String, String>           mHeader         = new HashMap<>();
-    private HttpMethod                    mRequestMethod;
+    private static final SimpleDateFormat    GMT_DATE_FORMAT = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
+    private              HttpStatusCode      mStatus;
+    private              String              mMimeType;
+    private              Object              mData;
+    private              Map<String, String> mHeader         = new HashMap<>();
+    private              HttpMethod          mRequestMethod;
 
     static {
         GMT_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -61,8 +61,8 @@ public class HttpResponse {
     }
 
     /**
-     * Creates a new {@link HttpResponse} with a type of {@link MimeTypes#HTML}, a status of
-     * {@link HttpStatusCode#OK}, and the specified message.
+     * Creates a new {@link HttpResponse} with a type of {@link MimeTypes#HTML}, a status of {@link
+     * HttpStatusCode#OK}, and the specified message.
      *
      * @param msg The message to use.
      */
@@ -75,12 +75,12 @@ public class HttpResponse {
      *
      * @param status   The {@link HttpStatusCode} to use.
      * @param mimeType The mime type to use.
-     * @param data     The data for the body content. May be <code>null</code>.
+     * @param data     The data for the body content. May be {@code null}.
      */
     public HttpResponse(HttpStatusCode status, String mimeType, Object data) {
-        mStatus   = status;
+        mStatus = status;
         mMimeType = mimeType;
-        mData     = data;
+        mData = data;
     }
 
     /**
@@ -135,7 +135,7 @@ public class HttpResponse {
         }
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(16 * 1024);
-            PrintWriter           pw   = new PrintWriter(baos);
+            PrintWriter           pw   = new PrintWriter(baos, false, StandardCharsets.UTF_8);
             pw.print("HTTP/1.1 ");
             pw.print(mStatus.getDescription());
             pw.print("\r\n");
@@ -149,8 +149,8 @@ public class HttpResponse {
             }
 
             if (mHeader != null) {
-                for (String key : mHeader.keySet()) {
-                    writeHeader(pw, key, mHeader.get(key));
+                for (Map.Entry<String, String> entry : mHeader.entrySet()) {
+                    writeHeader(pw, entry.getKey(), entry.getValue());
                 }
             }
 
@@ -195,7 +195,7 @@ public class HttpResponse {
         }
     }
 
-    private static final void writeHeader(PrintWriter out, String name, String value) {
+    private static void writeHeader(PrintWriter out, String name, String value) {
         out.print(name);
         out.print(": ");
         out.print(value);

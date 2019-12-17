@@ -28,12 +28,12 @@ public enum Platform {
     private String mDynamicLibraryExtension;
     private String mScriptExtension;
 
-    private Platform(String dirName, String extension, String dynamicLibraryPrefix, String dynamicLibraryExtension, String scriptExtension) {
-        mDirName                 = dirName;
-        mExtension               = extension;
-        mDynamicLibraryPrefix    = dynamicLibraryPrefix;
+    Platform(String dirName, String extension, String dynamicLibraryPrefix, String dynamicLibraryExtension, String scriptExtension) {
+        mDirName = dirName;
+        mExtension = extension;
+        mDynamicLibraryPrefix = dynamicLibraryPrefix;
         mDynamicLibraryExtension = dynamicLibraryExtension;
-        mScriptExtension         = scriptExtension;
+        mScriptExtension = scriptExtension;
     }
 
     public final String getDynamicLibraryPath(String libName) {
@@ -85,22 +85,22 @@ public enum Platform {
         return CURRENT;
     }
 
-    /** @return <code>true</code> if Macintosh is the platform being run on. */
+    /** @return {@code true} if Macintosh is the platform being run on. */
     public static final boolean isMacintosh() {
         return CURRENT == MAC;
     }
 
-    /** @return <code>true</code> if Windows is the platform being run on. */
+    /** @return {@code true} if Windows is the platform being run on. */
     public static final boolean isWindows() {
         return CURRENT == WINDOWS;
     }
 
-    /** @return <code>true</code> if Linux is the platform being run on. */
+    /** @return {@code true} if Linux is the platform being run on. */
     public static final boolean isLinux() {
         return CURRENT == LINUX;
     }
 
-    /** @return <code>true</code> if platform being run on is Unix-based. */
+    /** @return {@code true} if platform being run on is Unix-based. */
     public static final boolean isUnix() {
         return isMacintosh() || isLinux();
     }

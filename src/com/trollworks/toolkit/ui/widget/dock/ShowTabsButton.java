@@ -40,7 +40,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -48,11 +47,11 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 public class ShowTabsButton extends JComponent implements MouseListener, MouseMotionListener, ComponentListener, ActionListener {
-    private static final int MARGIN  = 2;
-    private boolean          mInMouseDown;
-    private boolean          mPressed;
-    private boolean          mShowBorder;
-    private Set<DockTab>     mHidden = new HashSet<>();
+    private static final int          MARGIN  = 2;
+    private              boolean      mInMouseDown;
+    private              boolean      mPressed;
+    private              boolean      mShowBorder;
+    private              Set<DockTab> mHidden = new HashSet<>();
 
     public ShowTabsButton() {
         setOpaque(false);
@@ -128,9 +127,9 @@ public class ShowTabsButton extends JComponent implements MouseListener, MouseMo
         gc.setColor(Color.BLACK);
         String    text   = getText();
         Rectangle bounds = getBounds();
-        bounds.x       = insets.left;
-        bounds.y       = insets.top;
-        bounds.width  -= insets.left + insets.right;
+        bounds.x = insets.left;
+        bounds.y = insets.top;
+        bounds.width -= insets.left + insets.right;
         bounds.height -= insets.top + insets.bottom;
         TextDrawing.draw(gc, bounds, text, SwingConstants.CENTER, SwingConstants.CENTER);
     }
@@ -173,7 +172,7 @@ public class ShowTabsButton extends JComponent implements MouseListener, MouseMo
     public void mousePressed(MouseEvent event) {
         if (!event.isPopupTrigger() && event.getButton() == 1) {
             mInMouseDown = true;
-            mPressed     = true;
+            mPressed = true;
             repaint();
             MouseCapture.start(this, Cursor.getDefaultCursor());
         }
@@ -191,7 +190,7 @@ public class ShowTabsButton extends JComponent implements MouseListener, MouseMo
     @Override
     public void mouseReleased(MouseEvent event) {
         mouseDragged(event);
-        mShowBorder  = mPressed;
+        mShowBorder = mPressed;
         mInMouseDown = false;
         MouseCapture.stop(this);
         if (mPressed) {

@@ -59,7 +59,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.xml.stream.XMLStreamException;
 
 /**
@@ -110,7 +109,7 @@ public class Xml {
         }
     }
 
-    private static final XmlObjectHelper getHelper(Class<?> clazz) {
+    private static XmlObjectHelper getHelper(Class<?> clazz) {
         synchronized (HELPERS) {
             XmlObjectHelper helper = HELPER_MAP.get(clazz);
             if (helper == null) {
@@ -240,7 +239,7 @@ public class Xml {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private static void load(XmlParser xml, Object obj, XmlParserContext context) throws XMLStreamException {
         try {
             if (context == null) {
@@ -262,7 +261,7 @@ public class Xml {
                 context.pushVersion(version);
             }
             Set<String> unmatchedAttributes = new HashSet<>();
-            for (int i = xml.getAttributeCount(); --i > 0;) {
+            for (int i = xml.getAttributeCount(); --i > 0; ) {
                 unmatchedAttributes.add(xml.getAttributeName(i));
             }
             unmatchedAttributes.remove(ATTR_VERSION);
@@ -295,8 +294,8 @@ public class Xml {
                         } else {
                             throw new XMLStreamException(String.format("Unable to create object for collection tag '%s'.", tag), xml.getLocation());
                         }
-                        Object   fieldObj = null;
-                        Class<?> cls      = Class.forName(genericType.getTypeName());
+                        Object   fieldObj;
+                        Class<?> cls = Class.forName(genericType.getTypeName());
                         if (cls == String.class) {
                             fieldObj = xml.getText();
                         } else {
@@ -457,6 +456,7 @@ public class Xml {
                 Object content = field.get(obj);
                 if (content != null && (!(content instanceof String) || !((String) content).isEmpty())) {
                     if (Collection.class.isAssignableFrom(field.getType())) {
+                        //noinspection CastConflictsWithInstanceof,ConstantConditions
                         if (!((Collection<?>) content).isEmpty()) {
                             return true;
                         }
@@ -483,7 +483,7 @@ public class Xml {
         }
     }
 
-    private static final void emitSubTags(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException {
+    private static void emitSubTags(XmlGenerator xml, Object obj, Class<?> objClass) throws XMLStreamException {
         for (FieldAnnotation<XmlTag> fa : Introspection.getDeepFieldAnnotations(objClass, XmlTag.class)) {
             try {
                 Field field = fa.getField();
@@ -493,6 +493,7 @@ public class Xml {
                     XmlTag   subTag = fa.getAnnotation();
                     Class<?> type   = field.getType();
                     if (Collection.class.isAssignableFrom(type)) {
+                        //noinspection CastConflictsWithInstanceof,ConstantConditions
                         Collection<?> collection = (Collection<?>) content;
                         if (!collection.isEmpty()) {
                             if (!field.isAnnotationPresent(XmlNoSort.class)) {

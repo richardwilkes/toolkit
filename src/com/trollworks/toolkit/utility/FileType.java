@@ -20,32 +20,31 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /** Describes a file. */
 public class FileType {
     /** The PNG extension. */
-    public static final String           PNG_EXTENSION  = "png";
+    public static final  String                PNG_EXTENSION  = "png";
     /** The GIF extension. */
-    public static final String           GIF_EXTENSION  = "gif";
+    public static final  String                GIF_EXTENSION  = "gif";
     /** The JPEG extension. */
-    public static final String           JPEG_EXTENSION = "jpg";
+    public static final  String                JPEG_EXTENSION = "jpg";
     /** The PDF extension. */
-    public static final String           PDF_EXTENSION  = "pdf";
+    public static final  String                PDF_EXTENSION  = "pdf";
     /** The HTML extension. */
-    public static final String           HTML_EXTENSION = "html";
+    public static final  String                HTML_EXTENSION = "html";
     /** The XML extension. */
-    public static final String           XML_EXTENSION  = "xml";
-    private static final List<FileType>  TYPES          = new ArrayList<>();
-    private static Map<String, FileType> EXTENSION_MAP  = new HashMap<>();
-    private String                       mExtension;
-    private StdImageSet                  mIconSet;
-    private String                       mDescription;
-    private String                       mReferenceURL;
-    private FileProxyCreator             mFileProxyCreator;
-    private boolean                      mAllowOpen;
-    private boolean                      mRegisterAppForOpening;
+    public static final  String                XML_EXTENSION  = "xml";
+    private static final List<FileType>        TYPES          = new ArrayList<>();
+    private static       Map<String, FileType> EXTENSION_MAP  = new HashMap<>();
+    private              String                mExtension;
+    private              StdImageSet           mIconSet;
+    private              String                mDescription;
+    private              String                mReferenceURL;
+    private              FileProxyCreator      mFileProxyCreator;
+    private              boolean               mAllowOpen;
+    private              boolean               mRegisterAppForOpening;
 
     /**
      * Registers a new {@link FileType}, replacing any existing entry for the specified extension.
@@ -127,7 +126,7 @@ public class FileType {
         extensions.addAll(Arrays.asList(getPngFilter().getExtensions()));
         extensions.addAll(Arrays.asList(getJpegFilter().getExtensions()));
         extensions.addAll(Arrays.asList(getGifFilter().getExtensions()));
-        return new FileNameExtensionFilter(I18n.Text("Image Files"), extensions.toArray(new String[extensions.size()]));
+        return new FileNameExtensionFilter(I18n.Text("Image Files"), extensions.toArray(new String[0]));
     }
 
     public static final FileType getByExtension(String extension) {
@@ -150,7 +149,7 @@ public class FileType {
 
     /** @return All of the registered {@link FileType}s. */
     public static final FileType[] getAll() {
-        return TYPES.toArray(new FileType[TYPES.size()]);
+        return TYPES.toArray(new FileType[0]);
     }
 
     /** @return All of the registered {@link FileType}s that can be opened. */
@@ -161,12 +160,12 @@ public class FileType {
                 openable.add(type);
             }
         }
-        return openable.toArray(new FileType[openable.size()]);
+        return openable.toArray(new FileType[0]);
     }
 
     /**
      * @param nameForAggregate The name for a {@link FileNameExtensionFilter} that will open them
-     *                         all, or <code>null</code>.
+     *                         all, or {@code null}.
      * @return {@link FileNameExtensionFilter}s for all of the registered {@link FileType}s that can
      *         be opened.
      */
@@ -182,29 +181,32 @@ public class FileType {
                 openable.add(type.getExtension());
             }
         }
-        return openable.toArray(new String[openable.size()]);
+        return openable.toArray(new String[0]);
     }
 
     /**
      * @param nameForAggregate The name for a {@link FileNameExtensionFilter} that includes all
-     *                         types, or <code>null</code>.
+     *                         types, or {@code null}.
      * @return {@link FileNameExtensionFilter}s for all of the specified {@link FileType}s.
      */
     public static final FileNameExtensionFilter[] getFileFilters(String nameForAggregate, FileType... fileType) {
         List<FileNameExtensionFilter> filters = new ArrayList<>();
-        if (fileType != null && fileType.length > 0) {
-            if (nameForAggregate != null && !nameForAggregate.isEmpty()) {
-                String[] extensions = new String[fileType.length];
-                for (int i = 0; i < fileType.length; i++) {
-                    extensions[i] = fileType[i].getExtension();
+        if (fileType != null) {
+            int length = fileType.length;
+            if (length > 0) {
+                if (nameForAggregate != null && !nameForAggregate.isEmpty()) {
+                    String[] extensions = new String[length];
+                    for (int i = 0; i < length; i++) {
+                        extensions[i] = fileType[i].getExtension();
+                    }
+                    filters.add(new FileNameExtensionFilter(nameForAggregate, extensions));
                 }
-                filters.add(new FileNameExtensionFilter(nameForAggregate, extensions));
-            }
-            for (FileType one : fileType) {
-                filters.add(new FileNameExtensionFilter(one.getDescription(), one.getExtension()));
+                for (FileType one : fileType) {
+                    filters.add(new FileNameExtensionFilter(one.getDescription(), one.getExtension()));
+                }
             }
         }
-        return filters.toArray(new FileNameExtensionFilter[filters.size()]);
+        return filters.toArray(new FileNameExtensionFilter[0]);
     }
 
     /**
@@ -242,12 +244,12 @@ public class FileType {
     }
 
     private FileType(String extension, StdImageSet iconset, String description, String referenceURL, FileProxyCreator fileProxyCreator, boolean allowOpen, boolean shouldRegisterAppForOpening) {
-        mExtension             = extension;
-        mIconSet               = iconset;
-        mDescription           = description;
-        mReferenceURL          = referenceURL;
-        mFileProxyCreator      = fileProxyCreator;
-        mAllowOpen             = allowOpen;
+        mExtension = extension;
+        mIconSet = iconset;
+        mDescription = description;
+        mReferenceURL = referenceURL;
+        mFileProxyCreator = fileProxyCreator;
+        mAllowOpen = allowOpen;
         mRegisterAppForOpening = shouldRegisterAppForOpening;
     }
 

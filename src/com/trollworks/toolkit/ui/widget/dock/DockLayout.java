@@ -38,7 +38,7 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
         }
     }
 
-    /** @return The {@link DockContainer} with the current keyboard focus, or <code>null</code>. */
+    /** @return The {@link DockContainer} with the current keyboard focus, or {@code null}. */
     public DockContainer getFocusedDockContainer() {
         return getRootLayout().getFocusedDockContainerInternal();
     }
@@ -90,9 +90,9 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 
     /**
      * @param dc The {@link DockContainer} to search for.
-     * @return The {@link DockLayout} that contains the {@link DockContainer}, or <code>null</code>
-     *         if it is not present. Note that this method will always start at the root and work
-     *         its way down, even if called on a sub-node.
+     * @return The {@link DockLayout} that contains the {@link DockContainer}, or {@code null} if it
+     *         is not present. Note that this method will always start at the root and work its way
+     *         down, even if called on a sub-node.
      */
     public DockLayout findLayout(DockContainer dc) {
         return getRootLayout().findLayoutInternal(dc);
@@ -116,7 +116,7 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 
     /**
      * @param node The {@link DockLayoutNode} to look for.
-     * @return <code>true</code> if the node is this {@link DockLayout} or one of its descendants.
+     * @return {@code true} if the node is this {@link DockLayout} or one of its descendants.
      */
     public boolean contains(DockLayoutNode node) {
         if (node == this) {
@@ -139,11 +139,11 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
      * Docks a {@link DockContainer} within this {@link DockLayout}. If the {@link DockContainer}
      * already exists in this {@link DockLayout}, it will be moved to the new location.
      *
-     * @param dc                       The {@link DockContainer} to install into this
-     *                                 {@link DockLayout}.
+     * @param dc                       The {@link DockContainer} to install into this {@link
+     *                                 DockLayout}.
      * @param target                   The target {@link DockLayoutNode}.
-     * @param locationRelativeToTarget The location relative to the target to install the
-     *                                 {@link DockContainer}.
+     * @param locationRelativeToTarget The location relative to the target to install the {@link
+     *                                 DockContainer}.
      */
     void dock(DockContainer dc, DockLayoutNode target, DockLocation locationRelativeToTarget) {
         // Does the container already exist in our hierarchy?
@@ -188,25 +188,25 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
             if (mChildren[order[1]] == null) {
                 mChildren[order[1]] = mChildren[order[0]];
                 mChildren[order[0]] = dc;
-                mHorizontal         = horizontal;
+                mHorizontal = horizontal;
             } else {
                 DockLayout layout = new DockLayout();
-                layout.mParent             = this;
+                layout.mParent = this;
                 layout.mChildren[order[0]] = dc;
-                layout.mHorizontal         = horizontal;
+                layout.mHorizontal = horizontal;
                 int which = target == mChildren[order[0]] ? 0 : 1;
                 layout.mChildren[order[1]] = mChildren[order[which]];
-                mChildren[order[which]]    = layout;
+                mChildren[order[which]] = layout;
                 if (order[which] == 0) {
                     layout.mDividerPosition = mDividerPosition;
-                    mDividerPosition        = -1;
+                    mDividerPosition = -1;
                 } else {
                     layout.mDividerPosition = -1;
                 }
             }
         } else {
             mChildren[order[0]] = dc;
-            mHorizontal         = horizontal;
+            mHorizontal = horizontal;
         }
     }
 
@@ -217,30 +217,31 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
                 mChildren[order[1]] = mChildren[order[0]];
             } else {
                 mChildren[order[1]] = pushDown();
-                mDividerPosition    = -1;
+                mDividerPosition = -1;
             }
         }
         mChildren[order[0]] = dc;
-        mHorizontal         = locationRelativeToTarget.isHorizontal();
+        mHorizontal = locationRelativeToTarget.isHorizontal();
     }
 
     private DockLayout pushDown() {
         DockLayout layout = new DockLayout();
         layout.mParent = this;
-        for (int i = 0; i < mChildren.length; i++) {
+        int length = mChildren.length;
+        for (int i = 0; i < length; i++) {
             if (mChildren[i] instanceof DockLayout) {
                 ((DockLayout) mChildren[i]).mParent = layout;
             }
             layout.mChildren[i] = mChildren[i];
         }
-        layout.mHorizontal      = mHorizontal;
+        layout.mHorizontal = mHorizontal;
         layout.mDividerPosition = mDividerPosition;
         return layout;
     }
 
     /**
      * @param node The node to remove.
-     * @return <code>true</code> if the node was found and removed.
+     * @return {@code true} if the node was found and removed.
      */
     public boolean remove(DockLayoutNode node) {
         if (node == mChildren[0]) {
@@ -286,18 +287,18 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 
     /**
      * @return The immediate children of this {@link DockLayout}. Note that the array may contain
-     *         <code>null</code> values.
+     *         {@code null} values.
      */
     public DockLayoutNode[] getChildren() {
         return mChildren;
     }
 
-    /** @return <code>true</code> if this {@link DockLayout} lays its children out horizontally. */
+    /** @return {@code true} if this {@link DockLayout} lays its children out horizontally. */
     public boolean isHorizontal() {
         return mHorizontal;
     }
 
-    /** @return <code>true</code> if this {@link DockLayout} lays its children out vertically. */
+    /** @return {@code true} if this {@link DockLayout} lays its children out vertically. */
     public boolean isVertical() {
         return !mHorizontal;
     }
@@ -308,7 +309,7 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
         int height = 0;
         if (mChildren[0] != null) {
             Dimension size = mChildren[0].getPreferredSize();
-            width  = size.width;
+            width = size.width;
             height = size.height;
         }
         if (mChildren[1] != null) {
@@ -350,19 +351,19 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
         return mHeight;
     }
 
-    /** @return <code>true</code> if this {@link DockLayout} has no children. */
+    /** @return {@code true} if this {@link DockLayout} has no children. */
     public boolean isEmpty() {
         return mChildren[0] == null && mChildren[1] == null;
     }
 
-    /** @return <code>true</code> if both child nodes of this {@link DockLayout} are occupied. */
+    /** @return {@code true} if both child nodes of this {@link DockLayout} are occupied. */
     public boolean isFull() {
         return mChildren[0] != null && mChildren[1] != null;
     }
 
     /**
-     * @return The maximum value the divider can be set to. Will always return 0 if
-     *         {@link #isFull()} returns <code>false</code>.
+     * @return The maximum value the divider can be set to. Will always return 0 if {@link
+     *         #isFull()} returns {@code false}.
      */
     public int getDividerMaximum() {
         if (isFull()) {
@@ -385,7 +386,7 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
         return 0;
     }
 
-    /** @return <code>true</code> if the divider is currently set and not in its default mode. */
+    /** @return {@code true} if the divider is currently set and not in its default mode. */
     public boolean isDividerPositionSet() {
         return mDividerPosition != -1;
     }
@@ -416,9 +417,9 @@ public class DockLayout implements DockLayoutNode, LayoutManager {
 
     @Override
     public void setBounds(int x, int y, int width, int height) {
-        mX      = x;
-        mY      = y;
-        mWidth  = width;
+        mX = x;
+        mY = y;
+        mWidth = width;
         mHeight = height;
         Dock          dock               = getDock();
         DockContainer maximizedContainer = dock != null ? dock.getMaximizedContainer() : null;

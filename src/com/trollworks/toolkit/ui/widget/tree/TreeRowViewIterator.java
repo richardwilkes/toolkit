@@ -11,7 +11,6 @@
 
 package com.trollworks.toolkit.ui.widget.tree;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -28,23 +27,11 @@ public class TreeRowViewIterator implements Iterator<TreeRow>, Iterable<TreeRow>
      * Creates a new {@link TreeRowViewIterator}.
      *
      * @param panel The owning {@link TreePanel}.
-     * @param row   The {@link TreeRow} to start iterating over.
-     */
-    public TreeRowViewIterator(TreePanel panel, TreeRow row) {
-        mPanel = panel;
-        mRows  = new ArrayList<>();
-        mRows.add(row);
-    }
-
-    /**
-     * Creates a new {@link TreeRowViewIterator}.
-     *
-     * @param panel The owning {@link TreePanel}.
      * @param rows  The {@link TreeRow}s to iterator over.
      */
     public TreeRowViewIterator(TreePanel panel, TreeRow... rows) {
         mPanel = panel;
-        mRows  = Arrays.asList(rows);
+        mRows = Arrays.asList(rows);
     }
 
     /**
@@ -55,7 +42,7 @@ public class TreeRowViewIterator implements Iterator<TreeRow>, Iterable<TreeRow>
      */
     public TreeRowViewIterator(TreePanel panel, List<TreeRow> rows) {
         mPanel = panel;
-        mRows  = rows;
+        mRows = rows;
     }
 
     @Override
@@ -68,7 +55,7 @@ public class TreeRowViewIterator implements Iterator<TreeRow>, Iterable<TreeRow>
         boolean hasNext = mIterator != null && mIterator.hasNext();
         if (!hasNext) {
             mIterator = null;
-            hasNext   = mIndex < mRows.size();
+            hasNext = mIndex < mRows.size();
         }
         return hasNext;
     }

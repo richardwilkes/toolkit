@@ -34,18 +34,17 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-
 import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 
 /** The header for a {@link DockContainer}. */
 public class DockHeader extends JPanel implements LayoutManager, DropTargetListener {
-    private static final int MINIMUM_TAB_WIDTH = 60;
-    private static final int GAP               = 4;
-    private IconButton       mMaximizeRestoreButton;
-    private ShowTabsButton   mShowTabsButton;
-    private Dockable         mDragDockable;
-    private int              mDragInsertIndex;
+    private static final int            MINIMUM_TAB_WIDTH = 60;
+    private static final int            GAP               = 4;
+    private              IconButton     mMaximizeRestoreButton;
+    private              ShowTabsButton mShowTabsButton;
+    private              Dockable       mDragDockable;
+    private              int            mDragInsertIndex;
 
     /**
      * Creates a new {@link DockHeader} for the specified {@link DockContainer}.
@@ -202,7 +201,7 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
         mShowTabsButton.clearHidden();
         for (int i = 0; i < count; i++) {
             Dimension size = comps[i].getPreferredSize();
-            widths[i]  = size.width;
+            widths[i] = size.width;
             heights[i] = size.height;
             if (comps[i] == mShowTabsButton) {
                 showTabsIndex = i;
@@ -225,12 +224,12 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
                     int perTab = Math.max(remaining / tabs, 1);
                     for (int i = 0; i < count && remaining > 0; i++) {
                         if (i != current && comps[i] instanceof DockTab && widths[i] > MINIMUM_TAB_WIDTH) {
-                            found      = true;
+                            found = true;
                             remaining -= perTab;
                             widths[i] -= perTab;
                             if (widths[i] <= MINIMUM_TAB_WIDTH) {
                                 remaining += MINIMUM_TAB_WIDTH - widths[i];
-                                widths[i]  = MINIMUM_TAB_WIDTH;
+                                widths[i] = MINIMUM_TAB_WIDTH;
                             }
                         }
                     }
@@ -243,9 +242,9 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
                     if (i != current && comps[i] instanceof DockTab) {
                         remaining -= widths[showTabsIndex];
                         mShowTabsButton.addHidden((DockTab) comps[i]);
-                        widths[showTabsIndex]  = mShowTabsButton.getPreferredWidth();
-                        remaining             += widths[showTabsIndex];
-                        remaining             -= widths[i] + GAP;
+                        widths[showTabsIndex] = mShowTabsButton.getPreferredWidth();
+                        remaining += widths[showTabsIndex];
+                        remaining -= widths[i] + GAP;
                     }
                 }
                 if (remaining > 0) {
@@ -270,8 +269,8 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
             } else {
                 comps[i].setVisible(true);
                 if (insertExtra && !(comps[i] instanceof DockTab)) {
-                    insertExtra  = false;
-                    x           += extra;
+                    insertExtra = false;
+                    x += extra;
                 }
                 comps[i].setBounds(x, insets.top + (height - (insets.top + heights[i] + insets.bottom)) / 2, widths[i], heights[i]);
                 x += widths[i] + GAP;
@@ -292,7 +291,7 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
                     x = child.getX() - GAP;
                 } else if (mDragInsertIndex > 0) {
                     child = getComponent(mDragInsertIndex - 1);
-                    x     = child.getX() + child.getWidth();
+                    x = child.getX() + child.getWidth();
                 } else {
                     x = insets.left;
                 }
@@ -386,7 +385,7 @@ public class DockHeader extends JPanel implements LayoutManager, DropTargetListe
 
     private void clearDragState() {
         repaint();
-        mDragDockable    = null;
+        mDragDockable = null;
         mDragInsertIndex = -1;
     }
 

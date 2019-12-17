@@ -26,7 +26,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
-
 import javax.swing.JPanel;
 
 /** Provides the "About" command. */
@@ -35,7 +34,7 @@ public class AboutCommand extends Command implements AboutHandler {
     public static final String       CMD_ABOUT = "About";
     /** The singleton {@link AboutCommand}. */
     public static final AboutCommand INSTANCE  = new AboutCommand();
-    AppWindow                        mWindow   = null;
+    AppWindow mWindow;
 
     private AboutCommand() {
         super(MessageFormat.format(I18n.Text("About {0}"), BundleInfo.getDefault().getName()), CMD_ABOUT);

@@ -25,14 +25,14 @@ import java.awt.event.MouseEvent;
 public class Column implements Transferable {
     /** The data flavor for this class. */
     public static final DataFlavor DATA_FLAVOR = new DataFlavor(Column.class, "Outline Column");
-    private HeaderCell             mHeaderCell;
-    private Cell                   mRowCell;
-    private boolean                mVisible;
-    private int                    mWidth;
-    private String                 mName;
-    private RetinaIcon             mIcon;
-    private int                    mID;
-    private String                 mToolTipText;
+    private             HeaderCell mHeaderCell;
+    private             Cell       mRowCell;
+    private             boolean    mVisible;
+    private             int        mWidth;
+    private             String     mName;
+    private             RetinaIcon mIcon;
+    private             int        mID;
+    private             String     mToolTipText;
 
     /**
      * Create a new outline column.
@@ -111,14 +111,14 @@ public class Column implements Transferable {
      * @param rowCell     The cell to use for rows.
      */
     public Column(int id, String name, RetinaIcon icon, String toolTipText, Cell rowCell) {
-        mName        = name == null || name.length() == 0 ? " " : name;
-        mIcon        = icon;
+        mName = name == null || name.isEmpty() ? " " : name;
+        mIcon = icon;
         mToolTipText = toolTipText;
-        mHeaderCell  = new HeaderCell();
-        mRowCell     = rowCell;
-        mVisible     = true;
-        mWidth       = -1;
-        mID          = id;
+        mHeaderCell = new HeaderCell();
+        mRowCell = rowCell;
+        mVisible = true;
+        mWidth = -1;
+        mID = id;
     }
 
     /** @return The user-supplied ID. */
@@ -132,7 +132,7 @@ public class Column implements Transferable {
     }
 
     /**
-     * @return <code>true</code> if this column should be sorted in ascending order.
+     * @return {@code true} if this column should be sorted in ascending order.
      */
     public boolean isSortAscending() {
         return getHeaderCell().isSortAscending();
@@ -141,14 +141,14 @@ public class Column implements Transferable {
     /**
      * Sets the sort criteria for this column.
      *
-     * @param sequence  The column's sort sequence. Use <code>-1</code> if it has none.
-     * @param ascending Pass in <code>true</code> for an ascending sort.
+     * @param sequence  The column's sort sequence. Use {@code -1} if it has none.
+     * @param ascending Pass in {@code true} for an ascending sort.
      */
     public void setSortCriteria(int sequence, boolean ascending) {
         getHeaderCell().setSortCriteria(sequence, ascending);
     }
 
-    /** @return The column's sort sequence, or <code>-1</code> if it has none. */
+    /** @return The column's sort sequence, or {@code -1} if it has none. */
     public int getSortSequence() {
         return getHeaderCell().getSortSequence();
     }
@@ -171,8 +171,8 @@ public class Column implements Transferable {
      * @param gc       The graphics context to use.
      * @param bounds   The bounds of the cell.
      * @param row      The row the cell data is to come from.
-     * @param selected Pass in <code>true</code> if the cell should be drawn in its selected state.
-     * @param active   Pass in <code>true</code> if the cell should be drawn in its active state.
+     * @param selected Pass in {@code true} if the cell should be drawn in its selected state.
+     * @param active   Pass in {@code true} if the cell should be drawn in its active state.
      */
     public void drawRowCell(Outline outline, Graphics gc, Rectangle bounds, Row row, boolean selected, boolean active) {
         getRowCell(row).drawCell(outline, gc, bounds, row, this, selected, active);
@@ -189,8 +189,8 @@ public class Column implements Transferable {
     }
 
     /**
-     * @param row The row to return a cell for. This parameter may be <code>null</code>, for
-     *            example, during sort operations.
+     * @param row The row to return a cell for. This parameter may be {@code null}, for example,
+     *            during sort operations.
      * @return The cell used for the specified row.
      */
     public Cell getRowCell(Row row) {
@@ -202,7 +202,7 @@ public class Column implements Transferable {
         mRowCell = cell;
     }
 
-    /** @return <code>true</code> if this column is visible. */
+    /** @return {@code true} if this column is visible. */
     public boolean isVisible() {
         return mVisible;
     }
@@ -266,7 +266,7 @@ public class Column implements Transferable {
      * @param name The name of this column, which can be retrieved by using {@link #toString()}.
      */
     public void setName(String name) {
-        mName = name == null || name.length() == 0 ? " " : name;
+        mName = name == null || name.isEmpty() ? " " : name;
     }
 
     @Override
@@ -305,7 +305,7 @@ public class Column implements Transferable {
 
     @Override
     public DataFlavor[] getTransferDataFlavors() {
-        return new DataFlavor[] { DATA_FLAVOR, DataFlavor.stringFlavor };
+        return new DataFlavor[]{DATA_FLAVOR, DataFlavor.stringFlavor};
     }
 
     @Override

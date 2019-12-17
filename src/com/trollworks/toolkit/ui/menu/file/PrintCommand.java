@@ -31,10 +31,10 @@ import java.util.concurrent.TimeUnit;
 /** Provides the "Print..." command. */
 public class PrintCommand extends Command implements PrintFilesHandler {
     /** The action command this command will issue. */
-    public static final String       CMD_PRINT = "Print";
+    public static final String CMD_PRINT = "Print";
 
     /** The singleton {@link PrintCommand}. */
-    public static final PrintCommand INSTANCE  = new PrintCommand();
+    public static final PrintCommand INSTANCE = new PrintCommand();
 
     private PrintCommand() {
         super(I18n.Text("Print\u2026"), CMD_PRINT, KeyEvent.VK_P);
@@ -72,7 +72,7 @@ public class PrintCommand extends Command implements PrintFilesHandler {
         }
     }
 
-    class DeferredPrint implements Runnable {
+    static class DeferredPrint implements Runnable {
         private long mStart;
         private File mFile;
 
@@ -86,7 +86,7 @@ public class PrintCommand extends Command implements PrintFilesHandler {
         public void run() {
             FileProxy proxy = AppWindow.findFileProxy(mFile);
             if (proxy != null) {
-                PrintCommand.print(proxy.getPrintProxy());
+                print(proxy.getPrintProxy());
             } else if (System.currentTimeMillis() - mStart < TimeUnit.MILLISECONDS.convert(2, TimeUnit.MINUTES)) {
                 EventQueue.invokeLater(this);
             }

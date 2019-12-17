@@ -14,7 +14,6 @@ package com.trollworks.toolkit.utility.text;
 import com.trollworks.toolkit.utility.units.LengthValue;
 
 import java.text.ParseException;
-
 import javax.swing.JFormattedTextField;
 
 /** Provides height field conversion. */
@@ -22,7 +21,7 @@ public class HeightFormatter extends JFormattedTextField.AbstractFormatter {
     private boolean mBlankOnZero;
 
     /**
-     * @param blankOnZero When <code>true</code>, a value of zero resolves to the empty string when
+     * @param blankOnZero When {@code true}, a value of zero resolves to the empty string when
      *                    calling {@link #valueToString(Object)}.
      */
     public HeightFormatter(boolean blankOnZero) {

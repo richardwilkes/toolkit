@@ -14,7 +14,6 @@ package com.trollworks.toolkit.io.xml;
 import com.trollworks.toolkit.annotation.XmlAttr;
 
 import java.util.Set;
-
 import javax.xml.stream.XMLStreamException;
 
 /**

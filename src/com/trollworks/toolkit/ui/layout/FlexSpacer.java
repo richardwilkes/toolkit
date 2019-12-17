@@ -32,9 +32,9 @@ public class FlexSpacer extends FlexCell {
      * @param growHeight Whether the height of the spacer can grow.
      */
     public FlexSpacer(int width, int height, boolean growWidth, boolean growHeight) {
-        mWidth      = width;
-        mHeight     = height;
-        mGrowWidth  = growWidth;
+        mWidth = width;
+        mHeight = height;
+        mGrowWidth = growWidth;
         mGrowHeight = growHeight;
     }
 

@@ -17,7 +17,7 @@ import java.awt.KeyboardFocusManager;
 public interface Commitable {
     void attemptCommit();
 
-    public static void sendCommitToFocusOwner() {
+    static void sendCommitToFocusOwner() {
         KeyboardFocusManager focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         Component            focus        = focusManager.getPermanentFocusOwner();
         if (focus == null) {

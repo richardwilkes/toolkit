@@ -25,7 +25,7 @@ public class Stack<T> extends ArrayList<T> {
      * Pushes an item onto the top of the stack.
      *
      * @param item The item to be pushed onto the stack.
-     * @return The <code>item</code> argument.
+     * @return The {@code item} argument.
      */
     public T push(T item) {
         add(item);
@@ -45,7 +45,7 @@ public class Stack<T> extends ArrayList<T> {
      * Removes the object at the top of the stack.
      *
      * @return The object at the top of the stack.
-     * @exception EmptyStackException if the stack is empty.
+     * @throws EmptyStackException if the stack is empty.
      */
     public T pop() {
         int length = size();
@@ -59,7 +59,7 @@ public class Stack<T> extends ArrayList<T> {
      * Looks at the object at the top of the stack without removing it from the stack.
      *
      * @return The object at the top of the stack.
-     * @exception EmptyStackException if the stack is empty.
+     * @throws EmptyStackException if the stack is empty.
      */
     public T peek() {
         int length = size();

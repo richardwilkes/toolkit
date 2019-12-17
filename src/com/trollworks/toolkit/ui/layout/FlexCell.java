@@ -59,14 +59,14 @@ public abstract class FlexCell {
      */
     public final void layout(Scale scale, Rectangle bounds) {
         Insets insets = scale.scale(mInsets);
-        bounds.x      += insets.left;
-        bounds.y      += insets.top;
-        bounds.width  -= insets.left + insets.right;
+        bounds.x += insets.left;
+        bounds.y += insets.top;
+        bounds.width -= insets.left + insets.right;
         bounds.height -= insets.top + insets.bottom;
-        mX             = bounds.x;
-        mY             = bounds.y;
-        mWidth         = bounds.width;
-        mHeight        = bounds.height;
+        mX = bounds.x;
+        mY = bounds.y;
+        mWidth = bounds.width;
+        mHeight = bounds.height;
         layoutSelf(scale, bounds);
     }
 
@@ -86,7 +86,7 @@ public abstract class FlexCell {
     public final Dimension getSize(Scale scale, LayoutSize type) {
         Insets    insets = scale.scale(mInsets);
         Dimension size   = getSizeSelf(scale, type);
-        size.width  += insets.left + insets.right;
+        size.width += insets.left + insets.right;
         size.height += insets.top + insets.bottom;
         return LayoutSize.sanitizeSize(size);
     }

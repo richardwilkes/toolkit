@@ -18,25 +18,25 @@ public final class ClassAnnotation<T extends Annotation> {
     private Class<T> mAnnotationClass;
 
     public ClassAnnotation(Class<?> cls, Class<T> annotationCls) {
-        mClass           = cls;
+        mClass = cls;
         mAnnotationClass = annotationCls;
     }
 
-    public final Class<?> getClassWithAnnotation() {
+    public Class<?> getClassWithAnnotation() {
         return mClass;
     }
 
-    public final Class<T> getAnnotationClass() {
+    public Class<T> getAnnotationClass() {
         return mAnnotationClass;
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return 31 * (31 + mAnnotationClass.hashCode()) + mClass.hashCode();
     }
 
     @Override
-    public final boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }

@@ -18,21 +18,21 @@ public interface ConduitReceiver {
      *
      * @param msg The message.
      */
-    public void conduitMessageReceived(ConduitMessage msg);
+    void conduitMessageReceived(ConduitMessage msg);
 
     /**
      * Called to get the filter to apply to incoming message IDs, if any. This method is only called
      * once, when the {@link Conduit} is starting up.
      *
-     * @return The string to match IDs against, or <code>null</code> if any ID is OK.
+     * @return The string to match IDs against, or {@code null} if any ID is OK.
      */
-    public String getConduitMessageIDFilter();
+    String getConduitMessageIDFilter();
 
     /**
      * Called to get the filter to apply to incoming message users, if any. This method is only
      * called once, when the {@link Conduit} is starting up.
      *
-     * @return The string to match users against, or <code>null</code> if any user is OK.
+     * @return The string to match users against, or {@code null} if any user is OK.
      */
-    public String getConduitMessageUserFilter();
+    String getConduitMessageUserFilter();
 }

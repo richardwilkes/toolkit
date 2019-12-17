@@ -21,7 +21,6 @@ import com.trollworks.toolkit.ui.widget.outline.TextCell;
 import com.trollworks.toolkit.utility.text.Numbers;
 
 import java.awt.BorderLayout;
-
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 

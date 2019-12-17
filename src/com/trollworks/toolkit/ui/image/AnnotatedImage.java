@@ -13,6 +13,7 @@ package com.trollworks.toolkit.ui.image;
 
 import com.trollworks.toolkit.io.EndianUtils;
 import com.trollworks.toolkit.io.Log;
+import org.w3c.dom.NodeList;
 
 import java.awt.Image;
 import java.io.ByteArrayInputStream;
@@ -26,24 +27,21 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.CRC32;
 import java.util.zip.DeflaterOutputStream;
-
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageInputStream;
 
-import org.w3c.dom.NodeList;
-
 /** Read and write annotated image data. */
 public class AnnotatedImage {
-    private static final String TROLLWORKS_TEXT_KEY = "twtk";
-    public StdImage             mImage;
-    public String               mText;
-    public int                  mDPI;
+    private static final String   TROLLWORKS_TEXT_KEY = "twtk";
+    public               StdImage mImage;
+    public               String   mText;
+    public               int      mDPI;
 
     /**
-     * Reads a PNG image from the file and any metadata written by
-     * {@link #writePNG(OutputStream, Image, int, String)}.
+     * Reads a PNG image from the file and any metadata written by {@link #writePNG(OutputStream,
+     * Image, int, String)}.
      *
      * @param file The file to read from.
      * @return The annotated image data.
@@ -55,8 +53,8 @@ public class AnnotatedImage {
     }
 
     /**
-     * Reads a PNG image from the stream and any metadata written by
-     * {@link #writePNG(OutputStream, Image, int, String)}.
+     * Reads a PNG image from the stream and any metadata written by {@link #writePNG(OutputStream,
+     * Image, int, String)}.
      *
      * @param in The stream to read from.
      * @return The annotated image data.
@@ -81,7 +79,7 @@ public class AnnotatedImage {
                 entries = root.getElementsByTagName("pHYs");
                 if (entries.getLength() > 0) {
                     IIOMetadataNode node = (IIOMetadataNode) entries.item(0);
-                    if (node.getAttribute("unitSpecifier") == "meter") {
+                    if ("meter".equals(node.getAttribute("unitSpecifier"))) {
                         result.mDPI = (int) (Integer.parseInt(node.getAttribute("pixelsPerUnitXAxis")) * 0.0254f + 0.5f);
                     }
                 }
@@ -105,7 +103,7 @@ public class AnnotatedImage {
      * @param file  The file to write to.
      * @param image The image to use.
      * @param dpi   The DPI to use. Values less than 1 are ignored.
-     * @param text  Additional text to store. May pass in <code>null</code>.
+     * @param text  Additional text to store. May pass in {@code null}.
      */
     public static final void writePNG(File file, Image image, int dpi, String text) throws IOException {
         try (FileOutputStream os = new FileOutputStream(file)) {
@@ -120,11 +118,13 @@ public class AnnotatedImage {
      * significantly worse than other tools (Photoshop, GIMP) produce. This implementation comes
      * close to what I was originally expecting, although it is hard-wired to only produce color
      * 32-bit pixels with an alpha channel, which is perfect for my needs.
+     * <p>
+     * This does NOT close the stream.
      *
      * @param os    The stream to write to.
      * @param image The image to use.
      * @param dpi   The DPI to use. Values less than 1 are ignored.
-     * @param text  Additional text to store. May pass in <code>null</code>.
+     * @param text  Additional text to store. May pass in {@code null}.
      */
     public static final void writePNG(OutputStream os, Image image, int dpi, String text) throws IOException {
         StdImage img  = StdImage.getToolkitImage(image);
@@ -132,7 +132,7 @@ public class AnnotatedImage {
         int      rows = img.getHeight();
 
         // Write PNG signature
-        os.write(new byte[] { -119, 80, 78, 71, 13, 10, 26, 10 });
+        os.write(new byte[]{-119, 80, 78, 71, 13, 10, 26, 10});
 
         // Write IHDR
         byte[] data   = new byte[13];
@@ -140,13 +140,13 @@ public class AnnotatedImage {
         EndianUtils.writeBEInt(cols, data, offset);
         offset += 4;
         EndianUtils.writeBEInt(rows, data, offset);
-        offset         += 4;
-        data[offset++]  = 8;
-        data[offset++]  = 6;
-        data[offset++]  = 0;
-        data[offset++]  = 0;
-        data[offset++]  = 0;
-        AnnotatedImage.writeChunk(os, "IHDR", data);
+        offset += 4;
+        data[offset++] = 8;
+        data[offset++] = 6;
+        data[offset++] = 0;
+        data[offset++] = 0;
+        data[offset] = 0;
+        writeChunk(os, "IHDR", data);
 
         // Add DPI, if provided
         if (dpi > 0) {
@@ -155,14 +155,14 @@ public class AnnotatedImage {
             EndianUtils.writeBEInt(ppu, data, 0);
             EndianUtils.writeBEInt(ppu, data, 4);
             data[8] = 1;
-            AnnotatedImage.writeChunk(os, "pHYs", data);
+            writeChunk(os, "pHYs", data);
         }
 
         // Write text, if provided
         if (text != null) {
             ByteArrayOutputStream ba = new ByteArrayOutputStream();
-            ba.write(AnnotatedImage.TROLLWORKS_TEXT_KEY.getBytes(StandardCharsets.ISO_8859_1));
-            ba.write(new byte[] { 0, 1, 0, 0, 0 });
+            ba.write(TROLLWORKS_TEXT_KEY.getBytes(StandardCharsets.ISO_8859_1));
+            ba.write(new byte[]{0, 1, 0, 0, 0});
             try (OutputStream deflater = new DeflaterOutputStream(ba)) {
                 try (ByteArrayInputStream in = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8))) {
                     byte[] buffer = new byte[4096];
@@ -172,32 +172,28 @@ public class AnnotatedImage {
                     }
                 }
             }
-            AnnotatedImage.writeChunk(os, "iTXt", ba.toByteArray());
+            writeChunk(os, "iTXt", ba.toByteArray());
         }
 
         // Write pixel data
-        PNGPixelsWriter pw       = new PNGPixelsWriter(os, cols, rows);
-        int[]           pixels   = new int[cols];
-        byte[]          scanline = new byte[cols * 4];
-        for (int i = 0; i < rows; i++) {
-            img.getRGB(0, i, cols, 1, pixels, 0, cols);
-            for (int i1 = 0, j = 0; i1 < cols; i1++) {
-                int pixel = pixels[i1];
-                scanline[j++] = (byte) (pixel >> 16 & 0xFF);
-                scanline[j++] = (byte) (pixel >> 8 & 0xFF);
-                scanline[j++] = (byte) (pixel & 0xFF);
-                scanline[j++] = (byte) (pixel >> 24 & 0xFF);
+        try (PNGPixelsWriter pw = new PNGPixelsWriter(os, cols, rows)) {
+            int[]  pixels   = new int[cols];
+            byte[] scanline = new byte[cols * 4];
+            for (int i = 0; i < rows; i++) {
+                img.getRGB(0, i, cols, 1, pixels, 0, cols);
+                for (int i1 = 0, j = 0; i1 < cols; i1++) {
+                    int pixel = pixels[i1];
+                    scanline[j++] = (byte) (pixel >> 16 & 0xFF);
+                    scanline[j++] = (byte) (pixel >> 8 & 0xFF);
+                    scanline[j++] = (byte) (pixel & 0xFF);
+                    scanline[j++] = (byte) (pixel >> 24 & 0xFF);
+                }
+                pw.writeRow(scanline);
             }
-            pw.writeRow(scanline);
         }
 
         // Write IEND
-        try {
-            pw.close();
-            AnnotatedImage.writeChunk(os, "IEND", null);
-        } finally {
-            os.close();
-        }
+        writeChunk(os, "IEND", null);
     }
 
     static void writeChunk(OutputStream os, String id, byte[] data) throws IOException {

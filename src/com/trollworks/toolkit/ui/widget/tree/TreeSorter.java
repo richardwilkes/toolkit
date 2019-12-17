@@ -13,10 +13,11 @@ package com.trollworks.toolkit.ui.widget.tree;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 /** Provides sorting of tree data. */
 public class TreeSorter implements Comparator<TreeRow> {
-    private ArrayList<SortData> mSortData = new ArrayList<>();
+    private List<SortData> mSortData = new ArrayList<>();
 
     /** @return Whether or not multiple sort criteria exists. */
     public boolean hasMultipleCriteria() {
@@ -25,7 +26,7 @@ public class TreeSorter implements Comparator<TreeRow> {
 
     /**
      * @param column The {@link TreeColumn} to look for.
-     * @return The {@link TreeColumn}'s sort sequence, or <code>-1</code>.
+     * @return The {@link TreeColumn}'s sort sequence, or {@code -1}.
      */
     public int getSortSequence(TreeColumn column) {
         int size = mSortData.size();
@@ -42,9 +43,7 @@ public class TreeSorter implements Comparator<TreeRow> {
      * @return Whether or not the {@link TreeColumn} is sorted in ascending order.
      */
     public boolean isSortAscending(TreeColumn column) {
-        int size = mSortData.size();
-        for (int i = 0; i < size; i++) {
-            SortData sortData = mSortData.get(i);
+        for (SortData sortData : mSortData) {
             if (sortData.mColumn == column) {
                 return sortData.mAscending;
             }
@@ -71,7 +70,7 @@ public class TreeSorter implements Comparator<TreeRow> {
             for (SortData data : mSortData) {
                 if (data.mColumn == column) {
                     data.mAscending = ascending;
-                    found           = true;
+                    found = true;
                     break;
                 }
             }
@@ -94,7 +93,7 @@ public class TreeSorter implements Comparator<TreeRow> {
         for (SortData data : mSortData) {
             if (data.mColumn == column) {
                 ascending = !data.mAscending;
-                found     = data;
+                found = data;
                 break;
             }
         }
@@ -104,7 +103,7 @@ public class TreeSorter implements Comparator<TreeRow> {
         } else if (found != null) {
             found.mAscending = ascending;
         } else {
-            mSortData.add(new SortData(column, ascending));
+            mSortData.add(new SortData(column, true));
         }
     }
 
@@ -131,7 +130,7 @@ public class TreeSorter implements Comparator<TreeRow> {
         boolean    mAscending;
 
         SortData(TreeColumn column, boolean ascending) {
-            mColumn    = column;
+            mColumn = column;
             mAscending = ascending;
         }
     }

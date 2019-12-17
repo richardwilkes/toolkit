@@ -12,7 +12,6 @@
 package com.trollworks.toolkit.ui.menu;
 
 import java.beans.PropertyChangeListener;
-
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
@@ -24,7 +23,6 @@ import javax.swing.JMenuItem;
 public class DynamicMenuItem extends JMenuItem {
     /** Creates a new {@link DynamicMenuItem}. */
     public DynamicMenuItem() {
-        super();
     }
 
     /**

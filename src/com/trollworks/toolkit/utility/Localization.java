@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -37,9 +38,9 @@ public class Localization implements PrivilegedAction<Object> {
     private static final int      MOD_EXPECTED = Modifier.STATIC;
     private static final int      MOD_MASK     = MOD_EXPECTED | Modifier.FINAL;
     private static final String[] LOCALES;
-    private Class<?>              mClass;
-    private String                mBundleName;
-    private boolean               mIsAccessible;
+    private              Class<?> mClass;
+    private              String   mBundleName;
+    private              boolean  mIsAccessible;
 
     static {
         Locale override = getLocaleOverride();
@@ -57,10 +58,10 @@ public class Localization implements PrivilegedAction<Object> {
             nl = nl.substring(0, lastSeparator);
         }
         result.add("");
-        LOCALES = result.toArray(new String[result.size()]);
+        LOCALES = result.toArray(new String[0]);
     }
 
-    /** @return The file a locale will be read from, or <code>null</code> if no property was set. */
+    /** @return The file a locale will be read from, or {@code null} if no property was set. */
     public static final File getLocaleOverrideFile() {
         String localeFile = System.getProperty("locale.file", "");
         if (!localeFile.isEmpty()) {
@@ -76,11 +77,11 @@ public class Localization implements PrivilegedAction<Object> {
         return null;
     }
 
-    /** @return The locale override, or <code>null</code> if no property was set. */
+    /** @return The locale override, or {@code null} if no property was set. */
     public static final Locale getLocaleOverride() {
         File localeFile = getLocaleOverrideFile();
         if (localeFile != null) {
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(localeFile)))) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(localeFile), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = in.readLine()) != null) {
                     line = line.trim();
@@ -97,8 +98,8 @@ public class Localization implements PrivilegedAction<Object> {
 
     /**
      * Initialize the calling class with the values from its message bundle. <b>NOTE</b>: This can
-     * only be called if the calling class shares the same {@link ClassLoader} as the
-     * {@link Localization} class. Classes from different Eclipse plugins, for example, do
+     * only be called if the calling class shares the same {@link ClassLoader} as the {@link
+     * Localization} class. Classes from different Eclipse plugins, for example, do
      * <b>NOT</b> share class loaders and cannot use this method unless they are in the same plugin
      * as the {@link Localization} class.
      */
@@ -115,7 +116,7 @@ public class Localization implements PrivilegedAction<Object> {
      *
      * @param theClass The class to process.
      */
-    public static void initialize(final Class<?> theClass) {
+    public static void initialize(Class<?> theClass) {
         Localization action = new Localization(theClass);
         if (System.getSecurityManager() == null) {
             action.run();
@@ -125,8 +126,8 @@ public class Localization implements PrivilegedAction<Object> {
     }
 
     private Localization(Class<?> theClass) {
-        mClass        = theClass;
-        mBundleName   = theClass.getName();
+        mClass = theClass;
+        mBundleName = theClass.getName();
         mIsAccessible = (mClass.getModifiers() & Modifier.PUBLIC) != 0;
     }
 

@@ -16,7 +16,6 @@ import com.trollworks.toolkit.ui.scale.Scale;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
-
 import javax.swing.border.Border;
 
 /** A replacement for the Swing EmptyBorder class that understands scaling. */

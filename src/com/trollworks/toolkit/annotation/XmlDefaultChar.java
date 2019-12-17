@@ -18,8 +18,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-/** Provides a default value for a char value. */
-public @interface XmlDefaultChar {
+/** Provides a default value for a char value. */ public @interface XmlDefaultChar {
     /** @return The default value. */
     char value();
 }

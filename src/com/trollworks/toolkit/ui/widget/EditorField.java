@@ -22,7 +22,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
-
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -85,7 +84,7 @@ public class EditorField extends JFormattedTextField implements ActionListener, 
         }
     }
 
-    /** @param hint The hint to use, or <code>null</code>. */
+    /** @param hint The hint to use, or {@code null}. */
     public void setHint(String hint) {
         mHint = hint;
         repaint();
@@ -94,7 +93,7 @@ public class EditorField extends JFormattedTextField implements ActionListener, 
     @Override
     protected void paintComponent(Graphics gc) {
         super.paintComponent(gc);
-        if (mHint != null && getText().length() == 0) {
+        if (mHint != null && getText().isEmpty()) {
             Rectangle bounds = getBounds();
             bounds.x = 0;
             bounds.y = 0;

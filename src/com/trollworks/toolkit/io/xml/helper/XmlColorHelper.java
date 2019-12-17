@@ -18,13 +18,13 @@ import com.trollworks.toolkit.ui.Colors;
 
 import java.awt.Color;
 import java.lang.reflect.Field;
-
 import javax.xml.stream.XMLStreamException;
 
 public class XmlColorHelper implements XmlObjectHelper {
     public static final XmlColorHelper SINGLETON = new XmlColorHelper();
 
-    private XmlColorHelper() {}
+    private XmlColorHelper() {
+    }
 
     @Override
     public boolean canHandleClass(Class<?> clazz) {

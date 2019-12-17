@@ -21,7 +21,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 
@@ -31,8 +30,8 @@ import javax.swing.SwingUtilities;
  */
 public class MouseCapture implements MouseListener, MouseMotionListener, HierarchyListener {
     private static final Map<Component, MouseCapture> MAP = new HashMap<>();
-    private Component                                 mGlassPane;
-    private Component                                 mCaptureComponent;
+    private              Component                    mGlassPane;
+    private              Component                    mCaptureComponent;
 
     /**
      * Starts redirecting all mouse events to the specified component or one of its children.
@@ -73,7 +72,7 @@ public class MouseCapture implements MouseListener, MouseMotionListener, Hierarc
     }
 
     private MouseCapture(Component glassPane, Component capture) {
-        mGlassPane        = glassPane;
+        mGlassPane = glassPane;
         mCaptureComponent = capture;
     }
 

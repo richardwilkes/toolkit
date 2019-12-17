@@ -20,5 +20,5 @@ public enum PrecisionLayoutAlignment {
     /** Position at the right/bottom. */
     END,
     /** Fill the available space. */
-    FILL;
+    FILL
 }

@@ -16,7 +16,7 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 2 bytes from the buffer, interpreted as a big-endian <code>short</code>.
+     * @return The next 2 bytes from the buffer, interpreted as a big-endian {@code short}.
      */
     public static final short readBEShort(byte[] buffer, int offset) {
         return (short) ((buffer[offset] & 0xFF) << 8 | (buffer[offset + 1] & 0xFF) << 0);
@@ -25,8 +25,8 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 2 bytes from the buffer, interpreted as a big-endian unsigned
-     *         <code>short</code>.
+     * @return The next 2 bytes from the buffer, interpreted as a big-endian unsigned {@code
+     *         short}.
      */
     public static final int readBEUnsignedShort(byte[] buffer, int offset) {
         return (buffer[offset] & 0xFF) << 8 | (buffer[offset + 1] & 0xFF) << 0;
@@ -35,7 +35,7 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 4 bytes from the buffer, interpreted as a big-endian <code>int</code>.
+     * @return The next 4 bytes from the buffer, interpreted as a big-endian {@code int}.
      */
     public static final int readBEInt(byte[] buffer, int offset) {
         return (buffer[offset] & 0xFF) << 24 | (buffer[offset + 1] & 0xFF) << 16 | (buffer[offset + 2] & 0xFF) << 8 | (buffer[offset + 3] & 0xFF) << 0;
@@ -44,7 +44,7 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 8 bytes from the buffer, interpreted as a big-endian <code>long</code>.
+     * @return The next 8 bytes from the buffer, interpreted as a big-endian {@code long}.
      */
     public static final long readBELong(byte[] buffer, int offset) {
         return ((long) buffer[offset] & 0xFF) << 56 | ((long) buffer[offset + 1] & 0xFF) << 48 | ((long) buffer[offset + 2] & 0xFF) << 40 | ((long) buffer[offset + 3] & 0xFF) << 32 | ((long) buffer[offset + 4] & 0xFF) << 24 | ((long) buffer[offset + 5] & 0xFF) << 16 | ((long) buffer[offset + 6] & 0xFF) << 8 | ((long) buffer[offset + 7] & 0xFF) << 0;
@@ -53,7 +53,7 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 4 bytes from the buffer, interpreted as a big-endian <code>float</code>.
+     * @return The next 4 bytes from the buffer, interpreted as a big-endian {@code float}.
      */
     public static final float readBEFloat(byte[] buffer, int offset) {
         return Float.intBitsToFloat(readBEInt(buffer, offset));
@@ -62,7 +62,7 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 8 bytes from the buffer, interpreted as a big-endian <code>double</code>.
+     * @return The next 8 bytes from the buffer, interpreted as a big-endian {@code double}.
      */
     public static final double readBEDouble(byte[] buffer, int offset) {
         return Double.longBitsToDouble(readBELong(buffer, offset));
@@ -74,7 +74,7 @@ public class EndianUtils {
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeBEShort(int value, byte[] buffer, int offset) {
-        buffer[offset]     = (byte) (value >>> 8 & 0xFF);
+        buffer[offset] = (byte) (value >>> 8 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 0 & 0xFF);
     }
 
@@ -84,7 +84,7 @@ public class EndianUtils {
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeBEInt(int value, byte[] buffer, int offset) {
-        buffer[offset]     = (byte) (value >>> 24 & 0xFF);
+        buffer[offset] = (byte) (value >>> 24 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 16 & 0xFF);
         buffer[offset + 2] = (byte) (value >>> 8 & 0xFF);
         buffer[offset + 3] = (byte) (value >>> 0 & 0xFF);
@@ -96,7 +96,7 @@ public class EndianUtils {
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeBELong(long value, byte[] buffer, int offset) {
-        buffer[offset]     = (byte) (value >>> 56 & 0xFF);
+        buffer[offset] = (byte) (value >>> 56 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 48 & 0xFF);
         buffer[offset + 2] = (byte) (value >>> 40 & 0xFF);
         buffer[offset + 3] = (byte) (value >>> 32 & 0xFF);
@@ -127,7 +127,7 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 2 bytes from the buffer, interpreted as a little-endian <code>short</code>.
+     * @return The next 2 bytes from the buffer, interpreted as a little-endian {@code short}.
      */
     public static final short readLEShort(byte[] buffer, int offset) {
         return (short) ((buffer[offset] & 0xFF) << 0 | (buffer[offset + 1] & 0xFF) << 8);
@@ -136,8 +136,8 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 2 bytes from the buffer, interpreted as a little-endian unsigned
-     *         <code>short</code>.
+     * @return The next 2 bytes from the buffer, interpreted as a little-endian unsigned {@code
+     *         short}.
      */
     public static final int readLEUnsignedShort(byte[] buffer, int offset) {
         return (buffer[offset] & 0xFF) << 0 | (buffer[offset + 1] & 0xFF) << 8;
@@ -146,7 +146,7 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 4 bytes from the buffer, interpreted as a little-endian <code>int</code>.
+     * @return The next 4 bytes from the buffer, interpreted as a little-endian {@code int}.
      */
     public static final int readLEInt(byte[] buffer, int offset) {
         return (buffer[offset] & 0xFF) << 0 | (buffer[offset + 1] & 0xFF) << 8 | (buffer[offset + 2] & 0xFF) << 16 | (buffer[offset + 3] & 0xFF) << 24;
@@ -155,7 +155,7 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 8 bytes from the buffer, interpreted as a little-endian <code>long</code>.
+     * @return The next 8 bytes from the buffer, interpreted as a little-endian {@code long}.
      */
     public static final long readLELong(byte[] buffer, int offset) {
         return ((long) buffer[offset] & 0xFF) << 0 | ((long) buffer[offset + 1] & 0xFF) << 8 | ((long) buffer[offset + 2] & 0xFF) << 16 | ((long) buffer[offset + 3] & 0xFF) << 24 | ((long) buffer[offset + 4] & 0xFF) << 32 | ((long) buffer[offset + 5] & 0xFF) << 40 | ((long) buffer[offset + 6] & 0xFF) << 48 | ((long) buffer[offset + 7] & 0xFF) << 56;
@@ -164,7 +164,7 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 4 bytes from the buffer, interpreted as a little-endian <code>float</code>.
+     * @return The next 4 bytes from the buffer, interpreted as a little-endian {@code float}.
      */
     public static final float readLEFloat(byte[] buffer, int offset) {
         return Float.intBitsToFloat(readLEInt(buffer, offset));
@@ -173,7 +173,7 @@ public class EndianUtils {
     /**
      * @param buffer The buffer to read from.
      * @param offset The offset within the buffer to start reading from.
-     * @return The next 8 bytes from the buffer, interpreted as a little-endian <code>double</code>.
+     * @return The next 8 bytes from the buffer, interpreted as a little-endian {@code double}.
      */
     public static final double readLEDouble(byte[] buffer, int offset) {
         return Double.longBitsToDouble(readLELong(buffer, offset));
@@ -185,7 +185,7 @@ public class EndianUtils {
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeLEShort(int value, byte[] buffer, int offset) {
-        buffer[offset]     = (byte) (value >>> 0 & 0xFF);
+        buffer[offset] = (byte) (value >>> 0 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 8 & 0xFF);
     }
 
@@ -195,7 +195,7 @@ public class EndianUtils {
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeLEInt(int value, byte[] buffer, int offset) {
-        buffer[offset]     = (byte) (value >>> 0 & 0xFF);
+        buffer[offset] = (byte) (value >>> 0 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 8 & 0xFF);
         buffer[offset + 2] = (byte) (value >>> 16 & 0xFF);
         buffer[offset + 3] = (byte) (value >>> 24 & 0xFF);
@@ -207,7 +207,7 @@ public class EndianUtils {
      * @param offset The offset within the buffer to start writing to.
      */
     public static final void writeLELong(long value, byte[] buffer, int offset) {
-        buffer[offset]     = (byte) (value >>> 0 & 0xFF);
+        buffer[offset] = (byte) (value >>> 0 & 0xFF);
         buffer[offset + 1] = (byte) (value >>> 8 & 0xFF);
         buffer[offset + 2] = (byte) (value >>> 16 & 0xFF);
         buffer[offset + 3] = (byte) (value >>> 24 & 0xFF);

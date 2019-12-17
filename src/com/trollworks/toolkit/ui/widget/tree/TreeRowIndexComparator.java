@@ -24,14 +24,6 @@ public class TreeRowIndexComparator implements Comparator<TreeRow> {
 
     @Override
     public int compare(TreeRow o1, TreeRow o2) {
-        int i1 = o1.getIndex();
-        int i2 = o2.getIndex();
-        if (i1 < i2) {
-            return -1;
-        }
-        if (i1 > i2) {
-            return 1;
-        }
-        return 0;
+        return Integer.compare(o1.getIndex(), o2.getIndex());
     }
 }

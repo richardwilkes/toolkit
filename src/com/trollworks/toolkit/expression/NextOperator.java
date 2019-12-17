@@ -19,6 +19,6 @@ class NextOperator {
 
     NextOperator(Operator operator, int index) {
         mOperator = operator;
-        mIndex    = index;
+        mIndex = index;
     }
 }

@@ -18,5 +18,5 @@ public enum RowDistribution {
     /** Distributes the height equally among the components. */
     DISTRIBUTE_HEIGHT,
     /** Gives excess height to the last component. */
-    GIVE_EXCESS_TO_LAST;
+    GIVE_EXCESS_TO_LAST
 }

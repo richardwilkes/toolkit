@@ -29,7 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.util.HashMap;
-
+import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -38,11 +38,11 @@ import javax.swing.KeyStroke;
 
 /** The menu keys preferences panel. */
 public class MenuKeyPreferences extends PreferencePanel implements ActionListener {
-    private static final String       NONE   = "NONE";
-    private static final String       MODULE = "MenuKeys";
-    private static boolean            LOADED = false;
-    private HashMap<JButton, Command> mMap   = new HashMap<>();
-    private BandedPanel               mPanel;
+    private static final String                    NONE   = "NONE";
+    private static final String                    MODULE = "MenuKeys";
+    private static       boolean                   LOADED;
+    private              HashMap<JButton, Command> mMap   = new HashMap<>();
+    private              BandedPanel               mPanel;
 
     /**
      * Creates a new {@link MenuKeyPreferences}.
@@ -82,7 +82,7 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
         JButton          button  = (JButton) event.getSource();
         Command          command = mMap.get(button);
         KeyStrokeDisplay ksd     = new KeyStrokeDisplay(command.getAccelerator());
-        switch (WindowUtils.showOptionDialog(this, ksd, I18n.Text("Type a keystroke\u2026"), false, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] { I18n.Text("Accept"), I18n.Text("Clear"), I18n.Text("Reset") }, null)) {
+        switch (WindowUtils.showOptionDialog(this, ksd, I18n.Text("Type a keystroke\u2026"), false, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[]{I18n.Text("Accept"), I18n.Text("Clear"), I18n.Text("Reset")}, null)) {
         case JOptionPane.CLOSED_OPTION:
         default:
             break;
@@ -102,8 +102,9 @@ public class MenuKeyPreferences extends PreferencePanel implements ActionListene
 
     @Override
     public void reset() {
-        for (JButton button : mMap.keySet()) {
-            setAccelerator(button, mMap.get(button).getOriginalAccelerator());
+        for (Map.Entry<JButton, Command> entry : mMap.entrySet()) {
+            JButton button = entry.getKey();
+            setAccelerator(button, entry.getValue().getOriginalAccelerator());
             button.invalidate();
         }
         mPanel.setSize(mPanel.getPreferredSize());

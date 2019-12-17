@@ -43,7 +43,7 @@ public class FileScanner implements FileVisitor<Path> {
      *
      * @param path       The starting point.
      * @param handler    The {@link Handler} to call for each file.
-     * @param skipHidden Pass in <code>true</code> if files and directories whose names start with a
+     * @param skipHidden Pass in {@code true} if files and directories whose names start with a
      *                   period should be skipped.
      */
     public static final void walk(Path path, Handler handler, boolean skipHidden) {
@@ -55,8 +55,8 @@ public class FileScanner implements FileVisitor<Path> {
     }
 
     private FileScanner(Path path, Handler handler, boolean skipHidden) {
-        mPath       = path;
-        mHandler    = handler;
+        mPath = path;
+        mHandler = handler;
         mSkipHidden = skipHidden;
     }
 

@@ -26,11 +26,11 @@ public interface PrintProxy extends Printable {
     /**
      * Called when the page setup has changed.
      *
-     * @param willPrint <code>true</code> when this call will be immediately followed by printing.
+     * @param willPrint {@code true} when this call will be immediately followed by printing.
      */
     void adjustToPageSetupChanges(boolean willPrint);
 
-    /** @return <code>true</code> when printing is in progress. */
+    /** @return {@code true} when printing is in progress. */
     boolean isPrinting();
 
     /** @param printing The current state to return from a call to {@link #isPrinting()}. */

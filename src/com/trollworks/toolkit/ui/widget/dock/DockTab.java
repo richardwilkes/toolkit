@@ -41,7 +41,6 @@ import java.awt.event.ContainerListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Path2D;
-
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -78,8 +77,8 @@ public class DockTab extends JPanel implements ContainerListener, MouseListener,
     }
 
     /**
-     * @return <code>true</code> if this {@link DockTab} is the current one for the
-     *         {@link DockContainer}.
+     * @return {@code true} if this {@link DockTab} is the current one for the {@link
+     *         DockContainer}.
      */
     public boolean isCurrent() {
         DockContainer dc = getDockContainer();

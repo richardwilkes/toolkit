@@ -11,18 +11,22 @@
 
 package com.trollworks.toolkit.ui.widget;
 
-import static java.awt.event.KeyEvent.*;
-
 import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.border.EmptyBorder;
 import com.trollworks.toolkit.ui.border.LineBorder;
 import com.trollworks.toolkit.utility.Platform;
+import static java.awt.event.KeyEvent.VK_ALT;
+import static java.awt.event.KeyEvent.VK_CAPS_LOCK;
+import static java.awt.event.KeyEvent.VK_CONTROL;
+import static java.awt.event.KeyEvent.VK_ESCAPE;
+import static java.awt.event.KeyEvent.VK_META;
+import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.awt.event.KeyEvent.getKeyText;
 
 import java.awt.Color;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import javax.swing.JLabel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
@@ -96,10 +100,10 @@ public class KeyStrokeDisplay extends JLabel implements KeyListener {
                 }
             }
             int keyCode = ks.getKeyCode();
-            if (keyCode != 0) {
-                buffer.append(KeyEvent.getKeyText(keyCode));
-            } else {
+            if (keyCode == 0) {
                 buffer.append(ks.getKeyChar());
+            } else {
+                buffer.append(getKeyText(keyCode));
             }
         }
         return buffer.toString();

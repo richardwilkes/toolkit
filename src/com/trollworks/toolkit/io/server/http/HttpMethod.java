@@ -17,7 +17,7 @@ public enum HttpMethod {
 
     /**
      * @param text The text representation of the HTTP request method.
-     * @return The {@link HttpMethod}, or <code>null</code> if no match can be found.
+     * @return The {@link HttpMethod}, or {@code null} if no match can be found.
      */
     static HttpMethod lookup(String text) {
         for (HttpMethod method : HttpMethod.values()) {

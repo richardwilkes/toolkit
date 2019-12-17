@@ -25,24 +25,24 @@ import java.util.StringTokenizer;
 /** Tracks targets of notifications and provides methods for notifying them. */
 public class Notifier implements Comparator<NotifierTarget> {
     /** The separator used between parts of a type. */
-    public static final String               SEPARATOR      = ".";
-    private Set<BatchNotifierTarget>         mBatchTargets  = new HashSet<>();
-    private Map<String, Set<NotifierTarget>> mProductionMap = new HashMap<>();
-    private Map<NotifierTarget, Set<String>> mNameMap       = new HashMap<>();
-    private BatchNotifierTarget[]            mCurrentBatch;
-    private int                              mBatchLevel;
-    private boolean                          mEnabled       = true;
+    public static final String                           SEPARATOR      = ".";
+    private             Set<BatchNotifierTarget>         mBatchTargets  = new HashSet<>();
+    private             Map<String, Set<NotifierTarget>> mProductionMap = new HashMap<>();
+    private             Map<NotifierTarget, Set<String>> mNameMap       = new HashMap<>();
+    private             BatchNotifierTarget[]            mCurrentBatch;
+    private             int                              mBatchLevel;
+    private             boolean                          mEnabled       = true;
 
     /**
      * Adds all registrations from the specified {@link Notifier} into this one.
      *
      * @param notifier The {@link Notifier} to use.
      */
-    public synchronized void add(Notifier notifier) {
+    public synchronized void addFrom(Notifier notifier) {
         Map<NotifierTarget, Set<String>> map = new HashMap<>(notifier.mNameMap);
         for (Entry<NotifierTarget, Set<String>> entry : map.entrySet()) {
             Set<String> set = entry.getValue();
-            add(entry.getKey(), set.toArray(new String[set.size()]));
+            add(entry.getKey(), set.toArray(new String[0]));
         }
     }
 
@@ -64,16 +64,18 @@ public class Notifier implements Comparator<NotifierTarget> {
         if (target instanceof BatchNotifierTarget) {
             mBatchTargets.add((BatchNotifierTarget) target);
         }
-        for (String name : names) {
-            name = normalizeName(name);
-            if (name.length() > 0) {
-                Set<NotifierTarget> set = mProductionMap.get(name);
-                if (set == null) {
-                    set = new HashSet<>();
-                    mProductionMap.put(name, set);
+        if (names != null) {
+            for (String name : names) {
+                name = normalizeName(name);
+                if (!name.isEmpty()) {
+                    Set<NotifierTarget> set = mProductionMap.get(name);
+                    if (set == null) {
+                        set = new HashSet<>();
+                        mProductionMap.put(name, set);
+                    }
+                    set.add(target);
+                    normalizedNames.add(name);
                 }
-                set.add(target);
-                normalizedNames.add(name);
             }
         }
         if (normalizedNames.isEmpty()) {
@@ -104,7 +106,7 @@ public class Notifier implements Comparator<NotifierTarget> {
                 mBatchTargets.remove(target);
             }
             for (String name : mNameMap.get(target)) {
-                if (name.length() > 0) {
+                if (!name.isEmpty()) {
                     Set<NotifierTarget> set = mProductionMap.get(name);
                     if (set != null) {
                         set.remove(target);
@@ -194,7 +196,7 @@ public class Notifier implements Comparator<NotifierTarget> {
         if (isEnabled()) {
             if (++mBatchLevel == 1) {
                 if (!mBatchTargets.isEmpty()) {
-                    mCurrentBatch = mBatchTargets.toArray(new BatchNotifierTarget[mBatchTargets.size()]);
+                    mCurrentBatch = mBatchTargets.toArray(new BatchNotifierTarget[0]);
                     for (BatchNotifierTarget target : mCurrentBatch) {
                         try {
                             target.enterBatchMode();
@@ -234,13 +236,6 @@ public class Notifier implements Comparator<NotifierTarget> {
         }
     }
 
-    /** Removes all targets. */
-    public synchronized void reset() {
-        mBatchTargets.clear();
-        mProductionMap.clear();
-        mNameMap.clear();
-    }
-
     /**
      * Removes all targets except the specified ones.
      *
@@ -248,31 +243,27 @@ public class Notifier implements Comparator<NotifierTarget> {
      */
     public synchronized void reset(NotifierTarget... exclude) {
         Map<NotifierTarget, Set<String>> set = new HashMap<>();
-        for (NotifierTarget target : exclude) {
-            if (target != null) {
-                Set<String> names = mNameMap.get(target);
-                if (names != null && !names.isEmpty()) {
-                    set.put(target, names);
+        if (exclude != null) {
+            for (NotifierTarget target : exclude) {
+                if (target != null) {
+                    Set<String> names = mNameMap.get(target);
+                    if (names != null && !names.isEmpty()) {
+                        set.put(target, names);
+                    }
                 }
             }
         }
-        reset();
-        for (NotifierTarget target : set.keySet()) {
-            Set<String> names = set.get(target);
-            add(target, names.toArray(new String[names.size()]));
+        mBatchTargets.clear();
+        mProductionMap.clear();
+        mNameMap.clear();
+        for (Entry<NotifierTarget, Set<String>> entry : set.entrySet()) {
+            Set<String> names = entry.getValue();
+            add(entry.getKey(), names.toArray(new String[0]));
         }
     }
 
     @Override
     public int compare(NotifierTarget t1, NotifierTarget t2) {
-        int p1 = t1.getNotificationPriority();
-        int p2 = t2.getNotificationPriority();
-        if (p1 > p2) {
-            return 1;
-        }
-        if (p1 < p2) {
-            return -1;
-        }
-        return 0;
+        return Integer.compare(t1.getNotificationPriority(), t2.getNotificationPriority());
     }
 }

@@ -23,7 +23,7 @@ public class Min implements ExpressionFunction {
     }
 
     @Override
-    public final Object execute(final Evaluator evaluator, final String arguments) throws EvaluationException {
+    public final Object execute(Evaluator evaluator, String arguments) throws EvaluationException {
         try {
             Evaluator         ev        = new Evaluator(evaluator);
             ArgumentTokenizer tokenizer = new ArgumentTokenizer(arguments);

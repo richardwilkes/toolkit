@@ -18,16 +18,15 @@ import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
 import javax.swing.text.JTextComponent;
 
 /** Provides the "Paste" command. */
 public class PasteCommand extends Command {
     /** The action command this command will issue. */
-    public static final String       CMD_PASTE = "Paste";
+    public static final String CMD_PASTE = "Paste";
 
     /** The singleton {@link PasteCommand}. */
-    public static final PasteCommand INSTANCE  = new PasteCommand();
+    public static final PasteCommand INSTANCE = new PasteCommand();
 
     private PasteCommand() {
         super(I18n.Text("Paste"), CMD_PASTE, KeyEvent.VK_V);

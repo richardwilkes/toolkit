@@ -14,7 +14,6 @@ package com.trollworks.toolkit.utility.text;
 import com.trollworks.toolkit.utility.units.WeightValue;
 
 import java.text.ParseException;
-
 import javax.swing.JFormattedTextField;
 
 /** Provides weight field conversion. */
@@ -22,7 +21,7 @@ public class WeightFormatter extends JFormattedTextField.AbstractFormatter {
     private boolean mBlankOnZero;
 
     /**
-     * @param blankOnZero When <code>true</code>, a value of zero resolves to the empty string when
+     * @param blankOnZero When {@code true}, a value of zero resolves to the empty string when
      *                    calling {@link #valueToString(Object)}.
      */
     public WeightFormatter(boolean blankOnZero) {

@@ -15,7 +15,8 @@ import com.trollworks.toolkit.ui.scale.Scale;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /** A row within a {@link FlexLayout}. */
 public class FlexRow extends FlexContainer {
@@ -24,9 +25,7 @@ public class FlexRow extends FlexContainer {
         int   count = getChildCount();
         int   hGap  = scale.scale(getHorizontalGap());
         int[] gaps  = new int[count > 0 ? count - 1 : 0];
-        for (int i = 0; i < gaps.length; i++) {
-            gaps[i] = hGap;
-        }
+        Arrays.fill(gaps, hGap);
         int         width     = hGap * (count > 0 ? count - 1 : 0);
         Dimension[] minSizes  = getChildSizes(scale, LayoutSize.MINIMUM);
         Dimension[] prefSizes = getChildSizes(scale, LayoutSize.PREFERRED);
@@ -46,20 +45,21 @@ public class FlexRow extends FlexContainer {
             for (int i = 0; i < count; i++) {
                 prefSizes[i].width = values[i];
             }
-            if (extra > 0 && getFillHorizontal() && gaps.length > 0) {
-                int amt = extra / gaps.length;
-                for (int i = 0; i < gaps.length; i++) {
+            int length = gaps.length;
+            if (extra > 0 && getFillHorizontal() && length > 0) {
+                int amt = extra / length;
+                for (int i = 0; i < length; i++) {
                     gaps[i] += amt;
                 }
-                extra -= amt * gaps.length;
+                extra -= amt * length;
                 for (int i = 0; i < extra; i++) {
                     gaps[i]++;
                 }
                 extra = 0;
             }
         }
-        ArrayList<FlexCell> children    = getChildren();
-        Rectangle[]         childBounds = new Rectangle[count];
+        List<FlexCell> children    = getChildren();
+        Rectangle[]    childBounds = new Rectangle[count];
         for (int i = 0; i < count; i++) {
             childBounds[i] = new Rectangle(prefSizes[i]);
             if (getFillVertical()) {

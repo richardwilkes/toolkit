@@ -26,7 +26,7 @@ public class JsonMap extends JsonCollection {
 
     /**
      * @param key The key to check for.
-     * @return <code>true</code> if the key is present in the map.
+     * @return {@code true} if the key is present in the map.
      */
     public boolean has(String key) {
         return mMap.containsKey(key);
@@ -41,7 +41,7 @@ public class JsonMap extends JsonCollection {
 
     /**
      * @param key The key to retrieve.
-     * @return The value associated with the key or <code>null</code> if no key matches.
+     * @return The value associated with the key or {@code null} if no key matches.
      */
     public Object get(String key) {
         return key == null ? null : mMap.get(key);
@@ -49,8 +49,8 @@ public class JsonMap extends JsonCollection {
 
     /**
      * @param key The key to retrieve.
-     * @return The value associated with the key or <code>false</code> if no key matches or the
-     *         value cannot be converted to a boolean.
+     * @return The value associated with the key or {@code false} if no key matches or the value
+     *         cannot be converted to a boolean.
      */
     public boolean getBoolean(String key) {
         return Json.asBoolean(get(key));
@@ -147,7 +147,7 @@ public class JsonMap extends JsonCollection {
 
     /**
      * @param key       The key to retrieve.
-     * @param allowNull <code>false</code> to return an empty string if no key matches.
+     * @param allowNull {@code false} to return an empty string if no key matches.
      * @return The value associated with the key.
      */
     public String getString(String key, boolean allowNull) {
@@ -161,8 +161,8 @@ public class JsonMap extends JsonCollection {
 
     /**
      * @param key       The key to retrieve.
-     * @param allowNull <code>false</code> to return an empty array if no key matches or the value
-     *                  cannot be converted to a {@link JsonArray}.
+     * @param allowNull {@code false} to return an empty array if no key matches or the value cannot
+     *                  be converted to a {@link JsonArray}.
      * @return The value associated with the key.
      */
     public JsonArray getArray(String key, boolean allowNull) {
@@ -171,8 +171,8 @@ public class JsonMap extends JsonCollection {
 
     /**
      * @param key       The key to retrieve.
-     * @param allowNull <code>false</code> to return an empty map if no key matches or the value
-     *                  cannot be converted to a {@link JsonMap}.
+     * @param allowNull {@code false} to return an empty map if no key matches or the value cannot
+     *                  be converted to a {@link JsonMap}.
      * @return The value associated with the key.
      */
     public JsonMap getMap(String key, boolean allowNull) {
@@ -181,8 +181,8 @@ public class JsonMap extends JsonCollection {
 
     /**
      * @param key       The key to retrieve.
-     * @param allowNull <code>false</code> to return an empty point if no such key exists or the
-     *                  value cannot be converted to a {@link Point}.
+     * @param allowNull {@code false} to return an empty point if no such key exists or the value
+     *                  cannot be converted to a {@link Point}.
      * @return The value associated with the key.
      */
     public Point getPoint(String key, boolean allowNull) {
@@ -191,7 +191,7 @@ public class JsonMap extends JsonCollection {
 
     /**
      * @param key       The key to retrieve.
-     * @param allowNull <code>false</code> to return an empty rectangle if no such key exists or the
+     * @param allowNull {@code false} to return an empty rectangle if no such key exists or the
      *                  value cannot be converted to a {@link Rectangle}.
      * @return The value associated with the key.
      */
@@ -293,7 +293,7 @@ public class JsonMap extends JsonCollection {
             }
             if (!compact) {
                 buffer.append('\n');
-                indent(buffer, compact, depth);
+                indent(buffer, false, depth);
             }
             buffer.append(Json.quote(key));
             if (compact) {
@@ -310,7 +310,7 @@ public class JsonMap extends JsonCollection {
         }
         if (!compact && !keys.isEmpty()) {
             buffer.append('\n');
-            indent(buffer, compact, depth - 1);
+            indent(buffer, false, depth - 1);
         }
         buffer.append('}');
         return buffer;

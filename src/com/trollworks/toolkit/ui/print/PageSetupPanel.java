@@ -28,9 +28,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.PrinterJob;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
-
 import javax.print.DocFlavor;
 import javax.print.PrintService;
 import javax.print.attribute.HashPrintRequestAttributeSet;
@@ -89,10 +90,8 @@ public class PageSetupPanel extends JPanel implements ActionListener {
         rebuildSelf(set);
         revalidate();
         Window window = WindowUtils.getWindowForComponent(this);
-        if (window != null) {
-            window.setSize(window.getPreferredSize());
-            GraphicsUtilities.forceOnScreen(window);
-        }
+        window.setSize(window.getPreferredSize());
+        GraphicsUtilities.forceOnScreen(window);
     }
 
     /** @param set The current {@link PrintRequestAttributeSet}. */
@@ -109,7 +108,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 
     // This is only here because the compiler wouldn't let me do this:
     // new ObjectWrapper<PrintService>[0]
-    class WrappedPrintService extends ObjectWrapper<PrintService> {
+    static class WrappedPrintService extends ObjectWrapper<PrintService> {
         WrappedPrintService(String title, PrintService object) {
             super(title, object);
         }
@@ -118,11 +117,12 @@ public class PageSetupPanel extends JPanel implements ActionListener {
     private void createPrinterCombo() {
         PrintService[] services = PrinterJob.lookupPrintServices();
         if (services.length == 0) {
-            services = new PrintService[] { new DummyPrintService() };
+            services = new PrintService[]{new DummyPrintService()};
         }
-        WrappedPrintService[] serviceWrappers = new WrappedPrintService[services.length];
+        int                   length          = services.length;
+        WrappedPrintService[] serviceWrappers = new WrappedPrintService[length];
         int                   selection       = 0;
-        for (int i = 0; i < services.length; i++) {
+        for (int i = 0; i < length; i++) {
             serviceWrappers[i] = new WrappedPrintService(services[i].getName(), services[i]);
             if (services[i] == mService) {
                 selection = i;
@@ -140,7 +140,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 
     // This is only here because the compiler wouldn't let me do this:
     // new ObjectWrapper<MediaSizeName>[0]
-    class WrappedMediaSizeName extends ObjectWrapper<MediaSizeName> {
+    static class WrappedMediaSizeName extends ObjectWrapper<MediaSizeName> {
         WrappedMediaSizeName(String title, MediaSizeName object) {
             super(title, object);
         }
@@ -184,13 +184,13 @@ public class PageSetupPanel extends JPanel implements ActionListener {
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
 
-            if (token.equalsIgnoreCase("na")) {
+            if ("na".equalsIgnoreCase(token)) {
                 builder.append("US");
-            } else if (token.equalsIgnoreCase("iso")) {
+            } else if ("iso".equalsIgnoreCase(token)) {
                 builder.append("ISO");
-            } else if (token.equalsIgnoreCase("jis")) {
+            } else if ("jis".equalsIgnoreCase(token)) {
                 builder.append("JIS");
-            } else if (token.equals("-")) {
+            } else if ("-".equals(token)) {
                 builder.append(" ");
             } else if (token.length() > 1) {
                 builder.append(Character.toUpperCase(token.charAt(0)));
@@ -206,11 +206,8 @@ public class PageSetupPanel extends JPanel implements ActionListener {
     private void createOrientationCombo(PrintRequestAttributeSet set) {
         OrientationRequested[] orientations = (OrientationRequested[]) mService.getSupportedAttributeValues(OrientationRequested.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
         if (orientations != null && orientations.length > 0) {
-            HashSet<OrientationRequested> possible = new HashSet<>();
-            for (OrientationRequested one : orientations) {
-                possible.add(one);
-            }
-            ArrayList<PageOrientation> choices = new ArrayList<>();
+            Set<OrientationRequested>  possible = new HashSet<>(Arrays.asList(orientations));
+            ArrayList<PageOrientation> choices  = new ArrayList<>();
             for (PageOrientation orientation : PageOrientation.values()) {
                 if (possible.contains(orientation.getOrientationRequested())) {
                     choices.add(orientation);
@@ -230,11 +227,8 @@ public class PageSetupPanel extends JPanel implements ActionListener {
     private void createSidesCombo(PrintRequestAttributeSet set) {
         Sides[] sides = (Sides[]) mService.getSupportedAttributeValues(Sides.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
         if (sides != null && sides.length > 0) {
-            HashSet<Sides> possible = new HashSet<>();
-            for (Sides one : sides) {
-                possible.add(one);
-            }
-            ArrayList<PageSides> choices = new ArrayList<>();
+            Set<Sides>           possible = new HashSet<>(Arrays.asList(sides));
+            ArrayList<PageSides> choices  = new ArrayList<>();
             for (PageSides side : PageSides.values()) {
                 if (possible.contains(side.getSides())) {
                     choices.add(side);
@@ -253,7 +247,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 
     // This is only here because the compiler wouldn't let me do this:
     // new ObjectWrapper<NumberUp>[0]
-    class WrappedNumberUp extends ObjectWrapper<NumberUp> {
+    static class WrappedNumberUp extends ObjectWrapper<NumberUp> {
         WrappedNumberUp(String title, NumberUp object) {
             super(title, object);
         }
@@ -261,22 +255,27 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 
     private void createNumberUpCombo(PrintRequestAttributeSet set) {
         NumberUp[] numUp = (NumberUp[]) mService.getSupportedAttributeValues(NumberUp.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
-        if (numUp != null && numUp.length > 0) {
-            NumberUp          current   = PrintUtilities.getNumberUp(mService, set);
-            WrappedNumberUp[] wrappers  = new WrappedNumberUp[numUp.length];
-            int               selection = 0;
-            for (int i = 0; i < numUp.length; i++) {
-                wrappers[i] = new WrappedNumberUp(numUp[i].toString(), numUp[i]);
-                if (numUp[i] == current) {
-                    selection = i;
+        if (numUp != null) {
+            int length = numUp.length;
+            if (length > 0) {
+                NumberUp          current   = PrintUtilities.getNumberUp(mService, set);
+                WrappedNumberUp[] wrappers  = new WrappedNumberUp[length];
+                int               selection = 0;
+                for (int i = 0; i < length; i++) {
+                    wrappers[i] = new WrappedNumberUp(numUp[i].toString(), numUp[i]);
+                    if (numUp[i] == current) {
+                        selection = i;
+                    }
                 }
+                mNumberUp = new JComboBox<>(wrappers);
+                mNumberUp.setSelectedIndex(selection);
+                UIUtilities.setToPreferredSizeOnly(mNumberUp);
+                LinkedLabel label = new LinkedLabel(I18n.Text("Number Up"), mNumberUp);
+                add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
+                add(mNumberUp);
+            } else {
+                mNumberUp = null;
             }
-            mNumberUp = new JComboBox<>(wrappers);
-            mNumberUp.setSelectedIndex(selection);
-            UIUtilities.setToPreferredSizeOnly(mNumberUp);
-            LinkedLabel label = new LinkedLabel(I18n.Text("Number Up"), mNumberUp);
-            add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
-            add(mNumberUp);
         } else {
             mNumberUp = null;
         }
@@ -285,11 +284,8 @@ public class PageSetupPanel extends JPanel implements ActionListener {
     private void createChromaticityCombo(PrintRequestAttributeSet set) {
         Chromaticity[] chromacities = (Chromaticity[]) mService.getSupportedAttributeValues(Chromaticity.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
         if (chromacities != null && chromacities.length > 0) {
-            HashSet<Chromaticity> possible = new HashSet<>();
-            for (Chromaticity one : chromacities) {
-                possible.add(one);
-            }
-            ArrayList<InkChromaticity> choices = new ArrayList<>();
+            Set<Chromaticity>          possible = new HashSet<>(Arrays.asList(chromacities));
+            ArrayList<InkChromaticity> choices  = new ArrayList<>();
             for (InkChromaticity chromaticity : InkChromaticity.values()) {
                 if (possible.contains(chromaticity.getChromaticity())) {
                     choices.add(chromaticity);
@@ -309,11 +305,8 @@ public class PageSetupPanel extends JPanel implements ActionListener {
     private void createPrintQualityCombo(PrintRequestAttributeSet set) {
         PrintQuality[] qualities = (PrintQuality[]) mService.getSupportedAttributeValues(PrintQuality.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
         if (qualities != null && qualities.length > 0) {
-            HashSet<PrintQuality> possible = new HashSet<>();
-            for (PrintQuality one : qualities) {
-                possible.add(one);
-            }
-            ArrayList<Quality> choices = new ArrayList<>();
+            Set<PrintQuality>  possible = new HashSet<>(Arrays.asList(qualities));
+            ArrayList<Quality> choices  = new ArrayList<>();
             for (Quality quality : Quality.values()) {
                 if (possible.contains(quality.getPrintQuality())) {
                     choices.add(quality);
@@ -332,7 +325,7 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 
     // This is only here because the compiler wouldn't let me do this:
     // new ObjectWrapper<PrinterResolution>[0]
-    class WrappedPrinterResolution extends ObjectWrapper<PrinterResolution> {
+    static class WrappedPrinterResolution extends ObjectWrapper<PrinterResolution> {
         WrappedPrinterResolution(String title, PrinterResolution object) {
             super(title, object);
         }
@@ -340,22 +333,27 @@ public class PageSetupPanel extends JPanel implements ActionListener {
 
     private void createResolutionCombo(PrintRequestAttributeSet set) {
         PrinterResolution[] resolutions = (PrinterResolution[]) mService.getSupportedAttributeValues(PrinterResolution.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
-        if (resolutions != null && resolutions.length > 0) {
-            PrinterResolution          current   = PrintUtilities.getResolution(mService, set, true);
-            WrappedPrinterResolution[] wrappers  = new WrappedPrinterResolution[resolutions.length];
-            int                        selection = 0;
-            for (int i = 0; i < resolutions.length; i++) {
-                wrappers[i] = new WrappedPrinterResolution(generateResolutionTitle(resolutions[i]), resolutions[i]);
-                if (resolutions[i] == current) {
-                    selection = i;
+        if (resolutions != null) {
+            int length = resolutions.length;
+            if (length > 0) {
+                PrinterResolution          current   = PrintUtilities.getResolution(mService, set, true);
+                WrappedPrinterResolution[] wrappers  = new WrappedPrinterResolution[length];
+                int                        selection = 0;
+                for (int i = 0; i < length; i++) {
+                    wrappers[i] = new WrappedPrinterResolution(generateResolutionTitle(resolutions[i]), resolutions[i]);
+                    if (resolutions[i] == current) {
+                        selection = i;
+                    }
                 }
+                mResolution = new JComboBox<>(wrappers);
+                mResolution.setSelectedIndex(selection);
+                UIUtilities.setToPreferredSizeOnly(mResolution);
+                LinkedLabel label = new LinkedLabel(I18n.Text("Resolution"), mResolution);
+                add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
+                add(mResolution);
+            } else {
+                mResolution = null;
             }
-            mResolution = new JComboBox<>(wrappers);
-            mResolution.setSelectedIndex(selection);
-            UIUtilities.setToPreferredSizeOnly(mResolution);
-            LinkedLabel label = new LinkedLabel(I18n.Text("Resolution"), mResolution);
-            add(label, new PrecisionLayoutData().setEndHorizontalAlignment());
-            add(mResolution);
         } else {
             mResolution = null;
         }
@@ -407,28 +405,50 @@ public class PageSetupPanel extends JPanel implements ActionListener {
      */
     public PrintService accept(PrintRequestAttributeSet set) {
         Commitable.sendCommitToFocusOwner();
-        mService = UIUtilities.getTypedSelectedItemFromCombo(mServices).getObject();
+        WrappedPrintService service = UIUtilities.getTypedSelectedItemFromCombo(mServices);
+        mService = service != null ? service.getObject() : new DummyPrintService();
         if (mOrientation != null) {
-            PrintUtilities.setPageOrientation(set, (PageOrientation) mOrientation.getSelectedItem());
+            PageOrientation orientation = (PageOrientation) mOrientation.getSelectedItem();
+            if (orientation != null) {
+                PrintUtilities.setPageOrientation(set, orientation);
+            }
         }
         if (mPaperType != null) {
-            PrintUtilities.setPaperSize(mService, set, PrintUtilities.getMediaDimensions(((WrappedMediaSizeName) mPaperType.getSelectedItem()).getObject(), LengthUnits.IN), LengthUnits.IN);
+            WrappedMediaSizeName mediaSizeName = (WrappedMediaSizeName) mPaperType.getSelectedItem();
+            if (mediaSizeName != null) {
+                PrintUtilities.setPaperSize(mService, set, PrintUtilities.getMediaDimensions(mediaSizeName.getObject(), LengthUnits.IN), LengthUnits.IN);
+            }
         }
-        PrintUtilities.setPageMargins(mService, set, new double[] { ((Double) mTopMargin.getValue()).doubleValue(), ((Double) mLeftMargin.getValue()).doubleValue(), ((Double) mBottomMargin.getValue()).doubleValue(), ((Double) mRightMargin.getValue()).doubleValue() }, LengthUnits.IN);
+        PrintUtilities.setPageMargins(mService, set, new double[]{((Double) mTopMargin.getValue()).doubleValue(), ((Double) mLeftMargin.getValue()).doubleValue(), ((Double) mBottomMargin.getValue()).doubleValue(), ((Double) mRightMargin.getValue()).doubleValue()}, LengthUnits.IN);
         if (mChromaticity != null) {
-            PrintUtilities.setChromaticity(set, (InkChromaticity) mChromaticity.getSelectedItem());
+            InkChromaticity chromaticity = (InkChromaticity) mChromaticity.getSelectedItem();
+            if (chromaticity != null) {
+                PrintUtilities.setChromaticity(set, chromaticity);
+            }
         }
         if (mSides != null) {
-            PrintUtilities.setSides(set, (PageSides) mSides.getSelectedItem());
+            PageSides pageSides = (PageSides) mSides.getSelectedItem();
+            if (pageSides != null) {
+                PrintUtilities.setSides(set, pageSides);
+            }
         }
         if (mNumberUp != null) {
-            PrintUtilities.setNumberUp(set, UIUtilities.getTypedSelectedItemFromCombo(mNumberUp).getObject());
+            WrappedNumberUp numberUp = UIUtilities.getTypedSelectedItemFromCombo(mNumberUp);
+            if (numberUp != null) {
+                PrintUtilities.setNumberUp(set, numberUp.getObject());
+            }
         }
         if (mPrintQuality != null) {
-            PrintUtilities.setPrintQuality(set, (Quality) mPrintQuality.getSelectedItem());
+            Quality quality = (Quality) mPrintQuality.getSelectedItem();
+            if (quality != null) {
+                PrintUtilities.setPrintQuality(set, quality);
+            }
         }
         if (mResolution != null) {
-            PrintUtilities.setResolution(set, UIUtilities.getTypedSelectedItemFromCombo(mResolution).getObject());
+            WrappedPrinterResolution resolution = UIUtilities.getTypedSelectedItemFromCombo(mResolution);
+            if (resolution != null) {
+                PrintUtilities.setResolution(set, resolution.getObject());
+            }
         }
         return mService instanceof DummyPrintService ? null : mService;
     }

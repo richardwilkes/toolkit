@@ -18,8 +18,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-/** Provides a default value for an int value. */
-public @interface XmlDefaultInteger {
+/** Provides a default value for an int value. */ public @interface XmlDefaultInteger {
     /** @return The default value. */
     int value();
 }

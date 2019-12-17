@@ -39,27 +39,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import javax.swing.JPanel;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 
 /** A widget that can display both tabular and hierarchical data. */
 public class TreeTable extends JPanel implements FocusListener, KeyListener, MouseListener, MouseMotionListener, Scrollable, BatchNotifierTarget, SelectionModel {
-    private static final int DISCLOSURE_WIDTH       = Icons.getDisclosure(false, false).getIconWidth();
-    private static final int DISCLOSURE_HEIGHT      = Icons.getDisclosure(false, false).getIconHeight();
-    private Model            mModel;
-    private Renderer         mRenderer;
-    private boolean          mBatchMode;
-    private Set<String>      mBatchNames            = new HashSet<>();
-    private Color            mDividerColor          = Color.LIGHT_GRAY;
-    private boolean          mShowDisclosureControl = true;
-    private boolean          mShowColumnDividers    = true;
-    private boolean          mShowRowDividers;
-    private int              mLastMouseX            = Integer.MIN_VALUE;
-    private int              mLastMouseY            = Integer.MIN_VALUE;
-    private Object           mOverRow;
-    private boolean          mOverDisclosure;
+    private static final int         DISCLOSURE_WIDTH       = Icons.getDisclosure(false, false).getIconWidth();
+    private static final int         DISCLOSURE_HEIGHT      = Icons.getDisclosure(false, false).getIconHeight();
+    private              Model       mModel;
+    private              Renderer    mRenderer;
+    private              boolean     mBatchMode;
+    private              Set<String> mBatchNames            = new HashSet<>();
+    private              Color       mDividerColor          = Color.LIGHT_GRAY;
+    private              boolean     mShowDisclosureControl = true;
+    private              boolean     mShowColumnDividers    = true;
+    private              boolean     mShowRowDividers;
+    private              int         mLastMouseX            = Integer.MIN_VALUE;
+    private              int         mLastMouseY            = Integer.MIN_VALUE;
+    private              Object      mOverRow;
+    private              boolean     mOverDisclosure;
 
     /**
      * @param model    The {@link Model} to use.
@@ -291,7 +290,7 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
 
     private Object getLastSelectedRow(Object row) {
         if (!mModel.isLeafRow(row) && mModel.isRowDisclosed(row)) {
-            for (int i = mModel.getRowChildCount(row); --i >= 0;) {
+            for (int i = mModel.getRowChildCount(row); --i >= 0; ) {
                 Object child = getLastSelectedRow(mModel.getRowChild(row, i));
                 if (child != null) {
                     return child;
@@ -338,7 +337,7 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
             int     x           = bounds.x;
             boolean rowSelected = isSelected(row);
             if (rowSelected) {
-                gc.setColor(Colors.getListBackground(rowSelected, active));
+                gc.setColor(Colors.getListBackground(true, active));
                 gc.fillRect(x, y, bounds.x + bounds.width - x, height);
             }
             int columns          = mRenderer.getColumnCount(this);
@@ -391,32 +390,32 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
         return y;
     }
 
-    /** @return <code>true</code> if the disclosure controls should be shown. */
+    /** @return {@code true} if the disclosure controls should be shown. */
     public final boolean showDisclosureControl() {
         return mShowDisclosureControl;
     }
 
-    /** @param show <code>true</code> if the disclosure controls should be shown. */
+    /** @param show {@code true} if the disclosure controls should be shown. */
     public final void setShowDisclosureControl(boolean show) {
         mShowDisclosureControl = show;
     }
 
-    /** @return <code>true</code> if the column dividers should be shown. */
+    /** @return {@code true} if the column dividers should be shown. */
     public final boolean showColumnDividers() {
         return mShowColumnDividers;
     }
 
-    /** @param show <code>true</code> if the column dividers should be shown. */
+    /** @param show {@code true} if the column dividers should be shown. */
     public final void setShowColumnDividers(boolean show) {
         mShowColumnDividers = show;
     }
 
-    /** @return <code>true</code> if the row dividers should be shown. */
+    /** @return {@code true} if the row dividers should be shown. */
     public final boolean showRowDividers() {
         return mShowRowDividers;
     }
 
-    /** @param show <code>true</code> if the row dividers should be shown. */
+    /** @param show {@code true} if the row dividers should be shown. */
     public final void setShowRowDividers(boolean show) {
         mShowRowDividers = show;
     }
@@ -611,11 +610,10 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
     private void clearMouseState() {
         mLastMouseX = Integer.MIN_VALUE;
         mLastMouseY = Integer.MIN_VALUE;
-        Object  wasOverRow        = mOverRow;
         boolean wasOverDisclosure = mOverDisclosure;
-        mOverRow        = null;
+        mOverRow = null;
         mOverDisclosure = false;
-        if (mOverDisclosure != wasOverDisclosure || wasOverDisclosure && mOverRow != wasOverRow) {
+        if (wasOverDisclosure) {
             repaint();
         }
     }
@@ -631,7 +629,7 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
         mLastMouseY = event.getY();
         Object  wasOverRow        = mOverRow;
         boolean wasOverDisclosure = mOverDisclosure;
-        mOverRow        = getRowAt(mLastMouseY);
+        mOverRow = getRowAt(mLastMouseY);
         mOverDisclosure = isOverDisclosure(mOverRow, mLastMouseX);
         if (mOverDisclosure != wasOverDisclosure || wasOverDisclosure && mOverRow != wasOverRow) {
             repaint();
@@ -641,7 +639,7 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
     /**
      * @param row The row object to check.
      * @param x   The x-coordinate to check.
-     * @return <code>true</code> if the x-coordinate is over the disclosure control.
+     * @return {@code true} if the x-coordinate is over the disclosure control.
      */
     public boolean isOverDisclosure(Object row, int x) {
         if (mShowDisclosureControl && row != null && !mModel.isLeafRow(row)) {
@@ -696,13 +694,12 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
 
     /**
      * @param y The y-coordinate to check.
-     * @return The row object at the specified y-coordinate, or <code>null</code> if there isn't
-     *         one.
+     * @return The row object at the specified y-coordinate, or {@code null} if there isn't one.
      */
     public Object getRowAt(int y) {
         int top = getInsets().top;
         if (y > top) {
-            int[] pos = new int[] { top };
+            int[] pos = {top};
             for (Object row : mModel.getRootRows()) {
                 Object result = getRowAt(row, y, pos);
                 if (result != null) {
@@ -782,7 +779,7 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
      */
     public Rectangle getRowBounds(Object row) {
         int   top = getInsets().top;
-        int[] pos = new int[] { top };
+        int[] pos = {top};
         for (Object one : mModel.getRootRows()) {
             Rectangle result = getRowAt(one, row, pos);
             if (result != null) {
@@ -830,7 +827,7 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
                 int width = mRenderer.getColumnWidth(this, i);
                 if (i == modelColumnIndex) {
                     Rectangle bounds = getRowBounds(row);
-                    bounds.x     = left;
+                    bounds.x = left;
                     bounds.width = width;
                     return bounds;
                 }
@@ -927,13 +924,13 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
 
         /**
          * @param row The row object to check.
-         * @return <code>true</code> if the row is not capable of having child rows.
+         * @return {@code true} if the row is not capable of having child rows.
          */
         boolean isLeafRow(Object row);
 
         /**
          * @param row The row object to check.
-         * @return <code>true</code> if the row is in the disclosed (open) state.
+         * @return {@code true} if the row is in the disclosed (open) state.
          */
         boolean isRowDisclosed(Object row);
 
@@ -965,15 +962,15 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
 
         /**
          * @param row The row object to work on.
-         * @return The row object's parent row object, or <code>null</code> if the passed in row is
-         *         a root.
+         * @return The row object's parent row object, or {@code null} if the passed in row is a
+         *         root.
          */
         Object getRowParent(Object row);
     }
 
     /**
-     * Objects that want to provide rendering and UI interaction services for cells within a
-     * {@link TreeTable} must implement this interface.
+     * Objects that want to provide rendering and UI interaction services for cells within a {@link
+     * TreeTable} must implement this interface.
      */
     public interface Renderer {
         /**
@@ -1016,8 +1013,8 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
          * @param column   The column index being rendered.
          * @param width    The width of the cell.
          * @param height   The height of the cell.
-         * @param selected <code>true</code> if the row is currently selected.
-         * @param active   <code>true</code> if the widget is currently active.
+         * @param selected {@code true} if the row is currently selected.
+         * @param active   {@code true} if the widget is currently active.
          */
         void drawCell(TreeTable table, Graphics2D gc, Object row, int column, int width, int height, boolean selected, boolean active);
 
@@ -1032,7 +1029,7 @@ public class TreeTable extends JPanel implements FocusListener, KeyListener, Mou
          * @param button       The button that is pressed.
          * @param clickCount   The number of clicks made by this button so far.
          * @param modifiers    The key modifiers at the time of the event.
-         * @param popupTrigger <code>true</code> if this should trigger a contextual menu.
+         * @param popupTrigger {@code true} if this should trigger a contextual menu.
          */
         void mousePressed(TreeTable table, Object row, int column, int x, int y, int width, int height, int button, int clickCount, int modifiers, boolean popupTrigger);
     }

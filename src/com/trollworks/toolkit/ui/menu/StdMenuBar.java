@@ -12,7 +12,6 @@
 package com.trollworks.toolkit.ui.menu;
 
 import java.util.TreeSet;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
@@ -34,7 +33,7 @@ public class StdMenuBar extends JMenuBar {
         for (MenuProvider provider : providers) {
             set.addAll(provider.getModifiableCommands());
         }
-        COMMANDS = set.toArray(new Command[set.size()]);
+        COMMANDS = set.toArray(new Command[0]);
     }
 
     /** @return The {@link Command}s that can have their accelerators modified. */
@@ -46,7 +45,7 @@ public class StdMenuBar extends JMenuBar {
      * @param bar  The {@link JMenuBar} to search.
      * @param name The name (as returned by {@link JMenu#getName()} to look for as a top-level
      *             {@link JMenu}.
-     * @return The found {@link JMenu}, or <code>null</code>.
+     * @return The found {@link JMenu}, or {@code null}.
      */
     public static JMenu findMenuByName(JMenuBar bar, String name) {
         if (bar != null) {

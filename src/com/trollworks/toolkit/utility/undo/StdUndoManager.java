@@ -15,7 +15,6 @@ import com.trollworks.toolkit.ui.UIUtilities;
 import com.trollworks.toolkit.ui.menu.edit.Undoable;
 
 import java.awt.Component;
-
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;

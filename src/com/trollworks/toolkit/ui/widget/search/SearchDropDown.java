@@ -21,7 +21,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JList;
@@ -48,9 +47,9 @@ class SearchDropDown extends JPanel implements MouseListener {
         super(new BorderLayout());
         setOpaque(true);
         mFilterField = filterField;
-        mTarget      = target;
-        mModel       = new DefaultListModel<>();
-        mList        = new JList<>(mModel);
+        mTarget = target;
+        mModel = new DefaultListModel<>();
+        mList = new JList<>(mModel);
         mList.setFocusable(false);
         mList.addMouseListener(this);
         mList.setCellRenderer(renderer);
