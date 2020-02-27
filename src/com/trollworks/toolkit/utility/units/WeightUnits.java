@@ -85,7 +85,7 @@ public enum WeightUnits implements Units {
 
     @Override
     public double normalize(double value) {
-        return value / mFactor;
+        return value * mFactor;
     }
 
     @Override
