@@ -13,6 +13,7 @@ package com.trollworks.toolkit.ui;
 
 import com.trollworks.toolkit.io.Log;
 import com.trollworks.toolkit.ui.image.StdImage;
+import com.trollworks.toolkit.ui.widget.IconButton;
 import com.trollworks.toolkit.utility.Platform;
 
 import java.awt.Component;
@@ -69,7 +70,7 @@ public class UIUtilities {
             }
         }
 
-        if (comp instanceof AbstractButton || comp instanceof JComboBox || comp instanceof JTextField) {
+        if (comp instanceof AbstractButton || comp instanceof JComboBox || comp instanceof JTextField || comp instanceof IconButton) {
             comp.setEnabled(false);
         }
     }
