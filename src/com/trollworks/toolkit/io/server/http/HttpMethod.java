@@ -20,7 +20,7 @@ public enum HttpMethod {
      * @return The {@link HttpMethod}, or {@code null} if no match can be found.
      */
     static HttpMethod lookup(String text) {
-        for (HttpMethod method : HttpMethod.values()) {
+        for (HttpMethod method : values()) {
             if (method.toString().equalsIgnoreCase(text)) {
                 return method;
             }
